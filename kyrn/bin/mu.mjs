@@ -94,25 +94,25 @@ export function platformName({ platform, wsl }) {
 export function usage(platform) {
 	const linkDir = platform === "win32" ? "%USERPROFILE%\\.local\\bin" : "~/.local/bin";
 	return [
-		"mu command line. (The project was called KYRN until 2026-09-21; the old spellings below still work.)",
+		"mu command line. (The project was called KYRN until 2026-09-21; the old kyrn commands still work.)",
 		"",
 		"  mu                       interactive session in the current directory",
-		'  mu "prompt"              interactive, starting with this prompt',
+		'  mu "prompt"              interactive session, starting with this prompt',
 		'  mu -p "prompt"           one-shot: print the answer and exit',
 		"  mu -c | -r               continue the last session | pick one to resume",
-		"  mu setup                 connect a model (an API key, or a service from a list) and choose the judge",
-		"                           (mu setup --help: scripts, a key from stdin, the services it knows)",
+		"  mu setup                 connect a model (with an API key or a service from a list) and choose a judge",
+		"                           (mu setup --help covers scripts, reading a key from stdin and supported services)",
 		"  mu judge <cmd>           the local judge (Laya): setup | start | stop | status | run",
-		"  mu ledger [n] [--json]   what the judge decided in the last n sessions",
-		"  mu import --list | <file>...   bring Claude Code and Codex conversations into mu (mu import --help)",
+		"  mu ledger [n] [--json]   the judge's verdicts from the last n sessions",
+		"  mu import --list | <file>...   import Claude Code and Codex conversations (mu import --help)",
 		"  mu doctor                check the installation",
 		"  mu auth <cmd>            subscription sign-in for the desktop app, as JSON lines:",
 		"                           status | login <provider> | logout <provider>",
 		`  mu link | unlink         put the \`mu\` command on your PATH (${linkDir}) | remove it`,
-		"  mu migrate [--dry-run]   once: move the home from before the rename, ~/.kyrn, to ~/.mu",
+		"  mu migrate [--dry-run]   one-time move of the pre-rename home folder, ~/.kyrn, to ~/.mu",
 		"  mu help | version",
 		"",
-		"Everything else goes to the agent unchanged: `mu --help` lists every flag,",
+		"Everything else is passed to the agent unchanged: `mu --help` lists every flag,",
 		"and `mu install|remove|update|list|config` manage pi packages.",
 	].join("\n");
 }
@@ -356,13 +356,13 @@ export function installHint({ root, platform }) {
 	const steps = [`cd ${root}`, "npm ci --ignore-scripts", "npm run hydrate:model-data"];
 	// Windows PowerShell 5 has no `&&`.
 	return platform === "win32"
-		? `mu's dependencies are not installed. Run:\n${steps.map((step) => `  ${step}`).join("\n")}`
-		: `mu's dependencies are not installed. Run:  ${steps.join(" && ")}`;
+		? `mu's dependencies aren't installed. Run:\n${steps.map((step) => `  ${step}`).join("\n")}`
+		: `mu's dependencies aren't installed. Run:  ${steps.join(" && ")}`;
 }
 
 /** What mu says on a Node that does not strip TypeScript types, which a checkout cannot run on. */
 const NO_TYPE_STRIPPING =
-	"mu runs a checkout's TypeScript with Node's own type stripping (on by default from Node 22.18), and this Node does not strip types";
+	"mu runs a source checkout's TypeScript with Node's built-in type stripping (on by default since Node 22.18), but this Node does not strip types";
 
 /**
  * Node's arguments for running a checkout's TypeScript, up to the entry file. Node strips the types itself (on by
@@ -428,10 +428,10 @@ export function localJudgeSupport({ platform, env, wsl = false }) {
 		runs: false,
 		url,
 		message: [
-			`The local judge (Laya) is a Core ML sidecar: it runs on macOS with Apple Silicon only, not on ${where}.`,
+			`The local judge (Laya) is a Core ML sidecar that runs only on macOS with Apple Silicon, not on ${where}.`,
 			"mu works without it: use Jev (TYPESAFE_API_KEY or AI_GATEWAY_API_KEY) or an llm judge in mu.json;",
-			"the desktop app's own local judge is being built. Decisions without a judge fall back to pi's behaviour.",
-			"A server that speaks the same contract (GET /health, POST /evaluate) can be used from here:",
+			"a local judge for the desktop app is in progress. Without a judge, decision points fall back to pi's default behavior.",
+			"To use a server that implements the same API (GET /health, POST /evaluate), set:",
 			"  MU_LOCAL_JUDGE_URL=http://host:port",
 		].join("\n"),
 	};
@@ -447,12 +447,37 @@ export function launchStrategy({ platform, env, canExec }) {
 /** How the judgment layer's extension joins pi's arguments: in front for a session, never in front of pi's own
  *  commands (PI_COMMANDS), which pi reads as its first argument — an -e before them would turn them into a prompt.
  *  The judgment layer never runs for them, so its extension stays out of their way. */
-function judgeArgs({ argv, layout, root, platform }) {
+function judgeArgs({ argv, layout, root, platform, agentDir, readFile }) {
 	if (PI_COMMANDS.has(argv[0])) return [];
 	const path = pathFor(platform);
-	return layout === "package"
-		? ["-e", packageEntries({ root, platform }).extension]
-		: ["-e", path.join(root, "packages", "kyrn-judge", "src", "extension", "kyrn-judge.ts")];
+	const extension =
+		layout === "package"
+			? ["-e", packageEntries({ root, platform }).extension]
+			: ["-e", path.join(root, "packages", "kyrn-judge", "src", "extension", "kyrn-judge.ts")];
+	return [...extension, ...themeArgs({ argv, layout, root, platform, agentDir, readFile })];
+}
+
+/** mu's own terminal themes, beside the judgment layer's files. */
+export function themesDir({ layout, root, platform }) {
+	const path = pathFor(platform);
+	return layout === "package" ? path.join(root, "judge", "themes") : path.join(root, "packages", "kyrn-judge", "themes");
+}
+
+/**
+ * An interactive session gets mu's themes (mu-light and mu-dark, which /settings then lists beside pi's) and, while the
+ * person has chosen no theme of their own, starts in them: light or dark as the terminal is. A theme chosen in
+ * /settings is saved in settings.json and wins; so does --use-theme. Print and RPC modes draw nothing and get neither.
+ */
+function themeArgs({ argv, layout, root, platform, agentDir, readFile }) {
+	if (argv.includes("--mode") || argv.includes("-p") || argv.includes("--print")) return [];
+	const args = ["--theme", themesDir({ layout, root, platform })];
+	if (argv.includes("--use-theme") || !agentDir || !readFile) return args;
+	let chosen = false;
+	try {
+		const settings = JSON.parse(readFile(pathFor(platform).join(agentDir, "settings.json")));
+		chosen = typeof settings?.theme === "string" && settings.theme !== "";
+	} catch {}
+	return chosen ? args : [...args, "--use-theme", "mu-light/mu-dark"];
 }
 
 /**
@@ -533,7 +558,7 @@ export function planLaunch({
 
 	return {
 		command: execPath,
-		args: [...entry, ...judgeArgs({ argv, layout, root, platform }), ...argv],
+		args: [...entry, ...judgeArgs({ argv, layout, root, platform, agentDir, readFile: fs.readFile }), ...argv],
 		env: childEnv,
 		strategy: launchStrategy({ platform, env, canExec }),
 		layout,
@@ -572,7 +597,7 @@ export function planHost({ platform, env, argv, root, home, fs, wsl = false, str
 			...common,
 			module: path.join(root, "dist", "bundle", "index.js"),
 			execArgv: [],
-			args: [...judgeArgs({ argv, layout: launch.layout, root, platform }), ...argv],
+			args: [...judgeArgs({ argv, layout: launch.layout, root, platform, agentDir: launch.agentDir, readFile: fs.readFile }), ...argv],
 		};
 	}
 	const runtime = sourceRuntime({ root, platform, stripsTypes, exists: fs.exists });
@@ -581,13 +606,13 @@ export function planHost({ platform, env, argv, root, home, fs, wsl = false, str
 		...common,
 		module: path.join(root, "packages", "coding-agent", "src", "index.ts"),
 		execArgv: runtime.args,
-		args: [...judgeArgs({ argv, layout: launch.layout, root, platform }), ...argv],
+		args: [...judgeArgs({ argv, layout: launch.layout, root, platform, agentDir: launch.agentDir, readFile: fs.readFile }), ...argv],
 	};
 }
 
 /** What mu says when the local judge does not come up. */
 const LOCAL_JUDGE_NOT_STARTED =
-	"mu: the local judge did not start (mu judge status); decisions fall back to pi's behaviour";
+	"mu: the local judge did not start (see mu judge status); decision points fall back to pi's default behavior";
 
 /** The part of the preparation that is files: the app view of a checkout, mu's agent folder, the configuration's notes. */
 function prepareFiles({ plan, platform, root, err }) {
@@ -1003,7 +1028,7 @@ export function planLink({ platform, env, home, bin, argv, fs }) {
 		return {
 			action: "refuse",
 			errors: [
-				`${link} already exists and is not this mu; it was left alone. Choose another folder: MU_LINK_DIR=<dir> mu link`,
+				`${link} already exists and is not this mu, so it was left alone. To use another folder: MU_LINK_DIR=<dir> mu link`,
 			],
 		};
 	}
@@ -1200,8 +1225,8 @@ export function migrate({ platform, home, argv, fs, run, alive, self, out, err }
 		return 0;
 	}
 	if (fs.exists(next) || fs.isLink(next)) {
-		err(`${next} already exists, so nothing was moved. Two homes are never merged or overwritten here:`);
-		err("look at both folders and decide which one is the real one.");
+		err(`${next} already exists, so nothing was moved. mu never merges or overwrites two home folders:`);
+		err("look at both and decide which one to keep.");
 		return 1;
 	}
 	// Whatever is running would write into the gap between the rename and the link, and split the home in two.
@@ -1210,10 +1235,10 @@ export function migrate({ platform, home, argv, fs, run, alive, self, out, err }
 	try {
 		pid = Number.parseInt(fs.readFile(path.join(old, "local-judge", "judge.pid")).trim(), 10);
 	} catch {}
-	if (pid > 0 && alive(pid)) busy.push(`  the local judge (pid ${pid}). Stop it: mu judge stop`);
+	if (pid > 0 && alive(pid)) busy.push(`  the local judge (pid ${pid}). Stop it with mu judge stop`);
 	const found = findBusy({ platform, old, run, self });
 	if (!found) {
-		err("Nothing was moved: the list of running processes could not be read (tasklist, powershell), so it is not known whether mu is still running.");
+		err("Nothing was moved: mu couldn't read the list of running processes (tasklist, powershell), so it can't tell whether mu is still running.");
 		return 1;
 	}
 	const list = (pids) => pids.join(" ");
@@ -1247,7 +1272,7 @@ export function migrate({ platform, home, argv, fs, run, alive, self, out, err }
 		out(`renamed  ${path.join(next, config)} -> mu.json`);
 	}
 	out(`linked   ${old} -> ${next} (paths stored from before the rename keep working)`);
-	out("Check it: mu doctor");
+	out("To check it, run mu doctor");
 	return 0;
 }
 
@@ -1426,7 +1451,7 @@ export async function main(argv = process.argv.slice(2)) {
 			out(await response.text());
 			return 0;
 		} catch {
-			out(`the judge server does not answer at ${plan.url}`);
+			out(`the judge server isn't answering at ${plan.url}`);
 			return 1;
 		}
 	}
