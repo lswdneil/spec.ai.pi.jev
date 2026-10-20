@@ -107,7 +107,7 @@
     },
     "startupDirectory": {
       "title": "Startup directory unavailable",
-      "description": "mu opened, but its local service couldn't start because the configured work or log directory is missing, unavailable, or blocked by permissions. Check that these directories exist and are writable, then restart mu."
+      "description": "mu opened, but its local service couldn't start because the configured work or log directory is missing, unavailable or blocked by permissions. Check that these directories exist and are writable, then restart mu."
     },
     "recoverableDatabaseCorruption": {
       "title": "Local data is corrupted",
@@ -527,7 +527,7 @@
       "noAnswerAfter": "No answer after {{duration}}",
       "hints": {
         "answered": "This message answers the agent’s own question: act on it and don’t ask again.",
-        "resolve": "The request is loosely worded and may change files: look at the project, state the assumption, and ask only for what can't be found here.",
+        "resolve": "The request is loosely worded and may change files: look at the project, state the assumption and ask only for what can't be found here.",
         "clarify": "The request looks under-specified: ask one focused question first.",
         "side_question": "This is a side question: answer it briefly, then carry on with the main task.",
         "plan_first": "This looks large or risky: write a short plan, then carry it out; pause only before a step that can't be undone.",
@@ -1108,7 +1108,7 @@
       "switching": "Switching…",
       "afterTurn": "Switches when the agent finishes this step",
       "unknown": "No board in this conversation yet. mu conversations get one while the plain-language board is on in Features.",
-      "off": "When it's on, this shows in plain words how the work is going, what the agent is doing now, and what needs you.",
+      "off": "When it's on, this shows in plain words how the work is going, what the agent is doing now and what needs you.",
       "cost": "For this project only. Each update costs one model call.",
       "empty": "Give the agent a moment; this will show in plain words how it's going.",
       "checks": "{{done}} of {{total}} checks done",
@@ -1538,12 +1538,12 @@
     "previewEmpty": "Nothing to preview yet. Files opened from the conversation appear here.",
     "previewHidden": "The preview is hidden.",
     "browserEmpty": "No pages open. Enter an address or search above. Pages opened from the conversation appear here too.",
-    "firstHint": "Board shows progress in plain words, Judge lists every verdict from Jev, and Files shows this conversation’s folder. Other tabs appear once they’re used."
+    "firstHint": "Board shows progress in plain words, Judge lists every verdict from Jev and Files shows this conversation’s folder. Other tabs appear once they’re used."
   },
   "nodeRuntime": {
     "title": "Download Node.js?",
     "message": "mu runs agents and tools with its own copy of Node.js, which isn't downloaded yet.",
-    "detail": "Node.js {{version}} (about {{size}} MB) will be downloaded from nodejs.org and unpacked into:\n{{folder}}\n\nIf you choose Later, nothing is downloaded. mu opens as usual, tells you where Node.js is needed, and asks again the next time it starts.",
+    "detail": "Node.js {{version}} (about {{size}} MB) will be downloaded from nodejs.org and unpacked into:\n{{folder}}\n\nIf you choose Later, nothing is downloaded. mu opens as usual, tells you where Node.js is needed and asks again the next time it starts.",
     "download": "Download",
     "later": "Later",
     "note": "Node.js isn't downloaded, so this agent can't run. mu will ask again the next time it starts.",

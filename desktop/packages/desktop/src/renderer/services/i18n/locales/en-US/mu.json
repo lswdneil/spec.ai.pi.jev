@@ -132,7 +132,7 @@
       },
       "custom": {
         "name": "Custom service",
-        "help": "Any service that supports TypeSafe's System One protocol: one you run yourself, a relay on your network, or another Jev provider.",
+        "help": "Any service that supports TypeSafe's System One protocol: one you run yourself, a relay on your network or another Jev provider.",
         "key": "Service API key"
       }
     },
@@ -158,7 +158,7 @@
       "jev": {
         "title": "Jev",
         "tag": "Recommended",
-        "description": "Fast and accurate. Free on OpenCode Zen for a limited time, or pay per call with a key for TypeSafe, OpenRouter, Vercel AI Gateway, OpenCode Zen, Cloudflare, or your own service."
+        "description": "Fast and accurate. Free on OpenCode Zen for a limited time, or pay per call with a key for TypeSafe, OpenRouter, Vercel AI Gateway, OpenCode Zen, Cloudflare or your own service."
       },
       "local": {
         "title": "Local Laya",
@@ -251,7 +251,7 @@
     "limit": "Context limit",
     "limitHelp": "0 uses the model's context window minus the reserve. Otherwise, {{min}} to {{max}}. Checked before each model request; it's not a hard cutoff.",
     "limitProblem": "Use 0, or a whole number from {{min}} to {{max}}.",
-    "lead": "When to compact a conversation, how large its context can grow, and the features that work on the context."
+    "lead": "When to compact a conversation, how large its context can grow and the features that work on the context."
   },
   "permissions": {
     "modes": {
@@ -261,11 +261,11 @@
       },
       "jev": {
         "title": "Jev approves",
-        "description": "Reads and edits inside the project go ahead. Jev approves commands, changes outside the project, and actions outside this computer for you, and only asks you when it's unsure."
+        "description": "Reads and edits inside the project go ahead. Jev approves commands, changes outside the project and actions outside this computer for you, and only asks you when it's unsure."
       },
       "ask": {
         "title": "Ask first",
-        "description": "Only reads go ahead. mu asks you before every edit, command, and action outside this computer."
+        "description": "Only reads go ahead. mu asks you before every edit, command and action outside this computer."
       }
     }
   },
@@ -325,9 +325,9 @@
     "name": "Display name",
     "namePlaceholder": "e.g. My proxy",
     "id": "ID",
-    "idHelp": "Lowercase letters, digits, and hyphens. Can't be changed after you save.",
+    "idHelp": "Lowercase letters, digits and hyphens. Can't be changed after you save.",
     "idProblem": {
-      "format": "Use up to 40 lowercase letters, digits, and hyphens, starting with a letter or digit.",
+      "format": "Use up to 40 lowercase letters, digits and hyphens, starting with a letter or digit.",
       "reserved": "This ID belongs to a built-in provider. Using it would reroute that provider instead of adding a new one.",
       "taken": "This ID is already in use."
     },
@@ -347,7 +347,7 @@
     "commented": "models.json contains comments, and saving from here would remove them, so providers are read-only. Remove the comments by hand to edit providers here.",
     "modelCount_one": "{{count, number}} model",
     "modelCount_other": "{{count, number}} models",
-    "summary": "Sign in with a subscription and use it right away, or connect any OpenAI-, Anthropic-, or Gemini-compatible endpoint.",
+    "summary": "Sign in with a subscription and use it right away, or connect any OpenAI-, Anthropic- or Gemini-compatible endpoint.",
     "subscriptions": "Subscriptions",
     "manualShort": "Manual",
     "needsSetup": "Not set up yet",
@@ -505,7 +505,7 @@
       "signedIn": {
         "title": "Sign in with a subscription",
         "tag": "No API key needed",
-        "description": "ChatGPT, Claude, Grok, or another plan"
+        "description": "ChatGPT, Claude, Grok or another plan"
       },
       "openai": {
         "title": "OpenAI-compatible API",
@@ -536,7 +536,7 @@
     "apiKey": {
       "title": "Paste an API key",
       "tag": "Easiest",
-      "description": "DeepSeek, Kimi, Qwen, GLM, OpenAI, Claude, Gemini, and more. mu detects the service from the key and sets up the rest",
+      "description": "DeepSeek, Kimi, Qwen, GLM, OpenAI, Claude, Gemini and more. mu detects the service from the key and sets up the rest",
       "placeholder": "Paste the key here",
       "service": "Service",
       "servicePlaceholder": "Detected from the key",
@@ -568,8 +568,8 @@
       "problems": {
         "key": "Paste the API key first.",
         "service": "Choose the service this key is from.",
-        "notWorking": "The key doesn't work yet. Fix it above, choose another option, or skip for now.",
-        "notReady": "{{service}} isn't ready yet. Follow the note above, choose another option, or skip for now.",
+        "notWorking": "The key doesn't work yet. Fix it above, choose another option or skip for now.",
+        "notReady": "{{service}} isn't ready yet. Follow the note above, choose another option or skip for now.",
         "model": "Enter the model to start with."
       },
       "services": {
@@ -653,7 +653,7 @@
       "points": {
         "judge": {
           "title": "A check at every step",
-          "text": "A built-in judge watches the key moments, so mu thinks before it acts, follows your rules, and never calls a job done without checking it."
+          "text": "A built-in judge watches the key moments, so mu thinks before it acts, follows your rules and never calls a job done without checking it."
         },
         "control": {
           "title": "You see it, you steer it",
@@ -661,7 +661,7 @@
         },
         "ready": {
           "title": "Works out of the box",
-          "text": "It picks up the rules, skills, and MCP servers you've already set up in Claude Code, Cursor, and Codex."
+          "text": "It picks up the rules, skills and MCP servers you've already set up in Claude Code, Cursor and Codex."
         }
       },
       "start": "Set up"
@@ -727,10 +727,10 @@
     "modelFailed": "The model request failed.",
     "turnRunning": "mu is still working on your previous message. Wait for it to finish, or stop it first.",
     "busyConfig": "Wait for the current turn to finish before changing the model or thinking level.",
-    "unsupportedValue": "mu doesn't support this model, thinking level, or permission mode.",
+    "unsupportedValue": "mu doesn't support this model, thinking level or permission mode.",
     "permissionsNotSwitched": "mu couldn't switch the permission mode. Try again, or type /permissions in the conversation.",
-    "imageUnsupported": "You can only send PNG, JPEG, WebP, or GIF images up to 12 MB.",
-    "contentUnsupported": "mu only accepts text, images, and text files.",
+    "imageUnsupported": "You can only send PNG, JPEG, WebP or GIF images up to 12 MB.",
+    "contentUnsupported": "mu only accepts text, images and text files.",
     "wrongProject": "This conversation belongs to another project folder.",
     "notPersisted": "mu couldn't save this conversation.",
     "startFailed": "mu couldn't start.",
@@ -780,8 +780,8 @@
     }
   },
   "errors": {
-    "credential": "The key contains characters that aren't allowed, such as spaces, quotes, or line breaks. Paste it again.",
-    "keyVariable": "{{name}} can't hold a judge key. Use TYPESAFE_API_KEY, AI_GATEWAY_API_KEY, or a name that starts with MU_JUDGE_.",
+    "credential": "The key contains characters that aren't allowed, such as spaces, quotes or line breaks. Paste it again.",
+    "keyVariable": "{{name}} can't hold a judge key. Use TYPESAFE_API_KEY, AI_GATEWAY_API_KEY or a name that starts with MU_JUDGE_.",
     "judgeEndpoint": "Jev's service has no address to send the key to. Enter an address, or choose another service.",
     "sharedKey": "{{providers}} would share one key variable. Change one of the IDs.",
     "pickBoth": "Choose a provider and a model together.",
@@ -806,17 +806,17 @@
     "importMissing": "This version of mu can't import conversations. Update mu first.",
     "importFailed": "mu couldn't import the conversations.",
     "skillInvalid": "This folder isn't a skill: it has no SKILL.md with a description.",
-    "skillName": "“{{name}}” isn't a valid skill folder name. Use lowercase letters, digits, and hyphens.",
+    "skillName": "“{{name}}” isn't a valid skill folder name. Use lowercase letters, digits and hyphens.",
     "skillExists": "mu already has a skill named {{name}}.",
     "skillTooLarge": "This folder is too large to be a skill (over 2,000 files or 50 MB).",
     "notFound": "Couldn't find {{name}}. It may have been moved.",
     "notMine": "{{name}} comes from {{source}}. mu doesn't change those files.",
-    "mcpName": "“{{name}}” isn't a valid server name. Use letters, digits, _, and -.",
+    "mcpName": "“{{name}}” isn't a valid server name. Use letters, digits, _ and -.",
     "mcpExists": "mu already has a server named {{name}}.",
     "mcpInvalid": {
       "command": "This command isn't valid. Check it and try again.",
       "url": "The URL must start with http:// or https://.",
-      "env": "Variable names can only contain letters, digits, and _, and can't start with a digit.",
+      "env": "Variable names can only contain letters, digits and _, and can't start with a digit.",
       "headers": "A header name or value isn't valid."
     }
   },
@@ -1133,7 +1133,7 @@
         "title": "Add an MCP server",
         "submit": "Add",
         "name": "Name",
-        "nameHelp": "Letters, digits, _, and -",
+        "nameHelp": "Letters, digits, _ and -",
         "kind": "Connection",
         "command": "Command",
         "commandHelp": "The program mu starts and its arguments, as you'd type them in a terminal.",

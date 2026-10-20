@@ -143,7 +143,7 @@
       "title": "Start new context",
       "description": "Starts a new backend session. Chat history and tasks are kept.",
       "confirmTitle": "Start a new context for {{memberName}}?",
-      "confirmContent": "This stops the current agent session and starts a new one for the next message. Chat history, tasks, files, model, and member settings are kept, but the agent loses the context from the previous session.",
+      "confirmContent": "This stops the current agent session and starts a new one for the next message. Chat history, tasks, files, model and member settings are kept, but the agent loses the context from the previous session.",
       "confirm": "Start new context",
       "success": "Started a new context for {{memberName}}.",
       "partialSuccess": "The context was reset for {{memberName}}, but the agent couldn't restart. Use Retry start.",

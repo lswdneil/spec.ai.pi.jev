@@ -1,7 +1,7 @@
 {
   "welcome": {
     "title": "What do you want to work on today?",
-    "placeholder": "Send a message, attach files, open a folder, schedule a task, or type / for commands…",
+    "placeholder": "Send a message, attach files, open a folder, schedule a task or type / for commands…",
     "linkFolder": "Open folder",
     "newConversation": "New chat",
     "selectModel": "Select model",
@@ -138,10 +138,10 @@
       "check_agent_version": "Check that the agent's version and protocol are compatible.",
       "check_local_command": "Install the missing command, or make sure it's on your PATH.",
       "check_provider_credentials": "Check the provider's API key or account credentials in Settings.",
-      "check_provider_billing": "Check your provider's balance, credits, or quota.",
-      "check_provider_base_url": "Check the provider's base URL, API path, proxy, and API compatibility.",
+      "check_provider_billing": "Check your provider's balance, credits or quota.",
+      "check_provider_base_url": "Check the provider's base URL, API path, proxy and API compatibility.",
       "change_model": "Choose a model your account can use that supports this request.",
-      "reduce_context": "Shorten the message, reference fewer files, or reduce the context, then try again.",
+      "reduce_context": "Shorten the message, reference fewer files or reduce the context, then try again.",
       "send_feedback": "Try again. If it keeps failing, check the app log."
     },
     "ownership": {
@@ -177,7 +177,7 @@
       },
       "USER_AGENT_STARTUP_FAILED": {
         "title": "The selected agent couldn't start",
-        "body": "The agent process exited before it was ready. Check its installation, sign-in status, and local command settings."
+        "body": "The agent process exited before it was ready. Check its installation, sign-in status and local command settings."
       },
       "USER_AGENT_OPENCLAW_GATEWAY_UNREACHABLE": {
         "title": "Can't reach OpenClaw Gateway",
@@ -257,7 +257,7 @@
       },
       "USER_LLM_PROVIDER_CONFIG_ERROR": {
         "title": "Model provider configuration is invalid",
-        "body": "Couldn't build a request from the current provider settings. Check the credentials, region, base URL, and other provider settings, then try again."
+        "body": "Couldn't build a request from the current provider settings. Check the credentials, region, base URL and other provider settings, then try again."
       },
       "USER_LLM_PROVIDER_MODEL_NOT_FOUND": {
         "title": "The selected model was not found",
@@ -265,7 +265,7 @@
       },
       "USER_LLM_PROVIDER_RATE_LIMITED": {
         "title": "Model provider rate limit reached",
-        "body": "The provider is temporarily limiting requests. Wait a moment, send requests less often, or switch models."
+        "body": "The provider is temporarily limiting requests. Wait a moment, send requests less often or switch models."
       },
       "USER_LLM_PROVIDER_TIMEOUT": {
         "title": "Model provider request timed out",
@@ -273,7 +273,7 @@
       },
       "USER_LLM_PROVIDER_NETWORK_ERROR": {
         "title": "Couldn't reach the model provider",
-        "body": "A network or DNS error blocked the connection to the provider. Check your network, proxy, and base URL."
+        "body": "A network or DNS error blocked the connection to the provider. Check your network, proxy and base URL."
       },
       "USER_LLM_PROVIDER_GATEWAY_ERROR": {
         "title": "Model provider service is unavailable",
@@ -285,7 +285,7 @@
       },
       "USER_LLM_PROVIDER_BILLING_REQUIRED": {
         "title": "The provider requires billing",
-        "body": "The selected provider needs active billing, credits, or quota before it can complete this request."
+        "body": "The selected provider needs active billing, credits or quota before it can complete this request."
       },
       "USER_LLM_PROVIDER_UNSUPPORTED_MODEL": {
         "title": "Model doesn't support this request",
@@ -293,7 +293,7 @@
       },
       "USER_LLM_PROVIDER_ENDPOINT_NOT_FOUND": {
         "title": "Model provider endpoint was not found",
-        "body": "The provider couldn't find the endpoint or API path. Check the base URL, deployment name, and API compatibility."
+        "body": "The provider couldn't find the endpoint or API path. Check the base URL, deployment name and API compatibility."
       },
       "USER_LLM_PROVIDER_INVALID_REQUEST": {
         "title": "Model provider rejected the request",
@@ -305,7 +305,7 @@
       },
       "USER_LLM_PROVIDER_CONTEXT_TOO_LARGE": {
         "title": "Context is too large for the model",
-        "body": "The request exceeds the model's context limit. Shorten the message, reference fewer files, or start a new conversation."
+        "body": "The request exceeds the model's context limit. Shorten the message, reference fewer files or start a new conversation."
       },
       "USER_LLM_PROVIDER_EMPTY_RESPONSE": {
         "title": "Model provider returned an empty response",
@@ -318,7 +318,7 @@
       },
       "UNKNOWN_UPSTREAM_ERROR": {
         "title": "The upstream agent or provider failed",
-        "body": "The app got an upstream error but couldn't tell whether it came from the agent, the provider, the network, or your local environment."
+        "body": "The app got an upstream error but couldn't tell whether it came from the agent, the provider, the network or your local environment."
       },
       "MCP_HTTP_RESPONSE_READ_FAILED": {
         "title": "Couldn't read the team helper's response",
@@ -326,7 +326,7 @@
       },
       "MCP_TOOL_REMOTE_ERROR": {
         "title": "The local team helper rejected the request",
-        "body": "The local team helper returned an error for this request. Check the details below, adjust the team action, and try again."
+        "body": "The local team helper returned an error for this request. Check the details below, adjust the team action and try again."
       },
       "MCP_TOOL_RESPONSE_UNEXPECTED": {
         "title": "The team helper returned an unexpected response",
@@ -480,12 +480,12 @@
     "noAnswer": "This conversation doesn't contain a clear answer to the side question.",
     "loading": "Thinking…",
     "parentTaskRunning": "The main task is still running in the background.",
-    "dismissHint": "Press Escape, Enter, or Space to dismiss",
+    "dismissHint": "Press Escape, Enter or Space to dismiss",
     "unsupported": "Side questions aren't available for this conversation.",
     "alreadyRunning": "A side question is already running.",
     "attachmentsNotAllowed": "Side questions can't include files or DOM snippets.",
     "emptyQuestion": "Type a question after /btw.",
-    "toolsRequired": "/btw can only answer questions based on what's already in this conversation. It doesn't have access to search, browse, or fetch new information.",
+    "toolsRequired": "/btw can only answer questions based on what's already in this conversation. It doesn't have access to search, browse or fetch new information.",
     "error": "Couldn't answer the side question."
   },
   "commandQueue": {
@@ -502,7 +502,7 @@
     "files": "{{count}} files",
     "files_one": "{{count}} file",
     "files_other": "{{count}} files",
-    "pausedAfterFailure": "The next queued command couldn't start. Edit, reorder, or remove it to continue.",
+    "pausedAfterFailure": "The next queued command couldn't start. Edit, reorder or remove it to continue.",
     "emptyInput": "Queued commands can't be empty.",
     "queueFull": "Queue is full. Remove a command before adding more.",
     "inputTooLong": "This queued command is too long. Shorten it before sending.",

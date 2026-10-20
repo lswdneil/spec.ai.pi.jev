@@ -10,7 +10,7 @@
   },
   "fileOps": {
     "displayName": "File operations",
-    "description": "Read, write, and edit files"
+    "description": "Read, write and edit files"
   },
   "webSearch": {
     "displayName": "Web search",

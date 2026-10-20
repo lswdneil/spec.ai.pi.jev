@@ -282,7 +282,7 @@ describe('MessageTips — error chips', () => {
       />
     );
 
-    expect(screen.getByText("Suggestion: Check your provider's balance, credits, or quota.")).toBeInTheDocument();
+    expect(screen.getByText("Suggestion: Check your provider's balance, credits or quota.")).toBeInTheDocument();
   });
 
   it('renders billing-required provider errors from i18n instead of backend fallback text', () => {
@@ -300,7 +300,7 @@ describe('MessageTips — error chips', () => {
     );
 
     expect(screen.getByText('The provider requires billing')).toBeInTheDocument();
-    expect(screen.getByText(/needs active billing, credits, or quota/)).toBeInTheDocument();
+    expect(screen.getByText(/needs active billing, credits or quota/)).toBeInTheDocument();
     expect(screen.queryByText('backend billing required fallback')).not.toBeInTheDocument();
   });
 

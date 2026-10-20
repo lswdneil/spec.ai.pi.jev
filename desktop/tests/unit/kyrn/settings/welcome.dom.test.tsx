@@ -444,7 +444,7 @@ describe('the first-run guide', () => {
     fireEvent.click(await screen.findByTestId('mu-welcome-start'));
     expect(
       await screen.findByText(
-        "Couldn't save: The key contains characters that aren't allowed, such as spaces, quotes, or line breaks. Paste it again."
+        "Couldn't save: The key contains characters that aren't allowed, such as spaces, quotes or line breaks. Paste it again."
       )
     ).toBeInTheDocument();
     expect(screen.queryByText(/Invalid credential/)).not.toBeInTheDocument();

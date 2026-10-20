@@ -34,7 +34,7 @@
   "pptOpenHint": "Open the file in its default app to see the full presentation",
   "pptOpenFile": "Open file",
   "pptShowLocation": "Show in folder",
-  "pptSystemAppHint": "Opens in your default app, such as PowerPoint, Keynote, or WPS",
+  "pptSystemAppHint": "Opens in your default app, such as PowerPoint, Keynote or WPS",
   "openWithApp": "Open in {{app}}",
   "openInSystemApp": "Open in default app",
   "openInSystemSuccess": "Opened in the default app",
@@ -156,7 +156,7 @@
     "agentActiveTooltip": "The agent is using this tab",
     "tabLimitReached": "Browser tab limit reached ({{count}}). The oldest tab was reused.",
     "agentFirstUseTitle": "The agent is using the in-app browser",
-    "agentFirstUseContent": "It can open pages, click, and read content in this panel. Your sign-ins are kept between sessions.",
+    "agentFirstUseContent": "It can open pages, click and read content in this panel. Your sign-ins are kept between sessions.",
     "agentFirstUseAction": "Open settings"
   },
   "saveConflict": "Couldn't save: this file changed on disk since you opened it. Reload to see the other changes — your edits are still here, unsaved.",

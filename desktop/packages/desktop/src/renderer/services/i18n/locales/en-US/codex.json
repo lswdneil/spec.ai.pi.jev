@@ -1,7 +1,7 @@
 {
   "sendbox": {},
   "network": {
-    "cloudflare_blocked": "Cloudflare blocked access to {{service}}. Try a VPN, switch networks, try again later, or switch to another AI service.",
+    "cloudflare_blocked": "Cloudflare blocked access to {{service}}. Try a VPN, switch networks, try again later or switch to another AI service.",
     "network_timeout": "The network timed out. Reconnecting…",
     "connection_refused": "Connection refused. Check that the Codex service is running.",
     "unknown_error": "Network error. Check your network settings.",
@@ -23,7 +23,7 @@
         "• Switch networks (for example, to a mobile hotspot)",
         "• Wait 10–30 minutes and try again",
         "• Clear your browser cache and cookies",
-        "• Switch to another available service: ChatGPT, Claude, Qwen, or Gemini"
+        "• Switch to another available service: ChatGPT, Claude, Qwen or Gemini"
       ],
       "network_timeout": [
         "• Check that your network connection is stable",

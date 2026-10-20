@@ -24,7 +24,7 @@
   "switchFailed": "Couldn't switch mode",
   "descriptions": {
     "full": "Runs everything without asking. Anything you've told mu not to do is still blocked.",
-    "jev": "Reads and edits inside the project go ahead. Jev approves commands, changes outside the project, and external actions for you, and asks you only when it isn't sure.",
-    "ask": "Only reads go ahead. mu asks you before every edit, command, and external action."
+    "jev": "Reads and edits inside the project go ahead. Jev approves commands, changes outside the project and external actions for you, and asks you only when it isn't sure.",
+    "ask": "Only reads go ahead. mu asks you before every edit, command and external action."
   }
 }
