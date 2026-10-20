@@ -1294,6 +1294,10 @@
       "firstHint": "この行は Jev の判定です。Jev がまず各メッセージを分類し、mu がその後の進め方を決めます。すべての判定は右側の「判定」にあります。"
     },
     "eventLine": {
+      "judgeNotice": {
+        "freeJev": "Jev キーが未設定のため、OpenCode Zen の無料 Jev を使用中",
+        "freeJevUnavailable": "無料の Jev が応答しなくなりました。Jev キーを設定するまで固定ルールで判断します"
+      },
       "detail": "詳細: {{detail}}",
       "progress": {
         "frame": "タスクフレームを更新しています",

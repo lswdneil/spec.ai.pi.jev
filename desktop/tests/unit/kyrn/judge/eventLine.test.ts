@@ -408,6 +408,17 @@ describe('Runtime event lines by the harness codes', () => {
     expect(say(zh, 'rewind.proposed', { ...same, triggerParams: { times: 3 } })).toEqual([same.trigger]);
     expect(say(zh, 'rewind.proposed', { trigger: 'old trigger' })).toEqual(['old trigger']);
   });
+
+  it('says a notice about the judge by its code, and leaves an unknown one to the generic line', () => {
+    expect(both('judge.notice', { code: 'free_jev', message: 'mu: no Jev key is set…' })).toEqual([
+      ['Using the free Jev on OpenCode Zen: no Jev key is set'],
+      ['未配置 Jev 密钥，使用 OpenCode Zen 上的免费 Jev'],
+    ]);
+    expect(say(tw, 'judge.notice', { code: 'free_jev_unavailable' }, 'zh-TW')).toEqual([
+      '免費 Jev 已停止回答：設定 Jev 金鑰之前由固定規則決定',
+    ]);
+    expect(say(en, 'judge.notice', { code: 'future', message: 'later' })).toBeUndefined();
+  });
 });
 
 describe('Browser run lines', () => {

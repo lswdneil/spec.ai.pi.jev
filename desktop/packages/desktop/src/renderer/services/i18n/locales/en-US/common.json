@@ -1294,6 +1294,10 @@
       "firstHint": "This line is Jev’s verdict: Jev sorts each message first, then mu decides what to do. Every verdict is listed under Judge on the right."
     },
     "eventLine": {
+      "judgeNotice": {
+        "freeJev": "Using the free Jev on OpenCode Zen: no Jev key is set",
+        "freeJevUnavailable": "The free Jev stopped answering: plain rules decide until a Jev key is set"
+      },
       "detail": "Details: {{detail}}",
       "progress": {
         "frame": "Updating the task frame",

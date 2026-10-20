@@ -538,6 +538,8 @@ export type I18nKey =
   | 'common.kyrn.eventLine.injection.byRules'
   | 'common.kyrn.eventLine.injection.excerpt'
   | 'common.kyrn.eventLine.injection.withheld'
+  | 'common.kyrn.eventLine.judgeNotice.freeJev'
+  | 'common.kyrn.eventLine.judgeNotice.freeJevUnavailable'
   | 'common.kyrn.eventLine.mcp.aborted'
   | 'common.kyrn.eventLine.mcp.closed'
   | 'common.kyrn.eventLine.mcp.crashedAgain'

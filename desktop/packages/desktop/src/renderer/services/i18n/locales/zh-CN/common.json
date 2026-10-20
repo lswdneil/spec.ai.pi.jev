@@ -1294,6 +1294,10 @@
       "firstHint": "这一行是 Jev 的判断：每条消息先由 Jev 快速归类，mu 再决定怎么接。每次判断都在右侧「判定」里。"
     },
     "eventLine": {
+      "judgeNotice": {
+        "freeJev": "未配置 Jev 密钥，使用 OpenCode Zen 上的免费 Jev",
+        "freeJevUnavailable": "免费 Jev 已停止回答：配置 Jev 密钥之前由固定规则决定"
+      },
       "detail": "详情：{{detail}}",
       "progress": {
         "frame": "正在更新任务帧",

@@ -1294,6 +1294,10 @@
       "firstHint": "Bu satır Jev’in kararı: Jev önce her mesajı sınıflandırır, sonra mu nasıl devam edeceğine karar verir. Tüm kararlar sağdaki Kararlar sekmesinde."
     },
     "eventLine": {
+      "judgeNotice": {
+        "freeJev": "Jev anahtarı yok: OpenCode Zen'deki ücretsiz Jev yanıtlıyor",
+        "freeJevUnavailable": "Ücretsiz Jev yanıt vermeyi bıraktı: Bir Jev anahtarı ayarlanana kadar sabit kurallar karar veriyor"
+      },
       "detail": "Ayrıntılar: {{detail}}",
       "progress": {
         "frame": "Görev çerçevesi güncelleniyor",

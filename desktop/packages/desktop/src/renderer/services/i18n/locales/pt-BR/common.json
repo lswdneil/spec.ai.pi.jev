@@ -1294,6 +1294,10 @@
       "firstHint": "Esta linha é o veredito do Jev: o Jev classifica cada mensagem primeiro e depois o mu decide como seguir. Todos os vereditos ficam em Vereditos, à direita."
     },
     "eventLine": {
+      "judgeNotice": {
+        "freeJev": "Nenhuma chave do Jev definida: o Jev gratuito do OpenCode Zen responde",
+        "freeJevUnavailable": "O Jev gratuito parou de responder: regras fixas decidem até que uma chave do Jev seja definida"
+      },
       "detail": "Detalhes: {{detail}}",
       "progress": {
         "frame": "Atualizando a definição da tarefa",

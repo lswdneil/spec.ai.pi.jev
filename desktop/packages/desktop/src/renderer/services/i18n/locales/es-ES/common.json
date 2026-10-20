@@ -1294,6 +1294,10 @@
       "firstHint": "Esta línea es la valoración de Jev: Jev clasifica primero cada mensaje y luego mu decide cómo seguir. Cada valoración está en Veredictos, a la derecha."
     },
     "eventLine": {
+      "judgeNotice": {
+        "freeJev": "No hay clave de Jev: responde el Jev gratuito de OpenCode Zen",
+        "freeJevUnavailable": "El Jev gratuito dejó de responder: deciden reglas fijas hasta que configures una clave de Jev"
+      },
       "detail": "Detalles: {{detail}}",
       "progress": {
         "frame": "Actualizando el marco de la tarea",

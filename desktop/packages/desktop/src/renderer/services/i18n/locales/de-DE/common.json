@@ -1294,6 +1294,10 @@
       "firstHint": "Diese Zeile ist Jevs Urteil: Jev ordnet jede Nachricht zuerst ein, dann entscheidet mu, wie es weitergeht. Jedes Urteil steht rechts unter Urteile."
     },
     "eventLine": {
+      "judgeNotice": {
+        "freeJev": "Kein Jev-Schlüssel gesetzt: Der kostenlose Jev auf OpenCode Zen antwortet",
+        "freeJevUnavailable": "Der kostenlose Jev antwortet nicht mehr: Bis ein Jev-Schlüssel gesetzt ist, entscheiden feste Regeln"
+      },
       "detail": "Details: {{detail}}",
       "progress": {
         "frame": "Aufgabenrahmen wird aktualisiert",
