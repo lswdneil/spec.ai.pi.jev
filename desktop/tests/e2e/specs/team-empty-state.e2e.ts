@@ -65,7 +65,9 @@ for (const leaderType of TEAM_SUPPORTED_BACKENDS) {
 
     // The chat send-box textarea placeholder starts with "Send message to" / "发送消息到".
     // We scope via this placeholder so the sidebar search textarea never matches first.
-    const chatInput = page.locator('textarea[placeholder^="Send message"], textarea[placeholder^="发送消息"]').first();
+    const chatInput = page
+      .locator('textarea[placeholder^="Send a message"], textarea[placeholder^="发送消息"]')
+      .first();
     await expect(chatInput).toBeVisible({ timeout: 5000 });
     await page.screenshot({ path: `tests/e2e/results/team-empty-${leaderType}-after-click.png` });
     await expect(chatInput).toHaveValue(EXPECTED_DEBATE_VALUE, { timeout: 5000 });

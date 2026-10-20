@@ -77,7 +77,7 @@ describe('the permission card of a native dialog', () => {
     const { answered } = show(asking());
     expect(screen.getByTestId('native-dialog')).toHaveAttribute('data-method', 'select');
     expect(screen.getByText('mu wants to run a command')).toBeInTheDocument();
-    expect(screen.getByText('Jev is not sure this step is what you want.')).toBeInTheDocument();
+    expect(screen.getByText("Jev isn't sure this step is what you want.")).toBeInTheDocument();
     expect(screen.getByText('ls -la')).toBeInTheDocument();
     expect(options().map((option) => option.textContent)).toEqual(ANSWERS);
     await act(async () => {
@@ -95,7 +95,7 @@ describe('the permission card of a native dialog', () => {
       fireEvent.click(options()[0]);
     });
     expect(screen.getByTestId('message-acp-permission-error')).toHaveTextContent(
-      'Could not send the response. Please try again.'
+      "Couldn't send the response. Try again."
     );
     expect(options()).toHaveLength(3);
   });
@@ -186,13 +186,13 @@ describe('other native dialogs', () => {
     const dialog: ViewDialog = { id: 'd6', method: 'confirm', title: 'Quick?', timeout: 3000, inRun: true };
     const { expired } = show(dialog, undefined, 2);
     expect(screen.getByTestId('native-dialog-countdown')).toHaveTextContent(
-      'Closes in 3 s; mu then goes on without your answer.'
+      'Closes in 3s, then mu continues without your answer.'
     );
-    expect(screen.getByText('Waiting after this one: 2')).toBeInTheDocument();
+    expect(screen.getByText('2 more waiting')).toBeInTheDocument();
     act(() => {
       vi.advanceTimersByTime(1000);
     });
-    expect(screen.getByTestId('native-dialog-countdown')).toHaveTextContent('Closes in 2 s');
+    expect(screen.getByTestId('native-dialog-countdown')).toHaveTextContent('Closes in 2s');
     expect(expired).toEqual([]);
     act(() => {
       vi.advanceTimersByTime(2000);

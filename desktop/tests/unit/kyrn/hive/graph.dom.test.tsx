@@ -56,7 +56,7 @@ describe('the map of a run', () => {
       'prefix-mutations → provider-cache: 2 deliveries\n· Prefix remains stable after the first request.\n· Again.'
     );
     expect(titles).toContain(
-      'provider-cache corrected a finding of prefix-mutations\n· The prefix changes once the provider swaps its cache key.'
+      'provider-cache corrected a finding from prefix-mutations\n· The prefix changes once the provider swaps its cache key.'
     );
     // Its legend names only what is on the map, in plain words.
     const legend = screen.getByRole('list', { name: 'Legend' });

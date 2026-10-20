@@ -65,7 +65,7 @@ test.describe('Team Create - mobile (narrow screen)', () => {
     await createBtn.click();
 
     await expect(
-      page.locator('.arco-modal h3').filter({ hasText: /Create Team|创建团队|New Team|新建团队/ })
+      page.locator('.arco-modal h3').filter({ hasText: /Create team|创建团队|New team|新建团队/ })
     ).toBeVisible({ timeout: 5_000 });
 
     // Shrink below the breakpoint — the open modal re-renders into its mobile layout.

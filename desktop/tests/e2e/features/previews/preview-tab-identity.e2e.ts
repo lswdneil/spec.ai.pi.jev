@@ -34,7 +34,7 @@ import { goToGuid } from '../../helpers';
 const PREVIEW_PANEL = '[data-project-preview-region]';
 
 /** `preview.unsavedChangesTitle`, both shipped locales. */
-const DIRTY_MARK = /Unsaved Changes|未保存的修改/;
+const DIRTY_MARK = /Unsaved changes|未保存的修改/;
 
 type BackendWindow = Window & { __backendPort?: number };
 

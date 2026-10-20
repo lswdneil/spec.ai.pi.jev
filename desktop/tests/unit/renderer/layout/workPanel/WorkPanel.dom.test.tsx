@@ -948,7 +948,7 @@ describe('where the panel sits', () => {
       expect(screen.queryByTestId('work-panel-resize')).not.toBeInTheDocument();
 
       const back = screen.getByTestId('work-panel-back');
-      expect(back).toHaveTextContent('Back to Chat');
+      expect(back).toHaveTextContent('Back to chat');
       fireEvent.click(back);
       expect(panel()).toHaveAttribute('data-open', 'false');
     });

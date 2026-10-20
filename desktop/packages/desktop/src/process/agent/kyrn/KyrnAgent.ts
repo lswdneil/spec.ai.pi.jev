@@ -188,20 +188,20 @@ export function readDefaultModel(home?: string): { provider: string; id: string 
  */
 export const MU_NOTICES = {
   /** A question of mu's got no usable answer (the app failed to ask, or answered with none of the choices). */
-  answer_lost: 'mu did not get your answer, so it went on as if you had declined.',
+  answer_lost: "mu didn't receive your answer, so it continued as if you had declined.",
   /** A command failed because mu found no bash on Windows: Git for Windows is missing (see `bashMissing`). */
   bash_missing:
-    'mu needs Git for Windows to run commands. Once it is installed, send your message again. Download it here: https://git-scm.com/download/win',
+    'mu needs Git for Windows to run commands. Install it, then send your message again. Download it here: https://git-scm.com/download/win',
   /**
    * The conversation goes without checkpoints (mu's `checkpoint.off`). The input carries mu's reason code and what it
    * names (`code`, `params`); the title is mu's own line, already in the app's language, and this only its stand-in.
    */
-  checkpoint_off: 'mu: checkpoints are off in this session.',
+  checkpoint_off: 'mu: checkpoints are off in this conversation.',
   /**
    * No Jev key is set, so the judge answers with the free Jev on OpenCode Zen (mu's `judge.notice`). The title is mu's
    * own line, already in the app's language, and this only its stand-in.
    */
-  free_jev: 'mu: no Jev key is set, so the judge uses the free Jev on OpenCode Zen for now.',
+  free_jev: 'mu: no Jev key is set, so the judge is the free Jev on OpenCode Zen for now.',
   /**
    * The free Jev stopped answering (mu's `judge.notice`); the input's `code` says why: `paid` (it asks for a key or
    * payment) or `gone` (no longer offered). Plain rules decide until a Jev key is set.

@@ -37,9 +37,11 @@ beforeAll(async () => {
 describe('counted sentences on the conversation page', () => {
   it('uses the singular for one in English', async () => {
     await i18n.changeLanguage('en-US');
-    expect(i18n.t('conversation.history.batchArchiveSuccess', { count: 1 })).toBe('Archived 1 topic');
-    expect(i18n.t('conversation.history.batchArchiveSuccess', { count: 3 })).toBe('Archived 3 topics');
-    expect(i18n.t('conversation.history.batchArchiveConfirm', { count: 1 })).toMatch(/^Archive 1 selected topic\?/);
+    expect(i18n.t('conversation.history.batchArchiveSuccess', { count: 1 })).toBe('Archived 1 conversation');
+    expect(i18n.t('conversation.history.batchArchiveSuccess', { count: 3 })).toBe('Archived 3 conversations');
+    expect(i18n.t('conversation.history.batchArchiveConfirm', { count: 1 })).toMatch(
+      /^Archive 1 selected conversation\?/
+    );
     expect(i18n.t('conversation.history.archiveProjectConfirm', { name: 'mu', count: 1 })).toContain(
       'Its 1 conversation will'
     );

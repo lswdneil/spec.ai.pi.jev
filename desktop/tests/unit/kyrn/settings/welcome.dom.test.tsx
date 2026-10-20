@@ -185,10 +185,12 @@ describe('a settings section as its own page', () => {
     });
     at('/settings/judges', <SettingsArea page='judges' />);
     const panel = await screen.findByTestId('mu-laya');
-    await waitFor(() => expect(panel).toHaveTextContent('Not installed yet.'));
+    await waitFor(() => expect(panel).toHaveTextContent('Not installed.'));
     fireEvent.click(within(panel).getByTestId('mu-laya-install'));
     // Nothing is downloaded before the person says yes, and they are told how much.
-    expect(await screen.findByText(/downloads about 800 MB from PyPI and Hugging Face/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/downloads about 800 MB of Python packages and model weights from PyPI and Hugging Face/)
+    ).toBeInTheDocument();
     expect(bridge.localJudgeRun).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'Download and install' }));
     await waitFor(() => expect(bridge.localJudgeRun).toHaveBeenCalledWith({ action: 'setup', consent: true }));
@@ -199,7 +201,7 @@ describe('a settings section as its own page', () => {
       ok: true,
       data: { support: 'ok', installed: true, running: true, url, task: { ...task, action: 'start', phase: 'done' } },
     });
-    await waitFor(() => expect(panel).toHaveTextContent('Running on this machine'), { timeout: 3000 });
+    await waitFor(() => expect(panel).toHaveTextContent('Running on this computer'), { timeout: 3000 });
     expect(within(panel).getByTestId('mu-laya-stop')).toBeInTheDocument();
     expect(within(panel).queryByTestId('mu-laya-output')).not.toBeInTheDocument();
   });
@@ -212,7 +214,7 @@ describe('a settings section as its own page', () => {
     });
     const { unmount } = at('/settings/judges', <SettingsArea page='judges' />);
     const panel = await screen.findByTestId('mu-laya');
-    await waitFor(() => expect(panel).toHaveTextContent('Installing needs uv'));
+    await waitFor(() => expect(panel).toHaveTextContent('Installing Laya requires uv'));
     expect(within(panel).getByTestId('mu-laya-uv')).toBeInTheDocument();
     expect(within(panel).queryByTestId('mu-laya-install')).not.toBeInTheDocument();
     unmount();
@@ -222,7 +224,7 @@ describe('a settings section as its own page', () => {
     });
     at('/settings/judges', <SettingsArea page='judges' />);
     const other = await screen.findByTestId('mu-laya');
-    await waitFor(() => expect(other).toHaveTextContent('or a Mac with Apple Silicon'));
+    await waitFor(() => expect(other).toHaveTextContent('or a Mac with Apple silicon'));
     expect(within(other).queryByRole('button')).not.toBeInTheDocument();
   });
 
@@ -247,7 +249,7 @@ describe('the first-run guide', () => {
     fireEvent.click(await screen.findByTestId('mu-welcome-begin'));
     expect(within(await screen.findByTestId('mu-welcome-way-openai')).getByText('Most common')).toBeInTheDocument();
     const anthropic = screen.getByTestId('mu-welcome-way-anthropic');
-    expect(anthropic).toHaveTextContent('Claude, and services that speak the Messages format');
+    expect(anthropic).toHaveTextContent('Claude and services that support the Messages format');
     expect(within(anthropic).queryByText('Claude')).not.toBeInTheDocument();
   });
 
@@ -271,7 +273,7 @@ describe('the first-run guide', () => {
     await screen.findByTestId('mu-welcome-step-judge');
     fireEvent.click(screen.getByTestId('mu-judge-choice-jev'));
     // With no key the free Jev answers: the step says so, and the service and key wait behind one link.
-    expect(screen.getByTestId('mu-welcome-judge-ready')).toHaveTextContent('The free Jev is ready');
+    expect(screen.getByTestId('mu-welcome-judge-ready')).toHaveTextContent('Jev is ready, free for now');
     expect(screen.queryByLabelText('TypeSafe API key')).toBeNull();
     fireEvent.click(screen.getByTestId('mu-welcome-judge-more'));
     fireEvent.change(screen.getByLabelText('TypeSafe API key'), { target: { value: 'jev-key' } });
@@ -426,8 +428,8 @@ describe('the first-run guide', () => {
       error: "EACCES: permission denied, open '/home/me/.mu/agent/settings.json'",
     });
     at('/welcome', <Welcome />);
-    expect(await screen.findByText('The settings could not be loaded')).toBeInTheDocument();
-    expect(screen.getByText('/home/me/.mu/agent/settings.json could not be read.')).toBeInTheDocument();
+    expect(await screen.findByText("Couldn't load the settings")).toBeInTheDocument();
+    expect(screen.getByText("Couldn't read /home/me/.mu/agent/settings.json.")).toBeInTheDocument();
     expect(screen.getByTestId('mu-error-detail')).toHaveTextContent('EACCES: permission denied');
     fireEvent.click(screen.getByText('Reload'));
 
@@ -442,7 +444,7 @@ describe('the first-run guide', () => {
     fireEvent.click(await screen.findByTestId('mu-welcome-start'));
     expect(
       await screen.findByText(
-        'Saving did not work: The key contains characters a key cannot have, such as spaces, quotes or line breaks. Paste it again.'
+        "Couldn't save: The key contains characters that aren't allowed, such as spaces, quotes, or line breaks. Paste it again."
       )
     ).toBeInTheDocument();
     expect(screen.queryByText(/Invalid credential/)).not.toBeInTheDocument();
@@ -747,7 +749,7 @@ describe('signing in with a subscription', () => {
     bridge.loginState.mockResolvedValue({ ok: true, data: asking });
     fireEvent.click(google);
     const risk = await screen.findByTestId('mu-login-risk');
-    expect(risk).toHaveTextContent('the login Google made for Gemini CLI itself');
+    expect(risk).toHaveTextContent('the login Google built for Gemini CLI');
     expect(risk).toHaveTextContent('Gemini API key');
     expect(screen.queryByTestId('mu-login-waiting')).not.toBeInTheDocument();
     // Nothing is answered for the person.
@@ -802,7 +804,7 @@ describe('signing in with a subscription', () => {
     fireEvent.click(await screen.findByTestId('mu-login-xai'));
     expect(await screen.findByTestId('mu-login-device-code')).toHaveTextContent('WDJB-MJHT');
     expect(screen.getByTestId('mu-login-waiting')).toHaveTextContent('The Grok verification page is open');
-    expect(screen.getByRole('button', { name: 'Open the page again' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reopen the page' })).toBeInTheDocument();
   });
 
   it('says the account is signed in while its models are still being read', async () => {
@@ -822,9 +824,9 @@ describe('signing in with a subscription', () => {
     await toSubscriptions();
     fireEvent.click(await screen.findByTestId('mu-login-google-antigravity'));
     expect(await screen.findByTestId('mu-login-waiting')).toHaveTextContent(
-      'Signed in to Antigravity. Reading the models this account can use'
+      'Signed in to Antigravity. Loading the models this account can use'
     );
-    expect(screen.queryByRole('button', { name: 'Open the page again' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Reopen the page' })).not.toBeInTheDocument();
   });
 
   it('says whose question it is above a question pi asks in its own words', async () => {
@@ -834,7 +836,7 @@ describe('signing in with a subscription', () => {
     bridge.loginState.mockResolvedValue({ ok: true, data: asking });
     fireEvent.click(screen.getByTestId('mu-login-openai-codex'));
     const waiting = await screen.findByTestId('mu-login-waiting');
-    expect(waiting).toHaveTextContent('ChatGPT asks (in its own words):');
+    expect(waiting).toHaveTextContent('ChatGPT asks (original text):');
     expect(waiting).toHaveTextContent('Enter your workspace id:');
   });
 
@@ -849,7 +851,7 @@ describe('signing in with a subscription', () => {
       data: { ...running, phase: 'failed', error: 'Token exchange request failed' },
     });
     fireEvent.click(screen.getByTestId('mu-login-openai-codex'));
-    const alert = await screen.findByText('Signing in did not finish. You can try again.', {}, { timeout: 3000 });
+    const alert = await screen.findByText("Sign-in didn't finish. Try again.", {}, { timeout: 3000 });
     expect(alert).toHaveTextContent('Token exchange request failed');
     expect(screen.getByTestId('mu-login-openai-codex')).not.toBeDisabled();
   });
@@ -911,7 +913,7 @@ describe('pasting an API key', () => {
     await toKeyTile();
     paste(` ${glmKey} `);
     expect(screen.getByTestId('mu-welcome-key-service')).toHaveTextContent('GLM (Zhipu AI)');
-    expect(screen.getByTestId('mu-welcome-key-hint')).toHaveTextContent('Found from the key.');
+    expect(screen.getByTestId('mu-welcome-key-hint')).toHaveTextContent('Detected from the key.');
     expect(screen.getByTestId('mu-welcome-key-status')).toHaveTextContent('Checking the key with GLM');
     await said('The key works.');
     expect(bridge.testProvider).toHaveBeenCalledTimes(1);
@@ -950,7 +952,9 @@ describe('pasting an API key', () => {
     bridge.testProvider.mockResolvedValue(listing(['deepseek-chat', 'deepseek-v4-pro']));
     await toKeyTile();
     paste(sharedShape);
-    expect(screen.getByTestId('mu-welcome-key-hint')).toHaveTextContent('Keys of more than one service look like this');
+    expect(screen.getByTestId('mu-welcome-key-hint')).toHaveTextContent(
+      'Several services use keys that look like this'
+    );
     await new Promise((resolve) => setTimeout(resolve, SETTLE_MS + 200));
     expect(bridge.testProvider).not.toHaveBeenCalled();
     fireEvent.click(screen.getByTestId('mu-welcome-next'));
@@ -981,13 +985,13 @@ describe('pasting an API key', () => {
     bridge.testProvider.mockResolvedValue(refused);
     await toKeyTile();
     paste(kimiKey);
-    await said('Kimi did not accept this key.');
+    await said('Kimi rejected this key.');
     expect(hosts()).toEqual(['api.moonshot.cn', 'api.moonshot.ai']);
     expect(screen.getByText('The endpoint said: Invalid Authentication')).toBeInTheDocument();
     // A key that does not work is not written.
     fireEvent.click(screen.getByTestId('mu-welcome-next'));
     expect(screen.getByTestId('mu-welcome-step-model')).toBeInTheDocument();
-    expect(screen.getByText(/The key does not work yet/)).toBeInTheDocument();
+    expect(screen.getByText(/The key doesn't work yet/)).toBeInTheDocument();
 
     // Made on the international site: it works there, and that address is the one kept.
     bridge.testProvider.mockReset();
@@ -1009,8 +1013,8 @@ describe('pasting an API key', () => {
     bridge.testProvider.mockResolvedValue(listing(['qwen3:8b', 'llama3.3']));
     await toKeyTile();
     fireEvent.click(screen.getByLabelText('Service'));
-    fireEvent.click(await screen.findByText('Ollama (this machine)', { selector: '.arco-select-option' }));
-    await said('Ollama is running on this machine.');
+    fireEvent.click(await screen.findByText('Ollama (this computer)', { selector: '.arco-select-option' }));
+    await said('Ollama is running on this computer.');
     expect(bridge.testProvider).toHaveBeenCalledTimes(1);
     expect(bridge.testProvider.mock.calls[0][0]).toEqual({
       id: '',
@@ -1036,19 +1040,19 @@ describe('pasting an API key', () => {
     });
     await toKeyTile();
     fireEvent.click(screen.getByLabelText('Service'));
-    fireEvent.click(await screen.findByText('Ollama (this machine)', { selector: '.arco-select-option' }));
-    await said('Ollama is not answering on this machine. Start it, then check again.');
+    fireEvent.click(await screen.findByText('Ollama (this computer)', { selector: '.arco-select-option' }));
+    await said("Ollama isn't responding on this computer. Start it, then check again.");
     fireEvent.click(screen.getByTestId('mu-welcome-next'));
     expect(screen.getByTestId('mu-welcome-step-model')).toBeInTheDocument();
-    expect(screen.getByText(/Ollama is not ready yet/)).toBeInTheDocument();
-    expect(screen.queryByText(/The key does not work yet/)).not.toBeInTheDocument();
+    expect(screen.getByText(/Ollama isn't ready yet/)).toBeInTheDocument();
+    expect(screen.queryByText(/The key doesn't work yet/)).not.toBeInTheDocument();
   });
 
   it('starts on the service’s usual model when it lists none for a key it took', async () => {
     bridge.testProvider.mockResolvedValue(listing([]));
     await toKeyTile();
     paste(kimiKey);
-    await said('The key works, but Kimi lists no models for it.');
+    await said("The key works, but Kimi doesn't list any models for it.");
     // Asked once: a key .cn took is not tried at .ai.
     expect(hosts()).toEqual(['api.moonshot.cn']);
     expect(screen.getByLabelText('mu will start with')).toHaveValue('kimi-k2.6');
