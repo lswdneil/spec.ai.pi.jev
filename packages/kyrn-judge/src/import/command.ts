@@ -22,16 +22,16 @@ import {
 import { absolute } from "./session.ts";
 
 export const USAGE = [
-	"mu import: bring Claude Code and Codex conversations into mu, to continue them here.",
+	"mu import: import Claude Code and Codex conversations so you can continue them in mu.",
 	"",
-	"  mu import --list [--json] [--cwd <dir>]   the conversations on this machine (only <dir>'s with --cwd)",
+	"  mu import --list [--json] [--cwd <dir>]   list conversations on this machine (with --cwd, only <dir>'s)",
 	"  mu import <file>... [--json]              import these transcripts; each becomes a mu session",
 	"",
 	"  --agent-dir <dir>   mu's agent folder (default: MU_CODING_AGENT_DIR, else ~/.mu/agent)",
-	"  --sub-agents        also list the threads sub-agents ran",
+	"  --sub-agents        also list subagent threads",
 	"",
 	"Looks in ~/.claude/projects (CLAUDE_CONFIG_DIR) and ~/.codex/sessions (CODEX_HOME).",
-	"A conversation that was imported before is not imported again.",
+	"Conversations that were already imported are skipped.",
 ].join("\n");
 
 export interface ParsedArgs {
@@ -68,7 +68,7 @@ export function parseArgs(argv: readonly string[]): ParsedArgs | { error: string
 		} else if (arg.startsWith("--")) return { error: `unknown option ${arg}` };
 		else parsed.files.push(arg);
 	}
-	if (parsed.list && parsed.files.length > 0) return { error: "--list takes no files" };
+	if (parsed.list && parsed.files.length > 0) return { error: "--list doesn't take files" };
 	return parsed;
 }
 
@@ -138,7 +138,7 @@ export function formatList(conversations: readonly FoundConversation[], home: st
 	const toolWidth = Math.max(...Object.values(TOOL_NAMES).map((name) => name.length));
 	for (const [cwd, group] of groups) {
 		if (lines.length > 0) lines.push("");
-		lines.push(cwd ? tilde(cwd, home) : "(folder unknown)");
+		lines.push(cwd ? tilde(cwd, home) : "(unknown folder)");
 		for (const conversation of group) {
 			const title = conversation.title || "(no message found)";
 			const mark = conversation.importedAs ? "  (imported)" : "";
@@ -154,11 +154,11 @@ export function formatList(conversations: readonly FoundConversation[], home: st
 }
 
 export function formatResult(result: ImportResult, home: string): string {
-	if (result.status === "failed") return `Could not import ${tilde(result.source, home)}: ${result.error}`;
+	if (result.status === "failed") return `Couldn't import ${tilde(result.source, home)}: ${result.error}`;
 	if (result.status === "already-imported")
 		return [
 			`Already imported: ${tilde(result.source, home)}`,
-			`  it is the session ${tilde(result.sessionFile, home)}`,
+			`  as session ${tilde(result.sessionFile, home)}`,
 		].join("\n");
 	const { counts } = result;
 	const left = Object.entries(counts.dropped)
@@ -167,9 +167,9 @@ export function formatResult(result: ImportResult, home: string): string {
 	return [
 		`Imported from ${TOOL_NAMES[result.tool]}: "${result.name}"`,
 		`  ${tilde(result.sessionFile, home)}`,
-		`  ${counts.user} messages from you, ${counts.assistant} answers, ${counts.toolCalls} tool calls${counts.compactions > 0 ? `, ${counts.compactions} compactions` : ""}`,
-		...(left.length > 0 ? [`  left out: ${left.join(", ")}`] : []),
-		`  continue it: mu --session ${result.sessionFile}`,
+		`  ${counts.user} messages from you, ${counts.assistant} replies, ${counts.toolCalls} tool calls${counts.compactions > 0 ? `, ${counts.compactions} compactions` : ""}`,
+		...(left.length > 0 ? [`  skipped: ${left.join(", ")}`] : []),
+		`  to continue: mu --session ${result.sessionFile}`,
 	].join("\n");
 }
 

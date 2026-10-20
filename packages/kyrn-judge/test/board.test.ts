@@ -269,14 +269,14 @@ describe("board words", () => {
 		});
 		expect(english).toEqual({
 			progress: "No checklist yet.",
-			now: "Stopped, waiting for your reply.",
+			now: "Stopped and waiting for your reply.",
 			confirm: ["Postgres or SQLite?"],
 			// Quoted from the agent: data, no code.
 			confirmCodes: [null],
 		});
 		// The fixed sentence has one.
 		expect(plainBoard({ ...facts, language: "en", needsUser: true, latest: " " })).toMatchObject({
-			confirm: ["It waits for your reply."],
+			confirm: ["It's waiting for your reply."],
 			confirmCodes: ["waiting_reply"],
 		});
 	});
@@ -358,12 +358,12 @@ describe("board model picker", () => {
 		const choices = boardModelChoices(available, available[2], "en");
 		expect(choices.map((choice) => choice.kind)).toEqual(["model", "add", "model", "other", "add"]);
 		expect(choices[0]).toMatchObject({ ref: "anthropic/claude-opus-4-6" });
-		expect(choices[0].label).toBe("Recommended · Claude Opus 4.6: the most natural and steady (anthropic)");
+		expect(choices[0].label).toBe("Recommended · Claude Opus 4.6: the most natural and consistent (anthropic)");
 		expect(choices[1]).toMatchObject({ recommended: RECOMMENDED_BOARD_MODELS[1] });
 		expect(choices[1].label).toContain("Gemini 3.8 Flash");
 		expect(choices[1].label).toContain("not set up yet");
 		expect(choices[2]).toMatchObject({ ref: SESSION_MODEL });
-		expect(choices[2].label).toBe("Whatever model the conversation uses (now openai/gpt-5.5)");
+		expect(choices[2].label).toBe("The session's model (currently openai/gpt-5.5)");
 
 		const zh = boardModelChoices([model("google", "gemini-3.8-flash")], undefined, "zh");
 		expect(zh.map((choice) => choice.label)).toEqual([
@@ -382,7 +382,7 @@ describe("board model picker", () => {
 		const help = addModelHelp("zh", RECOMMENDED_BOARD_MODELS[0]);
 		expect(help.split("\n")[0]).toBe("要用 Claude Opus 4.6，先登录 Anthropic（/login）。");
 		expect(help).toContain("/board model");
-		expect(addModelHelp("en")).toMatch(/^To add a model: \/login/);
+		expect(addModelHelp("en")).toMatch(/^To add a model, sign in to .* with \/login/);
 	});
 });
 
@@ -520,7 +520,7 @@ describe("board feature", () => {
 		);
 		await harness.session.prompt("/board on");
 		expect(events.filter((event) => event.kind === "board.switched").at(-1)?.payload).toMatchObject({ on: true });
-		expect(notes.at(-1)).toContain("Each telling costs one model call");
+		expect(notes.at(-1)).toContain("Each retelling costs one model call");
 
 		const asked: string[] = [];
 		const agent = [
@@ -693,7 +693,7 @@ describe("board feature", () => {
 			// With the account it had kept: the run's lines, then its end.
 			const restored = events.find((event) => event.kind === "board.update")?.payload as BoardUpdate;
 			expect(restored.log?.map((note) => note.code)).toEqual(["changed_file", "ended"]);
-			expect(restored.log?.map((note) => note.text)).toEqual(["Changed a.ts", "Stopped."]);
+			expect(restored.log?.map((note) => note.text)).toEqual(["Edited a.ts", "Stopped."]);
 		} finally {
 			rmSync(dir, { recursive: true, force: true });
 		}
@@ -841,7 +841,7 @@ describe("board feature", () => {
 		const dir = mkdtempSync(join(tmpdir(), "mu-board-pick-"));
 		try {
 			const offered: string[][] = [];
-			const answers = ["Whatever model the conversation uses"];
+			const answers = ["The session's model"];
 			const select = async (_title: string, options: string[]) => {
 				offered.push(options);
 				const wanted = answers.shift();
@@ -863,7 +863,7 @@ describe("board feature", () => {
 				on: true,
 				modelChosen: true,
 			});
-			expect(notes.at(-1)).toContain("the conversation's model (now ");
+			expect(notes.at(-1)).toContain("the session's model (currently ");
 
 			// Switched off and on again: nobody is asked twice.
 			await harness.session.prompt("/board off");
@@ -872,7 +872,7 @@ describe("board feature", () => {
 
 			// A model that is not there is refused, with how to add one.
 			await harness.session.prompt("/board model nowhere/nothing");
-			expect(notes.at(-1)).toContain("nowhere/nothing cannot be used here.");
+			expect(notes.at(-1)).toContain("nowhere/nothing isn't available here.");
 			expect(new BoardProjects(join(dir, "mu")).model()).toBe("session");
 
 			// Asking for a recommended model that is not set up explains how, and keeps nothing.
@@ -919,7 +919,7 @@ describe("board feature", () => {
 			expect(needed.map((event) => event.payload)).toEqual([
 				expect.objectContaining({ reason: "unusable", model: "gone/a-model-that-left" }),
 			]);
-			expect(notes.filter((note) => note.includes("cannot be used here"))).toHaveLength(1);
+			expect(notes.filter((note) => note.includes("isn't available here"))).toHaveLength(1);
 		} finally {
 			rmSync(dir, { recursive: true, force: true });
 		}
@@ -983,7 +983,7 @@ describe("board feature", () => {
 		await harness.session.prompt("Run the tests.");
 		await vi.waitFor(() => expect(boards(harness).at(-1)?.ended).toBe(true), { timeout: 5000 });
 		// While the picker was open, the board already said what waits on the person, from fixed sentences.
-		expect(whileAsked).toEqual(["mu wants to run a command: npm test. It waits for your permission."]);
+		expect(whileAsked).toEqual(["mu wants to run a command: npm test. It's waiting for your permission."]);
 		const updates = events
 			.filter((event) => event.kind === "board.update")
 			.map((event) => event.payload as BoardUpdate);
@@ -1080,8 +1080,8 @@ describe("board feature", () => {
 		const during = judged.find((request) => "sub_agents" in stateOf(request));
 		expect(String(stateOf(during).sub_agents)).toContain("delegate, 2 sub-agents");
 		expect(String(stateOf(during).sub_agents)).toContain("scout (scout)");
-		const shown = boards(harness).find((update) => !update.ended && update.now.includes("helpers"));
-		expect(shown?.now).toBe("Sent helpers to work on parts of it in parallel; waiting for them to come back.");
+		const shown = boards(harness).find((update) => !update.ended && update.now.includes("Subagents"));
+		expect(shown?.now).toBe("Subagents are working on parts of it in parallel; waiting for them to finish.");
 		// Sending them out and their coming back are events, in a person's words, not the JSON of the call.
 		expect(String(stateOf(during).events)).toContain("sent out 2 sub-agents: scout, fixer");
 		expect(judged.map((request) => String(stateOf(request).events)).join("\n")).toContain(
@@ -1136,10 +1136,10 @@ describe("board feature", () => {
 		await vi.waitFor(() => expect(boards(harness).at(-1)?.ended).toBe(true), { timeout: 5000 });
 		const notes = notesOf(events);
 		expect(notes.map((note) => `${note.by}:${note.code}:${note.text}`)).toEqual([
-			"rules:looked:Looked at 1 file or place",
-			"rules:looked:Looked at 2 files or places",
-			"rules:changed_file:Changed src/importer.ts",
-			"rules:check_passed:A check passed: npm test",
+			"rules:looked:Looked at 1 file or location",
+			"rules:looked:Looked at 2 files or locations",
+			"rules:changed_file:Edited src/importer.ts",
+			"rules:check_passed:Check passed: npm test",
 			"rules:ended:Stopped.",
 		]);
 		expect(notes[1]).toMatchObject({ sequence: notes[0].sequence, at: notes[0].at, params: { count: 2 } });
@@ -1212,7 +1212,7 @@ describe("board feature", () => {
 			"NEWS SINCE THE LAST UPDATE (picked from what happened, oldest first):\\n- the agent said: Found it",
 		);
 		expect(asked[1]).toContain("ALREADY ON THE ACCOUNT");
-		expect(asked[1]).toContain("- Looked at 1 file or place");
+		expect(asked[1]).toContain("- Looked at 1 file or location");
 		expect(asked[2]).toContain("THE RUN HAS ENDED");
 	});
 
@@ -1235,7 +1235,7 @@ describe("board feature", () => {
 		// The quote and the edit's line race (the writer answers while the edit runs); the end comes last.
 		const lines = notesOf(events).map((note) => `${note.code}:${note.text}`);
 		expect(lines.slice(0, 2).sort()).toEqual([
-			"changed_file:Changed src/importer.ts",
+			"changed_file:Edited src/importer.ts",
 			"said_quote:It said: Found it: empty files crash the parser.",
 		]);
 		expect(lines[2]).toBe("ended:Stopped.");
@@ -1291,7 +1291,7 @@ describe("board and sub-agents", () => {
 			"HELPERS IT SENT OUT TO WORK IN PARALLEL (what each one is doing):\ndelegate, 2 sub-agents",
 		);
 		expect(plainBoard(facts).now).toBe(
-			"Sent helpers to work on parts of it in parallel; waiting for them to come back.",
+			"Subagents are working on parts of it in parallel; waiting for them to finish.",
 		);
 		expect(plainBoard({ ...facts, language: "zh" }).now).toBe("派了几个助手分头干，在等它们回来。");
 		expect(plainBoard({ ...facts, ended: true, phase: "wrapping_up" }).now).toBe("The work is done; wrapping up.");
@@ -1300,14 +1300,14 @@ describe("board and sub-agents", () => {
 
 describe("board account", () => {
 	it("words each line in the person's language, for one or many", () => {
-		expect(noteText("looked", { count: 1 }, "en")).toBe("Looked at 1 file or place");
-		expect(noteText("looked", { count: 3 }, "en")).toBe("Looked at 3 files or places");
+		expect(noteText("looked", { count: 1 }, "en")).toBe("Looked at 1 file or location");
+		expect(noteText("looked", { count: 3 }, "en")).toBe("Looked at 3 files or locations");
 		expect(noteText("looked", { count: 3 }, "zh")).toBe("看了 3 个文件或地方");
 		expect(noteText("check_failed", { command: "npm test" }, "zh")).toBe("检查没通过：npm test");
-		expect(noteText("helpers_sent", { count: 1, titles: "scout" }, "en")).toBe("Sent out 1 helper: scout");
+		expect(noteText("helpers_sent", { count: 1, titles: "scout" }, "en")).toBe("Started 1 subagent: scout");
 		expect(noteText("helpers_back", { count: 2 }, "zh")).toBe("2 个助手回来了");
 		expect(noteText("goal_round", { round: 2, reason: reasonTail("tests still fail", "en") }, "en")).toBe(
-			"The goal is not met yet; mu sent it back to work (round 2): tests still fail",
+			"The goal isn't met yet, so mu kept the agent working (round 2): tests still fail",
 		);
 		expect(noteText("goal_paused", { reason: reasonTail("", "zh") }, "zh")).toBe("目标暂停了");
 		expect(noteText("goal_paused", { reason: reasonTail("你打断了", "zh") }, "zh")).toBe("目标暂停了：你打断了");

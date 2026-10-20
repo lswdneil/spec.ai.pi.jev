@@ -65,7 +65,7 @@ async function report(ctx: ImportContext, result: ImportResult): Promise<void> {
 		ctx.ui.notify(
 			say({
 				zh: `没能导入 ${result.source}：${result.error}`,
-				en: `Could not import ${result.source}: ${result.error}`,
+				en: `Couldn't import ${result.source}: ${result.error}`,
 			}),
 			"error",
 		);
@@ -75,7 +75,7 @@ async function report(ctx: ImportContext, result: ImportResult): Promise<void> {
 		ctx.ui.notify(
 			say({
 				zh: `这段对话之前已经导入过，在 ${result.sessionFile}`,
-				en: `This conversation was imported before: ${result.sessionFile}`,
+				en: `This conversation was already imported: ${result.sessionFile}`,
 			}),
 			"info",
 		);
@@ -86,14 +86,14 @@ async function report(ctx: ImportContext, result: ImportResult): Promise<void> {
 	ctx.ui.notify(
 		say({
 			zh: `已从 ${TOOL_NAMES[result.tool]} 导入“${result.name}”：你的消息 ${counts.user} 条，回答 ${counts.assistant} 条，工具调用 ${counts.toolCalls} 次。保存在 ${result.sessionFile}`,
-			en: `Imported "${result.name}" from ${TOOL_NAMES[result.tool]}: ${counts.user} messages from you, ${counts.assistant} answers, ${counts.toolCalls} tool calls. Saved as ${result.sessionFile}`,
+			en: `Imported "${result.name}" from ${TOOL_NAMES[result.tool]}: ${counts.user} messages from you, ${counts.assistant} replies, ${counts.toolCalls} tool calls. Saved to ${result.sessionFile}`,
 		}),
 		"info",
 	);
 	await offerToOpen(
 		ctx,
 		result.sessionFile,
-		say({ zh: "现在切换到这段对话，接着聊吗？", en: "Switch to it now and continue there?" }),
+		say({ zh: "现在切换到这段对话，接着聊吗？", en: "Switch to it now and continue the conversation?" }),
 	);
 }
 
@@ -109,7 +109,7 @@ export async function importChat(args: string, ctx: ImportContext, deps: ImportD
 			ctx.ui.notify(
 				say({
 					zh: "这个项目里没有找到 Claude Code 或 Codex 的对话。别的项目的对话可以用 /import-chat <文件> 导入，mu import --list 能列出全部。",
-					en: "No Claude Code or Codex conversation was found for this project. Import one from elsewhere with /import-chat <file>; mu import --list shows them all.",
+					en: "No Claude Code or Codex conversations found for this project. To import one from another project, use /import-chat <file>; mu import --list shows them all.",
 				}),
 				"info",
 			);
@@ -127,7 +127,7 @@ export async function importChat(args: string, ctx: ImportContext, deps: ImportD
 			return;
 		}
 		const choice = await ctx.ui.select(
-			say({ zh: "导入这个项目的哪段对话？", en: "Import which conversation of this project?" }),
+			say({ zh: "导入这个项目的哪段对话？", en: "Which conversation from this project do you want to import?" }),
 			labels,
 		);
 		if (choice === undefined) return;
@@ -146,7 +146,7 @@ function markerLines(origin: ImportOrigin): { title: string; detail: string } {
 		title: say({ zh: `从 ${tool} 导入的对话`, en: `Conversation imported from ${tool}` }),
 		detail: say({
 			zh: `${origin.source}\n你的消息 ${counts.user} 条，回答 ${counts.assistant} 条，工具调用 ${counts.toolCalls} 次；思考过程和图片没有导入。`,
-			en: `${origin.source}\n${counts.user} messages from you, ${counts.assistant} answers, ${counts.toolCalls} tool calls; thinking and images were not imported.`,
+			en: `${origin.source}\n${counts.user} messages from you, ${counts.assistant} replies, ${counts.toolCalls} tool calls; thinking and images weren't imported.`,
 		}),
 	};
 }
@@ -164,7 +164,7 @@ export function registerImport(pi: Pick<ExtensionAPI, "registerCommand" | "regis
 	pi.registerCommand(IMPORT_COMMAND, {
 		description: say({
 			zh: "导入这个项目在 Claude Code 或 Codex 里的对话，接着在这里聊：/import-chat [文件]",
-			en: "Bring a Claude Code or Codex conversation of this project into mu and continue it: /import-chat [file]",
+			en: "Import a Claude Code or Codex conversation from this project and continue it here: /import-chat [file]",
 		}),
 		handler: async (args, ctx) => importChat(args, ctx, { agentDir: getAgentDir() }),
 	});

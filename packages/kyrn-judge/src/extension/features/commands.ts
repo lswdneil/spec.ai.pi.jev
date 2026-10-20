@@ -72,57 +72,58 @@ const helpZh = () => `mu ${VERSIONS.mu} · 先判断再动手的编程代理，�
 
 输入时：! 运行一条 shell 命令 · !! 运行但不放进上下文 · @ 附上一个文件`;
 
-const helpEn = () => `mu ${VERSIONS.mu} · judgment-first coding agent, built on pi ${VERSIONS.pi}
+const helpEn = () => `mu ${VERSIONS.mu} · a judgment-first coding agent, built on pi ${VERSIONS.pi}
 
 Start here
-  /status                  judge, modes, what was kept out of the context, recent verdicts
-  /doctor                  is everything wired up: judge, model, browser, sub-agents
-  /init                    have the agent write AGENTS.md for this project
-  /clear                   start a fresh conversation (same as /new)
-  /import-chat [file]      bring a Claude Code or Codex conversation of this project into mu and continue it
+  /status                  model, judge, decision point modes, what was kept out of context, recent verdicts
+  /doctor                  check that the judge, model, browser and subagents are set up
+  /init                    have the agent write an AGENTS.md for this project
+  /clear                   start a new session (same as /new)
+  /import-chat [file]      import this project's Claude Code or Codex conversation and continue it here
 
-Judgment layer
-  Every message is read by the judge first: it waits above the editor while that happens (esc skips
-  the wait), and the verdict stays under it in the chat. ${keyText("app.tools.expand")} shows every answer behind a verdict.
-  /mu judge <tiers>      which models judge, in order: laya | laya,jev | jev-opencode-free | clm | classifier:<provider>/<model> | llm:<provider>/<model>
-  /mu route <decision> <tiers|default>      one decision on its own judge, e.g. browser.step luna
+Judgment kernel
+  The judge reads every message first. Meanwhile your message waits above the editor (esc skips the wait),
+  and the verdict then stays under it. ${keyText("app.tools.expand")} shows the full answers behind a verdict.
+  /mu judge <tiers>        which models judge, in order: laya | laya,jev | jev-opencode-free | clm | classifier:<provider>/<model> | llm:<provider>/<model>
+  /mu route <decision> <tiers|default>   give one decision point its own judge, e.g. browser.step luna
   /mu mode <decision|default> <off|shadow|active>
-  /frame                   the task as mu holds it: goal, your hard constraints and where you said them, to-do items
-  /goal <condition>        keep the agent working until a model reads the condition as met; /goal alone asks
-                           for one (or shows the running goal), /goal clear ends it
-  /board on|off            the plain-language board for this project: progress, what is happening, what
-                           waits on you, written for a person; /board shows it, /board model picks who writes it
-  /permissions [mode]      how much mu may do without asking: full (full access), jev (Jev approves for you,
-                           asks you only when it is not sure), ask (minimal: everything but reading asks)
-  /capabilities            what is installed, and what the judge has opened for this task
-  /ledger [n]              the last n verdicts with timing
-  /remember <lesson>       keep a lesson for future sessions
-  /lessons [all]           this project's lessons, how often each was recalled and followed; all adds the ones
-                           for everywhere and the retired ones
-  /forget <id>             retire a lesson so it is no longer recalled
+                           off; shadow (asked and logged, changes nothing); active (the verdict takes effect)
+  /frame                   the current task: goal, constraints (with where you stated them) and checklist
+  /goal <condition>        keep the agent working until a model judges the condition met; /goal alone asks
+                           for one (or shows the current goal), /goal clear ends it
+  /board on|off            turn the plain-language board on or off for this project: progress, what's happening,
+                           what's waiting on you; /board shows it, /board model picks the model that writes it
+  /permissions [mode]      how much mu can do without asking: full (Full access), jev (Jev approves for you and
+                           asks you only when it isn't sure), ask (Ask first: asks before anything but reading)
+  /capabilities            what's installed, and what the judge turned on for this task
+  /ledger [n]              the last n verdicts, with timing
+  /remember <lesson>       save a lesson for future sessions
+  /lessons [all]           this project's lessons, and how often each was recalled and followed; all adds
+                           global and retired lessons
+  /forget <id>             retire a lesson so it's no longer recalled
 
 Tools the agent can use (and you can ask for)
-  /browse <url> [goal]     drive the built-in browser yourself; the agent has it as "browse"
-  /agents                  sub-agent roles behind "delegate" (independent parts, or a chain of steps) and "hive"
-                           (one hard problem, several investigators, the judge passing findings between them)
-  /implement <task>        scout, plan, implement: a chain of sub-agents, each working to its own checklist
-  /scout-and-plan <task>   scout, then plan; nothing is changed
+  /browse <url> [goal]     drive the built-in browser yourself; the agent uses it through the browse tool
+  /agents                  subagent roles for delegate (independent tasks, or a chain of steps) and hive
+                           (several investigators on one hard problem, with the judge passing findings between them)
+  /implement <task>        scout, plan, implement: a chain of subagents, each working through its own checklist
+  /scout-and-plan <task>   scout, then plan; changes nothing
   /implement-and-review <task>   implement, review, fix
-  /hive <question>         several investigators on one question at once, each from its own angle; the judge
-                           passes what one finds to the others it matters to, and the answer draws on all of them
-  /swarm                   what every running sub-agent is doing right now; /swarm stop [name] has it report
-                           now and keeps what it found, /swarm kill [name] ends it at once
-  /review [what]           hand a review to the reviewer role; the judge sorts its findings P0 to P3
-  /commit [guidance]       split the uncommitted change into commits; shows the plan first, never pushes
+  /hive <question>         several investigators take on one question at once, each from its own angle; the judge
+                           passes each finding to whoever needs it, and the answer draws on all of them
+  /swarm                   what each running subagent is doing right now; /swarm stop [name] asks it to report
+                           now and keeps its findings, /swarm kill [name] stops it immediately
+  /review [what]           hand a review to the reviewer subagent; the judge ranks its findings from P0 to P3
+  /commit [guidance]       split uncommitted changes into commits; shows the plan first and never pushes
 
 Session and model (from pi)
   /model  /thinking  /login  /logout  /settings  /hotkeys
-                           /login also signs in with Grok, and with a Google account through Gemini CLI or
-                           Antigravity (experimental: it says the risk and asks before the browser opens)
+                           /login also signs in to Grok, and to a Google account through Gemini CLI or
+                           Antigravity (experimental: explains the risk and asks before opening the browser)
   /new  /resume  /tree  /fork  /clone  /compact  /name  /session
   /copy  /export  /import  /share  /reload  /changelog  /quit
 
-While typing:  ! runs a shell command · !! runs it without adding it to the context · @ attaches a file`;
+While typing:  ! runs a shell command · !! runs it without adding the output to context · @ attaches a file`;
 
 function describeRecord(record: LedgerRecord): string[] {
 	const verdict = record.judged === undefined ? (record.reason ?? "no verdict") : JSON.stringify(record.judged);
@@ -182,7 +183,9 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 			ctx.ui.notify(
 				[
 					`judge: ${engine.providerId}`,
-					probe.ok ? `answering in ${probe.latencyMs} ms` : `not answering (${probe.error}); decisions fall back`,
+					probe.ok
+						? `answering in ${probe.latencyMs} ms`
+						: `not answering (${probe.error}); decision points use their fallbacks`,
 					...problems.map((problem) => `problem: ${problem}`),
 				].join("\n"),
 				probe.ok ? "info" : "warning",
@@ -212,7 +215,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 	pi.registerCommand("mu", {
 		description: say({
 			zh: "mu 的状态。另外：/mu judge <判定器> | /mu route <判定点> <判定器|default> | /mu mode <判定点|default> <off|shadow|active>",
-			en: "mu status. Also: /mu judge <tiers> | /mu route <decision> <tiers|default> | /mu mode <decision|default> <off|shadow|active>",
+			en: "Show mu's status. Also: /mu judge <tiers> | /mu route <decision> <tiers|default> | /mu mode <decision|default> <off|shadow|active>",
 		}),
 		getArgumentCompletions: (prefix) => {
 			const options = [
@@ -231,7 +234,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 	pi.registerCommand("status", {
 		description: say({
 			zh: "模型、判定器、各判定点的模式、省下的上下文和最近的判定",
-			en: "Model, judge, decision modes, context savings and the latest verdicts",
+			en: "Model, judge, decision point modes, context savings and recent verdicts",
 		}),
 		handler: async (_args, ctx) => mu("", ctx),
 	});
@@ -239,7 +242,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 	pi.registerCommand("help", {
 		description: say({
 			zh: "mu 能做什么，以及常用命令一览",
-			en: "What mu can do and every command worth knowing",
+			en: "What mu can do, and the commands worth knowing",
 		}),
 		handler: async (_args, ctx) => ctx.ui.notify(help(), "info"),
 	});
@@ -247,7 +250,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 	pi.registerCommand("clear", {
 		description: say({
 			zh: "开始一段新对话（同 /new）",
-			en: "Start a fresh conversation (same as /new)",
+			en: "Start a new session (same as /new)",
 		}),
 		handler: async (_args, ctx) => {
 			await ctx.newSession();
@@ -257,14 +260,14 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 	pi.registerCommand("ledger", {
 		description: say({
 			zh: "判定器最近的判定和用时：/ledger [条数]",
-			en: "The last verdicts of the judge with timing: /ledger [n]",
+			en: "Recent verdicts, with timing: /ledger [n]",
 		}),
 		handler: async (args, ctx) => {
 			const count = Math.min(50, Math.max(1, Number.parseInt(args.trim(), 10) || 15));
 			const records = runtime.memory.records.slice(-count);
 			ctx.ui.notify(
 				records.length === 0
-					? "No verdicts yet in this session. Across sessions: mu ledger"
+					? "No verdicts in this session yet. For all sessions, run mu ledger"
 					: records.flatMap(describeRecord).join("\n"),
 				"info",
 			);
@@ -274,7 +277,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 	pi.registerCommand("doctor", {
 		description: say({
 			zh: "检查判定器、模型、浏览器和子代理有没有接好",
-			en: "Check that the judge, the model, the browser and the sub-agents are wired up",
+			en: "Check that the judge, model, browser and subagents are set up",
 		}),
 		handler: async (_args, ctx) => {
 			runtime.touch(ctx);
@@ -292,19 +295,19 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 				return slash < 1 || !ctx.modelRegistry.find(ref.slice(0, slash), ref.slice(slash + 1));
 			});
 			const lines = [
-				`${ok(Boolean(ctx.model))}model      ${ctx.model ? `${ctx.model.provider}/${ctx.model.id}` : "none selected: /login, then /model"}`,
-				`${ok(providers.length > 0)}login      ${providers.length > 0 ? providers.join(", ") : "no provider has credentials: /login"}`,
+				`${ok(Boolean(ctx.model))}model      ${ctx.model ? `${ctx.model.provider}/${ctx.model.id}` : "none selected: run /login, then /model"}`,
+				`${ok(providers.length > 0)}login      ${providers.length > 0 ? providers.join(", ") : "no provider is signed in: run /login"}`,
 				probe
-					? `${ok(probe.ok)}judge      ${engine.providerId} ${probe.ok ? `answers in ${probe.latencyMs} ms` : `does not answer (${probe.error}). For laya: mu judge start`}`
+					? `${ok(probe.ok)}judge      ${engine.providerId} ${probe.ok ? `answers in ${probe.latencyMs} ms` : `isn't answering (${probe.error}). For laya, run mu judge start`}`
 					: "--  judge      off (MU_JUDGE=off)",
-				`--  decisions  default ${engine.getMode("*")}. Change with /mu mode default <off|shadow|active>`,
+				`--  decisions  default mode ${engine.getMode("*")}. Change it with /mu mode default <off|shadow|active>`,
 				`${ok(Boolean(chrome))}browser    ${chrome ?? browserAdvice(browserHost)}`,
-				`--  browse     driven by ${engine.judgeFor("browser.step").id}. It needs a judge that can relate a goal to a page (jev, or an llm judge): /mu route browser.step luna`,
-				`${ok(roles.length > 0)}sub-agents ${roles.map((role) => role.name).join(", ")} · your own go in ${agentsDir}`,
-				`${ok(missing.length === 0)}ladder     ${ladder.length === 0 ? "none: sub-agents use the session's model" : ladder.join(" < ")}${
-					missing.length > 0 ? ` · not available: ${missing.join(", ")}` : ""
+				`--  browse     driven by ${engine.judgeFor("browser.step").id}. It needs a judge that can match a goal to a page (jev or an llm judge), e.g. /mu route browser.step luna`,
+				`${ok(roles.length > 0)}subagents  ${roles.map((role) => role.name).join(", ")} · add your own in ${agentsDir}`,
+				`${ok(missing.length === 0)}ladder     ${ladder.length === 0 ? "none: subagents use the session's model" : ladder.join(" < ")}${
+					missing.length > 0 ? ` · unavailable: ${missing.join(", ")}` : ""
 				}`,
-				`--  writer     ${runtime.config.writer ?? "none: the session's model writes typed text and lessons"}`,
+				`--  writer     ${runtime.config.writer ?? "none: the session's model writes task frames, browser form text and lessons"}`,
 				...runtime.problems.map((problem) => `FIX problem    ${problem}`),
 			];
 			ctx.ui.notify(lines.join("\n"), lines.some((line) => line.startsWith("FIX")) ? "warning" : "info");

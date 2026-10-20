@@ -851,7 +851,7 @@ describe("mu import on the command line", () => {
 			agentDir: "/m",
 		});
 		expect(parseArgs(["--cwd"])).toEqual({ error: "--cwd needs a folder" });
-		expect(parseArgs(["--list", "a.jsonl"])).toEqual({ error: "--list takes no files" });
+		expect(parseArgs(["--list", "a.jsonl"])).toEqual({ error: "--list doesn't take files" });
 	});
 
 	it("puts sessions where MU_CODING_AGENT_DIR and the settings say", async () => {
@@ -913,14 +913,14 @@ describe("/import-chat", () => {
 
 		// Picked again: it is not imported twice, the earlier session is offered instead.
 		await importChat("", ctx, deps);
-		expect(notes[1]).toContain("imported before");
+		expect(notes[1]).toContain("already imported");
 		expect(switched[1]).toBe(switched[0]);
 	});
 
 	it("says so when this project has none, and lists without a dialog where there is no UI", async () => {
 		const { ctx, notes, deps } = setup();
 		await importChat("", { ...ctx, cwd: "/tmp/mu-import-fixture/nothing-here" }, deps);
-		expect(notes[0]).toContain("No Claude Code or Codex conversation");
+		expect(notes[0]).toContain("No Claude Code or Codex conversations");
 		await importChat("", { ...ctx, hasUI: false }, deps);
 		expect(notes[1]).toContain(`${CC_ID}.jsonl`);
 		expect(ctx.ui.select).not.toHaveBeenCalled();
