@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import { parseConfig } from "../src/config.ts";
 import { DecisionEngine, defineDecision } from "../src/decision.ts";
 import {
+	judgeDisplayName,
 	type Paint,
 	readVersions,
 	renderWelcome,
@@ -38,11 +39,19 @@ describe("welcome screen", () => {
 		const text = renderWelcome(view, 100, plain).join("\n");
 
 		expect(text).toContain("judgment-first coding agent");
-		expect(text).toContain("Laya · answering in 95 ms · decisions active");
+		expect(text).toContain("Laya · answering in 95 ms · decision points active");
 		expect(text).toContain("openai-codex/gpt-5.6-sol · thinking medium");
 		expect(text).toContain("/help");
 		expect(text).not.toContain("What the judge does here");
 		expect(renderWelcome({ ...view, expanded: true }, 100, plain).join("\n")).toContain("What the judge does here");
+	});
+
+	it("names judges as people say them: the free Jev with its version, a cascade in order", () => {
+		expect(judgeDisplayName("jev")).toBe("Jev");
+		expect(judgeDisplayName("jev-1.13-free")).toBe("Jev 1.13 (free)");
+		expect(judgeDisplayName("laya>jev")).toBe("Laya, Jev");
+		expect(judgeDisplayName("laya,jev")).toBe("Laya, Jev");
+		expect(judgeDisplayName("clef-flash")).toBe("clef-flash");
 	});
 
 	it("never renders a line wider than the terminal, with wide characters", () => {

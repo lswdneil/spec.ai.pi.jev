@@ -82,11 +82,19 @@ const HEALTH_ERROR: Readonly<Record<string, string>> = {
 	payment_required: "out of credit",
 };
 
-/** A judge's label as people read it: "jev" is Jev, "laya,jev" is "Laya, Jev". Other labels stay as they are. */
+/**
+ * A judge's label as people read it: "jev" is Jev, "jev-1.13-free" is "Jev 1.13 (free)", and a cascade ("laya>jev" or
+ * "laya,jev") is "Laya, Jev". Other labels stay as they are.
+ */
 export function judgeDisplayName(label: string): string {
 	return label
-		.split(",")
-		.map((name) => (name === "jev" ? "Jev" : name === "laya" ? "Laya" : name))
+		.split(/[>,]/)
+		.map((name) => {
+			if (name === "jev") return "Jev";
+			if (name === "laya") return "Laya";
+			const free = /^jev-([\d.]+)-free$/.exec(name);
+			return free ? `Jev ${free[1]} (free)` : name;
+		})
 		.join(", ");
 }
 
@@ -95,7 +103,7 @@ function healthText(view: WelcomeView, paint: Paint): string {
 	const judge = judgeDisplayName(view.judge);
 	if (view.health === "checking") return `${judge} ${paint.fg("dim", "· checking…")}`;
 	if (view.health.ok) {
-		return `${judge} ${paint.fg("success", `· answering in ${view.health.latencyMs} ms`)} ${paint.fg("dim", `· decisions ${view.mode}`)}`;
+		return `${judge} ${paint.fg("success", `· answering in ${view.health.latencyMs} ms`)} ${paint.fg("dim", `· decision points ${view.mode === "shadow" ? "in shadow" : view.mode}`)}`;
 	}
 	const why = HEALTH_ERROR[view.health.error ?? ""] ?? `failing (${view.health.error ?? "error"})`;
 	return `${judge} ${paint.fg("warning", `· ${why}; using pi's default behavior`)}`;
