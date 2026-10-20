@@ -1428,6 +1428,27 @@
       "reviewer": "審查",
       "scout": "偵察",
       "worker": "執行"
+    },
+    "kernel": {
+      "free": "免費",
+      "local": "本機",
+      "judgeHint": "回答 mu 各判定點的判定器。點擊可更換。",
+      "points": "{{active}}/{{total}} 個判定點生效",
+      "shadow_one": "· {{count}} 個影子模式",
+      "shadow_other": "· {{count}} 個影子模式",
+      "off": "判定已關閉",
+      "verdicts_one": "次判定",
+      "verdicts_other": "次判定",
+      "last": "上次",
+      "context": "上下文",
+      "cache": "快取"
+    },
+    "hero": {
+      "kernel": "判定核心",
+      "judgeReady": "{{judge}} 已就緒",
+      "judgeOff": "判定已關閉",
+      "title": "讓 mu 做點什麼？",
+      "lead": "回合裡的每個小決定都先交給一個快速判定器：什麼進入上下文、命令是否安全、工作是否真的完成。模型專心寫程式碼。"
     }
   },
   "menu": {

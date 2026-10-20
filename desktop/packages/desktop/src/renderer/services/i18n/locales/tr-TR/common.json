@@ -1428,6 +1428,27 @@
       "reviewer": "gözden geçiren",
       "scout": "keşifçi",
       "worker": "uygulayıcı"
+    },
+    "kernel": {
+      "free": "ücretsiz",
+      "local": "yerel",
+      "judgeHint": "mu'nun karar noktalarını yanıtlayan hakem. Değiştirmek için tıklayın.",
+      "points": "{{active}}/{{total}} karar noktası etkin",
+      "shadow_one": "· {{count}} gölge modunda",
+      "shadow_other": "· {{count}} gölge modunda",
+      "off": "Hakem kapalı",
+      "verdicts_one": "karar",
+      "verdicts_other": "karar",
+      "last": "son",
+      "context": "bağlam",
+      "cache": "önbellek"
+    },
+    "hero": {
+      "kernel": "Karar çekirdeği",
+      "judgeReady": "{{judge}} hazır",
+      "judgeOff": "Hakem kapalı",
+      "title": "mu ne üzerinde çalışsın?",
+      "lead": "Bir turdaki her küçük karar önce hızlı bir hakeme gider: bağlama ne girecek, bir komut güvenli mi, iş gerçekten bitti mi. Model koda odaklanır."
     }
   },
   "menu": {

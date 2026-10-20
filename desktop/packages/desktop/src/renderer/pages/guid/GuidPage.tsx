@@ -18,7 +18,7 @@ import AssistantSelectionArea from './components/AssistantSelectionArea';
 import GuidActionRow from './components/GuidActionRow';
 import GuidInputCard from './components/GuidInputCard';
 import GuidModelSelector from './components/GuidModelSelector';
-import MuBackdrop from '@renderer/components/brand/MuBackdrop';
+import MuHero from '@renderer/components/kernel/MuHero';
 import MuStarters from '@renderer/components/brand/MuStarters';
 import { useGuidAssistantSelection } from './hooks/useGuidAssistantSelection';
 import { useGuidInput } from './hooks/useGuidInput';
@@ -718,13 +718,7 @@ const GuidPage: React.FC = () => {
     >
       <div ref={guidContainerRef} className={styles.guidContainer}>
         <div className={styles.guidLayout}>
-          <div className={styles.heroHeader}>
-            {/* The mark above the greeting is the home page's alone: a conversation starts without it. */}
-            <MuBackdrop className={styles.heroBackdrop} leaving={guidInput.loading} />
-            <p className={`${styles.heroTitle} text-18px font-500 mb-0 text-t-primary text-center`}>
-              {t('conversation.welcome.title')}
-            </p>
-          </div>
+          <MuHero leaving={guidInput.loading} />
 
           <AssistantSelectionArea
             selectedAssistantId={agentSelection.selectedAssistantId}

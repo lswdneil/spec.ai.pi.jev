@@ -490,11 +490,11 @@ describe('GuidPage', () => {
     expect(capturedGuidSendDeps.at(-1)).toMatchObject({ selectedMode: 'ask' });
   });
 
-  it('fades the μ out while the first message is on its way into a conversation', () => {
+  it('fades the hero out while the first message is on its way into a conversation', () => {
     guidInputMock.loading = true;
     try {
       render(<GuidPage />);
-      expect(screen.getByTestId('mu-backdrop')).toHaveAttribute('data-state', 'leaving');
+      expect(screen.getByTestId('mu-hero')).toHaveAttribute('data-state', 'leaving');
     } finally {
       guidInputMock.loading = false;
     }
@@ -505,9 +505,9 @@ describe('GuidPage', () => {
 
     expect(screen.queryByLabelText('common.back')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('Assistant Details')).not.toBeInTheDocument();
-    expect(screen.getByText('conversation.welcome.title')).toBeInTheDocument();
-    // The large faint μ behind the greeting, which only the home page has.
-    expect(screen.getByTestId('mu-backdrop')).toHaveAttribute('data-state', 'shown');
+    // The hero, which only the home page has: the kernel's status line, the question and the lead.
+    expect(screen.getByText('common.kyrn.hero.title')).toBeInTheDocument();
+    expect(screen.getByTestId('mu-hero')).toHaveAttribute('data-state', 'shown');
     expect(screen.queryByTestId('mu-mark')).not.toBeInTheDocument();
     expect(screen.getByTestId('assistant-selection-area')).toBeInTheDocument();
     const latestAssistantSelectionAreaProps = capturedAssistantSelectionAreaProps.at(-1);

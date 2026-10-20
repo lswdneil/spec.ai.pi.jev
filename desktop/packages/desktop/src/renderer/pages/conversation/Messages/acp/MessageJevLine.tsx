@@ -59,6 +59,11 @@ export default function MessageJevLine({ line }: { line: JevLine }) {
         className={line.stage === 'classifying' ? styles.dotBusy : muted ? styles.dotMuted : styles.dot}
         aria-hidden='true'
       />
+      {/* The decision point that asked, as the ledger and /status name it: a label drawn beside the sentence, which
+          stays the line's text. Not shown where no judge was asked. */}
+      {line.stage === 'noJudge' ? null : (
+        <span className={styles.point} data-point='input.preflight' aria-hidden='true' />
+      )}
       <span className={styles.text}>{text}</span>
       {line.stage === 'noJudge' && <JudgeSetup />}
       {hints.map((id) => (

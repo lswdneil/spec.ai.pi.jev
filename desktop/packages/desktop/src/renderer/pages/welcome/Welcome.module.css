@@ -6,6 +6,21 @@
   overflow-y: auto;
   background: var(--bg-base);
   color: var(--text-primary);
+  isolation: isolate;
+}
+
+/* The same atmosphere as the home page: a glow from the top and a dot grid that fades out. Decoration only. */
+.screen::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 46% at 50% -6%, var(--mu-glow-violet, transparent), transparent 72%),
+    radial-gradient(34% 30% at 88% 4%, var(--mu-glow-pink, transparent), transparent 70%),
+    radial-gradient(circle at 1px 1px, var(--mu-grid-dot, transparent) 1px, transparent 1.4px) 0 0 / 22px 22px;
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.55) 40%, transparent 75%);
 }
 
 /* The window has no title bar here: this strip is what it is moved by. */

@@ -1428,6 +1428,27 @@
       "reviewer": "Prüfer",
       "scout": "Kundschafter",
       "worker": "Ausführer"
+    },
+    "kernel": {
+      "free": "kostenlos",
+      "local": "lokal",
+      "judgeHint": "Der Judge, der die Entscheidungspunkte von mu beantwortet. Zum Ändern klicken.",
+      "points": "{{active}}/{{total}} Entscheidungspunkte aktiv",
+      "shadow_one": "· {{count}} im Schattenmodus",
+      "shadow_other": "· {{count}} im Schattenmodus",
+      "off": "Urteile sind aus",
+      "verdicts_one": "Urteil",
+      "verdicts_other": "Urteile",
+      "last": "zuletzt",
+      "context": "Kontext",
+      "cache": "Cache"
+    },
+    "hero": {
+      "kernel": "Urteilskern",
+      "judgeReady": "{{judge}} ist bereit",
+      "judgeOff": "Urteile sind aus",
+      "title": "Woran soll mu arbeiten?",
+      "lead": "Jede kleine Entscheidung in einer Runde geht zuerst an einen schnellen Judge: was in den Kontext kommt, ob ein Befehl sicher ist, ob die Arbeit wirklich fertig ist. Das Modell bleibt beim Code."
     }
   },
   "menu": {

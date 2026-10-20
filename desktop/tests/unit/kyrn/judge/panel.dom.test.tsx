@@ -101,7 +101,7 @@ describe('a judgment, opened', () => {
     const card = within(cards()[0]);
     expect(card.getByText(copy.state.returned)).toBeInTheDocument();
     expect(card.getByText(copy.actions.toRuntime)).toBeInTheDocument();
-    expect(copy.actions.toRuntime).toMatch(/not proof that the operation completed/);
+    expect(copy.actions.toRuntime).toMatch(/doesn't prove the operation completed/);
     expect(card.queryByText(copy.state.confirmed)).not.toBeInTheDocument();
     expect(card.queryByText(copy.actions.mainGiven)).not.toBeInTheDocument();
   });
@@ -132,7 +132,7 @@ describe('a judgment, opened', () => {
     ).toBe(5);
     expect(cards().map((card) => card.getAttribute('data-state'))).toEqual(['rule', 'fallback', 'late', 'shadow']);
     // A default is described as a default, never as permission.
-    expect(copy.actions.useDefault).toMatch(/not permission to proceed/);
+    expect(copy.actions.useDefault).toMatch(/isn’t permission to proceed/);
   });
 
   it('separates permission to deliver from a confirmed delivery', () => {
@@ -180,7 +180,7 @@ describe('a judgment, opened', () => {
     expect(publish.getByText(`${copy.fields.publish}`).parentElement).toHaveTextContent(copy.values.false);
     expect(publish.queryByText(copy.actions.allowPublish)).not.toBeInTheDocument();
     expect(admission.getByText(/Candidates covered by this record: 4\./)).toBeInTheDocument();
-    expect(admission.getByText(/default strategy used: 4\./)).toBeInTheDocument();
+    expect(admission.getByText(/\(default used\): 4\./)).toBeInTheDocument();
   });
 
   it('does not present token savings, cost or a model reasoning trace', () => {
@@ -318,7 +318,7 @@ describe('a judgment, opened', () => {
     expect(card.queryByText(copy.fields.keep)).not.toBeInTheDocument();
     expect(card.queryByText('shrink')).not.toBeInTheDocument();
     expect(card.getByText('Candidates covered by this record: 4.')).toBeInTheDocument();
-    expect(card.getByText('Without an answer, default strategy used: 1.')).toBeInTheDocument();
+    expect(card.getByText('Candidates with no answer (default used): 1.')).toBeInTheDocument();
   });
 
   it('formats numbers in the app language rather than the operating system’s', async () => {
@@ -582,7 +582,7 @@ function measure(scroller: HTMLElement) {
 }
 
 describe('the judge log', () => {
-  it('says what happened one line at a time, oldest first: the time and a short sentence, the code only once opened', () => {
+  it('says what happened one line at a time, oldest first: the time and a short sentence, a verdict with its readout', () => {
     showLog([
       event('preflight.verdict', verdict(), turn('runtime-a', 1, 2)),
       event('decision', ledger({ id: 'drift-1', specId: 'turn.drift', outcome: 'on_track' }), turn('runtime-a', 1, 5)),
@@ -596,11 +596,14 @@ describe('the judge log', () => {
     ]);
     expect(lines()[0]).toHaveTextContent(`Classified by Jev: ${copy.values.multi_step_task}`);
     expect(lines()[1]).toHaveTextContent(`${copy.questions.drift} · ${copy.state.returned}`);
-    expect(lines()[2]).toHaveTextContent('github: it did not answer in time');
-    // No line leads with a code: it reads as a sentence, not a log record.
-    for (const [line, code] of lines().map((each) => [each, each.getAttribute('data-code')!] as const))
-      expect(line).not.toHaveTextContent(code);
-    // A line is one line: the whole record waits until it is opened, and the code with it.
+    expect(lines()[2]).toHaveTextContent("github: it didn't respond in time");
+    // A line leads with its sentence. A verdict follows it with a readout, the decision point that asked as the
+    // ledger names it; an event of the run has none, and its code waits until the line is opened.
+    expect(within(lines()[0]).getByTestId('judge-line-readout')).toHaveTextContent('input.preflight');
+    expect(within(lines()[1]).getByTestId('judge-line-readout')).toHaveTextContent('turn.drift');
+    expect(within(lines()[2]).queryByTestId('judge-line-readout')).not.toBeInTheDocument();
+    expect(lines()[2]).not.toHaveTextContent('mcp.failed');
+    // A line is one line: the whole record waits until it is opened.
     expect(screen.queryByTestId('judge-card')).not.toBeInTheDocument();
     fireEvent.click(within(lines()[1]).getByRole('button'));
     expect(within(lines()[1]).getByTestId('judge-line-code')).toHaveTextContent('turn.drift');

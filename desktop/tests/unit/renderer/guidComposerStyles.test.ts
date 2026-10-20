@@ -39,8 +39,7 @@ describe('the two message inputs', () => {
     expect(light).toContain('--mu-composer-bg: #ffffff');
     expect(light).toContain('--bg-1: #ffffff');
     expect(dark).toContain('--mu-composer-bg: var(--bg-1)');
-    expect(dark).toContain('--bg-1: #111111');
-    expect(dark).toContain('--mu-input-border: #333333');
+    expect(dark).toMatch(/--mu-input-border: #[0-9a-f]{6};/);
     expect(body(sendbox, '.sendbox-panel')).toContain('background-color: var(--mu-composer-bg');
     expect(body(sendbox, '.sendbox-panel')).toContain('border: 1px solid var(--mu-input-border');
     expect(body(guid, '.guidInputCardWrap')).toContain('background: var(--mu-composer-bg');

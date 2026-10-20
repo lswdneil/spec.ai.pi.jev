@@ -1428,6 +1428,27 @@
       "reviewer": "검토",
       "scout": "정찰",
       "worker": "작업"
+    },
+    "kernel": {
+      "free": "무료",
+      "local": "로컬",
+      "judgeHint": "mu의 판정 지점에 답하는 판정기입니다. 클릭해 변경하세요.",
+      "points": "판정 지점 {{active}}/{{total}}개 활성",
+      "shadow_one": "· {{count}}개 섀도 모드",
+      "shadow_other": "· {{count}}개 섀도 모드",
+      "off": "판정이 꺼져 있습니다",
+      "verdicts_one": "건의 판정",
+      "verdicts_other": "건의 판정",
+      "last": "최근",
+      "context": "컨텍스트",
+      "cache": "캐시"
+    },
+    "hero": {
+      "kernel": "판정 커널",
+      "judgeReady": "{{judge}} 준비 완료",
+      "judgeOff": "판정이 꺼져 있습니다",
+      "title": "mu에게 무엇을 맡길까요?",
+      "lead": "턴 안의 작은 판단은 모두 먼저 빠른 판정기에 맡깁니다. 무엇을 컨텍스트에 넣을지, 명령이 안전한지, 작업이 정말 끝났는지. 모델은 코드에 집중합니다."
     }
   },
   "menu": {
