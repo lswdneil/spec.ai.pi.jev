@@ -50,7 +50,7 @@ If mu doesn't understand part of the file, that part falls back to its default a
 
 ## Modes in practice
 
-- Every point acts from the start. To try out a judge, or a point you're unsure of, put it in shadow mode, read the ledger (`mu ledger`, `/status`, or the judgments tab), then set it back to active once its verdicts look right.
+- Every point acts from the start. To try out a judge, or a point you're unsure of, put it in shadow mode, read the ledger (`mu ledger`, `/status` or the app's Judge tab), then set it back to active once its verdicts look right.
 - `/mu mode <point> <off|shadow|active>` switches one point for the current session, and `/mu mode default shadow` switches all of them. To make a mode stick, put it in `mu.json`; the app's settings turn points on or off.
 - `MU_JUDGE_MODE=shadow mu` sets the default mode for one run.
 

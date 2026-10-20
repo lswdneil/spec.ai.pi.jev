@@ -48,7 +48,7 @@ mu asks a small, fast judge the routine questions that come up in a session. You
 
 ## Decisions and their modes
 
-Every decision point is **active** from the start: mu asks the judge and acts on its verdicts. Every verdict is logged, so you can see what the judge decided (`/status`, `mu ledger`, or the judgments tab in the app).
+Every decision point is **active** from the start: mu asks the judge and acts on its verdicts. Every verdict is logged, so you can see what the judge decided (`/status`, `mu ledger` or the Judge tab in the app).
 
 To watch the judge before you trust it, set the default mode to **shadow**. The judge is still asked and its verdicts are logged, but they change nothing. In `~/.mu/agent/mu.json`:
 

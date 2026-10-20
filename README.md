@@ -18,6 +18,15 @@
   <b>English</b> · <a href="docs/readme/README.zh-CN.md">简体中文</a> · <a href="docs/readme/README.zh-TW.md">繁體中文</a> · <a href="docs/readme/README.ja.md">日本語</a> · <a href="docs/readme/README.ko.md">한국어</a>
 </p>
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/app-dark.png">
+    <img src="docs/readme/app-light.png" width="880" alt="The mu desktop app fixing a failing test in a small project. Jev classifies the message as a multi-step task (input.preflight), the agent runs the tests, reads the parser, fixes the minute unit and runs the tests again. The judge panel on the right lists each verdict with its decision point and latency, about 200 to 400 ms. The bar along the bottom shows the judge, 38 of 40 decision points active, 5 verdicts and the context in use.">
+  </picture>
+  <br>
+  <sub>The desktop app on a small demo project. The coding model is scripted for the screenshot; Jev's verdicts and their timings are real.</sub>
+</p>
+
 A coding agent makes hundreds of decisions per session that aren't about the code: what goes into the context, whether a command is safe, whether a finding is worth passing to another agent, whether the work is really done. Handing these to the main model costs tokens, time and focus. Fixed rules get them wrong too often. mu hands them to a **judge**: a small, fast model that answers one bounded question at a time, at 40 decision points in every turn. The main model keeps its attention on the work.
 
 mu comes as a command line, `mu`, which does everything pi does plus the judgment kernel, and as a desktop app that bundles mu and its runtime. The default judge is Jev, a hosted model that answers yes/no, choice and score questions with a probability for each answer. A local judge (Laya) or any LLM can take over any decision point.
@@ -26,7 +35,7 @@ What you get:
 
 - **A lean context and a warm cache.** In the authors' own sessions, the context never fills: tool output enters chunk by chunk, and stale results are dropped without writing a summary. In the longest failing test logs, folding exact repeats cut 51% of the characters without losing any (see [Measured](#measured)). The prompt cache stays warm because the kernel predicts when you'll be back.
 - **Permission checks that don't stop you at every step.** In *Jev approves* mode, the default, the judge lets through what the task clearly needs and asks you about the rest. Rules catch risky commands first, and web pages and MCP output are screened for instructions aimed at the AI before the model sees them.
-- **Decisions you can audit.** Every verdict goes into a local ledger with its probabilities and timing (`mu ledger`, `/status`, or the desktop app's judgments tab). Any decision point can run in shadow mode, asked and logged but changing nothing, so you can compare judges before you rely on one.
+- **Decisions you can audit.** Every verdict goes into a local ledger with its probabilities and timing (`mu ledger`, `/status` or the desktop app's Judge tab). Any decision point can run in shadow mode, asked and logged but changing nothing, so you can compare judges before you rely on one.
 
 > mu is in early development (0.1.x). See [Status and limitations](#status-and-limitations).
 
@@ -44,7 +53,7 @@ mu setup            # connect a model
 mu                  # start a session in the current directory
 ```
 
-You don't need a judge key to start: until you set one, the free Jev on OpenCode Zen answers. Every decision point acts on its verdicts from the start, and every verdict is logged (`/status`, `mu ledger`, or the app's judgments tab). To record what the judge would do without acting on it, put `{"modes": {"default": "shadow"}}` in `~/.mu/agent/mu.json`. More in [Getting started](docs/getting-started.md).
+You don't need a judge key to start: until you set one, the free Jev on OpenCode Zen answers. Every decision point acts on its verdicts from the start, and every verdict is logged (`/status`, `mu ledger` or the app's Judge tab). To record what the judge would do without acting on it, put `{"modes": {"default": "shadow"}}` in `~/.mu/agent/mu.json`. More in [Getting started](docs/getting-started.md).
 
 ## How a turn works
 
@@ -164,7 +173,7 @@ Every point, with its feature switch and options: [docs/reference/decision-point
 
   With no key set, Jev 1.13 on OpenCode Zen answers, free for a limited time. What it judges goes to OpenCode, which doesn't train on it, and mu reminds you of this once a day. Set a key (`mu setup`, or the judges page) and mu switches to it from the next question.
 
-  Measured in the authors' own sessions: a warm question takes about 0.3 s over HTTP/2, and 16 chunks of tool output are judged in a single request in 0.44 s, with the shared state billed once. Verdicts, probabilities and timings go to the ledger: run `mu ledger`, or open the judgments tab in the desktop app.
+  Measured in the authors' own sessions: a warm question takes about 0.3 s over HTTP/2, and 16 chunks of tool output are judged in a single request in 0.44 s, with the shared state billed once. Verdicts, probabilities and timings go to the ledger: run `mu ledger`, or open the Judge tab in the desktop app.
 - **Laya** (local) is a 322M-parameter judge that runs on your machine and never touches the network. Nothing is downloaded without your consent. It's reliable on simple predicates and weaker on meta-judgments, so run it in shadow alongside Jev and read the ledger before you give it a decision point.
 - **Any classifier model** in pi's catalog can serve as a tier: `classifier:<provider>/<model>`. For example, Cloudflare's Clef (`clef`, `clef-flash`), the System One models on OpenRouter and the Vercel AI Gateway, or a llama.cpp classifier.
 - **Any LLM** can serve as a tier: `llm:<provider>/<model>`.
@@ -258,9 +267,9 @@ The working model keeps its own language for the work, and the board stays reada
 
 A native app with mu and its runtime built in: there's no Node.js to install and nothing to download on first launch. It has everything the command line has, plus a work panel beside the conversation:
 
-**board** · **judgments** (the live ledger: every verdict with its question) · **hive** · **lessons** · **files** · **preview** · **source** · **browser** (the built-in browser the agent drives one step at a time; it shows the goal and lets you pause or stop)
+**board** · **judge** (the live ledger: every verdict with its question, decision point and latency) · **hive** · **lessons** · **files** · **preview** · **source** · **browser** (the built-in browser the agent drives one step at a time; it shows the goal and lets you pause or stop)
 
-The permission mode and the goal sit in the composer, and `⌘K` opens the command palette. You sign in to models inside the app: ChatGPT, Claude, Grok and Google (Gemini CLI / Antigravity) subscriptions, or an API key for any provider pi supports. You can import Claude Code and Codex CLI conversations and continue them.
+A bar along the bottom keeps the kernel in view: which judge answers and where it runs, how many decision points are active and, in a conversation, the verdicts so far, the latest judge latency and the context in use. The permission mode and the goal sit in the composer, and `⌘K` opens the command palette. You sign in to models inside the app: ChatGPT, Claude, Grok and Google (Gemini CLI / Antigravity) subscriptions, or an API key for any provider pi supports. You can import Claude Code and Codex CLI conversations and continue them.
 
 GitHub Actions builds the app for macOS (Apple silicon / Intel), Windows (x64 / Arm) and Linux (x64 / Arm) and publishes it under [Releases](https://github.com/qybaihe/mu/releases).
 
@@ -271,6 +280,13 @@ npm i -g mu-agent
 mu            # interactive session in the current directory
 mu doctor     # check the installation, the judges and the connections
 ```
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/cli-dark.png">
+    <img src="docs/readme/cli-light.png" width="720" alt="mu's welcome screen in a terminal: the μ mark, &quot;mu v0.1.9, judgment-first coding agent, built on pi 1.3.0&quot;, then the judge (Jev 1.13, free, answering in 428 ms, decision points active), the model and the working directory, and the keys worth knowing.">
+  </picture>
+</p>
 
 Requires Node.js 22.19 or newer. `mu -p "prompt"` runs a single prompt and prints the answer; `mu -c` continues the last session. `mu import --list` finds your Claude Code and Codex conversations, and `mu import <file>` brings one in. `mu ledger [n]` prints what the judge decided in the last n sessions. The command line and the desktop app share accounts, settings and lessons. In the terminal, mu uses its own `mu-dark` and `mu-light` themes until you choose one in `/settings` (`system` follows your terminal's palette).
 
