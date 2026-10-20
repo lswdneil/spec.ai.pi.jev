@@ -6,6 +6,15 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 
 ## [Unreleased]
 
+### Changed
+
+- **Native English throughout.** The README, the docs, the command line, the desktop app and the judge's messages were rewritten for people who read English first, following a new [style guide](docs/writing-style.md). The Chinese text is unchanged.
+- **A new look for the desktop app.** Ink-and-paper neutrals and monochrome primary buttons; violet marks what you can act on, and pink marks the judge.
+  - The home page says which judge is ready and how many decision points are active.
+  - A kernel bar along the bottom shows the judge and where it runs. In a conversation it also shows the verdicts so far, the latest judge latency, context use and cache hits. Click the judge to change it.
+  - Judge lines in a conversation and in the judge panel name their decision point (`input.preflight`), with the judge's latency.
+- **The command line has its own themes**, `mu-dark` and `mu-light`, matched to your terminal's background. mu uses them until you choose a theme in `/settings`. The welcome screen is redrawn without a box.
+
 ## [0.1.8] - 2026-10-19
 
 ### Added
