@@ -3,7 +3,7 @@
   "version": "0.1.8",
   "description": "mu, the coding agent with Jev judgment, as a desktop app.",
   "keywords": [],
-  "license": "Apache-2.0",
+  "license": "MIT AND Apache-2.0",
   "author": {
     "name": "mu"
   },

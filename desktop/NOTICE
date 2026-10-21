@@ -1,9 +1,14 @@
 mu desktop
 
+The desktop app is under the MIT license (LICENSE), except for the files that
+came from AionUi.
+
 This directory began as a fork of AionUi (https://github.com/iOfficeAI/AionUi),
-Copyright 2025 AionUi (aionui.com), licensed under the Apache License, Version
-2.0. Files derived from AionUi keep their copyright header and remain under that
-license; see LICENSE.
+version 2.2.2 (6744099b), Copyright 2025 AionUi (aionui.com), licensed under the
+Apache License, Version 2.0 (LICENSE-APACHE). The files that came from it, and
+mu's changes to them, stay under that license. AIONUI-FILES.txt lists them;
+scripts/aionuiFiles.mjs regenerates the list. A file mu rewrites from scratch
+or deletes leaves the list.
 
 The app runs AionCore (https://github.com/iOfficeAI/AionCore), a separate
 program from the same organization, which the build downloads and bundles.
