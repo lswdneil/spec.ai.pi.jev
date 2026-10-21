@@ -57,19 +57,12 @@ You don't need a judge key to start: until you set one, the free Jev on OpenCode
 
 ## How a turn works
 
-```
- you ──▶ input.preflight · task.frame · input.interjection
-           │
-           ▼
-         model ──▶ tool call ──▶ tool.risk · tool.constraint · tool.approval ──▶ runs
-           ▲                                                                     │
-           │    tool.injection   web pages and MCP output: instructions aimed at the AI are withheld
-           │    tool.admission   chunk by chunk: into the context, or archived behind a pointer
-           │    context.forget · context.compact   when the context grows        │
-           └─────────────────────────────────────────────────────────────────────┘
-
- turn ends ──▶ turn.completion · turn.continue · turn.drift · turn.rewind · memory.applied · board.read · cache.warming
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/turn-dark.svg">
+    <img src="docs/readme/turn-light.svg" width="880" alt="How a turn works: four stages, each with the decision points it asks the judge. A message arrives: input.preflight, task.frame, input.interjection, skills.disclosure, memory.recall. Before a tool runs, rules first: tool.risk, tool.constraint, tool.approval. What comes back, before the model sees it: tool.injection, tool.admission, context.forget, context.compact. The turn ends: turn.completion, turn.continue, turn.drift, memory.capture, cache.warming. The model loops over the middle two stages. Every stage asks the same judge, and every verdict goes to the ledger.">
+  </picture>
+</p>
 
 Each name in the diagram is a decision point, asked as a short question about a small piece of state. The verdict changes what the model does next, never whether the model asks you a question. Rules set the floor: they catch a dangerous-looking command first, and the judge can only vouch that you asked for it.
 
