@@ -648,6 +648,12 @@
       "permissions": "Permissões"
     },
     "intro": {
+      "turn": {
+        "label": "Um turno, visto pelo juiz",
+        "preflight": "Tarefa de várias etapas: olhar primeiro",
+        "approval": "npm test roda sem perguntar",
+        "completion": "Os testes passam: o trabalho está feito"
+      },
       "title": "Boas-vindas ao mu",
       "lead": "O mu é um assistente de programação que faz o trabalho: ele lê seu projeto, edita código, executa comandos e testes e continua até terminar a tarefa.",
       "points": {

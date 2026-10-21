@@ -648,6 +648,12 @@
       "permissions": "İzinler"
     },
     "intro": {
+      "turn": {
+        "label": "Hakemin gözünden bir tur",
+        "preflight": "Çok adımlı görev: önce bak",
+        "approval": "npm test sormadan çalışır",
+        "completion": "Testler geçiyor, iş bitti"
+      },
       "title": "mu'ya hoş geldiniz",
       "lead": "mu işi kendisi yapan bir kodlama asistanıdır: projenizi okur, kodu düzenler, komutları ve testleri çalıştırır, iş bitene kadar devam eder.",
       "points": {

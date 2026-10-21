@@ -648,6 +648,12 @@
       "permissions": "權限方式"
     },
     "intro": {
+      "turn": {
+        "label": "判定器眼中的一輪",
+        "preflight": "多步任務：先看再動",
+        "approval": "npm test 不用詢問即可執行",
+        "completion": "測試通過，工作完成"
+      },
       "title": "歡迎使用 mu",
       "lead": "mu 是一個會動手的程式助手：它讀你的專案、改程式碼、跑指令和測試，直到把事情做完。",
       "points": {

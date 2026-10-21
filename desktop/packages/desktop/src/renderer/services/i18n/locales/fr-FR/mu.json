@@ -648,6 +648,12 @@
       "permissions": "Autorisations"
     },
     "intro": {
+      "turn": {
+        "label": "Un tour, vu par le juge",
+        "preflight": "Tâche en plusieurs étapes : regarder d’abord",
+        "approval": "npm test s’exécute sans demander",
+        "completion": "Les tests passent : le travail est fini"
+      },
       "title": "Bienvenue dans mu",
       "lead": "mu est un assistant de code qui fait le travail : il lit votre projet, modifie le code, lance des commandes et des tests, et continue jusqu’à ce que la tâche soit terminée.",
       "points": {

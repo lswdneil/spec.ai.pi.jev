@@ -648,6 +648,12 @@
       "permissions": "权限方式"
     },
     "intro": {
+      "turn": {
+        "label": "判定器眼中的一轮",
+        "preflight": "多步任务：先看再动",
+        "approval": "npm test 无需询问即可运行",
+        "completion": "测试通过，工作完成"
+      },
       "title": "欢迎使用 mu",
       "lead": "mu 是一个会动手的编程助手：它读你的项目、改代码、跑命令和测试，直到把事情做完。",
       "points": {

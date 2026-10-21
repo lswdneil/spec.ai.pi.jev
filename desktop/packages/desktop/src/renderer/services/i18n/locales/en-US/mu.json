@@ -648,6 +648,12 @@
       "permissions": "Permissions"
     },
     "intro": {
+      "turn": {
+        "label": "A turn, as the judge sees it",
+        "preflight": "Multi-step task: look first",
+        "approval": "npm test runs without asking",
+        "completion": "Tests pass, so the work is done"
+      },
       "title": "Welcome to mu",
       "lead": "mu is a coding assistant that does the work: it reads your project, edits code, runs commands and tests, and keeps going until the job is done.",
       "points": {
