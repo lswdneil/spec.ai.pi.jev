@@ -231,7 +231,7 @@ asarUnpack:
   - 'out/main/builtin-mcp-browser.js'
   - 'out/main/team-mcp-stdio.js'
   # spec.jev's ACP adapter, run by the app's own binary as Node from resources/spec.jev
-  - 'out/main/spec.jev-acp.js'
+  - 'out/main/mu-acp.js'
 
 # Compression level: normal for faster builds, maximum for smallest size
 # Note: electron-builder doesn't support YAML template syntax for env vars
@@ -241,14 +241,14 @@ removePackageScripts: true
 electronDownload:
   cache: ${env.ELECTRON_CACHE}
 
-# mu's releases: the pre-releases of github.com/qybaihe/mu, which the app updates itself from (electron-updater's
+# mu's releases: the pre-releases of github.com/lswdneil/ai.spec.pi.jev, which the app updates itself from (electron-updater's
 # GitHub provider, see process/services/update). Beside the installers electron-builder writes the update feed:
 # latest-mac.yml, latest.yml (Windows), latest-linux.yml / latest-linux-arm64.yml and the .blockmap files; the
 # release job of the public repository's desktop.yml merges the per-arch ones and attaches them. It also writes
 # app-update.yml into the app. The builds run with --publish=never: the release job publishes, not electron-builder.
 publish:
   provider: github
-  owner: qybaihe
-  repo: mu
+  owner: lswdneil
+  repo: ai.spec.pi.jev
   publishAutoUpdate: true
   releaseType: prerelease

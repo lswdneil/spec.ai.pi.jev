@@ -83,12 +83,12 @@ const offer = (version: string, files = process.platform === 'darwin' ? macFiles
 
 const release = (version: string, installer: string | null = `spec.jev-${version}-mac-arm64.dmg`): UpdateReleaseInfo => {
   const assets = installer
-    ? [{ name: installer, url: `https://github.com/qybaihe/mu/releases/download/v${version}/${installer}`, size: 1 }]
+    ? [{ name: installer, url: `https://github.com/lswdneil/ai.spec.pi.jev/releases/download/v${version}/${installer}`, size: 1 }]
     : [];
   return {
     tagName: `v${version}`,
     version,
-    htmlUrl: `https://github.com/qybaihe/mu/releases/tag/v${version}`,
+    htmlUrl: `https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v${version}`,
     prerelease: true,
     assets,
     recommendedAsset: assets[0],
@@ -141,12 +141,12 @@ afterEach(() => {
 });
 
 describe('updates that install on a restart (electron-updater)', () => {
-  it('reads the pre-releases of qybaihe/mu, never downloads on its own, and installs a downloaded update on quit', async () => {
+  it('reads the pre-releases of lswdneil/ai.spec.pi.jev, never downloads on its own, and installs a downloaded update on quit', async () => {
     setPlatform('win32', 'x64');
     updater.checkForUpdates.mockResolvedValue(null);
     const { service } = makeService();
     await service.check();
-    expect(updater.setFeedURL).toHaveBeenCalledWith({ provider: 'github', owner: 'qybaihe', repo: 'mu' });
+    expect(updater.setFeedURL).toHaveBeenCalledWith({ provider: 'github', owner: 'lswdneil', repo: 'ai.spec.pi.jev' });
     expect(updater.allowPrerelease).toBe(true);
     expect(updater.autoDownload).toBe(false);
     expect(updater.autoInstallOnAppQuit).toBe(true);
@@ -427,7 +427,7 @@ describe('falling back to the installer', () => {
     );
     expect(service.getState().installerName).toBeUndefined();
     await service.run('openReleasePage');
-    expect(deps.openExternal).toHaveBeenCalledWith('https://github.com/qybaihe/mu/releases/tag/v0.1.3');
+    expect(deps.openExternal).toHaveBeenCalledWith('https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v0.1.3');
   });
 
   it('starts spec.jev again when the installer does not take over after the backend stopped', async () => {
@@ -487,7 +487,7 @@ describe('updates that come as an installer (Linux)', () => {
     const { service, deps } = makeService({ restartUpdater: undefined });
     deps.openExternal.mockRejectedValue(new Error('no browser'));
     await expect(service.run('openReleasePage')).resolves.toMatchObject({ phase: 'idle' });
-    expect(deps.openExternal).toHaveBeenCalledWith('https://github.com/qybaihe/mu/releases');
+    expect(deps.openExternal).toHaveBeenCalledWith('https://github.com/lswdneil/ai.spec.pi.jev/releases');
   });
 });
 

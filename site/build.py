@@ -52,8 +52,8 @@ from markdown_it import MarkdownIt
 
 here = Path(__file__).resolve().parent
 SITE = "https://usemu.dev/"
-REPO = "https://github.com/qybaihe/mu"
-API = "https://api.github.com/repos/qybaihe/mu"
+REPO = "https://github.com/lswdneil/ai.spec.pi.jev"
+API = "https://api.github.com/repos/lswdneil/ai.spec.pi.jev"
 LOCALES = ["zh-CN", "en", "zh-TW", "ja", "ko"]
 MANIFEST_LANG = {"zh-CN": "zh", "en": "en", "zh-TW": "zh-TW", "ja": "ja-JP", "ko": "ko-KR"}
 APP_LOCALE = {"zh-CN": "zh-CN", "en": "en-US", "zh-TW": "zh-TW", "ja": "ja-JP", "ko": "ko-KR"}
@@ -578,11 +578,11 @@ def check_facts(outdir, locales, modes, manifest):
 def main():
     parser = argparse.ArgumentParser(description="Build usemu.dev.")
     parser.add_argument("outdir")
-    parser.add_argument("--repo", default=os.environ.get("MU_REPO") or str(here.parent), help="a checkout of qybaihe/mu")
+    parser.add_argument("--repo", default=os.environ.get("MU_REPO") or str(here.parent), help="a checkout of lswdneil/ai.spec.pi.jev")
     args = parser.parse_args()
     repo = Path(args.repo).expanduser().resolve()
     if not (repo / "packages/kyrn-judge/manifest.json").exists():
-        raise SystemExit(f"{repo} is not a checkout of qybaihe/mu (no packages/kyrn-judge/manifest.json); pass --repo")
+        raise SystemExit(f"{repo} is not a checkout of lswdneil/ai.spec.pi.jev (no packages/kyrn-judge/manifest.json); pass --repo")
     outdir = Path(args.outdir).expanduser().resolve()
     outdir.mkdir(parents=True, exist_ok=True)
 

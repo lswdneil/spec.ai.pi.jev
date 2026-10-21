@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please report security problems **privately**, through the repository's [private report form](https://github.com/qybaihe/mu/security/advisories/new) (Security → Report a vulnerability). Only the maintainers can read it. Don't open a public issue, pull request or discussion about it.
+Please report security problems **privately**, through the repository's [private report form](https://github.com/lswdneil/ai.spec.pi.jev/security/advisories/new) (Security → Report a vulnerability). Only the maintainers can read it. Don't open a public issue, pull request or discussion about it.
 
 Include:
 
@@ -13,7 +13,7 @@ Include:
 
 spec.jev is maintained by a small team. You can expect an acknowledgment within a few days and a first assessment within two weeks. We'll agree on a disclosure date with you, credit you in the advisory unless you'd rather not be named, and publish a fixed release before the details.
 
-请通过仓库的[私密报告表单](https://github.com/qybaihe/mu/security/advisories/new)报告安全问题，不要公开发 issue。中文报告同样欢迎。
+请通过仓库的[私密报告表单](https://github.com/lswdneil/ai.spec.pi.jev/security/advisories/new)报告安全问题，不要公开发 issue。中文报告同样欢迎。
 
 ## Supported versions
 

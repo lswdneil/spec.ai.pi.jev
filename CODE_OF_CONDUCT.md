@@ -36,7 +36,7 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement through the repository's [private report form](https://github.com/qybaihe/mu/security/advisories/new) (title it "Conduct report"; only the maintainers can read it). All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement through the repository's [private report form](https://github.com/lswdneil/ai.spec.pi.jev/security/advisories/new) (title it "Conduct report"; only the maintainers can read it). All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the reporter of any incident.
 

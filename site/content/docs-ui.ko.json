@@ -17,9 +17,9 @@
   "contrib_h2": "기여자용",
   "contrib_p": "mu가 어떻게 만들어졌는지, 그리고 어떻게 더할 수 있는지. 저장소에 영어로 있어요:",
   "contrib": [
-    { "text": "mu의 동작 방식", "href": "https://github.com/qybaihe/mu/blob/main/docs/architecture.md" },
-    { "text": "판정 지점 추가하기", "href": "https://github.com/qybaihe/mu/blob/main/docs/adding-a-decision-point.md" },
-    { "text": "번역", "href": "https://github.com/qybaihe/mu/blob/main/docs/translations.md" },
-    { "text": "기여하기", "href": "https://github.com/qybaihe/mu/blob/main/CONTRIBUTING.md" }
+    { "text": "mu의 동작 방식", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/architecture.md" },
+    { "text": "판정 지점 추가하기", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/adding-a-decision-point.md" },
+    { "text": "번역", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/translations.md" },
+    { "text": "기여하기", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/CONTRIBUTING.md" }
   ]
 }

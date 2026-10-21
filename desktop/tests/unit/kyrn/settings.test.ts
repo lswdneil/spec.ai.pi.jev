@@ -408,7 +408,7 @@ describe('mu-only backend catalog', () => {
     return { calls, request };
   }
 
-  // https://github.com/qybaihe/mu/issues/14: uninstalling leaves the backend registration behind.
+  // https://github.com/lswdneil/ai.spec.pi.jev/issues/14: uninstalling leaves the backend registration behind.
   describe('reinstalling into a different folder', () => {
     const old = 'C:\\old\\resources\\spec.jev\\acp.cmd';
     const current = 'D:\\spec.jev\\resources\\spec.jev\\acp.cmd';

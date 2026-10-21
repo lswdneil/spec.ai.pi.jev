@@ -5,7 +5,7 @@ summary: What to check when spec.jev doesn't start, can't reach a model or the j
 
 Start with `spec.jev doctor`, or `/doctor` in a session: it checks the installation, the model, the judges and the connections, and says what to fix. In the desktop app, the logs are one click away under Settings → About.
 
-If none of this helps, [open an issue](https://github.com/qybaihe/mu/issues/new/choose) with the version, the platform and the `spec.jev doctor` output.
+If none of this helps, [open an issue](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose) with the version, the platform and the `spec.jev doctor` output.
 
 ## Installing and starting {#install}
 

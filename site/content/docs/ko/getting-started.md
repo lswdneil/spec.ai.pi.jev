@@ -7,7 +7,7 @@ spec.jev는 두 가지로 쓸 수 있어요. 필요한 것을 모두 담은 **�
 
 ## 데스크톱 앱 {#desktop-app}
 
-1. [Releases](https://github.com/qybaihe/mu/releases/latest)에서 여러분의 시스템에 맞는 빌드를 내려받거나, 시스템을 알아서 골라 주는 [홈 페이지](@home#install)에서 내려받으세요.
+1. [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases/latest)에서 여러분의 시스템에 맞는 빌드를 내려받거나, 시스템을 알아서 골라 주는 [홈 페이지](@home#install)에서 내려받으세요.
 
    | 시스템 | 파일 |
    | --- | --- |

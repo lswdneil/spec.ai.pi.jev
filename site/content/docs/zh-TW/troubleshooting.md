@@ -5,7 +5,7 @@ summary: spec.jev 啟動不了、連不上模型，或者判定器好像什麼�
 
 先執行 `spec.jev doctor`，或在工作階段裡用 `/doctor`：它檢查安裝、模型、判定器和各項連線，並告訴你要修什麼。在桌面版，日誌在「設定 → 關於」裡，點一下就能開啟。
 
-如果這些都沒用，請[開一個 issue](https://github.com/qybaihe/mu/issues/new/choose)，附上版本、平台和 `spec.jev doctor` 的輸出。
+如果這些都沒用，請[開一個 issue](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose)，附上版本、平台和 `spec.jev doctor` 的輸出。
 
 ## 安裝和啟動 {#install}
 

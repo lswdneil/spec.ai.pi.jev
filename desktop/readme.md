@@ -1,6 +1,6 @@
 # spec.jev desktop
 
-The desktop app of [spec.jev](../README.md). It runs pi and spec.jev's judgment kernel in an Electron utility process and shows each conversation with the judge's verdicts beside it: the work panel, the kernel bar, the settings drawn from the kernel's manifest, and the first-run guide. People who use spec.jev download it from [Releases](https://github.com/qybaihe/mu/releases); this page is for working on it.
+The desktop app of [spec.jev](../README.md). It runs pi and spec.jev's judgment kernel in an Electron utility process and shows each conversation with the judge's verdicts beside it: the work panel, the kernel bar, the settings drawn from the kernel's manifest, and the first-run guide. People who use spec.jev download it from [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases); this page is for working on it.
 
 ## Run it from this checkout
 

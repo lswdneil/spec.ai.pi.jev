@@ -1,6 +1,6 @@
 # Adding a decision point
 
-A decision point is one bounded question that a small judge answers about a small state, plus the effect its answer has. This guide takes you from the idea to a merged pull request. Open a [decision point proposal](https://github.com/qybaihe/mu/issues/new?template=decision_point.yml) first: agreeing on the question and the effect before you write code saves the most time.
+A decision point is one bounded question that a small judge answers about a small state, plus the effect its answer has. This guide takes you from the idea to a merged pull request. Open a [decision point proposal](https://github.com/lswdneil/ai.spec.pi.jev/issues/new?template=decision_point.yml) first: agreeing on the question and the effect before you write code saves the most time.
 
 ## Is it a good decision point?
 

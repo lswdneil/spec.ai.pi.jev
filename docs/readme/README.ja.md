@@ -6,12 +6,12 @@
 <p align="center">判定カーネルを持つコーディングエージェント。ベースは <a href="https://github.com/earendil-works/pi">pi</a>。</p>
 
 <p align="center">
-  <a href="https://github.com/qybaihe/mu/actions/workflows/ci.yml"><img src="https://github.com/qybaihe/mu/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/qybaihe/mu/actions/workflows/desktop.yml"><img src="https://github.com/qybaihe/mu/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
   <a href="https://www.npmjs.com/package/mu-agent"><img src="https://img.shields.io/npm/v/mu-agent?label=mu-agent" alt="npm"></a>
-  <a href="https://github.com/qybaihe/mu/releases"><img src="https://img.shields.io/github/v/release/qybaihe/mu?include_prereleases&label=desktop" alt="Desktop release"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/releases"><img src="https://img.shields.io/github/v/release/lswdneil/ai.spec.pi.jev?include_prereleases&label=desktop" alt="Desktop release"></a>
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
-  <a href="https://github.com/qybaihe/mu/discussions"><img src="https://img.shields.io/github/discussions/qybaihe/mu?label=discussions" alt="Discussions"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/discussions"><img src="https://img.shields.io/github/discussions/lswdneil/ai.spec.pi.jev?label=discussions" alt="Discussions"></a>
 </p>
 
 <p align="center">
@@ -33,13 +33,13 @@
 - **spec.jev デスクトップ**：spec.jev とそのランタイムを内蔵したデスクトップアプリです。ダウンロードしてモデルをつなげば、すぐに始められます。
 - **Jev**：判定器です。Yes/No、選択、スコアの問いに答え、答えごとに確率を付け、すべての判定を台帳に残します。承認だけは Jev が決めますが、それ以外の判定ポイントはローカルの判定器（Laya）や任意の LLM に任せることもできます。
 
-> まだ開発の初期段階です。プレリリース版（0.1.x）を npm と [Releases](https://github.com/qybaihe/mu/releases) で公開していて、作者たちは毎日使っています。名前、設定、形式は今後も変わる可能性があります。
+> まだ開発の初期段階です。プレリリース版（0.1.x）を npm と [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases) で公開していて、作者たちは毎日使っています。名前、設定、形式は今後も変わる可能性があります。
 
 **目次：**[クイックスタート](#クイックスタート) · [1 ターンの流れ](#1-ターンの流れ) · [判定ポイント](#判定ポイント) · [判定器](#判定器) · [実測](#実測) · [ハイブ](#ハイブ) · [わかりやすいボード](#わかりやすいボード) · [デスクトップアプリ](#デスクトップアプリ) · [コマンドライン](#コマンドライン) · [ドキュメント](#ドキュメント) · [コントリビュート](#コントリビュート)
 
 ## クイックスタート
 
-**デスクトップアプリ。** [Releases](https://github.com/qybaihe/mu/releases/latest) から macOS、Windows、Linux 用のインストーラーをダウンロードして開き、API キーを貼り付けるか、ChatGPT、Claude、Grok、Google のサブスクリプションでサインインします。ほかにインストールするものはありません。
+**デスクトップアプリ。** [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases/latest) から macOS、Windows、Linux 用のインストーラーをダウンロードして開き、API キーを貼り付けるか、ChatGPT、Claude、Grok、Google のサブスクリプションでサインインします。ほかにインストールするものはありません。
 
 **コマンドライン。**
 
@@ -247,7 +247,7 @@ spec.jev とそのランタイムを内蔵したデスクトップアプリで�
 
 画面下部のバーで、カーネルの状態をいつでも確認できます。どの判定器が答えていてどこで動いているか、有効な判定ポイントの数、会話中ならそれまでの判定数、直近の判定の所要時間、コンテキストの使用量です。権限モードと目標は入力欄にあり、`⌘K` でコマンドパレットが開きます。モデルへのログインはアプリの中で行います。ChatGPT、Claude、Grok、Google（Gemini CLI / Antigravity）のサブスクリプションか、pi が対応する任意のプロバイダーの API キーを使えます。Claude Code と Codex CLI の会話は、インポートして続きから話せます。
 
-macOS（Apple シリコン / Intel）、Windows（x64 / Arm）、Linux（x64 / Arm）向けのビルドは GitHub Actions で作成し、[Releases](https://github.com/qybaihe/mu/releases) で公開しています。
+macOS（Apple シリコン / Intel）、Windows（x64 / Arm）、Linux（x64 / Arm）向けのビルドは GitHub Actions で作成し、[Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases) で公開しています。
 
 ## コマンドライン
 
@@ -300,7 +300,7 @@ pi 自身のコマンド（`/model`、`/thinking`、`/login`、`/resume`、`/tre
 
 ## コントリビュート
 
-バグ報告、修正、新しい判定ポイント、判定器の評価、翻訳を歓迎します。英語か中国語で書いてください。まず [CONTRIBUTING.md](../../CONTRIBUTING.md) を読んでください。[`good first issue`](https://github.com/qybaihe/mu/labels/good%20first%20issue) ラベルの issue から始めるのがおすすめです。
+バグ報告、修正、新しい判定ポイント、判定器の評価、翻訳を歓迎します。英語か中国語で書いてください。まず [CONTRIBUTING.md](../../CONTRIBUTING.md) を読んでください。[`good first issue`](https://github.com/lswdneil/ai.spec.pi.jev/labels/good%20first%20issue) ラベルの issue から始めるのがおすすめです。
 
 ```bash
 npm install --ignore-scripts   # 依存パッケージのインストール（ライフサイクルスクリプトは実行しない）
@@ -319,8 +319,8 @@ spec.jev のライセンスは MIT です（[LICENSE](../../LICENSE)。デスク
 
 ## コミュニティ
 
-- 質問とアイデア：[Discussions](https://github.com/qybaihe/mu/discussions)。中国語のディスカッションは [linux.do](https://linux.do) でも。
-- バグ報告と要望：[Issues](https://github.com/qybaihe/mu/issues/new/choose)。
+- 質問とアイデア：[Discussions](https://github.com/lswdneil/ai.spec.pi.jev/discussions)。中国語のディスカッションは [linux.do](https://linux.do) でも。
+- バグ報告と要望：[Issues](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose)。
 - そのほか：[SUPPORT.md](../../SUPPORT.md)。
 
 spec.jev が役に立ったら、スターを付けてもらえると、ほかの人が見つけやすくなります。

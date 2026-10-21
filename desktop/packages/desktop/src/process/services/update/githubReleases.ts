@@ -13,7 +13,7 @@ import semver from 'semver';
  * spec.jev's builds are the releases of its own repository, and it asks no other update server: the server or repository of
  * the app it was forked from would offer that app's installer as an update of spec.jev.
  */
-export const MU_REPO = 'qybaihe/mu';
+export const MU_REPO = 'lswdneil/ai.spec.pi.jev';
 export const MU_RELEASES_URL = `https://github.com/${MU_REPO}/releases`;
 export const USER_AGENT = 'spec.jev';
 
@@ -177,7 +177,7 @@ export const latestRelease = (releases: GitHubReleaseApi[]): UpdateReleaseInfo |
   };
 };
 
-/** The newest release of github.com/qybaihe/mu, asked from GitHub's API; null when there is none. */
+/** The newest release of github.com/lswdneil/ai.spec.pi.jev, asked from GitHub's API; null when there is none. */
 export const fetchLatestRelease = async (timeoutMs = REQUEST_TIMEOUT_MS): Promise<UpdateReleaseInfo | null> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);

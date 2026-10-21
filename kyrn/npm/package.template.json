@@ -21,13 +21,13 @@
 		"judge",
 		"pi"
 	],
-	"homepage": "https://github.com/qybaihe/mu",
+	"homepage": "https://github.com/lswdneil/ai.spec.pi.jev",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/qybaihe/mu.git"
+		"url": "git+https://github.com/lswdneil/ai.spec.pi.jev.git"
 	},
 	"bugs": {
-		"url": "https://github.com/qybaihe/mu/issues"
+		"url": "https://github.com/lswdneil/ai.spec.pi.jev/issues"
 	},
 	"license": "MIT",
 	"engines": {

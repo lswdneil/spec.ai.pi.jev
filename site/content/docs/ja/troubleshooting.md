@@ -5,7 +5,7 @@ summary: spec.jev が起動しない、モデルに接続できない、判定�
 
 まず `spec.jev doctor`、またはセッション内で `/doctor` を実行します。インストール、モデル、判定器、各接続を確認し、何を直せばよいかを示します。デスクトップアプリでは、設定 → 情報からワンクリックでログを開けます。
 
-どれも役に立たなければ、バージョン、プラットフォーム、`spec.jev doctor` の出力を添えて [issue を作成](https://github.com/qybaihe/mu/issues/new/choose)してください。
+どれも役に立たなければ、バージョン、プラットフォーム、`spec.jev doctor` の出力を添えて [issue を作成](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose)してください。
 
 ## インストールと起動 {#install}
 

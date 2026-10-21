@@ -6,12 +6,12 @@
 <p align="center">A coding agent that hands its routine decisions to a small, fast judge model, so the main model can focus on the code. Built on <a href="https://github.com/earendil-works/pi">pi</a>.</p>
 
 <p align="center">
-  <a href="https://github.com/qybaihe/mu/actions/workflows/ci.yml"><img src="https://github.com/qybaihe/mu/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/qybaihe/mu/actions/workflows/desktop.yml"><img src="https://github.com/qybaihe/mu/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
   <a href="https://www.npmjs.com/package/spec.jev"><img src="https://img.shields.io/npm/v/spec.jev?label=spec.jev" alt="npm"></a>
-  <a href="https://github.com/qybaihe/mu/releases"><img src="https://img.shields.io/github/v/release/qybaihe/spec.jev?include_prereleases&label=desktop" alt="Desktop release"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/releases"><img src="https://img.shields.io/github/v/release/lswdneil/ai.spec.pi.jev?include_prereleases&label=desktop" alt="Desktop release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
-  <a href="https://github.com/qybaihe/mu/discussions"><img src="https://img.shields.io/github/discussions/qybaihe/spec.jev?label=discussions" alt="Discussions"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/discussions"><img src="https://img.shields.io/github/discussions/lswdneil/ai.spec.pi.jev?label=discussions" alt="Discussions"></a>
 </p>
 
 <p align="center">
@@ -43,7 +43,7 @@ What you get:
 
 ## Quick start
 
-**Desktop app.** Download the installer for macOS, Windows or Linux from [Releases](https://github.com/qybaihe/mu/releases/latest), open it and paste an API key or sign in with a ChatGPT, Claude, Grok or Google subscription. There's nothing else to install.
+**Desktop app.** Download the installer for macOS, Windows or Linux from [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases/latest), open it and paste an API key or sign in with a ChatGPT, Claude, Grok or Google subscription. There's nothing else to install.
 
 **Command line.**
 
@@ -302,7 +302,7 @@ A desktop app with spec.jev and its runtime built in: there's no Node.js to inst
 
 A bar along the bottom keeps the kernel in view: which judge answers and where it runs, how many decision points are active and, in a conversation, the verdicts so far, the latest judge latency and the context in use. The permission mode and the goal sit in the composer, and `⌘K` opens the command palette. You sign in to models inside the app: ChatGPT, Claude, Grok and Google (Gemini CLI / Antigravity) subscriptions, or an API key for any provider pi supports. You can import Claude Code and Codex CLI conversations and continue them.
 
-GitHub Actions builds the app for macOS (Apple silicon / Intel), Windows (x64 / Arm) and Linux (x64 / Arm) and publishes it under [Releases](https://github.com/qybaihe/mu/releases).
+GitHub Actions builds the app for macOS (Apple silicon / Intel), Windows (x64 / Arm) and Linux (x64 / Arm) and publishes it under [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases).
 
 ## Command line
 
@@ -349,7 +349,7 @@ Your keys stay on your machine. spec.jev never downloads a model or a runtime on
 
 ## Status and limitations
 
-- spec.jev is in early development. Pre-releases (0.1.x) are on npm and under [Releases](https://github.com/qybaihe/mu/releases). The authors use it every day, but names, settings and formats may still change.
+- spec.jev is in early development. Pre-releases (0.1.x) are on npm and under [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases). The authors use it every day, but names, settings and formats may still change.
 - The measurements above come from the authors' own sessions and from synthetic projects. The test-log repeats cover Vitest only.
 - The test-log numbers measure what reaches the model, not whether the model then finishes the task. There's no end-to-end comparison with pi, Claude Code or Codex on the same tasks yet.
 - Laya, the local judge, runs only on macOS on Apple silicon, and it's weaker on meta-judgments than on simple predicates. Run it in shadow before you give it a decision point.
@@ -364,7 +364,7 @@ Your keys stay on your machine. spec.jev never downloads a model or a runtime on
 
 ## Contributing
 
-Bug reports, fixes, new decision points, judge measurements and translations are welcome, in English or Chinese. Start with [CONTRIBUTING.md](CONTRIBUTING.md); issues labeled [`good first issue`](https://github.com/qybaihe/mu/labels/good%20first%20issue) are a good way in.
+Bug reports, fixes, new decision points, judge measurements and translations are welcome, in English or Chinese. Start with [CONTRIBUTING.md](CONTRIBUTING.md); issues labeled [`good first issue`](https://github.com/lswdneil/ai.spec.pi.jev/labels/good%20first%20issue) are a good way in.
 
 ```bash
 npm install --ignore-scripts   # install dependencies without lifecycle scripts
@@ -379,8 +379,8 @@ Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md). Report s
 
 ## Community and support
 
-- Questions and ideas: [Discussions](https://github.com/qybaihe/mu/discussions). There's also discussion in Chinese on [linux.do](https://linux.do).
-- Bugs and feature requests: [Issues](https://github.com/qybaihe/mu/issues/new/choose).
+- Questions and ideas: [Discussions](https://github.com/lswdneil/ai.spec.pi.jev/discussions). There's also discussion in Chinese on [linux.do](https://linux.do).
+- Bugs and feature requests: [Issues](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose).
 - More: [SUPPORT.md](SUPPORT.md).
 
 If spec.jev is useful to you, a star helps others find it.

@@ -5,7 +5,7 @@ summary: spec.jev가 시작되지 않을 때, 모델에 닿지 못할 때, 판�
 
 먼저 `spec.jev doctor`를 실행하세요. 세션 안에서는 `/doctor`예요. 설치, 모델, 판정기, 연결 상태를 점검하고 무엇을 고칠지 알려 줘요. 데스크톱 앱에서는 설정 → 정보에서 클릭 한 번으로 로그를 볼 수 있어요.
 
-그래도 해결되지 않으면 버전, 플랫폼, `spec.jev doctor` 출력을 적어서 [이슈를 열어 주세요](https://github.com/qybaihe/mu/issues/new/choose).
+그래도 해결되지 않으면 버전, 플랫폼, `spec.jev doctor` 출력을 적어서 [이슈를 열어 주세요](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose).
 
 ## 설치와 시작 {#install}
 

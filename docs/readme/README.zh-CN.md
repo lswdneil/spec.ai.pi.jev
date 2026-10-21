@@ -6,12 +6,12 @@
 <p align="center">带判定内核的编码代理。基于 <a href="https://github.com/earendil-works/pi">pi</a>。</p>
 
 <p align="center">
-  <a href="https://github.com/qybaihe/mu/actions/workflows/ci.yml"><img src="https://github.com/qybaihe/mu/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/qybaihe/mu/actions/workflows/desktop.yml"><img src="https://github.com/qybaihe/mu/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
   <a href="https://www.npmjs.com/package/mu-agent"><img src="https://img.shields.io/npm/v/mu-agent?label=mu-agent" alt="npm"></a>
-  <a href="https://github.com/qybaihe/mu/releases"><img src="https://img.shields.io/github/v/release/qybaihe/mu?include_prereleases&label=desktop" alt="Desktop release"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/releases"><img src="https://img.shields.io/github/v/release/lswdneil/ai.spec.pi.jev?include_prereleases&label=desktop" alt="Desktop release"></a>
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
-  <a href="https://github.com/qybaihe/mu/discussions"><img src="https://img.shields.io/github/discussions/qybaihe/mu?label=discussions" alt="Discussions"></a>
+  <a href="https://github.com/lswdneil/ai.spec.pi.jev/discussions"><img src="https://img.shields.io/github/discussions/lswdneil/ai.spec.pi.jev?label=discussions" alt="Discussions"></a>
 </p>
 
 <p align="center">
@@ -33,13 +33,13 @@
 - **spec.jev 桌面端**：自带 spec.jev 和运行时的桌面应用。下载，接一个模型，开始。
 - **Jev**：判定器。是非题、选择题、打分题，每个答案带概率，每一次判定都进流水。除了审批只由 Jev 决定，任何判定点都可以交给本地判定器（Laya）或任何一个大模型。
 
-> 还在早期开发。预发布版（0.1.x）在 npm 和 [Releases](https://github.com/qybaihe/mu/releases) 上，作者每天在用。名字、设置和格式都可能变。
+> 还在早期开发。预发布版（0.1.x）在 npm 和 [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases) 上，作者每天在用。名字、设置和格式都可能变。
 
 **目录：**[快速开始](#快速开始) · [一轮是怎么走的](#一轮是怎么走的) · [判定点](#判定点) · [判定器](#判定器) · [实测](#实测) · [蜂群](#蜂群) · [人话看板](#人话看板) · [桌面端](#桌面端) · [命令行](#命令行) · [文档](#文档) · [参与贡献](#参与贡献)
 
 ## 快速开始
 
-**桌面端。** 从 [Releases](https://github.com/qybaihe/mu/releases/latest) 下载 macOS、Windows 或 Linux 安装包，打开后粘贴一个 API key，或用 ChatGPT、Claude、Grok、Google 订阅登录。不用再装别的。
+**桌面端。** 从 [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases/latest) 下载 macOS、Windows 或 Linux 安装包，打开后粘贴一个 API key，或用 ChatGPT、Claude、Grok、Google 订阅登录。不用再装别的。
 
 **命令行。**
 
@@ -247,7 +247,7 @@ spec.jev                  # 在当前目录开一个会话
 
 底部的一条栏让内核一直在视线里：哪个判定器在回答、跑在哪里，启用了多少个判定点；在对话里，还有到目前为止的判定数、最近一次判定的耗时和上下文占用。权限模式和目标在发送框里；`⌘K` 打开命令面板。模型登录在应用内完成：ChatGPT、Claude、Grok 和 Google（Gemini CLI / Antigravity）订阅，或任何 pi 支持的提供商的 API 密钥。Claude Code 和 Codex CLI 的对话可以导入并接着聊。
 
-macOS（Apple 芯片 / Intel）、Windows（x64 / Arm）、Linux（x64 / Arm）的安装包由 GitHub Actions 构建，发布在 [Releases](https://github.com/qybaihe/mu/releases)。
+macOS（Apple 芯片 / Intel）、Windows（x64 / Arm）、Linux（x64 / Arm）的安装包由 GitHub Actions 构建，发布在 [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases)。
 
 ## 命令行
 
@@ -300,7 +300,7 @@ pi 自己的命令（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`
 
 ## 参与贡献
 
-欢迎报 bug、修 bug、提新判定点、测判定器、做翻译，中文英文都可以。先看 [CONTRIBUTING.md](../../CONTRIBUTING.md)；标了 [`good first issue`](https://github.com/qybaihe/mu/labels/good%20first%20issue) 的 issue 适合上手。
+欢迎报 bug、修 bug、提新判定点、测判定器、做翻译，中文英文都可以。先看 [CONTRIBUTING.md](../../CONTRIBUTING.md)；标了 [`good first issue`](https://github.com/lswdneil/ai.spec.pi.jev/labels/good%20first%20issue) 的 issue 适合上手。
 
 ```bash
 npm install --ignore-scripts   # 安装依赖，不跑生命周期脚本
@@ -319,8 +319,8 @@ spec.jev 采用 MIT 许可证（[LICENSE](../../LICENSE)；桌面端见 [desktop
 
 ## 社区支持
 
-- 提问和想法：[Discussions](https://github.com/qybaihe/mu/discussions)；中文讨论也可以去 [linux.do](https://linux.do)。
-- bug 和需求：[Issues](https://github.com/qybaihe/mu/issues/new/choose)。
+- 提问和想法：[Discussions](https://github.com/lswdneil/ai.spec.pi.jev/discussions)；中文讨论也可以去 [linux.do](https://linux.do)。
+- bug 和需求：[Issues](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose)。
 - 更多：[SUPPORT.md](../../SUPPORT.md)。
 
 如果 spec.jev 对你有用，点个 star 能让更多人看到它。

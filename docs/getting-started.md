@@ -4,7 +4,7 @@ spec.jev comes in two forms: a desktop app that bundles everything it needs, and
 
 ## The desktop app
 
-1. Download the build for your system from [Releases](https://github.com/qybaihe/mu/releases/latest):
+1. Download the build for your system from [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases/latest):
 
    | System | File |
    | --- | --- |
