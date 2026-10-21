@@ -74,9 +74,9 @@ The 40 points fall into five groups:
 
 - **Input** (3): what kind of message this is, whether it changes the task and whether it should interrupt the current step.
 - **Context** (14): what enters the prompt (skills, packs, lessons, chunks of tool output), what to drop as the context grows, which lessons and skills are worth keeping and when to keep the prompt cache warm.
-- **Tools and safety** (10): whether a command or action should run, whether fetched content or an MCP tool description carries a prompt injection and quick calls for file search, bulk yes/no questions, browser steps, review triage and diagnostics.
+- **Tools and safety** (10): whether a command or action should run, whether fetched content or an MCP tool description carries a prompt injection, and quick calls for file search, bulk yes/no questions, browser steps, review triage and diagnostics.
 - **Turn** (8): whether the work has drifted, hit a dead end, really finished or stopped short, whether a `/goal` condition is met and what the board and the model should hear.
-- **Teamwork** (5): which subagent gets a delegated task, whether its patch stayed in scope, and which findings bees share.
+- **Teamwork** (5): which subagent gets a delegated task, whether its patch stayed in scope and which findings bees share.
 
 <details>
 <summary><b>Input</b>: 3 decision points</summary>
@@ -104,7 +104,7 @@ The 40 points fall into five groups:
 | `memory.capture` | Does this message correct the agent or set a rule? | It becomes a lesson |
 | `memory.outcome` | The agent went in circles and found a way out: does that deserve a lesson? | A lesson learned from the run, not from you |
 | `memory.worth` | The model or a subagent proposes a lesson: useful again, a one-off or already known? | Kept or dropped |
-| `memory.merge` | Is it the same as an existing lesson, more precise, or contradictory? | No duplicates; the more precise lesson replaces the older one |
+| `memory.merge` | Is it the same as an existing lesson, more precise or contradictory? | No duplicates; the more precise lesson replaces the older one |
 | `memory.applied` | Were the recalled lessons followed this turn? | A lesson that's often recalled and never followed is retired |
 | `skill.capture` | A long run ended well: was it a procedure, the same steps for the next task of its kind? | It's drafted as a skill and waits for you; `/skills accept` installs it |
 | `cache.warming` | Will you be back before the prompt cache expires? | The cache is refreshed, or left to expire |
