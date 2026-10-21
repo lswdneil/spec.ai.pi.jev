@@ -342,6 +342,7 @@ function JudgeTiers({ draft, base, onChange, onKey }: JudgesSectionProps) {
           <Card
             key={`${index}:${name}`}
             testId={`mu-judge-tier-${index}`}
+            judge
             title={t('mu.judges.tierTitle', { index: formatNumber(index + 1, i18n.language), name: nameOf(name) })}
             summary={summary}
           >
