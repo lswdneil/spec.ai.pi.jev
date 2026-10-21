@@ -12,6 +12,12 @@
 - When the user asks a question, answer it first before making edits or running implementation commands.
 - When responding to user feedback or an analysis, explicitly say whether you agree or disagree before saying what you changed.
 
+## Ask, Do Not Guess
+
+- When a requirement is ambiguous, a decision has more than one reasonable answer, or an action is irreversible or leaves the machine (push, publish, release, delete user data), ask the user first. Do not pick a product name, protocol, publish target or deletion policy on the user's behalf.
+- Local, reversible edits may be made directly. Commits, pushes and publishing need an explicit instruction; uploading to GitHub needs explicit authorization for that upload.
+- State the assumption when one is unavoidable, and mark what remains undecided.
+
 ## Code Quality
 
 - Read files in full before wide-ranging changes, before editing files you have not fully inspected, and when asked to investigate or audit. Do not rely on search snippets for broad changes.

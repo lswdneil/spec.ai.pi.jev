@@ -1,6 +1,11 @@
-# mu desktop: project guide
+# spec.jev desktop: project guide
 
 All contributors (human and AI) must follow [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR. ([Chinese version](CONTRIBUTING.zh.md))
+
+## Ask, Do Not Guess
+
+- When a requirement is ambiguous, a decision has more than one reasonable answer, or an action is irreversible or leaves the machine (push, publish, release, delete user data), ask the user first. Do not pick a product name, protocol, publish target or deletion policy on the user's behalf.
+- Local, reversible edits may be made directly. Commits, pushes and publishing need an explicit instruction.
 
 ## Code Conventions
 
