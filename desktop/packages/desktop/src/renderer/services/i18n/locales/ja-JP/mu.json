@@ -919,6 +919,8 @@
       "idle": "未起動",
       "starting": "起動中",
       "running": "実行中",
+      "working": "作業中",
+      "ready": "待機中",
       "needsModel": "モデルなし",
       "failed": "停止"
     },

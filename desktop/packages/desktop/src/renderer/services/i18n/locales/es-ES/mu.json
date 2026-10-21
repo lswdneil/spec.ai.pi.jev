@@ -919,6 +919,8 @@
       "idle": "Sin ejecutar",
       "starting": "Iniciando",
       "running": "En ejecución",
+      "working": "Trabajando",
+      "ready": "Listo",
       "needsModel": "Sin modelo",
       "failed": "Detenido"
     },
