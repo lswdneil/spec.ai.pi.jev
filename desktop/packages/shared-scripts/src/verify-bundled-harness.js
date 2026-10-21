@@ -63,7 +63,10 @@ function verifyBundledHarness({ resourcesDir, electronPlatformName, targetArch }
   for (const entry of HARNESS_FILES) {
     // A list is one file at the paths it has had: any of them will do.
     const files = [entry].flat();
-    need(`mu-agent/${files[0]}`, files.some((file) => isFile(inPackage(file))));
+    need(
+      `mu-agent/${files[0]}`,
+      files.some((file) => isFile(inPackage(file)))
+    );
   }
   for (const name of Object.keys(manifest?.dependencies ?? {})) {
     need(`mu-agent/node_modules/${name}/package.json`, isFile(inPackage(`node_modules/${name}/package.json`)));
