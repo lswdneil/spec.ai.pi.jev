@@ -13,8 +13,14 @@ import {
 } from './muNotice';
 import styles from './MessageJevLine.module.css';
 
-/** The mark before a line: a warning says something went wrong, a stop mark ends a stopped reply, an answer is quiet. */
+/**
+ * The mark before a line: a warning says something went wrong, a stop mark ends a stopped reply, an answer is quiet. A
+ * reminder sent back to the model is only ever sent on the judge's verdict (turn.continue, turn.completion), so it has
+ * the judge's diamond, as the judge's own lines do: the run picked up again because the judge said so.
+ */
 function Mark({ notice }: { notice: MuNotice }) {
+  if (notice.code === 'to_model' && notice.kind === 'kyrn.nudge')
+    return <span className={styles.dot} data-mark='judge' aria-hidden='true' />;
   if (notice.code === 'stopped')
     return <PauseOne theme='outline' size='14' className='flex-none text-t-secondary' aria-hidden='true' />;
   if (notice.code === 'to_model')

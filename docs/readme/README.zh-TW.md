@@ -18,6 +18,15 @@
   <a href="../../README.md">English</a> · <a href="README.zh-CN.md">简体中文</a> · <b>繁體中文</b> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
 </p>
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="run-dark.gif">
+    <img src="run-light.gif" alt="桌面端裡的一次執行：測試在 main 上失敗了，找出原因並修好。Jev 把訊息判為多步驟任務（input.preflight），模型跑測試、讀解析器，說要把分鐘改成 60,000 再跑一次測試，然後停了。Jev 判定這次執行半途而止（turn.continue），mu 提醒模型這一輪還沒完，模型改好單位、測試通過。右側判定面板逐條列出每次裁決、判定點和耗時。">
+  </picture>
+  <br>
+  <sub>在桌面端裡錄下的一次執行。程式設計模型的回覆是為錄製寫好的腳本（介面上顯示為 GPT-6.1 Sol）；判定器的裁決、耗時和那次復原都是真的：模型話說一半就停了，<code>turn.continue</code> 發現了，mu 讓它回去做完。</sub>
+</p>
+
 一個程式設計代理每個工作階段要做幾百個和程式碼無關的決定：什麼留在上下文裡，一條指令安不安全，一個發現值不值得告訴另一個代理，工作做完了沒有。交給大模型，花的是 token、延遲和注意力；交給寫死的規則，錯得太多。mu 把它們交給一個**判定器**：一個小而快的模型，每次只回答一個有邊界的問題，每一輪有 40 個判定點。大模型把注意力留給正事。
 
 - **mu**：命令列。pi 的全部能力，加上判定核心。

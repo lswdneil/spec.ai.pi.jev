@@ -4,17 +4,12 @@ mu is [pi](https://github.com/earendil-works/pi), the coding agent, with a judgm
 
 ## The pieces
 
-```
- mu (kyrn/bin/mu.mjs) ─── starts ───▶ pi (packages/coding-agent)
-                                        │  extension: -e packages/kyrn-judge/src/extension/kyrn-judge.ts
-                                        ▼
-                                  judgment kernel (packages/kyrn-judge)
-                                  ├─ features: hook into pi's events, ask decision points, act on verdicts
-                                  ├─ decision engine: modes, judges, fallbacks, the ledger
-                                  └─ judges: Jev (hosted), Laya (local), classifiers, LLMs, your own
-
- desktop app (desktop/) ─── runs the same pi + kernel in a utility process, over pi's RPC protocol
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="readme/pieces-dark.svg">
+    <img src="readme/pieces-light.svg" width="880" alt="The desktop app and the mu command both start pi, the coding agent, with the judgment kernel inside it: features, the decision engine and the ledger. pi calls the main model; the engine asks the judges: Jev, Laya, any classifier or any LLM.">
+  </picture>
+</p>
 
 - **The launcher**, `kyrn/bin/mu.mjs`, is the `mu` command. It handles mu's own commands (`setup`, `doctor`, `import`, `ledger`, `judge`, `auth`, `link`, `migrate`), reads the `.env` file, and starts pi with the kernel as an extension. pi's own commands (`install`, `list`, `config`, `mcp`…) are passed to pi unchanged.
 - **pi** does the agent's work: models and providers (`packages/ai`), the agent loop (`packages/agent`), and tools, sessions and the terminal UI (`packages/coding-agent`, `packages/tui`). mu changes pi as little as possible and marks each change, so pi's releases can be merged in.
@@ -22,6 +17,13 @@ mu is [pi](https://github.com/earendil-works/pi), the coding agent, with a judgm
 - **The desktop app**, `desktop/`, is an Electron app built on AionUi. It starts pi with the kernel in an Electron utility process and talks to it over pi's RPC protocol, using an in-process transport (`desktop/packages/desktop/src/process/services/nativeHost/`). The conversation list is pi's session files, so the app and the command line share sessions.
 
 ## A decision, end to end
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="readme/decision-dark.svg">
+    <img src="readme/decision-light.svg" width="880" alt="Six steps: a feature hooks a pi event, it asks a decision point, the engine picks a judge, the judge answers, the ledger records it, and the feature acts (in active mode).">
+  </picture>
+</p>
 
 Take `tool.injection`, which screens web pages for prompt injection:
 

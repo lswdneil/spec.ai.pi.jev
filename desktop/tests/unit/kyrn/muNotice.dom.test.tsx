@@ -297,4 +297,16 @@ describe('what mu told the model', () => {
     showNotice('en', notice({ title: 'Psst', rawInput: { notice: 'to_model', kind: 'kyrn.newer', text: 'Psst' } }));
     expect(screen.getByTestId('mu-notice')).toHaveTextContent(enMu.notices.toModel.other);
   });
+
+  it('marks a reminder to finish with the judge’s diamond, since only a verdict sends one, and the rest with a bell', () => {
+    const sent = 'Your last message said what you would do next, and the run ended before you did it. Do it now.';
+    showNotice('en', notice({ title: sent, rawInput: { notice: 'to_model', kind: 'kyrn.nudge', text: sent } }));
+    expect(screen.getByTestId('mu-notice').querySelector('[data-mark="judge"]')).not.toBeNull();
+    cleanup();
+    showNotice(
+      'en',
+      notice({ title: 'Psst', rawInput: { notice: 'to_model', kind: 'kyrn.diagnostics', text: 'Psst' } })
+    );
+    expect(screen.getByTestId('mu-notice').querySelector('[data-mark="judge"]')).toBeNull();
+  });
 });

@@ -20,11 +20,11 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/app-dark.png">
-    <img src="docs/readme/app-light.png" width="880" alt="The mu desktop app fixing a failing test in a small project. Jev classifies the message as a multi-step task (input.preflight), the agent runs the tests, reads the parser, fixes the minute unit and runs the tests again. The judge panel on the right lists each verdict with its decision point and latency, about 200 to 400 ms. The bar along the bottom shows the judge, 38 of 40 decision points active, 5 verdicts and the context in use.">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/run-dark.gif">
+    <img src="docs/readme/run-light.gif" alt="A run in the mu desktop app. The message: the tests are failing on main, find out why and fix it. Jev classifies it as a multi-step task (input.preflight, about 350 ms). The model runs the tests, which Jev lets through (tool.approval, about 200 ms), reads the parser, finds that a minute is defined as 1,000 ms, says it will change it to 60,000 and run the tests again, and stops without doing it. Jev answers that the run stopped short (turn.continue, about 200 ms), mu reminds the model that the turn isn't finished, and it changes the unit and runs the tests, which pass. The judge panel on the right fills with each verdict, its decision point and its latency.">
   </picture>
   <br>
-  <sub>The desktop app on a small demo project. The coding model is scripted for the screenshot; Jev's verdicts and their timings are real.</sub>
+  <sub>A recorded run in the desktop app. The coding model's replies are scripted for the recording (it's shown as GPT-6.1 Sol). The judge's verdicts, their timings and the recovery are real: the model stopped short, <code>turn.continue</code> caught it, and mu sent it back to finish.</sub>
 </p>
 
 A coding agent makes hundreds of decisions per session that aren't about the code: what goes into the context, whether a command is safe, whether a finding is worth passing to another agent, whether the work is really done. Handing these to the main model costs tokens, time and focus. Fixed rules get them wrong too often. mu hands them to a **judge**: a small, fast model that answers one bounded question at a time, at 40 decision points in every turn. The main model keeps its attention on the work.
@@ -39,7 +39,7 @@ What you get:
 
 > mu is in early development (0.1.x). See [Status and limitations](#status-and-limitations).
 
-**Contents:** [Quick start](#quick-start) · [How a turn works](#how-a-turn-works) · [Decision points](#decision-points) · [Judges](#judges) · [Measured](#measured) · [The hive](#the-hive) · [The board](#the-plain-language-board) · [Desktop app](#the-desktop-app) · [Command line](#command-line) · [Privacy](#privacy) · [Status](#status-and-limitations) · [Documentation](#documentation) · [Contributing](#contributing)
+**Contents:** [Quick start](#quick-start) · [How a turn works](#how-a-turn-works) · [Decision points](#decision-points) · [Judges](#judges) · [How mu is built](#how-mu-is-built) · [Measured](#measured) · [The hive](#the-hive) · [The board](#the-plain-language-board) · [Desktop app](#the-desktop-app) · [Command line](#command-line) · [Privacy](#privacy) · [Status](#status-and-limitations) · [Documentation](#documentation) · [Contributing](#contributing)
 
 ## Quick start
 
@@ -57,19 +57,12 @@ You don't need a judge key to start: until you set one, the free Jev on OpenCode
 
 ## How a turn works
 
-```
- you ──▶ input.preflight · task.frame · input.interjection
-           │
-           ▼
-         model ──▶ tool call ──▶ tool.risk · tool.constraint · tool.approval ──▶ runs
-           ▲                                                                     │
-           │    tool.injection   web pages and MCP output: instructions aimed at the AI are withheld
-           │    tool.admission   chunk by chunk: into the context, or archived behind a pointer
-           │    context.forget · context.compact   when the context grows        │
-           └─────────────────────────────────────────────────────────────────────┘
-
- turn ends ──▶ turn.completion · turn.continue · turn.drift · turn.rewind · memory.applied · board.read · cache.warming
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/turn-dark.svg">
+    <img src="docs/readme/turn-light.svg" width="880" alt="How a turn works: four stages, each with the decision points it asks the judge. A message arrives: input.preflight, task.frame, input.interjection, skills.disclosure, memory.recall. Before a tool runs, rules first: tool.risk, tool.constraint, tool.approval. What comes back, before the model sees it: tool.injection, tool.admission, context.forget, context.compact. The turn ends: turn.completion, turn.continue, turn.drift, memory.capture, cache.warming. The model loops over the middle two stages. Every stage asks the same judge, and every verdict goes to the ledger.">
+  </picture>
+</p>
 
 Each name in the diagram is a decision point, asked as a short question about a small piece of state. The verdict changes what the model does next, never whether the model asks you a question. Rules set the floor: they catch a dangerous-looking command first, and the judge can only vouch that you asked for it.
 
@@ -178,6 +171,37 @@ Every point, with its feature switch and options: [docs/reference/decision-point
 - **Any classifier model** in pi's catalog can serve as a tier: `classifier:<provider>/<model>`. For example, Cloudflare's Clef (`clef`, `clef-flash`), the System One models on OpenRouter and the Vercel AI Gateway, or a llama.cpp classifier.
 - **Any LLM** can serve as a tier: `llm:<provider>/<model>`.
 
+Judges can be chained in tiers, cheapest first:
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/tiers-dark.svg">
+    <img src="docs/readme/tiers-light.svg" width="880" alt="Judges in tiers, for a cascade such as laya,jev. All questions go to Laya first, local and free. What it is sure of becomes a verdict; a yes/no answer between 0.2 and 0.8 is unsure and goes on to Jev, hosted, about 0.3 seconds. What is still unsure, or what no judge answered, gets the fallback: what mu would do without a judge. The ledger records every answer and which judge gave it. Laya is not trusted on relating, scoring or meta-judgments, so those go on to Jev.">
+  </picture>
+</p>
+
+## How mu is built
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/pieces-dark.svg">
+    <img src="docs/readme/pieces-light.svg" width="880" alt="The pieces. The desktop app (desktop/, which runs pi in a utility process over pi's RPC protocol) and the mu command (kyrn/bin/mu.mjs) both start pi, the coding agent: its agent loop, tools, sessions and providers. Inside pi runs the judgment kernel (packages/kyrn-judge): features hooked into pi's events, a decision engine with modes, judges and fallbacks, and the ledger. pi calls the main model. The engine asks the judges: Jev, Laya, any classifier or any LLM.">
+  </picture>
+</p>
+
+Everything mu adds to pi is one extension, the judgment kernel in `packages/kyrn-judge`, and mu's changes to pi itself are kept small and marked, so pi's updates merge in: a workflow brings them every Monday. The `mu` command handles mu's own commands (`setup`, `ledger`, `import`…) and starts pi with the kernel. The desktop app runs the same pi and kernel in a utility process, so the app and the command line share their sessions.
+
+Every decision point takes the same path, and a feature acts on a verdict only in `active` mode:
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/decision-dark.svg">
+    <img src="docs/readme/decision-light.svg" width="880" alt="A decision, end to end, with tool.injection screening a web page. 1: a feature hooks a pi event, web_fetch returning a page. 2: it asks a decision point with a small state and a bounded question. 3: the engine checks the mode and picks a judge from its tiers, with a fallback. 4: the judge answers, for example yes 0.97 in 0.3 seconds. 5: the ledger records the verdict. 6: in active mode the feature acts and the passage is withheld. In shadow mode it stops at step 5. Without a verdict, mu takes the fallback and the ledger says why.">
+  </picture>
+</p>
+
+The code map, and where each step lives: [docs/architecture.md](docs/architecture.md).
+
 ## Measured
 
 The numbers below come from the repository's own replay script, [`kyrn/spikes/judge-bench/test-log-replay.ts`](kyrn/spikes/judge-bench/test-log-replay.ts). The method and the full tables are in [kyrn/docs/09-test-log-admission.en.md](kyrn/docs/09-test-log-admission.en.md).
@@ -268,6 +292,13 @@ The working model keeps its own language for the work, and the board stays reada
 A native app with mu and its runtime built in: there's no Node.js to install and nothing to download on first launch. It has everything the command line has, plus a work panel beside the conversation:
 
 **board** · **judge** (the live ledger: every verdict with its question, decision point and latency) · **hive** · **lessons** · **files** · **preview** · **source** · **browser** (the built-in browser the agent drives one step at a time; it shows the goal and lets you pause or stop)
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/app-dark.png">
+    <img src="docs/readme/app-light.png" width="880" alt="The mu desktop app after fixing a failing test in a small project. Jev classified the message as a multi-step task (input.preflight), the agent ran the tests, read the parser, fixed the minute unit and ran the tests again. The judge panel on the right lists each verdict with its decision point and latency, about 200 to 400 ms. The bar along the bottom shows the judge, 38 of 40 decision points active, 5 verdicts and the context in use.">
+  </picture>
+</p>
 
 A bar along the bottom keeps the kernel in view: which judge answers and where it runs, how many decision points are active and, in a conversation, the verdicts so far, the latest judge latency and the context in use. The permission mode and the goal sit in the composer, and `⌘K` opens the command palette. You sign in to models inside the app: ChatGPT, Claude, Grok and Google (Gemini CLI / Antigravity) subscriptions, or an API key for any provider pi supports. You can import Claude Code and Codex CLI conversations and continue them.
 

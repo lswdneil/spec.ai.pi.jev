@@ -13,6 +13,7 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 ### Fixed
 
 - **A plain `http://` address with a host name works again**, such as a server on your own network or a name your hosts file points at your own computer (`http://my-llm.lan:8000/v1`). The desktop app used to accept plain http only for `localhost` and private IP addresses. It now accepts any host except link-local addresses (`169.254.x.x`, where cloud metadata lives), and says under the field that plain http isn't encrypted when the host isn't on your own computer or a private address. A key is still required unless the server is on your own computer.
+- In a conversation, the line above the send box no longer says "Jev is reviewing" a command long after the judge answered. It now ends a step mu announced when a tool starts or the model writes again.
 
 ### Changed
 
@@ -21,6 +22,7 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
   - The home page says which judge is ready and how many decision points are active.
   - A kernel bar along the bottom shows the judge and where it runs. In a conversation it also shows the verdicts so far, the latest judge latency, context use and cache hits. Click the judge to change it.
   - Judge lines in a conversation and in the judge panel name their decision point (`input.preflight`), with the judge's latency.
+  - When the judge finds that a run stopped short and mu sends the model back, the line saying so has the judge's diamond.
   - The settings pages have it too: each title has its group above it in mono, under a faint glow. Each decision point under a feature shows its id after the judge's diamond, as the judge's lines do in a conversation, and each judge in the judge order has the diamond too.
   - The first-run guide has the same look: it opens on one turn as the judge sees it (three decision points, their verdicts and timings), numbers its steps in mono, and ends on a readout of the model, the permissions, the judge and how many decision points are active.
 - **The command line has its own themes**, `mu-dark` and `mu-light`, matched to your terminal's background. mu uses them until you choose a theme in `/settings`. The welcome screen is redrawn without a box.

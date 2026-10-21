@@ -379,6 +379,33 @@ describe('reduce', () => {
     ]);
   });
 
+  it('drops what Jev was reviewing once the command runs, and a step once the model writes again', () => {
+    const review = frame('progress', {
+      step: 'Jev is reviewing: npm test',
+      code: 'permission_review',
+      params: { summary: 'npm test' },
+    });
+    const call = {
+      type: 'message_end',
+      message: assistant([{ type: 'toolCall', id: 'call_1', name: 'bash', arguments: { command: 'npm test' } }], {
+        stopReason: 'toolUse',
+      }),
+    };
+    const reviewing = reduceAll([{ type: 'agent_start' }, call, review]);
+    expect(reviewing.live.progress).toMatchObject({ code: 'permission_review' });
+    // Approved: the command runs, and the line above the send box no longer says Jev is reviewing it.
+    const running = reduceAll([{ type: 'tool_execution_start', toolCallId: 'call_1' }], reviewing);
+    expect(running.live.progress).toBeUndefined();
+    // A step before the model's next words ends with them; a message of the person's does not end it.
+    const choosing = reduceAll([frame('progress', { step: 'Choosing skills', code: 'skills' })], running);
+    expect(reduceAll([{ type: 'message_start', message: user('more') }], choosing).live.progress).toMatchObject({
+      code: 'skills',
+    });
+    expect(
+      reduceAll([{ type: 'message_start', message: assistant([], { stopReason: 'pending' }) }], choosing).live.progress
+    ).toBeUndefined();
+  });
+
   it('leaves the thinking status when a message ends inside its thinking block', () => {
     const run: PiRecord[] = [
       { type: 'agent_start' },
