@@ -86,7 +86,7 @@
       "prompt": "Prompt",
       "promptRequired": "Prompt is required",
       "promptPlaceholder": "Instructions for the assistant",
-      "queue": "Queue protection",
+      "queue": "Skip overlapping runs",
       "queueHint": "When on, a run is skipped if the previous one is still running, so the assistant isn't interrupted.",
       "frequency": "Frequency",
       "cronExpr": "Cron expression",

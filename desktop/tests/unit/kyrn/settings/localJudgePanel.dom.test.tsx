@@ -119,7 +119,7 @@ describe('Laya on Windows and Linux, where the app runs the ONNX model itself', 
     const view = await panel();
     fireEvent.click(await within(view).findByTestId('mu-laya-check'));
     await waitFor(() => expect(bridge.localJudgeRun).toHaveBeenCalledWith({ action: 'start', consent: false }));
-    await waitFor(() => expect(view).toHaveTextContent('Checking the model and starting Laya…'));
+    await waitFor(() => expect(view).toHaveTextContent('Checking the model and starting Laya.'));
     expect(within(view).getByTestId('mu-laya-stop')).toBeInTheDocument();
 
     bridge.localJudgeState.mockResolvedValue(onnx({ task: { ...task, phase: 'failed', problem: 'port' } }));

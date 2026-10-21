@@ -1,6 +1,6 @@
 {
   "work": {
-    "retryStart": "Retry start"
+    "retryStart": "Try starting again"
   },
   "create": {
     "searchPlaceholder": "Search",
@@ -8,7 +8,7 @@
     "chooseDifferentFolder": "Choose a different folder",
     "errorWithDetail": "Couldn't create the team: {{error}}"
   },
-  "interruptAndSend": "Interrupt & send",
+  "interruptAndSend": "Interrupt and send",
   "systemNotice": {
     "sender": "Team",
     "contextResetSuccess": "Started a new context for {{memberName}}.",

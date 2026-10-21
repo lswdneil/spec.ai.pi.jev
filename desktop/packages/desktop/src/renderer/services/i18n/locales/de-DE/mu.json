@@ -280,7 +280,7 @@
       "other": "mu möchte eine Aktion nach außen ausführen"
     },
     "reason": {
-      "ask": "Minimale Berechtigungen: Vor jedem Schritt wirst du gefragt.",
+      "ask": "Minimale Berechtigungen: Vor jeder Änderung, jedem Befehl und jeder Aktion nach außen wirst du gefragt.",
       "unsure": "Jev ist nicht sicher, ob du diesen Schritt willst.",
       "beyond": "Jev meint, das geht über das hinaus, worum du gebeten hast.",
       "unrelated": "Jev meint, das gehört nicht zur Aufgabe.",
@@ -664,7 +664,7 @@
         },
         "control": {
           "title": "Alles im Blick, alles im Griff",
-          "text": "Jede Änderung lässt sich rückgängig machen; jeder Schritt im Browser ist sichtbar, und du kannst pausieren oder übernehmen."
+          "text": "Mit Checkpoints lassen sich Änderungen rückgängig machen; nutzt mu den integrierten Browser, ist jeder Schritt sichtbar, und du kannst pausieren oder übernehmen."
         },
         "ready": {
           "title": "Sofort einsatzbereit",

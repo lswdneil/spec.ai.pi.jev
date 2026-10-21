@@ -1089,7 +1089,7 @@
       "switch": "Tablero en lenguaje claro de este proyecto",
       "switching": "Cambiando…",
       "afterTurn": "Cambia cuando el agente termine este paso",
-      "unknown": "Esta conversación aún no tiene tablero. Aparece en las conversaciones de mu mientras el tablero en lenguaje claro está activado en Funciones.",
+      "unknown": "Esta conversación aún no tiene tablero. Aparece en las conversaciones de mu mientras el tablero en lenguaje claro está activado en Configuración → Funciones principales.",
       "off": "Cuando está activado, explica con palabras sencillas cómo va el trabajo, qué hace ahora el agente y qué necesita de ti.",
       "cost": "Solo para este proyecto. Cada actualización cuesta una llamada al modelo.",
       "empty": "Dale un momento al agente; aquí verás con palabras sencillas cómo va.",

@@ -280,7 +280,7 @@
       "other": "mu bir dış işlem yapmak istiyor"
     },
     "reason": {
-      "ask": "En az izin: her adımda önce size sorulur.",
+      "ask": "En az izin: her düzenleme, komut ve dışarıya dönük işlem önce size sorulur.",
       "unsure": "Jev bu adımın istediğiniz şey olduğundan emin değil.",
       "beyond": "Jev bunun istediğiniz şeyin ötesine geçtiğini düşünüyor.",
       "unrelated": "Jev bunun görevin bir parçası olmadığını düşünüyor.",
@@ -664,7 +664,7 @@
         },
         "control": {
           "title": "Görürsünüz, yönetirsiniz",
-          "text": "Her değişiklik geri alınabilir; tarayıcıdaki her adım gözünüzün önündedir, duraklatabilir ya da devralabilirsiniz."
+          "text": "Kontrol noktaları değişiklikleri geri almanızı sağlar; mu uygulama içi tarayıcıyı kullanırken her adım gözünüzün önündedir, duraklatabilir ya da devralabilirsiniz."
         },
         "ready": {
           "title": "Hemen kullanıma hazır",

@@ -101,7 +101,7 @@ describe('a judgment, opened', () => {
     const card = within(cards()[0]);
     expect(card.getByText(copy.state.returned)).toBeInTheDocument();
     expect(card.getByText(copy.actions.toRuntime)).toBeInTheDocument();
-    expect(copy.actions.toRuntime).toMatch(/doesn't prove the operation completed/);
+    expect(copy.actions.toRuntime).toMatch(/doesn't confirm the action finished/);
     expect(card.queryByText(copy.state.confirmed)).not.toBeInTheDocument();
     expect(card.queryByText(copy.actions.mainGiven)).not.toBeInTheDocument();
   });
@@ -132,7 +132,7 @@ describe('a judgment, opened', () => {
     ).toBe(5);
     expect(cards().map((card) => card.getAttribute('data-state'))).toEqual(['rule', 'fallback', 'late', 'shadow']);
     // A default is described as a default, never as permission.
-    expect(copy.actions.useDefault).toMatch(/isn’t permission to proceed/);
+    expect(copy.actions.useDefault).toMatch(/isn't permission to proceed/);
   });
 
   it('separates permission to deliver from a confirmed delivery', () => {

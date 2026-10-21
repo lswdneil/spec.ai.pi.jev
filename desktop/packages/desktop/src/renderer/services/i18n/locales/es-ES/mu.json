@@ -280,7 +280,7 @@
       "other": "mu quiere realizar una acción externa"
     },
     "reason": {
-      "ask": "Permisos mínimos: te pregunta antes de cada paso.",
+      "ask": "Permisos mínimos: te pregunta antes de cada edición, comando o acción hacia fuera.",
       "unsure": "Jev no está seguro de que este paso sea lo que quieres.",
       "beyond": "Jev cree que esto va más allá de lo que has pedido.",
       "unrelated": "Jev cree que esto no forma parte de la tarea.",
@@ -664,7 +664,7 @@
         },
         "control": {
           "title": "Lo ves y lo diriges",
-          "text": "Cualquier cambio se puede deshacer; cada paso en el navegador está a la vista y puedes pausar o tomar el control."
+          "text": "Los puntos de control te permiten deshacer cambios; cuando mu usa el navegador integrado, cada paso está a la vista y puedes pausar o tomar el control."
         },
         "ready": {
           "title": "Listo para usar",

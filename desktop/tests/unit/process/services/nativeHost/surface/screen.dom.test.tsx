@@ -719,7 +719,7 @@ describe('the sidebar’s native group', () => {
       fireEvent.click(within(archived).getByTestId('native-sidebar-item-menu'));
     });
     await waitFor(() => expect(screen.getByTestId('native-sidebar-restore')).toBeVisible());
-    expect(screen.getByTestId('native-sidebar-restore')).toHaveTextContent('Unarchive');
+    expect(screen.getByTestId('native-sidebar-restore')).toHaveTextContent('Restore');
     expect(screen.getByTestId('native-sidebar-rename')).toBeVisible();
     expect(screen.getByTestId('native-sidebar-delete')).toBeVisible();
     for (const gone of ['pin', 'mark', 'archive']) expect(screen.queryByTestId(`native-sidebar-${gone}`)).toBeNull();

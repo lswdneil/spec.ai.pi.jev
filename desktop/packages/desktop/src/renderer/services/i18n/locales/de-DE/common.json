@@ -1089,7 +1089,7 @@
       "switch": "Klartext-Board für dieses Projekt",
       "switching": "Wird umgeschaltet…",
       "afterTurn": "Schaltet um, sobald der Agent diesen Schritt beendet hat",
-      "unknown": "In dieser Unterhaltung gibt es noch kein Board. Es erscheint in mu-Unterhaltungen, solange das Klartext-Board unter Funktionen eingeschaltet ist.",
+      "unknown": "In dieser Unterhaltung gibt es noch kein Board. Es erscheint in mu-Unterhaltungen, solange das Klartext-Board unter Einstellungen → Kernfunktionen eingeschaltet ist.",
       "off": "Sobald es eingeschaltet ist, steht hier in einfachen Worten, wie die Arbeit vorangeht, was der Agent gerade tut und wo du gebraucht wirst.",
       "cost": "Nur für dieses Projekt. Jede Aktualisierung kostet einen Modellaufruf.",
       "empty": "Gib dem Agenten einen Moment; hier steht dann in einfachen Worten, wie es läuft.",

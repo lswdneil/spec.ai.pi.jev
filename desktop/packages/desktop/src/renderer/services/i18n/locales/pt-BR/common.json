@@ -1089,7 +1089,7 @@
       "switch": "Painel em linguagem simples deste projeto",
       "switching": "Alternando…",
       "afterTurn": "Alterna quando o agente terminar esta etapa",
-      "unknown": "Esta conversa ainda não tem painel. Ele aparece nas conversas do mu enquanto o painel em linguagem simples está ativado em Recursos.",
+      "unknown": "Esta conversa ainda não tem painel. Ele aparece nas conversas do mu enquanto o painel em linguagem simples está ativado em Configurações → Recursos principais.",
       "off": "Quando ativado, ele diz em palavras simples como o trabalho está indo, o que o agente está fazendo agora e o que precisa de você.",
       "cost": "Só para este projeto. Cada atualização custa uma chamada ao modelo.",
       "empty": "Dê um momento ao agente; aqui aparecerá em palavras simples como está indo.",

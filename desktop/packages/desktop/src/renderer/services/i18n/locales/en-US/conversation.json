@@ -15,7 +15,7 @@
     "quickActionsTitle": "What can mu do?"
   },
   "history": {
-    "recents": "Recents",
+    "recents": "Recent",
     "noHistory": "No conversations yet",
     "deleteTitle": "Delete",
     "deleteConfirm": "Delete this conversation?",
@@ -72,7 +72,7 @@
     "conversationsSection": "Conversations",
     "newConversationInProject": "New conversation in this project",
     "deleting": "Deleting…",
-    "reorderPinned": "Drag to reorder pinned conversation",
+    "reorderPinned": "Drag to reorder",
     "forkedFrom": "Forked from “{{name}}”",
     "forkedConversation": "Forked conversation",
     "archive": "Archive",
@@ -470,7 +470,7 @@
     "tryAnotherAgent": "Try another agent:",
     "switchAgentFailed": "Couldn't switch agent",
     "archivedCannotSend": "This conversation is archived and can't take new messages.",
-    "awaitingConfirmation": "Awaiting confirmation"
+    "awaitingConfirmation": "Waiting for your confirmation"
   },
   "sideQuestion": {
     "title": "Side question",
@@ -485,7 +485,7 @@
     "alreadyRunning": "A side question is already running.",
     "attachmentsNotAllowed": "Side questions can't include files or DOM snippets.",
     "emptyQuestion": "Type a question after /btw.",
-    "toolsRequired": "/btw can only answer questions based on what's already in this conversation. It doesn't have access to search, browse or fetch new information.",
+    "toolsRequired": "/btw only answers from what's already in this conversation. It can't search, browse or fetch anything new.",
     "error": "Couldn't answer the side question."
   },
   "commandQueue": {
@@ -493,21 +493,21 @@
     "clear": "Clear queue",
     "edit": "Edit",
     "editing": "Editing",
-    "editPlaceholder": "Update the queued command before it runs.",
+    "editPlaceholder": "Edit the queued message before it sends.",
     "cancelEdit": "Cancel",
     "saveEdit": "Save",
     "moreActions": "More actions",
-    "reorder": "Drag to reorder queued command",
+    "reorder": "Drag to reorder",
     "remove": "Remove",
     "files": "{{count}} files",
     "files_one": "{{count}} file",
     "files_other": "{{count}} files",
-    "pausedAfterFailure": "The next queued command couldn't start. Edit, reorder or remove it to continue.",
-    "emptyInput": "Queued commands can't be empty.",
-    "queueFull": "Queue is full. Remove a command before adding more.",
-    "inputTooLong": "This queued command is too long. Shorten it before sending.",
-    "tooManyFiles": "Too many files are attached to this queued command.",
-    "queueTooLarge": "The queue is too large to save. Remove some queued commands first.",
+    "pausedAfterFailure": "The next queued message couldn't start. Edit, reorder or remove it to continue.",
+    "emptyInput": "Queued messages can't be empty.",
+    "queueFull": "The queue is full. Remove a message before adding more.",
+    "inputTooLong": "This queued message is too long. Shorten it before sending.",
+    "tooManyFiles": "Too many files are attached to this queued message.",
+    "queueTooLarge": "The queue is too large to save. Remove some queued messages first.",
     "sendNow": "Send now",
     "modeToggle": "Toggle send mode",
     "help": "Help",
@@ -581,9 +581,9 @@
       "failed": "Failed",
       "unsupported": "Unsupported"
     },
-    "selected": "Selected MCP",
+    "selected": "Selected MCP servers",
     "statusWithReason": "{{status}} · {{reason}}",
-    "selectedWithCount": "Selected MCP · {{count}}"
+    "selectedWithCount": "Selected MCP servers · {{count}}"
   },
   "runtimePreparing": {
     "sendboxHint": "Preparing the runtime environment. First startup can take a little longer."
@@ -602,7 +602,7 @@
       "endLabel": "End the goal"
     },
     "thinkingNote": "Changing the thinking level clears the prompt cache, so avoid switching it often on the same model",
-    "modelBusy": "Switch the model once this reply is done.",
+    "modelBusy": "You can switch models once this reply is done.",
     "defaultTag": "default",
     "makeDefault": "Make default for new conversations",
     "madeDefault": "New conversations will start on this model.",
@@ -683,7 +683,7 @@
       "limitReached": "Showing the first {{count}} — refine your search to narrow it down"
     },
     "scm": {
-      "notARepository": "Not a version-controlled folder",
+      "notARepository": "This folder isn't a Git repository",
       "noChanges": "No changes",
       "loading": "Loading changes…",
       "loadFailed": "Couldn't load changes",
@@ -782,7 +782,7 @@
     "truncated": "(earlier output truncated)"
   },
   "emptyState": {
-    "greeting": "Tell me what you need, and I'll get started."
+    "greeting": "Describe what you need to get started."
   },
   "crossSession": {
     "mentionAgain": "Mention conversation {{name}} in the message box",

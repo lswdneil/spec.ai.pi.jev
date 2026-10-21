@@ -274,7 +274,7 @@ describe('command palette', () => {
       expect(groupsShown()).toEqual(['conversations', 'settings', 'commands', 'messages']);
       expect(labelsOf('conversations')).toEqual(['A local model chat']);
       // The pages named by the query first, then the one the rail puts under "Models".
-      expect(labelsOf('settings')).toEqual(['Default model', 'Plain-language model', 'Providers']);
+      expect(labelsOf('settings')).toEqual(['Default model', 'Board model', 'Providers']);
       expect(labelsOf('commands')).toEqual(['/model']);
     });
 
@@ -309,7 +309,7 @@ describe('command palette', () => {
       expect(labelsOf('settings')).toEqual(['Open settings']);
 
       type('model');
-      expect(labelsOf('settings')).toEqual(['Default model', 'Plain-language model', 'Providers']);
+      expect(labelsOf('settings')).toEqual(['Default model', 'Board model', 'Providers']);
     });
 
     it('with no conversation yet, shows the way into the settings and what the app can do, and says why', () => {

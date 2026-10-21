@@ -1089,7 +1089,7 @@
       "switch": "Tableau en clair de ce projet",
       "switching": "Changement…",
       "afterTurn": "Change quand l’agent aura fini cette étape",
-      "unknown": "Pas encore de tableau dans cette conversation. Il apparaît dans les conversations mu tant que le tableau en clair est activé dans Fonctions.",
+      "unknown": "Pas encore de tableau dans cette conversation. Il apparaît dans les conversations mu tant que le tableau en clair est activé dans Paramètres → Fonctions principales.",
       "off": "Une fois activé, il dit en mots simples où en est le travail, ce que fait l’agent en ce moment et ce qui vous attend.",
       "cost": "Pour ce projet seulement. Chaque mise à jour coûte un appel au modèle.",
       "empty": "Laissez un moment à l’agent ; ici s’affichera en mots simples où il en est.",

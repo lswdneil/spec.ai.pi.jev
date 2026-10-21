@@ -8,7 +8,7 @@
   "keyHelp": "After you save the key, it isn't shown again. It stays on this computer, readable only by your user account.",
   "keyKeep": "Leave empty to keep the saved key",
   "endpointRule": "Enter an address that starts with https:// or http://. It can't include a user name, password, query or fragment.",
-  "endpointPlain": "This address uses plain http, so the key and your messages aren't encrypted. That's fine for a server on this computer or your own network, including a name your hosts file points there. Use https across the internet.",
+  "endpointPlain": "This address uses plain http, so the key and your messages aren't encrypted. That's fine for a server on this computer or your own network, even one you reach by a name from your hosts file. Use https across the internet.",
   "sections": {
     "judges": "Judges",
     "judgeOrder": "Judge order",
@@ -17,7 +17,7 @@
     "coreFeatures": "Core features",
     "providers": "Providers",
     "defaultModel": "Default model",
-    "boardModel": "Plain-language model",
+    "boardModel": "Board model",
     "context": "Context"
   },
   "pages": {
@@ -45,7 +45,7 @@
     "failed": "Couldn't load the settings"
   },
   "save": {
-    "saved": "Saved. New conversations use it; reconnect running ones to apply it.",
+    "saved": "Saved. New conversations use these settings; reconnect running ones to apply them.",
     "unsaved": "Unsaved changes in: {{sections}}",
     "nothing": "No unsaved changes",
     "unsavedDot": "Unsaved changes",
@@ -76,7 +76,7 @@
     "lead": "What mu does for you in the background. Turn a feature off and mu stops doing it.",
     "beta": "Beta",
     "reset": "Restore defaults",
-    "boardModelElsewhere": "Choose the model that writes the board under Plain-language model.",
+    "boardModelElsewhere": "Choose the model that writes the board under Board model.",
     "options": "Options",
     "noOptions": "This feature has no other settings.",
     "noSuchFeature": "This version of mu doesn't have this feature.",
@@ -87,7 +87,7 @@
     "details": "Details"
   },
   "judges": {
-    "tiersHelp": "mu asks the judges in order. Each one only sees the questions the judges before it weren't sure about.",
+    "tiersHelp": "mu asks the judges in order. A judge only sees the questions earlier judges weren't sure about.",
     "order": "Order",
     "orderHelp": "The first judge is the one you chose on the Judges page.",
     "firstTier": "The judge you chose on the Judges page. Set its service, address and key there.",
@@ -96,7 +96,7 @@
     "services": {
       "auto": {
         "name": "Automatic",
-        "help": "Uses the first service that has a key, in this order: TypeSafe, OpenRouter, Vercel AI Gateway, OpenCode Zen, Cloudflare. With no key set, Jev 1.13 answers on OpenCode Zen, free for a limited time. What it judges is sent to OpenCode, which doesn't train on it.",
+        "help": "Uses the first service that has a key, in this order: TypeSafe, OpenRouter, Vercel AI Gateway, OpenCode Zen, Cloudflare. With no key set, Jev 1.13 answers on OpenCode Zen, free for a limited time. OpenCode receives what Jev judges and doesn't train on it.",
         "key": "TypeSafe API key"
       },
       "opencodeFree": {
@@ -199,7 +199,7 @@
       "onnx": {
         "missing": "Laya's model isn't on this computer yet (about {{size}} MB). mu doesn't download it for you: get the files from Hugging Face, put them in the model folder, then click Check and start.",
         "stopped": "The model is in place, but Laya isn't running. When Laya is your judge, mu starts it automatically when the app opens.",
-        "starting": "Checking the model and starting Laya… The first check reads the whole model, so it takes a moment.",
+        "starting": "Checking the model and starting Laya. The first check reads the whole model, so it takes a moment.",
         "missingFiles": "Still missing: {{files}}",
         "wrongFiles": "These files don't match the version mu was tested with. Download them again: {{files}}",
         "folder": "Model folder: {{folder}}",
@@ -258,11 +258,11 @@
     "modes": {
       "full": {
         "title": "Full access",
-        "description": "Runs everything without asking. Anything you've said not to do is still blocked."
+        "description": "Runs everything without asking. Anything you've told mu not to do is still blocked."
       },
       "jev": {
         "title": "Jev approves",
-        "description": "Reads and edits inside the project go ahead. Jev approves commands, changes outside the project and actions outside this computer for you, and only asks you when it's unsure."
+        "description": "Reads and edits inside the project go ahead. Jev decides on commands, changes outside the project and actions outside this computer, and asks you only when it's unsure."
       },
       "ask": {
         "title": "Ask first",
@@ -280,7 +280,7 @@
       "other": "mu wants to take an action outside this computer"
     },
     "reason": {
-      "ask": "Ask first: mu asks you before every step.",
+      "ask": "Ask first: mu asks you before every edit, command and action outside this computer.",
       "unsure": "Jev isn't sure this step is what you want.",
       "beyond": "Jev thinks this goes beyond what you asked for.",
       "unrelated": "Jev thinks this isn't part of the task.",
@@ -291,7 +291,7 @@
     "flagged": "Risky: {{flag}}.",
     "flag": {
       "recursive_or_forced_delete": "recursive or forced delete",
-      "discards_git_work": "discards git work",
+      "discards_git_work": "discards Git work",
       "force_push": "force push",
       "drops_database_objects": "drops database objects",
       "overwrites_device": "overwrites a device",
@@ -387,10 +387,10 @@
   },
   "endpoints": {
     "openaiCompletions": {
-      "name": "OpenAI compatible (Chat Completions)",
+      "name": "OpenAI-compatible (Chat Completions)",
       "hint": "The most widely supported: proxies, Ollama, vLLM, LM Studio, DeepSeek…",
       "url": "Usually ends in /v1, e.g. https://api.example.com/v1 or http://localhost:11434/v1.",
-      "short": "OpenAI compatible"
+      "short": "OpenAI-compatible"
     },
     "openaiResponses": {
       "name": "OpenAI Responses",
@@ -399,10 +399,10 @@
       "short": "OpenAI Responses"
     },
     "anthropicMessages": {
-      "name": "Anthropic compatible (Messages)",
+      "name": "Anthropic-compatible (Messages)",
       "hint": "For Claude and services that support the Anthropic Messages format.",
-      "url": "Leave off /v1; the client adds /v1/messages itself, e.g. https://api.example.com.",
-      "short": "Anthropic compatible"
+      "url": "Without /v1, e.g. https://api.example.com. mu adds /v1/messages itself.",
+      "short": "Anthropic-compatible"
     },
     "googleGenerativeAi": {
       "name": "Google Generative AI",
@@ -458,7 +458,7 @@
     "okModels_other": "Connected ({{ms}} ms). The endpoint lists {{count, number}} models."
   },
   "boardModel": {
-    "title": "Plain-language model",
+    "title": "Board model",
     "summary": "Writes the board: a plain-language summary of how the work is going. It's for you only and never enters the conversation’s context. Each update is one model call.",
     "pick": "Choose a model",
     "recommended": "Recommended: Claude Opus 4.6 for the most natural, consistent writing, or Gemini 3.8 Flash for speed and lower cost.",
@@ -466,7 +466,7 @@
     "provider": "Provider",
     "model": "Model",
     "notSet": "Not set",
-    "pickProvider": "Pick a provider first",
+    "pickProvider": "Choose a provider first.",
     "unset": "None yet. mu asks the first time you turn on the board.",
     "session": "Same model as the conversation",
     "sessionHelp": "If the conversation switches models, the board switches too.",
@@ -506,12 +506,12 @@
       "signedIn": {
         "title": "Sign in with a subscription",
         "tag": "No API key needed",
-        "description": "ChatGPT, Claude, Grok or another plan"
+        "description": "ChatGPT, Claude, Grok and other subscriptions"
       },
       "openai": {
         "title": "OpenAI-compatible API",
         "tag": "Most common",
-        "description": "Relay services and anything else with an OpenAI-compatible API",
+        "description": "Proxies, gateways and anything else with an OpenAI-compatible API",
         "modelPlaceholder": "e.g. deepseek-chat"
       },
       "anthropic": {
@@ -528,7 +528,7 @@
         "label": "API format",
         "openai-completions": "Chat Completions",
         "openai-responses": "Responses",
-        "openai-completionsHint": "Works almost everywhere; most services and relays support it.",
+        "openai-completionsHint": "Works almost everywhere; most services and proxies support it.",
         "openai-responsesHint": "OpenAI's newer API; only some services support it."
       },
       "other": "Another service (enter its address)",
@@ -537,7 +537,7 @@
     "apiKey": {
       "title": "Paste an API key",
       "tag": "Easiest",
-      "description": "DeepSeek, Kimi, Qwen, GLM, OpenAI, Claude, Gemini and more. mu detects the service from the key and sets up the rest",
+      "description": "DeepSeek, Kimi, Qwen, GLM, OpenAI, Claude, Gemini and more. mu detects the service from the key and sets up the rest.",
       "placeholder": "Paste the key here",
       "service": "Service",
       "servicePlaceholder": "Detected from the key",
@@ -638,14 +638,14 @@
       "model": "Model",
       "judge": "Judge",
       "none": "Not set",
-      "noKey": "No key yet. Until you add one, mu uses its default rules instead of a judge",
-      "freeJev": "No key yet. Jev answers for free on OpenCode Zen for a limited time",
+      "noKey": "No key yet. Until you add one, mu uses its default rules instead of a judge.",
+      "freeJev": "No key yet. Jev answers for free on OpenCode Zen for a limited time.",
       "saveFailed": "Couldn't save: {{reason}}",
       "modelValue": "{{provider}} / {{model}}",
       "import": "Conversations",
       "importOpen": "Choose…",
-      "importFound_one": "{{count}} Claude Code or Codex conversation on this computer can be imported and continued here",
-      "importFound_other": "{{count}} Claude Code or Codex conversations on this computer can be imported and continued here",
+      "importFound_one": "Found {{count}} Claude Code or Codex conversation on this computer. You can continue it here.",
+      "importFound_other": "Found {{count}} Claude Code or Codex conversations on this computer. Choose the ones to continue here.",
       "permissions": "Permissions"
     },
     "intro": {
@@ -656,15 +656,15 @@
         "completion": "Tests pass, so the work is done"
       },
       "title": "Welcome to mu",
-      "lead": "mu is a coding assistant that does the work: it reads your project, edits code, runs commands and tests, and keeps going until the job is done.",
+      "lead": "mu is a coding agent that does the work: it reads your project, edits code, runs commands and tests, and keeps going until the job is done.",
       "points": {
         "judge": {
           "title": "A check at every step",
-          "text": "A built-in judge watches the key moments, so mu thinks before it acts, follows your rules and never calls a job done without checking it."
+          "text": "A built-in judge watches the key moments, so mu thinks before it acts, follows your rules and checks its work before calling a job done."
         },
         "control": {
           "title": "You see it, you steer it",
-          "text": "Any change can be rolled back. You can watch every step in the browser, and pause or take over at any time."
+          "text": "Checkpoints let you roll back changes. When mu uses the in-app browser, you can watch each step and pause or take over."
         },
         "ready": {
           "title": "Works out of the box",
@@ -707,7 +707,7 @@
       "pasteCode": "Paste a code instead",
       "cancel": "Cancel",
       "failed": "Sign-in didn't finish. Try again.",
-      "asks": "{{name}} asks (original text):",
+      "asks": "{{name}} asks:",
       "needAccount": "Sign in to an account first, then pick a model.",
       "experimental": "Experimental",
       "starting": "Preparing {{name}} sign-in…",
@@ -716,7 +716,7 @@
         "title": "Know the risk before you sign in",
         "text": "This signs in through the login Google built for {{tool}}, not one Google offers for mu. Google may consider this a violation of its terms and limit or suspend your account.",
         "instead": "Use an account you can afford to lose access to. The official options are a Gemini API key, or Vertex AI with a gcloud sign-in.",
-        "continue": "I understand the risk. Sign in",
+        "continue": "Sign in anyway",
         "cancel": "Don't sign in"
       },
       "readingModels": "Signed in to {{name}}. Loading the models this account can use…"
@@ -753,7 +753,7 @@
   },
   "notices": {
     "checkpointOff": "Checkpoints are off in this conversation.",
-    "freeJev": "No Jev key is set, so the judge is Jev 1.13 on OpenCode Zen, free for a limited time. What it judges is sent to OpenCode, which doesn't train on it. To use your own key, add it under Settings → Judges.",
+    "freeJev": "No Jev key is set, so the judge is Jev 1.13 on OpenCode Zen, free for a limited time. OpenCode receives what Jev judges and doesn't train on it. To use your own key, add it under Settings → Judges.",
     "freeJevUnavailable": {
       "paid": "Jev on OpenCode Zen now requires a key or payment, so mu is using its default rules for now. Add a Jev key under Settings → Judges to turn the judge back on.",
       "gone": "OpenCode Zen no longer offers Jev for free, so mu is using its default rules for now. Add a Jev key under Settings → Judges to turn the judge back on."
@@ -881,7 +881,7 @@
   },
   "commands": {
     "frame": "The task frame: goal, your constraints (with where you stated them), current subgoal and acceptance criteria",
-    "remember": "Save a lesson for future conversations in this project: /remember <what to do>",
+    "remember": "Save a lesson for future sessions in this project: /remember <what to do>",
     "lessons": "This project's lessons: /lessons lists id · kind · recalled/followed · lesson; /lessons all adds global and retired lessons",
     "forget": "Retire a lesson so it's no longer recalled: /forget <id prefix> (find ids with /lessons)",
     "capabilities": "What's installed and what's turned on: /capabilities lists them, /capabilities open <id> turns one on",
@@ -889,7 +889,7 @@
     "lsp": "Language servers: what's installed, what's running and the last error",
     "goal": "Keep the agent working until a condition holds: /goal <condition> sets it, /goal shows it (or asks for one), /goal clear ends it",
     "board": "The plain-language board: /board shows it, /board on or /board off for this project, /board model picks the model that writes it",
-    "checkpoints": "List this conversation's checkpoints: turn, time and files changed since",
+    "checkpoints": "List this session's checkpoints: turn, time and files changed since",
     "rewind": "Go back to a checkpoint: /rewind [#] [both|files|conversation]; /rewind undo reverses the last rewind",
     "swarm": "Subagents at work: /swarm shows what each is doing, /swarm stop [name] asks it to report now, /swarm kill [name] stops it immediately",
     "agents": "List the subagent roles the delegate tool can use, and where to add your own",
@@ -945,7 +945,7 @@
       "title": "Queued",
       "steer": "Next step",
       "followUp": "After this run",
-      "takeBack": "Take back"
+      "takeBack": "Edit"
     },
     "dialog": {
       "yes": "Yes",
@@ -1082,7 +1082,7 @@
           "help": "In ~/.agents/skills, shared by several agents. mu reads them but never changes them."
         },
         "builtin": {
-          "title": "Built in",
+          "title": "Built-in",
           "help": "Shipped with mu. Each one is available while the feature it belongs to is on."
         },
         "claude": {

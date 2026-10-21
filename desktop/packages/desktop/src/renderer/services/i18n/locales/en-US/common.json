@@ -24,7 +24,7 @@
   "loading": "Loading…",
   "copy": "Copy",
   "reply": "Reply",
-  "openInBuiltinBrowser": "Open in built-in browser",
+  "openInBuiltinBrowser": "Open in the in-app browser",
   "openInSystemBrowser": "Open in system browser",
   "copySuccess": "Copied",
   "copyFailed": "Couldn't copy",
@@ -67,8 +67,8 @@
   "readOnly": "Read-only",
   "tray.showWindow": "Show mu",
   "tray.newChat": "New conversation",
-  "tray.closeToTray": "Hide to tray",
-  "tray.hideToMenuBar": "Hide to menu bar",
+  "tray.closeToTray": "Minimize to tray",
+  "tray.hideToMenuBar": "Hide mu",
   "tray.about": "About mu",
   "tray.restart": "Restart mu",
   "tray.quit": "Quit mu",
@@ -203,7 +203,7 @@
       "lineReport": "{{from}} reported back to mu",
       "deliveries": "Information flow",
       "noDeliveries": "No confirmed deliveries yet.",
-      "board": "Shared board",
+      "board": "Shared findings",
       "noNotes": "No shared findings yet.",
       "context": "Execution context",
       "contextHint": "Recorded messages and finished tool output, not the full model prompt. Tool output appears once the call finishes.",
@@ -216,9 +216,9 @@
       "input": "Input",
       "output": "Output",
       "assistant": "Bee message",
-      "thinking": "Published thinking",
+      "thinking": "Thinking",
       "user": "Task input",
-      "custom": "Harness message",
+      "custom": "Message from mu",
       "tool": "Tool",
       "waitingOutput": "Waiting for the tool to finish.",
       "noText": "No text output.",
@@ -310,8 +310,8 @@
         "unknown": "Outcome unknown"
       },
       "actions": {
-        "toRuntime": "Verdict handed to the execution layer; this doesn't prove the operation completed.",
-        "observeOnly": "Shadow mode: recorded for comparison; execution doesn't change based on this verdict.",
+        "toRuntime": "Verdict passed to mu. This doesn't confirm the action finished.",
+        "observeOnly": "Shadow mode: logged for comparison. This verdict changes nothing.",
         "useDefault": "Fell back to this decision point's default. A fallback isn't permission to proceed: risk checks and hive gates default to the cautious side.",
         "lateIgnored": "The turn had already started; this late verdict didn't change it.",
         "waiting": "Waiting for the verdict.",
@@ -361,7 +361,7 @@
         "board": "Where does the work stand?",
         "relate": "What does this finding do to an earlier one?",
         "approval": "Is this a step the task needs, done the way you would expect?",
-        "injection": "Does this tool output carry instructions aimed at the AI?",
+        "injection": "Does this tool output carry instructions aimed at the agent?",
         "continuation": "Did the run stop short of what it should do?",
         "items": "The agent's own question about each item"
       },
@@ -416,7 +416,7 @@
         "false": "No",
         "yes": "Yes",
         "no": "No",
-        "unsure": "Uncertain",
+        "unsure": "Unsure",
         "unknown": "Unknown",
         "chat": "Conversation",
         "chat_question": "Concept question",
@@ -550,7 +550,7 @@
             "is_side_question": "Side question",
             "needs_clarification": "Too vague to act on",
             "needs_files_changed": "Needs a code change",
-            "needs_memory": "Past notes would help",
+            "needs_memory": "Past lessons would help",
             "swarm_worthy": "Independent parts",
             "plan_first": "Large or risky",
             "task_complexity": "Scope",
@@ -904,8 +904,8 @@
         },
         "injection": {
           "questions": {
-            "injected": "Carries instructions aimed at the AI",
-            "passage": "Passage {{number}} carries instructions aimed at the AI"
+            "injected": "Carries instructions aimed at the agent",
+            "passage": "Passage {{number}} carries instructions aimed at the agent"
           }
         },
         "continuation": {
@@ -969,7 +969,7 @@
       "memory.retired": "Lesson retired",
       "memory.merged": "Lessons merged",
       "compaction_start": "Compacting context…",
-      "compaction_end": "Compaction ended",
+      "compaction_end": "Compaction finished",
       "context.usage": "Context usage",
       "context.policy": "Beta compaction mode",
       "compaction.plan": "Beta compaction plan",
@@ -978,7 +978,7 @@
       },
       "board": {
         "update": "Board updated",
-        "switched": "Board turned on or off"
+        "switched": "Board setting changed"
       },
       "permissions": {
         "mode": "Permission mode",
@@ -1005,7 +1005,7 @@
         "opened": "Capability turned on"
       },
       "inherit": {
-        "found": "Inheritable setup found",
+        "found": "Found setup to reuse from Claude Code, Cursor or Codex",
         "rule": "Inherited rule used"
       },
       "mcp": {
@@ -1051,9 +1051,9 @@
     },
     "contextUsage": "Context usage",
     "contextPending": "Waiting for a fresh context measurement",
-    "betaActive": "Beta active",
-    "betaShadow": "Beta in shadow mode",
-    "betaOff": "Beta off",
+    "betaActive": "Beta compaction: on",
+    "betaShadow": "Beta compaction: shadow",
+    "betaOff": "Beta compaction: off",
     "contextWaiting": "Waiting for runtime",
     "contextTrigger": "Compacts at {{tokens}} tokens",
     "autoOff": "Auto compaction off",
@@ -1075,7 +1075,7 @@
       "judge": {
         "idle": "Judge standing by",
         "judging": "Judge at work",
-        "off": "Judge is off"
+        "off": "Judging is off"
       }
     },
     "toolStatus": {
@@ -1089,7 +1089,7 @@
       "switch": "Plain-language board for this project",
       "switching": "Switching…",
       "afterTurn": "Switches when the agent finishes this step",
-      "unknown": "No board in this conversation yet. mu conversations get one while the plain-language board is on in Features.",
+      "unknown": "No board in this conversation yet. Conversations with mu get one while the plain-language board is on in Settings → Core features.",
       "off": "When it's on, this shows in plain words how the work is going, what the agent is doing now and what needs you.",
       "cost": "For this project only. Each update costs one model call.",
       "empty": "Give the agent a moment; this will show in plain words how it's going.",
@@ -1121,12 +1121,12 @@
       "codes": {
         "progress": {
           "none": "No checklist yet.",
-          "all": "All {{total}} things on the checklist are done.",
-          "all_one": "The {{total}} thing on the checklist is done.",
-          "all_other": "All {{total}} things on the checklist are done.",
-          "some": "{{done}} of {{total}} things on the checklist are done.",
-          "some_one": "{{done}} of {{total}} thing on the checklist is done.",
-          "some_other": "{{done}} of {{total}} things on the checklist are done."
+          "all": "All {{total}} checklist items are done.",
+          "all_one": "The only checklist item is done.",
+          "all_other": "All {{total}} checklist items are done.",
+          "some": "{{done}} of {{total}} checklist items are done.",
+          "some_one": "{{done}} of {{total}} checklist item is done.",
+          "some_other": "{{done}} of {{total}} checklist items are done."
         },
         "now": {
           "understanding": "Reading the code and notes to work out what to do.",
@@ -1138,7 +1138,7 @@
           "wrapping_up": "The work is done; wrapping up.",
           "stuck": "Seems to be going in circles; it may need a hint from you.",
           "unclear": "Working.",
-          "focus": "{{now}} (On: {{focus}})"
+          "focus": "{{now}} (working on: {{focus}})"
         },
         "confirm": {
           "waiting_reply": "Waiting for your reply."
@@ -1165,7 +1165,7 @@
         "permission_allowed": "You allowed: {{summary}}",
         "permission_denied": "You didn't allow: {{summary}}",
         "goal_round": "The goal isn't met yet; mu sent it back to work (round {{round, number}}){{reason}}",
-        "goal_met": "The goal holds: {{text}}",
+        "goal_met": "Goal met: {{text}}",
         "goal_paused": "The goal is paused{{reason}}",
         "trouble_loop": "mu noticed it repeating the same step: {{detail}}",
         "trouble": "mu noticed: {{detail}}",
@@ -1211,7 +1211,7 @@
       "saveFailed": "Couldn't save the lesson",
       "empty": "No lessons for this project yet. mu learns them from your corrections, from workarounds it finds and from /remember.",
       "noneActive": "No lessons in use. Choose All to see retired and replaced ones.",
-      "noMatch": "No lesson matches.",
+      "noMatch": "No matching lessons.",
       "noProject": "This conversation has no project folder, so only lessons for all projects are shown.",
       "notes": {
         "label": "What the lessons did in this conversation",
@@ -1277,8 +1277,8 @@
     },
     "eventLine": {
       "judgeNotice": {
-        "freeJev": "Using the free Jev on OpenCode Zen: no Jev key is set",
-        "freeJevUnavailable": "The free Jev stopped answering: plain rules decide until a Jev key is set"
+        "freeJev": "No Jev key is set, so mu is using Jev's free tier on OpenCode Zen",
+        "freeJevUnavailable": "Jev's free tier stopped answering, so mu's default rules decide until you add a Jev key"
       },
       "detail": "Details: {{detail}}",
       "progress": {
@@ -1286,7 +1286,7 @@
         "lessons": "Checking lessons from earlier conversations",
         "skills": "Choosing which skills this conversation needs",
         "capabilities": "Choosing which capabilities this task needs",
-        "goal_check": "Checking whether the goal holds",
+        "goal_check": "Checking whether the goal is met",
         "permissionReview": "The judge is reviewing: {{summary}}"
       },
       "goal": {
@@ -1296,7 +1296,7 @@
           "modelCallFailed": "a model call failed",
           "needsUser": "the agent needs something from you",
           "needsUserDetail": "the agent needs something from you: {{detail}}",
-          "unjudged": "no judge could tell whether the goal holds, and nothing is provably unfinished",
+          "unjudged": "no judge could tell whether the goal is met, and nothing is provably unfinished",
           "idle": "the agent ended {{count}} runs in a row without doing anything",
           "idle_one": "the agent ended {{count}} run without doing anything",
           "idle_other": "the agent ended {{count}} runs in a row without doing anything",
@@ -1358,7 +1358,7 @@
       "browser": {
         "finished": "{{status}}: {{reason}}",
         "openFailed": "Couldn't open the page in the browser.",
-        "openFailedPanel": "Couldn't open the page in the app's browser panel.",
+        "openFailedPanel": "Couldn't open the page in the in-app browser.",
         "launch": {
           "noBrowser": {
             "mac": "No Chrome, Chromium, Edge or Brave was found in /Applications. Install one, or set MU_CHROME to a Chromium-based browser's executable.",
@@ -1395,7 +1395,7 @@
         "off": "Board: off"
       },
       "injection": {
-        "withheld": "{{tool}}: withheld {{withheld}} of {{total}} passages because they carried instructions aimed at the AI",
+        "withheld": "{{tool}}: withheld {{withheld}} of {{total}} passages because they carried instructions aimed at the agent",
         "byRules": "the judge didn't answer, so mu's rules decided",
         "excerpt": "begins: {{text}}"
       }

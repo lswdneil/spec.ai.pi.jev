@@ -69,7 +69,7 @@
     "detail": "{{format}} files can't be previewed here. Open the file in its default app instead.",
     "downloadUnavailable": "This file can't be downloaded here. Use “Open in default app” instead."
   },
-  "aiWriting": "AI is writing…",
+  "aiWriting": "The agent is writing…",
   "errors": {
     "missingFilePath": "File path is missing",
     "openWithoutPath": "Can't open: no file path given",
@@ -145,7 +145,7 @@
     "loading": "Starting PowerPoint preview…",
     "installing": "Installing preview component…",
     "startFailed": "Couldn't start the PowerPoint preview",
-    "installHint": "Install OfficeCLI from the official iOfficeAI/OfficeCLI releases page"
+    "installHint": "Install officecli from its GitHub releases page"
   },
   "browser": {
     "newTab": "New tab",
@@ -156,7 +156,7 @@
     "agentActiveTooltip": "The agent is using this tab",
     "tabLimitReached": "Browser tab limit reached ({{count}}). The oldest tab was reused.",
     "agentFirstUseTitle": "The agent is using the in-app browser",
-    "agentFirstUseContent": "It can open pages, click and read content in this panel. Your sign-ins are kept between sessions.",
+    "agentFirstUseContent": "It can open pages, click on them and read their content in this panel. Sites stay signed in after you restart mu.",
     "agentFirstUseAction": "Open settings"
   },
   "saveConflict": "Couldn't save: this file changed on disk since you opened it. Reload to see the other changes — your edits are still here, unsaved.",
@@ -173,14 +173,14 @@
     "unavailable": "Can't find this file",
     "failed": "Couldn't reload this file",
     "confirmTitle": "Reload and lose unsaved changes?",
-    "confirmMessage": "This tab has unsaved changes. Reloading replaces them with what is on disk.",
+    "confirmMessage": "This tab has unsaved changes. Reloading replaces them with what's on disk.",
     "discardAndRefresh": "Discard changes and reload",
     "officeNotWired": "Office documents can't be refreshed yet. Close and reopen the file to see changes."
   },
   "zoomIn": "Zoom in",
   "zoomOut": "Zoom out",
   "zoomReset": "Reset view",
-  "diagramZoomHint": "Scroll to zoom • Drag to pan • ESC to close",
+  "diagramZoomHint": "Scroll to zoom · Drag to pan · Esc to close",
   "muBrowser": {
     "stepNumber": "Step {{step}}",
     "confidence": "{{percent}}% sure",

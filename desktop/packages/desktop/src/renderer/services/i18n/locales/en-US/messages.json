@@ -80,7 +80,7 @@
     "yesAllowAlways": "Yes, always allow",
     "yesAlwaysAllowTool": "Yes, always allow tool \"{{toolName}}\" from server \"{{serverName}}\"",
     "yesAlwaysAllowServer": "Yes, always allow all tools from server \"{{serverName}}\"",
-    "no": "No (esc)"
+    "no": "No (Esc)"
   },
   "fork": {
     "action": "Fork from here",

@@ -280,7 +280,7 @@
       "other": "mu veut effectuer une action extérieure"
     },
     "reason": {
-      "ask": "Autorisations minimales : chaque étape vous est d’abord soumise.",
+      "ask": "Autorisations minimales : chaque modification, commande ou action vers l’extérieur vous est d’abord soumise.",
       "unsure": "Jev n’est pas sûr que cette étape corresponde à ce que vous voulez.",
       "beyond": "Jev estime que cela dépasse ce que vous avez demandé.",
       "unrelated": "Jev estime que cela ne fait pas partie de la tâche.",
@@ -664,7 +664,7 @@
         },
         "control": {
           "title": "Vous voyez, vous pilotez",
-          "text": "Toute modification peut être annulée ; chaque étape dans le navigateur reste visible, et vous pouvez mettre en pause ou prendre la main."
+          "text": "Les points de restauration permettent d’annuler les modifications ; quand mu utilise le navigateur intégré, chaque étape reste visible, et vous pouvez mettre en pause ou prendre la main."
         },
         "ready": {
           "title": "Prêt à l’emploi",

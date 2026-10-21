@@ -1089,7 +1089,7 @@
       "switch": "Bu projenin sade dildeki panosu",
       "switching": "Değiştiriliyor…",
       "afterTurn": "Ajan bu adımı bitirince değişir",
-      "unknown": "Bu konuşmada henüz pano yok. Özellikler bölümünde sade dildeki pano açıkken mu konuşmalarında görünür.",
+      "unknown": "Bu konuşmada henüz pano yok. Ayarlar → Temel özellikler bölümünde sade dildeki pano açıkken mu konuşmalarında görünür.",
       "off": "Açıldığında işin nasıl gittiğini, ajanın şu an ne yaptığını ve sizden neyin beklendiğini sade bir dille anlatır.",
       "cost": "Yalnızca bu proje için. Her güncelleme bir model çağrısına mal olur.",
       "empty": "Ajana biraz zaman tanıyın; nasıl gittiği burada sade bir dille yazacak.",

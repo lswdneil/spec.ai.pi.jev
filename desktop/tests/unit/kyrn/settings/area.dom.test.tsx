@@ -742,8 +742,8 @@ describe('providers and the default model', () => {
     const editor = screen.getByTestId('mu-provider-editor');
     expect(within(editor).getByTestId('mu-key-state')).toHaveTextContent('Set');
     await user.click(within(editor).getByTestId('mu-endpoint-select'));
-    fireEvent.click(await screen.findByText('Anthropic compatible (Messages)'));
-    expect(editor).toHaveTextContent('Leave off /v1');
+    fireEvent.click(await screen.findByText('Anthropic-compatible (Messages)'));
+    expect(editor).toHaveTextContent('Without /v1');
     fireEvent.change(within(editor).getByLabelText('API key'), { target: { value: 'sk-typed' } });
     expect(within(editor).getByTestId('mu-key-state')).toHaveTextContent('New key, not saved');
     expect(screen.getByTestId('mu-save-bar')).toHaveTextContent('Providers');
@@ -791,7 +791,7 @@ describe('providers and the default model', () => {
     // "relay" is the saved provider's id already.
     expect(within(editor).getByLabelText('ID')).toHaveValue('custom');
     expect(within(editor).getByLabelText('Base URL')).toHaveValue('https://proxy.example.com');
-    expect(editor).toHaveTextContent('Leave off /v1');
+    expect(editor).toHaveTextContent('Without /v1');
     expect(within(editor).getByTestId('mu-key-state')).toHaveTextContent('Not set');
   });
 
@@ -844,7 +844,7 @@ describe('providers and the default model', () => {
 
     fireEvent.click(screen.getByTestId('mu-provider-item-foreign-anthropic'));
     expect(screen.getByTestId('mu-provider-foreign')).toHaveTextContent(
-      'Anthropic compatible · https://p.example.com · 1,234 models'
+      'Anthropic-compatible · https://p.example.com · 1,234 models'
     );
     // An API format this screen does not know goes by what models.json says.
     fireEvent.click(screen.getByTestId('mu-provider-item-foreign-lab'));
@@ -1001,10 +1001,10 @@ describe('providers and the default model', () => {
     await open('board-model');
     // A page of its own, apart from the model new sessions start with; its header says what the model is for.
     expect(screen.queryByTestId('mu-defaults')).not.toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Plain-language model' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Board model' })).toBeInTheDocument();
     const card = screen.getByTestId('mu-board-model');
     expect(card).toHaveTextContent('None yet. mu asks the first time you turn on the board.');
-    expect(card).toHaveTextContent('Pick a provider first');
+    expect(card).toHaveTextContent('Choose a provider first.');
     const user = userEvent.setup();
     await user.click(within(card).getByLabelText('Provider'));
     fireEvent.click(await screen.findByText('corp-gateway', { selector: '.arco-select-option' }));
@@ -1015,7 +1015,7 @@ describe('providers and the default model', () => {
     const offered = [...document.querySelectorAll('.arco-select-option')].map((choice) => choice.textContent);
     expect(offered.slice(-2)).toEqual(['claude-opus-4-6 · recommended', 'gpt-5']);
     fireEvent.click(screen.getByText('claude-opus-4-6 · recommended', { selector: '.arco-select-option span' }));
-    expect(screen.getByTestId('mu-save-bar')).toHaveTextContent('Unsaved changes in: Plain-language model');
+    expect(screen.getByTestId('mu-save-bar')).toHaveTextContent('Unsaved changes in: Board model');
     expect(card).not.toHaveTextContent('None yet');
 
     // The conversation's own model, then back to the one picked.
@@ -1405,7 +1405,7 @@ describe('the permission modes and the board', () => {
     await open('details-goal');
     fireEvent.click(screen.getByTestId('mu-feature-open-board'));
     const board = screen.getByTestId('mu-section-feature-board');
-    expect(board).toHaveTextContent('Choose the model that writes the board under Plain-language model.');
+    expect(board).toHaveTextContent('Choose the model that writes the board under Board model.');
     expect(within(board).queryByTestId('mu-option-board-model')).not.toBeInTheDocument();
     expect(within(board).getByTestId('mu-option-board-defaultOn')).toBeInTheDocument();
   });
@@ -1447,7 +1447,7 @@ describe('the permission modes and the board', () => {
     fireEvent.click(screen.getByText('Discard'));
     const card = screen.getByTestId('mu-board-model');
     expect(within(card).queryByText('corp-gateway')).not.toBeInTheDocument();
-    expect(card).toHaveTextContent('Pick a provider first');
+    expect(card).toHaveTextContent('Choose a provider first.');
   });
 });
 
