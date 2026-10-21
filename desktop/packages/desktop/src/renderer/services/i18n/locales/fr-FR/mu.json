@@ -7,7 +7,8 @@
   "apiKey": "Clé API",
   "keyHelp": "Une fois enregistrée, la clé n’est plus jamais affichée. Elle reste sur cet ordinateur, lisible uniquement par votre compte.",
   "keyKeep": "Laisser vide pour conserver la clé enregistrée",
-  "endpointRule": "Utilisez HTTPS, ou HTTP uniquement vers cette machine (127.0.0.1, localhost) ou vers une adresse IP de réseau privé (comme 192.168.1.20). Pas de nom d’utilisateur, de mot de passe, de requête ni de fragment dans l’adresse.",
+  "endpointRule": "Saisissez une adresse qui commence par https:// ou http://. Elle ne peut contenir ni nom d’utilisateur, ni mot de passe, ni requête, ni fragment.",
+  "endpointPlain": "Cette adresse utilise http en clair : la clé et vos messages ne sont pas chiffrés. C’est sans souci pour un serveur sur cet ordinateur ou sur votre réseau, y compris un nom que votre fichier hosts y dirige. Sur Internet, utilisez https.",
   "sections": {
     "judges": "Juges",
     "judgeOrder": "Ordre des juges",
@@ -519,7 +520,7 @@
         "modelPlaceholder": "ex. claude-sonnet-5"
       },
       "problems": {
-        "baseUrl": "Saisissez une adresse commençant par https:// (http:// uniquement pour cette machine ou une adresse de réseau privé).",
+        "baseUrl": "Saisissez une adresse qui commence par https:// ou http://.",
         "key": "Saisissez la clé API.",
         "model": "Saisissez le nom du modèle."
       },

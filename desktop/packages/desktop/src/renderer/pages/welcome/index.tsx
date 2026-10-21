@@ -30,6 +30,7 @@ import { useMuSettings } from '@/renderer/pages/settings/KyrnSettings/useMuSetti
 import ImportChatsModal from '@/renderer/pages/settings/SystemSettings/ImportChats/ImportChatsModal';
 import { useNativeEnabled } from '@/renderer/pages/native/hooks/useNativeConversations';
 import { kyrnBridge, unwrap } from '@/common/kyrn/bridge';
+import { isPlainRemoteEndpoint, type ListedModel } from '@/common/kyrn/models';
 import { useModelNames } from '@/renderer/hooks/agent/useModelNames';
 import { modelDisplayName } from '@/renderer/utils/model/providerName';
 import Field from './Field';
@@ -96,6 +97,8 @@ export default function Welcome() {
   const [form, setForm] = useState<Omit<ApiModel, 'api'>>({ baseUrl: '', key: '', model: '' });
   const [signedIn, setSignedIn] = useState('');
   const [listed, setListed] = useState<string[]>([]);
+  // What the address's model list stated about each model: the provider's row starts from it.
+  const [listedFacts, setListedFacts] = useState<Record<string, ListedModel>>({});
   const [tried, setTried] = useState(false);
   const [added, setAdded] = useState<string>();
   // The judge's service and key, folded away while the judge answers as it is.
@@ -140,7 +143,7 @@ export default function Welcome() {
   };
 
   const apiOf = (tile: ApiWay): GuideApi => (tile === 'openai' ? openaiApi : 'anthropic-messages');
-  const apiInput = (api: GuideApi): ApiModel => ({ api, ...form });
+  const apiInput = (api: GuideApi): ApiModel => ({ api, ...form, facts: listedFacts[form.model.trim()] });
   const apiWay = chosenWay === 'openai' || chosenWay === 'anthropic' ? chosenWay : undefined;
   const problem = apiWay ? apiModelProblem(apiInput(apiOf(apiWay))) : undefined;
 
@@ -149,9 +152,9 @@ export default function Welcome() {
     if (chosenWay === 'key') {
       setTried(true);
       if (!keys.choice || !draft) return;
-      const { service, baseUrl, key, model } = keys.choice;
+      const { service, baseUrl, key, model, facts } = keys.choice;
       // A provider of its own, as for an address typed in: named after the service, its id made from the service's.
-      const result = withApiModel(draft, { api: service.api, baseUrl, key, model }, added, service);
+      const result = withApiModel(draft, { api: service.api, baseUrl, key, model, facts }, added, service);
       mu.edit(() => result.draft);
       setAdded(result.id);
       setTried(false);
@@ -338,7 +341,11 @@ export default function Welcome() {
                       <div className={choiceStyles.choiceHint}>{t(`mu.welcome.model.openaiApi.${openaiApi}Hint`)}</div>
                     </Field>
                   ) : null}
-                  <Field label={t('mu.welcome.model.baseUrl')} problem={fieldProblem('baseUrl')}>
+                  <Field
+                    label={t('mu.welcome.model.baseUrl')}
+                    problem={fieldProblem('baseUrl')}
+                    warning={isPlainRemoteEndpoint(form.baseUrl.trim()) ? t('mu.endpointPlain') : undefined}
+                  >
                     <Input
                       aria-label={t('mu.welcome.model.baseUrl')}
                       status={fieldStatus('baseUrl')}
@@ -371,8 +378,9 @@ export default function Welcome() {
                     provider={provider(api)}
                     typedKey={form.key.trim()}
                     disabled={apiModelProblem({ ...apiInput(api), model: form.model || 'x' }) === 'baseUrl'}
-                    onModels={(models) => {
+                    onModels={(models, facts) => {
                       setListed(models);
+                      setListedFacts(facts);
                       // A service that lists one model has named it: nothing is left to choose.
                       if (models.length === 1)
                         setForm((now) => (now.model.trim() ? now : { ...now, model: models[0] }));

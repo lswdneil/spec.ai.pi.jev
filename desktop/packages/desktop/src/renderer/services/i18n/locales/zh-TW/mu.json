@@ -7,7 +7,8 @@
   "apiKey": "API 金鑰",
   "keyHelp": "儲存後不再顯示。只存在這台電腦上，只有你的帳戶能讀取。",
   "keyKeep": "留空則保留已儲存的金鑰",
-  "endpointRule": "請使用 HTTPS；只有本機（127.0.0.1、localhost）或區域網路 IP 位址（例如 192.168.1.20）可以用 HTTP。位址裡不能帶使用者名稱、密碼、查詢參數或片段。",
+  "endpointRule": "請填寫以 https:// 或 http:// 開頭的位址，不能包含使用者名稱、密碼、查詢參數或片段。",
+  "endpointPlain": "這個位址用的是明文 http，金鑰和訊息都不加密。服務在本機或你自己的網路裡（包括 hosts 檔指過去的網域）就沒問題；走公網請用 https。",
   "sections": {
     "judges": "判定器",
     "judgeOrder": "判定順序",
@@ -519,7 +520,7 @@
         "modelPlaceholder": "例如 claude-sonnet-5"
       },
       "problems": {
-        "baseUrl": "請填寫 https:// 開頭的位址（本機或區域網路位址可以用 http://）。",
+        "baseUrl": "請填寫以 https:// 或 http:// 開頭的位址。",
         "key": "請填寫 API 金鑰。",
         "model": "請填寫模型名稱。"
       },

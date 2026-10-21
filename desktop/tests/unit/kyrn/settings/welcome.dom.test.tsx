@@ -521,6 +521,22 @@ describe('the first-run guide', () => {
     expect(screen.getByTestId('mu-welcome-kernel')).toHaveTextContent(`${active}/${total} decision points active`);
   });
 
+  it('takes a plain HTTP name, which the hosts file may point at this machine, and says the key is not encrypted', async () => {
+    at('/welcome', <Welcome />);
+    fireEvent.click(await screen.findByTestId('mu-welcome-begin'));
+    fireEvent.click(await screen.findByTestId('mu-welcome-way-openai'));
+    fireEvent.change(screen.getByLabelText('Base URL'), { target: { value: 'http://llm.internal:8000/v1' } });
+    expect(screen.getByTestId('mu-field-warning')).toHaveTextContent(enMu.endpointPlain);
+    fireEvent.change(screen.getByLabelText('API key'), { target: { value: 'sk-local' } });
+    fireEvent.change(screen.getByLabelText('Model name'), { target: { value: 'big-local' } });
+    fireEvent.click(screen.getByTestId('mu-welcome-next'));
+    expect(await screen.findByTestId('mu-welcome-step-judge')).toBeInTheDocument();
+    // On this machine or a private-network literal, there is nothing to warn about.
+    fireEvent.click(screen.getByText('Back'));
+    fireEvent.change(await screen.findByLabelText('Base URL'), { target: { value: 'http://192.168.1.20:8000/v1' } });
+    expect(screen.queryByTestId('mu-field-warning')).toBeNull();
+  });
+
   it('can be skipped from the first page without saving anything', async () => {
     at('/welcome', <Welcome />);
     fireEvent.click(await screen.findByText('Skip setup'));

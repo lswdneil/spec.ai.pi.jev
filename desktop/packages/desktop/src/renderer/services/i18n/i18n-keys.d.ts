@@ -2471,6 +2471,7 @@ export type I18nKey =
   | 'mu.details.askJevAbout'
   | 'mu.details.featureOff'
   | 'mu.details.lead'
+  | 'mu.endpointPlain'
   | 'mu.endpointRule'
   | 'mu.endpoints.anthropicMessages.hint'
   | 'mu.endpoints.anthropicMessages.name'

@@ -102,16 +102,20 @@ describe('native mu settings', () => {
       f.cleanup();
     }
   });
-  it('accepts a private-network HTTP address for a TypeSafe judge and still refuses a public one', () => {
+  it('accepts a plain HTTP address for a TypeSafe judge, by IP or by name, and refuses a link-local one', () => {
     const f = fixture();
     try {
       const value = f.store.read();
       value.judges['jev-direct'].baseUrl = 'http://192.168.31.124:8000/v1/systemone';
       expect(f.store.save(value).judges['jev-direct'].baseUrl).toBe('http://192.168.31.124:8000/v1/systemone');
+      // A name may be a server the hosts file points at: the app cannot tell, so it takes it.
+      const named = f.store.read();
+      named.judges['jev-direct'].baseUrl = 'http://judge.lan:8000/v1/systemone';
+      expect(f.store.save(named).judges['jev-direct'].baseUrl).toBe('http://judge.lan:8000/v1/systemone');
       const again = f.store.read();
-      again.judges['jev-direct'].baseUrl = 'http://example.com/v1';
-      expect(() => f.store.save(again)).toThrow('private-network address');
-      expect(f.store.read().judges['jev-direct'].baseUrl).toBe('http://192.168.31.124:8000/v1/systemone');
+      again.judges['jev-direct'].baseUrl = 'http://169.254.169.254/v1';
+      expect(() => f.store.save(again)).toThrow('not link-local');
+      expect(f.store.read().judges['jev-direct'].baseUrl).toBe('http://judge.lan:8000/v1/systemone');
     } finally {
       f.cleanup();
     }
@@ -283,12 +287,10 @@ describe('native mu settings', () => {
       expect(saved.keys.MU_JUDGE_CLM_API_KEY).toBe(true);
       raw = JSON.parse(readFileSync(join(f.dir, 'kyrn.json'), 'utf8'));
       expect(raw.judges.clm).toMatchObject({ type: 'clm', baseUrl: address, apiKeyEnv: 'MU_JUDGE_CLM_API_KEY' });
-      // The questions hold what the person wrote: plain HTTP to the internet is refused.
+      // The questions hold what the person wrote: never to a link-local address (cloud metadata lives there).
       const later = f.store.read();
-      const exposed = { ...later.judges.clm, baseUrl: 'http://example.com:8700' };
-      expect(() => f.store.save({ ...later, judges: { ...later.judges, clm: exposed } })).toThrow(
-        'private-network address'
-      );
+      const exposed = { ...later.judges.clm, baseUrl: 'http://169.254.169.254:8700' };
+      expect(() => f.store.save({ ...later, judges: { ...later.judges, clm: exposed } })).toThrow('not link-local');
       // And the CLM key never reaches TypeSafe through a System One judge without an address.
       const stray = {
         type: 'typesafe' as const,

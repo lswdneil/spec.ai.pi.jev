@@ -6,6 +6,14 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 
 ## [Unreleased]
 
+### Added
+
+- **A new provider starts with what its model list says** ([#23](https://github.com/qybaihe/mu/issues/23)). When Test connection lists the models, the desktop app reads each one's context window, output limit, image input and thinking from the list (OpenRouter, Gemini, vLLM, LM Studio, Mistral, Groq, LiteLLM and models.dev each word these differently), so a model you add from the list no longer starts at 128K, 16K, text only and no thinking. The list shows each model's context size, and the first-run guide uses the same facts. Anything the list doesn't state keeps the old defaults.
+
+### Fixed
+
+- **A plain `http://` address with a host name works again**, such as a server on your own network or a name your hosts file points at your own computer (`http://my-llm.lan:8000/v1`). The desktop app used to accept plain http only for `localhost` and private IP addresses. It now accepts any host except link-local addresses (`169.254.x.x`, where cloud metadata lives), and says under the field that plain http isn't encrypted when the host isn't on your own computer or a private address. A key is still required unless the server is on your own computer.
+
 ### Changed
 
 - **Native English throughout.** The README, the docs, the command line, the desktop app and the judge's messages were rewritten for people who read English first, following a new [style guide](docs/writing-style.md). The Chinese text is unchanged.

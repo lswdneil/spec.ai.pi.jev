@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { kyrnBridge, unwrap } from '@/common/kyrn/bridge';
-import type { ProviderTestResult } from '@/common/kyrn/models';
+import type { ListedModel, ProviderTestResult } from '@/common/kyrn/models';
 import { toMuError, type MuError } from '@/renderer/pages/settings/KyrnSettings/fields/muError';
 import { keyOutcome, type KeyOutcome } from './onboarding';
 import { namedModel, serviceById, servicesForKey, startModel, type ModelService, type ServiceId } from './services';
@@ -23,7 +23,8 @@ export type KeyCheck =
   | { phase: 'failed'; error: MuError };
 
 /** What Next writes: the service, the address it answered at, the key, and the model to start with. */
-export type KeyChoice = { service: ModelService; baseUrl: string; key: string; model: string };
+/** `facts`: what the service's model list stated about the chosen model (#23). */
+export type KeyChoice = { service: ModelService; baseUrl: string; key: string; model: string; facts?: ListedModel };
 
 export type KeySetup = {
   key: string;
@@ -156,7 +157,13 @@ export function useKeySetup(): KeySetup {
     setModel,
     choice:
       service && works && check.phase === 'done' && model.trim()
-        ? { service, baseUrl: check.baseUrl, key: typed, model: model.trim() }
+        ? {
+            service,
+            baseUrl: check.baseUrl,
+            key: typed,
+            model: model.trim(),
+            facts: check.result.facts?.[model.trim()],
+          }
         : undefined,
   };
 }

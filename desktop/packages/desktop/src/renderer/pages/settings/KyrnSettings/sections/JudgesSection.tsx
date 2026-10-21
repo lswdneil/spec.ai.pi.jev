@@ -3,7 +3,7 @@ import { Input, Switch, Tag } from '@arco-design/web-react';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { CLM_DEFAULT_ADDRESS, CLM_DEFAULT_MODEL } from '@/common/kyrn/clm';
-import { isSafeEndpoint } from '@/common/kyrn/models';
+import { isPlainRemoteEndpoint, isSafeEndpoint } from '@/common/kyrn/models';
 import type { JudgeSettings, KyrnSettings } from '@/common/kyrn/types';
 import AionSelect from '@/renderer/components/base/AionSelect';
 import OneLine from '@/renderer/components/settings/OneLine';
@@ -386,7 +386,10 @@ function addressOf(t: TFunction, service: JevService, baseUrl: string) {
   else if (custom) problem = t('mu.judges.baseUrlNeeded');
   return {
     placeholder: custom ? CUSTOM_ENDPOINT : TYPESAFE_ENDPOINT,
-    help: t(custom ? 'mu.judges.customUrlHelp' : 'mu.judges.baseUrlHelp'),
+    help:
+      baseUrl && isPlainRemoteEndpoint(baseUrl)
+        ? t('mu.endpointPlain')
+        : t(custom ? 'mu.judges.customUrlHelp' : 'mu.judges.baseUrlHelp'),
     problem,
   };
 }
