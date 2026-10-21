@@ -78,7 +78,7 @@ describe('the store names what went wrong with a stable code', () => {
     });
     expect(
       failure(() =>
-        store.save({ ...read, judges: { ...read.judges, jev: { ...judge, baseUrl: 'http://example.com' } } })
+        store.save({ ...read, judges: { ...read.judges, jev: { ...judge, baseUrl: 'http://169.254.169.254' } } })
       )
     ).toMatchObject({ code: 'endpoint' });
     const custom = { ...judge, type: 'typesafe' as const, apiKeyEnv: 'MU_JUDGE_CUSTOM_API_KEY' };
@@ -175,7 +175,7 @@ describe('the store names what went wrong with a stable code', () => {
     await expect(testProvider({ ...input, apiKey: 'two words' }, undefined)).rejects.toMatchObject({
       code: 'credential',
     });
-    await expect(testProvider({ ...input, baseUrl: 'http://x.example.com' }, undefined)).rejects.toMatchObject({
+    await expect(testProvider({ ...input, baseUrl: 'http://169.254.169.254' }, undefined)).rejects.toMatchObject({
       code: 'endpoint',
     });
 

@@ -7,7 +7,8 @@
   "apiKey": "Chave de API",
   "keyHelp": "Depois de salva, a chave nunca mais é exibida. Fica neste computador, e só a sua conta pode lê-la.",
   "keyKeep": "Deixe em branco para manter a chave salva",
-  "endpointRule": "Use HTTPS, ou HTTP apenas para esta máquina (127.0.0.1, localhost) ou para um endereço IP de rede privada (como 192.168.1.20). Sem nome de usuário, senha, parâmetros de consulta ou fragmento no endereço.",
+  "endpointRule": "Digite um endereço que comece com https:// ou http://. Ele não pode incluir usuário, senha, consulta nem fragmento.",
+  "endpointPlain": "Este endereço usa http sem criptografia: a chave e suas mensagens trafegam sem criptografia. Tudo bem para um servidor neste computador ou na sua rede, inclusive um nome que o arquivo hosts aponte para lá. Pela internet, use https.",
   "sections": {
     "judges": "Juízes",
     "judgeOrder": "Ordem dos juízes",
@@ -519,7 +520,7 @@
         "modelPlaceholder": "ex.: claude-sonnet-5"
       },
       "problems": {
-        "baseUrl": "Insira um endereço que comece com https:// (http:// só para esta máquina ou um endereço de rede privada).",
+        "baseUrl": "Digite um endereço que comece com https:// ou http://.",
         "key": "Insira a chave de API.",
         "model": "Insira o nome do modelo."
       },

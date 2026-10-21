@@ -7,7 +7,8 @@
   "apiKey": "Clave de API",
   "keyHelp": "Una vez guardada, la clave no se vuelve a mostrar. Se queda en este ordenador y solo tu cuenta puede leerla.",
   "keyKeep": "Déjalo vacío para conservar la clave guardada",
-  "endpointRule": "Usa HTTPS, o HTTP solo hacia este ordenador (127.0.0.1, localhost) o hacia una dirección IP de red privada (como 192.168.1.20). Sin nombre de usuario, contraseña, consulta ni fragmento en la dirección.",
+  "endpointRule": "Introduce una dirección que empiece por https:// o http://. No puede incluir usuario, contraseña, consulta ni fragmento.",
+  "endpointPlain": "Esta dirección usa http sin cifrar: la clave y tus mensajes viajan sin cifrar. Está bien para un servidor en este equipo o en tu red, incluido un nombre al que apunte tu archivo hosts. A través de internet, usa https.",
   "sections": {
     "judges": "Jueces",
     "judgeOrder": "Orden de los jueces",
@@ -519,7 +520,7 @@
         "modelPlaceholder": "Ej. claude-sonnet-5"
       },
       "problems": {
-        "baseUrl": "Introduce una dirección que empiece por https:// (http:// solo para este ordenador o una dirección de red privada).",
+        "baseUrl": "Introduce una dirección que empiece por https:// o http://.",
         "key": "Introduce la clave de API.",
         "model": "Introduce el nombre del modelo."
       },

@@ -380,6 +380,13 @@
   line-height: 18px;
 }
 
+.warning {
+  color: rgb(var(--warning-6));
+  font-size: 12px;
+  line-height: 18px;
+  text-wrap: pretty;
+}
+
 /* The ways that need an address typed in: a small title of their own in the list of ways, above its hairline. */
 .otherWays {
   padding: 20px 0 6px;

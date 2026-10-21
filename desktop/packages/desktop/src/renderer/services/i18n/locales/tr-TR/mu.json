@@ -7,7 +7,8 @@
   "apiKey": "API anahtarı",
   "keyHelp": "Kaydedildikten sonra bir daha gösterilmez. Yalnızca bu bilgisayarda kalır ve yalnızca sizin hesabınız okuyabilir.",
   "keyKeep": "Kayıtlı anahtarı korumak için boş bırakın",
-  "endpointRule": "HTTPS kullanın; HTTP yalnızca bu makine (127.0.0.1, localhost) veya özel ağdaki bir IP adresi (örneğin 192.168.1.20) için. Adreste kullanıcı adı, şifre, sorgu veya parça bulunmamalı.",
+  "endpointRule": "https:// veya http:// ile başlayan bir adres girin. Adreste kullanıcı adı, şifre, sorgu veya parça bulunmamalı.",
+  "endpointPlain": "Bu adres şifresiz http kullanıyor: anahtar ve mesajlarınız şifrelenmez. Bu bilgisayardaki ya da kendi ağınızdaki bir sunucu için sorun değil; hosts dosyanızın oraya yönlendirdiği bir ad da olur. İnternet üzerinden https kullanın.",
   "sections": {
     "judges": "Hakemler",
     "judgeOrder": "Hakem sırası",
@@ -519,7 +520,7 @@
         "modelPlaceholder": "örn. claude-sonnet-5"
       },
       "problems": {
-        "baseUrl": "https:// ile başlayan bir adres girin (http:// yalnızca bu bilgisayar veya özel ağ adresi için).",
+        "baseUrl": "https:// veya http:// ile başlayan bir adres girin.",
         "key": "API anahtarını girin.",
         "model": "Model adını girin."
       },

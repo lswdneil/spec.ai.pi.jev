@@ -7,7 +7,8 @@
   "apiKey": "API-Schlüssel",
   "keyHelp": "Nach dem Speichern wird der Schlüssel nie wieder angezeigt. Er bleibt auf diesem Computer und ist nur für dein Konto lesbar.",
   "keyKeep": "Leer lassen, um den gespeicherten Schlüssel zu behalten",
-  "endpointRule": "Verwende HTTPS; HTTP nur für diesen Rechner (127.0.0.1, localhost) oder eine IP-Adresse im privaten Netzwerk (etwa 192.168.1.20). Keine Benutzernamen, Passwörter, Abfrageparameter oder Fragmente in der Adresse.",
+  "endpointRule": "Gib eine Adresse ein, die mit https:// oder http:// beginnt. Benutzernamen, Passwörter, Abfrageparameter oder Fragmente sind darin nicht erlaubt.",
+  "endpointPlain": "Diese Adresse nutzt unverschlüsseltes http: Schlüssel und Nachrichten gehen unverschlüsselt über die Leitung. Für einen Server auf diesem Computer oder in deinem Netzwerk ist das in Ordnung, auch für einen Namen, den deine hosts-Datei dorthin lenkt. Über das Internet nutze https.",
   "sections": {
     "judges": "Judges",
     "judgeOrder": "Reihenfolge der Judges",
@@ -519,7 +520,7 @@
         "modelPlaceholder": "z. B. claude-sonnet-5"
       },
       "problems": {
-        "baseUrl": "Gib eine Adresse ein, die mit https:// beginnt (http:// nur für diesen Rechner oder eine private Netzadresse).",
+        "baseUrl": "Gib eine Adresse ein, die mit https:// oder http:// beginnt.",
         "key": "Gib den API-Schlüssel ein.",
         "model": "Gib den Modellnamen ein."
       },

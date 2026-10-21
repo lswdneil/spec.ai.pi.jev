@@ -879,6 +879,43 @@ describe('providers and the default model', () => {
     expect(screen.getByTestId('mu-model-1')).toHaveTextContent('fresh-model');
     expect(screen.queryByTestId('mu-model-offer-fresh-model')).not.toBeInTheDocument();
   });
+  it('adds a listed model with what the list said about it: context, output, images, thinking (#23)', async () => {
+    bridge.testProvider.mockResolvedValue({
+      ok: true,
+      data: {
+        ok: true,
+        code: 'ok-models',
+        status: 200,
+        latencyMs: 12,
+        detail: '',
+        models: ['plain', 'big-vision'],
+        facts: {
+          'big-vision': {
+            name: 'Big Vision',
+            contextWindow: 1048576,
+            maxTokens: 65536,
+            imageInput: true,
+            reasoning: true,
+          },
+        },
+      },
+    });
+    await open('providers');
+    fireEvent.click(screen.getByText('Test connection'));
+    const offer = await screen.findByTestId('mu-model-offer-big-vision');
+    // The size it comes with shows beside the id before it is added.
+    expect(offer).toHaveTextContent('big-vision1M');
+    fireEvent.click(offer);
+    const row = screen.getByTestId('mu-model-1');
+    expect(row).toHaveTextContent('big-vision');
+    expect(row).toHaveTextContent('Big Vision');
+    expect(row).toHaveTextContent('1M');
+    expect(row).toHaveTextContent(enMu.models.tagReasoning);
+    expect(row).toHaveTextContent(enMu.models.tagImage);
+    fireEvent.click(screen.getByRole('button', { name: 'Edit big-vision' }));
+    expect(screen.getByLabelText('Max output 2')).toHaveValue('65536');
+    expect(screen.getByTestId('mu-model-levels-1')).toBeInTheDocument();
+  });
   it('shows each model on one line and opens one to edit; a model without an id stays open', async () => {
     await open('providers');
     const line = screen.getByTestId('mu-model-0');
@@ -1495,7 +1532,7 @@ describe('the kernel pages', () => {
     expect(sent.tiers).toEqual(['jev-gateway']);
   });
 
-  it('shows a base URL only for TypeSafe and a custom service, and accepts a private-network HTTP address', async () => {
+  it('shows a base URL only for TypeSafe and a custom service, takes plain HTTP with a warning, and refuses link-local', async () => {
     bridge.settings.mockResolvedValue({ ok: true, data: settings() });
     render(<SettingsArea page='judges' />, { wrapper });
     const choice = await screen.findByTestId('mu-judge-choice-jev');
@@ -1504,10 +1541,15 @@ describe('the kernel pages', () => {
     fireEvent.click(await screen.findByText(enMu.judges.services.typesafe.name, { selector: '.arco-select-option' }));
     const tile = () => screen.getByTestId('mu-judge-choice-jev');
     const field = await within(tile()).findByLabelText(enMu.judges.baseUrl);
-    fireEvent.change(field, { target: { value: 'http://example.com/v1' } });
+    fireEvent.change(field, { target: { value: 'http://169.254.169.254/v1' } });
     expect(tile()).toHaveTextContent(enMu.endpointRule);
+    // A name over plain HTTP is taken, with a word on what that means for the key.
+    fireEvent.change(field, { target: { value: 'http://judge.lan:8000/v1/systemone' } });
+    expect(tile()).not.toHaveTextContent(enMu.endpointRule);
+    expect(tile()).toHaveTextContent(enMu.endpointPlain);
     fireEvent.change(field, { target: { value: 'http://192.168.31.124:8000/v1/systemone' } });
     expect(tile()).not.toHaveTextContent(enMu.endpointRule);
+    expect(tile()).not.toHaveTextContent(enMu.endpointPlain);
     fireEvent.click(screen.getByText('Save'));
     await waitFor(() => expect(bridge.save).toHaveBeenCalled());
     const sent = bridge.save.mock.calls[0][0] as SaveSettings;
@@ -1602,7 +1644,7 @@ describe('the kernel pages', () => {
     fireEvent.click(screen.getByText('Save'));
     expect(await screen.findByText(`Couldn't save: ${enMu.errors.judgeEndpoint}`)).toBeInTheDocument();
     // An address a key must not go to is the other problem; a private-network one is fine.
-    fireEvent.change(address, { target: { value: 'http://relay.example.com/v1/systemone' } });
+    fireEvent.change(address, { target: { value: 'http://169.254.169.254/v1/systemone' } });
     expect(within(tile).getByRole('alert')).toHaveTextContent(enMu.endpointRule);
     fireEvent.change(address, { target: { value: 'http://192.168.1.20:8000/v1/systemone' } });
     expect(within(tile).queryByRole('alert')).not.toBeInTheDocument();
@@ -1655,7 +1697,7 @@ describe('the kernel pages', () => {
     expect(screen.getAllByTestId('mu-clm-server')).toHaveLength(1);
     // A public address over plain HTTP breaks the rule, and is not asked.
     bridge.clmCheck.mockClear();
-    fireEvent.change(address, { target: { value: 'http://example.com:8700' } });
+    fireEvent.change(address, { target: { value: 'http://169.254.169.254:8700' } });
     expect(within(tile).getByRole('alert')).toHaveTextContent(enMu.endpointRule);
     expect(screen.queryByTestId('mu-clm-server')).not.toBeInTheDocument();
     // A private-network one is fine, and asked.

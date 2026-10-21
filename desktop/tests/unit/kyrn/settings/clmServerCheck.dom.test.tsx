@@ -92,7 +92,7 @@ describe('word from the CLM server on the judges page', () => {
   });
 
   it('does not ask about an address the questions may not go to', async () => {
-    check({ baseUrl: 'http://example.com:8700' });
+    check({ baseUrl: 'http://169.254.169.254:8700' });
     await new Promise((done) => setTimeout(done, 700));
     expect(bridge.clmCheck).not.toHaveBeenCalled();
     expect(screen.queryByTestId('mu-clm-server')).toBeNull();
