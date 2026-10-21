@@ -59,9 +59,9 @@ jobs:
       - name: Install the harness
         run: npm ci --ignore-scripts
 
-      # The model catalog pi reads at start is generated per checkout (npm run build does it in CI's harness job).
+      # The model catalog pi reads at start, from the snapshot CI's other jobs build with.
       - name: Hydrate the model catalog
-        run: npm --prefix packages/ai run hydrate-model-data
+        run: npm run hydrate:model-catalog
 
       - name: Install the desktop
         working-directory: desktop

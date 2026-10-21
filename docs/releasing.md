@@ -14,6 +14,9 @@ For maintainers. mu ships two things, versioned separately:
 | `npm.yml` | Pushes to `main` that touch the harness, and `mu-agent-v*` tags | Builds and packs `mu-agent`, installs the tarball and runs it on Linux (Node 22.19), macOS and Windows; keeps the tarball as an artifact; on a tag, publishes it to npm |
 | `desktop.yml` | Pushes to `main` that touch `desktop/`, and `v*` tags | Packs this commit's mu, builds the app for macOS, Windows and Linux (x64 and arm64), signs and notarizes the macOS builds, and holds a real conversation in each built app; on a tag, publishes the release |
 | `npm-audit.yml` | Daily | Audits the dependencies |
+| `model-catalog.yml` | Weekly | Regenerates the model catalog CI builds from and opens a pull request with the checks started on it |
+
+CI builds every package with the model catalog in `packages/ai/model-catalog.json` (`npm run build:pinned`), not the live one `npm run build` generates, so a model that's added, renamed or dropped upstream can't fail an unrelated pull request. It reaches mu in the weekly catalog pull request instead: the diff shows which models changed, and a failing test names the one to update. `npm run update:model-catalog` regenerates the snapshot by hand, with mu's own generator (mu's prices and model settings differ in places from the catalog pi publishes).
 
 ## Releasing the npm package
 

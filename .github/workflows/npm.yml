@@ -46,7 +46,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Build pi
-        run: npm run build
+        run: npm run build:pinned
 
       - name: Build and pack mu-agent
         run: node kyrn/npm/build.mjs --pack
