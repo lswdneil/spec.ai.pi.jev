@@ -238,7 +238,14 @@ mu                  # 在目前目錄開一個工作階段
 
 **看板** · **判定**（即時的判定帳本：每一次判定和它的問題） · **蜂群** · **經驗** · **檔案** · **預覽** · **原始碼** · **瀏覽器**（代理一步步操作的內建瀏覽器，帶目標、暫停和停止）
 
-權限模式和目標在傳送框裡；`⌘K` 開啟命令面板。模型登入在應用程式內完成：ChatGPT、Claude、Grok 和 Google（Gemini CLI / Antigravity）訂閱，或任何 pi 支援的供應商的 API 金鑰。Claude Code 和 Codex CLI 的對話可以匯入並接著聊。
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="app-dark.png">
+    <img src="app-light.png" width="880" alt="mu 桌面版修好一個小專案裡失敗的測試之後。Jev 把訊息判為多步驟任務（input.preflight），代理跑了測試、讀了解析器、改好分鐘的單位，再跑了一次測試。右側判定面板列出每次判定的判定點和耗時，約 200 到 400 毫秒。底部的列顯示判定器、40 個判定點裡啟用了 38 個、5 次判定和上下文用量。">
+  </picture>
+</p>
+
+底部的一條列讓核心一直在視線裡：哪個判定器在回答、跑在哪裡，啟用了多少個判定點；在對話裡，還有到目前為止的判定數、最近一次判定的耗時和上下文用量。權限模式和目標在傳送框裡；`⌘K` 開啟命令面板。模型登入在應用程式內完成：ChatGPT、Claude、Grok 和 Google（Gemini CLI / Antigravity）訂閱，或任何 pi 支援的供應商的 API 金鑰。Claude Code 和 Codex CLI 的對話可以匯入並接著聊。
 
 macOS（Apple 晶片 / Intel）、Windows（x64 / Arm）、Linux（x64 / Arm）的安裝檔由 GitHub Actions 建置，發布在 [Releases](https://github.com/qybaihe/mu/releases)。
 
@@ -250,7 +257,14 @@ mu            # 在目前目錄開一個互動式工作階段
 mu doctor     # 檢查安裝、判定器和各項連線
 ```
 
-需要 Node 22.19 或更新版本。`mu -p "prompt"` 執行一次並印出結果；`mu -c` 接續上一個工作階段。`mu import --list` 找出你的 Claude Code 和 Codex 對話，`mu import <file>` 把它們匯入。`mu ledger [n]` 印出最近 n 個工作階段裡判定器的決定。命令列和桌面版共用帳號、設定和經驗。
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="cli-dark.png">
+    <img src="cli-light.png" width="720" alt="終端機裡 mu 的歡迎畫面：μ 標記，「mu v0.1.9, judgment-first coding agent, built on pi 1.3.0」，接著是判定器（Jev 1.13，免費，428 毫秒回答，判定點已啟用）、模型和工作目錄，以及值得記住的幾個按鍵。">
+  </picture>
+</p>
+
+需要 Node 22.19 或更新版本。`mu -p "prompt"` 執行一次並印出結果；`mu -c` 接續上一個工作階段。`mu import --list` 找出你的 Claude Code 和 Codex 對話，`mu import <file>` 把它們匯入。`mu ledger [n]` 印出最近 n 個工作階段裡判定器的決定。命令列和桌面版共用帳號、設定和經驗。在終端機裡，mu 使用自己的 `mu-dark` 和 `mu-light` 主題，直到你在 `/settings` 裡另選一個（`system` 跟隨終端機的配色）。
 
 | 指令 | 做什麼 |
 | --- | --- |
