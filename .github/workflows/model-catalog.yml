@@ -1,0 +1,73 @@
+name: Model catalog
+
+# Weekly: pin the newest model catalog published on pi.dev (nix/model-catalog.json) and open a pull request.
+# CI builds from the pin (npm run build:pinned), so a model added, renamed or dropped upstream reaches mu here,
+# in one pull request whose checks show what it changes, instead of failing unrelated pull requests.
+
+on:
+  schedule:
+    - cron: '47 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: model-catalog
+  cancel-in-progress: false
+
+env:
+  BRANCH: chore/model-catalog
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  pin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      # The pin script imports packages/ai's TypeScript scripts, which Node 24 runs as they are.
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      # Pins only a catalog that hydrates this checkout; otherwise the step fails and says why.
+      - name: Pin the newest catalog
+        id: pin
+        run: |
+          before=$(node -p "require('./nix/model-catalog.json').revision")
+          node scripts/update-model-catalog-pin.mjs
+          after=$(node -p "require('./nix/model-catalog.json').revision")
+          echo "revision=$after" >> "$GITHUB_OUTPUT"
+          if [ "$before" = "$after" ]; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Open the pull request
+        if: steps.pin.outputs.changed == 'true'
+        env:
+          REVISION: ${{ steps.pin.outputs.revision }}
+        run: |
+          short="${REVISION:7:12}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
+          git add nix/model-catalog.json
+          git commit -m "chore: model catalog $short"
+          git push --force origin "$BRANCH"
+          # A pull request opened with GITHUB_TOKEN starts no workflows, so start the checks on the branch.
+          for workflow in ci.yml windows-tests.yml npm.yml; do
+            gh workflow run "$workflow" --ref "$BRANCH"
+          done
+          body="The newest model catalog published on pi.dev, \`$REVISION\`, pinned for CI and the Nix build.
+
+          The checks were started on this branch. If a test fails, a model it names was added, renamed or dropped upstream: update the test, or mu's default for that provider, on this branch, then merge."
+          if gh pr view "$BRANCH" --json state --jq .state 2>/dev/null | grep -q OPEN; then
+            gh pr edit "$BRANCH" --title "chore: model catalog $short" --body "$body"
+          else
+            gh pr create --base main --head "$BRANCH" --title "chore: model catalog $short" --body "$body"
+          fi
