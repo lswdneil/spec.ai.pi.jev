@@ -10,26 +10,26 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { basename, dirname, join } from "node:path";
-import { CONFIG_FILE, LEGACY_CONFIG_FILE } from "../naming.ts";
+import { CONFIG_FILE, LEGACY_CONFIG_FILES } from "../naming.ts";
 import { setEnvValue } from "./env-file.ts";
 
 /**
- * The files `mu setup` changes that pi does not write itself: models.json, mu.json and the .env. auth.json and
- * settings.json go through pi's own classes (pi-access.ts). Whatever exists is copied to <mu home>/backups/<time>/
+ * The files `spec.jev setup` changes that pi does not write itself: models.json, spec.jev.json and the .env. auth.json and
+ * settings.json go through pi's own classes (pi-access.ts). Whatever exists is copied to <spec.jev home>/backups/<time>/
  * before its first change, and nothing is rewritten that could not be read: a file with comments or broken JSON is
  * left as it is and the person is told what to add by hand.
  */
 
 export interface SetupPaths {
-	/** ~/.mu/agent: auth.json, models.json, settings.json, mu.json. */
+	/** ~/.spec.jev/agent: auth.json, models.json, settings.json, mu.json. */
 	readonly agentDir: string;
-	/** ~/.mu, or ~/.kyrn on a machine that has not moved its home: backups go into its `backups` folder. */
+	/** ~/.spec.jev, or ~/.kyrn on a machine that has not moved its home: backups go into its `backups` folder. */
 	readonly home: string;
-	/** The .env the launcher reads: the checkout's, or ~/.mu/.env for the npm package. */
+	/** The .env the launcher reads: the checkout's, or ~/.spec.jev/.env for the npm package. */
 	readonly envFile: string;
 }
 
-/** A file that may hold keys is readable by its owner alone when mu makes it. An existing file keeps its mode. */
+/** A file that may hold keys is readable by its owner alone when spec.jev makes it. An existing file keeps its mode. */
 const PRIVATE_FILE = 0o600;
 const PRIVATE_FOLDER = 0o700;
 
@@ -173,8 +173,8 @@ function mergeModels(existing: unknown, added: readonly { readonly id: string }[
 }
 
 /**
- * models.json with one provider of mu's added or brought up to date. Every other provider stays as it is, and so does
- * whatever this one already has that mu does not set (headers, compat, model overrides, the models it lists).
+ * models.json with one provider of spec.jev's added or brought up to date. Every other provider stays as it is, and so does
+ * whatever this one already has that spec.jev does not set (headers, compat, model overrides, the models it lists).
  */
 export function withProvider(
 	models: Record<string, unknown>,
@@ -211,17 +211,17 @@ export function withModel(
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// mu.json
+// spec.jev.json
 // ---------------------------------------------------------------------------------------------------------------
 
 /**
- * The file the judgment layer reads (config.ts): mu.json, or kyrn.json on a machine that only has that one. Writing
- * a new mu.json beside a kyrn.json would hide everything else in kyrn.json.
+ * The file the judgment layer reads (config.ts): spec.jev.json, or the mu.json / kyrn.json a machine already
+ * has. Writing a new file beside an old one would hide everything the old one says.
  */
 export function judgeConfigPath(agentDir: string, exists: (path: string) => boolean = existsSync): string {
 	const current = join(agentDir, CONFIG_FILE);
-	const legacy = join(agentDir, LEGACY_CONFIG_FILE);
-	return !exists(current) && exists(legacy) ? legacy : current;
+	const legacy = LEGACY_CONFIG_FILES.map((file) => join(agentDir, file)).find((path) => exists(path));
+	return !exists(current) && legacy ? legacy : current;
 }
 
 /** The judges a config asks for, as config.ts reads them: `tiers`, else Jev. */

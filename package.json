@@ -1,5 +1,5 @@
 {
-	"name": "pi-monorepo",
+	"name": "spec.jev-monorepo",
 	"private": true,
 	"type": "module",
 	"workspaces": [
@@ -74,7 +74,7 @@
 	"engines": {
 		"node": ">=22.19.0"
 	},
-	"version": "0.0.3",
+	"version": "0.1.0",
 	"overrides": {
 		"protobufjs": "7.6.6"
 	}

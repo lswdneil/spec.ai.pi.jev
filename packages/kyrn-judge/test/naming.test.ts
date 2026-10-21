@@ -20,7 +20,7 @@ afterEach(() => {
 	while (dirs.length > 0) rmSync(dirs.pop() as string, { recursive: true, force: true });
 });
 
-describe("the rename from KYRN to mu", () => {
+describe("the rename from KYRN to spec.jev", () => {
 	it("reads a setting under its new name first and under its old name still", () => {
 		expect(muEnv("JUDGE", { MU_JUDGE: "laya", KYRN_JUDGE: "jev" })).toBe("laya");
 		expect(muEnv("JUDGE", { KYRN_JUDGE: "jev" })).toBe("jev");
@@ -62,17 +62,20 @@ describe("the rename from KYRN to mu", () => {
 
 	it("keeps the old home until it has been moved, and never invents a second one beside it", () => {
 		const fresh = temp();
-		expect(muHome(fresh)).toBe(join(fresh, ".mu"));
+		expect(muHome(fresh)).toBe(join(fresh, ".spec.jev"));
 
 		const before = temp();
 		mkdirSync(join(before, ".kyrn"));
 		expect(muHome(before)).toBe(join(before, ".kyrn"));
 
-		// After `mv ~/.kyrn ~/.mu`, with or without a compatibility link left at the old path.
+		// A home from the mu years keeps being used until it is moved to ~/.spec.jev by hand.
 		const after = temp();
 		mkdirSync(join(after, ".mu"));
 		mkdirSync(join(after, ".kyrn"));
 		expect(muHome(after)).toBe(join(after, ".mu"));
+
+		mkdirSync(join(after, ".spec.jev"));
+		expect(muHome(after)).toBe(join(after, ".spec.jev"));
 	});
 
 	it("finds the browser named by MU_CHROME or, as before, KYRN_CHROME", () => {

@@ -1,7 +1,7 @@
 {
-  "name": "mu",
-  "short_name": "mu",
-  "description": "mu WebUI for mobile and desktop browsers.",
+  "name": "spec.jev",
+  "short_name": "spec.jev",
+  "description": "spec.jev WebUI for mobile and desktop browsers.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

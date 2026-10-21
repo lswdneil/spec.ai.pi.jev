@@ -1,7 +1,7 @@
 /**
- * The app's own copy names mu: the locale files and the source say mu, the local service and the built-in agent.
+ * The app's own copy names spec.jev: the locale files and the source say spec.jev, the local service and the built-in agent.
  * What still names the upstream products arrives at run time, from the bundled backend (AionCore): an error message,
- * an assistant's or an agent's name, a skill description. `showAsMu` shows those names as mu. Both i18next instances
+ * an assistant's or an agent's name, a skill description. `showAsMu` shows those names as spec.jev. Both i18next instances
  * (renderer and main process) run every resolved string, default values included, through it, and so does every
  * place that shows backend text as it came (see `withTextsAsMu`).
  *
@@ -16,14 +16,14 @@
 /** No lookbehind: the WebUI is opened in browsers that fail to parse one, which would break the whole bundle. */
 const UPSTREAM_NAME = /(^|[^\w/.@:-])(?:AionU[iI]|AionCore|Aionrs|Aion ?CLI)(?![\w/@]|-Dev\b|-(?!\p{Lu}\p{Ll})|\.\w)/gu;
 
-export const MU_DISPLAY_NAME = 'mu';
+export const MU_DISPLAY_NAME = 'spec.jev';
 
 export function showAsMu(text: string): string {
   return text.includes('Aion') ? text.replace(UPSTREAM_NAME, `$1${MU_DISPLAY_NAME}`) : text;
 }
 
 /**
- * A backend record with the named display texts shown as mu: a string field, or a map of localized strings
+ * A backend record with the named display texts shown as spec.jev: a string field, or a map of localized strings
  * (`name_i18n`), or a list of strings (`prompts`). Identifiers and every other field stay as they came.
  */
 export function withTextsAsMu<T extends object>(record: T, fields: readonly (keyof T)[]): T {

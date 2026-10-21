@@ -10,12 +10,12 @@ import * as path from 'path';
 import semver from 'semver';
 
 /**
- * mu's builds are the releases of its own repository, and it asks no other update server: the server or repository of
- * the app it was forked from would offer that app's installer as an update of mu.
+ * spec.jev's builds are the releases of its own repository, and it asks no other update server: the server or repository of
+ * the app it was forked from would offer that app's installer as an update of spec.jev.
  */
 export const MU_REPO = 'qybaihe/mu';
 export const MU_RELEASES_URL = `https://github.com/${MU_REPO}/releases`;
-export const USER_AGENT = 'mu';
+export const USER_AGENT = 'spec.jev';
 
 const RELEASES_API_URL = `https://api.github.com/repos/${MU_REPO}/releases`;
 const REQUEST_TIMEOUT_MS = 30_000;
@@ -46,7 +46,7 @@ type RuntimePlatformInfo = {
 
 type CanonicalArch = 'x64' | 'arm64' | 'ia32';
 
-/** The version of a release tag: `v0.1.3` is 0.1.3; the tags of the other packages here (`mu-agent-v0.1.3`) are none. */
+/** The version of a release tag: `v0.1.3` is 0.1.3; the tags of the other packages here (`spec.jev-v0.1.3`) are none. */
 const tagVersion = (tag: string): string | null => {
   const trimmed = tag.trim();
   const withoutV = trimmed.startsWith('v') ? trimmed.slice(1) : trimmed;
@@ -140,8 +140,8 @@ export const pickRecommendedAsset = (
 };
 
 /**
- * The newest of mu's releases, with its installers: the highest version tag among the releases that are not drafts.
- * Every mu build is a preview for now, published as a GitHub pre-release, so pre-releases count.
+ * The newest of spec.jev's releases, with its installers: the highest version tag among the releases that are not drafts.
+ * Every spec.jev build is a preview for now, published as a GitHub pre-release, so pre-releases count.
  */
 export const latestRelease = (releases: GitHubReleaseApi[]): UpdateReleaseInfo | null => {
   let newest: { release: GitHubReleaseApi; version: string } | null = null;

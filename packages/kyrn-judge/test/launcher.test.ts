@@ -33,23 +33,23 @@ afterEach(() => {
 	while (homes.length > 0) removeHome(homes.pop() as string);
 });
 
-/** `mu` as this platform runs it (mu.cmd on Windows), or another script of kyrn/bin; what it wrote, in one. */
+/** `spec.jev` as this platform runs it (mu.cmd on Windows), or another script of kyrn/bin; what it wrote, in one. */
 function run(command: string, args: string[], env: Record<string, string>, timeout?: number) {
 	const result = runScript(command === "mu" ? MU : join(BIN, command), args, env, timeout);
 	return { code: result.code, out: `${result.out}${result.err}` };
 }
 
-describe("the mu launcher", () => {
+describe("the spec.jev launcher", () => {
 	it("answers to the old command name too", () => {
 		const dir = home();
-		expect(run("mu", ["help"], { HOME: dir }).out).toContain("mu link | unlink");
+		expect(run("mu", ["help"], { HOME: dir }).out).toContain("spec.jev link | unlink");
 		// The old names are bash scripts, which Windows never had.
 		if (windows) return;
-		expect(run("kyrn", ["help"], { HOME: dir }).out).toContain("mu link | unlink");
-		expect(run("kyrn-dev", ["help"], { HOME: dir }).out).toContain("mu link | unlink");
+		expect(run("kyrn", ["help"], { HOME: dir }).out).toContain("spec.jev link | unlink");
+		expect(run("kyrn-dev", ["help"], { HOME: dir }).out).toContain("spec.jev link | unlink");
 	});
 
-	it("links itself as `mu`, and leaves another program of that name alone", () => {
+	it("links itself as `spec.jev`, and leaves another program of that name alone", () => {
 		const dir = home();
 		const links = join(dir, "bin");
 		// A link on POSIX; on Windows, where a link to a script cannot be run, a small mu.cmd.
@@ -64,7 +64,7 @@ describe("the mu launcher", () => {
 
 		const shadowing = run("mu", ["link"], { HOME: dir, MU_LINK_DIR: links, PATH: searchPath(other) });
 		expect(shadowing.code).toBe(1);
-		expect(shadowing.out).toContain("Another mu is already on your PATH");
+		expect(shadowing.out).toContain("Another spec.jev is already on your PATH");
 		expect(existsSync(linked)).toBe(false);
 
 		expect(run("mu", ["link"], { HOME: dir, MU_LINK_DIR: links }).code).toBe(0);
@@ -78,10 +78,10 @@ describe("the mu launcher", () => {
 		expect(readFileSync(linked, "utf8")).toBe("someone else's file");
 	});
 
-	// mu.ps1 is there so that a prompt reaches mu exactly, which cmd cannot promise. `mu import` repeats an option it
+	// mu.ps1 is there so that a prompt reaches spec.jev exactly, which cmd cannot promise. `spec.jev import` repeats an option it
 	// does not know word for word, so what it says is what node was given.
 	it.runIf(windows)(
-		"hands every argument to mu exactly from PowerShell: quotes, &, %, spaces and backslashes",
+		"hands every argument to spec.jev exactly from PowerShell: quotes, &, %, spaces and backslashes",
 		() => {
 			const dir = home();
 			const pwsh = (process.env.PATH ?? "")
@@ -135,7 +135,7 @@ describe("the mu launcher", () => {
 	);
 
 	it.skipIf(!installed)(
-		"stays in ~/.kyrn on a machine whose home has not been moved, without creating ~/.mu",
+		"stays in ~/.kyrn on a machine whose home has not been moved, without creating ~/.spec.jev",
 		() => {
 			const dir = home();
 			mkdirSync(join(dir, ".kyrn/agent"), { recursive: true });
@@ -166,7 +166,7 @@ describe("the mu launcher", () => {
 	);
 });
 
-describe("mu migrate", () => {
+describe("spec.jev migrate", () => {
 	/** A home from before the rename. The login file is a stand-in: only its bytes and its mode matter here. */
 	function oldHome(): string {
 		const dir = home();
@@ -253,7 +253,7 @@ describe("mu migrate", () => {
 		expect(existsSync(join(dir, ".kyrn/agent/kyrn.json"))).toBe(true);
 	});
 
-	it("never merges into or overwrites a ~/.mu that is already there", () => {
+	it("never merges into or overwrites a ~/.spec.jev that is already there", () => {
 		const dir = oldHome();
 		mkdirSync(join(dir, ".mu/agent"), { recursive: true });
 		writeFileSync(join(dir, ".mu/agent/mu.json"), JSON.stringify({ tiers: ["new"] }));
@@ -268,9 +268,9 @@ describe("mu migrate", () => {
 	});
 
 	it.each([
-		["the local judge", "mu judge stop", "nothing-is-running", true],
-		["a session", "mu sessions", "kyrn-judge.ts", false],
-		["the browser", "mu browser", "browser-profile", false],
+		["the local judge", "spec.jev judge stop", "nothing-is-running", true],
+		["a session", "spec.jev sessions", "kyrn-judge.ts", false],
+		["the browser", "spec.jev browser", "browser-profile", false],
 		["the desktop app", "desktop app", "aioncore", false],
 	])("moves nothing while %s is still running", (_what, names, running, judge) => {
 		const dir = oldHome();
@@ -306,7 +306,7 @@ describe("mu migrate", () => {
 			const refused = run("mu", ["migrate", "--dry-run"], { HOME: dir }, 110_000);
 
 			expect(refused.code).toBe(1);
-			expect(refused.out).toContain("mu sessions");
+			expect(refused.out).toContain("spec.jev sessions");
 			expect(refused.out).toContain(String(session.pid));
 		} finally {
 			session.kill();

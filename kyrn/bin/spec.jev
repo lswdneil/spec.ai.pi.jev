@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# spec.jev on macOS, Linux and WSL: the same launcher as `mu`, under the project's current name.
+# The work is in mu next to this file (mu.mjs, with mu.cmd for Windows), so there is one implementation.
+set -euo pipefail
+SOURCE="${BASH_SOURCE[0]}"
+while [[ -L "$SOURCE" ]]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ "$SOURCE" != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+exec "$(cd -P "$(dirname "$SOURCE")" && pwd)/mu" "$@"

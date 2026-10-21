@@ -12,7 +12,7 @@
 # can take seconds while PowerShell's module cache is cold.
 $node = @(Get-Command node -CommandType Application -ErrorAction SilentlyContinue)[0]
 if (-not $node) {
-	[Console]::Error.WriteLine("mu needs Node.js 22.19 or newer, and no node was found on PATH.")
+	[Console]::Error.WriteLine("spec.jev needs Node.js 22.19 or newer, and no node was found on PATH.")
 	[Console]::Error.WriteLine("Install it from https://nodejs.org or with: winget install OpenJS.NodeJS.LTS")
 	exit 1
 }

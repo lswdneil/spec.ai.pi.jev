@@ -13,9 +13,9 @@ import DocumentTitle, { titleForPath } from '@/renderer/components/layout/Docume
 
 describe('titleForPath', () => {
   it('names the product on every route', () => {
-    expect(titleForPath('/guid')).toBe('mu');
-    expect(titleForPath('/conversation/abc')).toBe('mu');
-    expect(titleForPath('/settings/agent')).toBe('mu');
+    expect(titleForPath('/guid')).toBe('spec.jev');
+    expect(titleForPath('/conversation/abc')).toBe('spec.jev');
+    expect(titleForPath('/settings/agent')).toBe('spec.jev');
   });
 });
 
@@ -27,6 +27,6 @@ describe('DocumentTitle', () => {
         <DocumentTitle />
       </MemoryRouter>
     );
-    expect(document.title).toBe('mu');
+    expect(document.title).toBe('spec.jev');
   });
 });

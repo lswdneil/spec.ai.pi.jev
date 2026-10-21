@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { JudgeProfile } from "./cascade.ts";
 import type { DecisionMode } from "./decision.ts";
-import { CONFIG_FILE, LEGACY_CONFIG_FILE, muEnv } from "./naming.ts";
+import { CONFIG_FILE, LEGACY_CONFIG_FILES, muEnv } from "./naming.ts";
 
 /**
  * How one judge is reached. The decision points never see this: they ask
@@ -10,7 +10,7 @@ import { CONFIG_FILE, LEGACY_CONFIG_FILE, muEnv } from "./naming.ts";
  *
  * - `gateway`: a judge model behind the Vercel AI Gateway (Jev).
  * - `clm`:     CLM-8B behind `clm-serve`, which answers the same questions Jev does.
- * - `local`:   the Laya sidecar started by `mu judge start`.
+ * - `local`:   the Laya sidecar started by `spec.jev judge start`.
  * - `http`:    any endpoint that takes `{state, questions}` and returns `{answers}`.
  * - `llm`:     a generative model from the host's model registry, prompted to answer as JSON.
  * - `classifier`: a classifier model from the host's model catalog (Jev on OpenCode Zen or Cloudflare, Clef, the
@@ -68,7 +68,7 @@ export interface KyrnConfig {
 	readonly routes: Readonly<Record<string, readonly string[]>>;
 	/** Per-feature switches and options, read by each feature. */
 	readonly features: Readonly<Record<string, unknown>>;
-	/** mu's own MCP servers: `{ "servers": { "<name>": { "command" | "url", … } } }`. Read by `src/inherit/mcp-config.ts`. */
+	/** spec.jev's own MCP servers: `{ "servers": { "<name>": { "command" | "url", … } } }`. Read by `src/inherit/mcp-config.ts`. */
 	readonly mcp?: unknown;
 	/** "provider/model-id" of a small generative model for the things a judge cannot do: task frames, lessons. */
 	readonly writer?: string;
@@ -88,16 +88,16 @@ export const BUILT_IN_JUDGES: Readonly<Record<string, JudgeConfig>> = {
 		apiKeyEnv: "MU_JUDGE_OPENROUTER_API_KEY",
 	},
 	"jev-gateway": { type: "gateway", model: "typesafe-ai/jev" },
-	// Jev on OpenCode Zen, with the key of OpenCode's models (OPENCODE_API_KEY, or `mu auth`). The free one is a
+	// Jev on OpenCode Zen, with the key of OpenCode's models (OPENCODE_API_KEY, or `spec.jev auth`). The free one is a
 	// limited-time offer of OpenCode's and needs no key at all. OpenCode does not train on what Jev is sent.
 	"jev-opencode": { type: "classifier", model: "opencode/jev-1.13" },
 	"jev-opencode-free": { type: "classifier", model: "opencode/jev-1.13-free" },
 	// Jev on Cloudflare Workers AI, with Cloudflare's key and account (CLOUDFLARE_API_KEY, CLOUDFLARE_ACCOUNT_ID).
 	"jev-cloudflare": { type: "classifier", model: "cloudflare-workers-ai/typesafe/jev" },
-	// Cloudflare's own System One classifiers. Not measured on mu's questions yet.
+	// Cloudflare's own System One classifiers. Not measured on spec.jev's questions yet.
 	clef: { type: "classifier", model: "cloudflare-workers-ai/@cf/cloudflare/clef" },
 	"clef-flash": { type: "classifier", model: "cloudflare-workers-ai/@cf/cloudflare/clef-flash" },
-	// CLM-8B on this machine, where `clm-serve` listens by default. Its profile is not measured on mu's questions yet.
+	// CLM-8B on this machine, where `clm-serve` listens by default. Its profile is not measured on spec.jev's questions yet.
 	clm: { type: "clm" },
 	// Measured in kyrn/docs/03-local-judge.md: the base checkpoint classifies one text well, says "yes" to
 	// nearly every relational question, and cannot use a rubric or judge the request itself.
@@ -189,7 +189,7 @@ export function parseConfig(value: unknown): KyrnConfig {
 }
 
 export interface ConfigSource {
-	/** Directory holding `mu.json`, normally the agent directory (~/.mu/agent). */
+	/** Directory holding `mu.json`, normally the agent directory (~/.spec.jev/agent). */
 	readonly dir?: string;
 	readonly env?: Readonly<Record<string, string | undefined>>;
 }
@@ -208,8 +208,8 @@ export function loadConfig(source: ConfigSource = {}): { config: KyrnConfig; dis
 	const env = source.env ?? process.env;
 	let config = DEFAULT_CONFIG;
 	let problem: string | undefined;
-	// The first file that exists wins, even when it is broken: a half-written mu.json must not silently bring back old settings.
-	for (const file of source.dir ? [CONFIG_FILE, LEGACY_CONFIG_FILE] : []) {
+	// The first file that exists wins, even when it is broken: a half-written spec.jev.json must not silently bring back old settings.
+	for (const file of source.dir ? [CONFIG_FILE, ...LEGACY_CONFIG_FILES] : []) {
 		try {
 			config = parseConfig(JSON.parse(readFileSync(join(source.dir as string, file), "utf8")));
 			break;

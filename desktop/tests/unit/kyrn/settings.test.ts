@@ -34,7 +34,7 @@ function fixture() {
     cleanup: () => rmSync(root, { recursive: true, force: true }),
   };
 }
-describe('native mu settings', () => {
+describe('native spec.jev settings', () => {
   it('shares the context cap with pi and preserves model settings and reserve', () => {
     const f = fixture();
     try {
@@ -308,7 +308,7 @@ describe('native mu settings', () => {
   });
 });
 
-describe('the rename from KYRN to mu', () => {
+describe('the rename from KYRN to spec.jev', () => {
   it('keeps saving to kyrn.json while that is the only file, and follows it once it is renamed', () => {
     const f = fixture();
     try {
@@ -326,14 +326,14 @@ describe('the rename from KYRN to mu', () => {
       f.cleanup();
     }
   });
-  it('reads mu.json first when both files are there, and writes mu.json on a fresh machine', () => {
+  it('reads spec.jev.json first, then the older names, and writes spec.jev.json on a fresh machine', () => {
     const f = fixture();
     try {
       writeFileSync(join(f.dir, 'mu.json'), JSON.stringify({ tiers: ['laya'] }));
       expect(f.store.read().tiers).toEqual(['laya']);
       const fresh = join(f.root, 'fresh');
       mkdirSync(fresh);
-      expect(configPath(fresh)).toBe(join(fresh, 'mu.json'));
+      expect(configPath(fresh)).toBe(join(fresh, 'spec.jev.json'));
     } finally {
       f.cleanup();
     }
@@ -356,11 +356,16 @@ describe('the rename from KYRN to mu', () => {
   it('stays in the old home until it has been moved, and never creates a second one beside it', () => {
     const f = fixture();
     try {
-      expect(muHome(f.root)).toBe(join(f.root, '.mu'));
+      expect(muHome(f.root)).toBe(join(f.root, '.spec.jev'));
       mkdirSync(join(f.root, '.kyrn'));
       expect(muHome(f.root)).toBe(join(f.root, '.kyrn'));
       mkdirSync(join(f.root, '.mu'));
       expect(muHome(f.root)).toBe(join(f.root, '.mu'));
+      mkdirSync(join(f.root, '.spec.jev'));
+      expect(muHome(f.root)).toBe(join(f.root, '.spec.jev'));
+      expect(muEnv('AGENT_DIR', { SPECJEV_AGENT_DIR: '/newest', MU_AGENT_DIR: '/new', KYRN_AGENT_DIR: '/old' })).toBe(
+        '/newest',
+      );
       expect(muEnv('AGENT_DIR', { MU_AGENT_DIR: '/new', KYRN_AGENT_DIR: '/old' })).toBe('/new');
       expect(muEnv('AGENT_DIR', { KYRN_AGENT_DIR: '/old' })).toBe('/old');
     } finally {
@@ -409,7 +414,7 @@ describe('mu-only backend catalog', () => {
     const current = 'D:\\mu\\resources\\mu\\acp.cmd';
     const row = {
       id: 'k',
-      name: 'mu',
+      name: 'spec.jev',
       command: old,
       enabled: true,
       description: AGENT_DESCRIPTION,
@@ -438,7 +443,7 @@ describe('mu-only backend catalog', () => {
           method: 'PUT',
           path: '/api/agents/custom/k',
           body: {
-            name: 'mu',
+            name: 'spec.jev',
             command: current,
             icon: row.icon,
             args: row.args,
@@ -491,13 +496,13 @@ describe('mu-only backend catalog', () => {
 
   it('disables other runtimes and assistants before exposing the sole product engine', async () => {
     const { calls, request } = backend([
-      { id: 'k', name: 'mu', command: '/kyrn/acp', enabled: true, yolo_id: 'full' },
+      { id: 'k', name: 'spec.jev', command: '/kyrn/acp', enabled: true, yolo_id: 'full' },
       { id: 'other', enabled: true },
     ]);
     expect((await initializeKyrn(request, '/kyrn/acp')).assistants).toHaveLength(1);
     expect(calls).toContainEqual({ method: 'PATCH', path: '/api/agents/other/enabled', body: { enabled: false } });
     expect(calls).toContainEqual({ method: 'PATCH', path: '/api/assistants/ao/state', body: { enabled: false } });
-    // Already called mu, with full auto set: nothing to read, nothing to update, nothing to create.
+    // Already called spec.jev, with full auto set: nothing to read, nothing to update, nothing to create.
     expect(calls.filter((call) => call.method === 'PUT' || call.path === '/api/agents/custom')).toEqual([]);
     expect(switches(calls, 'k')).toEqual([]);
   });
@@ -530,17 +535,17 @@ describe('mu-only backend catalog', () => {
         method: 'PUT',
         path: '/api/agents/custom/k',
         body: {
-          name: 'mu',
+          name: 'spec.jev',
           command: '/kyrn/acp',
           icon: 'icon.svg',
           args: ['--flag'],
           env: [{ name: 'A', value: 'b' }],
           advanced: {
-            // AionCore's own word for full auto, which mu does not know, becomes mu's full access.
+            // AionCore's own word for full auto, which spec.jev does not know, becomes spec.jev's full access.
             yolo_id: 'full',
             native_skills_dirs: ['/skills'],
             behavior_policy: { supports_side_question: true },
-            description: 'mu harness · local Codex login · Jev judgment',
+            description: 'spec.jev harness · local Codex login · Jev judgment',
           },
         },
       },
@@ -569,12 +574,12 @@ describe('mu-only backend catalog', () => {
         name: 'KYRN',
         command: '/kyrn/acp',
         enabled: true,
-        description: 'mu harness · local codex login · jev judgment',
+        description: 'spec.jev harness · local codex login · jev judgment',
       },
     ]);
     await initializeKyrn(request, '/kyrn/acp');
     const put = puts(calls)[0]?.body as { advanced: { description: string } };
-    expect(put.advanced.description).toBe('mu harness · local Codex login · Jev judgment');
+    expect(put.advanced.description).toBe('spec.jev harness · local Codex login · Jev judgment');
   });
   it('keeps the old name rather than update a record it could not read whole', async () => {
     const { calls, request } = backend(
@@ -606,16 +611,16 @@ describe('mu-only backend catalog', () => {
     expect(calls.filter((call) => call.path === '/api/agents/custom')).toEqual([]);
     expect(calls).toContainEqual({ method: 'PATCH', path: '/api/agents/other/enabled', body: { enabled: false } });
   });
-  it('registers once, as mu, when nothing is registered yet, with full access for runs nobody watches', async () => {
+  it('registers once, as spec.jev, when nothing is registered yet, with full access for runs nobody watches', async () => {
     const { calls, request } = backend([{ id: 'other', enabled: true }]);
     await initializeKyrn(request, '/kyrn/acp');
     const created = calls.filter((call) => call.path === '/api/agents/custom');
     expect(created).toHaveLength(1);
-    expect(created[0].body).toMatchObject({ name: 'mu', command: '/kyrn/acp', advanced: { yolo_id: 'full' } });
+    expect(created[0].body).toMatchObject({ name: 'spec.jev', command: '/kyrn/acp', advanced: { yolo_id: 'full' } });
   });
-  it('gives a registration without a full-auto mode mu’s full access, and keeps one of mu’s modes someone chose', async () => {
+  it('gives a registration without a full-auto mode spec.jev’s full access, and keeps one of spec.jev’s modes someone chose', async () => {
     const { calls, request } = backend([
-      { id: 'k', name: 'mu', command: '/kyrn/acp', enabled: true, env: [{ name: 'A', value: 'b' }] },
+      { id: 'k', name: 'spec.jev', command: '/kyrn/acp', enabled: true, env: [{ name: 'A', value: 'b' }] },
     ]);
     await initializeKyrn(request, '/kyrn/acp');
     // A scheduled task asks AionCore for full auto: without it, the run would wait on a question nobody answers.
@@ -624,26 +629,26 @@ describe('mu-only backend catalog', () => {
         method: 'PUT',
         path: '/api/agents/custom/k',
         body: expect.objectContaining({
-          name: 'mu',
+          name: 'spec.jev',
           env: [{ name: 'A', value: 'b' }],
           advanced: expect.objectContaining({ yolo_id: 'full' }),
         }),
       },
     ]);
-    const chosen = backend([{ id: 'k', name: 'mu', command: '/kyrn/acp', enabled: true, yolo_id: 'jev' }]);
+    const chosen = backend([{ id: 'k', name: 'spec.jev', command: '/kyrn/acp', enabled: true, yolo_id: 'jev' }]);
     await initializeKyrn(chosen.request, '/kyrn/acp');
     expect(puts(chosen.calls)).toEqual([]);
   });
   it.each(['KYRN', 'mu'])('never replaces a different user command registered as %s', async (name) => {
     const { calls, request } = backend([{ id: 'k', name, command: '/other' }]);
-    await expect(initializeKyrn(request, '/kyrn/acp')).rejects.toThrow('different mu command');
+    await expect(initializeKyrn(request, '/kyrn/acp')).rejects.toThrow('different spec.jev command');
     expect(calls).toHaveLength(1);
   });
-  // The check keeps what mu offers in the record the pickers read: the start makes one, a change to mu's models another.
-  it('checks mu again, found by its command, and changes nothing else', async () => {
+  // The check keeps what spec.jev offers in the record the pickers read: the start makes one, a change to spec.jev's models another.
+  it('checks spec.jev again, found by its command, and changes nothing else', async () => {
     const { calls, request } = backend([
       { id: 'other', name: 'Codex', command: '/codex', enabled: false },
-      { id: 'k', name: 'mu', command: '/kyrn/acp', enabled: true, yolo_id: 'full' },
+      { id: 'k', name: 'spec.jev', command: '/kyrn/acp', enabled: true, yolo_id: 'full' },
     ]);
     await recheckKyrn(request, '/kyrn/acp');
     expect(calls).toEqual([
@@ -651,16 +656,16 @@ describe('mu-only backend catalog', () => {
       { method: 'POST', path: '/api/agents/k/health-check', body: {} },
     ]);
   });
-  it('has nothing to check before mu is registered', async () => {
+  it('has nothing to check before spec.jev is registered', async () => {
     const { calls, request } = backend([{ id: 'other', name: 'Codex', command: '/codex', enabled: true }]);
     await recheckKyrn(request, '/kyrn/acp');
     expect(calls.map((call) => call.path)).toEqual(['/api/agents/management']);
   });
 
-  // #4: an app installed in C:\Program Files\mu registers its launcher's 8.3 short path, which AionCore can start. A
+  // #4: an app installed in C:\Program Files\spec.jev registers its launcher's 8.3 short path, which AionCore can start. A
   // registration an earlier start left may hold another spelling of the same launcher.
   describe('on Windows, where one launcher has several spellings', () => {
-    const long = 'C:\\Program Files\\mu\\resources\\mu\\acp.cmd';
+    const long = 'C:\\Program Files\\spec.jev\\resources\\spec.jev\\acp.cmd';
     const short = 'C:\\PROGRA~1\\mu\\resources\\mu\\acp.cmd';
     /** What the app works out on such a machine (windows/launcherCommand.ts): the short path, registered. */
     const installed = (): Promise<OwnCommand> =>
@@ -677,7 +682,7 @@ describe('mu-only backend catalog', () => {
       const own = await installed();
       const rows = [
         { id: 'old', name: 'KYRN', command: long, enabled: false },
-        { id: 'k', name: 'mu', command: short, enabled: true },
+        { id: 'k', name: 'spec.jev', command: short, enabled: true },
       ];
       expect(own.command).toBe(short);
       expect(findRegistration(rows, own)?.id).toBe('k');
@@ -688,12 +693,12 @@ describe('mu-only backend catalog', () => {
       ['its long path in another case', long.toUpperCase()],
       ['a forwarder written for it', 'C:\\ProgramData\\mu-desktop\\acp.cmd'],
     ])(
-      'takes a registration under mu’s name that runs %s as its own, and registers the short path in it',
+      'takes a registration under spec.jev’s name that runs %s as its own, and registers the short path in it',
       async (_how, registered) => {
         const { calls, request } = backend([
           {
             id: 'k',
-            name: 'mu',
+            name: 'spec.jev',
             command: registered,
             enabled: true,
             yolo_id: 'full',
@@ -711,7 +716,7 @@ describe('mu-only backend catalog', () => {
           {
             method: 'PUT',
             path: '/api/agents/custom/k',
-            body: expect.objectContaining({ name: 'mu', command: short, env: [{ name: 'A', value: 'b' }] }),
+            body: expect.objectContaining({ name: 'spec.jev', command: short, env: [{ name: 'A', value: 'b' }] }),
           },
         ]);
       }
@@ -722,7 +727,7 @@ describe('mu-only backend catalog', () => {
       expect(calls).toHaveLength(1);
     });
     it('checks the registration again while it still holds the long path', async () => {
-      const { calls, request } = backend([{ id: 'k', name: 'mu', command: long, enabled: true, yolo_id: 'full' }]);
+      const { calls, request } = backend([{ id: 'k', name: 'spec.jev', command: long, enabled: true, yolo_id: 'full' }]);
       await recheckKyrn(request, await installed());
       expect(calls.map((call) => call.path)).toEqual(['/api/agents/management', '/api/agents/k/health-check']);
     });

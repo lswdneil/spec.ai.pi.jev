@@ -63,19 +63,34 @@ export function pathFor(platform) {
 	return platform === "win32" ? nodePath.win32 : nodePath.posix;
 }
 
-/** `MU_<name>`, or the `KYRN_<name>` spelling from before the rename when the new one is unset or empty. */
+/** `SPECJEV_<name>`, or the `MU_<name>` / `KYRN_<name>` spelling from before a rename, newest first. */
 export function muEnv(name, env) {
-	return env[`MU_${name}`] || env[`KYRN_${name}`] || undefined;
+	return env[`SPECJEV_${name}`] || env[`MU_${name}`] || env[`KYRN_${name}`] || undefined;
 }
 
 /**
- * ~/.mu, or ~/.kyrn on a machine whose home has not been moved yet. Nothing here ever creates ~/.mu beside
- * ~/.kyrn: two homes would mean two logins and two session lists.
+ * The same three names for the environment as a whole: every `SPECJEV_*` is also handed on as `MU_*`, which is
+ * what the agent, the judgment layer and pi's plugins already read. One bridge here beats a new spelling in
+ * every file below, and a variable that is already set under the old name is never overwritten.
+ */
+export function withSpecJevEnv(env) {
+	const bridged = { ...env };
+	for (const [key, value] of Object.entries(env)) {
+		if (!key.startsWith("SPECJEV_") || typeof value !== "string") continue;
+		const legacy = `MU_${key.slice("SPECJEV_".length)}`;
+		if (!bridged[legacy]) bridged[legacy] = value;
+	}
+	return bridged;
+}
+
+/**
+ * ~/.spec.jev, or the older home this machine already has (~/.mu, then ~/.kyrn). Nothing here ever creates a
+ * new home beside an old one: two homes would mean two logins and two session lists.
  */
 export function muHome({ home, platform, isDir }) {
 	const path = pathFor(platform);
-	const current = path.join(home, ".mu");
-	return isDir(current) || !isDir(path.join(home, ".kyrn")) ? current : path.join(home, ".kyrn");
+	const candidates = [".spec.jev", ".mu", ".kyrn"].map((name) => path.join(home, name));
+	return candidates.find((candidate) => isDir(candidate)) ?? candidates[0];
 }
 
 /** WSL is Linux to the launcher. It matters to the browser and to what `mu doctor` reports. */
@@ -94,28 +109,27 @@ export function platformName({ platform, wsl }) {
 export function usage(platform) {
 	const linkDir = platform === "win32" ? "%USERPROFILE%\\.local\\bin" : "~/.local/bin";
 	return [
-		"mu: a coding agent with a judgment kernel, built on pi.",
+		"spec.jev: a coding agent with a judgment kernel, built on pi.",
 		"",
-		"  mu                       start a session in the current directory",
-		'  mu "prompt"              start a session with this prompt',
-		'  mu -p "prompt"           run one prompt, print the answer and exit',
-		"  mu -c | -r               continue the last session | pick a session to resume",
-		"  mu setup                 connect a model (paste an API key or pick a service) and choose a judge",
-		"                           (see mu setup --help for scripting, reading a key from stdin and the supported services)",
-		"  mu judge <cmd>           manage the local judge, Laya (macOS on Apple silicon): setup | start | stop | status | run",
-		"  mu ledger [n] [--json]   print the judge's verdicts from the last n sessions",
-		"  mu import --list | <file>...   import Claude Code and Codex conversations (mu import --help)",
-		"  mu doctor                check the installation, the judges and the connections",
-		"  mu auth <cmd>            sign-in helper for the desktop app (JSON lines):",
+		"  spec.jev                 start a session in the current directory",
+		'  spec.jev "prompt"        start a session with this prompt',
+		'  spec.jev -p "prompt"     run one prompt, print the answer and exit',
+		"  spec.jev -c | -r         continue the last session | pick a session to resume",
+		"  spec.jev setup           connect a model (paste an API key or pick a service) and choose a judge",
+		"                           (see spec.jev setup --help for scripting, reading a key from stdin and the supported services)",
+		"  spec.jev judge <cmd>     manage the local judge, Laya (macOS on Apple silicon): setup | start | stop | status | run",
+		"  spec.jev ledger [n] [--json]   print the judge's verdicts from the last n sessions",
+		"  spec.jev import --list | <file>...   import Claude Code and Codex conversations (spec.jev import --help)",
+		"  spec.jev doctor          check the installation, the judges and the connections",
+		"  spec.jev auth <cmd>      sign-in helper for the desktop app (JSON lines):",
 		"                           status | login <provider> | logout <provider>",
-		`  mu link | unlink         put the mu command on your PATH (${linkDir}) | remove it`,
-		"  mu migrate [--dry-run]   move the old home folder, ~/.kyrn, to ~/.mu (once)",
-		"  mu help | version        show this help | print the version",
+		`  spec.jev link | unlink   put the spec.jev command on your PATH (${linkDir}) | remove it`,
+		"  spec.jev help | version  show this help | print the version",
 		"",
-		"Everything else goes to pi unchanged: mu --help also shows pi's options,",
-		"and mu install|remove|update|list|config manage pi packages.",
+		"Everything else goes to pi unchanged: spec.jev --help also shows pi's options,",
+		"and spec.jev install|remove|update|list|config manage pi packages.",
 		"",
-		"Formerly KYRN: the kyrn commands still work.",
+		"Names before spec.jev still work: `mu` and `kyrn` are aliases, and ~/.mu or ~/.kyrn is used when it exists.",
 	].join("\n");
 }
 
@@ -217,10 +231,13 @@ export function appViewPlan(platform) {
 	];
 }
 
-/** Its package name stays pi's: pi updates itself by that name, and `mu` on npm is someone else's package. */
-export function appPackageJson(upstreamText) {
+/**
+ * Its package name stays pi's: pi updates itself by that name, and `spec.jev` on npm is someone else's package.
+ * `configDir` follows the home that was chosen, so an existing ~/.mu keeps holding this app's files.
+ */
+export function appPackageJson(upstreamText, configDir = ".spec.jev") {
 	const pkg = JSON.parse(upstreamText);
-	pkg.piConfig = { name: "mu", configDir: ".mu" };
+	pkg.piConfig = { name: "spec.jev", configDir };
 	return `${JSON.stringify(pkg, null, "\t")}\n`;
 }
 
@@ -250,7 +267,7 @@ function lstatOrUndefined(fs, target) {
  * replaced, with `unlink`: nothing here deletes recursively, because through a junction that would reach
  * the real source tree.
  */
-export function ensureAppView({ platform, app, upstream, fs = realFs }) {
+export function ensureAppView({ platform, app, upstream, configDir = ".spec.jev", fs = realFs }) {
 	const path = pathFor(platform);
 	const same = (a, b) => {
 		const [left, right] = [path.resolve(a), path.resolve(b)];
@@ -297,9 +314,9 @@ export function ensureAppView({ platform, app, upstream, fs = realFs }) {
 	const rebuild =
 		!current ||
 		fs.statSync(upstreamManifest).mtimeMs > current.mtimeMs ||
-		!fs.readFileSync(manifest, "utf8").includes('"name": "mu"');
+		!fs.readFileSync(manifest, "utf8").includes('"name": "spec.jev"');
 	if (rebuild) {
-		fs.writeFileSync(manifest, appPackageJson(fs.readFileSync(upstreamManifest, "utf8")));
+		fs.writeFileSync(manifest, appPackageJson(fs.readFileSync(upstreamManifest, "utf8"), configDir));
 		done.push("package.json");
 	}
 	return done;
@@ -358,13 +375,13 @@ export function installHint({ root, platform }) {
 	const steps = [`cd ${root}`, "npm ci --ignore-scripts", "npm run hydrate:model-data"];
 	// Windows PowerShell 5 has no `&&`.
 	return platform === "win32"
-		? `mu's dependencies aren't installed. Run:\n${steps.map((step) => `  ${step}`).join("\n")}`
-		: `mu's dependencies aren't installed. Run:  ${steps.join(" && ")}`;
+		? `spec.jev's dependencies aren't installed. Run:\n${steps.map((step) => `  ${step}`).join("\n")}`
+		: `spec.jev's dependencies aren't installed. Run:  ${steps.join(" && ")}`;
 }
 
 /** What mu says on a Node that does not strip TypeScript types, which a checkout cannot run on. */
 const NO_TYPE_STRIPPING =
-	"mu runs a source checkout's TypeScript with Node's built-in type stripping (on by default since Node 22.18), but this Node doesn't strip types. Use Node 22.19 or newer.";
+	"spec.jev runs a source checkout's TypeScript with Node's built-in type stripping (on by default since Node 22.18), but this Node doesn't strip types. Use Node 22.19 or newer.";
 
 /**
  * Node's arguments for running a checkout's TypeScript, up to the entry file. Node strips the types itself (on by
@@ -408,14 +425,14 @@ export function wantsLaya({ env, agentDir, platform, readFile }) {
 	const judges = muEnv("JUDGE", env);
 	if (judges) return `,${judges},`.includes(",laya");
 	const path = pathFor(platform);
-	for (const name of ["mu.json", "kyrn.json"]) {
+	for (const name of ["spec.jev.json", "mu.json", "kyrn.json"]) {
 		let text;
 		try {
 			text = readFile(path.join(agentDir, name));
 		} catch {
 			continue;
 		}
-		// Like the file itself: kyrn.json is only looked at when there is no mu.json.
+		// Like the file itself: the older names are only looked at when the newer one is absent.
 		return text.includes('"laya');
 	}
 	return false;
@@ -431,7 +448,7 @@ export function localJudgeSupport({ platform, env, wsl = false }) {
 		url,
 		message: [
 			`The local judge (Laya) is a Core ML sidecar that runs only on macOS on Apple silicon, not on ${where}.`,
-			"mu works without it: Jev answers by default (free on OpenCode Zen, or with your own key: mu setup), or set an LLM judge in mu.json.",
+			"spec.jev works without it: Jev answers by default (free on OpenCode Zen, or with your own key: spec.jev setup), or set an LLM judge in spec.jev.json.",
 			"A local judge for the desktop app is in progress. Without a judge, decision points use their fallbacks.",
 			"To use a server that implements the same API (GET /health, POST /evaluate), set:",
 			"  MU_LOCAL_JUDGE_URL=http://host:port",
@@ -506,7 +523,7 @@ export function planLaunch({
 	if (layout === "package") {
 		const files = packageEntries({ root, platform });
 		if (!fs.exists(files.extension)) {
-			return { error: `This mu-agent package is incomplete (${files.extension} is missing). Reinstall it: npm i -g mu-agent` };
+			return { error: `This spec.jev package is incomplete (${files.extension} is missing). Reinstall it: npm i -g spec.jev` };
 		}
 		entry = [files.cli];
 	} else {
@@ -530,7 +547,7 @@ export function planLaunch({
 		const parsed = parseEnvFile(envText);
 		fromFile = envFileAdditions({ env, entries: parsed.entries, platform });
 		// Line numbers only: the text of a line that did not parse may well be a secret.
-		if (parsed.problems.length > 0) notes.push(`mu: .env: skipped ${parsed.problems.length === 1 ? "line" : "lines"} ${parsed.problems.join(", ")} (expected KEY=VALUE)`);
+		if (parsed.problems.length > 0) notes.push(`spec.jev: .env: skipped ${parsed.problems.length === 1 ? "line" : "lines"} ${parsed.problems.join(", ")} (expected KEY=VALUE)`);
 	}
 
 	const childEnv = {};
@@ -541,7 +558,7 @@ export function planLaunch({
 	childEnv.MU_CODING_AGENT_DIR = agentDir;
 	childEnv.KYRN_CODING_AGENT_DIR = agentDir;
 	childEnv.PI_CODING_AGENT_DIR = agentDir;
-	// pi's release check asks pi.dev about pi's versions, which say nothing about mu's: a checkout follows
+	// pi's release check asks pi.dev about pi's versions, which say nothing about spec.jev's: a checkout follows
 	// upstream through git, and the package through npm.
 	childEnv.PI_SKIP_VERSION_CHECK = childEnv.PI_SKIP_VERSION_CHECK || "1";
 	// pi reports a fresh install to pi.dev with its version. mu-agent is not a pi install; asked for, it still can be.
@@ -553,7 +570,7 @@ export function planLaunch({
 		if (support.runs) startJudge = true;
 		else if (!support.url) {
 			notes.push(
-				`mu: the configuration asks for the local judge (Laya), which runs on macOS only; on ${platformName({ platform, wsl })} its decision points use the next judge or their fallbacks (mu judge status)`,
+				`spec.jev: the configuration asks for the local judge (Laya), which runs on macOS only; on ${platformName({ platform, wsl })} its decision points use the next judge or their fallbacks (spec.jev judge status)`,
 			);
 		}
 	}
@@ -569,7 +586,7 @@ export function planLaunch({
 		agentDir,
 		startJudge,
 		notes,
-		preface: argv[0] === "-h" || argv[0] === "--help" ? `${usage(platform)}\n\npi's help (mu passes all of this through):\n` : undefined,
+		preface: argv[0] === "-h" || argv[0] === "--help" ? `${usage(platform)}\n\npi's help (spec.jev passes all of this through):\n` : undefined,
 	};
 }
 
@@ -614,13 +631,18 @@ export function planHost({ platform, env, argv, root, home, fs, wsl = false, str
 
 /** What mu says when the local judge does not come up. */
 const LOCAL_JUDGE_NOT_STARTED =
-	"mu: the local judge (Laya) didn't start; decision points use the next judge or their fallbacks. Run mu judge status for details.";
+	"spec.jev: the local judge (Laya) didn't start; decision points use the next judge or their fallbacks. Run spec.jev judge status for details.";
 
 /** The part of the preparation that is files: the app view of a checkout, mu's agent folder, the configuration's notes. */
 function prepareFiles({ plan, platform, root, err }) {
 	const path = pathFor(platform);
 	if (plan.layout === "repo") {
-		ensureAppView({ platform, app: plan.appDir, upstream: path.join(root, "packages", "coding-agent") });
+		ensureAppView({
+			platform,
+			app: plan.appDir,
+			upstream: path.join(root, "packages", "coding-agent"),
+			configDir: path.basename(plan.muDir),
+		});
 	}
 	mkdirSync(plan.agentDir, { recursive: true });
 	for (const note of plan.notes) err(note);
@@ -679,7 +701,7 @@ export function planAuth({ platform, env, argv, root, home, execPath, fs, canExe
 	if (layoutOf({ root, platform, exists: fs.exists }) === "package") {
 		const { auth } = packageEntries({ root, platform });
 		if (!fs.exists(auth)) {
-			return { error: `This mu-agent package is incomplete (${auth} is missing). Reinstall it: npm i -g mu-agent` };
+			return { error: `This spec.jev package is incomplete (${auth} is missing). Reinstall it: npm i -g spec.jev` };
 		}
 		entry = [auth];
 	} else {
@@ -725,12 +747,12 @@ export function planImport({ platform, env, argv, root, home, execPath, fs, stri
 	if (layoutOf({ root, platform, exists: fs.exists }) === "package") {
 		const built = packageEntries({ root, platform }).import;
 		if (!fs.exists(built)) {
-			return { error: `This mu-agent package has no mu import (${built} is missing). Update it: npm i -g mu-agent` };
+			return { error: `This spec.jev package has no spec.jev import (${built} is missing). Update it: npm i -g mu-agent` };
 		}
 		entry = [built];
 	} else {
 		const source = path.join(root, "packages", "kyrn-judge", "src", "import", "cli.ts");
-		if (!fs.exists(source)) return { error: `mu import is missing from this checkout (${source})` };
+		if (!fs.exists(source)) return { error: `spec.jev import is missing from this checkout (${source})` };
 		if (!stripsTypes) return { error: NO_TYPE_STRIPPING };
 		entry = ["--disable-warning=ExperimentalWarning", source];
 	}
@@ -1365,7 +1387,8 @@ function handOver({ command, args, env, strategy }) {
 
 export async function main(argv = process.argv.slice(2)) {
 	const platform = process.platform;
-	const env = process.env;
+	// SPECJEV_* is the current spelling; it is handed to the agent under MU_*, which is what pi's side reads.
+	const env = withSpecJevEnv(process.env);
 	const home = homedir();
 	const path = pathFor(platform);
 	const bin = realpathSync(nodePath.dirname(fileURLToPath(import.meta.url)));
@@ -1381,7 +1404,7 @@ export async function main(argv = process.argv.slice(2)) {
 	const layout = layoutOf({ root, platform, exists: existsSync });
 
 	if (!nodeVersionOk(process.versions.node)) {
-		err(`mu needs Node >= ${MIN_NODE.join(".")} (found ${process.version}). Try: nvm install 24`);
+		err(`spec.jev needs Node >= ${MIN_NODE.join(".")} (found ${process.version}). Try: nvm install 24`);
 		return 1;
 	}
 
@@ -1546,7 +1569,7 @@ export async function main(argv = process.argv.slice(2)) {
 
 	if (layout === "package" && command === "version") {
 		const pkg = JSON.parse(readText(path.join(root, "package.json")));
-		out(`mu ${pkg.version} (pi ${pkg.muBuild?.pi ?? "?"}, npm package ${pkg.name})`);
+		out(`spec.jev ${pkg.version} (pi ${pkg.muBuild?.pi ?? "?"}, npm package ${pkg.name})`);
 		return 0;
 	}
 	// Asked before `version` too, as it always was: a checkout without its dependencies says so at the first command.
@@ -1555,9 +1578,9 @@ export async function main(argv = process.argv.slice(2)) {
 		return 1;
 	}
 	if (command === "version") {
-		// mu's version is the one this tree is released as; the judgment layer's own package.json is never released.
+		// spec.jev's version is the one this tree is released as; the judgment layer's own package.json is never released.
 		const version = (file) => JSON.parse(readText(path.join(root, ...file.split("/")))).version;
-		out(`mu ${version("kyrn/npm/package.template.json")} (pi ${version("packages/coding-agent/package.json")})`);
+		out(`spec.jev ${version("kyrn/npm/package.template.json")} (pi ${version("packages/coding-agent/package.json")})`);
 		return 0;
 	}
 

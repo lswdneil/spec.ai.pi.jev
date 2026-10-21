@@ -3,29 +3,33 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 
 /**
- * The project was called KYRN until 2026-09-21. What users set by hand keeps
- * working under its old spelling: `KYRN_*` variables, `kyrn.json`, `~/.kyrn`.
+ * The project has had three names: KYRN until 2026-09-21, spec.jev until 2026-10-21, and spec.jev since.
  *
- * Names already stored in sessions (`kyrn.decision`, `kyrn.verdict`, ...) were
- * not renamed at all: old sessions must still compact, restore and render.
+ * What a person set up by hand keeps working under the older spellings, newest first: `SPECJEV_*`, then
+ * `MU_*`, then `KYRN_*`; `spec.jev.json`, then `mu.json`, then `kyrn.json`; `~/.spec.jev`, then `~/.spec.jev`,
+ * then `~/.kyrn`. Nothing is moved: an `~/.spec.jev` that exists keeps being used, so a rename never splits a
+ * person's sessions, keys and browser profile in two.
+ *
+ * Names already stored in sessions (`kyrn.decision`, `kyrn.verdict`, ...) were not renamed at all: old
+ * sessions must still compact, restore and render.
  */
 type Env = Readonly<Record<string, string | undefined>>;
 
-/** `MU_<name>`, or the `KYRN_<name>` spelling when the new one is unset or empty. */
+/** `SPECJEV_<name>`, or the `MU_<name>` / `KYRN_<name>` spelling from before a rename. */
 export function muEnv(name: string, env: Env = process.env): string | undefined {
-	return env[`MU_${name}`] || env[`KYRN_${name}`] || undefined;
+	return env[`SPECJEV_${name}`] || env[`MU_${name}`] || env[`KYRN_${name}`] || undefined;
 }
 
-export const CONFIG_FILE = "mu.json";
-export const LEGACY_CONFIG_FILE = "kyrn.json";
+export const CONFIG_FILE = "spec.jev.json";
+/** Read when the current file is absent, in this order: the names this project had before. */
+export const LEGACY_CONFIG_FILES = ["mu.json", "kyrn.json"] as const;
 
 /**
- * `~/.mu`, or `~/.kyrn` on a machine whose home has not been moved yet. The
- * move is one manual step; until then nothing here creates `~/.mu` next to the
- * old home, which would split the browser profile and the sidecar state.
+ * `~/.spec.jev`, or the older home this machine already has. The move is one manual step; until then
+ * nothing here creates `~/.spec.jev` next to the old home, which would split the browser profile, the
+ * sessions and the sidecar state.
  */
 export function muHome(home: string = homedir()): string {
-	const current = join(home, ".mu");
-	const legacy = join(home, ".kyrn");
-	return existsSync(current) || !existsSync(legacy) ? current : legacy;
+	const candidates = [".spec.jev", ".mu", ".kyrn"].map((name) => join(home, name));
+	return candidates.find((candidate) => existsSync(candidate)) ?? candidates[0];
 }

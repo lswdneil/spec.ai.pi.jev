@@ -48,7 +48,7 @@ export const useDesktopTurnNotification = (): void => {
         // Both turn-completed and confirmation (permission / question) kinds
         // fire a native notification. The main process still gates on the
         // setting and skips when the window is focused.
-        void ipcBridge.notification.show.invoke({ title: 'mu', body, conversation_id: conversationId });
+        void ipcBridge.notification.show.invoke({ title: 'spec.jev', body, conversation_id: conversationId });
       },
     });
 

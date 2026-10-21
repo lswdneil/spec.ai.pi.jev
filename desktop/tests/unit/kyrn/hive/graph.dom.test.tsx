@@ -93,7 +93,7 @@ describe('the map of a run', () => {
     expect(screen.getByRole('list', { name: 'Legend' })).toHaveTextContent('dispute');
   });
 
-  it('puts mu in the middle of a delegate run, with a line from each sub-agent that reported back', () => {
+  it('puts spec.jev in the middle of a delegate run, with a line from each sub-agent that reported back', () => {
     render(
       view(
         <HiveRows
@@ -112,7 +112,7 @@ describe('the map of a run', () => {
       )
     );
     const map = screen.getByTestId('hive-map');
-    expect(within(map).getByText('mu')).toBeInTheDocument();
+    expect(within(map).getByText('spec.jev')).toBeInTheDocument();
     const reports = screen.getAllByTestId('hive-report');
     expect(reports.map((line) => [line.getAttribute('data-from'), line.getAttribute('data-to')])).toEqual([
       ['reviewer', 'mu'],
@@ -196,7 +196,7 @@ describe('the map of a run', () => {
 describe('a run whose turn is over', () => {
   const closed = (at: number): Activity => ({ id: `closed-${at}`, at, kind: 'kyrn_rpc_closed', payload: {} });
 
-  it('reads a bee that mu’s death caught at work as stopped, and says what did not get done', () => {
+  it('reads a bee that spec.jev’s death caught at work as stopped, and says what did not get done', () => {
     render(view(<HiveRows events={[...hiveEvents, closed(20000)]} />));
     const row = run('run-1').querySelector('[data-bee="prefix-mutations"]') as HTMLElement;
     expect(within(row).getAllByText('Stopped')).not.toHaveLength(0);
@@ -221,7 +221,7 @@ describe('a run whose turn is over', () => {
 });
 
 describe('endedRuns', () => {
-  it('ends a run once a turn settles or mu closes after its last word, and only then', () => {
+  it('ends a run once a turn settles or spec.jev closes after its last word, and only then', () => {
     const at = (event: Activity, time: number): Activity => ({ ...event, at: time });
     const settled: Activity = { id: 'settled', at: 0, kind: 'agent_settled', payload: {} };
     const word = activity('snapshot-2', 'swarm.snapshot', hiveSnapshot, 'run-2');

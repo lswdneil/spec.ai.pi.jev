@@ -39,7 +39,7 @@ if ! new_enough "$(node --version 2>/dev/null || true)"; then
   done
 fi
 if ! new_enough "$(node --version 2>/dev/null || true)"; then
-  echo "mu needs Node >= 22.19 (found $(node --version 2>/dev/null || echo none)). Try: nvm install 24" >&2
+  echo "spec.jev needs Node >= 22.19 (found $(node --version 2>/dev/null || echo none)). Try: nvm install 24" >&2
   exit 1
 fi
 

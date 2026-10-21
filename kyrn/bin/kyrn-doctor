@@ -21,10 +21,10 @@ import {
 } from "./mu.mjs";
 
 const [root, link] = process.argv.slice(2);
-/** `MU_<name>`, or the `KYRN_<name>` spelling from before the rename. */
-const env = (name) => process.env[`MU_${name}`] || process.env[`KYRN_${name}`];
-// Until ~/.kyrn is moved to ~/.mu by hand, the old home stays in use.
-const home = existsSync(join(homedir(), ".mu")) || !existsSync(join(homedir(), ".kyrn")) ? ".mu" : ".kyrn";
+/** `SPECJEV_<name>`, or the `MU_<name>` / `KYRN_<name>` spelling from before a rename. */
+const env = (name) => process.env[`SPECJEV_${name}`] || process.env[`MU_${name}`] || process.env[`KYRN_${name}`];
+// The first home this machine already has stays in use: ~/.spec.jev, then ~/.mu, then ~/.kyrn.
+const home = [".spec.jev", ".mu", ".kyrn"].find((name) => existsSync(join(homedir(), name))) ?? ".spec.jev";
 const agentDir = env("AGENT_DIR") ?? env("CODING_AGENT_DIR") ?? join(homedir(), home, "agent");
 // A checkout of the repository, or the npm package mu-agent.
 const layout = layoutOf({ root, platform: process.platform, exists: existsSync });

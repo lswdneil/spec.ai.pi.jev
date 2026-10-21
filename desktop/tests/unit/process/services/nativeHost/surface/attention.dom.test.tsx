@@ -123,7 +123,7 @@ describe('a conversation that wants its person', () => {
     act(() => host.attend({ id: 'c2', kind: 'done', title: 'Beta' }));
     expect(shown).toHaveBeenCalledTimes(1);
     expect(shown).toHaveBeenCalledWith({
-      title: 'mu',
+      title: 'spec.jev',
       body: '"Beta" finished replying',
       conversation_id: 'c2',
       native: true,

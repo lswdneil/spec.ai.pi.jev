@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Builds the npm package mu-agent: `npm i -g mu-agent`, then `mu`.
+// Builds the npm package spec.jev: `npm i -g spec.jev`, then `spec.jev` (the `mu` command stays as an alias).
 //
-//   node kyrn/npm/build.mjs          stage the package in .artifacts/npm/mu-agent/
+//   node kyrn/npm/build.mjs          stage the package in .artifacts/npm/spec.jev/
 //   node kyrn/npm/build.mjs --pack   and write the tarball beside it (npm pack)
 //
 // Needs `npm run build` first: the package carries pi's own Node bundle (packages/coding-agent/dist/bundle).
@@ -10,9 +10,9 @@
 // The package is laid out like the repository, so the launcher finds everything two folders above
 // kyrn/bin/mu.mjs either way (it tells the two apart with layoutOf):
 //
-//   kyrn/bin/          mu.mjs (npm's `mu`), kyrn-doctor, kyrn-ledger, kyrn-judge-local
-//   kyrn/local-judge/  the Laya sidecar's server (macOS). `mu judge setup` installs its venv and weights
-//                      into ~/.mu/local-judge, and only when asked to
+//   kyrn/bin/          mu.mjs (npm's `spec.jev` and `mu`), kyrn-doctor, kyrn-ledger, kyrn-judge-local
+//   kyrn/local-judge/  the Laya sidecar's server (macOS). `spec.jev judge setup` installs its venv and weights
+//                      into ~/.spec.jev/local-judge, and only when asked to
 //   dist/              pi's Node bundle (dist/bundle/cli.js), with its themes, assets, export templates and
 //                      the native clipboard helpers of pi-tui
 //   judge/             the judgment layer built to JavaScript, with its prompts, skills and agents, and the
@@ -366,7 +366,7 @@ function gitCommit() {
 }
 
 export async function main(argv = process.argv.slice(2)) {
-	const out = join(repo, ".artifacts", "npm", "mu-agent");
+	const out = join(repo, ".artifacts", "npm", "spec.jev");
 	rmSync(out, { recursive: true, force: true });
 	mkdirSync(out, { recursive: true });
 	// While working on the judgment layer's bundle: that part alone. It is built against pi's bundle, which has to be

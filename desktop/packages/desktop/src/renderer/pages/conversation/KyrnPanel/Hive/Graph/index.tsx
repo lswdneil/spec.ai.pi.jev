@@ -19,7 +19,7 @@ const TEST_IDS: Record<HiveLinkKind, string> = {
 };
 
 /**
- * The map of one run: its bees on a ring (around mu, for a delegate call's sub-agents; a hive's goal is the line
+ * The map of one run: its bees on a ring (around spec.jev, for a delegate call's sub-agents; a hive's goal is the line
  * above the map), a line for each pair the judge handed notes between, thicker the more went that way, an arrow at
  * the receiving end. A correction (a later note that replaced an earlier one) carries a bar across its middle; a
  * dispute is dashed. A delivery that arrives while the run is going sends one dash of the accent along its line. A
@@ -108,7 +108,7 @@ export default function HiveGraph({
                   data-testid={TEST_IDS[link.kind]}
                   data-kind={link.kind}
                   data-from={link.from}
-                  data-to={link.to === HOME ? 'mu' : link.to}
+                  data-to={link.to === HOME ? 'spec.jev' : link.to}
                   data-count={link.count}
                   data-muted={muted}
                   d={d}
@@ -178,7 +178,7 @@ export default function HiveGraph({
 
 /** What a pointer on a line reads: who to whom, how many, and the words that went along it. */
 function lineWords(t: ReturnType<typeof useTranslation>['t'], link: HiveLink): string {
-  const names = { from: link.from, to: link.to === HOME ? 'mu' : link.to, count: link.count };
+  const names = { from: link.from, to: link.to === HOME ? 'spec.jev' : link.to, count: link.count };
   const head =
     link.kind === 'delivery'
       ? t(`${KEY}.lineDelivery`, names)

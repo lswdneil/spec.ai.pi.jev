@@ -80,7 +80,7 @@ export function useNativeAttention(): void {
         // Cheap gate here; the main process still re-checks the setting and whether the window is in front.
         if (!isElectronDesktop() || configService.get('system.notificationEnabled') === false) return;
         void ipcBridge.notification.show.invoke({
-          title: 'mu',
+          title: 'spec.jev',
           body: bodyOf(t, event),
           conversation_id: event.id,
           native: true,

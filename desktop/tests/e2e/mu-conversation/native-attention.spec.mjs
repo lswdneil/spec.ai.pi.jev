@@ -85,7 +85,7 @@ test('a run shows as a spinner in its row, and once it ends while another conver
 
   await expect.poll(notes, { timeout: 15_000 }).toHaveLength(1);
   const [note] = await notes();
-  expect(note.title).toBe('mu');
+  expect(note.title).toBe('spec.jev');
   expect(note.body).toContain(RUN);
   // The profile's language says a reply has finished.
   expect(note.body).toMatch(/已完成本轮回复/);
@@ -119,13 +119,13 @@ test('a run the person stops tells nobody', async () => {
 
 test('a question pi asks tells the system at once', async () => {
   const before = (await notes()).length;
-  // 最小权限: mu asks before it writes or runs anything that changes something.
+  // 最小权限: spec.jev asks before it writes or runs anything that changes something.
   await newConversation({ permissions: '最小权限' });
   await send('E2E:WRITE notes/asked.txt');
   await expect(dialogs()).toHaveCount(1, { timeout: 60_000 });
   await expect.poll(async () => (await notes()).length, { timeout: 10_000 }).toBe(before + 1);
   const last = (await notes()).at(-1);
-  expect(last.title).toBe('mu');
+  expect(last.title).toBe('spec.jev');
   expect(last.body).toMatch(/等待你确认/);
   await dialogs().getByTestId('native-dialog-option').first().click();
   await replyWith('WRITE-DONE');

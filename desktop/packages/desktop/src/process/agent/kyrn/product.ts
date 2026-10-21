@@ -24,12 +24,12 @@ type AgentRow = {
 };
 export type BackendRequest = <T>(method: string, path: string, body?: unknown) => Promise<T>;
 
-export const AGENT_NAME = 'mu';
+export const AGENT_NAME = 'spec.jev';
 /** What the registration was called before the rename. Found under these names too, and then renamed. */
-const FORMER_NAMES = ['KYRN'];
-export const AGENT_DESCRIPTION = 'mu harness · local Codex login · Jev judgment';
+const FORMER_NAMES = ['mu', 'KYRN'];
+export const AGENT_DESCRIPTION = 'spec.jev harness · local Codex login · Jev judgment';
 /**
- * The descriptions mu has written, compared case-insensitively: a record written before the judge's name took
+ * The descriptions spec.jev has written, compared case-insensitively: a record written before the judge's name took
  * its present capitalization is still ours to update.
  */
 const OWN_DESCRIPTIONS = new Set(
@@ -37,22 +37,22 @@ const OWN_DESCRIPTIONS = new Set(
 );
 /**
  * The permission mode of a run nobody watches: a scheduled task, a team's agents. AionCore gives them its "full auto",
- * which it reads from the registration's `yolo_id`; nobody could answer a question there, so mu runs with full access.
+ * which it reads from the registration's `yolo_id`; nobody could answer a question there, so spec.jev runs with full access.
  */
 export const FULL_AUTO_MODE = 'full';
-/** AionCore's words for full auto. mu has no such mode: a registration saying one of them is set to mu's. */
+/** AionCore's words for full auto. spec.jev has no such mode: a registration saying one of them is set to spec.jev's. */
 const LEGACY_FULL_AUTO = new Set(['yolo', 'yoloNoSandbox']);
 const needsFullAuto = (row: AgentRow): boolean => !row.yolo_id?.trim() || LEGACY_FULL_AUTO.has(row.yolo_id.trim());
 
 /**
- * mu's command as the backend may hold it: `command`, the one this start registers, and `sameFile`, whether a command
+ * spec.jev's command as the backend may hold it: `command`, the one this start registers, and `sameFile`, whether a command
  * a registration holds runs the same launcher by another spelling. On Windows a launcher has several (any case, its 8.3
  * short path, the forwarder written for it: windows/launcherCommand.ts); a plain string is only itself.
  */
 export type OwnCommand = {
   command: string;
   sameFile: (registered: string) => boolean;
-  /** A missing packaged launcher left by an uninstalled copy of mu. Never a custom command or a live install. */
+  /** A missing packaged launcher left by an uninstalled copy of spec.jev. Never a custom command or a live install. */
   canRestore?: (registered: string) => boolean;
 };
 
@@ -84,7 +84,7 @@ export function findRegistration(agents: AgentRow[], own: string | OwnCommand): 
     canRestore?.(stale.command)
   )
     return stale;
-  if (namesakes.length > 0) throw new KyrnError('otherRegistration', 'A different mu command is already registered');
+  if (namesakes.length > 0) throw new KyrnError('otherRegistration', 'A different spec.jev command is already registered');
   return undefined;
 }
 
@@ -104,8 +104,8 @@ async function wholeRecord(request: BackendRequest, row: AgentRow): Promise<Agen
 
 /**
  * The backend's update replaces the whole record: anything left out is cleared. So the record goes back as
- * it is, with the name ours, the description too when it is still one of ours, and full auto set to mu's full
- * access unless someone chose one of mu's modes for it.
+ * it is, with the name ours, the description too when it is still one of ours, and full auto set to spec.jev's full
+ * access unless someone chose one of spec.jev's modes for it.
  */
 export function updated(row: AgentRow, command: string): Record<string, unknown> {
   const description =
@@ -129,13 +129,13 @@ export function updated(row: AgentRow, command: string): Record<string, unknown>
 async function update(request: BackendRequest, before: AgentRow, command: string): Promise<AgentRow> {
   const record = await wholeRecord(request, before);
   // Updating a partial record would clear its variables. The caller may tolerate a label-only failure.
-  if (!record) throw new KyrnError('runtimeOffline', 'The backend did not return the complete mu registration');
+  if (!record) throw new KyrnError('runtimeOffline', 'The backend did not return the complete spec.jev registration');
   const path = `/api/agents/custom/${encodeURIComponent(before.id)}`;
   const saved = await request<AgentRow>('PUT', path, updated(record, command));
   return { ...before, ...saved, id: before.id };
 }
 
-/** Make mu the only enabled runtime, in the backend catalog as well as the picker. */
+/** Make spec.jev the only enabled runtime, in the backend catalog as well as the picker. */
 export async function initializeKyrn(request: BackendRequest, own: string | OwnCommand): Promise<KyrnCatalog> {
   const { command, sameFile } = ownCommand(own);
   const agents = await request<AgentRow[]>('GET', '/api/agents/management');
@@ -177,13 +177,13 @@ export async function initializeKyrn(request: BackendRequest, own: string | OwnC
   );
   const checked = await request<AgentRow>('POST', `/api/agents/${encodeURIComponent(agent.id)}/health-check`, {});
   if (checked.status !== 'online')
-    throw new KyrnError('runtimeOffline', 'mu runtime is not online. Check the local launcher and login.');
+    throw new KyrnError('runtimeOffline', 'spec.jev runtime is not online. Check the local launcher and login.');
   const ready = await request<Assistant[]>('GET', '/api/assistants');
   return { agentId: agent.id, assistants: ready.filter((row) => row.agent_id === agent.id && row.enabled) };
 }
 
 /**
- * Has the backend check mu again. The check starts mu and keeps what it offers (its models, modes and commands) in
+ * Has the backend check spec.jev again. The check starts spec.jev and keeps what it offers (its models, modes and commands) in
  * the registration's record, where the model pickers and the / menu read it. The start checks once, so a model set up
  * since then was missing there until the app started again. Without a registration there is nothing to check.
  */

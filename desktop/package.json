@@ -1,11 +1,11 @@
 {
-  "name": "mu-desktop",
-  "version": "0.1.9",
-  "description": "mu, the coding agent with Jev judgment, as a desktop app.",
+  "name": "spec.jev-desktop",
+  "version": "0.1.0",
+  "description": "spec.jev, the coding agent with Jev judgment, as a desktop app.",
   "keywords": [],
   "license": "MIT AND Apache-2.0",
   "author": {
-    "name": "mu"
+    "name": "spec.jev"
   },
   "workspaces": [
     "packages/*"
@@ -251,9 +251,9 @@
   "electronRebuild": {
     "electronVersion": "^37.3.1"
   },
-  "muAgentVersion": "0.1.10",
+  "muAgentVersion": "0.1.0",
   "patchedDependencies": {
     "7zip-bin@5.2.0": "patches/7zip-bin@5.2.0.patch"
   },
-  "productName": "mu"
+  "productName": "spec.jev"
 }

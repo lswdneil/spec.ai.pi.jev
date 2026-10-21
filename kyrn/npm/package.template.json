@@ -1,16 +1,26 @@
 {
-	"name": "mu-agent",
-	"version": "0.1.10",
-	"description": "mu: a coding agent that hands its routine decisions to a small, fast judge model, so the main model can keep its attention on the work. Built on pi.",
+	"name": "spec.jev",
+	"version": "0.1.0",
+	"description": "spec.jev: a coding agent that hands its routine decisions to a small, fast judge model, so the main model can keep its attention on the work. Built on pi.",
 	"type": "module",
 	"bin": {
+		"spec.jev": "kyrn/bin/mu.mjs",
 		"mu": "kyrn/bin/mu.mjs"
 	},
 	"piConfig": {
-		"name": "mu",
-		"configDir": ".mu"
+		"name": "spec.jev",
+		"configDir": ".spec.jev"
 	},
-	"keywords": ["coding-agent", "ai", "llm", "cli", "terminal", "agent", "judge", "pi"],
+	"keywords": [
+		"coding-agent",
+		"ai",
+		"llm",
+		"cli",
+		"terminal",
+		"agent",
+		"judge",
+		"pi"
+	],
 	"homepage": "https://github.com/qybaihe/mu",
 	"repository": {
 		"type": "git",

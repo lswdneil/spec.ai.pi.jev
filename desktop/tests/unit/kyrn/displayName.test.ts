@@ -3,33 +3,33 @@ import { describe, expect, it } from 'vitest';
 import { MU_NAME_POST_PROCESSOR, muNamePostProcessor, showAsMu, withTextsAsMu } from '@/common/kyrn/displayName';
 
 describe('showAsMu', () => {
-  it('shows the upstream product name as mu, in either spelling and next to CJK text', () => {
-    expect(showAsMu('关于 AionUi')).toBe('关于 mu');
+  it('shows the upstream product name as spec.jev, in either spelling and next to CJK text', () => {
+    expect(showAsMu('关于 AionUi')).toBe('关于 spec.jev');
     expect(showAsMu('重启AionUI，或把这个 MCP server 改成绝对命令路径。')).toBe(
-      '重启mu，或把这个 MCP server 改成绝对命令路径。'
+      '重启spec.jev，或把这个 MCP server 改成绝对命令路径。'
     );
-    expect(showAsMu('AionUi - Login')).toBe('mu - Login');
-    expect(showAsMu('Restart AionUi. Then retry.')).toBe('Restart mu. Then retry.');
-    expect(showAsMu('AionUi AionUi')).toBe('mu mu');
-    expect(showAsMu('Chat with (AionUi) assistant')).toBe('Chat with (mu) assistant');
+    expect(showAsMu('AionUi - Login')).toBe('spec.jev - Login');
+    expect(showAsMu('Restart AionUi. Then retry.')).toBe('Restart spec.jev. Then retry.');
+    expect(showAsMu('AionUi AionUi')).toBe('spec.jev spec.jev');
+    expect(showAsMu('Chat with (AionUi) assistant')).toBe('Chat with (spec.jev) assistant');
   });
 
-  it('shows the backend, the built-in agent and its CLI as mu too', () => {
-    expect(showAsMu('AionCore 无法启动')).toBe('mu 无法启动');
+  it('shows the backend, the built-in agent and its CLI as spec.jev too', () => {
+    expect(showAsMu('AionCore 无法启动')).toBe('spec.jev 无法启动');
     expect(showAsMu('AionCore usually provisions its managed Node runtime automatically.')).toBe(
-      'mu usually provisions its managed Node runtime automatically.'
+      'spec.jev usually provisions its managed Node runtime automatically.'
     );
-    expect(showAsMu('Aionrs agent error: timeout')).toBe('mu agent error: timeout');
-    expect(showAsMu('Please select a model for Aion CLI')).toBe('Please select a model for mu');
-    expect(showAsMu('Send message to AionCLI...')).toBe('Send message to mu...');
-    expect(showAsMu("AionCore's log")).toBe("mu's log");
+    expect(showAsMu('Aionrs agent error: timeout')).toBe('spec.jev agent error: timeout');
+    expect(showAsMu('Please select a model for Aion CLI')).toBe('Please select a model for spec.jev');
+    expect(showAsMu('Send message to AionCLI...')).toBe('Send message to spec.jev...');
+    expect(showAsMu("AionCore's log")).toBe("spec.jev's log");
   });
 
-  it('shows the name as mu in German compound nouns, which join it to the next word with a hyphen', () => {
-    expect(showAsMu('Die AionUi-Installation ist unvollständig.')).toBe('Die mu-Installation ist unvollständig.');
-    expect(showAsMu('Liebe AionUi-Nutzerin, lieber AionUi-Nutzer,')).toBe('Liebe mu-Nutzerin, lieber mu-Nutzer,');
-    expect(showAsMu('die AionUi-Oberfläche')).toBe('die mu-Oberfläche');
-    expect(showAsMu('das lokale AionCore-Backend')).toBe('das lokale mu-Backend');
+  it('shows the name as spec.jev in German compound nouns, which join it to the next word with a hyphen', () => {
+    expect(showAsMu('Die AionUi-Installation ist unvollständig.')).toBe('Die spec.jev-Installation ist unvollständig.');
+    expect(showAsMu('Liebe AionUi-Nutzerin, lieber AionUi-Nutzer,')).toBe('Liebe spec.jev-Nutzerin, lieber spec.jev-Nutzer,');
+    expect(showAsMu('die AionUi-Oberfläche')).toBe('die spec.jev-Oberfläche');
+    expect(showAsMu('das lokale AionCore-Backend')).toBe('das lokale spec.jev-Backend');
   });
 
   it('leaves links, paths, file names, identifiers and the dev data folder alone', () => {
@@ -55,9 +55,9 @@ describe('showAsMu', () => {
     }
   });
 
-  it('keeps a real data path while the sentence around it becomes mu', () => {
+  it('keeps a real data path while the sentence around it becomes spec.jev', () => {
     expect(showAsMu('AionUi logs are in ~/Library/Application Support/AionUi-Dev/logs')).toBe(
-      'mu logs are in ~/Library/Application Support/AionUi-Dev/logs'
+      'spec.jev logs are in ~/Library/Application Support/AionUi-Dev/logs'
     );
   });
 
@@ -68,7 +68,7 @@ describe('showAsMu', () => {
 });
 
 describe('withTextsAsMu', () => {
-  it('shows the named texts of a backend record as mu and leaves every other field as it came', () => {
+  it('shows the named texts of a backend record as spec.jev and leaves every other field as it came', () => {
     const record = {
       id: 'aionui-assistant',
       name: 'AionUi Butler',
@@ -81,11 +81,11 @@ describe('withTextsAsMu', () => {
     };
     expect(withTextsAsMu(record, ['name', 'name_i18n', 'description', 'prompts', 'prompts_i18n'] as const)).toEqual({
       id: 'aionui-assistant',
-      name: 'mu Butler',
-      name_i18n: { 'en-US': 'mu Butler', 'zh-CN': 'mu 管家' },
-      description: 'Helps you manage mu itself',
-      prompts: ['Open mu from my phone', 'Check mu logs'],
-      prompts_i18n: { 'en-US': ['Open mu from my phone'] },
+      name: 'spec.jev Butler',
+      name_i18n: { 'en-US': 'spec.jev Butler', 'zh-CN': 'spec.jev 管家' },
+      description: 'Helps you manage spec.jev itself',
+      prompts: ['Open spec.jev from my phone', 'Check spec.jev logs'],
+      prompts_i18n: { 'en-US': ['Open spec.jev from my phone'] },
       agent_type: 'aionrs',
       context: 'You are AionUi’s built-in butler.',
     });
@@ -94,8 +94,8 @@ describe('withTextsAsMu', () => {
   });
 
   it('leaves missing and non-text fields alone', () => {
-    const record: { name: string; description?: string; enabled: boolean } = { name: 'mu', enabled: true };
-    expect(withTextsAsMu(record, ['name', 'description', 'enabled'])).toEqual({ name: 'mu', enabled: true });
+    const record: { name: string; description?: string; enabled: boolean } = { name: 'spec.jev', enabled: true };
+    expect(withTextsAsMu(record, ['name', 'description', 'enabled'])).toEqual({ name: 'spec.jev', enabled: true });
   });
 });
 
@@ -116,11 +116,11 @@ describe('muNamePostProcessor', () => {
       interpolation: { escapeValue: false },
       postProcess: [MU_NAME_POST_PROCESSOR],
     });
-    expect(i18n.t('tray.about')).toBe('关于 mu');
-    expect(i18n.t('update', { version: 'v2' })).toBe('请将 mu 更新到 v2，mu 无需处理。');
-    expect(i18n.t('agent', { name: 'Aion CLI' })).toBe('mu 正在运行');
+    expect(i18n.t('tray.about')).toBe('关于 spec.jev');
+    expect(i18n.t('update', { version: 'v2' })).toBe('请将 spec.jev 更新到 v2，spec.jev 无需处理。');
+    expect(i18n.t('agent', { name: 'Aion CLI' })).toBe('spec.jev 正在运行');
     expect(i18n.t('missing.key', { defaultValue: 'Chat with AionUi assistant via Telegram' })).toBe(
-      'Chat with mu assistant via Telegram'
+      'Chat with spec.jev assistant via Telegram'
     );
   });
 });

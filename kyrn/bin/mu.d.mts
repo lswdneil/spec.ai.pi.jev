@@ -22,11 +22,12 @@ export function envFileAdditions(input: {
 
 export type ViewKind = "symlink" | "junction" | "copy";
 export function appViewPlan(platform: Platform): { name: string; kind: ViewKind }[];
-export function appPackageJson(upstreamText: string): string;
+export function appPackageJson(upstreamText: string, configDir?: string): string;
 export function ensureAppView(input: {
 	platform: Platform;
 	app: string;
 	upstream: string;
+	configDir?: string;
 	fs?: Record<string, (...args: never[]) => unknown>;
 }): string[];
 

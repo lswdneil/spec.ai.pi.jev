@@ -135,9 +135,12 @@ describe("the launcher's decisions, per platform", () => {
 	it("keeps the old home until it has been moved, with Windows paths on Windows", () => {
 		const at = (folders: string[]) =>
 			muHome({ home: WIN_HOME, platform: "win32", isDir: (path) => folders.includes(path) });
-		expect(at([])).toBe("C:\\Users\\bai\\.mu");
+		expect(at([])).toBe("C:\\Users\\bai\\.spec.jev");
 		expect(at(["C:\\Users\\bai\\.kyrn"])).toBe("C:\\Users\\bai\\.kyrn");
 		expect(at(["C:\\Users\\bai\\.kyrn", "C:\\Users\\bai\\.mu"])).toBe("C:\\Users\\bai\\.mu");
+		expect(at(["C:\\Users\\bai\\.kyrn", "C:\\Users\\bai\\.mu", "C:\\Users\\bai\\.spec.jev"])).toBe(
+			"C:\\Users\\bai\\.spec.jev",
+		);
 		expect(muHome({ home: "/home/bai", platform: "linux", isDir: (path) => path === "/home/bai/.kyrn" })).toBe(
 			"/home/bai/.kyrn",
 		);
@@ -170,10 +173,10 @@ describe("the launcher's decisions, per platform", () => {
 		}
 	});
 
-	it("names the folder `mu link` uses on each platform", () => {
+	it("names the folder `spec.jev link` uses on each platform", () => {
 		expect(usage("win32")).toContain("%USERPROFILE%\\.local\\bin");
 		expect(usage("darwin")).toContain("(~/.local/bin)");
-		expect(usage("linux")).toContain("mu link | unlink");
+		expect(usage("linux")).toContain("spec.jev link | unlink");
 	});
 });
 
@@ -220,7 +223,7 @@ describe("the app view", () => {
 		const manifest = JSON.parse(readFileSync(join(app, "package.json"), "utf8"));
 		expect(manifest).toMatchObject({
 			name: "@earendil-works/pi-coding-agent",
-			piConfig: { name: "mu", configDir: ".mu" },
+			piConfig: { name: "spec.jev", configDir: ".spec.jev" },
 		});
 		expect(ensureAppView({ platform, app, upstream })).toEqual([]);
 
@@ -296,8 +299,8 @@ describe("the app view", () => {
 			`write ${app}\\package.json`,
 		]);
 		expect(JSON.parse(nodes.get(`${app}\\package.json`)?.text as string).piConfig).toEqual({
-			name: "mu",
-			configDir: ".mu",
+			name: "spec.jev",
+			configDir: ".spec.jev",
 		});
 		// Junctions read back with a trailing backslash and in any case: that is still the same place.
 		nodes.set(`${app}\\src`, { kind: "link", target: `${upstream.toUpperCase()}\\SRC\\`, mtimeMs: 300 });
@@ -461,14 +464,14 @@ describe("starting pi", () => {
 	});
 
 	it("prints the launcher's own help before the agent's", () => {
-		expect(launch({ argv: ["--help"] }).preface).toContain("pi's help (mu passes all of this through):");
-		expect(launch({ argv: ["-h"] }).preface).toContain("mu link | unlink");
+		expect(launch({ argv: ["--help"] }).preface).toContain("pi's help (spec.jev passes all of this through):");
+		expect(launch({ argv: ["-h"] }).preface).toContain("spec.jev link | unlink");
 		expect(launch({ argv: ["-p", "--help"] }).preface).toBeUndefined();
 	});
 });
 
 describe("pi inside another program (the desktop app's runtime host)", () => {
-	const WIN_PACKAGE = "C:\\Program Files\\mu\\resources\\harness\\mu-agent";
+	const WIN_PACKAGE = "C:\\Program Files\\spec.jev\\resources\\harness\\spec.jev";
 	const winPackage = {
 		[`${WIN_PACKAGE}\\dist\\bundle\\cli.js`]: "",
 		[`${WIN_PACKAGE}\\judge\\mu\\index.js`]: "",
@@ -615,7 +618,7 @@ describe("preparing a launch, for the command line and for a program that must n
 	});
 });
 
-describe("the npm package (mu-agent)", () => {
+describe("the npm package (spec.jev)", () => {
 	const WIN_PACKAGE = "C:\\Users\\bai\\AppData\\Roaming\\npm\\node_modules\\mu-agent";
 	const winPackage = {
 		[`${WIN_PACKAGE}\\dist\\bundle\\cli.js`]: "",
@@ -664,13 +667,13 @@ describe("the npm package (mu-agent)", () => {
 			PI_PACKAGE_DIR: WIN_PACKAGE,
 			MU_CODING_AGENT_DIR: "C:\\Users\\bai\\.mu\\agent",
 			PI_SKIP_VERSION_CHECK: "1",
-			// pi's install report goes to pi.dev; mu-agent is not a pi install.
+			// pi's install report goes to pi.dev; spec.jev is not a pi install.
 			PI_TELEMETRY: "0",
 		});
 		expect(plan.appDir).toBe(WIN_PACKAGE);
 	});
 
-	it("reads the Jev key from ~/.mu/.env, not from a .env beside the package, and keeps a telemetry choice", () => {
+	it("reads the Jev key from ~/.spec.jev/.env, not from a .env beside the package, and keeps a telemetry choice", () => {
 		const plan = launch({
 			root: POSIX_PACKAGE,
 			env: { PI_TELEMETRY: "1" },
@@ -700,20 +703,20 @@ describe("the npm package (mu-agent)", () => {
 			execPath: "node",
 			fs: disk({ [`${POSIX_PACKAGE}/dist/bundle/cli.js`]: "" }),
 		});
-		expect(plan.error).toContain("npm i -g mu-agent");
+		expect(plan.error).toContain("npm i -g spec.jev");
 		expect(packageEntries({ root: POSIX_PACKAGE, platform: "linux" }).extension).toBe(
 			`${POSIX_PACKAGE}/judge/mu/index.js`,
 		);
 	});
 
-	it("signs in with `mu auth` from the package's built sign-in, in mu's agent folder, and reads no key for it", () => {
+	it("signs in with `spec.jev auth` from the package's built sign-in, in spec.jev's agent folder, and reads no key for it", () => {
 		const plan = planAuth({
 			platform: "win32",
 			env: { Path: "C:\\Windows", TYPESAFE_API_KEY: undefined },
 			argv: ["login", "openai-codex"],
 			root: WIN_PACKAGE,
 			home: WIN_HOME,
-			execPath: "C:\\Program Files\\mu\\mu.exe",
+			execPath: "C:\\Program Files\\spec.jev\\mu.exe",
 			fs: disk({
 				...winPackage,
 				[`${WIN_PACKAGE}\\judge\\dist\\auth.js`]: "",
@@ -721,7 +724,7 @@ describe("the npm package (mu-agent)", () => {
 			}),
 		});
 		if (plan.error !== undefined) throw new Error(plan.error);
-		expect(plan.command).toBe("C:\\Program Files\\mu\\mu.exe");
+		expect(plan.command).toBe("C:\\Program Files\\spec.jev\\mu.exe");
 		expect(plan.args).toEqual([`${WIN_PACKAGE}\\judge\\dist\\auth.js`, "login", "openai-codex"]);
 		expect(plan.strategy).toBe("spawn");
 		expect(plan.env).toEqual({ Path: "C:\\Windows", MU_AGENT_DIR: "C:\\Users\\bai\\.mu\\agent" });
@@ -743,8 +746,8 @@ describe("the npm package (mu-agent)", () => {
 	});
 });
 
-describe("mu auth in a checkout", () => {
-	it("runs the sign-in's sources the way pi runs, in the agent folder mu uses everywhere else", () => {
+describe("spec.jev auth in a checkout", () => {
+	it("runs the sign-in's sources the way pi runs, in the agent folder spec.jev uses everywhere else", () => {
 		const plan = planAuth({
 			platform: "linux",
 			env: { MU_AGENT_DIR: "/srv/mu-agent" },
@@ -876,7 +879,7 @@ describe("the local judge away from macOS", () => {
 		expect(launch({ fs: disk(legacy) }).notes).toEqual([]);
 	});
 
-	it("explains itself instead of failing: `mu judge start` on Windows, Linux and WSL", () => {
+	it("explains itself instead of failing: `spec.jev judge start` on Windows, Linux and WSL", () => {
 		expect(planJudge({ platform: "darwin", env: {}, argv: [], bin: "/repo/kyrn/bin" })).toEqual({
 			kind: "script",
 			command: "/repo/kyrn/bin/kyrn-judge-local",
@@ -903,7 +906,7 @@ describe("the local judge away from macOS", () => {
 	});
 });
 
-describe("mu import", () => {
+describe("spec.jev import", () => {
 	const importArgs = { env: {}, argv: ["--list"], home: "/home/bai", execPath: "/usr/bin/node" };
 
 	it("runs the importer's TypeScript with Node itself in a checkout, the built one in the npm package", () => {
@@ -917,7 +920,7 @@ describe("mu import", () => {
 		expect(checkout.error === undefined && checkout.env.MU_CODING_AGENT_DIR).toBe("/home/bai/.mu/agent");
 
 		expect(planImport({ ...importArgs, platform: "linux", root: POSIX_ROOT, fs: disk({}) }).error).toContain(
-			"mu import is missing from this checkout",
+			"spec.jev import is missing from this checkout",
 		);
 
 		const pkg = "/usr/local/lib/node_modules/mu-agent";
@@ -927,9 +930,9 @@ describe("mu import", () => {
 		expect(
 			planImport({ ...importArgs, platform: "linux", root: pkg, fs: disk({ ...installed, [built]: "" }) }),
 		).toMatchObject({ command: "/usr/bin/node", args: [built, "--list"], agentDir: "/home/bai/.mu/agent" });
-		// A package built before mu import says to update, instead of passing `import` to pi as a message.
+		// A package built before spec.jev import says to update, instead of passing `import` to pi as a message.
 		expect(planImport({ ...importArgs, platform: "linux", root: pkg, fs: disk(installed) }).error).toContain(
-			"npm i -g mu-agent",
+			"npm i -g spec.jev",
 		);
 	});
 
@@ -958,7 +961,7 @@ describe("mu import", () => {
 			platform: "win32" as const,
 			root: WIN_ROOT,
 			home: WIN_HOME,
-			execPath: "C:\\Program Files\\mu\\mu.exe",
+			execPath: "C:\\Program Files\\spec.jev\\mu.exe",
 			stripsTypes: false,
 		};
 		expect(planImport({ ...electron, fs: disk({ ...winInstalled, [source]: "" }) }).error).toContain(
@@ -1012,7 +1015,7 @@ describe("mu import", () => {
 	});
 });
 
-describe("mu link on Windows", () => {
+describe("spec.jev link on Windows", () => {
 	const BIN = `${WIN_ROOT}\\kyrn\\bin`;
 	const LINKS = "C:\\Users\\bai\\.local\\bin";
 	const ours = shimContent({ linkDir: LINKS, bin: BIN });
@@ -1042,7 +1045,7 @@ describe("mu link on Windows", () => {
 		);
 		expect(ours.split("\r\n")).toEqual([
 			"@echo off",
-			"rem mu-link-shim: written by `mu link`, removed by `mu unlink`.",
+			"rem mu-link-shim: written by `spec.jev link`, removed by `spec.jev unlink`.",
 			'"%~dp0..\\..\\code\\KYRN\\kyrn\\bin\\mu.cmd" %*',
 			"",
 		]);
@@ -1061,19 +1064,19 @@ describe("mu link on Windows", () => {
 		expect(link({}, { PATH: `C:\\Windows;${LINKS.toUpperCase()}\\` })).toMatchObject({ action: "link", notes: [] });
 	});
 
-	it("leaves another program's mu alone: neither replaced nor shadowed without --force", () => {
+	it("leaves another program's spec.jev alone: neither replaced nor shadowed without --force", () => {
 		const replaced = link({ [`${LINKS}\\mu.cmd`]: "@echo off\r\nsomeone else's\r\n" }, { PATH: LINKS });
 		expect(replaced).toMatchObject({ action: "refuse" });
-		expect(JSON.stringify(replaced)).toContain("is not this mu");
+		expect(JSON.stringify(replaced)).toContain("is not this spec.jev");
 
 		const other = { "C:\\tools\\mu.exe": "MZ" };
 		const env = { PATH: `C:\\tools;${LINKS}`, PATHEXT: ".COM;.EXE;.BAT;.CMD" };
 		expect(link(other, env)).toMatchObject({
 			action: "refuse",
-			errors: ["Another mu is already on your PATH: C:\\tools\\mu.exe", expect.any(String)],
+			errors: ["Another spec.jev is already on your PATH: C:\\tools\\mu.exe", expect.any(String)],
 		});
 		expect(link(other, env, ["--force"]).action).toBe("link");
-		// Its own shim, and this repository's bin folder on PATH, are not "another mu".
+		// Its own shim, and this repository's bin folder on PATH, are not "another spec.jev".
 		expect(link({ [`${LINKS}\\mu.cmd`]: ours }, { PATH: LINKS }).action).toBe("link");
 		expect(link({ [`${BIN}\\mu.cmd`]: "the real one" }, { PATH: BIN }).action).toBe("link");
 	});
@@ -1132,7 +1135,7 @@ describe("mu link on Windows", () => {
 	});
 });
 
-describe("mu migrate without pgrep", () => {
+describe("spec.jev migrate without pgrep", () => {
 	const TASKLIST = [
 		'"System Idle Process","0","Services","0","8 K"',
 		'"aioncore.exe","7312","Console","1","48,120 K"',
@@ -1236,17 +1239,17 @@ describe("mu migrate without pgrep", () => {
 		);
 		expect(moved.code).toBe(0);
 		expect(moved.done).toEqual([
-			"rename C:\\Users\\bai\\.kyrn -> C:\\Users\\bai\\.mu",
-			"junction C:\\Users\\bai\\.kyrn -> C:\\Users\\bai\\.mu",
-			"rename C:\\Users\\bai\\.mu\\agent\\kyrn.json -> C:\\Users\\bai\\.mu\\agent\\mu.json",
+			"rename C:\\Users\\bai\\.kyrn -> C:\\Users\\bai\\.spec.jev",
+			"junction C:\\Users\\bai\\.kyrn -> C:\\Users\\bai\\.spec.jev",
+			"rename C:\\Users\\bai\\.spec.jev\\agent\\kyrn.json -> C:\\Users\\bai\\.spec.jev\\agent\\mu.json",
 		]);
 	});
 
 	it("moves nothing while something runs, nor when it cannot find out what runs", () => {
 		const busy = windowsHome((command) => (command === "tasklist" ? TASKLIST : CIM));
 		expect(busy).toMatchObject({ code: 1, done: [] });
-		expect(busy.said).toContain("mu sessions");
-		expect(busy.said).toContain("the mu browser (pid 9200)");
+		expect(busy.said).toContain("spec.jev sessions");
+		expect(busy.said).toContain("the spec.jev browser (pid 9200)");
 		expect(busy.said).toContain("desktop app's backend (pid 7312)");
 
 		const blind = windowsHome(() => undefined);
@@ -1267,7 +1270,7 @@ describe("the launcher, run for real on this machine", () => {
 		writeFileSync(join(dir, "node"), '#!/bin/sh\necho "v20.20.1"\n', { mode: 0o755 });
 		const refused = run(["help"], { HOME: dir, PATH: bare(dir) });
 		expect(refused.code).toBe(1);
-		expect(refused.err).toContain("mu needs Node >= 22.19 (found v20.20.1)");
+		expect(refused.err).toContain("spec.jev needs Node >= 22.19 (found v20.20.1)");
 
 		// An nvm under the home is where a newer one is looked for.
 		const nvm = join(dir, ".nvm/versions/node/v24.0.0/bin");
@@ -1286,7 +1289,7 @@ describe("the launcher, run for real on this machine", () => {
 		writeFileSync(join(dir, "node.cmd"), "@echo v20.20.1\r\n");
 		const refused = run(["help"], { HOME: dir, PATH: bare(dir) });
 		expect(refused.code).toBe(1);
-		expect(refused.err).toContain("mu needs Node.js 22.19 or newer, found 20.20.");
+		expect(refused.err).toContain("spec.jev needs Node.js 22.19 or newer, found 20.20.");
 	});
 
 	it("unlinks what it linked, and nothing else", () => {
@@ -1297,16 +1300,16 @@ describe("the launcher, run for real on this machine", () => {
 		expect(run(["link"], { HOME: dir, MU_LINK_DIR: links }).code).toBe(0);
 		if (!windows) expect(lstatSync(linked).isSymbolicLink()).toBe(true);
 		// Through the link, as a user would call it.
-		expect(runScript(linked, ["help"], { HOME: dir }).out).toContain("mu link | unlink");
+		expect(runScript(linked, ["help"], { HOME: dir }).out).toContain("spec.jev link | unlink");
 		expect(run(["unlink"], { HOME: dir, MU_LINK_DIR: links }).out).toContain("removed");
 		expect(existsSync(linked)).toBe(false);
 		writeFileSync(linked, "a file");
 		expect(run(["unlink"], { HOME: dir, MU_LINK_DIR: links }).out).toContain(
-			windows ? "is not a shim written by mu link; nothing removed" : "is not a link; nothing removed",
+			windows ? "is not a shim written by spec.jev link; nothing removed" : "is not a link; nothing removed",
 		);
 	});
 
-	it.runIf(windows)("reaches mu.cmd through the shim `mu link` writes, below a user name that is not ASCII", () => {
+	it.runIf(windows)("reaches mu.cmd through the shim `spec.jev link` writes, below a user name that is not ASCII", () => {
 		// cmd reads a batch file in the console's code page: the shim names mu.cmd relative to itself, through %~dp0,
 		// which cmd fills in itself.
 		const dir = join(temp(), "白鹤");
@@ -1316,7 +1319,7 @@ describe("the launcher, run for real on this machine", () => {
 		mkdirSync(links, { recursive: true });
 		writeFileSync(join(bin, "mu.cmd"), "@echo reached %*\r\n");
 		const shim = shimContent({ linkDir: links, bin });
-		expect(shim).toContain('"%~dp0..\\..\\code\\mu\\kyrn\\bin\\mu.cmd" %*');
+		expect(shim).toContain('"%~dp0..\\..\\code\\spec.jev\\kyrn\\bin\\mu.cmd" %*');
 		writeFileSync(join(links, "mu.cmd"), shim);
 
 		const reached = runScript(join(links, "mu.cmd"), ["help"], { HOME: dir });

@@ -62,37 +62,37 @@ type Session = {
   settled?: () => void;
   /** Set once the session has answered its first state: later mode changes are announced to the app. */
   opened?: boolean;
-  /** mu's session file, kept with the conversation's mode in the adapter's record. */
+  /** spec.jev's session file, kept with the conversation's mode in the adapter's record. */
   file?: string;
-  /** mu's permission modes, from its last `permissions.mode` event; unset while mu reports none. */
+  /** spec.jev's permission modes, from its last `permissions.mode` event; unset while spec.jev reports none. */
   permissions?: PermissionModes;
-  /** What mu said about the permission question it is about to ask. */
+  /** What spec.jev said about the permission question it is about to ask. */
   request?: PermissionRequest;
-  /** Mode switches from the app in flight: mu's own "switched" note is not shown as a reply then. */
+  /** Mode switches from the app in flight: spec.jev's own "switched" note is not shown as a reply then. */
   switching: number;
   /**
-   * mu's process has stopped (a crash, a kill). The conversation's next call starts a new one on the same session file
+   * spec.jev's process has stopped (a crash, a kill). The conversation's next call starts a new one on the same session file
    * (`live`); a turn that was running fails with `processExited`.
    */
   stopped?: boolean;
   /** The conversation was told that Git for Windows is missing: once is enough. */
   bashMissingSaid?: boolean;
-  /** mu runs without a model (pi found none it could use when it started), as its last state said. */
+  /** spec.jev runs without a model (pi found none it could use when it started), as its last state said. */
   noModel?: boolean;
   /** A look for a model this conversation can run on, while one is under way (`findModel`). */
   finding?: Promise<void>;
   /** What the conversation's notices have said: a warning, a checkpoint or a judge notice is said once. */
   said: Set<string>;
-  /** A warning of mu's, held until its next event, which may say the same in the app's words (`checkpoint.off`). */
+  /** A warning of spec.jev's, held until its next event, which may say the same in the app's words (`checkpoint.off`). */
   held?: { text: string; level: NoticeLevel; timer: NodeJS.Timeout };
-  /** Calls the person said no to: their rows say so, not the refusal mu hands the model. */
+  /** Calls the person said no to: their rows say so, not the refusal spec.jev hands the model. */
   denied: Set<string>;
-  /** Calls mu started and has not ended yet (`endOpenCalls`). */
+  /** Calls spec.jev started and has not ended yet (`endOpenCalls`). */
   open: Set<string>;
   /** The judge asked about the message being classified, for a row that ends without its answer. */
   judge?: string;
 };
-/** How a notice of mu's reads: an answer (`info`), or something that went wrong. */
+/** How a notice of spec.jev's reads: an answer (`info`), or something that went wrong. */
 type NoticeLevel = 'info' | 'warning' | 'error';
 type RpcFactory = (
   cwd: string,
@@ -110,23 +110,23 @@ type RpcFactory = (
  * (`renderer/utils/chat/muTurnErrors.ts`, which a test keeps in step with this list).
  */
 export const MU_TURN_ERRORS = {
-  processExited: 'mu process exited during the turn',
+  processExited: 'spec.jev process exited during the turn',
   modelFailed: 'Model request failed',
-  turnRunning: 'A mu turn is already running',
+  turnRunning: 'A spec.jev turn is already running',
   busyConfig: 'Wait for the current turn before changing configuration',
   unsupportedValue: 'Unsupported configuration value',
-  permissionsNotSwitched: 'mu did not switch permissions',
+  permissionsNotSwitched: 'spec.jev did not switch permissions',
   imageUnsupported: 'Unsupported image format or size',
-  contentUnsupported: 'This mu adapter accepts text, images and text resources',
+  contentUnsupported: 'This spec.jev adapter accepts text, images and text resources',
   wrongProject: 'Session belongs to a different project',
-  notPersisted: 'mu did not persist the session',
+  notPersisted: 'spec.jev did not persist the session',
   /** pi has no model to answer with, or none it has a key for. pi's own words (with `/login` help) follow as a detail. */
-  noModel: 'mu has no model to answer with',
+  noModel: 'spec.jev has no model to answer with',
 } as const;
 
 /** pi's words when it cannot run a prompt for want of a model: none at all, none chosen, or none with a key. */
 const NO_MODEL = /No API key found for|No models available|No model selected/;
-/** proper-lockfile's words for a store another mu process holds: pi did not start the prompt, which can go again. */
+/** proper-lockfile's words for a store another spec.jev process holds: pi did not start the prompt, which can go again. */
 const STORE_LOCKED = /Lock file is already being held|ELOCKED/;
 /** How long a conversation that started without a model looks for one, step by step: about six seconds in all. */
 const MODEL_WAITS_MS = [0, 500, 1000, 2000, 3000] as const;
@@ -164,7 +164,7 @@ function noModelError(said: string, cause?: unknown): Error | undefined {
 }
 
 /**
- * The model mu starts new sessions on: pi's `defaultProvider` and `defaultModel` in the agent folder's settings, or
+ * The model spec.jev starts new sessions on: pi's `defaultProvider` and `defaultModel` in the agent folder's settings, or
  * undefined when there is none or the file cannot be read.
  *
  * @param home the user's home directory; tests pass a temporary one
@@ -188,33 +188,33 @@ export function readDefaultModel(home?: string): { provider: string; id: string 
  * list). The English text is its title, for other clients.
  */
 export const MU_NOTICES = {
-  /** A question of mu's got no usable answer (the app failed to ask, or answered with none of the choices). */
-  answer_lost: "mu didn't receive your answer, so it continued as if you had declined.",
-  /** A command failed because mu found no bash on Windows: Git for Windows is missing (see `bashMissing`). */
+  /** A question of spec.jev's got no usable answer (the app failed to ask, or answered with none of the choices). */
+  answer_lost: "spec.jev didn't receive your answer, so it continued as if you had declined.",
+  /** A command failed because spec.jev found no bash on Windows: Git for Windows is missing (see `bashMissing`). */
   bash_missing:
-    'mu needs Git for Windows to run commands. Install it, then send your message again. Download it here: https://git-scm.com/download/win',
+    'spec.jev needs Git for Windows to run commands. Install it, then send your message again. Download it here: https://git-scm.com/download/win',
   /**
-   * The conversation goes without checkpoints (mu's `checkpoint.off`). The input carries mu's reason code and what it
-   * names (`code`, `params`); the title is mu's own line, already in the app's language, and this only its stand-in.
+   * The conversation goes without checkpoints (spec.jev's `checkpoint.off`). The input carries spec.jev's reason code and what it
+   * names (`code`, `params`); the title is spec.jev's own line, already in the app's language, and this only its stand-in.
    */
-  checkpoint_off: 'mu: checkpoints are off in this conversation.',
+  checkpoint_off: 'spec.jev: checkpoints are off in this conversation.',
   /**
-   * No Jev key is set, so the judge answers with the free Jev on OpenCode Zen (mu's `judge.notice`). The title is mu's
+   * No Jev key is set, so the judge answers with the free Jev on OpenCode Zen (spec.jev's `judge.notice`). The title is spec.jev's
    * own line, already in the app's language, and this only its stand-in.
    */
-  free_jev: 'mu: no Jev key is set, so the judge is the free Jev on OpenCode Zen for now.',
+  free_jev: 'spec.jev: no Jev key is set, so the judge is the free Jev on OpenCode Zen for now.',
   /**
-   * The free Jev stopped answering (mu's `judge.notice`); the input's `code` says why: `paid` (it asks for a key or
+   * The free Jev stopped answering (spec.jev's `judge.notice`); the input's `code` says why: `paid` (it asks for a key or
    * payment) or `gone` (no longer offered). Plain rules decide until a Jev key is set.
    */
-  free_jev_unavailable: 'mu: the free Jev stopped answering, so plain rules decide until a Jev key is set.',
+  free_jev_unavailable: 'spec.jev: the free Jev stopped answering, so plain rules decide until a Jev key is set.',
   /** The person stopped the reply: what came before this line is all of it. */
   stopped: 'You stopped this reply.',
 } as const;
 export type MuNoticeCode = keyof typeof MU_NOTICES;
 
 /**
- * A shell call that failed because mu found no bash, which on Windows means Git for Windows is missing. The words are
+ * A shell call that failed because spec.jev found no bash, which on Windows means Git for Windows is missing. The words are
  * pi's (`getShellConfig` in the harness's `packages/coding-agent/src/utils/shell.ts`, whose test keeps the first line).
  */
 export function bashMissing(event: JsonRecord): boolean {
@@ -226,7 +226,7 @@ export function bashMissing(event: JsonRecord): boolean {
 }
 
 /**
- * The language the app shows, as the desktop last wrote it to `<mu home>/app-language` for the harness, or undefined
+ * The language the app shows, as the desktop last wrote it to `<spec.jev home>/app-language` for the harness, or undefined
  * when the file is missing or unreadable. Read at every harness start, so a new session follows a language switch.
  *
  * @param home the user's home directory; tests pass a temporary one
@@ -257,17 +257,17 @@ const CONFIRM_OPTIONS = [
   { optionId: 'reject', name: 'Reject', kind: 'reject_once' },
 ] as const;
 
-/** ACP adapter only: the app owns the UI and projects; mu owns all execution and judgment. */
+/** ACP adapter only: the app owns the UI and projects; spec.jev owns all execution and judgment. */
 export class KyrnAgent implements Agent {
   private connection: Connection;
   private store: string;
   private factory: RpcFactory;
   private home: string | undefined;
   private sessions = new Map<string, Session>();
-  /** Sessions whose stopped mu is being started again (`live`). */
+  /** Sessions whose stopped spec.jev is being started again (`live`). */
   private reviving = new Map<string, Promise<void>>();
   /**
-   * @param home the user's home directory, whose mu home holds the app language; tests pass a temporary one
+   * @param home the user's home directory, whose spec.jev home holds the app language; tests pass a temporary one
    */
   constructor(connection: Connection, launcher: string, store: string, factory?: RpcFactory, home?: string) {
     this.connection = connection;
@@ -280,7 +280,7 @@ export class KyrnAgent implements Agent {
     return {
       protocolVersion: PROTOCOL_VERSION,
       // `name` is an identifier the backend has already seen; only the title is shown.
-      agentInfo: { name: 'kyrn', title: 'mu', version: '0.1.0' },
+      agentInfo: { name: 'kyrn', title: 'spec.jev', version: '0.1.0' },
       agentCapabilities: { loadSession: true, promptCapabilities: { embeddedContext: true, image: true } },
       authMethods: [],
     };
@@ -290,11 +290,11 @@ export class KyrnAgent implements Agent {
   }
   private session(id: string): Session {
     const found = this.sessions.get(id);
-    if (!found) throw new Error('Unknown mu session');
+    if (!found) throw new Error('Unknown spec.jev session');
     return found;
   }
   private path(id: string): string {
-    if (!/^[a-f\d-]{36}$/.test(id)) throw new Error('Invalid mu session ID');
+    if (!/^[a-f\d-]{36}$/.test(id)) throw new Error('Invalid spec.jev session ID');
     return join(this.store, `${id}.json`);
   }
   private async state(id: string): Promise<JsonRecord> {
@@ -326,7 +326,7 @@ export class KyrnAgent implements Agent {
         session.refreshing = undefined;
       });
   }
-  /** The adapter's record of a conversation: where mu keeps it, and the permission mode it was last in. */
+  /** The adapter's record of a conversation: where spec.jev keeps it, and the permission mode it was last in. */
   private save(id: string, session: Session): void {
     const path = this.path(id);
     const record = { cwd: session.cwd, file: session.file, permissions: session.permissions?.mode };
@@ -353,7 +353,7 @@ export class KyrnAgent implements Agent {
     const onEvent = (event: JsonRecord): void => {
       telemetry.capture(event);
       const shown = presentation(event);
-      // A held warning goes out before whatever came after it, unless this is mu saying the same by its code.
+      // A held warning goes out before whatever came after it, unless this is spec.jev saying the same by its code.
       if (session.held) {
         if (shown?.kind === 'checkpoint.off' && text(shown.payload.message).trim() === session.held.text) {
           clearTimeout(session.held.timer);
@@ -388,13 +388,13 @@ export class KyrnAgent implements Agent {
       this.permissionEvent(id, session, shown);
       if (shown?.kind === 'preflight.pending') session.judge = text(shown.payload.judge) || undefined;
       const notified = event.type === 'extension_ui_request' && event.method === 'notify';
-      // mu's "switched" note while the app switches the mode itself says nothing the picker does not show.
+      // spec.jev's "switched" note while the app switches the mode itself says nothing the picker does not show.
       const quiet = session.switching > 0 && notified && event.notifyType === 'info';
       const updates = mapEvent(event);
       // No bash on Windows: pi's error (English, with options meant for developers) makes way for one line in the
       // reader's language with the download link, said once below.
       const noBash = bashMissing(event);
-      // A call the person said no to ends with mu's refusal, which is for the model: the row says so in its own words.
+      // A call the person said no to ends with spec.jev's refusal, which is for the model: the row says so in its own words.
       const denied = event.type === 'tool_execution_end' && session.denied.delete(text(event.toolCallId));
       for (const update of updates) {
         if (update.sessionUpdate !== 'tool_call_update') continue;
@@ -476,13 +476,13 @@ export class KyrnAgent implements Agent {
     };
     session.rpc = this.factory(cwd, file, onEvent, id, {
       ...harnessEnv(id, this.home),
-      // A reopened conversation starts in the mode it was last in, unless mu's own record of it says otherwise.
+      // A reopened conversation starts in the mode it was last in, unless spec.jev's own record of it says otherwise.
       ...(permissions ? { MU_PERMISSIONS: permissions } : {}),
     });
     let model: unknown;
     try {
       const state = await this.state(id);
-      // mu announces its mode at startup, before it answers anything, so the options below already carry it.
+      // spec.jev announces its mode at startup, before it answers anything, so the options below already carry it.
       session.opened = true;
       if (!state.sessionFile) throw new Error(MU_TURN_ERRORS.notPersisted);
       session.file = text(state.sessionFile);
@@ -497,7 +497,7 @@ export class KyrnAgent implements Agent {
   }
   /**
    * pi chooses a conversation's model when it starts, from the models it can use then. One that started while another
-   * mu process held the model store found none and runs without one; the store frees up within seconds. So the
+   * spec.jev process held the model store found none and runs without one; the store frees up within seconds. So the
    * conversation keeps looking for a while, takes the model new sessions start on (or the first one offered) as soon
    * as pi lists it, and the send box hears of it. Nothing is chosen when the person picked a model meanwhile.
    */
@@ -533,7 +533,7 @@ export class KyrnAgent implements Agent {
     }
   }
   /**
-   * The session with a running mu. One whose mu stopped (it crashed, or was killed) gets a new process on the same session
+   * The session with a running spec.jev. One whose spec.jev stopped (it crashed, or was killed) gets a new process on the same session
    * file, in the mode it was in, so the conversation goes on instead of failing every call after that. A new process
    * that does not start leaves the session as it was, for the next call to try again.
    */
@@ -562,7 +562,7 @@ export class KyrnAgent implements Agent {
     return revived;
   }
   /**
-   * Keeps what mu says about permissions: its modes for the send box, its next question for the card, and the calls
+   * Keeps what spec.jev says about permissions: its modes for the send box, its next question for the card, and the calls
    * the person said no to.
    */
   private permissionEvent(id: string, session: Session, shown: ReturnType<typeof presentation>): void {
@@ -575,7 +575,7 @@ export class KyrnAgent implements Agent {
       if (session.opened && before !== modes.mode) {
         this.announce(id, session);
         // AionCore sets the mode it last saw whenever it reopens a conversation; one that was never switched would
-        // otherwise come back in mu's current default, and that set would then switch it (and save it as mu's default).
+        // otherwise come back in spec.jev's current default, and that set would then switch it (and save it as spec.jev's default).
         try {
           if (session.file) this.save(id, session);
         } catch {
@@ -602,15 +602,15 @@ export class KyrnAgent implements Agent {
       .catch((): void => {});
   }
   /**
-   * Switches this conversation with mu's own command. It runs at once, even during a turn: the next call is checked
+   * Switches this conversation with spec.jev's own command. It runs at once, even during a turn: the next call is checked
    * under the new mode. The switch is for this conversation only (`--here`): the app sets a mode by itself too, when it
    * opens a conversation or seeds a new one, and the mode new conversations start in is set in the settings. An older
-   * mu, which has no `--here`, makes each switch its default as well.
+   * spec.jev, which has no `--here`, makes each switch its default as well.
    */
   private async switchPermissions(id: string, value: string): Promise<SetSessionConfigOptionResponse> {
     const session = this.session(id);
     if (!session.permissions?.modes.some((mode) => mode.id === value)) throw new Error(MU_TURN_ERRORS.unsupportedValue);
-    // The app sets the mode it remembers whenever it opens a conversation; the same mode again is no switch (mu
+    // The app sets the mode it remembers whenever it opens a conversation; the same mode again is no switch (spec.jev
     // would forget what was allowed for this conversation).
     if (session.permissions.mode !== value) {
       session.switching += 1;
@@ -630,7 +630,7 @@ export class KyrnAgent implements Agent {
         clearTimeout(timer);
         session.switching -= 1;
       }
-      // mu announces the new mode before it answers the command.
+      // spec.jev announces the new mode before it answers the command.
       if (session.permissions.mode !== value) throw new Error(MU_TURN_ERRORS.permissionsNotSwitched);
     }
     return { configOptions: await this.options(id) };
@@ -689,7 +689,7 @@ export class KyrnAgent implements Agent {
     ];
   }
   /**
-   * Tells the app which slash commands mu has, for the send box's `/` menu. Called as a session is answered: the app
+   * Tells the app which slash commands spec.jev has, for the send box's `/` menu. Called as a session is answered: the app
    * keeps a session's commands only once it knows the session, so this runs after the answer has gone out.
    */
   private advertise(id: string): void {
@@ -822,7 +822,7 @@ export class KyrnAgent implements Agent {
       throw new Error(MU_TURN_ERRORS.contentUnsupported);
     });
     const found = this.session(params.sessionId);
-    // Only a conversation whose mu stopped waits for a new one; any other sends the prompt at once, as before.
+    // Only a conversation whose spec.jev stopped waits for a new one; any other sends the prompt at once, as before.
     const session = found.stopped || this.reviving.has(params.sessionId) ? await this.live(params.sessionId) : found;
     if (session.busy) throw new Error(MU_TURN_ERRORS.turnRunning);
     session.busy = true;
@@ -833,7 +833,7 @@ export class KyrnAgent implements Agent {
       session.settled = resolve;
     });
     try {
-      // A conversation that started without a model gets a moment to find one before the message goes to mu.
+      // A conversation that started without a model gets a moment to find one before the message goes to spec.jev.
       if (session.noModel) {
         this.lookForModel(params.sessionId, session, PROMPT_MODEL_WAITS_MS);
         await session.finding;
@@ -855,7 +855,7 @@ export class KyrnAgent implements Agent {
       }
       this.endOpenCalls(params.sessionId, session);
       await session.queue;
-      // A mu that stopped during the turn answers nothing more; the turn failed, and says why.
+      // A spec.jev that stopped during the turn answers nothing more; the turn failed, and says why.
       if (session.stopped) throw new Error(MU_TURN_ERRORS.processExited);
       await this.state(params.sessionId);
       if (session.error) throw session.error;
@@ -867,7 +867,7 @@ export class KyrnAgent implements Agent {
     } catch (error) {
       this.endOpenCalls(params.sessionId, session);
       await session.queue;
-      // Whatever failed first (the prompt, a state read), a mu that stopped is the reason.
+      // Whatever failed first (the prompt, a state read), a spec.jev that stopped is the reason.
       if (session.stopped) throw new Error(MU_TURN_ERRORS.processExited, { cause: error });
       throw noModelError(errorText(error), error) ?? error;
     } finally {
@@ -876,7 +876,7 @@ export class KyrnAgent implements Agent {
     }
   }
   /**
-   * A turn is over, and a call mu started has no end: its process closed mid-call (a crash, a kill), or the turn ended
+   * A turn is over, and a call spec.jev started has no end: its process closed mid-call (a crash, a kill), or the turn ended
    * without one. The conversation keeps what it was last told, so that row would stay running for good, a sub-agent
    * card with its bees at work. It ends as failed: the call did not finish, and the turn says why.
    */
@@ -890,7 +890,7 @@ export class KyrnAgent implements Agent {
     session.open.clear();
   }
   /**
-   * Sends a prompt, and sends it again after a moment when pi refused it because another mu process held the model
+   * Sends a prompt, and sends it again after a moment when pi refused it because another spec.jev process held the model
    * store: pi had not started it then, so nothing runs twice.
    */
   private async sendPrompt(session: Session, command: JsonRecord): Promise<void> {
@@ -910,13 +910,13 @@ export class KyrnAgent implements Agent {
   async cancel(params: CancelNotification): Promise<void> {
     const session = this.session(params.sessionId);
     session.cancelled = true;
-    // A mu that stopped runs nothing that could be stopped.
+    // A spec.jev that stopped runs nothing that could be stopped.
     if (session.stopped) return;
     await session.rpc.send({ type: 'abort' });
   }
   /**
    * One line in the conversation, in the reader's language (see MU_NOTICES). `title` stands in for the code's English
-   * where mu said it itself; `input` is what the code names.
+   * where spec.jev said it itself; `input` is what the code names.
    */
   private notice(
     id: string,
@@ -941,9 +941,9 @@ export class KyrnAgent implements Agent {
       .catch((): void => {});
   }
   /**
-   * What mu notified, as a line of its own: it is no part of the reply. mu words it in the app's language already.
+   * What spec.jev notified, as a line of its own: it is no part of the reply. spec.jev words it in the app's language already.
    * An answer (`info`, such as a command's reply) is said each time; a warning or an error once per conversation, and
-   * only after a moment, because mu may say the same right after by its code (`checkpoint.off`), which the app words.
+   * only after a moment, because spec.jev may say the same right after by its code (`checkpoint.off`), which the app words.
    * Words a coded notice said just before (`judge.notice`) are not said again.
    */
   private harnessNotice(id: string, session: Session, message: string, type: string): void {
@@ -971,8 +971,8 @@ export class KyrnAgent implements Agent {
     this.line(id, session, held.text, { level: held.level });
   }
   /**
-   * The session goes without checkpoints (mu's `checkpoint.off`): one line, by mu's code, which the desktop words in
-   * the app's language. mu's own line is its title, and is not said again as a plain notice.
+   * The session goes without checkpoints (spec.jev's `checkpoint.off`): one line, by spec.jev's code, which the desktop words in
+   * the app's language. spec.jev's own line is its title, and is not said again as a plain notice.
    */
   private checkpointNotice(id: string, session: Session, payload: JsonRecord): void {
     const message = text(payload.message).trim();
@@ -980,7 +980,7 @@ export class KyrnAgent implements Agent {
     if (session.said.has('checkpoint_off')) return;
     session.said.add('checkpoint_off');
     const reason = text(payload.code);
-    // The numbers mu's reason names (a limit, seconds); nothing else of its params is passed on.
+    // The numbers spec.jev's reason names (a limit, seconds); nothing else of its params is passed on.
     const given = asRecord(payload.params);
     const params = Object.fromEntries(
       Object.entries(given).filter(([, value]) => typeof value === 'number' && Number.isFinite(value))
@@ -991,10 +991,10 @@ export class KyrnAgent implements Agent {
     });
   }
   /**
-   * mu's `judge.notice`: the judge answers with the free Jev on OpenCode Zen (`free_jev`), or the free Jev stopped
+   * spec.jev's `judge.notice`: the judge answers with the free Jev on OpenCode Zen (`free_jev`), or the free Jev stopped
    * (`free_jev_unavailable`, why in `reason`). One line each per conversation, by code, which the desktop words in the
-   * app's language; mu's own line, its title, comes right after as a notification and is not said again. A code this
-   * build does not know leaves mu's line to say it.
+   * app's language; spec.jev's own line, its title, comes right after as a notification and is not said again. A code this
+   * build does not know leaves spec.jev's line to say it.
    */
   private judgeNotice(id: string, session: Session, payload: JsonRecord): void {
     const code = text(payload.code);
@@ -1010,9 +1010,9 @@ export class KyrnAgent implements Agent {
     this.notice(id, session, code, { title: message, input: reason ? { code: reason } : {} });
   }
   /**
-   * Asks the app one of mu's questions and answers mu exactly once, whatever happens: a failure to ask, an answer that
+   * Asks the app one of spec.jev's questions and answers spec.jev exactly once, whatever happens: a failure to ask, an answer that
    * is none of the choices, or an error here all end as "cancelled" (for a permission, not allowed), with a line in the
-   * conversation that says so. mu is never left waiting on a question the app can no longer answer.
+   * conversation that says so. spec.jev is never left waiting on a question the app can no longer answer.
    */
   private async permission(id: string, session: Session, event: JsonRecord): Promise<void> {
     let answered = false;
@@ -1030,7 +1030,7 @@ export class KyrnAgent implements Agent {
     answer({ cancelled: true });
     this.notice(id, session, 'answer_lost');
   }
-  /** The question as the app shows it, and the answer back to mu; returns without answering when there is none to give. */
+  /** The question as the app shows it, and the answer back to spec.jev; returns without answering when there is none to give. */
   private async ask(
     id: string,
     session: Session,
@@ -1046,7 +1046,7 @@ export class KyrnAgent implements Agent {
     // names are the English fallback). The choices of a select are the harness's own text and stay as sent.
     const choices = confirm ? [] : array(event.options).map(text);
     const message = text(event.message);
-    // mu's permission question comes right after what it said about it; any other picker keeps the plain shape.
+    // spec.jev's permission question comes right after what it said about it; any other picker keeps the plain shape.
     const request = !confirm && session.request && asks(session.request, choices) ? session.request : undefined;
     session.request = undefined;
     const result = await this.connection.requestPermission({

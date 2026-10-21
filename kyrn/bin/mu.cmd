@@ -22,11 +22,11 @@ node "%~dp0mu.mjs" %*
 exit /b %errorlevel%
 
 :missing
-echo mu needs Node.js 22.19 or newer, and no node was found on PATH. 1>&2
+echo spec.jev needs Node.js 22.19 or newer, and no node was found on PATH. 1>&2
 echo Install it from https://nodejs.org or with: winget install OpenJS.NodeJS.LTS 1>&2
 exit /b 1
 
 :old
-echo mu needs Node.js 22.19 or newer, found %_MU_MAJOR%.%_MU_MINOR%. 1>&2
+echo spec.jev needs Node.js 22.19 or newer, found %_MU_MAJOR%.%_MU_MINOR%. 1>&2
 echo Install a newer one from https://nodejs.org or with: winget install OpenJS.NodeJS.LTS 1>&2
 exit /b 1
