@@ -1,8 +1,8 @@
 !ifndef MU_INSTALLER_OBSERVABILITY_NSH
 !define MU_INSTALLER_OBSERVABILITY_NSH
 
-!define MU_APP_EXECUTABLE_FILENAME "mu.exe"
-!define MU_FALLBACK_LOG "mu-installer-${VERSION}-fallback-log.jsonl"
+!define MU_APP_EXECUTABLE_FILENAME "spec.jev.exe"
+!define MU_FALLBACK_LOG "spec.jev-installer-${VERSION}-fallback-log.jsonl"
 
 !pragma warning disable 6001
 Var /GLOBAL MuSessionId

@@ -5,7 +5,7 @@
  *
  * Two modes:
  *   1. **Packaged mode** (CI default): Launches from electron-builder's unpacked output
- *      (e.g. out/linux-unpacked/mu-desktop, out/mac-arm64/mu.app, out/win-unpacked/mu.exe).
+ *      (e.g. out/linux-unpacked/spec.jev, out/mac-arm64/spec.jev.app, out/win-unpacked/spec.jev.exe).
  *      This validates that packaged resources are intact.
  *   2. **Dev mode** (local default): Launches via `electron .` from project root with
  *      the Vite dev server (electron-vite dev).
@@ -154,9 +154,9 @@ function resolvePackagedApp(): { executablePath: string; cwd: string } | null {
   const platform = process.platform;
 
   if (platform === 'win32') {
-    // out/win-unpacked/mu.exe  or  out/win-x64-unpacked/mu.exe
+    // out/win-unpacked/spec.jev.exe  or  out/win-x64-unpacked/spec.jev.exe
     for (const dir of ['win-unpacked', 'win-x64-unpacked', 'win-arm64-unpacked']) {
-      const exe = path.join(outDir, dir, 'mu.exe');
+      const exe = path.join(outDir, dir, 'spec.jev.exe');
       if (fs.existsSync(exe)) return { executablePath: exe, cwd: path.join(outDir, dir) };
     }
   } else if (platform === 'darwin') {
@@ -171,12 +171,12 @@ function resolvePackagedApp(): { executablePath: string; cwd: string } | null {
       }
     }
   } else {
-    // Linux: out/linux-unpacked/mu-desktop  (linux.executableName; `spec.jev` on the PATH is the command line)
+    // Linux: out/linux-unpacked/spec.jev  (linux.executableName)
     for (const dir of ['linux-unpacked', 'linux-x64-unpacked', 'linux-arm64-unpacked']) {
       const dirPath = path.join(outDir, dir);
       if (!fs.existsSync(dirPath)) continue;
       // Try common executable names
-      for (const name of ['mu-desktop', 'mu']) {
+      for (const name of ['spec.jev']) {
         const exe = path.join(dirPath, name);
         if (fs.existsSync(exe)) return { executablePath: exe, cwd: dirPath };
       }

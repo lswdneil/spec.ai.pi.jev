@@ -36,7 +36,7 @@ describe('installerLastFailure service', () => {
         instDir: 'D:\\mu',
         logPath: 'C:\\Users\\me\\AppData\\Local\\Temp\\mu-installer-2.1.27-20260702-151830-ab12cd34ef56.log',
         at: '2026-07-01T00:00:00.000Z',
-        blockers: [{ pid: 1234, name: 'mu.exe' }],
+        blockers: [{ pid: 1234, name: 'spec.jev.exe' }],
       })
     );
 
@@ -53,7 +53,7 @@ describe('installerLastFailure service', () => {
       logPath: 'C:\\Users\\me\\AppData\\Local\\Temp\\mu-installer-2.1.27-20260702-151830-ab12cd34ef56.log',
       at: '2026-07-01T00:00:00.000Z',
     });
-    expect(consumed?.blockers).toEqual([{ pid: 1234, name: 'mu.exe' }]);
+    expect(consumed?.blockers).toEqual([{ pid: 1234, name: 'spec.jev.exe' }]);
     expect(existsSync(markerPath)).toBe(false);
     await expect(consumeInstallerLastFailure({ appDataDir })).resolves.toBeNull();
   });

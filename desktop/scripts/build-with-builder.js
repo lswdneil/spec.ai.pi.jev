@@ -838,11 +838,11 @@ try {
     const winUnpackedDir = path.join(outDir, 'win-unpacked');
     let cleaned = tryRemoveDir(winUnpackedDir);
     if (!cleaned) {
-      const aionRunning = isProcessRunningWindows('mu.exe');
+      const aionRunning = isProcessRunningWindows('spec.jev.exe');
       const electronRunning = isProcessRunningWindows('electron.exe');
       if (aionRunning || electronRunning) {
         console.log('⚠️  Detected running mu/Electron process. Attempting to close...');
-        killWindowsProcesses(['mu.exe', 'electron.exe']);
+        killWindowsProcesses(['spec.jev.exe', 'electron.exe']);
         cleaned = tryRemoveDir(winUnpackedDir);
         if (!cleaned) {
           console.log('⚠️  Directory still locked. Please close any running mu/Electron processes and retry.');
@@ -861,7 +861,7 @@ try {
   try {
     buildWithDmgRetry(builderCommand, targetArch);
   } catch (error) {
-    const winExePath = path.join(outDir, 'win-unpacked', 'mu.exe');
+    const winExePath = path.join(outDir, 'win-unpacked', 'spec.jev.exe');
     const firstError = formatExecError(error);
     const canRetryWithoutExecutableEdit =
       process.platform === 'win32' && isWindowsBuild && process.env.CI !== 'true' && fs.existsSync(winExePath);
@@ -870,7 +870,7 @@ try {
       throw error;
     }
 
-    console.log('⚠️  Windows local build failed after mu.exe was produced.');
+    console.log('⚠️  Windows local build failed after spec.jev.exe was produced.');
     if (firstError) {
       console.log('   First failure summary:');
       console.log(
@@ -883,7 +883,7 @@ try {
     }
     console.log('   Retrying local build with win.signAndEditExecutable=false...');
     console.log('   This fallback is intended for transient rcedit / file-lock failures on developer machines.');
-    killWindowsProcesses(['mu.exe', 'electron.exe']);
+    killWindowsProcesses(['spec.jev.exe', 'electron.exe']);
     cleanupWindowsPackOutput();
 
     try {

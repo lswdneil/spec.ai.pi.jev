@@ -37,7 +37,7 @@ async function main() {
       entryPoints: [path.join(ROOT, 'packages/desktop/src/process/resources/builtinMcp/browserServer.ts')],
       outfile: path.join(ROOT, 'out/main/builtin-mcp-browser.js'),
     }),
-    // mu's ACP adapter for the packaged app, run by resources/mu/acp(.cmd) with the user's Node: from source it
+    // mu's ACP adapter for the packaged app, run by resources/spec.jev/acp(.cmd) with the user's Node: from source it
     // runs through tsx (scripts/kyrn/acp), which a packaged app does not carry.
     esbuild.build({
       ...SHARED_OPTIONS,

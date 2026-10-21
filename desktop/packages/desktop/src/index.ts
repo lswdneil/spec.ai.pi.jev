@@ -913,7 +913,7 @@ const handleAppReady = async (): Promise<void> => {
 };
 
 // ============ Protocol Registration ============
-// Register mu:// as the default protocol client. An automated run (E2E) leaves the machine's mu:// links with the
+// Register spec.jev:// as the default protocol client. An automated run (E2E) leaves the machine's links with the
 // app the person uses: the registration is system-wide and outlives the run.
 if (!isE2ETestMode) {
   if (process.defaultApp) {
@@ -924,7 +924,7 @@ if (!isE2ETestMode) {
   }
 }
 
-// macOS: handle mu:// URLs via the open-url event
+// macOS: handle spec.jev:// URLs via the open-url event
 app.on('open-url', (event, url) => {
   event.preventDefault();
   handleDeepLinkUrl(url);

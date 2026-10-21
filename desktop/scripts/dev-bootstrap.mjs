@@ -4,8 +4,8 @@ import path from 'node:path';
 import process from 'node:process';
 
 const DEFAULT_PORTS = [5173, 9230];
-// The packaged app's process is `mu` (`mu.exe`): matched by its whole name, since many other names contain "mu".
-const APP_NAMES = new Set(['mu', 'mu.exe']);
+// The packaged app's process is `spec.jev` (`spec.jev.exe`): matched by its whole name.
+const APP_NAMES = new Set(['spec.jev', 'spec.jev.exe']);
 const KILLABLE_NAMES = new Set(['electron', 'electron.exe', ...APP_NAMES]);
 
 const log = (...args) => console.log('[dev-bootstrap]', ...args);

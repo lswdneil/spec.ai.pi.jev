@@ -128,7 +128,7 @@ export default function ProviderManager(props: ProviderManagerProps) {
     onModels({ providers: [...providers, blankProvider(freeProviderId(taken))] });
     setSelection({ kind: 'custom', index: providers.length });
   };
-  // A mu:// add-provider link: a new provider filled from it, unsaved like one added by hand, with the id its name
+  // A spec.jev:// add-provider link: a new provider filled from it, unsaved like one added by hand, with the id its name
   // suggests when the editor would accept that id.
   const addFromLink = (link: DeepLinkAddProviderDetail) => {
     const taken = new Set([...takenFor(providers.length), ...flow.offered]);

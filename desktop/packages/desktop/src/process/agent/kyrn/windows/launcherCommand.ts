@@ -38,7 +38,7 @@ export type LauncherDeps = {
 };
 
 /** Where a forwarder is written, in each folder forwarderFolders names, and its name there. */
-export const FORWARDER_FOLDER = 'mu-desktop';
+export const FORWARDER_FOLDER = 'spec.jev-desktop';
 export const FORWARDER_NAME = 'acp.cmd';
 
 /** The variable cmd.exe reads the path from: in the command line itself, a `%` or `&` of the path would be syntax. */
@@ -215,8 +215,8 @@ export async function ownLauncher(launcher: string, patch: Partial<LauncherDeps>
   // Only packaged apps restore another packaged install. A development checkout must not adopt its registration.
   const packaged = (file: string): boolean =>
     deps.platform === 'win32'
-      ? DRIVE_PATH.test(file) && /\\resources\\mu\\acp\.cmd$/i.test(fold(file))
-      : file.startsWith('/') && !file.startsWith('//') && /\/[Rr]esources\/mu\/acp$/.test(file);
+      ? DRIVE_PATH.test(file) && /\\resources\\spec\.jev\\acp\.cmd$/i.test(fold(file))
+      : file.startsWith('/') && !file.startsWith('//') && /\/[Rr]esources\/spec\.jev\/acp$/.test(file);
   const canRestore = (registered: string): boolean =>
     packaged(launcher) && packaged(registered) && deps.missing(registered);
   if (deps.platform !== 'win32')

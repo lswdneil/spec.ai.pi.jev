@@ -5,7 +5,7 @@
  */
 
 /**
- * A mu:// link that adds a provider lands on the providers page. It used to go to `/settings/model`, a page that no
+ * A spec.jev:// link that adds a provider lands on the providers page. It used to go to `/settings/model`, a page that no
  * longer exists and only redirected there. The page takes the link's details when it opens, or at once when it is
  * already open.
  */

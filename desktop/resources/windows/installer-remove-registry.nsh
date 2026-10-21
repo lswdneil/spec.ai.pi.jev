@@ -165,7 +165,7 @@
           !insertmacro MU_FAIL_REPORTABLE_BILINGUAL ${MU_E_INSTALL_DIR_REMOVE_OR_LOCKED} "event=session-end result=fail code=${MU_E_INSTALL_DIR_REMOVE_OR_LOCKED} phase=residual-delete-failed userAction=cancel fatal=1 firstFailed=$MuRemoveFirstFailedPath lockers=$MuLockerList" "${MU_MSG_PREVIOUS_FILE_OPEN_EN}" "${MU_MSG_PREVIOUS_FILE_OPEN_ZH}" "${MU_MSG_CLOSE_SHOWN_FILE_ACTION_EN}" "${MU_MSG_CLOSE_SHOWN_FILE_ACTION_ZH}"
       ${EndIf}
       mu_continue_after_rm:
-      DetailPrint `The previous mu installation had locked residual files; continuing after atomic cleanup succeeded: $INSTDIR`
+      DetailPrint `The previous spec.jev installation had locked residual files; continuing after atomic cleanup succeeded: $INSTDIR`
       !insertmacro MU_LOG_EVENT "code=${MU_E_INSTALL_DIR_REMOVE_OR_LOCKED} phase=residual-delete-failed degraded=continue fatal=0 residueRoot=$MuRemoveResidueRoot failedCount=$MuRemoveResidueCount firstFailed=$MuRemoveFirstFailedPath removeDirResult=$MuRemoveDirResult removeResidueCount=$MuRemoveResidueCount atomicFailedPath=$MuAtomicFailedPath atomicSucceeded=$MuAtomicRemoveSucceeded"
     ${else}
       DetailPrint `Can't safely remove previous installation without atomic cleanup proof: $INSTDIR`

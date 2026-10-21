@@ -104,8 +104,8 @@ SilentInstall normal
 !define MU_FALLBACK_LOG "mu-installer-smoke-fallback.log"
 !define VERSION "rstrtmgr-ui-smoke"
 !define MU_TARGET_ARCH "x64"
-!define MU_APP_EXECUTABLE_FILENAME "mu.exe"
-!define UNINSTALL_FILENAME "Uninstall mu.exe"
+!define MU_APP_EXECUTABLE_FILENAME "spec.jev.exe"
+!define UNINSTALL_FILENAME "Uninstall spec.jev.exe"
 !define PROJECT_DIR "${nsisQuote(repoRoot)}"
 !include LogicLib.nsh
 !include "${nsisQuote(messagesPath)}"

@@ -8,7 +8,7 @@ Var /GLOBAL MuUpdatedAppExitWaitResult
 Var /GLOBAL MuActiveMarkerExecResult
 Var /GLOBAL MuActiveMarkerResult
 
-!define MU_ACTIVE_INSTALLER_MARKER "mu-installer-active.marker"
+!define MU_ACTIVE_INSTALLER_MARKER "spec.jev-installer-active.marker"
 ; Legacy name: installers from before the rename to mu kept this marker in %TEMP% under
 ; the name below, and one that was killed mid-install leaves it there.
 ; MU_RECORD_ACTIVE_INSTALLER_MARKER still reads it when the new marker is missing, and

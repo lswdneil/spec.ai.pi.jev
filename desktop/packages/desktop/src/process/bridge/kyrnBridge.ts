@@ -98,7 +98,7 @@ export function initKyrnBridge(): void {
   // The registration is found by this path, so it stays `acp` where it always was. Windows cannot start a bash
   // script: there the command is acp.cmd, which runs the same adapter with Node. The packaged app has no sources:
   // it carries the adapter bundled (out/main/mu-acp.js) and its launchers in resources/spec.jev.
-  const launchers = app.isPackaged ? join(process.resourcesPath, 'mu') : join(desktopRoot, 'scripts', 'kyrn');
+  const launchers = app.isPackaged ? join(process.resourcesPath, 'spec.jev') : join(desktopRoot, 'scripts', 'kyrn');
   const launcher = join(launchers, process.platform === 'win32' ? 'acp.cmd' : 'acp');
   // What is registered: the launcher, or on Windows a spelling of it without spaces (windows/launcherCommand.ts).
   // Worked out once per start, again after a failure.

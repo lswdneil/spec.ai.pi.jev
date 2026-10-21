@@ -176,11 +176,11 @@ describe("the conversation E2E's look at the processes", () => {
     const one = JSON.stringify({ pid: 4, ppid: 0, start: 0, command: '' });
     expect(parseProcesses('win32', one)).toEqual([{ pid: 4, ppid: 0, start: 0, command: '' }]);
     const many = JSON.stringify([
-      { pid: 10, ppid: 4, start: 1_700_000_000_000, command: '"C:\\spec.jev\\mu.exe" --lang=zh-CN' },
+      { pid: 10, ppid: 4, start: 1_700_000_000_000, command: '"C:\\spec.jev\\spec.jev.exe" --lang=zh-CN' },
       { pid: 11, ppid: 10, start: 1_700_000_000_500, command: null },
     ]);
     expect(parseProcesses('win32', `${many}\r\n`)).toEqual([
-      { pid: 10, ppid: 4, start: 1_700_000_000_000, command: '"C:\\spec.jev\\mu.exe" --lang=zh-CN' },
+      { pid: 10, ppid: 4, start: 1_700_000_000_000, command: '"C:\\spec.jev\\spec.jev.exe" --lang=zh-CN' },
       { pid: 11, ppid: 10, start: 1_700_000_000_500, command: '' },
     ]);
     expect(parseProcesses('win32', '')).toEqual([]);
@@ -197,9 +197,9 @@ describe("the conversation E2E's look at the processes", () => {
 
   it('follows the tree under a process, but not to an older process holding a reused parent pid', () => {
     const table: Entry[] = [
-      { pid: 100, ppid: 1, start: 5_000, command: 'mu.exe' },
+      { pid: 100, ppid: 1, start: 5_000, command: 'spec.jev.exe' },
       { pid: 200, ppid: 100, start: 6_000, command: 'aioncore.exe' },
-      { pid: 300, ppid: 200, start: 7_000, command: 'mu.exe mu-acp.js' },
+      { pid: 300, ppid: 200, start: 7_000, command: 'spec.jev.exe mu-acp.js' },
       // Its parent 100 exited long ago: Windows gave the pid to the app since.
       { pid: 400, ppid: 100, start: 1_000, command: 'svchost.exe' },
     ];
@@ -207,16 +207,16 @@ describe("the conversation E2E's look at the processes", () => {
   });
 
   it('counts a seen process as left over only with its pid, start and command line', () => {
-    const seen = [{ pid: 300, start: 7_000, command: 'mu.exe mu-acp.js' }];
+    const seen = [{ pid: 300, start: 7_000, command: 'spec.jev.exe mu-acp.js' }];
     const running: Entry[] = [
       // The same pid, given to another process since.
-      { pid: 300, ppid: 1, start: 9_000, command: 'mu.exe mu-acp.js' },
+      { pid: 300, ppid: 1, start: 9_000, command: 'spec.jev.exe mu-acp.js' },
       { pid: 301, ppid: 1, start: 9_500, command: 'notepad.exe' },
     ];
     expect(leftovers({ running, seen, root: winPaths.root, platform: 'win32', self: 1 })).toEqual([]);
-    running.push({ pid: 300, ppid: 1, start: 7_000, command: 'mu.exe mu-acp.js' });
+    running.push({ pid: 300, ppid: 1, start: 7_000, command: 'spec.jev.exe mu-acp.js' });
     expect(leftovers({ running, seen, root: winPaths.root, platform: 'win32', self: 1 })).toEqual([
-      { pid: 300, command: 'mu.exe mu-acp.js' },
+      { pid: 300, command: 'spec.jev.exe mu-acp.js' },
     ]);
   });
 
@@ -298,23 +298,23 @@ describe('the packaged app the conversation E2E runs', () => {
 
   it("takes the Windows app for the processor asked for from the builder's output, not its uninstaller", () => {
     const out = scratch();
-    unpacked(join(out, 'win-unpacked'), 'mu.exe', ['Uninstall mu.exe']);
-    unpacked(join(out, 'win-arm64-unpacked'), 'mu.exe');
+    unpacked(join(out, 'win-unpacked'), 'spec.jev.exe', ['Uninstall spec.jev.exe']);
+    unpacked(join(out, 'win-arm64-unpacked'), 'spec.jev.exe');
     expect(packagedApp(out, 'x64', 'win32')).toEqual({
-      executable: join(out, 'win-unpacked', 'mu.exe'),
+      executable: join(out, 'win-unpacked', 'spec.jev.exe'),
       resources: join(out, 'win-unpacked', 'resources'),
     });
-    expect(packagedApp(out, 'arm64', 'win32')?.executable).toBe(join(out, 'win-arm64-unpacked', 'mu.exe'));
+    expect(packagedApp(out, 'arm64', 'win32')?.executable).toBe(join(out, 'win-arm64-unpacked', 'spec.jev.exe'));
     expect(packagedApp(join(out, 'win-unpacked'), 'x64', 'win32')?.executable).toBe(
-      join(out, 'win-unpacked', 'mu.exe')
+      join(out, 'win-unpacked', 'spec.jev.exe')
     );
   });
 
   // Windows keeps no execute bit, which tells the Linux program from the other files.
   it.skipIf(process.platform === 'win32')('takes the Linux program, not the sandbox helper or a library', () => {
     const out = scratch();
-    unpacked(join(out, 'linux-unpacked'), 'mu-desktop', ['chrome-sandbox', 'chrome_crashpad_handler']);
-    expect(packagedApp(out, 'x64', 'linux')?.executable).toBe(join(out, 'linux-unpacked', 'mu-desktop'));
+    unpacked(join(out, 'linux-unpacked'), 'spec.jev', ['chrome-sandbox', 'chrome_crashpad_handler']);
+    expect(packagedApp(out, 'x64', 'linux')?.executable).toBe(join(out, 'linux-unpacked', 'spec.jev'));
     expect(packagedApp(out, 'arm64', 'linux')).toBeUndefined();
   });
 

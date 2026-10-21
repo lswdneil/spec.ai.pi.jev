@@ -99,7 +99,7 @@ const ensureCliSafeSymlink = (targetPath: string, symlinkName: string): string =
  * The names of the home-folder shortcuts: a packaged build's are spec.jev's, a development build keeps those its data was
  * written through (`DEV_SHORTCUT_BASES`).
  */
-const MU_SHORTCUT_NAMES = { data: '.mu-desktop', config: '.mu-desktop-config' } as const;
+const MU_SHORTCUT_NAMES = { data: '.spec.jev-desktop', config: '.spec.jev-desktop-config' } as const;
 const shortcutName = (folder: keyof typeof MU_SHORTCUT_NAMES): string =>
   getPlatformServices().paths.isPackaged() === true
     ? MU_SHORTCUT_NAMES[folder]

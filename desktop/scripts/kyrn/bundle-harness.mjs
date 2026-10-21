@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Puts mu inside the app: the npm package spec.jev, with its dependencies, in resources/harness/spec.jev, which
 // electron-builder copies to <resources>/harness (packages/desktop/electron-builder.yml, extraResources). The app runs
-// it on its own binary as Node (resources/mu/acp, process/agent/kyrn/harness.ts), so the machine the app runs on needs
+// it on its own binary as Node (resources/spec.jev/acp, process/agent/kyrn/harness.ts), so the machine the app runs on needs
 // no Node, no npm and no download.
 //
 //   node scripts/kyrn/bundle-harness.mjs [--platform darwin|linux|win32] [--arch arm64|x64]

@@ -6,9 +6,9 @@ executableName: spec.jev
 copyright: Copyright © 2026 spec.jev
 
 protocols:
-  - name: mu Protocol
+  - name: spec.jev Protocol
     schemes:
-      - mu
+      - spec.jev
 
 asar:
   smartUnpack: true
@@ -117,11 +117,11 @@ extraResources:
     to: bundled-aioncore
   - from: resources/hub
     to: hub
-  # mu's ACP adapter launchers: AionCore runs resources/mu/acp (acp.cmd on Windows), which runs the bundled adapter
-  # out/main/mu-acp.js (unpacked below) on the app's own binary as Node
-  - from: resources/mu
-    to: mu
-  # mu itself: the npm package mu-agent with its dependencies (scripts/kyrn/bundle-harness.mjs), which the adapter
+  # spec.jev's ACP adapter launchers: AionCore runs resources/spec.jev/acp (acp.cmd on Windows), which runs the bundled
+  # adapter out/main/mu-acp.js (unpacked below) on the app's own binary as Node
+  - from: resources/spec.jev
+    to: spec.jev
+  # spec.jev itself: the npm package spec.jev with its dependencies (scripts/kyrn/bundle-harness.mjs), which the adapter
   # and the sign-in run on the app's own binary as Node. Plain files outside app.asar, read by that Node.
   - from: resources/harness
     to: harness
@@ -186,21 +186,21 @@ linux:
     - deb
   icon: resources/app.png
   artifactName: ${productName}-${version}-${os}-${arch}.${ext}
-  # `mu` on the PATH is the command line (npm i -g mu-agent); the desktop app gets its own name there.
-  executableName: mu-desktop
+  # The command line owns `spec.jev` through npm; the desktop app gets its own binary name.
+  executableName: spec.jev
   files:
     - '!**/node_modules/onnxruntime-node/bin/napi-v6/{darwin,win32}/**'
   category: Utility
-  maintainer: mu
-  vendor: mu
+  maintainer: spec.jev
+  vendor: spec.jev
   synopsis: ${description}
   description: ${description}
   desktop:
     entry:
-      Name: mu
+      Name: spec.jev
       Comment: ${description}
       Categories: Office;Utility;
-      MimeType: x-scheme-handler/mu;
+      MimeType: x-scheme-handler/spec.jev;
 
 npmRebuild: false
 buildDependenciesFromSource: false
@@ -230,8 +230,8 @@ asarUnpack:
   - 'out/main/builtin-mcp-image-gen.js'
   - 'out/main/builtin-mcp-browser.js'
   - 'out/main/team-mcp-stdio.js'
-  # mu's ACP adapter, run by the app's own binary as Node from resources/mu
-  - 'out/main/mu-acp.js'
+  # spec.jev's ACP adapter, run by the app's own binary as Node from resources/spec.jev
+  - 'out/main/spec.jev-acp.js'
 
 # Compression level: normal for faster builds, maximum for smallest size
 # Note: electron-builder doesn't support YAML template syntax for env vars

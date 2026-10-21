@@ -11,13 +11,13 @@ import { ipcBridge } from '@/common';
  * spec.jev's own link scheme (electron-builder.yml `protocols`). spec.jev answers no other: the scheme of the app it was forked
  * from belongs to that app, which may be installed beside spec.jev.
  */
-export const PROTOCOL_SCHEME = 'mu';
+export const PROTOCOL_SCHEME = 'spec.jev';
 
 /**
- * Parse a mu:// URL into action and params.
+ * Parse a spec.jev:// URL into action and params.
  * Supports two formats:
- *   1. mu://add-provider?base_url=xxx&api_key=xxx
- *   2. mu://provider/add?v=1&data=<base64 JSON>  (one-api / new-api style)
+ *   1. spec.jev://add-provider?base_url=xxx&api_key=xxx
+ *   2. spec.jev://provider/add?v=1&data=<base64 JSON>  (one-api / new-api style)
  */
 export const parseDeepLinkUrl = (url: string): { action: string; params: Record<string, string> } | null => {
   try {

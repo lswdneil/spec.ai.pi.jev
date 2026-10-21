@@ -223,7 +223,7 @@ Var /GLOBAL MuCurrentOutDir
     ${If} ${Silent}
       nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "& { \
         $$ErrorActionPreference = 'Stop'; \
-        $$appDir = Join-Path $$env:APPDATA 'mu'; \
+        $$appDir = Join-Path $$env:APPDATA 'spec.jev'; \
         $$marker = Join-Path $$appDir 'installer-last-failure.json'; \
         $$log = '$MuSessionLogPath'; \
         if (-not $$log) { $$log = Join-Path $$env:TEMP '${MU_FALLBACK_LOG}' }; \

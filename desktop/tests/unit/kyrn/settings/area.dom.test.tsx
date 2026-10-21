@@ -756,7 +756,7 @@ describe('providers and the default model', () => {
     expect(sent.credentials).toEqual([{ name: 'MU_PROVIDER_RELAY_API_KEY', value: 'sk-typed' }]);
     expect(JSON.stringify(sent.models)).not.toContain('sk-typed');
   });
-  it('opens a new provider filled from a mu:// add-provider link, saved only from the save bar', async () => {
+  it('opens a new provider filled from a spec.jev:// add-provider link, saved only from the save bar', async () => {
     offerAddProviderLink({
       name: 'Team Relay',
       base_url: 'https://team.example.com/v1',

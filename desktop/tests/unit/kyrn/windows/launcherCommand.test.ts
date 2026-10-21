@@ -17,14 +17,14 @@ import {
 } from '../../../../packages/desktop/src/process/agent/kyrn/windows/launcherCommand.ts';
 
 // Issue #4: the installer's default folder, C:\Program Files\spec.jev. AionCore started the launcher as `C:\Program`.
-const INSTALLED = 'C:\\Program Files\\spec.jev\\resources\\mu\\acp.cmd';
-const SHORT = 'C:\\PROGRA~1\\mu\\resources\\mu\\acp.cmd';
+const INSTALLED = 'C:\\Program Files\\spec.jev\\resources\\spec.jev\\acp.cmd';
+const SHORT = 'C:\\PROGRA~1\\spec.jev\\resources\\spec.jev\\acp.cmd';
 const ENV: NodeJS.ProcessEnv = {
   LOCALAPPDATA: 'C:\\Users\\someone\\AppData\\Local',
   ProgramData: 'C:\\ProgramData',
   PUBLIC: 'C:\\Users\\Public',
 };
-const LOCAL_FORWARDER = 'C:\\Users\\someone\\AppData\\Local\\mu-desktop\\acp.cmd';
+const LOCAL_FORWARDER = 'C:\\Users\\someone\\AppData\\Local\\spec.jev-desktop\\acp.cmd';
 
 /**
  * A machine made of what is given: `files` maps every spelling of a path (in any case, as Windows reads it) to its
@@ -79,7 +79,7 @@ describe('the command spec.jev registers for its launcher', () => {
   });
 
   it('registers a Windows launcher whose path has no spaces as it is, without asking for a short path', async () => {
-    const launcher = 'C:\\mu\\resources\\mu\\acp.cmd';
+    const launcher = 'C:\\spec.jev\\resources\\spec.jev\\acp.cmd';
     const { deps, asked } = machine({ files: { [launcher]: launcher } });
     expect((await ownLauncher(launcher, deps)).command).toBe(launcher);
     expect(asked).toEqual([]);
@@ -135,10 +135,10 @@ describe('the command spec.jev registers for its launcher', () => {
   it('puts the forwarder in the first folder without spaces that takes it', async () => {
     const env = { ...ENV, LOCALAPPDATA: 'C:\\Users\\some one\\AppData\\Local' };
     const programData = machine({ env, files: { [INSTALLED]: INSTALLED }, writable: ['C:\\ProgramData', 'C:\\Users'] });
-    expect((await ownLauncher(INSTALLED, programData.deps)).command).toBe('C:\\ProgramData\\mu-desktop\\acp.cmd');
+    expect((await ownLauncher(INSTALLED, programData.deps)).command).toBe('C:\\ProgramData\\spec.jev-desktop\\acp.cmd');
     // Another account's forwarder in ProgramData is not this one's to change.
     const published = machine({ env, files: { [INSTALLED]: INSTALLED }, writable: ['C:\\Users\\Public'] });
-    expect((await ownLauncher(INSTALLED, published.deps)).command).toBe('C:\\Users\\Public\\mu-desktop\\acp.cmd');
+    expect((await ownLauncher(INSTALLED, published.deps)).command).toBe('C:\\Users\\Public\\spec.jev-desktop\\acp.cmd');
   });
 
   it('forwards to an ASCII short spelling of a folder outside ASCII', async () => {
@@ -184,10 +184,10 @@ describe('which registered commands run this launcher', () => {
       INSTALLED.toLowerCase(),
       SHORT,
       SHORT.toLowerCase(),
-      'c:/program files/spec.jev/resources/mu/acp.cmd',
+      'c:/program files/spec.jev/resources/spec.jev/acp.cmd',
       LOCAL_FORWARDER,
-      'C:\\ProgramData\\mu-desktop\\acp.cmd',
-      'C:\\Users\\Public\\mu-desktop\\ACP.CMD',
+      'C:\\ProgramData\\spec.jev-desktop\\acp.cmd',
+      'C:\\Users\\Public\\spec.jev-desktop\\ACP.CMD',
     ])
       expect(sameFile(spelling), spelling).toBe(true);
   });
@@ -208,17 +208,17 @@ describe('which registered commands run this launcher', () => {
         return file;
       },
     });
-    expect(same('C:\\mu\\resources\\mu\\acp.cmd')).toBe(false);
+    expect(same('C:\\spec.jev\\resources\\spec.jev\\acp.cmd')).toBe(false);
     expect(same('npx mu-acp')).toBe(false);
     expect(same('\\\\server\\share\\mu\\acp.cmd')).toBe(false);
-    expect(looked).toEqual(['C:\\mu\\resources\\mu\\acp.cmd']);
+    expect(looked).toEqual(['C:\\spec.jev\\resources\\spec.jev\\acp.cmd']);
   });
 
   it('is only the command itself on macOS and Linux', async () => {
-    const launcher = '/opt/mu/resources/mu/acp';
+    const launcher = '/opt/spec.jev/resources/spec.jev/acp';
     const { sameFile } = await ownLauncher(launcher, machine({ platform: 'linux' }).deps);
     expect(sameFile(launcher)).toBe(true);
-    expect(sameFile('/OPT/mu/resources/mu/acp')).toBe(false);
+    expect(sameFile('/OPT/spec.jev/resources/spec.jev/acp')).toBe(false);
   });
 });
 
@@ -226,23 +226,23 @@ describe('which registered commands run this launcher', () => {
 describe('restoring an uninstalled launcher', () => {
   it('recognizes missing Windows launchers, including old short paths, without probing arbitrary commands', async () => {
     const checked: string[] = [];
-    const existing = 'D:\\other\\resources\\mu\\acp.cmd';
+    const existing = 'D:\\other\\resources\\spec.jev\\acp.cmd';
     const { deps } = machine({ files: { [INSTALLED]: INSTALLED }, short: SHORT });
-    const own = await ownLauncher('C:\\mu\\resources\\mu\\acp.cmd', {
+    const own = await ownLauncher('C:\\spec.jev\\resources\\spec.jev\\acp.cmd', {
       ...deps,
       missing: (file) => {
         checked.push(file);
         return file !== existing;
       },
     });
-    for (const file of [INSTALLED, SHORT, 'c:/old/RESOURCES/mu/ACP.CMD']) expect(own.canRestore?.(file)).toBe(true);
+    for (const file of [INSTALLED, SHORT, 'c:/old/RESOURCES/spec.jev/ACP.CMD']) expect(own.canRestore?.(file)).toBe(true);
     expect(own.canRestore?.(existing)).toBe(false);
     const before = checked.length;
     for (const file of [
       'npx mu-acp',
-      'resources\\mu\\acp.cmd',
+      'resources\\spec.jev\\acp.cmd',
       'C:\\custom\\acp.cmd',
-      '\\\\server\\share\\resources\\mu\\acp.cmd',
+      '\\\\server\\share\\resources\\spec.jev\\acp.cmd',
       'C:\\spec.jev\\resources\\spec.jev\\acp.cmd --flag',
     ])
       expect(own.canRestore?.(file), file).toBe(false);
@@ -256,7 +256,7 @@ describe('restoring an uninstalled launcher', () => {
         throw new Error('must not probe');
       },
     });
-    expect(own.canRestore?.('/opt/mu/resources/mu/acp')).toBe(false);
+    expect(own.canRestore?.('/opt/spec.jev/resources/spec.jev/acp')).toBe(false);
   });
 
   it('checks actual file removal on the host platform before allowing restoration', async () => {
@@ -264,17 +264,17 @@ describe('restoring an uninstalled launcher', () => {
     const root = mkdtempSync(join(tmpdir(), 'mu-reinstall-'));
     try {
       const filename = platform === 'win32' ? 'acp.cmd' : 'acp';
-      const old = join(root, 'old', platform === 'darwin' ? 'Resources' : 'resources', 'mu', filename);
+      const old = join(root, 'old', platform === 'darwin' ? 'Resources' : 'resources', 'spec.jev', filename);
       mkdirSync(join(old, '..'), { recursive: true });
       writeFileSync(old, '');
-      const current = join(root, 'new', 'resources', 'mu', filename);
+      const current = join(root, 'new', 'resources', 'spec.jev', filename);
       mkdirSync(join(current, '..'), { recursive: true });
       writeFileSync(current, '');
       const own = await ownLauncher(current, { env: { ...process.env, LOCALAPPDATA: join(root, 'local') } });
       expect(own.canRestore?.(old)).toBe(false);
       rmSync(old);
       expect(own.canRestore?.(old)).toBe(true);
-      expect(own.canRestore?.('//server/resources/mu/acp')).toBe(false);
+      expect(own.canRestore?.('//server/resources/spec.jev/acp')).toBe(false);
       expect(own.canRestore?.('/opt/custom/acp')).toBe(false);
     } finally {
       rmSync(root, { recursive: true, force: true });
@@ -285,11 +285,11 @@ describe('restoring an uninstalled launcher', () => {
 describe('the forwarder', () => {
   it('goes to the user’s own local app data first, then ProgramData, then the public profile', () => {
     expect(forwarderFolders(ENV)).toEqual([
-      'C:\\Users\\someone\\AppData\\Local\\mu-desktop',
-      'C:\\ProgramData\\mu-desktop',
-      'C:\\Users\\Public\\mu-desktop',
+      'C:\\Users\\someone\\AppData\\Local\\spec.jev-desktop',
+      'C:\\ProgramData\\spec.jev-desktop',
+      'C:\\Users\\Public\\spec.jev-desktop',
     ]);
-    expect(forwarderFolders({ ProgramData: 'C:\\ProgramData' })).toEqual(['C:\\ProgramData\\mu-desktop']);
+    expect(forwarderFolders({ ProgramData: 'C:\\ProgramData' })).toEqual(['C:\\ProgramData\\spec.jev-desktop']);
   });
 
   it('is an ASCII batch file that hands over to the launcher with its arguments, without `call`', () => {

@@ -61,7 +61,7 @@ export const subscribePendingDeepLink = (listener: () => void): (() => void) => 
 const ALLOWED_NAVIGATE_PATTERNS = [/^\/team\/[^/]+$/, /^\/conversation\/[^/]+$/];
 
 /**
- * Hook to listen for mu:// deep link events from main process.
+ * Hook to listen for spec.jev:// deep link events from main process.
  * Routes 'add-provider' action to the providers settings page, which opens a new provider filled from the link.
  * Routes 'navigate' action to the specified route (whitelist-validated).
  * The pre-fill data is stored in a module-level variable and taken by the providers page via consumePendingDeepLink().

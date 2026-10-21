@@ -19,7 +19,7 @@ const isString = (value: unknown): value is string => typeof value === 'string' 
 
 export function getInstallerLastFailureMarkerPath(appDataDir: string): string {
   // The app's data folder on Windows, %APPDATA%\<productName>; the installer writes the marker there.
-  return path.join(appDataDir, 'mu', INSTALLER_LAST_FAILURE_FILE_NAME);
+  return path.join(appDataDir, 'spec.jev', INSTALLER_LAST_FAILURE_FILE_NAME);
 }
 
 export function parseInstallerLastFailureMarker(raw: unknown): InstallerLastFailureMarker | null {

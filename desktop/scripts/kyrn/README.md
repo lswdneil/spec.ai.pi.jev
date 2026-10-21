@@ -37,7 +37,7 @@ not imported, and free-text extension dialogs are cancelled rather than guessed.
 Built-in mu browser, hive, skills and tools still run inside mu.
 
 Where mu comes from (`process/agent/kyrn/harness.ts`): `MU_ROOT` / `KYRN_ROOT` when set; else the copy the packaged
-app carries (`<resources>/harness/mu-agent`, below); else a checkout beside this one (`../KYRN`, or `..` in the MU
+app carries (`<resources>/harness/spec.jev`, below); else a checkout beside this one (`../KYRN`, or `..` in the MU
 monorepo); else `mu-agent` installed with npm (`npm i -g mu-agent`), found from `mu` on PATH or in npm's usual global
 folders. The npm package, the app's copy included, keeps its keys in `~/.mu/.env` and its Laya venv in
 `~/.mu/local-judge`, and the settings follow it there.
@@ -51,7 +51,7 @@ a real Windows machine yet.
 AionCore runs a registration's command only up to its first space, and the installer puts the app for all users in
 `C:\Program Files\mu` (#4). So on Windows a launcher whose path has whitespace is registered by a spelling without it
 (`process/agent/kyrn/windows/launcherCommand.ts`): its real path when that has none, else its 8.3 short path
-(`C:\PROGRA~1\mu\resources\mu\acp.cmd`), else a forwarder: `mu-desktop\acp.cmd`, an ASCII batch file that hands over
+(`C:\PROGRA~1\spec.jev\resources\spec.jev\acp.cmd`), else a forwarder: `spec.jev-desktop\acp.cmd`, an ASCII batch file that hands over
 to the launcher, in the first folder without spaces that takes it (the user's local app data, ProgramData, the public
 profile), rewritten at each start. A registration under mu's name that runs the same launcher by another spelling gets
 this start's command; one that runs another file is still refused. When no spelling works (a folder outside ASCII
@@ -60,8 +60,8 @@ spaces, such as `C:\mu`. `register.mjs` does the same on Windows, where it needs
 
 The packaged app has no desktop sources and no tsx, and needs no Node on the machine. It carries the adapter bundled
 into one file, `out/main/mu-acp.js` (unpacked from the asar, built by `scripts/build-mcp-servers.js` like the builtin
-MCP servers), and mu itself: the npm package `mu-agent` with its dependencies in `<resources>/harness/mu-agent`. It
-registers `resources/mu/acp` (`acp.cmd` on Windows) as the command, which runs the adapter on the app's own binary
+MCP servers), and mu itself: the npm package `spec.jev` with its dependencies in `<resources>/harness/spec.jev`. It
+registers `resources/spec.jev/acp` (`acp.cmd` on Windows) as the command, which runs the adapter on the app's own binary
 as Node (`ELECTRON_RUN_AS_NODE=1`; Electron 37 carries Node 22.21), and the adapter starts mu the same way
 (`launchCommand` in `piRpc.ts`). `MU_NODE`, when set, runs both on that Node instead. mu drops the variable for
 what it starts (tools, servers) and gives it back only to its own sub-agents.
@@ -89,7 +89,7 @@ of this has run on a real Windows machine with WSL yet.
 app and AionCore run it (on Windows: `acp.cmd` through `cmd /d /c`, the harness as `node mu.mjs`, `taskkill /T` at the
 end): the harness is found, mu answers over RPC, the registration's command answers the ACP handshake and opens a
 session, and ending each leaves no process behind. With `--packaged` it does the same for the bundled adapter and
-`resources/mu`. It uses a throwaway home, calls no model and needs no key, so CI can run it on Windows runners.
+`resources/spec.jev`. It uses a throwaway home, calls no model and needs no key, so CI can run it on Windows runners.
 
 The earlier `kyrn/` prototype is paused. It is not the product UI direction.
 

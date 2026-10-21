@@ -410,8 +410,8 @@ describe('mu-only backend catalog', () => {
 
   // https://github.com/qybaihe/mu/issues/14: uninstalling leaves the backend registration behind.
   describe('reinstalling into a different folder', () => {
-    const old = 'C:\\old\\resources\\mu\\acp.cmd';
-    const current = 'D:\\mu\\resources\\mu\\acp.cmd';
+    const old = 'C:\\old\\resources\\spec.jev\\acp.cmd';
+    const current = 'D:\\spec.jev\\resources\\spec.jev\\acp.cmd';
     const row = {
       id: 'k',
       name: 'spec.jev',
@@ -691,7 +691,7 @@ describe('mu-only backend catalog', () => {
       ['its short path in another case', short.toLowerCase()],
       ['its long path', long],
       ['its long path in another case', long.toUpperCase()],
-      ['a forwarder written for it', 'C:\\ProgramData\\mu-desktop\\acp.cmd'],
+      ['a forwarder written for it', 'C:\\ProgramData\\spec.jev-desktop\\acp.cmd'],
     ])(
       'takes a registration under spec.jev’s name that runs %s as its own, and registers the short path in it',
       async (_how, registered) => {

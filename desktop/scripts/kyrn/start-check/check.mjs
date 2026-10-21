@@ -9,7 +9,7 @@
 //      answers the ACP handshake and opens a session, which starts mu under the adapter, and ending the command's
 //      tree as AionCore does leaves nothing behind;
 //   4. with --packaged, step 3 for the packaged app: the adapter bundled by scripts/build-mcp-servers.js and
-//      resources/mu/acp(.cmd), laid out as in an installed app's resources folder. There is no app binary in that
+//      resources/spec.jev/acp(.cmd), laid out as in an installed app's resources folder. There is no app binary in that
 //      folder, so MU_NODE runs them on this Node instead of the app's own.
 //   5. with --permission, mu's permission round trip through the same command: a stub model (a local HTTP server
 //      speaking the OpenAI chat API) asks for a file write, mu in minimal permissions asks, and the check answers as
@@ -428,8 +428,8 @@ try {
     // An installed app has no checkout beside it: the harness comes from MU_ROOT here, from its own copy for a user.
     const launch = join(resources, 'mu', windows ? 'acp.cmd' : 'acp');
     const env = { MU_ROOT: harness.root, MU_NODE: process.execPath };
-    if (windows) await acp('packaged resources/mu/acp.cmd', 'cmd.exe', ['/d', '/c', launch], env);
-    else await acp('packaged resources/mu/acp', launch, [], env);
+    if (windows) await acp('packaged resources/spec.jev/acp.cmd', 'cmd.exe', ['/d', '/c', launch], env);
+    else await acp('packaged resources/spec.jev/acp', launch, [], env);
   }
 
   // 5. The permission round trip, through the registration's command.
