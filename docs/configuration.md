@@ -1,6 +1,6 @@
 # Configuration
 
-mu reads pi's settings (models, sign-ins and preferences; see [pi's documentation](https://github.com/earendil-works/pi/tree/main/packages/coding-agent#readme)) and its own, in `~/.mu/agent/mu.json`. The desktop app's settings write to the same file, so anything you change there you can also change by hand, and the other way round.
+mu reads pi's settings (models, sign-ins and preferences; see [pi's documentation](https://github.com/earendil-works/pi/tree/main/packages/coding-agent#readme)) and its own, in `~/.mu/agent/mu.json`. The desktop app's settings write to the same file, so anything you change there you can also change by hand, and vice versa.
 
 mu reads only your own `mu.json`. A project can't change the judge, its endpoint or its modes, because the judge reads your messages.
 
@@ -50,7 +50,7 @@ If mu doesn't understand part of the file, that part falls back to its default a
 
 ## Modes in practice
 
-- Every point acts from the start. To try out a judge, or a point you're unsure of, put it in shadow mode, read the ledger (`mu ledger`, `/status` or the app's Judge tab), then set it back to active once its verdicts look right.
+- All but two points act from the start (`context.compact` and `output.drift` are off until you turn them on). To try out a judge, or a point you're unsure of, put it in shadow mode, read the ledger (`mu ledger`, `/status` or the app's Judge tab), then set it back to active once its verdicts look right.
 - `/mu mode <point> <off|shadow|active>` switches one point for the current session, and `/mu mode default shadow` switches all of them. To make a mode stick, put it in `mu.json`; the app's settings turn points on or off.
 - `MU_JUDGE_MODE=shadow mu` sets the default mode for one run.
 

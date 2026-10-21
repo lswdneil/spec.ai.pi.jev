@@ -30,8 +30,8 @@
 一个编码代理每次会话要做几百个和代码无关的决定：什么留在上下文里，一条命令安不安全，一个发现值不值得告诉另一个代理，活干完了没有。交给大模型，花的是 token、延迟和注意力；交给死规则，错得太多。mu 把它们交给一个**判定器**：一个小而快的模型，每次只回答一个有边界的问题，每一轮有 40 个判定点。大模型把注意力留给正事。
 
 - **mu**：命令行。pi 的全部能力，加上判定内核。
-- **mu 桌面端**：原生应用，自带 mu 和运行时。下载，接一个模型，开始。
-- **Jev**：判定器。是非题、选择题、打分题，每个答案带概率，每一次判定都进流水。本地判定器（Laya）或任何一个大模型都可以接管某个判定点。
+- **mu 桌面端**：自带 mu 和运行时的桌面应用。下载，接一个模型，开始。
+- **Jev**：判定器。是非题、选择题、打分题，每个答案带概率，每一次判定都进流水。除了审批只由 Jev 决定，任何判定点都可以交给本地判定器（Laya）或任何一个大模型。
 
 > 还在早期开发。预发布版（0.1.x）在 npm 和 [Releases](https://github.com/qybaihe/mu/releases) 上，作者每天在用。名字、设置和格式都可能变。
 
@@ -90,7 +90,7 @@ mu                  # 在当前目录开一个会话
 | `tool.admission` | 一段长工具输出的每一块：现在重要吗？ | 重要的进上下文；其余归档，留一个指针 |
 | `tool.admission.test-log` | 测试日志里哪些是重复？ | 完全相同的重复只留一份，无损；可选地由判定器从剩下的里挑 |
 | `context.forget` | 上下文超过阈值后，哪些工具结果已经过期？ | 每一条在外发请求里变成一行墓碑 |
-| `context.compact` | 这一段留还是删？ | 按判定压缩；不写摘要 |
+| `context.compact` | 这一段留还是删？ | 默认关闭。按判定压缩；不写摘要 |
 | `memory.recall` | 哪些经验适用于这个任务？ | 带进这一轮 |
 | `memory.capture` | 这条消息是在纠正代理，还是在立一条规矩？ | 变成一条经验 |
 | `memory.outcome` | 绕了圈子之后，最后走通的那条路值得记吗？ | 从运行里学来的经验，不是你教的 |
@@ -105,7 +105,7 @@ mu                  # 在当前目录开一个会话
 | 判定点 | 问题 | 效果 |
 | --- | --- | --- |
 | `tool.risk` | 一条被规则标记的命令：是你要的吗？ | 拿不准就问你 |
-| `tool.approval` | 在「Jev 审批」模式下：这条命令、这个项目外的改动、这个对外动作、这个子代理，任务明确需要吗？ | 确定需要的直接过；其余问你 |
+| `tool.approval` | 在「Jev 审批」模式下：这条命令、这个项目外的改动、这个对外动作、这个子代理，任务明确需要吗？ | Jev 确定需要的直接过；其余问你 |
 | `tool.constraint` | 在一个会改变东西的调用之前：它越过了你定下的约束吗？ | 调用被拦下 |
 | `tool.injection` | 网页、搜索结果、MCP 服务器的输出，或命令从别的机器取回的内容（`curl`、`gh issue view`），一段一段看：里面有没有冲着 AI 来的指令？ | 这些段落不会到达模型，原处留一条说明。读到过这种段落的子代理，报告交回时前面带一句警告 |
 | `tool.description` | MCP 工具自己的说明，第一次出现或变了时：是不是要 AI 做调用这个工具以外的事（读密钥、把数据发到别处、瞒着你）？ | 这个工具从模型的工具列表里拿掉，调用也被拒绝，并告诉你 |
@@ -123,7 +123,7 @@ mu                  # 在当前目录开一个会话
 | `turn.rewind` | 同一个失败一次又一次：这条路是死路吗？ | 退回到某个检查点 |
 | `turn.completion` | 模型说做完了：有什么东西验证过吗？ | 没有就提醒一次 |
 | `turn.continue` | 一轮停在「接下来我跑一下测试」，或者在你已经要它做的事上问「要我动手吗」：是不是没做完就停了？ | 让它接着做，每条消息最多两次；难以撤销的一步不会推它去做 |
-| `output.drift` | 模型正在写的时候：输出的末尾越过了你的约束吗？ | 实验性；边写边纠正 |
+| `output.drift` | 模型正在写的时候：输出的末尾越过了你的约束吗？ | 实验性，默认关闭；边写边纠正 |
 | `goal.met` | 目标模式下大模型给不出答案时：条件成立了吗？ | `/goal` 的兜底 |
 | `board.read` | 事情做到哪了，选择题？ | 供人话看板使用 |
 | `notify.routing` | 上下文预算之类的事件：现在告诉模型，晚点，还是不说？ | 模型在合适的时候被告知 |
@@ -147,7 +147,7 @@ mu                  # 在当前目录开一个会话
 - **pi 模型目录里的任何分类模型**，作为一级：`classifier:<提供商>/<模型>`。比如 Cloudflare 的 Clef（`clef`、`clef-flash`）、OpenRouter 和 Vercel AI Gateway 上的 System One 模型、llama.cpp 的分类模型。
 - **任何大模型**，作为一级：`llm:<提供商>/<模型>`。
 
-这换来什么，以作者自己的会话为准：上下文从不填满，因为工具输出逐块进入、过期结果不写摘要直接放下；最长的几份失败测试日志里，折叠完全相同的重复省下 51% 的字符，一个字符也没丢（见[实测](#实测)）；提示缓存保持热的，因为内核会猜你什么时候回来。
+这换来什么，以作者自己的会话为准：上下文很少填满，因为工具输出逐块进入、过期结果不写摘要直接放下；测试日志精简默认关闭，开启后折叠完全相同的重复，在最长的几份失败测试日志里省下 51% 的字符，一个字符也没丢（见[实测](#实测)）；提示缓存过期之前，内核会判断你会不会回来，会回来就提前续上。
 
 ## 实测
 
@@ -234,7 +234,7 @@ mu                  # 在当前目录开一个会话
 
 ## 桌面端
 
-原生应用，自带 mu 和运行时：不用装 Node，第一次启动不下载任何东西。命令行有的它都有，另加一块对话旁边的工作面板：
+桌面应用，自带 mu 和运行时：不用装 Node，第一次启动不下载任何东西。命令行有的它都有，另加一块对话旁边的工作面板：
 
 **看板** · **判定**（实时的流水：每一次判定和它的问题） · **蜂群** · **经验** · **文件** · **预览** · **源码** · **浏览器**（代理逐步操作的内置浏览器，带目标、暂停和停止）
 
@@ -315,7 +315,7 @@ npm run check                  # 格式、静态检查、类型
 
 ## 来源与协议
 
-mu 采用 MIT 许可证（[LICENSE](../../LICENSE)；桌面端见 [desktop/LICENSE](../../desktop/LICENSE)）。它基于 [pi](https://github.com/earendil-works/pi)（编码代理，MIT）和 [AionUi](https://github.com/iOfficeAI/AionUi) 改造，感谢两个项目：桌面端起步于 AionUi 的分支，来自 AionUi 的文件列在 [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt)，仍按 Apache 2.0 授权（见 [desktop/NOTICE](../../desktop/NOTICE)）。有几个判定点借鉴了别的项目：提示注入筛查的问法来自 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)，续跑检查和批量判定工具参考了 [oh-my-pi](https://github.com/can1357/oh-my-pi)。判定内核用到的第三方代码列在 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)。
+mu 采用 MIT 许可证（[LICENSE](../../LICENSE)；桌面端见 [desktop/LICENSE](../../desktop/LICENSE)）。它基于 [pi](https://github.com/earendil-works/pi)（编码代理，MIT）和 [AionUi](https://github.com/iOfficeAI/AionUi) 改造，感谢两个项目：桌面端最初从 AionUi fork 而来，来自 AionUi 的文件列在 [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt)，仍按 Apache 2.0 授权（见 [desktop/NOTICE](../../desktop/NOTICE)）。有几个判定点借鉴了别的项目：提示注入筛查的问法来自 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)，续跑检查和批量判定工具参考了 [oh-my-pi](https://github.com/can1357/oh-my-pi)。判定内核用到的第三方代码列在 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)。
 
 ## 社区支持
 
