@@ -27,7 +27,7 @@ On by default: yes. Decision points: `input.preflight`.
 | `thinking` | `false` | Set the thinking level from the verdict (changing it invalidates the prompt cache). |
 | `hints` | `true` | Give the model a one-line hint. |
 | `show` | `true` | Show the wait and the verdict. |
-| `waitMs` | `4000` ms | Wait at most. After this, the turn starts without the verdict. Range 500 to 30000. |
+| `waitMs` | `4000` ms | Wait at most `4000` ms. After this, the turn starts without the verdict. Range 500 to 30000. |
 
 ## interjection
 
@@ -37,7 +37,7 @@ On by default: yes. Decision points: `input.interjection`.
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `waitMs` | `1500` ms | Wait at most. Range 200 to 10000. |
+| `waitMs` | `1500` ms | Wait at most `1500` ms. Range 200 to 10000. |
 
 ## skills
 
@@ -48,7 +48,7 @@ On by default: yes. Decision points: `skills.disclosure`.
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `minSkills` | `4` | Don't filter below this many skills. Range 1 to 100. |
-| `waitMs` | `4000` ms | Wait at most. Range 500 to 30000. |
+| `waitMs` | `4000` ms | Wait at most `4000` ms. Range 500 to 30000. |
 
 ## catalog
 
@@ -58,7 +58,7 @@ On by default: yes. Decision points: `capability.disclosure`.
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `waitMs` | `4000` ms | Wait at most. Range 500 to 30000. |
+| `waitMs` | `4000` ms | Wait at most `4000` ms. Range 500 to 30000. |
 
 ## frame
 
@@ -68,7 +68,7 @@ On by default: yes. Decision points: `task.frame`.
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `waitMs` | `3000` ms | Wait for the task frame at most. Counted from when the message arrives. A late update isn't dropped: the turn starts with the previous version plus the raw message, and the update applies when it's ready. Range 0 to 30000. |
+| `waitMs` | `3000` ms | Wait for the task frame at most `3000` ms. Counted from when the message arrives. A late update isn't dropped: the turn starts with the previous version plus the raw message, and the update applies when it's ready. Range 0 to 30000. |
 | `writerTimeoutMs` | `20000` ms | Time limit for writing a frame. On a timeout or malformed reply, the last version stays and is marked stale, goal-based filtering holds back, and the next message tries again. Range 1000 to 120000. |
 | `show` | `true` | Show frame updates in the chat. |
 
@@ -81,9 +81,9 @@ On by default: yes. Decision points: `memory.recall`, `memory.capture`, `memory.
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `path` | empty | Lessons file. Leave empty for the default location. |
-| `maxCandidates` | `24` | Judge at most. The most followed come first, then the most recently saved or confirmed. Range 1 to 200. |
-| `maxInjected` | `5` | Bring in at most. Range 0 to 20. |
-| `waitMs` | `4000` ms | Wait for recall at most. Counted from when the message arrives; picking lessons for subagents uses the same limit. Range 0 to 30000. |
+| `maxCandidates` | `24` | Judge at most `24`. The most followed come first, then the most recently saved or confirmed. Range 1 to 200. |
+| `maxInjected` | `5` | Bring in at most `5`. Range 0 to 20. |
+| `waitMs` | `4000` ms | Wait for recall at most `4000` ms. Counted from when the message arrives; picking lessons for subagents uses the same limit. Range 0 to 30000. |
 | `retireAfter` | `8` | Retire after this many recalls without being followed. 0 never retires lessons automatically. Range 0 to 100. |
 | `mergeNeighbours` | `6` | Compare with this many similar lessons. Chosen by shared words and judged in one request; 0 saves without merging. Range 0 to 16. |
 | `outcome` | `true` | Learn from the agent getting unstuck. Needs the writer model or the session's model to word the lesson. |
@@ -126,7 +126,7 @@ On by default: yes. Decision points: `tool.constraint`.
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `maxConstraints` | `6` | Max constraints checked per call. The newest ones are used. Range 1 to 20. |
-| `waitMs` | `5000` ms | Wait at most. Range 500 to 30000. |
+| `waitMs` | `5000` ms | Wait at most `5000` ms. Range 500 to 30000. |
 
 ## injection
 
@@ -138,9 +138,9 @@ On by default: yes. Decision points: `tool.injection`, `tool.description`.
 | --- | --- | --- |
 | `tools` | `web_fetch`, `web_search`, `browse`, `mcp__*` | Tools screened. Tool names, or a prefix ending in *; mcp__* covers every MCP server. |
 | `fetchCommands` | `curl`, `wget`, `gh`, `glab`, `lynx`, `w3m`, `Invoke-WebRequest`, `Invoke-RestMethod`, `iwr`, `irm` | Fetching commands. When a bash or PowerShell command runs one of these programs, its output is screened unless every address it's given is on this machine (localhost); gh and glab output is always screened. Empty: no shell output is screened. |
-| `waitMs` | `6000` ms | Wait at most. After this, rules withhold only obvious injection phrases; the verdict is still recorded. Range 500 to 30000. |
+| `waitMs` | `6000` ms | Wait at most `6000` ms. After this, rules withhold only obvious injection phrases; the verdict is still recorded. Range 500 to 30000. |
 | `descriptions` | `true` | Screen MCP tool descriptions. MCP tools whose descriptions ask the AI to do more than use the tool are removed from the list (tool.description). |
-| `descriptionWaitMs` | `8000` ms | Wait for tool description verdicts at most. How long a turn waits for verdicts on MCP tools it hasn't seen before. After this, rules decide until the verdict arrives. Range 500 to 30000. |
+| `descriptionWaitMs` | `8000` ms | Wait for tool description verdicts at most `8000` ms. How long a turn waits for verdicts on MCP tools it hasn't seen before. After this, rules decide until the verdict arrives. Range 500 to 30000. |
 
 ## admission
 
@@ -150,11 +150,11 @@ On by default: yes. Decision points: `tool.admission`, `tool.admission.test-log`
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `minChars` | `4000` chars | Only filter output longer than. Range 500 to 200000. |
+| `minChars` | `4000` chars | Only filter output longer than `4000` chars. Range 500 to 200000. |
 | `chunkChars` | `1200` chars | Chunk size. Range 200 to 20000. |
 | `maxChunks` | `48` | Judge at most this many chunks. Range 4 to 400. |
 | `batchChunks` | `16` | Chunks per request. A hosted judge takes many chunks in one request, with the shared context billed once; the local judge takes one at a time. Range 1 to 32. |
-| `waitMs` | `4000` ms | Wait at most. After this, the full output goes in; the verdict is only recorded. Range 500 to 30000. |
+| `waitMs` | `4000` ms | Wait at most `4000` ms. After this, the full output goes in; the verdict is only recorded. Range 500 to 30000. |
 | `passThrough` | `read`, `edit`, `write` | Never filter these tools. |
 | `testLog` | `off` | Test log trimming. One of `off` (Off), `rules` (Drop exact repeats only (lossless)), `jev` (Also let the judge pick from the rest). |
 | `agentEnv` | `true` | Tell test runners an agent is reading. Vitest and other runners then print only failures and the summary. |
@@ -168,10 +168,10 @@ On by default: yes. Decision points: `context.forget`.
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `thresholds` | `50`, `70`, `85` | Trigger thresholds (context use %). |
-| `minChars` | `6000` chars | Only results longer than. Range 500 to 200000. |
+| `minChars` | `6000` chars | Only results longer than `6000` chars. Range 500 to 200000. |
 | `minAgeTurns` | `2` | At least this many turns old. Range 0 to 50. |
 | `maxPerBatch` | `12` | Judge at most per batch. Range 1 to 100. |
-| `waitMs` | `4000` ms | Wait at most. The current request waits this long; later verdicts apply from the next request on. Range 500 to 30000. |
+| `waitMs` | `4000` ms | Wait at most `4000` ms. The current request waits this long; later verdicts apply from the next request on. Range 500 to 30000. |
 
 ## compaction
 
@@ -182,7 +182,7 @@ On by default: no. Decision points: `context.compact`.
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `keepThreshold` | `0.5` | Keep threshold. Range 0 to 1. |
-| `minChars` | `600` chars | Keep anything shorter than. Range 100 to 20000. |
+| `minChars` | `600` chars | Keep anything shorter than `600` chars. Range 100 to 20000. |
 | `headChars` | `300` chars | Head kept when pruning. Range 0 to 5000. |
 | `targetRatio` | `0.5` | Target share of the original. Range 0.05 to 1. |
 | `maxWindowShare` | `0.25` | At most this share of the window. Range 0.05 to 0.9. |
@@ -218,7 +218,7 @@ On by default: yes. Decision points: `turn.drift`.
 | --- | --- | --- |
 | `every` | `6` | Tool calls between checks. Range 1 to 100. |
 | `repeats` | `3` | Repeats that count as a loop. Range 2 to 20. |
-| `window` | `8` | Window. Range 2 to 100. |
+| `window` | `8` | Recent calls checked. Range 2 to 100. |
 
 ## lsp
 
@@ -231,13 +231,13 @@ On by default: yes. Decision points: `diagnostics.delivery`.
 | `builtin` | `true` | Use the built-in list of well-known servers. Well-known servers for TypeScript, Python, Go, Rust and C/C++, found on PATH only. Add your own under features.lsp.servers in mu.json. |
 | `editTools` | `edit`, `write` | Tools that count as editing a file. |
 | `subAgents` | `false` | Subagents start language servers too. Off by default: a set of servers per subagent is heavy on the machine. |
-| `settleMs` | `1500` ms | Wait for the server after an edit, at most. Past this, nothing waits: late diagnostics are handled at the next edit or when the turn ends. Range 0 to 10000. |
-| `turnEndSettleMs` | `3000` ms | Wait at the end of a turn, at most. Range 0 to 30000. |
+| `settleMs` | `1500` ms | Wait for the server after an edit, at most `1500` ms. Past this, nothing waits: late diagnostics are handled at the next edit or when the turn ends. Range 0 to 10000. |
+| `turnEndSettleMs` | `3000` ms | Wait at the end of a turn, at most `3000` ms. Range 0 to 30000. |
 | `quietMs` | `250` ms | Silence that counts as the server being done. Range 20 to 5000. |
-| `baselineMs` | `5000` ms | Wait for the pre-edit diagnostics, at most. Waited for in the background, never blocking a tool. Past this, the first report isn't treated as new. Range 100 to 60000. |
-| `maxItems` | `10` | Diagnostics reported at once, at most. Range 1 to 100. |
-| `maxServers` | `4` | Servers running at once, at most. Range 1 to 16. |
-| `waitMs` | `4000` ms | Wait for the judge, at most. Range 500 to 30000. |
+| `baselineMs` | `5000` ms | Wait for the pre-edit diagnostics, at most `5000` ms. Waited for in the background, never blocking a tool. Past this, the first report isn't treated as new. Range 100 to 60000. |
+| `maxItems` | `10` | Diagnostics reported at once, at most `10`. Range 1 to 100. |
+| `maxServers` | `4` | Servers running at once, at most `4`. Range 1 to 16. |
+| `waitMs` | `4000` ms | Wait for the judge, at most `4000` ms. Range 500 to 30000. |
 
 ## ttsr
 
@@ -249,7 +249,7 @@ On by default: no. Decision points: `output.drift`.
 | --- | --- | --- |
 | `rules` | none | Rules to follow at all times. One per line, in plain words, e.g. “Answer in Chinese”, “No placeholder implementations”. Your hard constraints from the task frame are added automatically. |
 | `segmentChars` | `600` | Characters of output per check. Range 200 to 5000. |
-| `maxRules` | `4` | Rules checked per call at most. When there are more, the most recent ones are used. Range 1 to 12. |
+| `maxRules` | `4` | Rules checked per call at most `4`. When there are more, the most recent ones are used. Range 1 to 12. |
 | `maxInterrupts` | `2` | Max cuts between two of your messages. Range 1 to 10. |
 
 ## goal
@@ -293,7 +293,7 @@ On by default: yes. Decision points: `turn.completion`.
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `waitMs` | `3000` ms | Wait at most. After this, there's no nudge; the verdict is only recorded. Range 500 to 30000. |
+| `waitMs` | `3000` ms | Wait at most `3000` ms. After this, there's no nudge; the verdict is only recorded. Range 500 to 30000. |
 
 ## continuation
 
@@ -304,7 +304,7 @@ On by default: yes. Decision points: `turn.continue`.
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `maxNudges` | `2` | Max nudges per message. Range 1 to 5. |
-| `waitMs` | `3000` ms | Wait at most. After this, there's no nudge; the verdict is only recorded. Range 500 to 30000. |
+| `waitMs` | `3000` ms | Wait at most `3000` ms. After this, there's no nudge; the verdict is only recorded. Range 500 to 30000. |
 
 ## notify
 
@@ -330,7 +330,7 @@ On by default: yes.
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `intervalMs` | `50000` ms | Every. The server drops connections idle for about 90 s; stay below that. Range 10000 to 85000. |
+| `intervalMs` | `50000` ms | Every `50000` ms. The server drops connections idle for about 90 s; stay below that. Range 10000 to 85000. |
 | `idleMs` | `900000` ms | Stop after this much inactivity. Range 60000 to 7200000. |
 
 ## swarm
