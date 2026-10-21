@@ -20,11 +20,11 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/app-dark.png">
-    <img src="docs/readme/app-light.png" width="880" alt="The mu desktop app fixing a failing test in a small project. Jev classifies the message as a multi-step task (input.preflight), the agent runs the tests, reads the parser, fixes the minute unit and runs the tests again. The judge panel on the right lists each verdict with its decision point and latency, about 200 to 400 ms. The bar along the bottom shows the judge, 38 of 40 decision points active, 5 verdicts and the context in use.">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/run-dark.gif">
+    <img src="docs/readme/run-light.gif" alt="A run in the mu desktop app. The message: the tests are failing on main, find out why and fix it. Jev classifies it as a multi-step task (input.preflight, about 350 ms). The model runs the tests, which Jev lets through (tool.approval, about 200 ms), reads the parser, finds that a minute is defined as 1,000 ms, says it will change it to 60,000 and run the tests again, and stops without doing it. Jev answers that the run stopped short (turn.continue, about 200 ms), mu reminds the model that the turn isn't finished, and it changes the unit and runs the tests, which pass. The judge panel on the right fills with each verdict, its decision point and its latency.">
   </picture>
   <br>
-  <sub>The desktop app on a small demo project. The coding model is scripted for the screenshot; Jev's verdicts and their timings are real.</sub>
+  <sub>A recorded run in the desktop app. The coding model's replies are scripted for the recording (it's shown as GPT-6.1 Sol). The judge's verdicts, their timings and the recovery are real: the model stopped short, <code>turn.continue</code> caught it, and mu sent it back to finish.</sub>
 </p>
 
 A coding agent makes hundreds of decisions per session that aren't about the code: what goes into the context, whether a command is safe, whether a finding is worth passing to another agent, whether the work is really done. Handing these to the main model costs tokens, time and focus. Fixed rules get them wrong too often. mu hands them to a **judge**: a small, fast model that answers one bounded question at a time, at 40 decision points in every turn. The main model keeps its attention on the work.
@@ -268,6 +268,13 @@ The working model keeps its own language for the work, and the board stays reada
 A native app with mu and its runtime built in: there's no Node.js to install and nothing to download on first launch. It has everything the command line has, plus a work panel beside the conversation:
 
 **board** · **judge** (the live ledger: every verdict with its question, decision point and latency) · **hive** · **lessons** · **files** · **preview** · **source** · **browser** (the built-in browser the agent drives one step at a time; it shows the goal and lets you pause or stop)
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/app-dark.png">
+    <img src="docs/readme/app-light.png" width="880" alt="The mu desktop app after fixing a failing test in a small project. Jev classified the message as a multi-step task (input.preflight), the agent ran the tests, read the parser, fixed the minute unit and ran the tests again. The judge panel on the right lists each verdict with its decision point and latency, about 200 to 400 ms. The bar along the bottom shows the judge, 38 of 40 decision points active, 5 verdicts and the context in use.">
+  </picture>
+</p>
 
 A bar along the bottom keeps the kernel in view: which judge answers and where it runs, how many decision points are active and, in a conversation, the verdicts so far, the latest judge latency and the context in use. The permission mode and the goal sit in the composer, and `⌘K` opens the command palette. You sign in to models inside the app: ChatGPT, Claude, Grok and Google (Gemini CLI / Antigravity) subscriptions, or an API key for any provider pi supports. You can import Claude Code and Codex CLI conversations and continue them.
 
