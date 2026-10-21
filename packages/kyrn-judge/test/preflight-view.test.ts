@@ -154,7 +154,7 @@ describe("preflight view", () => {
 		});
 		const none = verdictData(failed, { by: "jev-latest", state: "none" });
 		expect(renderVerdict(none, false, 120, plain)[0]).toContain(
-			"◇ jev-latest  no verdict (error:timeout) · default behavior for this turn",
+			"◇ jev-latest  no verdict (error:timeout) · using the fallback this turn",
 		);
 		const skipped = verdictData(undefined, { by: "jev-latest", state: "none", reason: "skipped", waitedMs: 1200 });
 		expect(renderVerdict(skipped, false, 120, plain)[0]).toContain("no verdict (skipped)");

@@ -750,7 +750,7 @@ export function registerSwarmCommand(runtime: KyrnRuntime): void {
 	runtime.pi.registerCommand("swarm", {
 		description: say({
 			zh: "正在干活的子代理：/swarm 看每个在做什么，/swarm stop [名字] 让它现在交报告，/swarm kill [名字] 立刻结束它",
-			en: "Subagents at work: /swarm shows what each is doing, /swarm stop [name] asks it to report now, /swarm kill [name] stops it immediately",
+			en: "Show what each subagent is doing; /swarm stop [name] asks it to report now, /swarm kill [name] stops it immediately",
 		}),
 		// No argument completions on purpose: with them the first Enter picks a completion and only the
 		// second one runs the command, and "stop" is typed by someone who wants it to happen now.

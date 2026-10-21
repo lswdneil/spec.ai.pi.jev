@@ -456,7 +456,7 @@ class Setup {
 			if (answer === "") return choices[0].value;
 			const number = Number(answer);
 			if (Number.isInteger(number) && number >= 1 && number <= choices.length) return choices[number - 1].value;
-			this.io.say(this.t({ zh: `请输入 ${range} 之间的数字。`, en: `Type a number from ${range}.` }));
+			this.io.say(this.t({ zh: `请输入 ${range} 之间的数字。`, en: `Type a number from 1 to ${choices.length}.` }));
 		}
 	}
 
@@ -496,7 +496,7 @@ class Setup {
 					? { zh: "没有密钥，也没有 --service", en: "no key or --service given" }
 					: {
 							zh: "问题要在终端里回答。脚本里用：mu setup --service <id> --key-stdin（见 mu setup --help）",
-							en: "its questions need a terminal. In a script, use mu setup --service <id> --key-stdin (see mu setup --help)",
+							en: "no terminal to ask in. In a script, use mu setup --service <id> --key-stdin (see mu setup --help)",
 						},
 				SETUP_EXIT.usage,
 			);
@@ -622,7 +622,7 @@ class Setup {
 				matches.length > 1
 					? {
 							zh: `${this.names(matches)} 的密钥长得一样。用 --service 说明是哪家：${matches.map((service) => service.id).join(" 或 ")}`,
-							en: `${this.names(matches)} keys look the same. Say which with --service ${matches.map((service) => service.id).join(" or ")}`,
+							en: `${this.names(matches)} keys look the same. Choose one with --service ${matches.map((service) => service.id).join(" or ")}`,
 						}
 					: {
 							zh: "认不出这个密钥属于哪个服务。用 --service <id> 说明（mu setup --list 列出全部）",
@@ -849,11 +849,11 @@ class Setup {
 				key
 					? this.t({
 							zh: `正在用 ${where}检查密钥……`,
-							en: `Checking the key with ${this.name(service)} (${hostOf(reach.baseUrl)})...`,
+							en: `Checking the key with ${this.name(service)} (${hostOf(reach.baseUrl)})…`,
 						})
 					: this.t({
 							zh: `正在检查 ${where}……`,
-							en: `Checking ${this.name(service)} (${hostOf(reach.baseUrl)})...`,
+							en: `Checking ${this.name(service)} (${hostOf(reach.baseUrl)})…`,
 						}),
 			);
 			const result = await checkKey({
@@ -999,7 +999,7 @@ class Setup {
 			this.io.say(
 				this.t({
 					zh: `请输入 1-${shown.length} 之间的数字，或模型名。`,
-					en: `Type a number from 1-${shown.length}, or a model name.`,
+					en: `Type a number from 1 to ${shown.length}, or a model name.`,
 				}),
 			);
 		}
@@ -1091,8 +1091,8 @@ class Setup {
 							en: `Jev with a TypeSafe key: ${JEV_PAGE}`,
 						})
 					: this.t({
-							zh: `Jev，用自己的密钥：又快又准，按次计费。密钥在 TypeSafe 申请：${JEV_PAGE}`,
-							en: `Jev with your own key: fast and accurate, billed per call. Get a key from TypeSafe: ${JEV_PAGE}`,
+							zh: `Jev，用自己的密钥：每个问题约 0.3 秒，按次计费。密钥在 TypeSafe 申请：${JEV_PAGE}`,
+							en: `Jev with your own key: about 0.3 s per question, billed per call. Get a key from TypeSafe: ${JEV_PAGE}`,
 						}),
 			value: "jev",
 		});
@@ -1124,7 +1124,7 @@ class Setup {
 		const picked = await this.choose(
 			this.t({
 				zh: "mu 工作时要做很多小判断：这条消息该怎么处理、这一步会不会违反你定的规则……判定器负责回答。选哪个判定器？",
-				en: "As it works, mu makes many small decisions: how to handle a message, whether a step breaks your rules. A judge makes them. Which judge do you want?",
+				en: "As it works, mu faces many small decisions: how to handle a message, whether a step breaks your rules. A judge answers them. Which judge do you want?",
 			}),
 			choices,
 		);

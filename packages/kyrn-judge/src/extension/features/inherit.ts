@@ -211,7 +211,7 @@ export function registerInherit(runtime: KyrnRuntime, roots: HarnessRoots | unde
 	pi.registerCommand("inherit", {
 		description: say({
 			zh: "mu 从 Claude Code、Cursor 和 Codex 沿用了什么，各来自哪个文件",
-			en: "What mu inherited from Claude Code, Cursor and Codex, and from which files",
+			en: "Show what mu inherited from Claude Code, Cursor and Codex, and from which files",
 		}),
 		handler: async (_args, ctx) => {
 			runtime.touch(ctx);

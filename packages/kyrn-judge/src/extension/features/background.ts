@@ -292,7 +292,7 @@ export function registerBackground(runtime: KyrnRuntime): void {
 	pi.registerCommand("jobs", {
 		description: say({
 			zh: "后台命令：/jobs 查看，/jobs stop <编号|all> 停掉",
-			en: "Background jobs: /jobs lists them, /jobs stop <id|all> stops them",
+			en: "List background jobs; /jobs stop <id|all> stops them",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);

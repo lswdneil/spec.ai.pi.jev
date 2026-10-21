@@ -46,7 +46,7 @@ export function registerCommit(shared: PackShared, options: { maxPlanChars: numb
 	runtime.pi.registerCommand("commit", {
 		description: say({
 			zh: "把还没提交的改动拆成几个提交：先给你看计划，你同意才提交，从不推送",
-			en: "Split uncommitted changes into commits: shows the plan, commits only when you approve, and never pushes",
+			en: "Split uncommitted changes into commits: shows the plan, commits only when you approve and never pushes",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);

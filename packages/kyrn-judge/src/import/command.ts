@@ -11,6 +11,7 @@
 import { readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, sep } from "node:path";
+import { count as plural } from "../language.ts";
 import {
 	type FoundConversation,
 	type ImportResult,
@@ -167,7 +168,7 @@ export function formatResult(result: ImportResult, home: string): string {
 	return [
 		`Imported from ${TOOL_NAMES[result.tool]}: "${result.name}"`,
 		`  ${tilde(result.sessionFile, home)}`,
-		`  ${counts.user} messages from you, ${counts.assistant} replies, ${counts.toolCalls} tool calls${counts.compactions > 0 ? `, ${counts.compactions} compactions` : ""}`,
+		`  ${plural(counts.user, "message")} from you, ${plural(counts.assistant, "reply", "replies")}, ${plural(counts.toolCalls, "tool call")}${counts.compactions > 0 ? `, ${plural(counts.compactions, "compaction")}` : ""}`,
 		...(left.length > 0 ? [`  skipped: ${left.join(", ")}`] : []),
 		`  to continue: mu --session ${result.sessionFile}`,
 	].join("\n");

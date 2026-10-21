@@ -207,8 +207,8 @@ export function registerProcedures(runtime: KyrnRuntime, roots?: HarnessRoots): 
 			if (!draft) {
 				ctx.ui.notify(
 					say({
-						zh: `没有叫「${name}」的草稿。${name ? "" : "要给出名字。"}/skills 列出草稿。`,
-						en: `No draft named "${name}".${name ? "" : " Give a name."} /skills lists the drafts.`,
+						zh: `${name ? `没有叫「${name}」的草稿。` : "要给出草稿的名字。"}/skills 列出草稿。`,
+						en: `${name ? `No draft named "${name}".` : "Name a draft."} /skills lists the drafts.`,
 					}),
 					"warning",
 				);
