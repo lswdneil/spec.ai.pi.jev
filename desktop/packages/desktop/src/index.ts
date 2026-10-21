@@ -605,7 +605,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
 
 const handleAppReady = async (): Promise<void> => {
   const t0 = performance.now();
-  const mark = (label: string) => console.log(`[AionUi:ready] ${label} +${Math.round(performance.now() - t0)}ms`);
+  const mark = (label: string) => console.log(`[mu:ready] ${label} +${Math.round(performance.now() - t0)}ms`);
   mark('start');
 
   // React DevTools comes from the Chrome Web Store (about 670 KB): only when asked for with MU_DEVTOOLS=1, since
