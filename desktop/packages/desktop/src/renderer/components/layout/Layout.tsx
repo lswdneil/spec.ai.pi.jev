@@ -5,7 +5,6 @@
  */
 
 import { ipcBridge } from '@/common';
-import { TEAM_MODE_ENABLED } from '@/common/config/constants';
 import Titlebar from '@/renderer/components/layout/Titlebar';
 import MuMark from '@renderer/components/brand/MuMark';
 import { Layout as ArcoLayout, Message, Tooltip } from '@arco-design/web-react';
@@ -150,8 +149,7 @@ const Layout: React.FC<{
   useNativeAttention();
   const navigate = useNavigate();
   const location = useLocation();
-  const workspaceAvailable =
-    location.pathname.startsWith('/conversation/') || (TEAM_MODE_ENABLED && location.pathname.startsWith('/team/'));
+  const workspaceAvailable = location.pathname.startsWith('/conversation/');
   // The person folding or opening the sidebar: the titlebar button, ⌘B, dragging or double-clicking its edge.
   const setSiderCollapsed = useCallback((next: boolean) => setSiderChoice(next ? 'folded' : 'open'), []);
   const toggleSider = useCallback(() => setSiderCollapsed(!collapsed), [collapsed, setSiderCollapsed]);
