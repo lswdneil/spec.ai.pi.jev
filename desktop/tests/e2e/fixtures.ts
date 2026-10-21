@@ -31,12 +31,12 @@ type RendererDiagnostic = {
 // Singleton – one app per test worker
 let app: ElectronApplication | null = null;
 let mainPage: Page | null = null;
-const e2eStateSandboxDir = fs.mkdtempSync(path.join(os.tmpdir(), 'aionui-e2e-state-'));
+const e2eStateSandboxDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mu-e2e-state-'));
 const e2eStateFile = path.join(e2eStateSandboxDir, 'extension-states.json');
 // Disposable userData root so AionCore migrates a fresh DB per run instead of
 // touching the developer's real database (a shared DB that fails migration
 // blocks the whole app from booting). Consumed by configureChromium.ts.
-const e2eUserDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'aionui-e2e-userdata-'));
+const e2eUserDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mu-e2e-userdata-'));
 const rendererDiagnostics = new WeakMap<Page, RendererDiagnostic[]>();
 
 function isDevToolsWindow(page: Page): boolean {

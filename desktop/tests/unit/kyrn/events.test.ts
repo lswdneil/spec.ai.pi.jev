@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { mapEvent } from '../../../packages/desktop/src/process/agent/kyrn/events.ts';
 
-describe('KYRN events in native AionUi cards', () => {
+describe("KYRN events in the app's native cards", () => {
   it('updates one classification card and never invents reasoning tokens', () => {
     const frame = (kind: string, payload: object) =>
       mapEvent({

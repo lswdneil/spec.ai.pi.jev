@@ -1,11 +1,11 @@
 import { fileURLToPath } from 'node:url';
 
-// Use the same public API as AionUi's Add Custom Agent form; never edit its database.
+// Use the same public API as the app's Add Custom Agent form; never edit AionCore's database.
 // The lookup and update rules are the ones in packages/desktop/src/process/agent/kyrn/product.ts.
 if (!process.env.MU_BACKEND_URL) throw new Error('Set MU_BACKEND_URL to the running local backend URL');
 const base = new URL(process.env.MU_BACKEND_URL);
 if (base.protocol !== 'http:' || !['127.0.0.1', 'localhost', '[::1]'].includes(base.hostname)) {
-  throw new Error('Registration requires the local AionUi backend URL');
+  throw new Error('Registration requires the local backend URL');
 }
 const NAME = 'mu';
 const FORMER_NAMES = ['KYRN'];
@@ -35,9 +35,9 @@ async function request(path, body, method = body === undefined ? 'GET' : 'POST')
     ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     signal: AbortSignal.timeout(60000),
   });
-  if (!response.ok) throw new Error(`AionUi ${path}: HTTP ${response.status}`);
+  if (!response.ok) throw new Error(`AionCore ${path}: HTTP ${response.status}`);
   const result = await response.json();
-  if (result.success === false) throw new Error('AionUi rejected registration');
+  if (result.success === false) throw new Error('AionCore rejected registration');
   return result.data ?? result;
 }
 // The agent list does not return `env`, and no route reads a single record. Setting `enabled` to the value it

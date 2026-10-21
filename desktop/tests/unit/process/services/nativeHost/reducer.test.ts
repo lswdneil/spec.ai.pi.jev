@@ -431,7 +431,7 @@ describe('reduce', () => {
     expect(next).not.toHaveProperty('error');
   });
 
-  it('shows what the person said, without the rules AionUi puts in front of a conversation’s first message', () => {
+  it('shows what the person said, without the rules AionCore puts in front of a conversation’s first message', () => {
     const rules = '[Assistant Rules]\n## Available Skills\n\n- **cron**: Scheduled tasks\n[/Assistant Rules]\n\n';
     const said = (content: string) =>
       reduceAll([{ type: 'message_end', message: user(content) }]).messages.map((message) =>

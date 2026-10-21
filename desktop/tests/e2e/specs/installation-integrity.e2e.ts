@@ -41,7 +41,7 @@ test.describe('Installation integrity failure dialog', () => {
       const page = await resolveMainWindow(electronApp);
 
       await expect(page.getByTestId('installation-integrity-dialog')).toBeVisible();
-      await expect(page.getByTestId('installation-integrity-description')).toContainText(/AionUi/);
+      await expect(page.getByTestId('installation-integrity-description')).toContainText(/mu/);
       await expect(page.getByTestId('installation-integrity-download')).toBeVisible();
       await expect(page.getByTestId('installation-integrity-report')).toHaveCount(0);
     } finally {

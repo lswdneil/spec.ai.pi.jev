@@ -66,6 +66,7 @@ import {
   updateBrowserTab,
 } from '@/renderer/pages/conversation/Preview/browser/browserStore';
 import { MAX_BROWSER_TABS } from '@/renderer/pages/conversation/Preview/browser/constants';
+import { BROWSER_PARTITION } from '@/common/platform/legacyNames';
 
 const i18n = createInstance();
 beforeAll(async () => {
@@ -272,7 +273,7 @@ describe('the browser’s pages', () => {
       openBrowserPage('https://run.test/', { by: 'agent', muRun: 'r1' });
     });
     show();
-    expect(pages.byUrl.get('https://person.test/')?.partition).toBe('persist:aionui-browser');
+    expect(pages.byUrl.get('https://person.test/')?.partition).toBe(BROWSER_PARTITION);
     expect(pages.byUrl.get('https://run.test/')?.partition).toBe('persist:mu-browser');
   });
 

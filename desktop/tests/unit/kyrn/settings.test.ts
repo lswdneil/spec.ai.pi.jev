@@ -536,7 +536,7 @@ describe('mu-only backend catalog', () => {
           args: ['--flag'],
           env: [{ name: 'A', value: 'b' }],
           advanced: {
-            // AionUi's own word for full auto, which mu does not know, becomes mu's full access.
+            // AionCore's own word for full auto, which mu does not know, becomes mu's full access.
             yolo_id: 'full',
             native_skills_dirs: ['/skills'],
             behavior_policy: { supports_side_question: true },

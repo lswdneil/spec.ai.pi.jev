@@ -6,7 +6,7 @@
 
 import type { Theme, WindowAppearance } from '@/common/theme/types';
 import { buildStorage } from '@/common/platform/storage';
-import { BUILTIN_MCP_SERVER_NAMES, DIRS_KEY, FIRST_IMAGE_GEN_SERVER_NAME } from '@/common/platform/legacyNames';
+import { BUILTIN_MCP_SERVER_NAMES, type DIRS_KEY, FIRST_IMAGE_GEN_SERVER_NAME } from '@/common/platform/legacyNames';
 import type { AIONCORE_APP_SOURCE } from '@/common/platform/aioncoreNames';
 
 // 系统配置存储

@@ -278,7 +278,7 @@ test.describe('Built-in Skill Migration (T3)', () => {
     // SkillsHubSettings.tsx uses when the user clicks "Export".
     const probe = builtins[0];
     const skillPath = probe.location.replace(/[\\/]SKILL\.md$/, '');
-    const targetDir = fs.mkdtempSync(path.join(os.tmpdir(), 'aionui-e2e-s7-export-'));
+    const targetDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mu-e2e-s7-export-'));
     try {
       await httpPost(page, '/api/skills/export-symlink', {
         skill_path: skillPath,
@@ -389,7 +389,7 @@ test.describe('Built-in Skill Migration (T3)', () => {
     }
 
     test.beforeEach(() => {
-      dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'aionui-e2e-builtin-skill-'));
+      dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mu-e2e-builtin-skill-'));
     });
 
     test.afterEach(async () => {

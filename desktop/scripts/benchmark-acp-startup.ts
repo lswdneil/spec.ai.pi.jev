@@ -86,9 +86,9 @@ function agentPillByBackend(backend: string) {
 
 function getLogFilePath(): string {
   const today = new Date().toISOString().slice(0, 10);
-  // Dev mode uses "AionUi-Dev", production uses "AionUi"
+  // A development build logs under its profile name ("AionUi-Dev", kept from earlier versions), a packaged one under "mu"
   const devPath = path.join(os.homedir(), 'Library', 'Logs', 'AionUi-Dev', `${today}.log`);
-  const prodPath = path.join(os.homedir(), 'Library', 'Logs', 'AionUi', `${today}.log`);
+  const prodPath = path.join(os.homedir(), 'Library', 'Logs', 'mu', `${today}.log`);
   return fs.existsSync(devPath) ? devPath : prodPath;
 }
 

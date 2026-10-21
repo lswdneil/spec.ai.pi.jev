@@ -95,6 +95,7 @@ vi.mock('@/common/adapter/ipcBridge', () => ({
 }));
 
 import ToolsModalContent from '@/renderer/components/settings/SettingsModal/contents/ToolsModalContent';
+import { BUILTIN_MCP_SERVER_NAMES } from '@/common/platform/legacyNames';
 
 describe('ToolsModalContent image model guide', () => {
   beforeEach(() => {
@@ -171,7 +172,7 @@ describe('ToolsModalContent image model that no longer resolves', () => {
     hooks.mcpServers = [
       {
         id: 'builtin-image-gen',
-        name: 'aionui-image-generation',
+        name: BUILTIN_MCP_SERVER_NAMES.imageGeneration,
         builtin: true,
         enabled: false,
         transport: { type: 'stdio', command: 'node', args: [], env: {} },
