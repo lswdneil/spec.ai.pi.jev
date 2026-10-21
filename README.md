@@ -64,7 +64,7 @@ You don't need a judge key to start: until you set one, the free Jev on OpenCode
   </picture>
 </p>
 
-Each name in the diagram is a decision point, asked as a short question about a small piece of state. The verdict changes what the model does next, never whether the model asks you a question. Rules set the floor: they catch a dangerous-looking command first, and the judge can only vouch that you asked for it.
+Each name in the diagram is a decision point, asked as a short question about a small piece of state. Its verdict steers what happens next. Rules set the floor: they catch a dangerous-looking command first, and the judge can only vouch that you asked for it.
 
 ## Decision points
 
