@@ -27,7 +27,7 @@ type StreamRegistry = {
   >;
 };
 
-const ENABLED_CONVERSATION_KEY = 'aionui:e2e-message-stream-conversation-id';
+const ENABLED_CONVERSATION_KEY = 'mu:e2e-message-stream-conversation-id';
 const SEEDED_HISTORY_PAIRS = 6;
 /**
  * Long enough to overflow the rail on the short window these tests use, so the

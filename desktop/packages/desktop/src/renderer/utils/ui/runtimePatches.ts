@@ -7,6 +7,8 @@
 // 集中管理 renderer 端的运行时补丁，使入口文件保持整洁
 // Centralize renderer runtime patches so the entry file stays tidy
 
+import { migrateLegacyStorageKeys } from '@/common/platform/legacyNames';
+
 declare global {
   interface Window {
     __AionSafeResizeObserver__?: boolean;
@@ -157,10 +159,19 @@ const patchConsole = () => {
   }
 };
 
+const migrateStorage = () => {
+  try {
+    migrateLegacyStorageKeys(window.localStorage);
+  } catch {
+    // No local storage here (a sandboxed frame): nothing to move.
+  }
+};
+
 export const applyRuntimePatches = () => {
   if (typeof window === 'undefined') {
     return;
   }
+  migrateStorage();
   patchGlobalErrorListeners();
   patchResizeObserver();
   patchGlobalErrorFilters();
