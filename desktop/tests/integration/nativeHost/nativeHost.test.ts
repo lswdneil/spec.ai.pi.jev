@@ -20,7 +20,7 @@ import { createHostWorld, hostEnvironment, launcherFs } from './hostWorld.mjs';
 /**
  * The native host for real: entry.ts forked with Node (the app forks the same file as an Electron utility process),
  * pi and the judgment layer of a spec.jev checkout inside it, the E2E fake model and the offline mock judge, in a throwaway
- * home (hostWorld.mjs). Skipped where there is no harness that plans hosts: MU_ROOT, or the KYRN checkout beside this
+ * home (hostWorld.mjs). Skipped where there is no harness that plans hosts: SPECJEV_ROOT, or the KYRN checkout beside this
  * repository.
  */
 

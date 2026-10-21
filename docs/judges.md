@@ -4,7 +4,7 @@ A judge answers the bounded questions asked at spec.jev's decision points: yes o
 
 ## Which judge answers
 
-`tiers` in `~/.spec.jev/agent/spec.jev.json` (or `MU_JUDGE` for one run) lists the judges in order. Each later judge only sees the questions the earlier ones left uncertain, so a cheap local judge can go first and a hosted one can catch the rest:
+`tiers` in `~/.spec.jev/agent/spec.jev.json` (or `SPECJEV_JUDGE` for one run) lists the judges in order. Each later judge only sees the questions the earlier ones left uncertain, so a cheap local judge can go first and a hosted one can catch the rest:
 
 ```json
 { "tiers": ["laya", "jev"] }

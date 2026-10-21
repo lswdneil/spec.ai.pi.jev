@@ -207,7 +207,7 @@ describe('starting by itself at app start', () => {
   afterEach(() => dir && rmSync(dir, { recursive: true, force: true }));
   const agentDir = (config: object) => {
     dir = mkdtempSync(join(tmpdir(), 'mu-agent-'));
-    writeFileSync(join(dir, 'mu.json'), JSON.stringify(config));
+    writeFileSync(join(dir, 'spec.jev.json'), JSON.stringify(config));
     return dir;
   };
   const LOCAL = { judges: { laya: { type: 'local' } }, tiers: ['laya'] };

@@ -19,18 +19,18 @@ import { runSetup } from "./wizard.ts";
 
 /**
  * The entry of `spec.jev setup` (wizard.ts), which kyrn/bin/mu.mjs starts: from its sources in a checkout, as
- * judge/dist/setup.js in the npm package. The launcher names the folders: MU_AGENT_DIR, MU_SETUP_HOME (spec.jev's home, for
- * the backups) and MU_SETUP_ENV_FILE (the .env it reads for a session).
+ * judge/dist/setup.js in the npm package. The launcher names the folders: SPECJEV_AGENT_DIR,
+ * SPECJEV_SETUP_HOME (spec.jev's home, for the backups) and SPECJEV_SETUP_ENV_FILE (the .env it reads for a session).
  */
 
 // A key given on the command line comes in the environment, never in this process's argv (the launcher moved it
 // there). It is taken out at once, so that nothing this process might start inherits it.
-const givenKey = process.env.MU_SETUP_KEY || undefined;
-delete process.env.MU_SETUP_KEY;
+const givenKey = process.env.SPECJEV_SETUP_KEY || undefined;
+delete process.env.SPECJEV_SETUP_KEY;
 
-const home = process.env.MU_SETUP_HOME || muHome();
+const home = process.env.SPECJEV_SETUP_HOME || muHome();
 const agentDir = muEnv("AGENT_DIR") || join(home, "agent");
-const envFile = process.env.MU_SETUP_ENV_FILE || join(home, ".env");
+const envFile = process.env.SPECJEV_SETUP_ENV_FILE || join(home, ".env");
 /** The files pi keeps under a lock, named once so that the exit waits for the same ones pi opens (../auth/exit.ts). */
 const authPath = join(agentDir, "auth.json");
 const modelsStorePath = join(agentDir, "models-store.json");

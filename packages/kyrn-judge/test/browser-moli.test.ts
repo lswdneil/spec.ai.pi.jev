@@ -27,7 +27,7 @@ async function rejection(promise: Promise<unknown>): Promise<string | undefined>
 /**
  * There is no moli where these tests run, so what is proven here is the part that decides: where a moli is
  * looked for, which command line would start one, and how an endpoint is read. Whether moli then drives a
- * page is a smoke test on a machine that has it (`MU_MOLI=/path/to/moli`, then `/browse <url>`).
+ * page is a smoke test on a machine that has it (`SPECJEV_MOLI=/path/to/moli`, then `/browse <url>`).
  */
 function host(platform: NodeJS.Platform, installed: string[], extra: Partial<MoliHost> = {}): MoliHost {
 	return {
@@ -58,9 +58,9 @@ describe("finding moli", () => {
 		expect(candidates.filter((path) => path === "/usr/local/bin/moli")).toHaveLength(1);
 	});
 
-	it("lets MU_MOLI name the executable", () => {
+	it("lets SPECJEV_MOLI name the executable", () => {
 		const where = "C:\\tools\\moli.exe";
-		expect(findMoli(host("win32", [where], { env: { MU_MOLI: where } }))).toBe(where);
+		expect(findMoli(host("win32", [where], { env: { SPECJEV_MOLI: where } }))).toBe(where);
 	});
 
 	it("finds nothing when nothing is installed", () => {

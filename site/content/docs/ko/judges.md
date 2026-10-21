@@ -19,7 +19,7 @@ summary: 판정 지점에 누가 답하는지, 판정기를 고르고 잇고 비
 { "routes": { "browser.step": ["jev"], "memory.capture": ["llm:anthropic/claude-haiku-4-5"] } }
 ```
 
-세션 안에서는 `/mu judge <judges>`와 `/mu route <point> <judges|default>`가 같은 일을 하고, `MU_JUDGE=laya,jev spec.jev`는 한 번 실행에서 쓸 판정기를 정해요. `/status`는 어떤 판정기가 무엇에 답하는지 보여 주고, 앱의 판정기 페이지에서도 같은 것을 설정해요.
+세션 안에서는 `/mu judge <judges>`와 `/mu route <point> <judges|default>`가 같은 일을 하고, `SPECJEV_JUDGE=laya,jev spec.jev`는 한 번 실행에서 쓸 판정기를 정해요. `/status`는 어떤 판정기가 무엇에 답하는지 보여 주고, 앱의 판정기 페이지에서도 같은 것을 설정해요.
 
 판정기가 제시간에 답하지 못하면 판정 지점마다 판정이 없을 때 하던 대로 하고(대개는 아무것도 바뀌지 않아요), 판정 장부에 그 이유가 남아요. 오래 기다리는 일은 없어요. 판정 지점마다 시간 제한이 있어요.
 

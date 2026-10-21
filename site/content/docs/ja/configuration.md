@@ -48,7 +48,7 @@ spec.jev が理解できない部分は、spec.jev を止めずにその既定�
 
 - {points} の判定ポイントのうち {points_active} は最初から判定を反映します（`context.compact` と `output.drift` は既定でオフです）。判定器や、確信の持てない判定ポイントを試すには、シャドーにして台帳を読み（`spec.jev ledger`、`/status`、アプリの判定タブ）、それから active に戻します。
 - `/mu mode <point> <off|shadow|active>` は現在のセッションで一つの判定ポイントを切り替え、`/mu mode default shadow` はすべてを切り替えます。モードを残しておくには、`spec.jev.json` に書きます。
-- `MU_JUDGE_MODE=shadow spec.jev` は、1 回の実行の既定値を設定します。
+- `SPECJEV_JUDGE_MODE=shadow spec.jev` は、1 回の実行の既定値を設定します。
 
 ## 環境変数 {#env}
 
@@ -56,8 +56,8 @@ spec.jev が理解できない部分は、spec.jev を止めずにその既定�
 
 | 変数 | 効果 |
 | --- | --- |
-| `MU_JUDGE` | この実行の判定器（カンマ区切り）：`laya`、`laya,jev`、`jev-opencode-free`、`classifier:<provider>/<model>`、`llm:<provider>/<model>`。`off` でカーネルをオフにする。 |
-| `MU_JUDGE_MODE` | この実行の既定のモード：`off`、`shadow`、`active` |
+| `SPECJEV_JUDGE` | この実行の判定器（カンマ区切り）：`laya`、`laya,jev`、`jev-opencode-free`、`classifier:<provider>/<model>`、`llm:<provider>/<model>`。`off` でカーネルをオフにする。 |
+| `SPECJEV_JUDGE_MODE` | この実行の既定のモード：`off`、`shadow`、`active` |
 | `MU_WRITER` | 書き手のモデルの `provider/model` |
 | `MU_PERMISSIONS` | この実行の権限モード：`full`、`jev`、`ask` |
 | `MU_LOCAL_JUDGE_URL` | `spec.jev judge start` が起動するもの以外の、ローカル判定器サーバーのアドレス |
@@ -68,11 +68,11 @@ Jev のキー（それぞれ自分のサービスにだけ送られます）：`
 
 | 変数 | 効果 |
 | --- | --- |
-| `MU_AGENT_DIR` | `~/.spec.jev/agent` の代わりに使うエージェントフォルダ |
+| `SPECJEV_AGENT_DIR` | `~/.spec.jev/agent` の代わりに使うエージェントフォルダ |
 | `MU_NO_SETUP=1` | 初回起動時にモデルの設定を尋ねない |
-| `MU_LANG` | セッション内の spec.jev 自身のメッセージの言語：`zh…` なら中国語、それ以外は英語。デスクトップアプリはアプリの言語に設定し、`spec.jev setup` はロケールに従う。 |
+| `SPECJEV_LANG` | セッション内の spec.jev 自身のメッセージの言語：`zh…` なら中国語、それ以外は英語。デスクトップアプリはアプリの言語に設定し、`spec.jev setup` はロケールに従う。 |
 | `MU_LINK_DIR` | `~/.local/bin` の代わりに、`spec.jev link` が `spec.jev` コマンドを置く場所 |
-| `MU_CHROME` | コマンドラインで内蔵ブラウザが使う Chrome または Chromium |
+| `SPECJEV_CHROME` | コマンドラインで内蔵ブラウザが使う Chrome または Chromium |
 
 `MU_` で始まる変数は、どれも古い `KYRN_` の綴りでも読み込まれます。
 

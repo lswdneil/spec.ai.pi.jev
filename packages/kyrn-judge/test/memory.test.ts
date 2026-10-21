@@ -395,7 +395,7 @@ describe("the experience library in a session", () => {
 			"GEMINI_API_KEY",
 			"OPENAI_API_KEY",
 			// The messages below are the English ones.
-			"MU_LANG",
+			"SPECJEV_LANG",
 			"KYRN_LANG",
 		]) {
 			vi.stubEnv(name, undefined);
@@ -1011,7 +1011,7 @@ describe("the experience library in a session", () => {
 	it("sub-agents: each investigator of a hive gets the lessons for its angle, and its Lesson: lines come back", async () => {
 		// The role files of this machine are not part of the test.
 		const agentDir = temp();
-		for (const name of ["PI_CODING_AGENT_DIR", "MU_CODING_AGENT_DIR", "KYRN_CODING_AGENT_DIR"])
+		for (const name of ["PI_CODING_AGENT_DIR", "SPECJEV_CODING_AGENT_DIR", "SPECJEV_CODING_AGENT_DIR"])
 			vi.stubEnv(name, agentDir);
 		const instructions = new Map<string, string>();
 		const session = await start(

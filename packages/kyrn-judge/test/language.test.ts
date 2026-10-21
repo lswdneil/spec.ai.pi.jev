@@ -3,16 +3,15 @@ import { narratorSystem } from "../src/board/narrate.ts";
 import { describeGoal } from "../src/extension/features/goal.ts";
 import { appLanguage, count, say } from "../src/language.ts";
 
-describe("the app's language (MU_LANG)", () => {
-	it("reads the tag the desktop passes, with KYRN_LANG as the old name", () => {
+describe("the app's language (SPECJEV_LANG)", () => {
+	it("reads the tag the desktop passes, and nothing older", () => {
 		expect(appLanguage({})).toBeUndefined();
-		expect(appLanguage({ MU_LANG: "zh-CN" })).toEqual({ code: "zh-CN", wording: "zh", name: "Simplified Chinese" });
-		expect(appLanguage({ MU_LANG: "zh-TW" })).toMatchObject({ wording: "zh", name: "Traditional Chinese" });
-		expect(appLanguage({ MU_LANG: "zh_Hant_HK" })).toMatchObject({ code: "zh-Hant-HK", name: "Traditional Chinese" });
-		expect(appLanguage({ MU_LANG: "en-US" })).toMatchObject({ wording: "en", name: "English" });
-		expect(appLanguage({ MU_LANG: "ja-JP" })).toMatchObject({ code: "ja-JP", wording: "en", name: "Japanese" });
-		expect(appLanguage({ KYRN_LANG: "zh" })).toMatchObject({ wording: "zh" });
-		expect(appLanguage({ MU_LANG: "en-US", KYRN_LANG: "zh" })).toMatchObject({ wording: "en" });
+		expect(appLanguage({ SPECJEV_LANG: "zh-CN" })).toEqual({ code: "zh-CN", wording: "zh", name: "Simplified Chinese" });
+		expect(appLanguage({ SPECJEV_LANG: "zh-TW" })).toMatchObject({ wording: "zh", name: "Traditional Chinese" });
+		expect(appLanguage({ SPECJEV_LANG: "zh_Hant_HK" })).toMatchObject({ code: "zh-Hant-HK", name: "Traditional Chinese" });
+		expect(appLanguage({ SPECJEV_LANG: "en-US" })).toMatchObject({ wording: "en", name: "English" });
+		expect(appLanguage({ SPECJEV_LANG: "ja-JP" })).toMatchObject({ code: "ja-JP", wording: "en", name: "Japanese" });
+		expect(appLanguage({ SPECJEV_LANG: "en-US", MU_LANG: "zh" })).toMatchObject({ wording: "en" });
 	});
 
 	it("takes nothing but a language tag: the value reaches a model's instructions", () => {
@@ -23,14 +22,14 @@ describe("the app's language (MU_LANG)", () => {
 			"ja-JP-extremely-long-subtag",
 			"",
 		]) {
-			expect(appLanguage({ MU_LANG: value })).toBeUndefined();
+			expect(appLanguage({ SPECJEV_LANG: value })).toBeUndefined();
 		}
 	});
 
 	it("says a message in Chinese or English, English when the language is another or unset", () => {
 		const texts = { zh: "已清除", en: "cleared" };
-		expect(say(texts, appLanguage({ MU_LANG: "zh-CN" }))).toBe("已清除");
-		expect(say(texts, appLanguage({ MU_LANG: "ja-JP" }))).toBe("cleared");
+		expect(say(texts, appLanguage({ SPECJEV_LANG: "zh-CN" }))).toBe("已清除");
+		expect(say(texts, appLanguage({ SPECJEV_LANG: "ja-JP" }))).toBe("cleared");
 		expect(say(texts, undefined)).toBe("cleared");
 		expect([count(1, "commit"), count(3, "commit")]).toEqual(["1 commit", "3 commits"]);
 	});
@@ -42,21 +41,21 @@ describe("the app's language (MU_LANG)", () => {
 	});
 });
 
-describe("user-facing words follow MU_LANG", () => {
+describe("user-facing words follow SPECJEV_LANG", () => {
 	it("describes the goal in Chinese when the app is in Chinese, and as before when it is not", ({
 		onTestFinished,
 	}) => {
-		const before = process.env.MU_LANG;
+		const before = process.env.SPECJEV_LANG;
 		onTestFinished(() => {
-			if (before === undefined) delete process.env.MU_LANG;
-			else process.env.MU_LANG = before;
+			if (before === undefined) delete process.env.SPECJEV_LANG;
+			else process.env.SPECJEV_LANG = before;
 		});
 		const goal = { status: "paused" as const, text: "测试全部通过", continuations: 2, reason: "代理在等你回复" };
-		delete process.env.MU_LANG;
+		delete process.env.SPECJEV_LANG;
 		expect(describeGoal(goal)).toBe(
 			"goal: 测试全部通过\nstatus: paused: 代理在等你回复. Your next message resumes it",
 		);
-		process.env.MU_LANG = "zh-CN";
+		process.env.SPECJEV_LANG = "zh-CN";
 		expect(describeGoal(goal)).toBe("目标：测试全部通过\n状态：已暂停：代理在等你回复。你发下一条消息就会接着干");
 		expect(describeGoal(undefined)).toContain("没有设定目标");
 		expect(describeGoal({ ...goal, status: "active", reason: undefined })).toContain("进行中（已续跑 2 次）");

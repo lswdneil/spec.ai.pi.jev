@@ -1,5 +1,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { muEnv } from "../naming.ts";
 import { CHECK_TIMEOUT_MS, checkKey, explainProblem, type Problem } from "./check.ts";
 import { envFileValue } from "./env-file.ts";
 import {
@@ -1403,12 +1404,12 @@ class Setup {
 				);
 			}
 		}
-		const override = env.MU_JUDGE || env.KYRN_JUDGE;
+		const override = muEnv("JUDGE", env);
 		if (override) {
 			notes.push(
 				this.t({
-					zh: `注意：环境变量 MU_JUDGE=${override} 比 mu.json 优先，由它决定判定器。`,
-					en: `Note: MU_JUDGE=${override} is set in your environment and takes precedence over mu.json for the judge.`,
+					zh: `注意：环境变量 SPECJEV_JUDGE=${override} 比 spec.jev.json 优先，由它决定判定器。`,
+					en: `Note: SPECJEV_JUDGE=${override} is set in your environment and takes precedence over spec.jev.json for the judge.`,
 				}),
 			);
 		}

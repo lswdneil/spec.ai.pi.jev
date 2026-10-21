@@ -71,7 +71,7 @@ describe("tool output admission", () => {
 		config: Record<string, unknown> = {},
 	): Promise<Harness> {
 		// About what a result keeps, not about who allows the command that made it.
-		vi.stubEnv("MU_PERMISSIONS", "full");
+		vi.stubEnv("SPECJEV_PERMISSIONS", "full");
 		const harness = await createHarness({
 			tools: [runTests],
 			extensionFactories: [

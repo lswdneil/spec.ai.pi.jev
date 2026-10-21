@@ -286,11 +286,11 @@ Node 22.19 以降が必要です。`spec.jev -p "prompt"` は 1 回だけ実行�
 | `/import-chat` | Claude Code または Codex の会話をインポートする |
 | `/doctor` | セットアップと接続を確認する |
 
-pi 自身のコマンド（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`/fork`、`/compact`、`/export` など）はそのままです。`MU_JUDGE=laya,jev spec.jev` とすると、その 1 回の実行だけ判定器を上書きできます。
+pi 自身のコマンド（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`/fork`、`/compact`、`/export` など）はそのままです。`SPECJEV_JUDGE=laya,jev spec.jev` とすると、その 1 回の実行だけ判定器を上書きできます。
 
 ## プライバシー
 
-キーはこのマシンから出ません。spec.jev が自分からモデルやランタイムをダウンロードすることはなく、ダウンロードが必要なものは必ず先に確認します。判定器が見るのは、問いに必要なフィールドだけです（キーがなければ、それは OpenCode Zen の無料 Jev に送られます。`MU_JUDGE=off` か Laya なら、すべてこのマシンに残ります）。すべての判定はローカルに記録され、どれでも読み返せます。
+キーはこのマシンから出ません。spec.jev が自分からモデルやランタイムをダウンロードすることはなく、ダウンロードが必要なものは必ず先に確認します。判定器が見るのは、問いに必要なフィールドだけです（キーがなければ、それは OpenCode Zen の無料 Jev に送られます。`SPECJEV_JUDGE=off` か Laya なら、すべてこのマシンに残ります）。すべての判定はローカルに記録され、どれでも読み返せます。
 
 ## ドキュメント
 
@@ -309,7 +309,7 @@ npm run check                  # フォーマット、lint、型チェック
 ./test.sh                      # テスト（モデルが必要なテストは、キーがなければスキップ）
 ```
 
-デスクトップアプリは `desktop/` にあります。`bun install` のあと、`KYRN_ROOT="$(cd .. && pwd)" bun run start` を実行すると、このリポジトリの spec.jev を使う開発版が起動します（先にルートで `npm install` を実行してください）。
+デスクトップアプリは `desktop/` にあります。`bun install` のあと、`SPECJEV_ROOT="$(cd .. && pwd)" bun run start` を実行すると、このリポジトリの spec.jev を使う開発版が起動します（先にルートで `npm install` を実行してください）。
 
 参加者は全員[行動規範](../../CODE_OF_CONDUCT.md)に従います。セキュリティの問題は [SECURITY.md](../../SECURITY.md) のとおり非公開で報告してください。
 

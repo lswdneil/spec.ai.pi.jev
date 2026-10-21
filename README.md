@@ -373,7 +373,7 @@ npm run check                  # formatting, lint, types
 ./test.sh                      # tests (those that need a model are skipped without a key)
 ```
 
-The desktop app lives in `desktop/`. Run `npm install` at the root first, then `bun install` and `KYRN_ROOT="$(cd .. && pwd)" bun run start` in `desktop/` to run the development build against the spec.jev in this repository.
+The desktop app lives in `desktop/`. Run `npm install` at the root first, then `bun install` and `SPECJEV_ROOT="$(cd .. && pwd)" bun run start` in `desktop/` to run the development build against the spec.jev in this repository.
 
 Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md). Report security problems privately, as described in [SECURITY.md](SECURITY.md).
 

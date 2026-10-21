@@ -25,7 +25,7 @@ const OTHER_ID = '7c1d9a4e-3f52-4b8e-a6d0-5e2f1b3c4d02';
 let worlds = 0;
 function world() {
   const home = join(root, `world-${++worlds}`);
-  const store = join(home, '.mu', 'acp-sessions');
+  const store = join(home, '.spec.jev', 'acp-sessions');
   const sessions = join(home, 'agent', 'sessions', '--project--');
   mkdirSync(join(store, 'imports'), { recursive: true });
   mkdirSync(sessions, { recursive: true });

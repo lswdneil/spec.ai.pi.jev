@@ -95,13 +95,13 @@ describe('findModel', () => {
 describe('hostEnv', () => {
   it('names the conversation, and passes on the app’s language and the permission mode when there are ones', () => {
     const home = join(root, 'home');
-    mkdirSync(join(home, '.mu'), { recursive: true });
-    expect(hostEnv({ desktopSession: 'n-1', home })).toEqual({ MU_DESKTOP_SESSION: 'n-1' });
-    writeFileSync(join(home, '.mu', 'app-language'), 'zh-CN\n');
+    mkdirSync(join(home, '.spec.jev'), { recursive: true });
+    expect(hostEnv({ desktopSession: 'n-1', home })).toEqual({ SPECJEV_DESKTOP_SESSION: 'n-1' });
+    writeFileSync(join(home, '.spec.jev', 'app-language'), 'zh-CN\n');
     expect(hostEnv({ desktopSession: 'n-1', permissions: 'ask', home })).toEqual({
-      MU_DESKTOP_SESSION: 'n-1',
-      MU_LANG: 'zh-CN',
-      MU_PERMISSIONS: 'ask',
+      SPECJEV_DESKTOP_SESSION: 'n-1',
+      SPECJEV_LANG: 'zh-CN',
+      SPECJEV_PERMISSIONS: 'ask',
     });
   });
 });

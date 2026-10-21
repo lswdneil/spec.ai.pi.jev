@@ -450,7 +450,7 @@ describe('what the sign-in may open and run', () => {
         launcher,
         [
           'const [command, mode] = process.argv.slice(2);',
-          'const models = [{ id: `${command} ${mode}`, name: process.env.MU_AGENT_DIR }];',
+          'const models = [{ id: `${command} ${mode}`, name: process.env.SPECJEV_AGENT_DIR }];',
           "const signedIn = [{ provider: 'openai-codex', models }];",
           "console.log(JSON.stringify({ type: 'status', offered: ['openai-codex', 'anthropic'], signedIn }));",
         ].join('\n')

@@ -84,7 +84,7 @@ export class NativeConversations implements NativeConversationsApi {
   private readonly byId = new Map<string, Conversation>();
   /** Draft ids of conversations that have their session's id now. */
   private readonly drafts = new Map<string, Conversation>();
-  /** Conversations by the name spec.jev hands back to the app's browser (MU_DESKTOP_SESSION). */
+  /** Conversations by the name spec.jev hands back to the app's browser (SPECJEV_DESKTOP_SESSION). */
   private readonly desktopSessions = new Map<string, Conversation>();
   /** Made from a session file (a list, an open): let go when the file is gone and no host runs. */
   private readonly fromFiles = new WeakSet<Conversation>();
@@ -220,7 +220,7 @@ export class NativeConversations implements NativeConversationsApi {
     await Promise.all([...this.byId.values()].map((conversation) => conversation.end().catch((): void => {})));
   }
 
-  /** The id a conversation has now, by the name spec.jev hands back to the app's browser (MU_DESKTOP_SESSION). */
+  /** The id a conversation has now, by the name spec.jev hands back to the app's browser (SPECJEV_DESKTOP_SESSION). */
   conversationOf(desktopSession: string): string | undefined {
     return this.desktopSessions.get(desktopSession)?.id;
   }

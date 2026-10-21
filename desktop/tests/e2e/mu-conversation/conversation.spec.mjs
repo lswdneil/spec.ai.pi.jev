@@ -357,7 +357,7 @@ test('first start: the guide opens, and a custom endpoint added in the settings 
       .toMatchObject({ defaultProvider: PROVIDER_ID, defaultModel: FAKE_MODEL_ID });
   });
 
-  expect(existsSync(join(paths().home, '.mu', 'agent')), 'spec.jev used MU_AGENT_DIR, not ~/.spec.jev/agent').toBe(false);
+  expect(existsSync(join(paths().home, '.spec.jev', 'agent')), 'spec.jev used SPECJEV_AGENT_DIR, not ~/.spec.jev/agent').toBe(false);
   expectNoProblems();
 });
 
@@ -679,12 +679,12 @@ test('the test stayed in its profile, and left nothing running', async () => {
 
   const { project, home, agentDir } = paths();
   const slug = `--${project.replace(/^[/\\]/, '').replace(/[/\\:]/g, '-')}--`;
-  expect(existsSync(join(agentDir, 'sessions', slug)), "spec.jev kept the conversation's session in MU_AGENT_DIR").toBe(true);
-  expect(existsSync(join(home, '.mu', 'agent')), 'nothing in the profile home ~/.spec.jev/agent').toBe(false);
-  const realMu = join(homedir(), '.mu');
+  expect(existsSync(join(agentDir, 'sessions', slug)), "spec.jev kept the conversation's session in SPECJEV_AGENT_DIR").toBe(true);
+  expect(existsSync(join(home, '.spec.jev', 'agent')), 'nothing in the profile home ~/.spec.jev/agent').toBe(false);
+  const realMu = join(homedir(), '.spec.jev');
   expect(existsSync(join(realMu, 'agent', 'sessions', slug)), "nothing in the person's ~/.spec.jev/agent").toBe(false);
-  for (const name of existsSync(join(home, '.mu', 'acp-sessions'))
-    ? readdirSync(join(home, '.mu', 'acp-sessions'))
+  for (const name of existsSync(join(home, '.spec.jev', 'acp-sessions'))
+    ? readdirSync(join(home, '.spec.jev', 'acp-sessions'))
     : []) {
     expect(existsSync(join(realMu, 'acp-sessions', name)), `nothing in the person's ~/.spec.jev/acp-sessions (${name})`).toBe(
       false

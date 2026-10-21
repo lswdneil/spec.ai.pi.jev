@@ -7,7 +7,7 @@
 ### Changed
 
 - The project is called **spec.jev**. The npm package and the command are `spec.jev`; the `mu` command stays as an alias.
-- A new machine keeps its files in `~/.spec.jev` and reads `~/.spec.jev/agent/spec.jev.json`. A machine that already has `~/.mu` (then `~/.kyrn`), `mu.json` (then `kyrn.json`) or a `MU_*` / `KYRN_*` variable keeps using it: the older spellings are read when the newer one is absent, so nothing moves and nothing splits.
+- Everything lives in `~/.spec.jev`, `~/.spec.jev/agent/spec.jev.json` and variables spelled `SPECJEV_*`. The homes, files and variable spellings of the projects it grew out of are not read.
 - `SPECJEV_*` is the current environment spelling; the launcher hands it to the agent under the `MU_*` names the rest of the code reads.
 - The desktop app is `spec.jev` (app id `com.specjev.desktop`).
 - The brand mark is the new loop logo: every icon (`app.png`, `app.ico`, `app.icns`, the PWA and site icons, the social card) is built from `desktop/resources/brand/mu-icon-source.png` by `desktop/scripts/kyrn/icon/build-icon.py`; the in-app mark and the sign-in page use the same artwork.

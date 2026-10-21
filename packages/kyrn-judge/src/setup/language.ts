@@ -15,7 +15,7 @@ function languageOf(value: string | undefined): SetupLanguage | undefined {
 }
 
 export function setupLanguage(env: Env, systemLocale: string | undefined): SetupLanguage {
-	for (const name of ["MU_LANG", "KYRN_LANG", "LC_ALL", "LC_MESSAGES", "LANG"]) {
+	for (const name of ["SPECJEV_LANG", "LC_ALL", "LC_MESSAGES", "LANG"]) {
 		const found = languageOf(env[name]);
 		if (found) return found;
 	}

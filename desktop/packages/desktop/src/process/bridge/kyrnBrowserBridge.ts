@@ -35,7 +35,7 @@ async function start(): Promise<void> {
   const host = new PanelHost({
     request: (request) => kyrnBrowserBridge.request.emit(request),
     publish: (event) => kyrnBrowserBridge.events.emit(event),
-    // A native conversation's spec.jev names it by the name the app gave it (MU_DESKTOP_SESSION); an ACP session by its own.
+    // A native conversation's spec.jev names it by the name the app gave it (SPECJEV_DESKTOP_SESSION); an ACP session by its own.
     conversationOf: (adapterSession) =>
       browserConversationOf(adapterSession, {
         native: nativeConversationOf,

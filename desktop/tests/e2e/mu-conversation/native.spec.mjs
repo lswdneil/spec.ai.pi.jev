@@ -244,13 +244,13 @@ test('the test stayed in its profile, and left nothing running', async () => {
 
   const { project, home, agentDir } = paths();
   const slug = `--${project.replace(/^[/\\]/, '').replace(/[/\\:]/g, '-')}--`;
-  expect(existsSync(join(agentDir, 'sessions', slug)), "spec.jev kept the conversation's session in MU_AGENT_DIR").toBe(true);
-  expect(existsSync(join(home, '.mu', 'agent')), 'nothing in the profile home ~/.spec.jev/agent').toBe(false);
-  const realMu = join(homedir(), '.mu');
+  expect(existsSync(join(agentDir, 'sessions', slug)), "spec.jev kept the conversation's session in SPECJEV_AGENT_DIR").toBe(true);
+  expect(existsSync(join(home, '.spec.jev', 'agent')), 'nothing in the profile home ~/.spec.jev/agent').toBe(false);
+  const realMu = join(homedir(), '.spec.jev');
   expect(existsSync(join(realMu, 'agent', 'sessions', slug)), "nothing in the person's ~/.spec.jev/agent").toBe(false);
   // A native conversation has no ACP record: AionCore never heard of it. (Its start-up health checks leave records of
   // their own, in the temporary folder; none of them names the conversation's project.)
-  const records = join(home, '.mu', 'acp-sessions');
+  const records = join(home, '.spec.jev', 'acp-sessions');
   const naming = existsSync(records)
     ? readdirSync(records).filter(
         (name) => name.endsWith('.json') && readFileSync(join(records, name), 'utf8').includes(project)

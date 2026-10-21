@@ -12,7 +12,7 @@ import { HIVE_MESSAGE, SWARM_MESSAGE } from "../src/swarm/markers.ts";
 
 const dirs: string[] = [];
 function temp(): string {
-	const dir = mkdtempSync(join(tmpdir(), "mu-naming-"));
+	const dir = mkdtempSync(join(tmpdir(), "spec-jev-naming-"));
 	dirs.push(dir);
 	return dir;
 }
@@ -20,69 +20,59 @@ afterEach(() => {
 	while (dirs.length > 0) rmSync(dirs.pop() as string, { recursive: true, force: true });
 });
 
-describe("the rename from KYRN to spec.jev", () => {
-	it("reads a setting under its new name first and under its old name still", () => {
-		expect(muEnv("JUDGE", { MU_JUDGE: "laya", KYRN_JUDGE: "jev" })).toBe("laya");
-		expect(muEnv("JUDGE", { KYRN_JUDGE: "jev" })).toBe("jev");
-		expect(muEnv("JUDGE", { MU_JUDGE: "", KYRN_JUDGE: "jev" })).toBe("jev");
+describe("spec.jev's names", () => {
+	it("reads a setting only under its own name", () => {
+		expect(muEnv("JUDGE", { SPECJEV_JUDGE: "laya" })).toBe("laya");
+		expect(muEnv("JUDGE", { MU_JUDGE: "jev" })).toBeUndefined();
+		expect(muEnv("JUDGE", { KYRN_JUDGE: "jev" })).toBeUndefined();
+		expect(muEnv("JUDGE", { SPECJEV_JUDGE: "", MU_JUDGE: "jev" })).toBeUndefined();
 		expect(muEnv("JUDGE", {})).toBeUndefined();
 	});
 
-	it("applies the judge, mode and writer overrides under either spelling", () => {
-		const current = loadConfig({ env: { MU_JUDGE: "laya,gateway", MU_JUDGE_MODE: "active", MU_WRITER: "p/m" } });
+	it("applies the judge, mode and writer overrides", () => {
+		const current = loadConfig({ env: { SPECJEV_JUDGE: "laya,gateway", SPECJEV_JUDGE_MODE: "active", SPECJEV_WRITER: "p/m" } });
 		expect(current.config).toMatchObject({ tiers: ["laya", "jev"], modes: { default: "active" }, writer: "p/m" });
 
-		const legacy = loadConfig({ env: { KYRN_JUDGE: "laya", KYRN_JUDGE_MODE: "off", KYRN_WRITER: "p/old" } });
-		expect(legacy.config).toMatchObject({ tiers: ["laya"], modes: { default: "off" }, writer: "p/old" });
-
-		expect(loadConfig({ env: { KYRN_JUDGE: "off" } }).disabled).toBe(true);
-		expect(loadConfig({ env: { MU_JUDGE: "laya", KYRN_JUDGE: "off" } }).disabled).toBe(false);
+		expect(loadConfig({ env: { MU_JUDGE: "laya" } }).config.tiers).toEqual(["jev"]);
+		expect(loadConfig({ env: { SPECJEV_JUDGE: "off" } }).disabled).toBe(true);
+		expect(loadConfig({ env: { SPECJEV_JUDGE: "laya", MU_JUDGE: "off" } }).disabled).toBe(false);
 	});
 
-	it("reads mu.json, and kyrn.json only when there is no mu.json", () => {
+	it("reads spec.jev.json and nothing else", () => {
 		const dir = temp();
-		writeFileSync(join(dir, "kyrn.json"), JSON.stringify({ tiers: ["old"] }));
-		expect(loadConfig({ dir, env: {} }).config.tiers).toEqual(["old"]);
+		writeFileSync(join(dir, "mu.json"), JSON.stringify({ tiers: ["old"] }));
+		writeFileSync(join(dir, "kyrn.json"), JSON.stringify({ tiers: ["older"] }));
+		expect(loadConfig({ dir, env: {} }).config.tiers).toEqual(["jev"]);
 
-		writeFileSync(join(dir, "mu.json"), JSON.stringify({ tiers: ["new"] }));
+		writeFileSync(join(dir, "spec.jev.json"), JSON.stringify({ tiers: ["new"] }));
 		expect(loadConfig({ dir, env: {} }).config.tiers).toEqual(["new"]);
-		expect(loadConfig({ dir: temp(), env: {} })).toMatchObject({ config: { tiers: ["jev"] }, disabled: false });
 	});
 
-	it("reports a broken mu.json instead of quietly bringing the old settings back", () => {
+	it("reports a broken spec.jev.json", () => {
 		const dir = temp();
-		writeFileSync(join(dir, "kyrn.json"), JSON.stringify({ tiers: ["old"] }));
-		writeFileSync(join(dir, "mu.json"), "{ not json");
+		writeFileSync(join(dir, "mu.json"), JSON.stringify({ tiers: ["old"] }));
+		writeFileSync(join(dir, "spec.jev.json"), "{ not json");
 
 		const loaded = loadConfig({ dir, env: {} });
 
-		expect(loaded.problem).toMatch(/^mu\.json could not be read/);
+		expect(loaded.problem).toMatch(/^spec\.jev\.json could not be read/);
 		expect(loaded.config.tiers).toEqual(["jev"]);
 	});
 
-	it("keeps the old home until it has been moved, and never invents a second one beside it", () => {
+	it("always uses ~/.spec.jev, whatever older folders exist", () => {
 		const fresh = temp();
 		expect(muHome(fresh)).toBe(join(fresh, ".spec.jev"));
 
-		const before = temp();
-		mkdirSync(join(before, ".kyrn"));
-		expect(muHome(before)).toBe(join(before, ".kyrn"));
-
-		// A home from the spec.jev years keeps being used until it is moved to ~/.spec.jev by hand.
-		const after = temp();
-		mkdirSync(join(after, ".mu"));
-		mkdirSync(join(after, ".kyrn"));
-		expect(muHome(after)).toBe(join(after, ".mu"));
-
-		mkdirSync(join(after, ".spec.jev"));
-		expect(muHome(after)).toBe(join(after, ".spec.jev"));
+		const withOld = temp();
+		mkdirSync(join(withOld, ".mu"));
+		mkdirSync(join(withOld, ".kyrn"));
+		expect(muHome(withOld)).toBe(join(withOld, ".spec.jev"));
 	});
 
-	it("finds the browser named by MU_CHROME or, as before, KYRN_CHROME", () => {
+	it("finds the browser named by SPECJEV_CHROME", () => {
 		const chrome = join(temp(), "chrome");
 		writeFileSync(chrome, "");
-		expect(findChrome({ MU_CHROME: chrome })).toBe(chrome);
-		expect(findChrome({ KYRN_CHROME: chrome })).toBe(chrome);
+		expect(findChrome({ SPECJEV_CHROME: chrome })).toBe(chrome);
 	});
 
 	it("leaves every name that is already stored in sessions and desktop event logs as it was", () => {

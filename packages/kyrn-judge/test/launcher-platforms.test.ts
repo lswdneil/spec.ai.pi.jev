@@ -132,17 +132,14 @@ describe("the launcher's decisions, per platform", () => {
 		]);
 	});
 
-	it("keeps the old home until it has been moved, with Windows paths on Windows", () => {
+	it("always uses ~/.spec.jev, whatever older folders are there", () => {
 		const at = (folders: string[]) =>
 			muHome({ home: WIN_HOME, platform: "win32", isDir: (path) => folders.includes(path) });
 		expect(at([])).toBe("C:\\Users\\bai\\.spec.jev");
-		expect(at(["C:\\Users\\bai\\.kyrn"])).toBe("C:\\Users\\bai\\.kyrn");
-		expect(at(["C:\\Users\\bai\\.kyrn", "C:\\Users\\bai\\.mu"])).toBe("C:\\Users\\bai\\.mu");
-		expect(at(["C:\\Users\\bai\\.kyrn", "C:\\Users\\bai\\.mu", "C:\\Users\\bai\\.spec.jev"])).toBe(
-			"C:\\Users\\bai\\.spec.jev",
-		);
+		expect(at(["C:\\Users\\bai\\.kyrn"])).toBe("C:\\Users\\bai\\.spec.jev");
+		expect(at(["C:\\Users\\bai\\.kyrn", "C:\\Users\\bai\\.mu"])).toBe("C:\\Users\\bai\\.spec.jev");
 		expect(muHome({ home: "/home/bai", platform: "linux", isDir: (path) => path === "/home/bai/.kyrn" })).toBe(
-			"/home/bai/.kyrn",
+			"/home/bai/.spec.jev",
 		);
 	});
 
@@ -387,8 +384,7 @@ describe("starting pi", () => {
 		expect(plan.strategy).toBe("spawn");
 		expect(plan.env).toMatchObject({
 			PI_PACKAGE_DIR: "C:\\Users\\bai\\.spec.jev\\app",
-			MU_CODING_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
-			KYRN_CODING_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
+			SPECJEV_CODING_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
 			PI_CODING_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
 			PI_SKIP_VERSION_CHECK: "1",
 		});
@@ -443,22 +439,22 @@ describe("starting pi", () => {
 		expect(launchStrategy({ platform: "darwin", env: {}, canExec: true })).toBe("exec");
 		expect(launchStrategy({ platform: "linux", env: {}, canExec: true })).toBe("exec");
 		expect(launchStrategy({ platform: "linux", env: {}, canExec: false })).toBe("spawn");
-		expect(launchStrategy({ platform: "linux", env: { MU_LAUNCH: "spawn" }, canExec: true })).toBe("spawn");
-		expect(launchStrategy({ platform: "win32", env: { MU_LAUNCH: "exec" }, canExec: true })).toBe("spawn");
+		expect(launchStrategy({ platform: "linux", env: { SPECJEV_LAUNCH: "spawn" }, canExec: true })).toBe("spawn");
+		expect(launchStrategy({ platform: "win32", env: { SPECJEV_LAUNCH: "exec" }, canExec: true })).toBe("spawn");
 	});
 
-	it("under WSL behaves as Linux, and stays in a home from before the rename", () => {
+	it("under WSL behaves as Linux, in ~/.spec.jev whatever older homes exist", () => {
 		const plan = launch({
 			wsl: true,
-			env: { WSL_DISTRO_NAME: "Ubuntu", PI_SKIP_VERSION_CHECK: "0", KYRN_AGENT_DIR: "" },
+			env: { WSL_DISTRO_NAME: "Ubuntu", PI_SKIP_VERSION_CHECK: "0" },
 			fs: disk(posixInstalled, ["/home/bai/.kyrn"]),
 		});
-		expect(plan.muDir).toBe("/home/bai/.kyrn");
-		expect(plan.env.MU_CODING_AGENT_DIR).toBe("/home/bai/.kyrn/agent");
+		expect(plan.muDir).toBe("/home/bai/.spec.jev");
+		expect(plan.env.SPECJEV_CODING_AGENT_DIR).toBe("/home/bai/.spec.jev/agent");
 		expect(plan.env.PI_SKIP_VERSION_CHECK).toBe("0");
 		expect(plan.strategy).toBe("exec");
-		expect(launch({ env: { KYRN_AGENT_DIR: "/data/agent", MU_APP_DIR: "/data/app" } }).env).toMatchObject({
-			MU_CODING_AGENT_DIR: "/data/agent",
+		expect(launch({ env: { SPECJEV_AGENT_DIR: "/data/agent", SPECJEV_APP_DIR: "/data/app" } }).env).toMatchObject({
+			SPECJEV_CODING_AGENT_DIR: "/data/agent",
 			PI_PACKAGE_DIR: "/data/app",
 		});
 	});
@@ -665,7 +661,7 @@ describe("the npm package (spec.jev)", () => {
 		expect(plan.strategy).toBe("spawn");
 		expect(plan.env).toMatchObject({
 			PI_PACKAGE_DIR: WIN_PACKAGE,
-			MU_CODING_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
+			SPECJEV_CODING_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
 			PI_SKIP_VERSION_CHECK: "1",
 			// pi's install report goes to pi.dev; spec.jev is not a pi install.
 			PI_TELEMETRY: "0",
@@ -727,7 +723,7 @@ describe("the npm package (spec.jev)", () => {
 		expect(plan.command).toBe("C:\\Program Files\\spec.jev\\mu.exe");
 		expect(plan.args).toEqual([`${WIN_PACKAGE}\\judge\\dist\\auth.js`, "login", "openai-codex"]);
 		expect(plan.strategy).toBe("spawn");
-		expect(plan.env).toEqual({ Path: "C:\\Windows", MU_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent" });
+		expect(plan.env).toEqual({ Path: "C:\\Windows", SPECJEV_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent" });
 		expect(plan.agentDir).toBe("C:\\Users\\bai\\.spec.jev\\agent");
 		// A package that lost its sign-in says so.
 		const broken = planAuth({
@@ -750,7 +746,7 @@ describe("spec.jev auth in a checkout", () => {
 	it("runs the sign-in's sources the way pi runs, in the agent folder spec.jev uses everywhere else", () => {
 		const plan = planAuth({
 			platform: "linux",
-			env: { MU_AGENT_DIR: "/srv/mu-agent" },
+			env: { SPECJEV_AGENT_DIR: "/srv/mu-agent" },
 			argv: ["status"],
 			root: POSIX_ROOT,
 			home: "/home/bai",
@@ -761,8 +757,8 @@ describe("spec.jev auth in a checkout", () => {
 		if (plan.error !== undefined) throw new Error(plan.error);
 		expect(plan.args).toEqual([...POSIX_NATIVE, `${POSIX_ROOT}/packages/kyrn-judge/src/auth/main.ts`, "status"]);
 		expect(plan.strategy).toBe("exec");
-		expect(plan.env.MU_AGENT_DIR).toBe("/srv/mu-agent");
-		// Before the rename the home was ~/.kyrn; a machine that still has only that one keeps it.
+		expect(plan.env.SPECJEV_AGENT_DIR).toBe("/srv/mu-agent");
+		// An older home is not read: the sign-in always runs in ~/.spec.jev/agent.
 		const legacy = planAuth({
 			platform: "linux",
 			env: {},
@@ -772,7 +768,7 @@ describe("spec.jev auth in a checkout", () => {
 			execPath: "node",
 			fs: disk(posixInstalled, ["/home/bai/.kyrn"]),
 		});
-		expect(legacy.error === undefined && legacy.env.MU_AGENT_DIR).toBe("/home/bai/.kyrn/agent");
+		expect(legacy.error === undefined && legacy.env.SPECJEV_AGENT_DIR).toBe("/home/bai/.spec.jev/agent");
 		const bare = planAuth({
 			platform: "linux",
 			env: {},
@@ -835,14 +831,14 @@ describe("the repo-root .env", () => {
 			env: { AFTER: "from-the-shell" },
 			fs: disk({
 				...posixInstalled,
-				[`${POSIX_ROOT}/.env`]: `${FIXTURE}\nMU_CODING_AGENT_DIR=/from/file\nMU_JUDGE=laya`,
+				[`${POSIX_ROOT}/.env`]: `${FIXTURE}\nMU_CODING_AGENT_DIR=/from/file\nSPECJEV_JUDGE=laya`,
 			}),
 		});
 
 		expect(plan.env.TYPESAFE_API_KEY).toBe("fixture-direct-key");
 		expect(plan.env.AFTER).toBe("from-the-shell");
 		// What the launcher decides is not the file's to change.
-		expect(plan.env.MU_CODING_AGENT_DIR).toBe("/home/bai/.spec.jev/agent");
+		expect(plan.env.SPECJEV_CODING_AGENT_DIR).toBe("/home/bai/.spec.jev/agent");
 		expect(plan.notes.join("\n")).toContain("skipped line 11");
 		const said = JSON.stringify([plan.notes, plan.preface, plan.args]);
 		for (const secret of ["fixture-direct-key", "fixture gateway", "secret without a name", "BEGIN"]) {
@@ -855,7 +851,7 @@ describe("the repo-root .env", () => {
 
 describe("the local judge away from macOS", () => {
 	it("is started by the launcher on macOS only", () => {
-		const files = { ...posixInstalled, "/home/bai/.spec.jev/agent/mu.json": '{ "tiers": ["laya", "jev"] }' };
+		const files = { ...posixInstalled, "/home/bai/.spec.jev/agent/spec.jev.json": '{ "tiers": ["laya", "jev"] }' };
 		expect(launch({ platform: "darwin", fs: disk(files) })).toMatchObject({ startJudge: true, notes: [] });
 
 		const linux = launch({ fs: disk(files) });
@@ -864,13 +860,13 @@ describe("the local judge away from macOS", () => {
 		expect(launch({ wsl: true, fs: disk(files) }).notes[0]).toContain("on WSL");
 
 		// A server of one's own is the way out, and then there is nothing to say.
-		expect(launch({ env: { MU_LOCAL_JUDGE_URL: "http://10.0.0.5:47823" }, fs: disk(files) })).toMatchObject({
+		expect(launch({ env: { SPECJEV_LOCAL_JUDGE_URL: "http://10.0.0.5:47823" }, fs: disk(files) })).toMatchObject({
 			startJudge: false,
 			notes: [],
 		});
-		// MU_JUDGE decides before the file; kyrn.json is only read when there is no mu.json.
-		expect(launch({ env: { MU_JUDGE: "jev" }, fs: disk(files) }).notes).toEqual([]);
-		expect(launch({ env: { KYRN_JUDGE: "jev,laya" }, fs: disk(posixInstalled) }).notes).toHaveLength(1);
+		// SPECJEV_JUDGE decides before the file; older spellings and files are not read.
+		expect(launch({ env: { SPECJEV_JUDGE: "jev" }, fs: disk(files) }).notes).toEqual([]);
+		expect(launch({ env: { MU_JUDGE: "jev,laya" }, fs: disk(posixInstalled) }).notes).toEqual([]);
 		const legacy = {
 			...posixInstalled,
 			"/home/bai/.spec.jev/agent/mu.json": "{}",
@@ -895,9 +891,9 @@ describe("the local judge away from macOS", () => {
 			expect(plan.message).toContain(`runs only on macOS on Apple silicon, not on ${name}`);
 			expect(plan.message).toContain("Jev");
 			expect(plan.message).toContain("desktop app");
-			expect(plan.message).toContain("MU_LOCAL_JUDGE_URL");
+			expect(plan.message).toContain("SPECJEV_LOCAL_JUDGE_URL");
 		}
-		const env = { MU_LOCAL_JUDGE_URL: "http://10.0.0.5:47823/" };
+		const env = { SPECJEV_LOCAL_JUDGE_URL: "http://10.0.0.5:47823/" };
 		expect(planJudge({ platform: "linux", env, argv: [], bin: "bin" })).toEqual({
 			kind: "health",
 			url: "http://10.0.0.5:47823/health",
@@ -917,7 +913,7 @@ describe("spec.jev import", () => {
 			args: ["--disable-warning=ExperimentalWarning", source, "--list"],
 			agentDir: "/home/bai/.spec.jev/agent",
 		});
-		expect(checkout.error === undefined && checkout.env.MU_CODING_AGENT_DIR).toBe("/home/bai/.spec.jev/agent");
+		expect(checkout.error === undefined && checkout.env.SPECJEV_CODING_AGENT_DIR).toBe("/home/bai/.spec.jev/agent");
 
 		expect(planImport({ ...importArgs, platform: "linux", root: POSIX_ROOT, fs: disk({}) }).error).toContain(
 			"spec.jev import is missing from this checkout",
@@ -936,7 +932,7 @@ describe("spec.jev import", () => {
 		);
 	});
 
-	it("builds Windows paths on Windows, and follows MU_AGENT_DIR", () => {
+	it("builds Windows paths on Windows, and follows SPECJEV_AGENT_DIR", () => {
 		const source = `${WIN_ROOT}\\packages\\kyrn-judge\\src\\import\\cli.ts`;
 		const plan = planImport({
 			...importArgs,
@@ -944,14 +940,14 @@ describe("spec.jev import", () => {
 			root: WIN_ROOT,
 			home: WIN_HOME,
 			execPath: "node.exe",
-			env: { MU_AGENT_DIR: "D:\\mu-test" },
+			env: { SPECJEV_AGENT_DIR: "D:\\mu-test" },
 			fs: disk({ [source]: "" }),
 		});
 		expect(plan).toMatchObject({
 			command: "node.exe",
 			args: ["--disable-warning=ExperimentalWarning", source, "--list"],
 		});
-		expect(plan.error === undefined && plan.env.MU_CODING_AGENT_DIR).toBe("D:\\mu-test");
+		expect(plan.error === undefined && plan.env.SPECJEV_CODING_AGENT_DIR).toBe("D:\\mu-test");
 	});
 
 	it("refuses a checkout's sources on a runtime that does not strip types", () => {
@@ -1003,7 +999,7 @@ describe("spec.jev import", () => {
 		const agentDir = join(dir, "mu-agent");
 		const result = runScript(MU, ["import", "--json", transcript], {
 			HOME: dir,
-			MU_AGENT_DIR: agentDir,
+			SPECJEV_AGENT_DIR: agentDir,
 			CLAUDE_CONFIG_DIR: join(dir, "claude"),
 		});
 		expect(result.err).toBe("");
@@ -1040,7 +1036,7 @@ describe("spec.jev link on Windows", () => {
 
 	it("writes a shim that finds mu.cmd from where it is, in CRLF and ASCII", () => {
 		expect(linkPath({ platform: "win32", env: {}, home: WIN_HOME })).toBe(`${LINKS}\\mu.cmd`);
-		expect(linkPath({ platform: "win32", env: { KYRN_LINK_DIR: "D:\\tools" }, home: WIN_HOME })).toBe(
+		expect(linkPath({ platform: "win32", env: { SPECJEV_LINK_DIR: "D:\\tools" }, home: WIN_HOME })).toBe(
 			"D:\\tools\\mu.cmd",
 		);
 		expect(ours.split("\r\n")).toEqual([
@@ -1094,7 +1090,7 @@ describe("spec.jev link on Windows", () => {
 		expect(plan).toMatchObject({ action: "link", notes: [] });
 		const far = planLink({
 			platform: "win32",
-			env: { PATH: "D:\\tools", MU_LINK_DIR: "D:\\tools" },
+			env: { PATH: "D:\\tools", SPECJEV_LINK_DIR: "D:\\tools" },
 			home: "C:\\Users\\白鹤",
 			bin: "C:\\Users\\白鹤\\KYRN\\kyrn\\bin",
 			argv: [],
@@ -1241,7 +1237,7 @@ describe("spec.jev migrate without pgrep", () => {
 		expect(moved.done).toEqual([
 			"rename C:\\Users\\bai\\.kyrn -> C:\\Users\\bai\\.spec.jev",
 			"junction C:\\Users\\bai\\.kyrn -> C:\\Users\\bai\\.spec.jev",
-			"rename C:\\Users\\bai\\.spec.jev\\agent\\kyrn.json -> C:\\Users\\bai\\.spec.jev\\agent\\mu.json",
+			"rename C:\\Users\\bai\\.spec.jev\\agent\\kyrn.json -> C:\\Users\\bai\\.spec.jev\\agent\\spec.jev.json",
 		]);
 	});
 
@@ -1297,14 +1293,14 @@ describe("the launcher, run for real on this machine", () => {
 		const links = join(dir, "bin");
 		// A link on POSIX; on Windows, where a link to a script cannot be run, a small mu.cmd.
 		const linked = join(links, windows ? "mu.cmd" : "mu");
-		expect(run(["link"], { HOME: dir, MU_LINK_DIR: links }).code).toBe(0);
+		expect(run(["link"], { HOME: dir, SPECJEV_LINK_DIR: links }).code).toBe(0);
 		if (!windows) expect(lstatSync(linked).isSymbolicLink()).toBe(true);
 		// Through the link, as a user would call it.
 		expect(runScript(linked, ["help"], { HOME: dir }).out).toContain("spec.jev link | unlink");
-		expect(run(["unlink"], { HOME: dir, MU_LINK_DIR: links }).out).toContain("removed");
+		expect(run(["unlink"], { HOME: dir, SPECJEV_LINK_DIR: links }).out).toContain("removed");
 		expect(existsSync(linked)).toBe(false);
 		writeFileSync(linked, "a file");
-		expect(run(["unlink"], { HOME: dir, MU_LINK_DIR: links }).out).toContain(
+		expect(run(["unlink"], { HOME: dir, SPECJEV_LINK_DIR: links }).out).toContain(
 			windows ? "is not a shim written by spec.jev link; nothing removed" : "is not a link; nothing removed",
 		);
 	});
@@ -1336,13 +1332,13 @@ describe("the launcher, run for real on this machine", () => {
 		"starts pi as a child too, the way Windows has to, and passes its exit code on",
 		() => {
 			const dir = temp();
-			const child = run(["--version"], { HOME: dir, MU_LAUNCH: "spawn" });
+			const child = run(["--version"], { HOME: dir, SPECJEV_LAUNCH: "spawn" });
 			const replaced = run(["--version"], { HOME: dir });
 
 			expect(child).toMatchObject({ code: 0, out: replaced.out });
 			expect(child.out).toMatch(/^\d+\.\d+\.\d+/);
 			// An exit code that is not zero comes through as well: a home without a login makes the doctor exit with 1.
-			const doctor = run(["doctor"], { HOME: dir, MU_LAUNCH: "spawn" });
+			const doctor = run(["doctor"], { HOME: dir, SPECJEV_LAUNCH: "spawn" });
 			expect(doctor.out).toContain("login");
 			expect(doctor.code).toBe(1);
 		},

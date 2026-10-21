@@ -10,7 +10,7 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { basename, dirname, join } from "node:path";
-import { CONFIG_FILE, LEGACY_CONFIG_FILES } from "../naming.ts";
+import { CONFIG_FILE } from "../naming.ts";
 import { setEnvValue } from "./env-file.ts";
 
 /**
@@ -214,14 +214,9 @@ export function withModel(
 // spec.jev.json
 // ---------------------------------------------------------------------------------------------------------------
 
-/**
- * The file the judgment layer reads (config.ts): spec.jev.json, or the mu.json / kyrn.json a machine already
- * has. Writing a new file beside an old one would hide everything the old one says.
- */
-export function judgeConfigPath(agentDir: string, exists: (path: string) => boolean = existsSync): string {
-	const current = join(agentDir, CONFIG_FILE);
-	const legacy = LEGACY_CONFIG_FILES.map((file) => join(agentDir, file)).find((path) => exists(path));
-	return !exists(current) && legacy ? legacy : current;
+/** The file the judgment layer reads (config.ts). */
+export function judgeConfigPath(agentDir: string): string {
+	return join(agentDir, CONFIG_FILE);
 }
 
 /** The judges a config asks for, as config.ts reads them: `tiers`, else Jev. */

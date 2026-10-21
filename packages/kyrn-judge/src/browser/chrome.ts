@@ -125,7 +125,7 @@ function sideOf(executable: string, host: BrowserHost): FoundBrowser["side"] {
 }
 
 /**
- * The browser spec.jev would start. MU_CHROME (or KYRN_CHROME) wins. From inside WSL a browser on the Windows side
+ * The browser spec.jev would start. SPECJEV_CHROME wins. From inside WSL a browser on the Windows side
  * only counts when it can be reached: see `windowsSideProblem`.
  */
 export function findBrowser(host: BrowserHost): FoundBrowser | undefined {
@@ -162,13 +162,13 @@ const LINUX_INSTALL = [
 /** What to tell someone whose machine has no browser spec.jev can use. */
 export function browserAdvice(host: BrowserHost): string {
 	if (host.platform === "darwin") {
-		return "No Chrome, Chromium, Edge or Brave found in /Applications. Install one, or set MU_CHROME to a Chromium-based browser's executable.";
+		return "No Chrome, Chromium, Edge or Brave found in /Applications. Install one, or set SPECJEV_CHROME to a Chromium-based browser's executable.";
 	}
 	if (host.platform === "win32") {
-		return "No Chrome, Chromium, Edge or Brave found under Program Files or %LOCALAPPDATA%. Install one, or set MU_CHROME to its .exe.";
+		return "No Chrome, Chromium, Edge or Brave found under Program Files or %LOCALAPPDATA%. Install one, or set SPECJEV_CHROME to its .exe.";
 	}
 	if (!host.wsl) {
-		return `No Chrome, Chromium, Edge or Brave found. Install one, or set MU_CHROME to its executable:\n${LINUX_INSTALL}`;
+		return `No Chrome, Chromium, Edge or Brave found. Install one, or set SPECJEV_CHROME to its executable:\n${LINUX_INSTALL}`;
 	}
 	const windowsSide = browserCandidates(host).find(
 		(candidate) => candidate.side === "windows" && host.exists(candidate.executable),

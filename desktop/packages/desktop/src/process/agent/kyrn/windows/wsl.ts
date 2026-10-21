@@ -62,14 +62,14 @@ export function wslLaunch(input: {
   home: string;
 }): { command: string; args: string[]; cwd: string; env: Record<string, string> } {
   const { location, session, env, agentDir, inherited, home } = input;
-  const carried = [...Object.keys(env), 'MU_AGENT_DIR/p', ...(session ? ['MU_ACP_SESSION/p'] : [])];
+  const carried = [...Object.keys(env), 'SPECJEV_AGENT_DIR/p', ...(session ? ['MU_ACP_SESSION/p'] : [])];
   return {
     command: 'wsl.exe',
     args: ['--distribution', location.distro, '--cd', location.path, '--exec', 'bash', '-lc', WSL_START],
     cwd: home,
     env: {
       ...env,
-      MU_AGENT_DIR: agentDir,
+      SPECJEV_AGENT_DIR: agentDir,
       ...(session ? { MU_ACP_SESSION: session } : {}),
       WSLENV: withWslenv(inherited, carried),
     },

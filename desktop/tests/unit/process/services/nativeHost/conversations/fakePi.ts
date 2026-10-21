@@ -107,7 +107,7 @@ export class FakeHost implements ConversationHost {
   boot(): void {
     this.session = this.input.session ? this.load(this.input.session) : this.fresh();
     // spec.jev says its permission mode as it starts, before it answers anything.
-    this.emit(frame('permissions.mode', { mode: this.input.env.MU_PERMISSIONS || 'full', modes: MODES }));
+    this.emit(frame('permissions.mode', { mode: this.input.env.SPECJEV_PERMISSIONS || 'full', modes: MODES }));
     queueMicrotask(() => {
       if (!this.disposed) this.setState({ phase: this.model ? 'running' : 'needs-model' });
     });

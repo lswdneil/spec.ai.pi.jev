@@ -96,14 +96,13 @@ describe("spec.jev setup, as the launcher starts it", () => {
 		expect(plan.env).toEqual({
 			PATH: "/usr/bin",
 			LANG: "zh_CN.UTF-8",
-			MU_SETUP_KEY: KEY,
-			MU_AGENT_DIR: "/home/bai/.spec.jev/agent",
-			MU_CODING_AGENT_DIR: "/home/bai/.spec.jev/agent",
-			KYRN_CODING_AGENT_DIR: "/home/bai/.spec.jev/agent",
+			SPECJEV_SETUP_KEY: KEY,
+			SPECJEV_AGENT_DIR: "/home/bai/.spec.jev/agent",
+			SPECJEV_CODING_AGENT_DIR: "/home/bai/.spec.jev/agent",
 			PI_CODING_AGENT_DIR: "/home/bai/.spec.jev/agent",
-			MU_SETUP_HOME: "/home/bai/.spec.jev",
+			SPECJEV_SETUP_HOME: "/home/bai/.spec.jev",
 			// A checkout's session reads the .env at its root: the Jev key goes there.
-			MU_SETUP_ENV_FILE: `${POSIX_ROOT}/.env`,
+			SPECJEV_SETUP_ENV_FILE: `${POSIX_ROOT}/.env`,
 		});
 	});
 
@@ -120,10 +119,10 @@ describe("spec.jev setup, as the launcher starts it", () => {
 			"kimi-k2.6",
 		]);
 		expect(joined.error === undefined && joined.keyGiven).toBe(false);
-		expect(joined.error === undefined && "MU_SETUP_KEY" in joined.env).toBe(false);
+		expect(joined.error === undefined && "SPECJEV_SETUP_KEY" in joined.env).toBe(false);
 		// The word after --model is its value, not a key.
 		const named = plan(["--model", "deepseek-chat", KEY]);
-		expect(named.error === undefined && named.env.MU_SETUP_KEY).toBe(KEY);
+		expect(named.error === undefined && named.env.SPECJEV_SETUP_KEY).toBe(KEY);
 		expect(plan([KEY, "another"])).toEqual({
 			error: "spec.jev setup takes one key at most (spec.jev setup --help)",
 			code: 2,
@@ -144,10 +143,10 @@ describe("spec.jev setup, as the launcher starts it", () => {
 		if (plan.error !== undefined) throw new Error(plan.error);
 		expect(plan.args).toEqual([built]);
 		expect(plan.env).toMatchObject({
-			MU_SETUP_KEY: KEY,
-			MU_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
-			MU_SETUP_HOME: "C:\\Users\\bai\\.spec.jev",
-			MU_SETUP_ENV_FILE: "C:\\Users\\bai\\.spec.jev\\.env",
+			SPECJEV_SETUP_KEY: KEY,
+			SPECJEV_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
+			SPECJEV_SETUP_HOME: "C:\\Users\\bai\\.spec.jev",
+			SPECJEV_SETUP_ENV_FILE: "C:\\Users\\bai\\.spec.jev\\.env",
 		});
 		// A package built before spec.jev setup says to update, instead of passing `setup` to pi as a message.
 		const old = planSetup({
@@ -175,7 +174,7 @@ describe("spec.jev setup, as the launcher starts it", () => {
 		const moved = planSetup({
 			...setupArgs,
 			platform: "linux",
-			env: { MU_AGENT_DIR: "/srv/mu-agent" },
+			env: { SPECJEV_AGENT_DIR: "/srv/mu-agent" },
 			argv: [],
 			root: POSIX_ROOT,
 			fs: disk(posixInstalled),
@@ -188,7 +187,7 @@ describe("spec.jev setup, as the launcher starts it", () => {
 			root: POSIX_ROOT,
 			fs: disk(posixInstalled, ["/home/bai/.kyrn"]),
 		});
-		expect(legacy.error === undefined && legacy.env.MU_SETUP_HOME).toBe("/home/bai/.kyrn");
+		expect(legacy.error === undefined && legacy.env.SPECJEV_SETUP_HOME).toBe("/home/bai/.spec.jev");
 		const bare = planSetup({ ...setupArgs, platform: "linux", argv: [], root: POSIX_ROOT, fs: disk({}) });
 		expect(bare.error).toContain("npm ci --ignore-scripts");
 	});
@@ -237,7 +236,7 @@ describe("the first start", () => {
 			true,
 		);
 		expect(first({ envText: "TYPESAFE_API_KEY=x\nDEEPSEEK_API_KEY=\n" })).toBe(true);
-		expect(first({ env: { MU_NO_SETUP: "0" } })).toBe(true);
+		expect(first({ env: { SPECJEV_NO_SETUP: "0" } })).toBe(true);
 	});
 
 	it("never asks a script, a command, or a run that names its model", () => {
@@ -291,8 +290,8 @@ describe("the first start", () => {
 
 	it("never asks again after a no, or when it is turned off", () => {
 		expect(first({}, { [`${agentDir}/${SETUP_DECLINED_FILE}`]: "" })).toBe(false);
-		expect(first({ env: { MU_NO_SETUP: "1" } })).toBe(false);
-		expect(first({ env: { KYRN_NO_SETUP: "yes" } })).toBe(false);
+		expect(first({ env: { SPECJEV_NO_SETUP: "1" } })).toBe(false);
+		expect(first({ env: { KYRN_NO_SETUP: "yes" } })).toBe(true);
 	});
 
 	it("never asks when something gives spec.jev a model, or when a file cannot be read", () => {

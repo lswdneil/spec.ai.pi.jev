@@ -13,7 +13,7 @@ export type JudgeSettings = {
   timeoutMs: number;
 };
 /**
- * The permission mode a new conversation starts in. spec.jev reads, in order: the conversation's own switch, `MU_PERMISSIONS`,
+ * The permission mode a new conversation starts in. spec.jev reads, in order: the conversation's own switch, `SPECJEV_PERMISSIONS`,
  * the last pick (`<agentDir>/mu/permissions.json`, written by `/permissions` and by this page), then mu.json.
  */
 export type PermissionDefault = {

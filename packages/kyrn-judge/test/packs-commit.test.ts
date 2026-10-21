@@ -385,7 +385,7 @@ describe("/commit: a change split into commits", () => {
 		});
 
 		it("asks and answers in Chinese when the app is in Chinese", async () => {
-			vi.stubEnv("MU_LANG", "zh-CN");
+			vi.stubEnv("SPECJEV_LANG", "zh-CN");
 			const refusing = scriptedUi(false);
 			const { harness, repo } = await session(refusing);
 			harness.setResponses([fauxAssistantMessage('{"commits":[{"message":"all","units":["u1","u2","u3"]}]}')]);

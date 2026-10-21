@@ -160,7 +160,7 @@ export const nativeBridge = {
   list: bridge.buildProvider<NativeResult<NativeConversation[]>, void>('mu.native.list'),
   /**
    * A new conversation in a project folder. No host starts until a command needs pi. `permissions`: the permission
-   * mode its spec.jev starts in (`full`, `jev`, `ask`: MU_PERMISSIONS), spec.jev's own default when left out.
+   * mode its spec.jev starts in (`full`, `jev`, `ask`: SPECJEV_PERMISSIONS), spec.jev's own default when left out.
    */
   create: bridge.buildProvider<NativeResult<NativeConversation>, { cwd: string; permissions?: string }>(
     'mu.native.create'

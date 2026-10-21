@@ -286,11 +286,11 @@ spec.jev doctor     # 檢查安裝、判定器和各項連線
 | `/import-chat` | 匯入 Claude Code 或 Codex 的對話 |
 | `/doctor` | 檢查設定和連線 |
 
-pi 自己的指令（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`/fork`、`/compact`、`/export` 等）原樣保留。`MU_JUDGE=laya,jev spec.jev` 只為這一次執行更換判定器。
+pi 自己的指令（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`/fork`、`/compact`、`/export` 等）原樣保留。`SPECJEV_JUDGE=laya,jev spec.jev` 只為這一次執行更換判定器。
 
 ## 隱私
 
-金鑰只留在本機。spec.jev 不會自己下載任何模型或執行環境；需要下載的東西都會先問你。判定器只看得到一個問題所需的欄位（沒設金鑰時，這些欄位送到 OpenCode Zen 上免費的 Jev；用 `MU_JUDGE=off` 或 Laya 就全部留在本機）；每一次判定都記錄在本機，你全都看得到。
+金鑰只留在本機。spec.jev 不會自己下載任何模型或執行環境；需要下載的東西都會先問你。判定器只看得到一個問題所需的欄位（沒設金鑰時，這些欄位送到 OpenCode Zen 上免費的 Jev；用 `SPECJEV_JUDGE=off` 或 Laya 就全部留在本機）；每一次判定都記錄在本機，你全都看得到。
 
 ## 文件
 
@@ -309,7 +309,7 @@ npm run check                  # 格式、靜態檢查、型別
 ./test.sh                      # 測試（沒有金鑰時跳過需要模型的測試）
 ```
 
-桌面版在 `desktop/`：`bun install`，然後 `KYRN_ROOT="$(cd .. && pwd)" bun run start` 啟動開發版，它會使用儲存庫裡的 spec.jev（先在根目錄執行 `npm install`）。
+桌面版在 `desktop/`：`bun install`，然後 `SPECJEV_ROOT="$(cd .. && pwd)" bun run start` 啟動開發版，它會使用儲存庫裡的 spec.jev（先在根目錄執行 `npm install`）。
 
 所有參與者都遵守[行為準則](../../CODE_OF_CONDUCT.md)。安全問題請依 [SECURITY.md](../../SECURITY.md) 私下回報。
 

@@ -21,7 +21,7 @@ describe("judge fetch", () => {
 		closers.push(declined.close);
 		expect(declined.http2).toBe(false);
 		// A proxy that cannot carry HTTP/2 is switched off from the environment, without a config file.
-		vi.stubEnv("MU_JUDGE_HTTP2", "off");
+		vi.stubEnv("SPECJEV_JUDGE_HTTP2", "off");
 		const fromEnv = createJudgeFetch();
 		closers.push(fromEnv.close);
 		expect(fromEnv.http2).toBe(false);

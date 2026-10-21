@@ -32,7 +32,7 @@ export function createHostWorld({ baseUrl, judgeMode = 'off', nodeDir }) {
   const home = join(root, 'home');
   const project = join(root, 'project');
   const tmp = join(root, 'tmp');
-  const agentDir = join(home, '.mu', 'agent');
+  const agentDir = join(home, '.spec.jev', 'agent');
   for (const dir of [agentDir, project, tmp]) mkdirSync(dir, { recursive: true });
   if (baseUrl) {
     const provider = { baseUrl, api: 'openai-completions', apiKey: FAKE_API_KEY, models: [{ id: FAKE_MODEL_ID }] };
@@ -83,7 +83,7 @@ export function launcherPlansHosts(harnessRoot) {
 
 /**
  * The harness and the Node to run a host with, or why a test cannot run here: a harness whose launcher plans hosts
- * (MU_ROOT, or the KYRN checkout beside this repository) and Node 22.19 or newer, on macOS or Linux.
+ * (SPECJEV_ROOT, or the KYRN checkout beside this repository) and Node 22.19 or newer, on macOS or Linux.
  */
 export function hostEnvironment(desktopRoot) {
   if (process.platform === 'win32') return { skip: 'the host world is set up for macOS and Linux' };
@@ -91,7 +91,7 @@ export function hostEnvironment(desktopRoot) {
   try {
     harness = findHarnessSource(desktopRoot);
   } catch {
-    return { skip: 'no spec.jev harness (MU_ROOT, or ../KYRN beside this checkout)' };
+    return { skip: 'no spec.jev harness (SPECJEV_ROOT, or ../KYRN beside this checkout)' };
   }
   if (!launcherPlansHosts(harness.root)) return { skip: `${harness.root} is a spec.jev from before the native host` };
   try {

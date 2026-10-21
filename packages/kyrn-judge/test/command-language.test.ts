@@ -142,7 +142,7 @@ describe("commands in the app's language", () => {
 		harness.session.extensionRunner.getRegisteredCommands().map((command) => [command.name, command.description]);
 
 	it("describes every spec.jev command in Chinese when the app is in Chinese, and in English otherwise", async () => {
-		vi.stubEnv("MU_LANG", "zh-CN");
+		vi.stubEnv("SPECJEV_LANG", "zh-CN");
 		const chinese = commands(await start());
 		expect(chinese.map(([name]) => name)).toEqual(
 			expect.arrayContaining([
@@ -162,14 +162,14 @@ describe("commands in the app's language", () => {
 			board: expect.stringContaining("人话看板"),
 		});
 
-		vi.stubEnv("MU_LANG", "en-US");
+		vi.stubEnv("SPECJEV_LANG", "en-US");
 		const english = commands(await start());
 		expect(english.map(([name]) => name)).toEqual(chinese.map(([name]) => name));
 		expect(english.filter(([, description]) => CJK.test(description ?? ""))).toEqual([]);
 	});
 
 	it("shows the templates' Chinese in the menu, with the same body for the model", async () => {
-		vi.stubEnv("MU_LANG", "zh-CN");
+		vi.stubEnv("SPECJEV_LANG", "zh-CN");
 		const harness = await start();
 		// What pi does with the folders spec.jev hands it, with pi's own loader.
 		const { promptPaths } = await harness.session.extensionRunner.emitResourcesDiscover(harness.tempDir, "startup");
@@ -196,7 +196,7 @@ describe("commands in the app's language", () => {
 	});
 
 	it("without a home of its own (a caller that owns the setup), keeps the English templates and writes nothing", async () => {
-		vi.stubEnv("MU_LANG", "zh-CN");
+		vi.stubEnv("SPECJEV_LANG", "zh-CN");
 		const harness = await createHarness({
 			extensionFactories: [
 				createKyrnJudgeExtension({ provider: new MockJudgeProvider(), mode: "active", config: parseConfig({}) }),

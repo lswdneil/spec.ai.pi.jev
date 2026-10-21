@@ -39,11 +39,11 @@ const PLAN: HostPlan = {
   module: '/mu/packages/coding-agent/src/index.ts',
   execArgv: ['--import', '/mu/source-resolver.ts'],
   args: ['-e', '/mu/judge.ts', '--mode', 'rpc'],
-  env: { HOME: '/home/someone', MU_AGENT_DIR: '/home/someone/.mu/agent' },
+  env: { HOME: '/home/someone', SPECJEV_AGENT_DIR: '/home/someone/.spec.jev/agent' },
   layout: 'repo',
   muDir: '/home/someone/.mu',
-  appDir: '/home/someone/.mu/app',
-  agentDir: '/home/someone/.mu/agent',
+  appDir: '/home/someone/.spec.jev/app',
+  agentDir: '/home/someone/.spec.jev/agent',
   startJudge: false,
   notes: ['spec.jev: .env: skipped line 3 (not KEY=VALUE)'],
 };
@@ -142,12 +142,12 @@ describe('prepareHost', () => {
     const importLauncher = vi.fn(async () => ({
       planHost: () => PLAN,
       prepareLaunch: () => {
-        throw new Error("EACCES: permission denied, mkdir '/home/someone/.mu/agent'");
+        throw new Error("EACCES: permission denied, mkdir '/home/someone/.spec.jev/agent'");
       },
     }));
     await expect(prepareHost(options({ importLauncher }))).rejects.toMatchObject({
       kind: 'plan',
-      message: "spec.jev could not prepare the launch: EACCES: permission denied, mkdir '/home/someone/.mu/agent'",
+      message: "spec.jev could not prepare the launch: EACCES: permission denied, mkdir '/home/someone/.spec.jev/agent'",
     });
   });
 

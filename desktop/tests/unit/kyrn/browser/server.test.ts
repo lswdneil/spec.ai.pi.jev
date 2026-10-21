@@ -97,7 +97,7 @@ describe('the advert file', () => {
   const home = () => {
     const root = mkdtempSync(join(tmpdir(), 'mu-advert-'));
     homes.push(root);
-    return join(root, '.mu');
+    return join(root, '.spec.jev');
   };
   const posix = process.platform !== 'win32';
 

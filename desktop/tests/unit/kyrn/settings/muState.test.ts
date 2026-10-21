@@ -8,12 +8,12 @@ import { withOwnPlaces } from './muState.fixture';
 
 type Json = Record<string, unknown>;
 
-/** A harness root with a manifest, and an agent directory with the given mu.json and files under `spec.jev/`. */
+/** A harness root with a manifest, and an agent directory with the given spec.jev.json and files under `spec.jev/`. */
 function fixture(config: Json | undefined, own: { permissions?: string; board?: string } = {}, harness: unknown) {
   const root = mkdtempSync(join(tmpdir(), 'mu-own-'));
   const dir = join(root, 'agent');
   mkdirSync(join(dir, 'mu'), { recursive: true });
-  if (config) writeFileSync(join(dir, 'mu.json'), JSON.stringify(config, null, '\t'));
+  if (config) writeFileSync(join(dir, 'spec.jev.json'), JSON.stringify(config, null, '\t'));
   if (own.permissions !== undefined) writeFileSync(join(dir, 'mu', 'permissions.json'), own.permissions);
   if (own.board !== undefined) writeFileSync(join(dir, 'mu', 'board.json'), own.board);
   mkdirSync(join(root, 'packages', 'kyrn-judge'), { recursive: true });
@@ -47,7 +47,7 @@ const picked = (mode: string, version = 1) => JSON.stringify({ version, mode });
 const board = (patch: Json = {}) => JSON.stringify({ version: 1, projects: { '/work/app': true }, ...patch });
 
 describe('the permission mode of a new conversation', () => {
-  it('is the last pick, else what mu.json says, else the harness default', () => {
+  it('is the last pick, else what spec.jev.json says, else the harness default', () => {
     using(undefined, {}, (f) => expect(f.store.read().permissions).toEqual({ mode: 'jev', from: 'default' }));
     const config = { features: { permissions: { mode: 'ask' } } };
     using(config, {}, (f) => expect(f.store.read().permissions).toEqual({ mode: 'ask', from: 'config' }));
@@ -82,8 +82,8 @@ describe('the permission mode of a new conversation', () => {
       if (process.platform !== 'win32') {
         expect(statSync(join(f.dir, 'mu', 'permissions.json')).mode & 0o777).toBe(0o600);
       }
-      // mu.json is not where it goes.
-      expect(f.json('mu.json')).toEqual({ tiers: ['jev'], modes: { default: 'off' } });
+      // spec.jev.json is not where it goes.
+      expect(f.json('spec.jev.json')).toEqual({ tiers: ['jev'], modes: { default: 'off' } });
 
       expect(() => f.store.save({ ...saved, permissions: { mode: 'root' } })).toThrow('Invalid permission mode');
       expect(f.json('mu/permissions.json')).toEqual({ version: 1, mode: 'full' });
@@ -102,7 +102,7 @@ describe('the permission mode of a new conversation', () => {
 });
 
 describe('the model that writes the board', () => {
-  it('is the one picked for the board, unless mu.json names one, which spec.jev reads first', () => {
+  it('is the one picked for the board, unless spec.jev.json names one, which spec.jev reads first', () => {
     using(undefined, {}, (f) => expect(f.store.read().boardModel).toEqual({ supported: true, model: '' }));
     using(undefined, { board: board({ model: 'anthropic/claude-opus-4-6' }) }, (f) =>
       expect(f.store.read().boardModel.model).toBe('anthropic/claude-opus-4-6')
@@ -114,7 +114,7 @@ describe('the model that writes the board', () => {
     using(undefined, {}, (f) => expect(f.store.read().boardModel.supported).toBe(false), manifest);
   });
 
-  it('is saved into board.json with every project switch kept, and takes over from mu.json', () => {
+  it('is saved into board.json with every project switch kept, and takes over from spec.jev.json', () => {
     const config = { features: { board: { model: 'google/gemini-3.8-flash', defaultOn: true } } };
     using(config, { board: board({ model: 'session' }) }, (f) => {
       const saved = f.store.save({ ...f.store.read(), boardModel: { model: 'openrouter/anthropic/claude-opus-4.6' } });
@@ -124,7 +124,7 @@ describe('the model that writes the board', () => {
         projects: { '/work/app': true },
         model: 'openrouter/anthropic/claude-opus-4.6',
       });
-      expect(f.json('mu.json')).toEqual({ features: { board: { defaultOn: true } } });
+      expect(f.json('spec.jev.json')).toEqual({ features: { board: { defaultOn: true } } });
 
       f.store.save({ ...f.store.read(), boardModel: { model: 'session' } });
       expect(f.json('mu/board.json').model).toBe('session');

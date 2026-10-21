@@ -66,8 +66,8 @@ function world(options: Partial<NativeConversationsOptions> = {}) {
     startHost: pi.startHost,
     folders: () => folders,
     env: (conversation) => ({
-      MU_DESKTOP_SESSION: conversation.desktopSession,
-      ...(conversation.permissions ? { MU_PERMISSIONS: conversation.permissions } : {}),
+      SPECJEV_DESKTOP_SESSION: conversation.desktopSession,
+      ...(conversation.permissions ? { SPECJEV_PERMISSIONS: conversation.permissions } : {}),
     }),
     trash: async (file) => {
       trashed.push(file);
@@ -193,7 +193,7 @@ describe('native conversations', () => {
     // The draft's id still reaches it, and spec.jev names it by the app's name for it.
     await expect(w.conversations.request(draft.id, { type: 'get_state' })).resolves.toMatchObject({ sessionId: id });
     expect(w.pi.hosts).toHaveLength(1);
-    const desktopSession = w.pi.last.input.env.MU_DESKTOP_SESSION;
+    const desktopSession = w.pi.last.input.env.SPECJEV_DESKTOP_SESSION;
     expect(desktopSession).toMatch(/^n-[0-9a-f-]{36}$/);
     expect(w.conversations.conversationOf(desktopSession)).toBe(id);
     await expect(w.conversations.open('nobody')).rejects.toMatchObject({ kind: 'unknown-conversation' });
@@ -575,12 +575,12 @@ describe('native conversations', () => {
     const w = world();
     const draft = await w.conversations.create({ cwd: w.project, permissions: 'jev' });
     await turn(w, draft.id, 'hello');
-    expect(w.pi.last.input.env.MU_PERMISSIONS).toBe('jev');
+    expect(w.pi.last.input.env.SPECJEV_PERMISSIONS).toBe('jev');
     const id = w.pi.last.session.id;
     await w.conversations.request(id, { type: 'prompt', message: '/permissions ask --here' });
     await w.conversations.close(id);
     await w.conversations.request(id, { type: 'get_state' });
-    expect(w.pi.last.input.env.MU_PERMISSIONS).toBe('ask');
+    expect(w.pi.last.input.env.SPECJEV_PERMISSIONS).toBe('ask');
   });
 
   it('removes a conversation with its session file, only from spec.jev’s session folders', async () => {

@@ -112,7 +112,7 @@ describe("the desktop app's browser", () => {
 
 	it("is found through the variable or the app's advert, and not when that app has quit", () => {
 		const advert = (value: unknown) => ({
-			home: "/home/u/.mu",
+			home: "/home/u/.spec.jev",
 			env: {},
 			readFile: (path: string) => {
 				expect(path.endsWith(ADVERT_FILE)).toBe(true);
@@ -121,15 +121,14 @@ describe("the desktop app's browser", () => {
 		});
 		const url = "ws://127.0.0.1:41000/secret";
 
-		expect(findEmbeddedEndpoint({ env: { MU_BROWSER_ENDPOINT: url } })).toEqual({ url });
-		expect(findEmbeddedEndpoint({ env: { KYRN_BROWSER_ENDPOINT: url } })).toEqual({ url });
-		expect(findEmbeddedEndpoint({ env: { MU_BROWSER_ENDPOINT: "ws://10.0.0.2:1/x" } })).toBeUndefined();
+		expect(findEmbeddedEndpoint({ env: { SPECJEV_BROWSER_ENDPOINT: url } })).toEqual({ url });
+		expect(findEmbeddedEndpoint({ env: { SPECJEV_BROWSER_ENDPOINT: "ws://10.0.0.2:1/x" } })).toBeUndefined();
 		expect(findEmbeddedEndpoint({ ...advert({ url, pid: 7 }), isRunning: () => true })).toEqual({ url, pid: 7 });
 		expect(findEmbeddedEndpoint({ ...advert({ url, pid: 7 }), isRunning: () => false })).toBeUndefined();
 		expect(findEmbeddedEndpoint(advert({ url: "ws://evil.example/x", pid: 7 }))).toBeUndefined();
 		expect(
 			findEmbeddedEndpoint({
-				home: "/home/u/.mu",
+				home: "/home/u/.spec.jev",
 				env: {},
 				readFile: () => {
 					throw new Error("ENOENT");
@@ -156,7 +155,7 @@ describe("the desktop app's browser", () => {
 	it("says which conversation it serves, so the page opens beside it", async () => {
 		const hello = (method: string) => (method === "Mu.hello" ? { embedded: true, version: 1 } : {});
 		const named = await connected(hello);
-		await EmbeddedBrowser.handshake(named.cdp, { MU_DESKTOP_SESSION: "conv_42" });
+		await EmbeddedBrowser.handshake(named.cdp, { SPECJEV_DESKTOP_SESSION: "conv_42" });
 		expect(named.fake.calls[0]).toEqual({ method: "Mu.hello", params: { version: 1, session: "conv_42" } });
 
 		const terminal = await connected(hello);
@@ -302,7 +301,7 @@ describe("the desktop app's browser", () => {
 			return {};
 		});
 		open.push(app);
-		vi.stubEnv("MU_BROWSER_ENDPOINT", await app.listen());
+		vi.stubEnv("SPECJEV_BROWSER_ENDPOINT", await app.listen());
 		const harness = await createHarness({
 			extensionFactories: [
 				createKyrnJudgeExtension({
@@ -356,7 +355,7 @@ describe("the desktop app's browser", () => {
 			return {};
 		});
 		open.push(app);
-		vi.stubEnv("MU_BROWSER_ENDPOINT", await app.listen());
+		vi.stubEnv("SPECJEV_BROWSER_ENDPOINT", await app.listen());
 		const choose = (choice: string): Answer => ({ type: "choice", choice, probabilities: { [choice]: 0.97 } });
 		const harness = await createHarness({
 			extensionFactories: [

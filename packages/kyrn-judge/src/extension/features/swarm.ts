@@ -159,7 +159,7 @@ export function chainRunner(runner: SwarmRunner): SwarmRunner {
 /** A sub-agent works in its parent's permission mode, as it is now, not as the parent started. */
 export function permissionEnv(runtime: KyrnRuntime): Record<string, string> {
 	const mode = runtime.permissionMode?.();
-	return mode ? { MU_PERMISSIONS: mode } : {};
+	return mode ? { SPECJEV_PERMISSIONS: mode } : {};
 }
 
 /** Where a sub-agent leaves its acceptance list for the parent. */

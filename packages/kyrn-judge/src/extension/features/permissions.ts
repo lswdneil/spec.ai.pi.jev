@@ -110,7 +110,7 @@ function projectSettings(cwd: string): string[] {
 /**
  * Three permission modes, one switch (`/permissions`). The mode is per
  * conversation: a new one starts in the mode last chosen, a reopened one in
- * the mode it was in, a sub-agent in its parent's (MU_PERMISSIONS).
+ * the mode it was in, a sub-agent in its parent's (SPECJEV_PERMISSIONS).
  *
  * Asking is one picker with fixed answers and a status line while it waits,
  * so the terminal shows it in its footer and the desktop as a prompt in its

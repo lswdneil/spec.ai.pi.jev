@@ -48,7 +48,7 @@ spec.jev 看不懂的部分会退回默认值，而不是让 spec.jev 停下。�
 
 - {points} 个判定点里有 {points_active} 个从一开始就生效（`context.compact` 和 `output.drift` 要你自己打开）。想试一个判定器，或者对某个判定点没把握，就把它设成影子模式，读流水（`spec.jev ledger`、`/status` 或桌面端的「判定」页），再把它设回生效。
 - `/mu mode <point> <off|shadow|active>` 在当前会话里切换一个判定点；`/mu mode default shadow` 切换全部。想保留一个模式，就写进 `spec.jev.json`。
-- `MU_JUDGE_MODE=shadow spec.jev` 为一次运行设置默认模式。
+- `SPECJEV_JUDGE_MODE=shadow spec.jev` 为一次运行设置默认模式。
 
 ## 环境变量 {#env}
 
@@ -56,8 +56,8 @@ spec.jev 看不懂的部分会退回默认值，而不是让 spec.jev 停下。�
 
 | 变量 | 效果 |
 | --- | --- |
-| `MU_JUDGE` | 这次运行用的判定器，用逗号分隔：`laya`、`laya,jev`、`jev-opencode-free`、`classifier:<provider>/<model>`、`llm:<provider>/<model>`。`off` 关掉判定内核。 |
-| `MU_JUDGE_MODE` | 这次运行的默认模式：`off`、`shadow` 或 `active` |
+| `SPECJEV_JUDGE` | 这次运行用的判定器，用逗号分隔：`laya`、`laya,jev`、`jev-opencode-free`、`classifier:<provider>/<model>`、`llm:<provider>/<model>`。`off` 关掉判定内核。 |
+| `SPECJEV_JUDGE_MODE` | 这次运行的默认模式：`off`、`shadow` 或 `active` |
 | `MU_WRITER` | 写作模型的 `provider/model` |
 | `MU_PERMISSIONS` | 这次运行的权限模式：`full`、`jev` 或 `ask` |
 | `MU_LOCAL_JUDGE_URL` | 本地判定器服务器的地址，用于 `spec.jev judge start` 启动的那个之外的服务器 |
@@ -68,11 +68,11 @@ Jev 的密钥，每个只发给它自己的服务：`TYPESAFE_API_KEY`、`MU_JUD
 
 | 变量 | 效果 |
 | --- | --- |
-| `MU_AGENT_DIR` | 代理文件夹，代替 `~/.spec.jev/agent` |
+| `SPECJEV_AGENT_DIR` | 代理文件夹，代替 `~/.spec.jev/agent` |
 | `MU_NO_SETUP=1` | 第一次启动时从不询问设置模型 |
-| `MU_LANG` | 会话里 spec.jev 自己的消息：`zh…` 用中文，其他用英文。桌面端把它设成应用的语言；`spec.jev setup` 跟随你的系统语言。 |
+| `SPECJEV_LANG` | 会话里 spec.jev 自己的消息：`zh…` 用中文，其他用英文。桌面端把它设成应用的语言；`spec.jev setup` 跟随你的系统语言。 |
 | `MU_LINK_DIR` | `spec.jev link` 把 `spec.jev` 命令放在哪里，代替 `~/.local/bin` |
-| `MU_CHROME` | 命令行里内置浏览器使用的 Chrome 或 Chromium |
+| `SPECJEV_CHROME` | 命令行里内置浏览器使用的 Chrome 或 Chromium |
 
 每个 `MU_` 变量也认它以前的 `KYRN_` 写法。
 

@@ -126,13 +126,13 @@ describe('the store names what went wrong with a stable code', () => {
 
   it('names a configuration file that is not JSON, or cannot be read, with the parser or OS words as the message', () => {
     const { dir, store } = fixture();
-    writeFileSync(join(dir, 'mu.json'), '{ "tiers": ');
+    writeFileSync(join(dir, 'spec.jev.json'), '{ "tiers": ');
     expect(failure(() => store.read())).toMatchObject({
       code: 'invalidJson',
-      params: { file: join(dir, 'mu.json') },
+      params: { file: join(dir, 'spec.jev.json') },
       message: expect.stringContaining('JSON'),
     });
-    rmSync(join(dir, 'mu.json'));
+    rmSync(join(dir, 'spec.jev.json'));
     // A file nobody may read (root may read anything, so this only holds for an ordinary user). Windows has no mode
     // bits: chmod there only sets the read-only flag.
     if (process.getuid?.() === 0 || process.platform === 'win32') return;
@@ -246,9 +246,9 @@ describe('the words a screen shows for a code', () => {
     keyVariable: { name: 'MY_KEY' },
     sharedKey: { providers: ['a.b', 'a-b'] },
     optionValue: { feature: 'preflight', option: 'waitMs', problem: 'range' },
-    invalidJson: { file: '/home/me/.mu/agent/mu.json' },
-    unreadable: { file: '/home/me/.mu/agent/settings.json' },
-    unwritable: { file: '/home/me/.mu/.env' },
+    invalidJson: { file: '/home/me/.spec.jev/agent/mu.json' },
+    unreadable: { file: '/home/me/.spec.jev/agent/settings.json' },
+    unwritable: { file: '/home/me/.spec.jev/.env' },
     backend: { status: 500 },
     skillName: { name: 'My Skill' },
     skillExists: { name: 'review' },
@@ -288,11 +288,11 @@ describe('the words a screen shows for a code', () => {
     expect(word('contextLimit').text).toBe('The context limit must be 0 or a whole number from 8,192 to 10,000,000.');
     expect(word('optionValue').text).toBe('"Wait at most" is outside the allowed range.');
     expect(word('invalidJson', 'Unexpected end of JSON input')).toEqual({
-      text: "/home/me/.mu/agent/mu.json isn't valid JSON. Fix it by hand, then reload.",
+      text: "/home/me/.spec.jev/agent/mu.json isn't valid JSON. Fix it by hand, then reload.",
       detail: 'Unexpected end of JSON input',
     });
     expect(word('unwritable', 'EACCES: permission denied')).toEqual({
-      text: "Couldn't write /home/me/.mu/.env.",
+      text: "Couldn't write /home/me/.spec.jev/.env.",
       detail: 'EACCES: permission denied',
     });
     expect(word('backend', 'database is locked')).toEqual({

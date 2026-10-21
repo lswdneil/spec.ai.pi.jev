@@ -19,7 +19,7 @@ summary: 誰が判定ポイントに答えるか、判定器の選び方、つ�
 { "routes": { "browser.step": ["jev"], "memory.capture": ["llm:anthropic/claude-haiku-4-5"] } }
 ```
 
-セッションの中では、`/mu judge <judges>` と `/mu route <point> <judges|default>` で同じことができます。`MU_JUDGE=laya,jev spec.jev` は 1 回の実行だけ判定器を設定します。`/status` で、どの判定器が何に答えるかがわかります。アプリの「判定器」ページでも同じ設定ができます。
+セッションの中では、`/mu judge <judges>` と `/mu route <point> <judges|default>` で同じことができます。`SPECJEV_JUDGE=laya,jev spec.jev` は 1 回の実行だけ判定器を設定します。`/status` で、どの判定器が何に答えるかがわかります。アプリの「判定器」ページでも同じ設定ができます。
 
 時間内に答える判定器がなければ、各判定ポイントは判定がないときと同じように動き（たいていは何も変わりません）、台帳にその理由が残ります。長く待つことはありません。どの判定ポイントにも制限時間があります。
 

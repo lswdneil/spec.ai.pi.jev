@@ -19,7 +19,7 @@ A judge answers the bounded questions of spec.jev's [decision points](@decisions
 { "routes": { "browser.step": ["jev"], "memory.capture": ["llm:anthropic/claude-haiku-4-5"] } }
 ```
 
-In a session, `/mu judge <judges>` and `/mu route <point> <judges|default>` do the same; `MU_JUDGE=laya,jev spec.jev` sets the judges for one run. `/status` shows which judge answers what, and the app's judges page sets the same things.
+In a session, `/mu judge <judges>` and `/mu route <point> <judges|default>` do the same; `SPECJEV_JUDGE=laya,jev spec.jev` sets the judges for one run. `/status` shows which judge answers what, and the app's judges page sets the same things.
 
 When no judge answers in time, each decision point does what it would do without a verdict (usually: nothing changes), and the ledger records why. Nothing waits long: every point has a time limit.
 

@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { JudgeProfile } from "./cascade.ts";
 import type { DecisionMode } from "./decision.ts";
-import { CONFIG_FILE, LEGACY_CONFIG_FILES, muEnv } from "./naming.ts";
+import { CONFIG_FILE, muEnv } from "./naming.ts";
 
 /**
  * How one judge is reached. The decision points never see this: they ask
@@ -209,7 +209,7 @@ export function loadConfig(source: ConfigSource = {}): { config: KyrnConfig; dis
 	let config = DEFAULT_CONFIG;
 	let problem: string | undefined;
 	// The first file that exists wins, even when it is broken: a half-written spec.jev.json must not silently bring back old settings.
-	for (const file of source.dir ? [CONFIG_FILE, ...LEGACY_CONFIG_FILES] : []) {
+	for (const file of source.dir ? [CONFIG_FILE] : []) {
 		try {
 			config = parseConfig(JSON.parse(readFileSync(join(source.dir as string, file), "utf8")));
 			break;

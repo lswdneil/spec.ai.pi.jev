@@ -480,12 +480,8 @@ describe("the files", () => {
 		});
 	});
 
-	it("writes the judge into spec.jev.json, or into the mu.json / kyrn.json a machine already has", () => {
-		const has = (names: string[]) => (path: string) => names.some((name) => path.endsWith(name));
-		expect(judgeConfigPath("/a", has([]))).toBe(join("/a", "spec.jev.json"));
-		expect(judgeConfigPath("/a", has(["kyrn.json"]))).toBe(join("/a", "kyrn.json"));
-		expect(judgeConfigPath("/a", has(["kyrn.json", "mu.json"]))).toBe(join("/a", "mu.json"));
-		expect(judgeConfigPath("/a", has(["kyrn.json", "mu.json", "spec.jev.json"]))).toBe(join("/a", "spec.jev.json"));
+	it("always uses spec.jev.json, whatever older files are around", () => {
+		expect(judgeConfigPath("/a")).toBe(join("/a", "spec.jev.json"));
 	});
 });
 
@@ -499,7 +495,7 @@ describe("the language", () => {
 		expect(setupLanguage({ LANG: "zh_CN.UTF-8" }, "en-US")).toBe("zh");
 		expect(setupLanguage({ LC_ALL: "en_US.UTF-8", LANG: "zh_CN.UTF-8" }, "zh-CN")).toBe("en");
 		expect(setupLanguage({ LC_ALL: "C", LANG: "zh_TW.UTF-8" }, undefined)).toBe("zh");
-		expect(setupLanguage({ MU_LANG: "en", LANG: "zh_CN.UTF-8" }, undefined)).toBe("en");
+		expect(setupLanguage({ SPECJEV_LANG: "en", LANG: "zh_CN.UTF-8" }, undefined)).toBe("en");
 		expect(setupLanguage({}, "zh-Hans-CN")).toBe("zh");
 		expect(setupLanguage({}, undefined)).toBe("en");
 		expect(["DeepSeek", "OpenAI", "xAI", "GLM", "Ollama"].map(article)).toEqual([
@@ -739,7 +735,7 @@ describe("spec.jev setup, asking in a terminal", () => {
 		mkdirSync(join(home, "agent"));
 		writeFileSync(join(home, ".env"), "# mine\nOTHER=1\n");
 		const mode = statSync(join(home, ".env")).mode & 0o777;
-		writeFileSync(join(home, "agent", "mu.json"), JSON.stringify({ tiers: ["laya"], modes: { default: "active" } }));
+		writeFileSync(join(home, "agent", "spec.jev.json"), JSON.stringify({ tiers: ["laya"], modes: { default: "active" } }));
 		const run = await wizard({
 			home,
 			// The second "2": Jev with a key of one's own (the free Jev is offered first while no key is set).
@@ -751,10 +747,10 @@ describe("spec.jev setup, asking in a terminal", () => {
 		expect(run.said).toContain("This is an Anthropic key.");
 		expect(run.read(".env")).toBe(`# mine\nOTHER=1\nTYPESAFE_API_KEY=${KEYS.jev}\n`);
 		expect(statSync(join(home, ".env")).mode & 0o777).toBe(mode);
-		expect(run.json("mu.json")).toEqual({ tiers: ["jev"], modes: { default: "active" } });
+		expect(run.json("spec.jev.json")).toEqual({ tiers: ["jev"], modes: { default: "active" } });
 		const backup = join(home, "backups", "2026-09-27T12-00-00");
 		expect(readFileSync(join(backup, ".env"), "utf8")).toBe("# mine\nOTHER=1\n");
-		expect(JSON.parse(readFileSync(join(backup, "mu.json"), "utf8")).tiers).toEqual(["laya"]);
+		expect(JSON.parse(readFileSync(join(backup, "spec.jev.json"), "utf8")).tiers).toEqual(["laya"]);
 		expect(run.printed).toContain(`Backed up the previous files to ${join("~", "backups", "2026-09-27T12-00-00")}`);
 		expect(run.said).toContain("Done. spec.jev will start on Anthropic · claude-opus-4-8. Judge: Jev.");
 	});

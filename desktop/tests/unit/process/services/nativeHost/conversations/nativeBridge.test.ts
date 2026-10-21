@@ -58,7 +58,7 @@ beforeAll(() => {
 const CONVERSATION: NativeConversation = {
   id: 'session-1',
   cwd: '/project',
-  sessionFile: '/home/me/.mu/agent/sessions/--project--/2026_session-1.jsonl',
+  sessionFile: '/home/me/.spec.jev/agent/sessions/--project--/2026_session-1.jsonl',
   title: 'Hello',
   createdAt: 1,
   updatedAt: 2,
@@ -178,7 +178,7 @@ describe('the native conversation bridge in the main process', () => {
           throw new NativeRequestError('unknown-conversation', 'No conversation session-9');
         }),
         list: vi.fn(async () => {
-          throw new Error("EACCES: permission denied, scandir '/home/me/.mu/agent/sessions'");
+          throw new Error("EACCES: permission denied, scandir '/home/me/.spec.jev/agent/sessions'");
         }),
         close: vi.fn(async () => {
           throw new NativeHostError('timeout', 'spec.jev did not answer get_state in 30000 ms');
@@ -199,7 +199,7 @@ describe('the native conversation bridge in the main process', () => {
     await expect(nativeBridge.list.invoke()).resolves.toEqual({
       ok: false,
       kind: 'failed',
-      message: "EACCES: permission denied, scandir '/home/me/.mu/agent/sessions'",
+      message: "EACCES: permission denied, scandir '/home/me/.spec.jev/agent/sessions'",
     });
     // No output, no `stderr`.
     await expect(nativeBridge.close.invoke({ id: 'session-1' })).resolves.toEqual({
@@ -301,8 +301,8 @@ describe('the native conversation bridge in the main process', () => {
     ]);
     // 1 forces it on (no spec.jev is looked for), which is what a developer testing an older spec.jev wants.
     vi.stubEnv('MU_NATIVE_HOST', '1');
-    vi.stubEnv('MU_AGENT_DIR', agentDir);
-    vi.stubEnv('MU_CODING_AGENT_SESSION_DIR', '');
+    vi.stubEnv('SPECJEV_AGENT_DIR', agentDir);
+    vi.stubEnv('SPECJEV_CODING_AGENT_SESSION_DIR', '');
     try {
       initNativeBridge();
       await expect(nativeBridge.enabled.invoke()).resolves.toBe(true);
@@ -344,13 +344,13 @@ export function prepareLaunch() {}
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     try {
       vi.stubEnv('MU_NATIVE_HOST', '');
-      vi.stubEnv('KYRN_ROOT', '');
-      vi.stubEnv('MU_ROOT', current);
+      vi.stubEnv('SPECJEV_ROOT', '');
+      vi.stubEnv('SPECJEV_ROOT', current);
       initNativeBridge();
       await expect(nativeBridge.enabled.invoke()).resolves.toBe(true);
       expect(warn).not.toHaveBeenCalled();
 
-      vi.stubEnv('MU_ROOT', older);
+      vi.stubEnv('SPECJEV_ROOT', older);
       initNativeBridge();
       await expect(nativeBridge.enabled.invoke()).resolves.toBe(false);
       // The reason is in the log, and nothing else says a word: the app just keeps the classic path.

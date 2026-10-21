@@ -32,13 +32,13 @@ describe('writeAppLanguageFile', () => {
     expect(readdirSync(join(home, '.spec.jev'))).toEqual(['app-language']);
   });
 
-  it('writes into ~/.kyrn on a machine whose home has not moved yet', async () => {
+  it('always writes into ~/.spec.jev, whatever older homes exist', async () => {
     mkdirSync(join(home, '.kyrn'));
 
     await writeAppLanguageFile('ja-JP', home);
 
-    expect(readFileSync(join(home, '.kyrn', 'app-language'), 'utf8')).toBe('ja-JP\n');
-    expect(existsSync(join(home, '.spec.jev'))).toBe(false);
+    expect(readFileSync(join(home, '.spec.jev', 'app-language'), 'utf8')).toBe('ja-JP\n');
+    expect(existsSync(join(home, '.kyrn', 'app-language'))).toBe(false);
   });
 
   it('logs and returns instead of throwing when the file cannot be written', async () => {

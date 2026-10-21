@@ -250,14 +250,14 @@ describe("judge configuration", () => {
 	});
 
 	it("lets the environment pick the tiers, the default mode, or switch the kernel off", () => {
-		const picked = loadConfig({ env: { KYRN_JUDGE: "laya, gateway", KYRN_JUDGE_MODE: "active" } });
+		const picked = loadConfig({ env: { SPECJEV_JUDGE: "laya, gateway", SPECJEV_JUDGE_MODE: "active" } });
 		expect(picked.config.tiers).toEqual(["laya", "jev"]);
 		expect(picked.config.modes.default).toBe("active");
-		expect(loadConfig({ env: { KYRN_JUDGE: "off" } }).disabled).toBe(true);
+		expect(loadConfig({ env: { SPECJEV_JUDGE: "off" } }).disabled).toBe(true);
 		expect(loadConfig({ env: {} }).config.tiers).toEqual(["jev"]);
 	});
 
-	it("ignores malformed parts of mu.json instead of failing", () => {
+	it("ignores malformed parts of spec.jev.json instead of failing", () => {
 		const config = parseConfig({
 			tiers: "laya",
 			modes: { default: "loud", "tool.admission": "active" },

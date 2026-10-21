@@ -137,8 +137,7 @@ export class LocalJudge {
    */
   private started(): boolean {
     const { env, home, exists, readFile, alive } = this.deps;
-    const candidates = ['.spec.jev', '.mu', '.kyrn'];
-    const muDir = join(home, candidates.find((name) => exists(join(home, name))) ?? '.spec.jev');
+    const muDir = join(home, '.spec.jev');
     const runDir = env.MU_LOCAL_JUDGE_RUN_DIR || env.KYRN_LOCAL_JUDGE_RUN_DIR || join(muDir, 'local-judge');
     const pid = Number.parseInt(readFile(join(runDir, 'judge.pid'))?.trim() ?? '', 10);
     return pid > 0 && alive(pid);

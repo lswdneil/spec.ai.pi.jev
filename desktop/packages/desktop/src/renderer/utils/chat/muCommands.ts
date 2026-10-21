@@ -1,6 +1,6 @@
 /**
  * spec.jev's slash commands, by name, with the words spec.jev gives each one in English and in Chinese (pi's
- * `get_commands`, with MU_LANG en or zh), then any earlier English wording an older spec.jev may still send. `llama` and
+ * `get_commands`, with SPECJEV_LANG en or zh), then any earlier English wording an older spec.jev may still send. `llama` and
  * `mcp` are pi's own commands, in English only. `clear` and `new` are not in the menu (`process/agent/kyrn/commands.ts`).
  *
  * pi gives a command no code to translate by, and spec.jev has wording in those two languages only: a reader of the app in

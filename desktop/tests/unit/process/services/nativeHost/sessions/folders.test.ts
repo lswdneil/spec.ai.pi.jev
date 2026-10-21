@@ -38,15 +38,15 @@ describe('sessionFolders', () => {
   it('takes the agent folder the environment names, in the launcher’s order', () => {
     const home = join(root, 'env');
     expect(
-      sessionFolders({ env: { MU_AGENT_DIR: '/a', MU_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings })
+      sessionFolders({ env: { SPECJEV_AGENT_DIR: '/a', SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings })
     ).toEqual({
       agentDir: '/a',
       sessionsDir: '/a/sessions',
     });
     expect(
-      sessionFolders({ env: { KYRN_AGENT_DIR: '/k', MU_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings }).agentDir
+      sessionFolders({ env: { SPECJEV_AGENT_DIR: '/k', SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings }).agentDir
     ).toBe('/k');
-    expect(sessionFolders({ env: { MU_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings }).agentDir).toBe('/b');
+    expect(sessionFolders({ env: { SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings }).agentDir).toBe('/b');
   });
 
   it('adds the session folder the configuration names: the environment first, then the settings', () => {
@@ -54,12 +54,12 @@ describe('sessionFolders', () => {
     const agentDir = join(home, 'agent');
     mkdirSync(agentDir, { recursive: true });
     writeFileSync(join(agentDir, 'settings.json'), JSON.stringify({ sessionDir: '~/all-sessions' }));
-    expect(sessionFolders({ env: { MU_AGENT_DIR: agentDir }, home }).customDir).toBe(join(home, 'all-sessions'));
+    expect(sessionFolders({ env: { SPECJEV_AGENT_DIR: agentDir }, home }).customDir).toBe(join(home, 'all-sessions'));
     expect(
-      sessionFolders({ env: { MU_AGENT_DIR: agentDir, MU_CODING_AGENT_SESSION_DIR: '/elsewhere' }, home }).customDir
+      sessionFolders({ env: { SPECJEV_AGENT_DIR: agentDir, SPECJEV_CODING_AGENT_SESSION_DIR: '/elsewhere' }, home }).customDir
     ).toBe('/elsewhere');
     writeFileSync(join(agentDir, 'settings.json'), '{ not json');
-    expect(sessionFolders({ env: { MU_AGENT_DIR: agentDir }, home }).customDir).toBeUndefined();
+    expect(sessionFolders({ env: { SPECJEV_AGENT_DIR: agentDir }, home }).customDir).toBeUndefined();
   });
 });
 

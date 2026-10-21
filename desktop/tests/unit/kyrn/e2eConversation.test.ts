@@ -70,7 +70,7 @@ describe('the conversation E2E profile environment', () => {
       APPDATA: `${winPaths.home}\\AppData\\Roaming`,
       LOCALAPPDATA: `${winPaths.home}\\AppData\\Local`,
       MU_E2E_USER_DATA_DIR: winPaths.userData,
-      MU_AGENT_DIR: winPaths.agentDir,
+      SPECJEV_AGENT_DIR: winPaths.agentDir,
     });
     expect(env.CFFIXED_USER_HOME).toBeUndefined();
   });
@@ -110,7 +110,7 @@ describe('the conversation E2E profile environment', () => {
 
   it('names no checkout, harness or backend to a packaged app, and all of them for the checkout build', () => {
     const packaged = profileEnv({ platform: 'darwin', env: {}, paths: macPaths, language: 'zh-CN' });
-    for (const name of ['MU_ROOT', 'KYRN_ROOT', 'KYRN_DESKTOP_ROOT', 'MU_BACKEND_BIN', 'MU_NODE']) {
+    for (const name of ['SPECJEV_ROOT', 'SPECJEV_ROOT', 'KYRN_DESKTOP_ROOT', 'MU_BACKEND_BIN', 'MU_NODE']) {
       expect(packaged[name], name).toBeUndefined();
     }
     const checkout = profileEnv({
@@ -124,8 +124,8 @@ describe('the conversation E2E profile environment', () => {
     expect(checkout).toMatchObject({
       MU_BACKEND_BIN: '/d/aioncore',
       KYRN_DESKTOP_ROOT: '/d',
-      MU_ROOT: `${macPaths.root}/harness`,
-      KYRN_ROOT: `${macPaths.root}/harness`,
+      SPECJEV_ROOT: `${macPaths.root}/harness`,
+      SPECJEV_ROOT: `${macPaths.root}/harness`,
     });
     expect(checkout.PATH).toBe('/n/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin');
   });

@@ -158,7 +158,7 @@ describe("goal mode", () => {
 	});
 
 	it("gives its reasons in Chinese when the app is in Chinese", async () => {
-		vi.stubEnv("MU_LANG", "zh-CN");
+		vi.stubEnv("SPECJEV_LANG", "zh-CN");
 		const harness = await start(verdicts());
 		harness.setResponses([
 			fauxAssistantMessage("I think this is fine."),

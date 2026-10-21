@@ -48,7 +48,7 @@ spec.jev가 이해하지 못하는 부분은 spec.jev를 멈추지 않고 기본
 
 - 판정 지점 {points}개 중 {points_active}개는 처음부터 판정을 반영해요(`context.compact`와 `output.drift`는 기본으로 꺼져 있어요). 판정기나 확신이 없는 판정 지점을 시험하려면 섀도로 두고, 판정 장부(`spec.jev ledger`, `/status`, 앱의 판정 탭)를 읽은 다음, 다시 active로 돌려요.
 - `/mu mode <point> <off|shadow|active>`는 현재 세션에서 판정 지점 하나를 바꾸고, `/mu mode default shadow`는 전부를 바꿔요. 모드를 계속 유지하려면 `spec.jev.json`에 넣으세요.
-- `MU_JUDGE_MODE=shadow spec.jev`는 한 번 실행의 기본 모드를 정해요.
+- `SPECJEV_JUDGE_MODE=shadow spec.jev`는 한 번 실행의 기본 모드를 정해요.
 
 ## 환경 변수 {#env}
 
@@ -56,8 +56,8 @@ spec.jev가 이해하지 못하는 부분은 spec.jev를 멈추지 않고 기본
 
 | 변수 | 효과 |
 | --- | --- |
-| `MU_JUDGE` | 이번 실행의 판정기, 쉼표로 구분: `laya`, `laya,jev`, `jev-opencode-free`, `classifier:<provider>/<model>`, `llm:<provider>/<model>`. `off`는 커널을 꺼요. |
-| `MU_JUDGE_MODE` | 이번 실행의 기본 모드: `off`, `shadow`, `active` |
+| `SPECJEV_JUDGE` | 이번 실행의 판정기, 쉼표로 구분: `laya`, `laya,jev`, `jev-opencode-free`, `classifier:<provider>/<model>`, `llm:<provider>/<model>`. `off`는 커널을 꺼요. |
+| `SPECJEV_JUDGE_MODE` | 이번 실행의 기본 모드: `off`, `shadow`, `active` |
 | `MU_WRITER` | 글쓰기 모델의 `provider/model` |
 | `MU_PERMISSIONS` | 이번 실행의 권한 모드: `full`, `jev`, `ask` |
 | `MU_LOCAL_JUDGE_URL` | `spec.jev judge start`가 띄우는 서버가 아닌 다른 로컬 판정기 서버의 주소 |
@@ -68,11 +68,11 @@ Jev 키(각각 자기 서비스로만 보내져요): `TYPESAFE_API_KEY`, `MU_JUD
 
 | 변수 | 효과 |
 | --- | --- |
-| `MU_AGENT_DIR` | `~/.spec.jev/agent` 대신 쓸 에이전트 폴더 |
+| `SPECJEV_AGENT_DIR` | `~/.spec.jev/agent` 대신 쓸 에이전트 폴더 |
 | `MU_NO_SETUP=1` | 처음 시작할 때 모델 설정을 절대 묻지 않기 |
-| `MU_LANG` | 세션 안에서 spec.jev 자체 메시지의 언어: `zh…`면 중국어, 그 밖에는 영어. 데스크톱 앱은 앱의 언어로 설정하고, `spec.jev setup`은 여러분의 로캘을 따라요. |
+| `SPECJEV_LANG` | 세션 안에서 spec.jev 자체 메시지의 언어: `zh…`면 중국어, 그 밖에는 영어. 데스크톱 앱은 앱의 언어로 설정하고, `spec.jev setup`은 여러분의 로캘을 따라요. |
 | `MU_LINK_DIR` | `~/.local/bin` 대신 `spec.jev link`가 `spec.jev` 명령을 둘 곳 |
-| `MU_CHROME` | 명령줄에서 내장 브라우저가 쓸 Chrome이나 Chromium |
+| `SPECJEV_CHROME` | 명령줄에서 내장 브라우저가 쓸 Chrome이나 Chromium |
 
 `MU_` 변수는 모두 예전 철자인 `KYRN_`으로도 읽어요.
 

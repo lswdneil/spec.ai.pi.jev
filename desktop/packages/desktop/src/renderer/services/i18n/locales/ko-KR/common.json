@@ -1361,10 +1361,10 @@
         "openFailedPanel": "앱의 브라우저 패널에서 페이지를 열 수 없습니다.",
         "launch": {
           "noBrowser": {
-            "mac": "/Applications에서 Chrome, Chromium, Edge 또는 Brave를 찾을 수 없습니다. 이 중 하나를 설치하거나 MU_CHROME을 Chromium 기반 브라우저의 실행 파일로 설정하세요.",
-            "windows": "Program Files 또는 %LOCALAPPDATA%에서 Chrome, Chromium, Edge 또는 Brave를 찾을 수 없습니다. 이 중 하나를 설치하거나 MU_CHROME을 해당 브라우저의 .exe 파일로 설정하세요.",
+            "mac": "/Applications에서 Chrome, Chromium, Edge 또는 Brave를 찾을 수 없습니다. 이 중 하나를 설치하거나 SPECJEV_CHROME을 Chromium 기반 브라우저의 실행 파일로 설정하세요.",
+            "windows": "Program Files 또는 %LOCALAPPDATA%에서 Chrome, Chromium, Edge 또는 Brave를 찾을 수 없습니다. 이 중 하나를 설치하거나 SPECJEV_CHROME을 해당 브라우저의 .exe 파일로 설정하세요.",
             "wsl": "WSL 안에서 브라우저를 찾을 수 없습니다. WSL 안에 브라우저를 설치하거나 WSL의 미러 모드 네트워킹을 켜세요. 방법은 아래 reason 필드에 있습니다.",
-            "other": "Chrome, Chromium, Edge 또는 Brave를 찾을 수 없습니다. 이 중 하나를 설치하거나 MU_CHROME을 해당 브라우저의 실행 파일로 설정하세요. 설치 명령은 아래 reason 필드에 있습니다."
+            "other": "Chrome, Chromium, Edge 또는 Brave를 찾을 수 없습니다. 이 중 하나를 설치하거나 SPECJEV_CHROME을 해당 브라우저의 실행 파일로 설정하세요. 설치 명령은 아래 reason 필드에 있습니다."
           },
           "windowsBrowserUnusable": "{{executable}}을(를) 사용할 수 없습니다. Windows 쪽 브라우저는 WSL에서 미러 모드 네트워킹을 켠 경우에만 연결할 수 있습니다.",
           "profileNoWindowsPath": "프로필 폴더 {{profileDir}}에 해당하는 Windows 경로가 없습니다(WSL_DISTRO_NAME이 설정되지 않음).",

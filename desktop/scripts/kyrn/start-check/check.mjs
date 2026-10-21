@@ -16,7 +16,7 @@
 //      the app does: allow once, don't allow, and an answer that is none of the choices (mu must hear "no" and the
 //      conversation must get the answer-lost line). A plain message after that must still work, on the same adapter.
 //
-// Everything runs in a throwaway home (HOME and USERPROFILE): ~/.mu is never touched, no model is called, no key is
+// Everything runs in a throwaway home (HOME and USERPROFILE): ~/.spec.jev is never touched, no model is called, no key is
 // needed. Exits 1 when a step fails.
 //
 //   node scripts/kyrn/start-check/check.mjs [--packaged] [--permission]
@@ -228,7 +228,7 @@ async function stubModel() {
     });
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
-  const agentDir = join(home, '.mu', 'agent');
+  const agentDir = join(home, '.spec.jev', 'agent');
   mkdirSync(agentDir, { recursive: true });
   const model = { id: 'stub', name: 'Stub', reasoning: false, input: ['text'], contextWindow: 128000, maxTokens: 4096 };
   writeFileSync(

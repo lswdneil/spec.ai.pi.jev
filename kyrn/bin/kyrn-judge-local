@@ -7,21 +7,20 @@
 #   kyrn/bin/kyrn-judge-local status
 #   kyrn/bin/kyrn-judge-local run      run in the foreground
 #
-# One sidecar serves every mu session on this machine. State lives in ~/.mu/local-judge
-# (~/.kyrn/local-judge on a machine whose home has not been moved yet).
+# One sidecar serves every spec.jev session on this machine. State lives in ~/.spec.jev/local-judge.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 HOME_DIR="$ROOT/kyrn/local-judge"
 MODEL_REPO="aac6fef/laya-multilingual-coreml"
-if [[ -d "$HOME/.mu" || ! -d "$HOME/.kyrn" ]]; then MU_DIR="$HOME/.mu"; else MU_DIR="$HOME/.kyrn"; fi
-RUN_DIR="${MU_LOCAL_JUDGE_RUN_DIR:-${KYRN_LOCAL_JUDGE_RUN_DIR:-$MU_DIR/local-judge}}"
+MU_DIR="$HOME/.spec.jev"
+RUN_DIR="${SPECJEV_LOCAL_JUDGE_RUN_DIR:-$MU_DIR/local-judge}"
 # A checkout keeps the venv and the weights beside server.py. The npm package (mu-agent) keeps them in mu's
 # home instead: npm replaces the whole package folder on every update.
 if [[ -d "$ROOT/packages/kyrn-judge" ]]; then STATE_DIR="$HOME_DIR"; else STATE_DIR="$RUN_DIR"; fi
 PYTHON="$STATE_DIR/.venv/bin/python"
-MODEL_DIR="${MU_LOCAL_JUDGE_MODEL:-${KYRN_LOCAL_JUDGE_MODEL:-$STATE_DIR/models/laya-multilingual-coreml}}"
-PORT="${MU_LOCAL_JUDGE_PORT:-${KYRN_LOCAL_JUDGE_PORT:-47823}}"
+MODEL_DIR="${SPECJEV_LOCAL_JUDGE_MODEL:-$STATE_DIR/models/laya-multilingual-coreml}"
+PORT="${SPECJEV_LOCAL_JUDGE_PORT:-47823}"
 PID_FILE="$RUN_DIR/judge.pid"
 LOG_FILE="$RUN_DIR/judge.log"
 URL="http://127.0.0.1:$PORT"

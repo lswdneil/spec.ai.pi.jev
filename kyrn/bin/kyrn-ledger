@@ -14,10 +14,9 @@ import { join } from "node:path";
 const args = process.argv.slice(2);
 const asJson = args.includes("--json");
 const limit = Number(args.find((arg) => /^\d+$/.test(arg)) ?? 5);
-/** `SPECJEV_<name>`, or the `MU_<name>` / `KYRN_<name>` spelling from before a rename. */
-const env = (name) => process.env[`SPECJEV_${name}`] || process.env[`MU_${name}`] || process.env[`KYRN_${name}`];
-// The first home this machine already has stays in use: ~/.spec.jev, then ~/.mu, then ~/.kyrn.
-const home = [".spec.jev", ".mu", ".kyrn"].find((name) => existsSync(join(homedir(), name))) ?? ".spec.jev";
+/** `SPECJEV_<name>`. */
+const env = (name) => process.env[`SPECJEV_${name}`];
+const home = ".spec.jev";
 const agentDir = env("AGENT_DIR") ?? process.env.PI_CODING_AGENT_DIR ?? join(homedir(), home, "agent");
 const sessionsDir = env("SESSIONS_DIR") ?? join(agentDir, "sessions");
 

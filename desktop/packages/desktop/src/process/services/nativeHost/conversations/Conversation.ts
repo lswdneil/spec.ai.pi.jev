@@ -195,7 +195,7 @@ export type ConversationInit = {
   createdAt: number;
   updatedAt: number;
   permissions?: string;
-  /** The app's name for the conversation in spec.jev's environment (MU_DESKTOP_SESSION). Default: a new one. */
+  /** The app's name for the conversation in spec.jev's environment (SPECJEV_DESKTOP_SESSION). Default: a new one. */
   desktopSession?: string;
   /** The session's `message` entries, when known. */
   messageCount?: number;
@@ -206,7 +206,7 @@ export type ConversationInit = {
 export class Conversation {
   id: string;
   readonly cwd: string;
-  /** The app's name for the conversation, which never changes (MU_DESKTOP_SESSION): spec.jev hands it back to the browser. */
+  /** The app's name for the conversation, which never changes (SPECJEV_DESKTOP_SESSION): spec.jev hands it back to the browser. */
   readonly desktopSession: string;
   /** Made here, and pi has not named its session yet. */
   draft: boolean;
@@ -215,7 +215,7 @@ export class Conversation {
   firstText: string | undefined;
   createdAt: number;
   updatedAt: number;
-  /** The permission mode spec.jev last said the conversation is in, for its next host (MU_PERMISSIONS). */
+  /** The permission mode spec.jev last said the conversation is in, for its next host (SPECJEV_PERMISSIONS). */
   permissions: string | undefined;
   /** The session's `message` entries; undefined when the list could not count them (a large file read in part). */
   messageCount: number | undefined;
@@ -325,7 +325,7 @@ export class Conversation {
     const { view, settings } = await this.fileRead();
     // A host may have started while the file was read: its view is the one records follow.
     if (this.host && this.ready) return this.hostSnapshot();
-    // What the next host resumes with: the file's own, else the mode spec.jev will start in here (MU_PERMISSIONS).
+    // What the next host resumes with: the file's own, else the mode spec.jev will start in here (SPECJEV_PERMISSIONS).
     const permissions = settings.permissions ?? this.permissions;
     const session = { ...settings, ...(permissions ? { permissions } : {}) };
     return {

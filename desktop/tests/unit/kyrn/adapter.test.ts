@@ -89,7 +89,7 @@ function fixture(options: FixtureOptions = {}) {
   let mode = options.mode;
   let model = options.model ?? { provider: 'fixture', id: 'model' };
   const promptErrors = [...(options.promptErrors ?? [])];
-  /** The mode each spec.jev process was handed (MU_PERMISSIONS). */
+  /** The mode each spec.jev process was handed (SPECJEV_PERMISSIONS). */
   const launched: (string | undefined)[] = [];
   let announced = false;
   const agent = new KyrnAgent(
@@ -116,7 +116,7 @@ function fixture(options: FixtureOptions = {}) {
         down = true;
         listener({ type: 'kyrn_rpc_closed' });
       };
-      const handed = env?.MU_PERMISSIONS;
+      const handed = env?.SPECJEV_PERMISSIONS;
       launched.push(handed);
       // A new spec.jev process announces its mode again; one handed a mode starts in it (no session entry here).
       announced = false;
@@ -776,7 +776,7 @@ describe('KYRN ACP bridge', () => {
     const home = mkdtempSync(join(tmpdir(), 'kyrn-home-'));
     const f = fixture({ home });
     try {
-      const muHome = join(home, '.mu');
+      const muHome = join(home, '.spec.jev');
       mkdirSync(muHome, { recursive: true });
       writeFileSync(join(muHome, 'app-language'), 'zh-CN\n');
       const first = await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -785,9 +785,9 @@ describe('KYRN ACP bridge', () => {
       rmSync(join(muHome, 'app-language'));
       await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
       expect(f.envs).toEqual([
-        { MU_DESKTOP_SESSION: first.sessionId, MU_LANG: 'zh-CN' },
-        { MU_DESKTOP_SESSION: second.sessionId, MU_LANG: 'en-US' },
-        { MU_DESKTOP_SESSION: expect.any(String) },
+        { SPECJEV_DESKTOP_SESSION: first.sessionId, SPECJEV_LANG: 'zh-CN' },
+        { SPECJEV_DESKTOP_SESSION: second.sessionId, SPECJEV_LANG: 'en-US' },
+        { SPECJEV_DESKTOP_SESSION: expect.any(String) },
       ]);
     } finally {
       f.cleanup();
@@ -795,16 +795,16 @@ describe('KYRN ACP bridge', () => {
     }
   });
 
-  it('reads the app language from the legacy home and ignores an empty or missing file', () => {
+  it("reads the app language from spec.jev's home and ignores an empty or missing file", () => {
     const home = mkdtempSync(join(tmpdir(), 'kyrn-home-'));
     try {
       expect(readAppLanguage(home)).toBeUndefined();
-      mkdirSync(join(home, '.kyrn'), { recursive: true });
-      writeFileSync(join(home, '.kyrn', 'app-language'), '  \n');
+      mkdirSync(join(home, '.spec.jev'), { recursive: true });
+      writeFileSync(join(home, '.spec.jev', 'app-language'), '  \n');
       expect(readAppLanguage(home)).toBeUndefined();
-      writeFileSync(join(home, '.kyrn', 'app-language'), 'ja-JP\n');
+      writeFileSync(join(home, '.spec.jev', 'app-language'), 'ja-JP\n');
       expect(readAppLanguage(home)).toBe('ja-JP');
-      expect(harnessEnv(undefined, home)).toEqual({ MU_LANG: 'ja-JP' });
+      expect(harnessEnv(undefined, home)).toEqual({ SPECJEV_LANG: 'ja-JP' });
     } finally {
       rmSync(home, { recursive: true, force: true });
     }
@@ -1075,16 +1075,16 @@ describe('a conversation without a model', () => {
   });
 
   it('reads the model new sessions start on from the agent folder’s settings, and nothing from a missing file', () => {
-    vi.stubEnv('MU_AGENT_DIR', '');
-    vi.stubEnv('KYRN_AGENT_DIR', '');
+    vi.stubEnv('SPECJEV_AGENT_DIR', '');
+    vi.stubEnv('SPECJEV_AGENT_DIR', '');
     const home = mkdtempSync(join(tmpdir(), 'kyrn-home-'));
     try {
       expect(readDefaultModel(home)).toBeUndefined();
-      mkdirSync(join(home, '.mu', 'agent'), { recursive: true });
-      writeFileSync(join(home, '.mu', 'agent', 'settings.json'), JSON.stringify({ defaultProvider: 'fixture' }));
+      mkdirSync(join(home, '.spec.jev', 'agent'), { recursive: true });
+      writeFileSync(join(home, '.spec.jev', 'agent', 'settings.json'), JSON.stringify({ defaultProvider: 'fixture' }));
       expect(readDefaultModel(home)).toBeUndefined();
       writeFileSync(
-        join(home, '.mu', 'agent', 'settings.json'),
+        join(home, '.spec.jev', 'agent', 'settings.json'),
         JSON.stringify({ defaultProvider: 'fixture', defaultModel: 'second' })
       );
       expect(readDefaultModel(home)).toEqual({ provider: 'fixture', id: 'second' });
@@ -1096,12 +1096,12 @@ describe('a conversation without a model', () => {
 
   it('takes the model new sessions start on once pi lists it, and the send box hears of it', async () => {
     // Started while another spec.jev held the model store, pi found no model and runs on its placeholder.
-    vi.stubEnv('MU_AGENT_DIR', '');
-    vi.stubEnv('KYRN_AGENT_DIR', '');
+    vi.stubEnv('SPECJEV_AGENT_DIR', '');
+    vi.stubEnv('SPECJEV_AGENT_DIR', '');
     const home = mkdtempSync(join(tmpdir(), 'kyrn-home-'));
-    mkdirSync(join(home, '.mu', 'agent'), { recursive: true });
+    mkdirSync(join(home, '.spec.jev', 'agent'), { recursive: true });
     writeFileSync(
-      join(home, '.mu', 'agent', 'settings.json'),
+      join(home, '.spec.jev', 'agent', 'settings.json'),
       JSON.stringify({ defaultProvider: 'fixture', defaultModel: 'second' })
     );
     const f = fixture({

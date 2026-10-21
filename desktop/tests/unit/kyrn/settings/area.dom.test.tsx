@@ -615,14 +615,14 @@ describe('the save bar', () => {
     bridge.settings.mockResolvedValueOnce({
       ok: false,
       code: 'invalidJson',
-      params: { file: '/home/me/.mu/agent/mu.json' },
+      params: { file: '/home/me/.spec.jev/agent/mu.json' },
       error: "Expected property name or '}' in JSON at position 1 (line 1 column 2)",
     });
     render(<SettingsArea />, { wrapper });
     // A sentence the reader can act on, naming the file; the parser's own words only as the detail under it.
     expect(await screen.findByText("Couldn't load the settings")).toBeInTheDocument();
     expect(
-      screen.getByText("/home/me/.mu/agent/mu.json isn't valid JSON. Fix it by hand, then reload.")
+      screen.getByText("/home/me/.spec.jev/agent/mu.json isn't valid JSON. Fix it by hand, then reload.")
     ).toBeInTheDocument();
     expect(screen.getByTestId('mu-error-detail')).toHaveTextContent('at position 1 (line 1 column 2)');
     fireEvent.click(screen.getByText('Reload'));

@@ -12,7 +12,7 @@ import { array, asRecord, text, type JsonRecord } from './piRpc.ts';
 export type PermissionModes = {
   /** The mode this conversation is in. */
   mode: string;
-  /** Every mode, with its name and what it lets spec.jev do, in the language spec.jev speaks (MU_LANG). */
+  /** Every mode, with its name and what it lets spec.jev do, in the language spec.jev speaks (SPECJEV_LANG). */
   modes: { id: string; label: string; description: string }[];
   /**
    * spec.jev understands `/permissions <id> --here`, which switches this conversation only. An older spec.jev would read

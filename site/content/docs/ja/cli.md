@@ -35,7 +35,7 @@ spec.jev                     # 現在のディレクトリで対話セッショ�
 | `spec.jev judge setup \| start \| stop \| status` | ローカルの判定器 Laya。`setup` はモデルをダウンロードする前に確認する。 |
 | `spec.jev link` / `spec.jev unlink` | `spec.jev` コマンドを PATH（`~/.local/bin`）に置く、または取り除く |
 | `spec.jev auth status \| login <provider> \| logout <provider>` | デスクトップアプリが使うサブスクリプションのサインイン |
-| `spec.jev migrate [--dry-run]` | 一度だけ実行：名前変更前のホーム `~/.kyrn` を `~/.spec.jev` に移す |
+| `spec.jev migrate [--dry-run]` | 一度だけ実行：名前変更前のホーム `~/.spec.jev` を `~/.spec.jev` に移す |
 
 ## セッション内のコマンド {#slash-commands}
 
@@ -70,9 +70,9 @@ pi 自身のコマンド（`/model`、`/thinking`、`/login`、`/resume`、`/tre
 
 | 変数 | 効果 |
 | --- | --- |
-| `MU_JUDGE=laya,jev spec.jev` | この実行だけの判定器。`MU_JUDGE=off` でカーネルをオフにする。 |
-| `MU_JUDGE_MODE=shadow spec.jev` | この実行では、すべての判定ポイントをシャドーにする |
+| `SPECJEV_JUDGE=laya,jev spec.jev` | この実行だけの判定器。`SPECJEV_JUDGE=off` でカーネルをオフにする。 |
+| `SPECJEV_JUDGE_MODE=shadow spec.jev` | この実行では、すべての判定ポイントをシャドーにする |
 | `MU_PERMISSIONS=ask spec.jev` | この実行の権限モード：`full`、`jev`、`ask` |
-| `MU_LANG=zh-CN spec.jev` | spec.jev 自身のメッセージを中国語（`zh`）か英語（それ以外）にする |
+| `SPECJEV_LANG=zh-CN spec.jev` | spec.jev 自身のメッセージを中国語（`zh`）か英語（それ以外）にする |
 
 完全な一覧は[設定](@docs/configuration#env)にあります。

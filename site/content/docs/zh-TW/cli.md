@@ -35,7 +35,7 @@ spec.jev                     # 在目前目錄開啟一個互動式工作階段
 | `spec.jev judge setup \| start \| stop \| status` | 本機判定器 Laya。`setup` 下載模型前會先問你。 |
 | `spec.jev link` / `spec.jev unlink` | 把 `spec.jev` 指令放進 PATH（`~/.local/bin`），或移除 |
 | `spec.jev auth status \| login <provider> \| logout <provider>` | 訂閱登入，和桌面版用的一樣 |
-| `spec.jev migrate [--dry-run]` | 一次性：把改名前的主目錄 `~/.kyrn` 搬到 `~/.spec.jev` |
+| `spec.jev migrate [--dry-run]` | 一次性：把改名前的主目錄 `~/.spec.jev` 搬到 `~/.spec.jev` |
 
 ## 工作階段裡的指令 {#slash-commands}
 
@@ -70,9 +70,9 @@ pi 自己的指令原樣保留：`/model`、`/thinking`、`/login`、`/resume`�
 
 | 變數 | 效果 |
 | --- | --- |
-| `MU_JUDGE=laya,jev spec.jev` | 只為這次執行指定判定器。`MU_JUDGE=off` 關掉判定核心。 |
-| `MU_JUDGE_MODE=shadow spec.jev` | 這次執行裡所有判定點都用影子模式 |
+| `SPECJEV_JUDGE=laya,jev spec.jev` | 只為這次執行指定判定器。`SPECJEV_JUDGE=off` 關掉判定核心。 |
+| `SPECJEV_JUDGE_MODE=shadow spec.jev` | 這次執行裡所有判定點都用影子模式 |
 | `MU_PERMISSIONS=ask spec.jev` | 這次執行的權限模式：`full`、`jev` 或 `ask` |
-| `MU_LANG=zh-CN spec.jev` | spec.jev 自己的訊息用中文（`zh`）或英文（其他任何值） |
+| `SPECJEV_LANG=zh-CN spec.jev` | spec.jev 自己的訊息用中文（`zh`）或英文（其他任何值） |
 
 完整清單請見[設定](@docs/configuration#env)。

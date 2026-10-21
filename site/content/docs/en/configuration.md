@@ -48,7 +48,7 @@ A part spec.jev doesn't understand falls back to its default instead of stopping
 
 - {points_active} of the {points} points act from the start; `context.compact` and `output.drift` stay off until you turn them on. To try a judge, or a point you're unsure of, put it in shadow, read the ledger (`spec.jev ledger`, `/status` or the app's Judge tab), then set it back to active.
 - `/mu mode <point> <off|shadow|active>` switches one point for the current session; `/mu mode default shadow` all of them. To keep a mode, put it in `spec.jev.json`.
-- `MU_JUDGE_MODE=shadow spec.jev` sets the default for one run.
+- `SPECJEV_JUDGE_MODE=shadow spec.jev` sets the default for one run.
 
 ## Environment variables {#env}
 
@@ -56,8 +56,8 @@ Judges and modes:
 
 | Variable | Effect |
 | --- | --- |
-| `MU_JUDGE` | Judges for this run, comma-separated: `laya`, `laya,jev`, `jev-opencode-free`, `classifier:<provider>/<model>`, `llm:<provider>/<model>`. `off` turns the kernel off. |
-| `MU_JUDGE_MODE` | Default mode for this run: `off`, `shadow` or `active` |
+| `SPECJEV_JUDGE` | Judges for this run, comma-separated: `laya`, `laya,jev`, `jev-opencode-free`, `classifier:<provider>/<model>`, `llm:<provider>/<model>`. `off` turns the kernel off. |
+| `SPECJEV_JUDGE_MODE` | Default mode for this run: `off`, `shadow` or `active` |
 | `MU_WRITER` | `provider/model` for the writing model |
 | `MU_PERMISSIONS` | Permission mode for this run: `full`, `jev` or `ask` |
 | `MU_LOCAL_JUDGE_URL` | Address of a local judge server other than the one `spec.jev judge start` runs |
@@ -68,11 +68,11 @@ The launcher:
 
 | Variable | Effect |
 | --- | --- |
-| `MU_AGENT_DIR` | The agent folder, in place of `~/.spec.jev/agent` |
+| `SPECJEV_AGENT_DIR` | The agent folder, in place of `~/.spec.jev/agent` |
 | `MU_NO_SETUP=1` | Never ask to set up a model at the first start |
-| `MU_LANG` | spec.jev's own messages in a session: Chinese for `zh…`, English otherwise. The desktop app sets it to the app's language; `spec.jev setup` follows your locale. |
+| `SPECJEV_LANG` | spec.jev's own messages in a session: Chinese for `zh…`, English otherwise. The desktop app sets it to the app's language; `spec.jev setup` follows your locale. |
 | `MU_LINK_DIR` | Where `spec.jev link` puts the `spec.jev` command, in place of `~/.local/bin` |
-| `MU_CHROME` | The Chrome or Chromium the built-in browser uses on the command line |
+| `SPECJEV_CHROME` | The Chrome or Chromium the built-in browser uses on the command line |
 
 Each `MU_` variable is also read under its old `KYRN_` spelling.
 

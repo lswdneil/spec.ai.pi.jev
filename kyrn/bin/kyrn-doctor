@@ -21,10 +21,9 @@ import {
 } from "./mu.mjs";
 
 const [root, link] = process.argv.slice(2);
-/** `SPECJEV_<name>`, or the `MU_<name>` / `KYRN_<name>` spelling from before a rename. */
-const env = (name) => process.env[`SPECJEV_${name}`] || process.env[`MU_${name}`] || process.env[`KYRN_${name}`];
-// The first home this machine already has stays in use: ~/.spec.jev, then ~/.mu, then ~/.kyrn.
-const home = [".spec.jev", ".mu", ".kyrn"].find((name) => existsSync(join(homedir(), name))) ?? ".spec.jev";
+/** `SPECJEV_<name>`. */
+const env = (name) => process.env[`SPECJEV_${name}`];
+const home = ".spec.jev";
 const agentDir = env("AGENT_DIR") ?? env("CODING_AGENT_DIR") ?? join(homedir(), home, "agent");
 // A checkout of the repository, or the npm package mu-agent.
 const layout = layoutOf({ root, platform: process.platform, exists: existsSync });
@@ -57,7 +56,7 @@ if (layout === "package") {
 	row(
 		complete ? "ok" : "fix",
 		"package",
-		complete ? `${pkg.name} ${pkg.version} (pi ${pkg.muBuild?.pi ?? "?"}) · ${tilde(root)}` : `incomplete: reinstall with npm i -g mu-agent`,
+		complete ? `${pkg.name} ${pkg.version} (pi ${pkg.muBuild?.pi ?? "?"}) · ${tilde(root)}` : `incomplete: reinstall with npm i -g spec.jev`,
 	);
 	// npm puts the command in its global bin folder, which has to be on PATH.
 	const onPath = findOnPath({
@@ -92,9 +91,6 @@ if (layout === "package") {
 }
 
 row("--", "home", tilde(agentDir));
-if (home === ".kyrn" && agentDir.startsWith(join(homedir(), ".kyrn"))) {
-	row("--", "", "this home folder predates the rename: `mu migrate` moves it to ~/.mu (add `--dry-run` to preview)");
-}
 // Only the size is looked at: pi writes an empty `{}` at its first start, and any stored login is far longer.
 let authBytes = 0;
 try {
@@ -115,10 +111,10 @@ row(
 		: "no default: mu uses the first provider with credentials. Pick one with /model and save it with ctrl+s",
 );
 
-const config = readJson(join(agentDir, "mu.json")) ?? readJson(join(agentDir, "kyrn.json"));
+const config = readJson(join(agentDir, "spec.jev.json"));
 const tiers = (env("JUDGE") ? env("JUDGE").split(",") : (config?.tiers ?? ["jev"])).map((tier) => tier.trim());
 const mode = env("JUDGE_MODE") ?? config?.modes?.default ?? "active";
-row("--", "judges", `${tiers.join(" > ")} · default mode ${mode}${env("JUDGE") ? " (from MU_JUDGE)" : ""}`);
+row("--", "judges", `${tiers.join(" > ")} · default mode ${mode}${env("JUDGE") ? " (from SPECJEV_JUDGE)" : ""}`);
 const overrides = Object.entries(config?.modes ?? {}).filter(([id]) => id !== "default");
 if (overrides.length > 0) row("--", "modes", overrides.map(([id, value]) => `${id}=${value}`).join(" "));
 const ladder = config?.features?.swarm?.models ?? [];
@@ -128,7 +124,7 @@ const judgeSupport = localJudgeSupport({ platform: process.platform, env: proces
 if (tiers.some((tier) => tier.startsWith("laya")) && !judgeSupport.runs && !judgeSupport.url) {
 	// Not a failure of this installation: the sidecar is Core ML, and there is none for this platform.
 	row("--", "local judge", `not available on ${platformName({ platform: process.platform, wsl })}: the Laya sidecar needs Core ML (macOS on Apple silicon)`);
-	row("--", "", "Laya's decision points use the next judge or their fallbacks. Use Jev, an LLM judge or MU_LOCAL_JUDGE_URL=<a server with the same API>");
+	row("--", "", "Laya's decision points use the next judge or their fallbacks. Use Jev, an LLM judge or SPECJEV_LOCAL_JUDGE_URL=<a server with the same API>");
 } else if (tiers.some((tier) => tier.startsWith("laya"))) {
 	const base = env("LOCAL_JUDGE_URL") ?? `http://127.0.0.1:${env("LOCAL_JUDGE_PORT") ?? 47823}`;
 	const startedAt = performance.now();
@@ -143,11 +139,11 @@ if (tiers.some((tier) => tier.startsWith("laya")) && !judgeSupport.runs && !judg
 			"local judge",
 			judgeSupport.runs
 				? `${base} isn't answering: run mu judge start   (first time: mu judge setup)`
-				: `${base} (MU_LOCAL_JUDGE_URL) isn't answering`,
+				: `${base} (SPECJEV_LOCAL_JUDGE_URL) isn't answering`,
 		);
 	}
 }
-// The built-in ways to Jev, as packages/kyrn-judge/src/config.ts has them; mu.json may name others.
+// The built-in ways to Jev, as packages/kyrn-judge/src/config.ts has them; spec.jev.json may name others.
 const JEV_ROUTES = {
 	jev: { type: "jev" },
 	"jev-direct": { type: "typesafe" },
@@ -268,7 +264,7 @@ for (const endpoint of new Set(clmJudges.map((judge) => clmEndpoint(judge.baseUr
 	} catch {}
 	const ms = Math.round(performance.now() - startedAt);
 	if (health?.ok !== true) {
-		row("fix", "clm", `${base} isn't answering: start clm-serve there, or point the judge's baseUrl in mu.json at a running one`);
+		row("fix", "clm", `${base} isn't answering: start clm-serve there, or point the judge's baseUrl in spec.jev.json at a running one`);
 		continue;
 	}
 	const served = Array.isArray(health.models) ? health.models : [];
@@ -330,7 +326,7 @@ row(
 	"browse",
 	[browseTiers].flat().some(canRelate)
 		? `driven by ${[browseTiers].flat().join(" > ")}`
-		: 'needs a judge that can match a goal to a page. In mu.json: "routes": { "browser.step": ["llm:openai-codex/gpt-5.6-luna"] }',
+		: 'needs a judge that can match a goal to a page. In spec.jev.json: "routes": { "browser.step": ["llm:openai-codex/gpt-5.6-luna"] }',
 );
 
 const marks = { ok: "\x1b[32m ok\x1b[0m", fix: "\x1b[33mfix\x1b[0m", "--": "\x1b[2m  ·\x1b[0m" };

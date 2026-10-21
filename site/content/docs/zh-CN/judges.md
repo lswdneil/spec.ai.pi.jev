@@ -19,7 +19,7 @@ summary: 谁来回答判定点，怎样选择、串联和比较判定器，以�
 { "routes": { "browser.step": ["jev"], "memory.capture": ["llm:anthropic/claude-haiku-4-5"] } }
 ```
 
-在会话里，`/mu judge <judges>` 和 `/mu route <point> <judges|default>` 做同样的事；`MU_JUDGE=laya,jev spec.jev` 只为一次运行指定判定器。`/status` 显示哪个判定器回答什么，桌面端的「判定器」页也能设置这些。
+在会话里，`/mu judge <judges>` 和 `/mu route <point> <judges|default>` 做同样的事；`SPECJEV_JUDGE=laya,jev spec.jev` 只为一次运行指定判定器。`/status` 显示哪个判定器回答什么，桌面端的「判定器」页也能设置这些。
 
 没有判定器按时回答时，每个判定点就照没有判定时那样做（通常是什么都不变），流水里记下原因。不会等太久：每个判定点都有时限。
 

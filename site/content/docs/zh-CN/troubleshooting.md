@@ -27,7 +27,7 @@ summary: spec.jev 启动不了、连不上模型，或者判定器好像什么�
 
 ## 判定器 {#judge}
 
-**判定器好像什么都没做。** 处于影子模式的判定点只记录判定，不改变任何东西；关闭的判定点根本不问。`/status` 显示每个判定点的模式；看看 `~/.spec.jev/agent/spec.jev.json` 里有没有 `"default": "shadow"` 或 `"off"`，或者你的环境里有没有 `MU_JUDGE_MODE`。
+**判定器好像什么都没做。** 处于影子模式的判定点只记录判定，不改变任何东西；关闭的判定点根本不问。`/status` 显示每个判定点的模式；看看 `~/.spec.jev/agent/spec.jev.json` 里有没有 `"default": "shadow"` 或 `"off"`，或者你的环境里有没有 `SPECJEV_JUDGE_MODE`。
 
 **「还没有可用的判定器，所以每一步都先问你。」** 在「Jev 审批」模式下，没有判定器能回答时，spec.jev 会对每一个需要审批的步骤都问你：没有密钥且免费的 Jev 不可用、账户额度用完，或者只有一个本地判定器，而本地判定器不被信任来审批。设置一个 Jev 密钥（`spec.jev setup`），或者用 `/permissions` 切换模式。
 

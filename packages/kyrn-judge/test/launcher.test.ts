@@ -62,19 +62,19 @@ describe("the spec.jev launcher", () => {
 			chmodSync(join(other, "mu"), 0o755);
 		}
 
-		const shadowing = run("mu", ["link"], { HOME: dir, MU_LINK_DIR: links, PATH: searchPath(other) });
+		const shadowing = run("mu", ["link"], { HOME: dir, SPECJEV_LINK_DIR: links, PATH: searchPath(other) });
 		expect(shadowing.code).toBe(1);
 		expect(shadowing.out).toContain("Another spec.jev is already on your PATH");
 		expect(existsSync(linked)).toBe(false);
 
-		expect(run("mu", ["link"], { HOME: dir, MU_LINK_DIR: links }).code).toBe(0);
+		expect(run("mu", ["link"], { HOME: dir, SPECJEV_LINK_DIR: links }).code).toBe(0);
 		if (windows) expect(readFileSync(linked, "utf8")).toContain("mu-link-shim");
 		else expect(readlinkSync(linked)).toBe(join(BIN, "mu"));
 		// Linking again over its own link is fine; a file that is not a link to it is not replaced.
-		expect(run("mu", ["link"], { HOME: dir, MU_LINK_DIR: links, PATH: searchPath(links) }).code).toBe(0);
+		expect(run("mu", ["link"], { HOME: dir, SPECJEV_LINK_DIR: links, PATH: searchPath(links) }).code).toBe(0);
 		rmSync(linked);
 		writeFileSync(linked, "someone else's file");
-		expect(run("mu", ["link"], { HOME: dir, MU_LINK_DIR: links }).code).toBe(1);
+		expect(run("mu", ["link"], { HOME: dir, SPECJEV_LINK_DIR: links }).code).toBe(1);
 		expect(readFileSync(linked, "utf8")).toBe("someone else's file");
 	});
 
@@ -226,7 +226,7 @@ describe("spec.jev migrate", () => {
 		// A junction on Windows, whose target comes back with a trailing backslash.
 		const target = readlinkSync(join(dir, ".kyrn"));
 		expect(windows ? resolve(target) : target).toBe(join(dir, ".spec.jev"));
-		expect(JSON.parse(readFileSync(join(dir, ".spec.jev/agent/mu.json"), "utf8"))).toEqual({ tiers: ["old"] });
+		expect(JSON.parse(readFileSync(join(dir, ".spec.jev/agent/spec.jev.json"), "utf8"))).toEqual({ tiers: ["old"] });
 		expect(existsSync(join(dir, ".spec.jev/agent/kyrn.json"))).toBe(false);
 		expect(readFileSync(join(dir, ".spec.jev/agent/auth.json"), "utf8")).toBe("stand-in-login");
 		// Windows has no mode bits to keep.
@@ -256,7 +256,7 @@ describe("spec.jev migrate", () => {
 	it("never merges into or overwrites a ~/.spec.jev that is already there", () => {
 		const dir = oldHome();
 		mkdirSync(join(dir, ".spec.jev/agent"), { recursive: true });
-		writeFileSync(join(dir, ".spec.jev/agent/mu.json"), JSON.stringify({ tiers: ["new"] }));
+		writeFileSync(join(dir, ".spec.jev/agent/spec.jev.json"), JSON.stringify({ tiers: ["new"] }));
 
 		const refused = run("mu", ["migrate"], processes(dir, "nothing-is-running"));
 
@@ -264,7 +264,7 @@ describe("spec.jev migrate", () => {
 		expect(refused.out).toContain("already exists");
 		expect(isLink(join(dir, ".kyrn"))).toBe(false);
 		expect(JSON.parse(readFileSync(join(dir, ".kyrn/agent/kyrn.json"), "utf8"))).toEqual({ tiers: ["old"] });
-		expect(JSON.parse(readFileSync(join(dir, ".spec.jev/agent/mu.json"), "utf8"))).toEqual({ tiers: ["new"] });
+		expect(JSON.parse(readFileSync(join(dir, ".spec.jev/agent/spec.jev.json"), "utf8"))).toEqual({ tiers: ["new"] });
 	});
 
 	it.each([

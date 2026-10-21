@@ -19,7 +19,7 @@ function fixture() {
   const dir = join(root, 'agent');
   mkdirSync(dir);
   writeFileSync(
-    join(dir, 'kyrn.json'),
+    join(dir, 'spec.jev.json'),
     JSON.stringify({
       tiers: ['jev'],
       routes: { 'browser.step': ['llm-a'] },
@@ -67,7 +67,7 @@ describe('native spec.jev settings', () => {
     const f = fixture();
     try {
       f.store.save({ ...f.store.read(), betaCompression: true });
-      const raw = JSON.parse(readFileSync(join(f.dir, 'kyrn.json'), 'utf8'));
+      const raw = JSON.parse(readFileSync(join(f.dir, 'spec.jev.json'), 'utf8'));
       expect(raw.features).toEqual({ hive: { maxBees: 4 }, compaction: { enabled: true, keepThreshold: 0.4 } });
       expect(raw.routes).toEqual({ 'browser.step': ['llm-a'] });
       expect(raw.judges['llm-a'].thinking).toBe('low');
@@ -139,7 +139,7 @@ describe('native spec.jev settings', () => {
         credentials: [{ name: 'MU_JUDGE_OPENROUTER_API_KEY', value: 'fixture-openrouter' }],
       });
       expect(saved.keys.MU_JUDGE_OPENROUTER_API_KEY).toBe(true);
-      const raw = JSON.parse(readFileSync(join(f.dir, 'kyrn.json'), 'utf8'));
+      const raw = JSON.parse(readFileSync(join(f.dir, 'spec.jev.json'), 'utf8'));
       expect(raw.tiers).toEqual(['jev-openrouter']);
       expect(raw.judges['jev-openrouter']).toBeUndefined();
     } finally {
@@ -178,7 +178,7 @@ describe('native spec.jev settings', () => {
         OPENCODE_API_KEY: false,
       });
       expect(readFileSync(join(f.root, '.env'), 'utf8')).toContain('CLOUDFLARE_ACCOUNT_ID=0123abcd');
-      const raw = JSON.parse(readFileSync(join(f.dir, 'kyrn.json'), 'utf8'));
+      const raw = JSON.parse(readFileSync(join(f.dir, 'spec.jev.json'), 'utf8'));
       expect(raw.tiers).toEqual(['jev-cloudflare', 'jev-opencode-free']);
       expect(raw.judges['jev-cloudflare']).toBeUndefined();
       // A provider's variable is saved like a judge's key, but no judge may name it as its key.
@@ -236,7 +236,7 @@ describe('native spec.jev settings', () => {
     const f = fixture();
     try {
       writeFileSync(
-        join(f.dir, 'kyrn.json'),
+        join(f.dir, 'spec.jev.json'),
         JSON.stringify({
           tiers: ['relay'],
           judges: { relay: { type: 'typesafe', apiKeyEnv: 'MU_JUDGE_CUSTOM_API_KEY' } },
@@ -272,7 +272,7 @@ describe('native spec.jev settings', () => {
       expect(read.keys.MU_JUDGE_CLM_API_KEY).toBe(false);
       // Chosen as it is: only the order is written, and the harness finds clm-serve on this machine.
       f.store.save({ ...read, tiers: ['clm'] });
-      let raw = JSON.parse(readFileSync(join(f.dir, 'kyrn.json'), 'utf8'));
+      let raw = JSON.parse(readFileSync(join(f.dir, 'spec.jev.json'), 'utf8'));
       expect(raw.tiers).toEqual(['clm']);
       expect(raw.judges.clm).toBeUndefined();
       // A server on the network, with the key it was started with.
@@ -285,7 +285,7 @@ describe('native spec.jev settings', () => {
       });
       expect(saved.judges.clm.baseUrl).toBe(address);
       expect(saved.keys.MU_JUDGE_CLM_API_KEY).toBe(true);
-      raw = JSON.parse(readFileSync(join(f.dir, 'kyrn.json'), 'utf8'));
+      raw = JSON.parse(readFileSync(join(f.dir, 'spec.jev.json'), 'utf8'));
       expect(raw.judges.clm).toMatchObject({ type: 'clm', baseUrl: address, apiKeyEnv: 'MU_JUDGE_CLM_API_KEY' });
       // The questions hold what the person wrote: never to a link-local address (cloud metadata lives there).
       const later = f.store.read();
@@ -309,27 +309,10 @@ describe('native spec.jev settings', () => {
 });
 
 describe('the rename from KYRN to spec.jev', () => {
-  it('keeps saving to kyrn.json while that is the only file, and follows it once it is renamed', () => {
+  it('reads spec.jev.json and writes it on a fresh machine', () => {
     const f = fixture();
     try {
-      f.store.save({ ...f.store.read(), mode: 'shadow' });
-      expect(existsSync(join(f.dir, 'mu.json'))).toBe(false);
-      expect(JSON.parse(readFileSync(join(f.dir, 'kyrn.json'), 'utf8')).modes.default).toBe('shadow');
-
-      // The one-time move of the home renames the file. The same store follows it without a restart.
-      renameSync(join(f.dir, 'kyrn.json'), join(f.dir, 'mu.json'));
-      expect(f.store.read().mode).toBe('shadow');
-      f.store.save({ ...f.store.read(), mode: 'off' });
-      expect(JSON.parse(readFileSync(join(f.dir, 'mu.json'), 'utf8')).modes.default).toBe('off');
-      expect(existsSync(join(f.dir, 'kyrn.json'))).toBe(false);
-    } finally {
-      f.cleanup();
-    }
-  });
-  it('reads spec.jev.json first, then the older names, and writes spec.jev.json on a fresh machine', () => {
-    const f = fixture();
-    try {
-      writeFileSync(join(f.dir, 'mu.json'), JSON.stringify({ tiers: ['laya'] }));
+      writeFileSync(join(f.dir, 'spec.jev.json'), JSON.stringify({ tiers: ['laya'] }));
       expect(f.store.read().tiers).toEqual(['laya']);
       const fresh = join(f.root, 'fresh');
       mkdirSync(fresh);
@@ -353,21 +336,15 @@ describe('the rename from KYRN to spec.jev', () => {
       f.cleanup();
     }
   });
-  it('stays in the old home until it has been moved, and never creates a second one beside it', () => {
+  it('always uses ~/.spec.jev, and only the current variable spelling', () => {
     const f = fixture();
     try {
       expect(muHome(f.root)).toBe(join(f.root, '.spec.jev'));
       mkdirSync(join(f.root, '.kyrn'));
-      expect(muHome(f.root)).toBe(join(f.root, '.kyrn'));
       mkdirSync(join(f.root, '.mu'));
-      expect(muHome(f.root)).toBe(join(f.root, '.mu'));
-      mkdirSync(join(f.root, '.spec.jev'));
       expect(muHome(f.root)).toBe(join(f.root, '.spec.jev'));
-      expect(muEnv('AGENT_DIR', { SPECJEV_AGENT_DIR: '/newest', MU_AGENT_DIR: '/new', KYRN_AGENT_DIR: '/old' })).toBe(
-        '/newest',
-      );
-      expect(muEnv('AGENT_DIR', { MU_AGENT_DIR: '/new', KYRN_AGENT_DIR: '/old' })).toBe('/new');
-      expect(muEnv('AGENT_DIR', { KYRN_AGENT_DIR: '/old' })).toBe('/old');
+      expect(muEnv('AGENT_DIR', { SPECJEV_AGENT_DIR: '/newest', MU_AGENT_DIR: '/old' })).toBe('/newest');
+      expect(muEnv('AGENT_DIR', { MU_AGENT_DIR: '/old' })).toBeUndefined();
     } finally {
       f.cleanup();
     }

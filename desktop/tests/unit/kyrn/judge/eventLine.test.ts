@@ -427,14 +427,14 @@ describe('Browser run lines', () => {
       [
         'no_browser',
         { platform: 'darwin', wsl: 0 },
-        "No Chrome, Chromium, Edge or Brave was found in /Applications. Install one, or set MU_CHROME to a Chromium-based browser's executable.",
-        '在 /Applications 中没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 MU_CHROME 设为某个 Chromium 内核浏览器的可执行文件。',
+        "No Chrome, Chromium, Edge or Brave was found in /Applications. Install one, or set SPECJEV_CHROME to a Chromium-based browser's executable.",
+        '在 /Applications 中没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 SPECJEV_CHROME 设为某个 Chromium 内核浏览器的可执行文件。',
       ],
       [
         'no_browser',
         { platform: 'win32', wsl: 0 },
-        'No Chrome, Chromium, Edge or Brave was found under Program Files or %LOCALAPPDATA%. Install one, or set MU_CHROME to its .exe.',
-        '在 Program Files 或 %LOCALAPPDATA% 下没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 MU_CHROME 设为它的 .exe 文件。',
+        'No Chrome, Chromium, Edge or Brave was found under Program Files or %LOCALAPPDATA%. Install one, or set SPECJEV_CHROME to its .exe.',
+        '在 Program Files 或 %LOCALAPPDATA% 下没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 SPECJEV_CHROME 设为它的 .exe 文件。',
       ],
       [
         'no_browser',
@@ -445,8 +445,8 @@ describe('Browser run lines', () => {
       [
         'no_browser',
         { platform: 'linux', wsl: 0 },
-        'No Chrome, Chromium, Edge or Brave was found. Install one, or set MU_CHROME to its executable; the install commands are in the reason field below.',
-        '没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 MU_CHROME 设为它的可执行文件；安装命令见下方的 reason 字段。',
+        'No Chrome, Chromium, Edge or Brave was found. Install one, or set SPECJEV_CHROME to its executable; the install commands are in the reason field below.',
+        '没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 SPECJEV_CHROME 设为它的可执行文件；安装命令见下方的 reason 字段。',
       ],
       [
         'windows_browser_unusable',

@@ -84,7 +84,7 @@ describe("procedures", () => {
 	const harnesses: Harness[] = [];
 	beforeEach(() => {
 		// The messages below are the English ones.
-		vi.stubEnv("MU_LANG", undefined);
+		vi.stubEnv("SPECJEV_LANG", undefined);
 		vi.stubEnv("KYRN_LANG", undefined);
 	});
 	afterEach(() => {

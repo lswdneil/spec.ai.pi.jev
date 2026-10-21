@@ -46,13 +46,13 @@ spec.jev reads only your own `spec.jev.json`. A project can't change the judge, 
 | `recordState` | Keep the judged state in the ledger, not just the verdict. You need this to train a local judge on your sessions. Off by default because the states contain your content. | `false` |
 | `mcp` | spec.jev's own MCP servers: `{ "servers": { "<name>": { "command": … } } }`. Servers configured for Claude Code, Cursor and Codex are picked up too (`features.inherit`). | none |
 
-If spec.jev doesn't understand part of the file, that part falls back to its default and spec.jev keeps running. If the file can't be parsed at all, spec.jev reports it when a session starts and uses the defaults. An older `kyrn.json` is read only when there's no `spec.jev.json`.
+If spec.jev doesn't understand part of the file, that part falls back to its default and spec.jev keeps running. If the file can't be parsed at all, spec.jev reports it when a session starts and uses the defaults. An older `spec.jev.json` is read only when there's no `spec.jev.json`.
 
 ## Modes in practice
 
 - All but two points act from the start (`context.compact` and `output.drift` are off until you turn them on). To try out a judge, or a point you're unsure of, put it in shadow mode, read the ledger (`spec.jev ledger`, `/status` or the app's Judge tab), then set it back to active once its verdicts look right.
 - `/mu mode <point> <off|shadow|active>` switches one point for the current session, and `/mu mode default shadow` switches all of them. To make a mode stick, put it in `spec.jev.json`; the app's settings turn points on or off.
-- `MU_JUDGE_MODE=shadow spec.jev` sets the default mode for one run.
+- `SPECJEV_JUDGE_MODE=shadow spec.jev` sets the default mode for one run.
 
 Every decision point, with what it decides: [reference/decision-points.md](reference/decision-points.md).
 
@@ -62,8 +62,8 @@ Judges and modes:
 
 | Variable | Effect |
 | --- | --- |
-| `MU_JUDGE` | Judges for this run, comma-separated: `laya`, `laya,jev`, `jev-opencode-free`, `classifier:<provider>/<model>`, `llm:<provider>/<model>`. `off` turns the kernel off. |
-| `MU_JUDGE_MODE` | Default mode for this run: `off`, `shadow` or `active`. |
+| `SPECJEV_JUDGE` | Judges for this run, comma-separated: `laya`, `laya,jev`, `jev-opencode-free`, `classifier:<provider>/<model>`, `llm:<provider>/<model>`. `off` turns the kernel off. |
+| `SPECJEV_JUDGE_MODE` | Default mode for this run: `off`, `shadow` or `active`. |
 | `MU_WRITER` | `provider/model-id` for the writer model. |
 | `MU_PERMISSIONS` | Permission mode for this run: `full`, `jev` or `ask`. |
 | `MU_LOCAL_JUDGE_URL` | Address of a local judge server, if it isn't the one `spec.jev judge start` runs. |
@@ -74,11 +74,11 @@ The launcher:
 
 | Variable | Effect |
 | --- | --- |
-| `MU_AGENT_DIR` | The agent folder, in place of `~/.spec.jev/agent`. |
+| `SPECJEV_AGENT_DIR` | The agent folder, in place of `~/.spec.jev/agent`. |
 | `MU_NO_SETUP=1` | Never offer to set up a model on first launch. |
-| `MU_LANG` | A language tag (`zh-CN`, `en`, `ja`…) for spec.jev's own messages in a session: Chinese for `zh`, English for anything else. If it's unset, sessions use English, and `spec.jev setup` follows your locale. The desktop app sets it to the app's language. |
+| `SPECJEV_LANG` | A language tag (`zh-CN`, `en`, `ja`…) for spec.jev's own messages in a session: Chinese for `zh`, English for anything else. If it's unset, sessions use English, and `spec.jev setup` follows your locale. The desktop app sets it to the app's language. |
 | `MU_LINK_DIR` | Where `spec.jev link` puts the `spec.jev` command, in place of `~/.local/bin`. |
-| `MU_CHROME` | The Chrome or Chromium binary the built-in browser uses on the command line. |
+| `SPECJEV_CHROME` | The Chrome or Chromium binary the built-in browser uses on the command line. |
 
 Every `MU_` variable is also read under its old `KYRN_` name.
 

@@ -563,8 +563,8 @@ describe("checkpoints and the judged rewind", () => {
 
 	it("says why in the user's language", () => {
 		const limits = { maxFiles: 5000, maxTotalMb: 200, timeoutMs: 30_000 };
-		const saved = process.env.MU_LANG;
-		process.env.MU_LANG = "zh-CN";
+		const saved = process.env.SPECJEV_LANG;
+		process.env.SPECJEV_LANG = "zh-CN";
 		try {
 			expect(offNotice("too_many_bytes", limits)).toEqual({
 				line: "spec.jev：本次会话不拍检查点，因为这个文件夹要拍的文件加起来超过 200 MB。在项目文件夹里启动 spec.jev 就有检查点，或者调高 features.checkpoint.maxTotalMb。",
@@ -577,8 +577,8 @@ describe("checkpoints and the judged rewind", () => {
 				"spec.jev：检查点已关闭，因为这台 Mac 没有安装 git 所需的命令行开发者工具。用 xcode-select --install 安装后，新开一个会话就有检查点。",
 			);
 		} finally {
-			if (saved === undefined) delete process.env.MU_LANG;
-			else process.env.MU_LANG = saved;
+			if (saved === undefined) delete process.env.SPECJEV_LANG;
+			else process.env.SPECJEV_LANG = saved;
 		}
 		expect(offNotice("too_slow", limits).line).toBe(
 			"spec.jev: checkpoints are off for this session because listing this folder's files took more than 30 s. Start spec.jev in a project folder to use checkpoints.",

@@ -38,11 +38,9 @@ function machine(platform: NodeJS.Platform, files: string[], patch: Partial<Harn
 }
 
 describe('where the desktop finds the spec.jev harness', () => {
-  it('takes MU_ROOT or KYRN_ROOT first, as in development', () => {
-    const deps = machine('darwin', [], { env: { KYRN_ROOT: '/work/KYRN' } });
+  it('takes SPECJEV_ROOT first, as in development', () => {
+    const deps = machine('darwin', [], { env: { SPECJEV_ROOT: '/work/KYRN' } });
     expect(findHarness('/work/KYRN-desktop', deps)).toEqual({ root: '/work/KYRN', layout: 'repo', source: 'env' });
-    const both = machine('darwin', [], { env: { MU_ROOT: '/work/mu', KYRN_ROOT: '/work/KYRN' } });
-    expect(findHarness('/work/KYRN-desktop', both)?.root).toBe('/work/mu');
   });
 
   it('then the copy the packaged app carries, before anything else on the machine', () => {
@@ -58,7 +56,7 @@ describe('where the desktop finds the spec.jev harness', () => {
     const app = machine('darwin', files, { resourcesPath: resources });
     expect(findHarness(undefined, app)).toEqual({ root: bundled, layout: 'package', source: 'bundled' });
     expect(findHarness('/work/KYRN-desktop', app)?.source).toBe('bundled');
-    expect(findHarness(undefined, { ...app, env: { MU_ROOT: '/work/KYRN' } })?.source).toBe('env');
+    expect(findHarness(undefined, { ...app, env: { SPECJEV_ROOT: '/work/KYRN' } })?.source).toBe('env');
     // Development: Electron's own resources folder holds no spec.jev.
     expect(findHarness('/work/KYRN-desktop', { ...app, resourcesPath: '/dev/electron/Resources' })?.source).toBe(
       'beside'
@@ -186,8 +184,8 @@ describe('how the harness is started and where it keeps things', () => {
   it('reads keys from spec.jev’s home and the manifest from the built layer when spec.jev comes from npm', () => {
     const repo = { root: '/work/KYRN', layout: 'repo' as const };
     const pkg = { root: '/g/spec.jev', layout: 'package' as const };
-    expect(envFileOf(repo, '/home/someone/.mu', 'linux')).toBe('/work/KYRN/.env');
-    expect(envFileOf(pkg, '/home/someone/.mu', 'linux')).toBe('/home/someone/.mu/.env');
+    expect(envFileOf(repo, '/home/someone/.spec.jev', 'linux')).toBe('/work/KYRN/.env');
+    expect(envFileOf(pkg, '/home/someone/.spec.jev', 'linux')).toBe('/home/someone/.spec.jev/.env');
     expect(manifestOf(repo, 'linux')).toBe('/work/KYRN/packages/kyrn-judge/manifest.json');
     expect(manifestOf(pkg, 'linux')).toBe('/g/spec.jev/judge/manifest.json');
   });
@@ -220,7 +218,7 @@ describe('files of an npm-installed harness', () => {
 
   it('finds the Core ML judge’s venv and weights in spec.jev’s home', async () => {
     // Spelled by this machine's join, as the judge builds its paths whatever platform it is told it runs on.
-    const state = join('/home/someone', '.mu', 'local-judge');
+    const state = join('/home/someone', '.spec.jev', 'local-judge');
     const files = new Set([
       join('/home/someone', '.local', 'bin', 'uv'),
       join(state, '.venv', 'bin', 'python'),

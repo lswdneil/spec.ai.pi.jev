@@ -24,7 +24,7 @@ If that doesn't help, [open an issue](https://github.com/lswdneil/ai.spec.pi.jev
 
 ## The judge
 
-**The judge seems to do nothing.** A point in shadow mode records its verdicts and changes nothing, and a point that's off isn't asked at all. `/status` shows each point's mode. Look for `"default": "shadow"` or `"off"` in `~/.spec.jev/agent/spec.jev.json`, or `MU_JUDGE_MODE` in your environment. See [Getting started](getting-started.md#decisions-and-their-modes).
+**The judge seems to do nothing.** A point in shadow mode records its verdicts and changes nothing, and a point that's off isn't asked at all. `/status` shows each point's mode. Look for `"default": "shadow"` or `"off"` in `~/.spec.jev/agent/spec.jev.json`, or `SPECJEV_JUDGE_MODE` in your environment. See [Getting started](getting-started.md#decisions-and-their-modes).
 
 **"No judge is available yet, so spec.jev asks about each step."** In *Jev approves* mode, spec.jev asks you about every step that needs approval when no judge can answer. That happens when there's no key and the free Jev is unavailable, when your judge account has hit its limit, or when only a local judge is set up, since a local judge isn't trusted with approvals. Set a Jev key (`spec.jev setup`), or switch the permission mode with `/permissions`.
 

@@ -18,12 +18,10 @@
 //
 // What the launcher sets up:
 // - spec.jev's own home, ~/.spec.jev/agent (auth, sessions, settings), apart from a stock pi in ~/.pi.
-//   A machine that still has ~/.kyrn and no ~/.spec.jev keeps using ~/.kyrn until that folder is moved (`spec.jev migrate`).
 // - spec.jev's name on the agent: PI_PACKAGE_DIR points at ~/.spec.jev/app, a view of packages/coding-agent whose
 //   package.json carries piConfig {name: spec.jev, configDir: .spec.jev}. No upstream file is edited.
-// - the judgment layer (packages/kyrn-judge), with judges from ~/.spec.jev/agent/mu.json or MU_JUDGE
+// - the judgment layer (packages/kyrn-judge), with judges from ~/.spec.jev/agent/spec.jev.json or SPECJEV_JUDGE
 //   (e.g. "laya", "laya,luna", "laya,jev", "off"). When "laya" is among them the sidecar is started (macOS only).
-//   kyrn.json and every KYRN_* variable are still read when the spec.jev spelling is absent.
 // - the repo-root .env (the Jev key), read as data and handed to the agent without ever being printed.
 //   The npm package reads ~/.spec.jev/.env instead: there is no repository around it.
 import { spawn, spawnSync } from "node:child_process";
@@ -63,34 +61,14 @@ export function pathFor(platform) {
 	return platform === "win32" ? nodePath.win32 : nodePath.posix;
 }
 
-/** `SPECJEV_<name>`, or the `MU_<name>` / `KYRN_<name>` spelling from before a rename, newest first. */
+/** `SPECJEV_<name>`. */
 export function muEnv(name, env) {
-	return env[`SPECJEV_${name}`] || env[`MU_${name}`] || env[`KYRN_${name}`] || undefined;
+	return env[`SPECJEV_${name}`] || undefined;
 }
 
-/**
- * The same three names for the environment as a whole: every `SPECJEV_*` is also handed on as `MU_*`, which is
- * what the agent, the judgment layer and pi's plugins already read. One bridge here beats a new spelling in
- * every file below, and a variable that is already set under the old name is never overwritten.
- */
-export function withSpecJevEnv(env) {
-	const bridged = { ...env };
-	for (const [key, value] of Object.entries(env)) {
-		if (!key.startsWith("SPECJEV_") || typeof value !== "string") continue;
-		const legacy = `MU_${key.slice("SPECJEV_".length)}`;
-		if (!bridged[legacy]) bridged[legacy] = value;
-	}
-	return bridged;
-}
-
-/**
- * ~/.spec.jev, or the older home this machine already has (~/.spec.jev, then ~/.kyrn). Nothing here ever creates a
- * new home beside an old one: two homes would mean two logins and two session lists.
- */
-export function muHome({ home, platform, isDir }) {
-	const path = pathFor(platform);
-	const candidates = [".spec.jev", ".mu", ".kyrn"].map((name) => path.join(home, name));
-	return candidates.find((candidate) => isDir(candidate)) ?? candidates[0];
+/** `~/.spec.jev`. */
+export function muHome({ home, platform }) {
+	return pathFor(platform).join(home, ".spec.jev");
 }
 
 /** WSL is Linux to the launcher. It matters to the browser and to what `spec.jev doctor` reports. */
@@ -417,8 +395,7 @@ export function sourceRuntime({ root, platform, stripsTypes, exists }) {
 }
 
 /**
- * pi reads <APP NAME>_CODING_AGENT_DIR and nothing else, so with the app named spec.jev that export decides the
- * home. The pi and KYRN spellings are exported too, for scripts that still read them.
+ * pi reads PI_CODING_AGENT_DIR, so the launcher exports it and SPECJEV_CODING_AGENT_DIR for spec.jev's own code.
  */
 export function agentDirFor({ env, muDir, platform }) {
 	return (
@@ -431,20 +408,16 @@ export function wantsLaya({ env, agentDir, platform, readFile }) {
 	const judges = muEnv("JUDGE", env);
 	if (judges) return `,${judges},`.includes(",laya");
 	const path = pathFor(platform);
-	for (const name of ["spec.jev.json", "mu.json", "kyrn.json"]) {
-		let text;
-		try {
-			text = readFile(path.join(agentDir, name));
-		} catch {
-			continue;
-		}
-		// Like the file itself: the older names are only looked at when the newer one is absent.
-		return text.includes('"laya');
+	let text;
+	try {
+		text = readFile(path.join(agentDir, "spec.jev.json"));
+	} catch {
+		return false;
 	}
-	return false;
+	return text.includes('"laya');
 }
 
-/** The Core ML sidecar exists for macOS only. Anything else needs a server of its own behind MU_LOCAL_JUDGE_URL. */
+/** The Core ML sidecar exists for macOS only. Anything else needs a server of its own behind SPECJEV_LOCAL_JUDGE_URL. */
 export function localJudgeSupport({ platform, env, wsl = false }) {
 	if (platform === "darwin") return { runs: true };
 	const url = muEnv("LOCAL_JUDGE_URL", env);
@@ -457,12 +430,12 @@ export function localJudgeSupport({ platform, env, wsl = false }) {
 			"spec.jev works without it: Jev answers by default (free on OpenCode Zen, or with your own key: spec.jev setup), or set an LLM judge in spec.jev.json.",
 			"A local judge for the desktop app is in progress. Without a judge, decision points use their fallbacks.",
 			"To use a server that implements the same API (GET /health, POST /evaluate), set:",
-			"  MU_LOCAL_JUDGE_URL=http://host:port",
+			"  SPECJEV_LOCAL_JUDGE_URL=http://host:port",
 		].join("\n"),
 	};
 }
 
-/** exec replaces this process, as the bash launcher did; spawn is what Windows has. MU_LAUNCH forces either. */
+/** exec replaces this process, as the bash launcher did; spawn is what Windows has. SPECJEV_LAUNCH forces either. */
 export function launchStrategy({ platform, env, canExec }) {
 	const forced = muEnv("LAUNCH", env);
 	if (platform === "win32" || !canExec || forced === "spawn") return "spawn";
@@ -561,8 +534,7 @@ export function planLaunch({
 		if (typeof value === "string") childEnv[key] = value;
 	}
 	childEnv.PI_PACKAGE_DIR = appDir;
-	childEnv.MU_CODING_AGENT_DIR = agentDir;
-	childEnv.KYRN_CODING_AGENT_DIR = agentDir;
+	childEnv.SPECJEV_CODING_AGENT_DIR = agentDir;
 	childEnv.PI_CODING_AGENT_DIR = agentDir;
 	// pi's release check asks pi.dev about pi's versions, which say nothing about spec.jev's: a checkout follows
 	// upstream through git, and the package through npm.
@@ -720,7 +692,7 @@ export function planAuth({ platform, env, argv, root, home, execPath, fs, canExe
 	for (const [key, value] of Object.entries(env)) {
 		if (typeof value === "string") childEnv[key] = value;
 	}
-	childEnv.MU_AGENT_DIR = agentDir;
+	childEnv.SPECJEV_AGENT_DIR = agentDir;
 	const strategy = launchStrategy({ platform, env, canExec });
 	return { command: execPath, args: [...entry, ...argv], env: childEnv, strategy, agentDir };
 }
@@ -765,8 +737,7 @@ export function planImport({ platform, env, argv, root, home, execPath, fs, stri
 	const agentDir = agentDirFor({ env, muDir: muHome({ home, platform, isDir: fs.isDir }), platform });
 	const childEnv = {};
 	for (const [key, value] of Object.entries(env)) if (typeof value === "string") childEnv[key] = value;
-	childEnv.MU_CODING_AGENT_DIR = agentDir;
-	childEnv.KYRN_CODING_AGENT_DIR = agentDir;
+	childEnv.SPECJEV_CODING_AGENT_DIR = agentDir;
 	childEnv.PI_CODING_AGENT_DIR = agentDir;
 	return { command: execPath, args: [...entry, ...argv], env: childEnv, agentDir };
 }
@@ -839,7 +810,7 @@ export const MODEL_KEY_VARIABLES = [
 /**
  * `spec.jev setup`: the wizard that connects a model and chooses the judge (packages/kyrn-judge/src/setup). It is pi's code,
  * so it runs the way `spec.jev auth` runs: from the sources in a checkout, built in the package. A key on the command line
- * (`spec.jev setup <key>`) goes to the wizard in the environment, MU_SETUP_KEY, never in its argv, which every process on
+ * (`spec.jev setup <key>`) goes to the wizard in the environment, SPECJEV_SETUP_KEY, never in its argv, which every process on
  * the machine can read. The launcher waits for the wizard, since a finished setup may go on into a session.
  */
 export function planSetup({ platform, env, argv, root, home, execPath, fs, stripsTypes = true }) {
@@ -872,14 +843,13 @@ export function planSetup({ platform, env, argv, root, home, execPath, fs, strip
 	const agentDir = agentDirFor({ env, muDir, platform });
 	const childEnv = {};
 	for (const [name, value] of Object.entries(env)) if (typeof value === "string") childEnv[name] = value;
-	if (key !== undefined) childEnv.MU_SETUP_KEY = key;
-	childEnv.MU_AGENT_DIR = agentDir;
-	childEnv.MU_CODING_AGENT_DIR = agentDir;
-	childEnv.KYRN_CODING_AGENT_DIR = agentDir;
+	if (key !== undefined) childEnv.SPECJEV_SETUP_KEY = key;
+	childEnv.SPECJEV_AGENT_DIR = agentDir;
+	childEnv.SPECJEV_CODING_AGENT_DIR = agentDir;
 	childEnv.PI_CODING_AGENT_DIR = agentDir;
-	childEnv.MU_SETUP_HOME = muDir;
+	childEnv.SPECJEV_SETUP_HOME = muDir;
 	// The .env a session gets: the wizard writes the Jev key there, and reads a proxy from it.
-	childEnv.MU_SETUP_ENV_FILE = envFilePath({ layout, root, muDir, platform });
+	childEnv.SPECJEV_SETUP_ENV_FILE = envFilePath({ layout, root, muDir, platform });
 	return { command: execPath, args: [...entry, ...args], env: childEnv, strategy: "spawn", agentDir, keyGiven: key !== undefined };
 }
 
@@ -938,7 +908,7 @@ const NO_SETUP_FLAGS = new Set([
 /**
  * Whether `spec.jev` offers to set up a model before a session: only to a person at a terminal (stdin and stdout) who starts
  * a session, on a machine where nothing gives spec.jev a model yet, and who has not answered no before (SETUP_DECLINED_FILE)
- * or turned the question off (MU_NO_SETUP=1). Nothing gives a model: no credential in auth.json, no provider in
+ * or turned the question off (SPECJEV_NO_SETUP=1). Nothing gives a model: no credential in auth.json, no provider in
  * models.json, no default provider in settings.json, no key of MODEL_KEY_VARIABLES in the environment or the .env.
  * A file that cannot be read counts as set up: the question is for an empty home, never for a broken one.
  *
@@ -1058,7 +1028,7 @@ export function planLink({ platform, env, home, bin, argv, fs }) {
 		return {
 			action: "refuse",
 			errors: [
-				`${link} already exists and is not this spec.jev, so it was left alone. To use another folder: MU_LINK_DIR=<dir> spec.jev link`,
+				`${link} already exists and is not this spec.jev, so it was left alone. To use another folder: SPECJEV_LINK_DIR=<dir> spec.jev link`,
 			],
 		};
 	}
@@ -1068,7 +1038,7 @@ export function planLink({ platform, env, home, bin, argv, fs }) {
 			action: "refuse",
 			errors: [
 				`Another spec.jev is already on your PATH: ${other}`,
-				"Nothing was linked. To put this one first anyway: spec.jev link --force (or MU_LINK_DIR=<dir> spec.jev link)",
+				"Nothing was linked. To put this one first anyway: spec.jev link --force (or SPECJEV_LINK_DIR=<dir> spec.jev link)",
 			],
 		};
 	}
@@ -1086,7 +1056,7 @@ export function planLink({ platform, env, home, bin, argv, fs }) {
 	if (windows && /[^\x00-\x7f]/.test(content)) {
 		notes.push(
 			"Note: the path from that folder to this repository has non-ASCII characters in it, and cmd reads a batch file in the",
-			"console's code page. If spec.jev then can't find its target, choose a folder on the same drive (MU_LINK_DIR), or put",
+			"console's code page. If spec.jev then can't find its target, choose a folder on the same drive (SPECJEV_LINK_DIR), or put",
 			`${bin} on your PATH instead.`,
 		);
 	}
@@ -1244,9 +1214,7 @@ export function findBusy({ platform, old, run, self }) {
 export function migrate({ platform, home, argv, fs, run, alive, self, out, err }) {
 	const path = pathFor(platform);
 	const old = path.join(home, ".kyrn");
-	// The home this machine already uses wins; a new move lands in the current name.
-	const legacy = path.join(home, ".mu");
-	const next = fs.isDir(legacy) || fs.isLink(legacy) ? legacy : path.join(home, ".spec.jev");
+	const next = path.join(home, ".spec.jev");
 	const dry = argv[0] === "--dry-run";
 	if (fs.isLink(old)) {
 		out(`Already moved: ${old} is a link to ${fs.readlink(old)}.`);
@@ -1287,10 +1255,10 @@ export function migrate({ platform, home, argv, fs, run, alive, self, out, err }
 		return 1;
 	}
 	const config = path.join("agent", "kyrn.json");
-	const renameConfig = fs.exists(path.join(old, config)) && !fs.exists(path.join(old, "agent", "mu.json"));
+	const renameConfig = fs.exists(path.join(old, config)) && !fs.exists(path.join(old, "agent", "spec.jev.json"));
 	if (dry) {
 		out(`Would move   ${old} -> ${next}`);
-		if (renameConfig) out(`Would rename ${path.join(next, config)} -> mu.json`);
+		if (renameConfig) out(`Would rename ${path.join(next, config)} -> spec.jev.json`);
 		out(`Would link   ${old} -> ${next}`);
 		out("Nothing was changed.");
 		return 0;
@@ -1300,8 +1268,8 @@ export function migrate({ platform, home, argv, fs, run, alive, self, out, err }
 	fs.link(next, old, platform === "win32" ? "junction" : "dir");
 	out(`moved    ${old} -> ${next}`);
 	if (renameConfig) {
-		fs.rename(path.join(next, config), path.join(next, "agent", "mu.json"));
-		out(`renamed  ${path.join(next, config)} -> mu.json`);
+		fs.rename(path.join(next, config), path.join(next, "agent", "spec.jev.json"));
+		out(`renamed  ${path.join(next, config)} -> spec.jev.json`);
 	}
 	out(`linked   ${old} -> ${next} (paths stored from before the rename keep working)`);
 	out("To check it, run spec.jev doctor");
@@ -1396,7 +1364,7 @@ function handOver({ command, args, env, strategy }) {
 export async function main(argv = process.argv.slice(2)) {
 	const platform = process.platform;
 	// SPECJEV_* is the current spelling; it is handed to the agent under MU_*, which is what pi's side reads.
-	const env = withSpecJevEnv(process.env);
+	const env = process.env;
 	const home = homedir();
 	const path = pathFor(platform);
 	const bin = realpathSync(nodePath.dirname(fileURLToPath(import.meta.url)));

@@ -286,11 +286,11 @@ Node 22.19 이상이 필요해요. `spec.jev -p "prompt"`는 한 번 실행하�
 | `/import-chat` | Claude Code 또는 Codex 대화 가져오기 |
 | `/doctor` | 설정과 연결 점검하기 |
 
-pi의 자체 명령(`/model`, `/thinking`, `/login`, `/resume`, `/tree`, `/fork`, `/compact`, `/export` 등)은 그대로예요. `MU_JUDGE=laya,jev spec.jev`로 실행하면 그 실행에서만 판정기를 바꿀 수 있어요.
+pi의 자체 명령(`/model`, `/thinking`, `/login`, `/resume`, `/tree`, `/fork`, `/compact`, `/export` 등)은 그대로예요. `SPECJEV_JUDGE=laya,jev spec.jev`로 실행하면 그 실행에서만 판정기를 바꿀 수 있어요.
 
 ## 프라이버시
 
-키는 이 컴퓨터를 떠나지 않아요. spec.jev는 모델이나 런타임을 스스로 내려받지 않고, 내려받아야 하는 것은 모두 먼저 물어봐요. 판정기는 질문에 필요한 필드만 봐요(키가 없으면 그 필드는 OpenCode Zen의 무료 Jev로 가요. `MU_JUDGE=off`나 Laya를 쓰면 전부 이 컴퓨터에 남아요). 모든 판정은 로컬에 기록되고, 전부 읽어 볼 수 있어요.
+키는 이 컴퓨터를 떠나지 않아요. spec.jev는 모델이나 런타임을 스스로 내려받지 않고, 내려받아야 하는 것은 모두 먼저 물어봐요. 판정기는 질문에 필요한 필드만 봐요(키가 없으면 그 필드는 OpenCode Zen의 무료 Jev로 가요. `SPECJEV_JUDGE=off`나 Laya를 쓰면 전부 이 컴퓨터에 남아요). 모든 판정은 로컬에 기록되고, 전부 읽어 볼 수 있어요.
 
 ## 문서
 
@@ -309,7 +309,7 @@ npm run check                  # 포맷, 린트, 타입 검사
 ./test.sh                      # 테스트 (모델이 필요한 테스트는 키가 없으면 건너뜀)
 ```
 
-데스크톱 앱은 `desktop/`에 있어요. `bun install` 다음에 `KYRN_ROOT="$(cd .. && pwd)" bun run start`를 실행하면 이 저장소의 spec.jev를 쓰는 개발 빌드가 시작돼요(먼저 루트에서 `npm install`을 실행하세요).
+데스크톱 앱은 `desktop/`에 있어요. `bun install` 다음에 `SPECJEV_ROOT="$(cd .. && pwd)" bun run start`를 실행하면 이 저장소의 spec.jev를 쓰는 개발 빌드가 시작돼요(먼저 루트에서 `npm install`을 실행하세요).
 
 참여하는 모든 사람은 [행동 강령](../../CODE_OF_CONDUCT.md)을 따라요. 보안 문제는 [SECURITY.md](../../SECURITY.md)에 적힌 대로 비공개로 제보해 주세요.
 

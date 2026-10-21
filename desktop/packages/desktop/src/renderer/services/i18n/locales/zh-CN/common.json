@@ -1361,10 +1361,10 @@
         "openFailedPanel": "页面无法在应用的浏览器面板中打开。",
         "launch": {
           "noBrowser": {
-            "mac": "在 /Applications 中没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 MU_CHROME 设为某个 Chromium 内核浏览器的可执行文件。",
-            "windows": "在 Program Files 或 %LOCALAPPDATA% 下没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 MU_CHROME 设为它的 .exe 文件。",
+            "mac": "在 /Applications 中没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 SPECJEV_CHROME 设为某个 Chromium 内核浏览器的可执行文件。",
+            "windows": "在 Program Files 或 %LOCALAPPDATA% 下没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 SPECJEV_CHROME 设为它的 .exe 文件。",
             "wsl": "WSL 中没有找到浏览器。请在 WSL 中安装一个，或者开启 WSL 的镜像网络模式；具体步骤见下方的 reason 字段。",
-            "other": "没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 MU_CHROME 设为它的可执行文件；安装命令见下方的 reason 字段。"
+            "other": "没有找到 Chrome、Chromium、Edge 或 Brave。请安装其中一个，或把 SPECJEV_CHROME 设为它的可执行文件；安装命令见下方的 reason 字段。"
           },
           "windowsBrowserUnusable": "无法使用 {{executable}}：WSL 只有在镜像网络模式下才能连接 Windows 这边的浏览器。",
           "profileNoWindowsPath": "浏览器配置文件夹 {{profileDir}} 没有对应的 Windows 路径（未设置 WSL_DISTRO_NAME）。",

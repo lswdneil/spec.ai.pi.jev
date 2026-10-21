@@ -27,10 +27,10 @@ describe('a project inside WSL runs spec.jev inside WSL', () => {
   it('starts wsl.exe in the distribution and folder, and carries the app’s variables and paths across', () => {
     const plan = wslLaunch({
       location: { distro: 'Ubuntu', path: '/home/me/proj' },
-      session: 'C:\\Users\\me\\.mu\\acp-sessions\\a.jsonl',
-      env: { MU_DESKTOP_SESSION: 's1', MU_LANG: 'zh-CN' },
-      agentDir: 'C:\\Users\\me\\.mu\\agent',
-      inherited: 'GOPATH/p:MU_AGENT_DIR',
+      session: 'C:\\Users\\me\\.spec.jev\\acp-sessions\\a.jsonl',
+      env: { SPECJEV_DESKTOP_SESSION: 's1', SPECJEV_LANG: 'zh-CN' },
+      agentDir: 'C:\\Users\\me\\.spec.jev\\agent',
+      inherited: 'GOPATH/p:SPECJEV_AGENT_DIR',
       home: 'C:\\Users\\me',
     });
     expect(plan.command).toBe('wsl.exe');
@@ -45,13 +45,13 @@ describe('a project inside WSL runs spec.jev inside WSL', () => {
     ]);
     expect(plan.cwd).toBe('C:\\Users\\me');
     expect(plan.env).toMatchObject({
-      MU_DESKTOP_SESSION: 's1',
-      MU_LANG: 'zh-CN',
-      MU_AGENT_DIR: 'C:\\Users\\me\\.mu\\agent',
-      MU_ACP_SESSION: 'C:\\Users\\me\\.mu\\acp-sessions\\a.jsonl',
+      SPECJEV_DESKTOP_SESSION: 's1',
+      SPECJEV_LANG: 'zh-CN',
+      SPECJEV_AGENT_DIR: 'C:\\Users\\me\\.spec.jev\\agent',
+      MU_ACP_SESSION: 'C:\\Users\\me\\.spec.jev\\acp-sessions\\a.jsonl',
     });
     // The user's own entries stay; ours win for a name in both, since a path needs /p.
-    expect(plan.env.WSLENV).toBe('GOPATH/p:MU_DESKTOP_SESSION:MU_LANG:MU_AGENT_DIR/p:MU_ACP_SESSION/p');
+    expect(plan.env.WSLENV).toBe('GOPATH/p:SPECJEV_DESKTOP_SESSION:SPECJEV_LANG:SPECJEV_AGENT_DIR/p:MU_ACP_SESSION/p');
     const fresh = wslLaunch({
       location: { distro: 'D', path: '/' },
       session: undefined,
@@ -60,7 +60,7 @@ describe('a project inside WSL runs spec.jev inside WSL', () => {
       inherited: undefined,
       home: 'C:\\h',
     });
-    expect(fresh.env.WSLENV).toBe('MU_AGENT_DIR/p');
+    expect(fresh.env.WSLENV).toBe('SPECJEV_AGENT_DIR/p');
     expect(fresh.env).not.toHaveProperty('MU_ACP_SESSION');
   });
 
@@ -96,9 +96,9 @@ describe('the start script inside the distribution', () => {
     // A stand-in spec.jev that says how it was called and which node folder leads PATH.
     writeFileSync(join(bin, 'mu'), '#!/bin/sh\necho "args:$*"\necho "path:${PATH%%:*}"\n');
     chmodSync(join(bin, 'mu'), 0o755);
-    const withSession = start({ MU_ACP_SESSION: '/mnt/c/Users/me/.mu/acp-sessions/a b.jsonl' });
+    const withSession = start({ MU_ACP_SESSION: '/mnt/c/Users/me/.spec.jev/acp-sessions/a b.jsonl' });
     expect(withSession.status).toBe(0);
-    expect(withSession.stdout).toContain('args:--mode rpc --session /mnt/c/Users/me/.mu/acp-sessions/a b.jsonl');
+    expect(withSession.stdout).toContain('args:--mode rpc --session /mnt/c/Users/me/.spec.jev/acp-sessions/a b.jsonl');
     expect(withSession.stdout).toContain(`path:${bin}`);
     expect(start().stdout).toContain('args:--mode rpc\n');
   });

@@ -125,7 +125,7 @@ test('the native list leaves out the sessions AionCore’s conversations use', a
   made.imported = writeSession(project, IMPORTED_TITLE, 10);
   // The ACP adapter's record (the session's id: its file, folder and permission mode) and an import's record, in
   // `<spec.jev home>/acp-sessions`: the profile's home is the app's.
-  const store = join(home, '.mu', 'acp-sessions');
+  const store = join(home, '.spec.jev', 'acp-sessions');
   mkdirSync(join(store, 'imports'), { recursive: true });
   const adapter = join(store, `${made.bound.id}.json`);
   writeFileSync(adapter, JSON.stringify({ cwd: project, file: made.bound.file, permissions: 'full' }));
@@ -318,7 +318,7 @@ test('the test stayed in its profile, and left nothing running', async () => {
   expectNoProblems();
   await expectNothingLeft();
   expect(
-    existsSync(join(homedir(), '.mu', 'agent', 'sessions', slug(made.elsewhere))),
+    existsSync(join(homedir(), '.spec.jev', 'agent', 'sessions', slug(made.elsewhere))),
     "nothing in the person's ~/.spec.jev"
   ).toBe(false);
   for (const { path, before } of run.untouched) expect(stamp(path), `${path} left alone`).toBe(before);

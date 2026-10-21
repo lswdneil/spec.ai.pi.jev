@@ -245,9 +245,9 @@ export function harnessEnv(sessionId: string | undefined, home?: string): Record
   return {
     // The app's browser bridge learns from this which conversation a browsing run belongs to: the harness hands the
     // value back in its hello, and the app looks the conversation up by the session.
-    ...(sessionId ? { MU_DESKTOP_SESSION: sessionId } : {}),
+    ...(sessionId ? { SPECJEV_DESKTOP_SESSION: sessionId } : {}),
     // The harness words its notices, confirmations and choices in this language.
-    ...(language ? { MU_LANG: language } : {}),
+    ...(language ? { SPECJEV_LANG: language } : {}),
   };
 }
 
@@ -477,7 +477,7 @@ export class KyrnAgent implements Agent {
     session.rpc = this.factory(cwd, file, onEvent, id, {
       ...harnessEnv(id, this.home),
       // A reopened conversation starts in the mode it was last in, unless spec.jev's own record of it says otherwise.
-      ...(permissions ? { MU_PERMISSIONS: permissions } : {}),
+      ...(permissions ? { SPECJEV_PERMISSIONS: permissions } : {}),
     });
     let model: unknown;
     try {

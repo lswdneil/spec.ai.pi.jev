@@ -35,7 +35,7 @@ spec.jev                     # an interactive session in the current directory
 | `spec.jev judge setup \| start \| stop \| status` | The local judge, Laya. `setup` asks before downloading the model. |
 | `spec.jev link` / `spec.jev unlink` | Put the `spec.jev` command on your PATH (`~/.local/bin`), or remove it |
 | `spec.jev auth status \| login <provider> \| logout <provider>` | Subscription sign-in, as used by the desktop app |
-| `spec.jev migrate [--dry-run]` | One-time: move the old `~/.kyrn` folder to `~/.spec.jev` |
+| `spec.jev migrate [--dry-run]` | One-time: move the old `~/.spec.jev` folder to `~/.spec.jev` |
 
 ## Commands inside a session {#slash-commands}
 
@@ -70,9 +70,9 @@ Before a turn starts, spec.jev waits briefly for the judge's reading of your mes
 
 | Variable | Effect |
 | --- | --- |
-| `MU_JUDGE=laya,jev spec.jev` | Judges for this run only. `MU_JUDGE=off` turns the kernel off. |
-| `MU_JUDGE_MODE=shadow spec.jev` | Every decision point in shadow for this run |
+| `SPECJEV_JUDGE=laya,jev spec.jev` | Judges for this run only. `SPECJEV_JUDGE=off` turns the kernel off. |
+| `SPECJEV_JUDGE_MODE=shadow spec.jev` | Every decision point in shadow for this run |
 | `MU_PERMISSIONS=ask spec.jev` | The permission mode for this run: `full`, `jev` or `ask` |
-| `MU_LANG=zh-CN spec.jev` | spec.jev's own messages in Chinese (`zh`) or English (anything else) |
+| `SPECJEV_LANG=zh-CN spec.jev` | spec.jev's own messages in Chinese (`zh`) or English (anything else) |
 
 The full list is under [Configuration](@docs/configuration#env).

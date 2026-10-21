@@ -43,7 +43,7 @@ function home(): Home {
     write,
     read: (path) => JSON.parse(readFileSync(path, 'utf8')),
     piFile: join(agentDir, 'mcp.json'),
-    muFile: join(agentDir, 'mu.json'),
+    muFile: join(agentDir, 'spec.jev.json'),
   };
 }
 

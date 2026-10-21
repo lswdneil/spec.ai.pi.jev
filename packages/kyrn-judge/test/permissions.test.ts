@@ -594,7 +594,7 @@ describe("permission modes in a session", () => {
 			expect(down.request, error.message).toMatchObject({ reason: "judgedown" });
 			expect(down.title, error.message).toContain("The judge didn't answer this time, so spec.jev is asking you.");
 		}
-		vi.stubEnv("MU_LANG", "zh-CN");
+		vi.stubEnv("SPECJEV_LANG", "zh-CN");
 		expect((await refusedInJev(failing(new JudgeError("auth", "no key")), "npm publish")).title).toContain(
 			"还没有可用的判定器，所以每一步都先问你。",
 		);
@@ -638,13 +638,13 @@ describe("permission modes in a session", () => {
 		expect(noKey.request).toMatchObject({ reason: "nojudge" });
 	});
 
-	it("with judging switched off (MU_JUDGE=off) the chosen mode still holds: minimal permissions ask before an edit", async () => {
+	it("with judging switched off (SPECJEV_JUDGE=off) the chosen mode still holds: minimal permissions ask before an edit", async () => {
 		const agentDir = mkdtempSync(join(tmpdir(), "mu-judge-off-"));
 		dirs.push(agentDir);
 		// Nothing of the user's own setup is read: the agent folder, under each name the launcher sets it by, is empty.
 		for (const app of ["MU", "KYRN", "PI"]) vi.stubEnv(`${app}_CODING_AGENT_DIR`, agentDir);
-		vi.stubEnv("MU_JUDGE", "off");
-		vi.stubEnv("MU_PERMISSIONS", "ask");
+		vi.stubEnv("SPECJEV_JUDGE", "off");
+		vi.stubEnv("SPECJEV_PERMISSIONS", "ask");
 		try {
 			const ran: string[] = [];
 			const edit: AgentTool = {
@@ -881,13 +881,13 @@ describe("permission modes in a session", () => {
 
 	it("a sub-agent works in its parent's mode as it is now", () => {
 		expect(permissionEnv({ permissionMode: () => "ask" } as unknown as KyrnRuntime)).toEqual({
-			MU_PERMISSIONS: "ask",
+			SPECJEV_PERMISSIONS: "ask",
 		});
 		expect(permissionEnv({} as KyrnRuntime)).toEqual({});
 	});
 
 	it("starts in the mode the environment names, for a sub-agent or a desktop conversation", async () => {
-		vi.stubEnv("MU_PERMISSIONS", "full");
+		vi.stubEnv("SPECJEV_PERMISSIONS", "full");
 		const { of } = await start(() => ({}), { mode: "ask", pick: () => undefined });
 		expect(of("permissions.mode")[0]).toMatchObject({ mode: "full" });
 	});

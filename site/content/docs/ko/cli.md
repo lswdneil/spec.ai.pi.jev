@@ -35,7 +35,7 @@ spec.jev                     # 현재 디렉터리에서 대화형 세션 시작
 | `spec.jev judge setup \| start \| stop \| status` | 로컬 판정기 Laya. `setup`은 모델을 내려받기 전에 물어요. |
 | `spec.jev link` / `spec.jev unlink` | `spec.jev` 명령을 PATH(`~/.local/bin`)에 넣거나 빼기 |
 | `spec.jev auth status \| login <provider> \| logout <provider>` | 데스크톱 앱이 쓰는 구독 로그인 |
-| `spec.jev migrate [--dry-run]` | 한 번만: 이름을 바꾸기 전의 홈 `~/.kyrn`을 `~/.spec.jev`로 옮기기 |
+| `spec.jev migrate [--dry-run]` | 한 번만: 이름을 바꾸기 전의 홈 `~/.spec.jev`을 `~/.spec.jev`로 옮기기 |
 
 ## 세션 안의 명령어 {#slash-commands}
 
@@ -70,9 +70,9 @@ pi의 자체 명령어는 그대로예요: `/model`, `/thinking`, `/login`, `/re
 
 | 변수 | 효과 |
 | --- | --- |
-| `MU_JUDGE=laya,jev spec.jev` | 이번 실행에서만 쓸 판정기. `MU_JUDGE=off`는 커널을 꺼요. |
-| `MU_JUDGE_MODE=shadow spec.jev` | 이번 실행에서 모든 판정 지점을 섀도로 |
+| `SPECJEV_JUDGE=laya,jev spec.jev` | 이번 실행에서만 쓸 판정기. `SPECJEV_JUDGE=off`는 커널을 꺼요. |
+| `SPECJEV_JUDGE_MODE=shadow spec.jev` | 이번 실행에서 모든 판정 지점을 섀도로 |
 | `MU_PERMISSIONS=ask spec.jev` | 이번 실행의 권한 모드: `full`, `jev`, `ask` |
-| `MU_LANG=zh-CN spec.jev` | spec.jev 자체 메시지를 중국어(`zh`)나 영어(그 밖의 값)로 |
+| `SPECJEV_LANG=zh-CN spec.jev` | spec.jev 자체 메시지를 중국어(`zh`)나 영어(그 밖의 값)로 |
 
 전체 목록은 [설정](@docs/configuration#env)에 있어요.

@@ -9,7 +9,7 @@ import { NativeConversations } from '@process/services/nativeHost/conversations/
 import { FakePi } from '../conversations/fakePi';
 
 /**
- * spec.jev's browser tool names the conversation it works for by the session name the app gave its spec.jev (MU_DESKTOP_SESSION);
+ * spec.jev's browser tool names the conversation it works for by the session name the app gave its spec.jev (SPECJEV_DESKTOP_SESSION);
  * the app's browser panel opens the run's tab beside that conversation (process/bridge/kyrnBrowserBridge.ts). For a
  * native conversation the name is the one the app handed its host, and the conversation is answered by the id it has
  * now: a draft's id gives way to its session's once pi names it.
@@ -33,7 +33,7 @@ function world() {
     events: { records: () => {}, status: () => {}, replaced: () => {}, changed: () => {}, attention: () => {} },
     startHost: pi.startHost,
     folders: () => ({ agentDir, sessionsDir }),
-    env: (conversation) => ({ MU_DESKTOP_SESSION: conversation.desktopSession }),
+    env: (conversation) => ({ SPECJEV_DESKTOP_SESSION: conversation.desktopSession }),
     trash: async () => {},
     log: () => {},
   });
@@ -71,7 +71,7 @@ describe('the conversation a run of spec.jev’s browser belongs to', () => {
     await w.pi.last.turn;
     await quiet();
     const session = w.pi.last.session.id;
-    const name = w.pi.last.input.env.MU_DESKTOP_SESSION;
+    const name = w.pi.last.input.env.SPECJEV_DESKTOP_SESSION;
     expect(name).toMatch(/^n-/);
 
     const requests: BrowserPanelRequest[] = [];

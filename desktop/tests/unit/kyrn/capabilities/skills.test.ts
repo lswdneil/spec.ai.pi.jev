@@ -41,7 +41,7 @@ function roots(): SkillRoots & { muJson: (value: unknown) => void } {
     home,
     agentDir,
     builtinDir,
-    muJson: (value) => writeFileSync(join(agentDir, 'mu.json'), JSON.stringify(value)),
+    muJson: (value) => writeFileSync(join(agentDir, 'spec.jev.json'), JSON.stringify(value)),
   };
 }
 
@@ -107,7 +107,7 @@ describe('the skills spec.jev loads', () => {
     expect(names(where).filter((name) => !name.startsWith('builtin:'))).toEqual(['claude:linked']);
   });
 
-  it('follows mu.json: what it takes over, and the features that bring the skills that come with spec.jev', () => {
+  it('follows spec.jev.json: what it takes over, and the features that bring the skills that come with spec.jev', () => {
     const where = roots();
     skill(join(where.home, '.claude', 'skills', 'pdf', 'SKILL.md'));
     skill(join(where.home, '.codex', 'skills', 'slides', 'SKILL.md'));
@@ -117,8 +117,8 @@ describe('the skills spec.jev loads', () => {
     expect(names(where)).toEqual(['builtin:mu-browser']);
     where.muJson({ features: { inherit: { skills: false } } });
     expect(names(where)).toEqual(['builtin:mu-browser', 'builtin:mu-github']);
-    // A mu.json that does not parse is spec.jev's defaults, as the harness takes it.
-    writeFileSync(join(where.agentDir, 'mu.json'), '{ not json');
+    // A spec.jev.json that does not parse is spec.jev's defaults, as the harness takes it.
+    writeFileSync(join(where.agentDir, 'spec.jev.json'), '{ not json');
     expect(names(where)).toEqual(['builtin:mu-browser', 'builtin:mu-github', 'claude:pdf', 'codex:slides']);
   });
 
@@ -136,9 +136,9 @@ describe('the skills spec.jev loads', () => {
   it('finds the agent folder as spec.jev’s launcher does', () => {
     const home = temp();
     expect(muAgentDir({}, home)).toBe(join(home, '.spec.jev', 'agent'));
-    expect(muAgentDir({ MU_CODING_AGENT_DIR: '/x/coding' }, home)).toBe('/x/coding');
-    expect(muAgentDir({ MU_AGENT_DIR: '/x/agent', MU_CODING_AGENT_DIR: '/x/coding' }, home)).toBe('/x/agent');
-    expect(muAgentDir({ KYRN_AGENT_DIR: '/x/old' }, home)).toBe('/x/old');
+    expect(muAgentDir({ SPECJEV_CODING_AGENT_DIR: '/x/coding' }, home)).toBe('/x/coding');
+    expect(muAgentDir({ SPECJEV_AGENT_DIR: '/x/agent', SPECJEV_CODING_AGENT_DIR: '/x/coding' }, home)).toBe('/x/agent');
+    expect(muAgentDir({ SPECJEV_AGENT_DIR: '/x/old' }, home)).toBe('/x/old');
   });
 });
 

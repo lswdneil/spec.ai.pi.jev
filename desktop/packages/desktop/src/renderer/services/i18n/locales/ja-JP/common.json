@@ -1361,10 +1361,10 @@
         "openFailedPanel": "ページをアプリのブラウザーパネルで開けませんでした。",
         "launch": {
           "noBrowser": {
-            "mac": "/Applications に Chrome、Chromium、Edge、Brave のいずれも見つかりませんでした。いずれかをインストールするか、MU_CHROME に Chromium ベースのブラウザーの実行ファイルを設定してください。",
-            "windows": "Program Files と %LOCALAPPDATA% に Chrome、Chromium、Edge、Brave のいずれも見つかりませんでした。いずれかをインストールするか、MU_CHROME にその .exe を設定してください。",
+            "mac": "/Applications に Chrome、Chromium、Edge、Brave のいずれも見つかりませんでした。いずれかをインストールするか、SPECJEV_CHROME に Chromium ベースのブラウザーの実行ファイルを設定してください。",
+            "windows": "Program Files と %LOCALAPPDATA% に Chrome、Chromium、Edge、Brave のいずれも見つかりませんでした。いずれかをインストールするか、SPECJEV_CHROME にその .exe を設定してください。",
             "wsl": "WSL 内にブラウザーが見つかりませんでした。WSL 内にインストールするか、WSL のミラーモードのネットワークをオンにしてください。手順は下の reason フィールドにあります。",
-            "other": "Chrome、Chromium、Edge、Brave のいずれも見つかりませんでした。いずれかをインストールするか、MU_CHROME にその実行ファイルを設定してください。インストールコマンドは下の reason フィールドにあります。"
+            "other": "Chrome、Chromium、Edge、Brave のいずれも見つかりませんでした。いずれかをインストールするか、SPECJEV_CHROME にその実行ファイルを設定してください。インストールコマンドは下の reason フィールドにあります。"
           },
           "windowsBrowserUnusable": "{{executable}} は使用できません。Windows 側のブラウザーには、WSL からはミラーモードのネットワークでしか接続できません。",
           "profileNoWindowsPath": "プロファイルフォルダー {{profileDir}} に対応する Windows パスがありません（WSL_DISTRO_NAME が設定されていません）。",

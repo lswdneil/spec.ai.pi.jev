@@ -76,7 +76,7 @@ describe("finding a browser on Windows", () => {
 		expect(findBrowser(host("win32", [EDGE], { env }))).toEqual({ executable: EDGE, side: "native" });
 		expect(findChrome(env, host("win32", [EDGE], { env }))).toBe(EDGE);
 		expect(findBrowser(host("win32", [], { env }))).toBeUndefined();
-		expect(browserAdvice(host("win32", []))).toContain("set MU_CHROME to its .exe");
+		expect(browserAdvice(host("win32", []))).toContain("set SPECJEV_CHROME to its .exe");
 	});
 
 	it("starts it with a Windows profile path and the usual flags", () => {
@@ -112,14 +112,14 @@ describe("finding a browser on Linux", () => {
 		expect(new Set(paths).size).toBe(paths.length);
 	});
 
-	it("lets MU_CHROME, or KYRN_CHROME as before, win over everything found", () => {
+	it("lets SPECJEV_CHROME win over everything found", () => {
 		const installed = ["/usr/bin/chromium", "/opt/my/chrome"];
 		expect(findBrowser(host("linux", installed))?.executable).toBe("/usr/bin/chromium");
-		expect(findBrowser(host("linux", installed, { env: { KYRN_CHROME: "/opt/my/chrome" } }))?.executable).toBe(
+		expect(findBrowser(host("linux", installed, { env: { SPECJEV_CHROME: "/opt/my/chrome" } }))?.executable).toBe(
 			"/opt/my/chrome",
 		);
 		// Named but not there: the search goes on.
-		expect(findBrowser(host("linux", installed, { env: { MU_CHROME: "/nowhere" } }))?.executable).toBe(
+		expect(findBrowser(host("linux", installed, { env: { SPECJEV_CHROME: "/nowhere" } }))?.executable).toBe(
 			"/usr/bin/chromium",
 		);
 	});

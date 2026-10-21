@@ -274,6 +274,6 @@ export function initNativeBridge(): void {
   });
 }
 
-/** The native conversation spec.jev names by MU_DESKTOP_SESSION when it drives the app's browser (kyrnBrowserBridge.ts). */
+/** The native conversation spec.jev names by SPECJEV_DESKTOP_SESSION when it drives the app's browser (kyrnBrowserBridge.ts). */
 export const nativeConversationOf = (desktopSession: string): string | undefined =>
   conversations?.conversationOf(desktopSession);

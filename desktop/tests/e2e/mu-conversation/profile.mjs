@@ -7,7 +7,7 @@
 //   `app.getPath('home')` still names the account's own folder (Windows answers it, not the environment); the test
 //   prints the app's folders at its first start.
 // - MU_E2E_USER_DATA_DIR moves Electron's user data and logs (configureChromium.ts).
-// - MU_AGENT_DIR is a folder of its own, apart from `<home>/.mu/agent`, so the test also shows that every part of the
+// - SPECJEV_AGENT_DIR is a folder of its own, apart from `<home>/.spec.jev/agent`, so the test also shows that every part of the
 //   app and of spec.jev uses the one the person named.
 // - The checkout's build runs the harness through a view of the checkout (links) whose own `.env` is the test's: a
 //   checkout keeps its keys in `<root>/.env`, and the app writes a provider's key there. The checkout's own `.env` is
@@ -106,9 +106,9 @@ export function mainCheckout(root) {
   }
 }
 
-/** The harness checkout (or npm package) to run: MU_ROOT / KYRN_ROOT, else `../KYRN` beside the desktop checkout. */
+/** The harness checkout (or npm package) to run: SPECJEV_ROOT / SPECJEV_ROOT, else `../KYRN` beside the desktop checkout. */
 export function findHarnessSource(desktopRoot) {
-  const named = process.env.MU_ROOT || process.env.KYRN_ROOT;
+  const named = process.env.SPECJEV_ROOT || process.env.SPECJEV_ROOT;
   const candidates = named
     ? [resolve(named)]
     : [join(desktopRoot, '..', 'KYRN'), join(mainCheckout(desktopRoot), '..', 'KYRN')];
@@ -119,7 +119,7 @@ export function findHarnessSource(desktopRoot) {
     }
   }
   throw new Error(
-    `No spec.jev harness found (looked in ${candidates.join(', ')}). Set MU_ROOT to a harness checkout or a spec.jev package.`
+    `No spec.jev harness found (looked in ${candidates.join(', ')}). Set SPECJEV_ROOT to a harness checkout or a spec.jev package.`
   );
 }
 
@@ -253,14 +253,14 @@ export function profileEnv({ platform = process.platform, env = process.env, pat
     // The backend's Node.js runtime (about 50 MB from nodejs.org) is declined, as a person can decline it. A packaged
     // app carries it, and never asks.
     MU_NODE_RUNTIME: 'later',
-    MU_AGENT_DIR: paths.agentDir,
+    SPECJEV_AGENT_DIR: paths.agentDir,
   });
   if (checkout) {
     Object.assign(result, {
       MU_BACKEND_BIN: checkout.backend,
       KYRN_DESKTOP_ROOT: checkout.desktopRoot,
-      MU_ROOT: checkout.harness,
-      KYRN_ROOT: checkout.harness,
+      SPECJEV_ROOT: checkout.harness,
+      SPECJEV_ROOT: checkout.harness,
     });
   }
   return result;
@@ -318,7 +318,7 @@ export function createProfile({ desktopRoot, root, language = 'zh-CN', app } = {
   for (const dir of homeFolders(process.platform, paths.home)) mkdirSync(dir, { recursive: true });
   writeFileSync(join(paths.project, 'README.md'), '# E2E project\n\nA folder for the spec.jev conversation test.\n');
   // spec.jev's judgment configuration: the offline `mock` judge, and every decision point off, so each one takes its fixed
-  // fallback. The same run every time, and no judge is called. (MU_JUDGE=off would switch the whole judgment layer off,
+  // fallback. The same run every time, and no judge is called. (SPECJEV_JUDGE=off would switch the whole judgment layer off,
   // permission modes and the board with it.)
   writeFileSync(join(paths.agentDir, 'mu.json'), `${JSON.stringify(JUDGE_CONFIG, null, 2)}\n`);
 
