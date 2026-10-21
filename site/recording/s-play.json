@@ -1,0 +1,1 @@
+[{"wait": 14}, {"mark": "welcome"}, {"type": "跑一下测试，把失败的用例修好", "delay": 0.11}, {"wait": 0.8}, {"mark": "typed"}, {"key": "\r"}, {"every": 2, "max": 300, "idle": 20, "prefix": "t"}, {"mark": "end"}]
