@@ -64,7 +64,7 @@ export function setWindowAppearance(value: unknown, persist: (hint: WindowAppear
   trackPersistedWrite(
     Promise.resolve()
       .then(() => persist(hint))
-      .catch((error: unknown) => console.error('[AionUi] Failed to keep the window appearance:', error))
+      .catch((error: unknown) => console.error('[mu] Failed to keep the window appearance:', error))
   );
 }
 
