@@ -1,10 +1,4 @@
 {
-  "promptExamplesHint": "Try one of these",
-  "defaultPrompts": {
-    "understand": "Read through this project and explain in plain language what it does and where to start",
-    "cleanup": "Find duplicate and unneeded files in this folder and list them for me to review",
-    "create": "Build me a beautiful personal homepage and open it when it's done"
-  },
   "selectAssistantHint": "Select an assistant to start a task",
   "workspace": {
     "workInProject": "Work in a project",

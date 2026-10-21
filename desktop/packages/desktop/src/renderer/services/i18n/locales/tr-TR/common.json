@@ -1076,24 +1076,6 @@
         "idle": "Hakem beklemede",
         "judging": "Hakem değerlendiriyor",
         "off": "Hakem kapalı"
-      },
-      "starters": {
-        "hint": "Nereden başlayacağınızı bilmiyor musunuz? Şunlardan birini deneyin:",
-        "understand": {
-          "title": "Bu projeyi anla",
-          "desc": "Yapıyı, giriş noktalarını ve ana modülleri çıkar",
-          "prompt": "Önce bu projeyi baştan sona oku; genel yapısını, ana giriş noktalarını ve en önemli modüllerini anlat. İlk okunması gereken üç dosyayı belirt."
-        },
-        "fix": {
-          "title": "Bir sorunu bul ve düzelt",
-          "desc": "Hatadan veya belirtiden kök nedene",
-          "prompt": "Bir sorunla karşılaştım: <belirtiyi anlatın veya hatayı yapıştırın>. Önce sorunu yeniden üret ve kök nedeni bul, ardından en küçük düzeltmeyi yap ve doğrulamak için ilgili testleri çalıştır."
-        },
-        "plan": {
-          "title": "Bir değişiklik planla",
-          "desc": "Önce plan, onayınızdan sonra düzenleme",
-          "prompt": "Şunu gerçekleştirmek istiyorum: <ihtiyacınızı anlatın>. Önce bir uygulama planı ve ilgili dosyaları sun; düzenlemeye ancak ben onayladıktan sonra başla."
-        }
       }
     },
     "toolStatus": {
@@ -1451,8 +1433,7 @@
       "kernel": "Karar çekirdeği",
       "judgeReady": "{{judge}} hazır",
       "judgeOff": "Hakem kapalı",
-      "title": "mu ne üzerinde çalışsın?",
-      "lead": "Bir turdaki her küçük karar önce hızlı bir hakeme gider: bağlama ne girecek, bir komut güvenli mi, iş gerçekten bitti mi. Model koda odaklanır."
+      "title": "mu ne üzerinde çalışsın?"
     }
   },
   "menu": {

@@ -1076,24 +1076,6 @@
         "idle": "Judge standing by",
         "judging": "Judge at work",
         "off": "Judge is off"
-      },
-      "starters": {
-        "hint": "Not sure where to start? Try one of these:",
-        "understand": {
-          "title": "Understand this project",
-          "desc": "Map the structure, entry points and key modules",
-          "prompt": "Read through this project first, then tell me how it is structured, where the main entry points are and which modules matter most. Point out the three files worth reading first."
-        },
-        "fix": {
-          "title": "Find and fix a problem",
-          "desc": "Start from an error or a symptom and get to the cause",
-          "prompt": "I ran into a problem: <describe the symptom or paste the error>. Reproduce it and find the root cause first, then make the smallest fix and run the related tests to verify."
-        },
-        "plan": {
-          "title": "Plan a change",
-          "desc": "Get a plan first; edits start after you confirm",
-          "prompt": "I want to build: <describe what you need>. Give me an implementation plan and the files involved first, and start editing only after I confirm."
-        }
       }
     },
     "toolStatus": {
@@ -1451,8 +1433,7 @@
       "kernel": "Judgment kernel",
       "judgeReady": "{{judge}} is ready",
       "judgeOff": "Judging is off",
-      "title": "What should mu work on?",
-      "lead": "Every small call in a turn goes to a fast judge first: what enters the context, whether a command is safe, whether the work is really done. The model stays on the code."
+      "title": "What should mu work on?"
     }
   },
   "menu": {

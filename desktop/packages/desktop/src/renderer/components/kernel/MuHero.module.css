@@ -1,4 +1,4 @@
-/* The home page's header: a mono status line, a large question, one line of lead. Left-aligned with the input. */
+/* The home page's header: a mono status line and a large question. Left-aligned with the input. */
 .hero {
   position: relative;
   display: flex;
@@ -35,13 +35,6 @@
   color: var(--text-secondary);
 }
 
-.dot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--bg-5);
-}
-
 .title {
   margin: 4px 0 0;
   color: var(--text-primary);
@@ -49,14 +42,6 @@
   font-weight: 600;
   line-height: 1.12;
   letter-spacing: -0.025em;
-}
-
-.lead {
-  max-width: 560px;
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: 14px;
-  line-height: 1.55;
 }
 
 @keyframes mu-hero-in {

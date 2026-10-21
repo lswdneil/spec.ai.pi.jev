@@ -1076,24 +1076,6 @@
         "idle": "Juez en espera",
         "judging": "Juez evaluando",
         "off": "Juez desactivado"
-      },
-      "starters": {
-        "hint": "¿No sabes por dónde empezar? Prueba una de estas opciones:",
-        "understand": {
-          "title": "Entender este proyecto",
-          "desc": "Repasar la estructura, los puntos de entrada y los módulos clave",
-          "prompt": "Primero lee este proyecto y explícame su estructura, sus principales puntos de entrada y los módulos más importantes. Señala los tres archivos que conviene leer primero."
-        },
-        "fix": {
-          "title": "Encontrar y corregir un problema",
-          "desc": "Partir de un error o un síntoma hasta llegar a la causa",
-          "prompt": "Me he encontrado con un problema: <describe el síntoma o pega el error>. Primero reprodúcelo y localiza la causa, después aplica la corrección mínima y ejecuta las pruebas relacionadas para comprobarlo."
-        },
-        "plan": {
-          "title": "Planificar un cambio",
-          "desc": "Primero el plan; los cambios, cuando lo confirmes",
-          "prompt": "Quiero implementar: <describe lo que necesitas>. Dame primero un plan de implementación con los archivos afectados y empieza a modificar solo cuando yo lo confirme."
-        }
       }
     },
     "toolStatus": {
@@ -1451,8 +1433,7 @@
       "kernel": "Núcleo de juicio",
       "judgeReady": "{{judge}} está listo",
       "judgeOff": "Juez desactivado",
-      "title": "¿En qué debe trabajar mu?",
-      "lead": "Cada pequeña decisión de un turno pasa primero por un juez rápido: qué entra en el contexto, si un comando es seguro, si el trabajo está realmente terminado. El modelo se centra en el código."
+      "title": "¿En qué debe trabajar mu?"
     }
   },
   "menu": {

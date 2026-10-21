@@ -12,8 +12,8 @@ export type MuHeroProps = {
 };
 
 /**
- * The top of the home page: one mono line about the kernel (which judge is ready, how many decision points act on
- * it), the question, and one line on what mu does differently.
+ * The top of the home page: one mono line on whether the judge is ready, and the question. How many decision points
+ * act is in the kernel bar below, so it is not said twice.
  */
 const MuHero: React.FC<MuHeroProps> = ({ leaving = false, className }) => {
   const { t } = useTranslation();
@@ -34,15 +34,8 @@ const MuHero: React.FC<MuHeroProps> = ({ leaving = false, className }) => {
               : t('common.kyrn.hero.judgeReady', { judge: summary.judge })
             : t('common.kyrn.hero.kernel')}
         </span>
-        {summary && !off ? (
-          <>
-            <span className={styles.dot} aria-hidden='true' />
-            <span>{t('common.kyrn.kernel.points', { active: summary.active, total: summary.total })}</span>
-          </>
-        ) : null}
       </div>
       <h1 className={styles.title}>{t('common.kyrn.hero.title')}</h1>
-      <p className={styles.lead}>{t('common.kyrn.hero.lead')}</p>
     </header>
   );
 };

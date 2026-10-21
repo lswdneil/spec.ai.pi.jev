@@ -19,7 +19,7 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 
 - **Native English throughout.** The README, the docs, the command line, the desktop app and the judge's messages were rewritten for people who read English first, following a new [style guide](docs/writing-style.md). The Chinese text is unchanged.
 - **A new look for the desktop app.** Ink-and-paper neutrals and monochrome primary buttons; violet marks what you can act on, and pink marks the judge.
-  - The home page says which judge is ready and how many decision points are active.
+  - The home page says which judge is ready, then asks what to work on: no lead paragraph and no example prompts under the input. How many decision points are active is in the kernel bar.
   - A kernel bar along the bottom shows the judge and where it runs. In a conversation it also shows the verdicts so far, the latest judge latency, context use and cache hits. Click the judge to change it.
   - Judge lines in a conversation and in the judge panel name their decision point (`input.preflight`), with the judge's latency.
   - When the judge finds that a run stopped short and mu sends the model back, the line saying so has the judge's diamond.
