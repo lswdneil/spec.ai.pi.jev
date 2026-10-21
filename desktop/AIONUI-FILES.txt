@@ -1,13 +1,8 @@
 # Files in desktop/ that came from AionUi (https://github.com/iOfficeAI/AionUi, v2.2.2, 6744099b).
 # They stay under the Apache License 2.0 (LICENSE-APACHE); every other file in desktop/ is under the MIT license
 # (LICENSE). Regenerate with: node scripts/aionuiFiles.mjs
-.aionui/FEATURE_CHANNELS.md
-.aionui/FEATURE_CHANNELS_LARK_LARK.md
-.aionui/FEATURE_DEV_TEMPLATE.md
 .codecov.yml
 .dockerignore
-.gemini/config.json
-.gemini/styleguide.md
 .gitattributes
 .gitignore
 .npmrc
@@ -16,11 +11,6 @@
 .pre-commit-config.yaml
 .prettierignore
 .prettierrc.json
-.specify/memory/constitution.md
-.specify/templates/agent-file-template.md
-.specify/templates/plan-template.md
-.specify/templates/spec-template.md
-.specify/templates/tasks-template.md
 AGENTS.md
 CLAUDE.md
 CONTRIBUTING.md
@@ -34,7 +24,6 @@ docs/contributing/file-structure.md
 docs/guides/acp-image-output.zh-CN.md
 docs/guides/cdp.md
 docs/guides/custom-theme.md
-docs/guides/deploy-server.md
 docs/guides/hub-testing.md
 docs/theming/tokens.md
 entitlements.plist
@@ -301,20 +290,20 @@ packages/desktop/src/renderer/components/agent/MarqueePillLabel.tsx
 packages/desktop/src/renderer/components/agent/RuntimeSelectorPill.tsx
 packages/desktop/src/renderer/components/agent/ThemedLogo.tsx
 packages/desktop/src/renderer/components/agent/runtimeSelectorOptions.tsx
-packages/desktop/src/renderer/components/base/AionCollapse.tsx
-packages/desktop/src/renderer/components/base/AionInlineSearchInput.module.css
-packages/desktop/src/renderer/components/base/AionInlineSearchInput.tsx
-packages/desktop/src/renderer/components/base/AionModal.tsx
-packages/desktop/src/renderer/components/base/AionScrollArea.tsx
-packages/desktop/src/renderer/components/base/AionSearchInput.module.css
-packages/desktop/src/renderer/components/base/AionSearchInput.tsx
-packages/desktop/src/renderer/components/base/AionSelect.tsx
-packages/desktop/src/renderer/components/base/AionSteps.tsx
 packages/desktop/src/renderer/components/base/ButlerDiagnoseButton.tsx
 packages/desktop/src/renderer/components/base/FileChangesPanel.tsx
 packages/desktop/src/renderer/components/base/FirstHint/index.tsx
 packages/desktop/src/renderer/components/base/ForkBranchIcon.tsx
 packages/desktop/src/renderer/components/base/ModalWrapper.tsx
+packages/desktop/src/renderer/components/base/MuCollapse.tsx
+packages/desktop/src/renderer/components/base/MuInlineSearchInput.module.css
+packages/desktop/src/renderer/components/base/MuInlineSearchInput.tsx
+packages/desktop/src/renderer/components/base/MuModal.tsx
+packages/desktop/src/renderer/components/base/MuScrollArea.tsx
+packages/desktop/src/renderer/components/base/MuSearchInput.module.css
+packages/desktop/src/renderer/components/base/MuSearchInput.tsx
+packages/desktop/src/renderer/components/base/MuSelect.tsx
+packages/desktop/src/renderer/components/base/MuSteps.tsx
 packages/desktop/src/renderer/components/base/StepsWrapper.tsx
 packages/desktop/src/renderer/components/base/TalkToButlerButton.tsx
 packages/desktop/src/renderer/components/base/index.ts
@@ -1174,7 +1163,6 @@ scripts/check-i18n.js
 scripts/codemods/assistantSnakeCase.ts
 scripts/dev-bootstrap.mjs
 scripts/generate-i18n-types.js
-scripts/pack-web-cli.js
 scripts/packaged-launch.mjs
 scripts/postinstall.js
 scripts/prepareAioncore.js
@@ -1185,25 +1173,8 @@ scripts/run-benchmarks.ts
 scripts/smoke-installer-failure-messagebox.js
 scripts/smoke-installer-rstrtmgr-ui.js
 scripts/smoke-installer-self-lock.js
-scripts/smoke-test-web-cli.sh
 scripts/verify-installer-jsonl.ps1
 tests/e2e/README.md
-tests/e2e/docs/assistants/discussion-log.zh.md
-tests/e2e/docs/assistants/implementation-mapping.zh.md
-tests/e2e/docs/assistants/requirements.zh.md
-tests/e2e/docs/assistants/test-cases.zh.md
-tests/e2e/docs/chat-aionrs/discussion-log.zh.md
-tests/e2e/docs/chat-aionrs/implementation-mapping.zh.md
-tests/e2e/docs/chat-aionrs/requirements.zh.md
-tests/e2e/docs/chat-aionrs/test-cases.zh.md
-tests/e2e/docs/parallel-feasibility.md
-tests/e2e/docs/skills-hub/discussion-log.zh.md
-tests/e2e/docs/skills-hub/engineer-preliminary-notes.md
-tests/e2e/docs/skills-hub/engineer-review-testcases-v1.md
-tests/e2e/docs/skills-hub/implementation-mapping.zh.md
-tests/e2e/docs/skills-hub/requirements.zh.md
-tests/e2e/docs/skills-hub/test-cases.zh.md
-tests/e2e/docs/skills-hub/test-strategy.zh.md
 tests/e2e/features/.gitkeep
 tests/e2e/features/assistants-user-data/assistant-user-data.e2e.ts
 tests/e2e/features/assistants/.gitkeep
@@ -1343,7 +1314,6 @@ tests/fixtures/fake-extension.zip
 tests/fixtures/fake-extension/aion-extension.json
 tests/fixtures/fake-extension/scripts/install.js
 tests/integration/bootstrap/windowsPath.test.ts
-tests/integration/migrateAssistants.realFixture.test.ts
 tests/unit/_helpers/mockHttpBridge.test.ts
 tests/unit/_helpers/mockHttpBridge.ts
 tests/unit/acpConfigOptions.test.ts
