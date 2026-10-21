@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import type {
   RequestPermissionRequest,
   RequestPermissionResponse,
@@ -1423,5 +1423,34 @@ describe('the judge’s line', () => {
     } finally {
       f.cleanup();
     }
+  });
+});
+
+/** The adapter's source files, from its entry, by their relative imports. */
+function adapterSources(file: string, seen = new Map<string, string>()): Map<string, string> {
+  if (seen.has(file)) return seen;
+  const source = readFileSync(file, 'utf8');
+  seen.set(file, source);
+  for (const [, specifier] of source.matchAll(/(?:^|\n)\s*(?:import|export)\b[^'"]*?from\s+'([^']+)'/g)) {
+    if (!specifier.startsWith('.')) continue;
+    const base = resolve(dirname(file), specifier);
+    const found = [base, `${base}.ts`, `${base}.tsx`, join(base, 'index.ts')].find(
+      (path) => existsSync(path) && statSync(path).isFile()
+    );
+    if (found && /\.tsx?$/.test(found)) adapterSources(found, seen);
+  }
+  return seen;
+}
+
+describe('the adapter AionCore starts', () => {
+  it('imports nothing by a path alias: scripts/kyrn/acp runs it with tsx, outside the app, where no alias resolves', () => {
+    const entry = join(__dirname, '../../../packages/desktop/src/process/agent/kyrn/index.ts');
+    const aliased = [...adapterSources(entry)].flatMap(([file, source]) =>
+      [...source.matchAll(/from\s+'(@(?:process|renderer|worker)?\/[^']+)'/g)].map(
+        ([, specifier]) => `${file}: ${specifier}`
+      )
+    );
+    expect(aliased).toEqual([]);
+    expect(adapterSources(entry).size).toBeGreaterThan(5);
   });
 });

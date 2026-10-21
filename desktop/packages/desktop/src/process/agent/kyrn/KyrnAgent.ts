@@ -16,7 +16,7 @@ import {
   type SessionConfigOption,
   type SessionUpdate,
 } from '@agentclientprotocol/sdk';
-import { AIONCORE_CONVERSATION_ID_ENV } from '@/common/platform/aioncoreNames';
+import { AIONCORE_CONVERSATION_ID_ENV } from '../../../common/platform/aioncoreNames.ts';
 import { randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import { realpath } from 'node:fs/promises';

@@ -1,6 +1,6 @@
 import { DatabaseSync } from 'node:sqlite';
 import { join } from 'node:path';
-import { AIONCORE_DATABASE_FILE } from '@/common/platform/aioncoreNames';
+import { AIONCORE_DATABASE_FILE } from '../../../common/platform/aioncoreNames';
 
 /** AionCore v0.2.2 stores the resume anchor outside conversation.extra.
  * Read only that binding; the backend remains the sole database writer.
