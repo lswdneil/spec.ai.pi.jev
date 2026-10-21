@@ -114,9 +114,9 @@ export function registerGuard(runtime: KyrnRuntime): void {
 			// Off and shadow leave pi's own behavior alone; only an active gate may stop a command.
 			if (decision.mode !== "active" || decision.outcome === "allow") return undefined;
 			if (!ctx.hasUI)
-				return { block: true, reason: `mu: "${flag}" needs confirmation, which this mode cannot ask for.` };
+				return { block: true, reason: `spec.jev: "${flag}" needs confirmation, which this mode cannot ask for.` };
 			const approved = await ctx.ui.confirm(
-				`mu: ${say({ zh: FLAG_ZH[flag] ?? flag, en: flag })}`,
+				`spec.jev: ${say({ zh: FLAG_ZH[flag] ?? flag, en: flag })}`,
 				`${say({ zh: "要运行这条命令吗？", en: "Run this command?" })}\n\n${clip(command, 600)}`,
 			);
 			return approved ? undefined : { block: true, reason: `The user declined this command (${flag}).` };

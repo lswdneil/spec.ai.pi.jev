@@ -65,14 +65,14 @@ const setPlatform = (platform: NodeJS.Platform, arch: NodeJS.Architecture = 'arm
 // The files of the merged feeds, as the release job writes them: latest-mac.yml gives each zip and disk image its size;
 // latest.yml has none for the installers (electron-builder writes no size for NSIS without a differential package).
 const macFiles = (version: string) => [
-  { url: `mu-${version}-mac-x64.zip`, sha512: 'a', size: 214_523_871 },
-  { url: `mu-${version}-mac-x64.dmg`, sha512: 'b', size: 221_839_104 },
-  { url: `mu-${version}-mac-arm64.zip`, sha512: 'c', size: 206_117_345 },
-  { url: `mu-${version}-mac-arm64.dmg`, sha512: 'd', size: 213_207_011 },
+  { url: `spec.jev-${version}-mac-x64.zip`, sha512: 'a', size: 214_523_871 },
+  { url: `spec.jev-${version}-mac-x64.dmg`, sha512: 'b', size: 221_839_104 },
+  { url: `spec.jev-${version}-mac-arm64.zip`, sha512: 'c', size: 206_117_345 },
+  { url: `spec.jev-${version}-mac-arm64.dmg`, sha512: 'd', size: 213_207_011 },
 ];
 const windowsFiles = (version: string, sizes?: [number, number]) => [
-  { url: `mu-${version}-win-x64.exe`, sha512: 'e', ...(sizes ? { size: sizes[0] } : {}) },
-  { url: `mu-${version}-win-arm64.exe`, sha512: 'f', ...(sizes ? { size: sizes[1] } : {}) },
+  { url: `spec.jev-${version}-win-x64.exe`, sha512: 'e', ...(sizes ? { size: sizes[0] } : {}) },
+  { url: `spec.jev-${version}-win-arm64.exe`, sha512: 'f', ...(sizes ? { size: sizes[1] } : {}) },
 ];
 
 const offer = (version: string, files = process.platform === 'darwin' ? macFiles(version) : windowsFiles(version)) => ({
@@ -81,7 +81,7 @@ const offer = (version: string, files = process.platform === 'darwin' ? macFiles
   versionInfo: { version },
 });
 
-const release = (version: string, installer: string | null = `mu-${version}-mac-arm64.dmg`): UpdateReleaseInfo => {
+const release = (version: string, installer: string | null = `spec.jev-${version}-mac-arm64.dmg`): UpdateReleaseInfo => {
   const assets = installer
     ? [{ name: installer, url: `https://github.com/qybaihe/mu/releases/download/v${version}/${installer}`, size: 1 }]
     : [];
@@ -101,7 +101,7 @@ const makeService = (overrides: Partial<UpdateServiceDeps> = {}) => {
     restartUpdater: new AutoUpdaterService(),
     installerReason: 'unpackaged' as const,
     latestRelease: vi.fn(async (): Promise<UpdateReleaseInfo | null> => release('0.1.3')),
-    downloadInstaller: vi.fn(async () => '/Users/me/Downloads/mu-0.1.3-mac-arm64.dmg'),
+    downloadInstaller: vi.fn(async () => '/Users/me/Downloads/spec.jev-0.1.3-mac-arm64.dmg'),
     openPath: vi.fn(async () => ''),
     showItemInFolder: vi.fn(),
     openExternal: vi.fn(async () => undefined),
@@ -362,21 +362,21 @@ describe('falling back to the installer', () => {
       version: '0.1.3',
       installerReason: 'autoUpdateFailed',
       error: { code: 'noUpdateInfo' },
-      installerName: 'mu-0.1.3-mac-arm64.dmg',
+      installerName: 'spec.jev-0.1.3-mac-arm64.dmg',
     });
     // The installer downloads only when the person asks for it, too.
     expect(deps.downloadInstaller).not.toHaveBeenCalled();
 
     expect((await service.run('downloadInstaller')).phase).toBe('downloadingInstaller');
     expect(deps.downloadInstaller).toHaveBeenCalledWith(
-      expect.objectContaining({ name: 'mu-0.1.3-mac-arm64.dmg' }),
+      expect.objectContaining({ name: 'spec.jev-0.1.3-mac-arm64.dmg' }),
       expect.any(Function)
     );
     await vi.waitFor(() => expect(service.getState().phase).toBe('installerReady'));
-    expect(service.getState().installerPath).toBe('/Users/me/Downloads/mu-0.1.3-mac-arm64.dmg');
+    expect(service.getState().installerPath).toBe('/Users/me/Downloads/spec.jev-0.1.3-mac-arm64.dmg');
 
     await service.run('openInstaller');
-    expect(deps.openPath).toHaveBeenCalledWith('/Users/me/Downloads/mu-0.1.3-mac-arm64.dmg');
+    expect(deps.openPath).toHaveBeenCalledWith('/Users/me/Downloads/spec.jev-0.1.3-mac-arm64.dmg');
   });
 
   it('says it is up to date when the check fails but GitHub has nothing newer', async () => {
@@ -453,15 +453,15 @@ describe('updates that come as an installer (Linux)', () => {
     const { service, deps } = makeService({
       restartUpdater: undefined,
       installerReason: 'linux',
-      latestRelease: vi.fn(async () => release('0.1.3', 'mu-0.1.3-linux-amd64.deb')),
-      downloadInstaller: vi.fn(async () => '/home/me/Downloads/mu-0.1.3-linux-amd64.deb'),
+      latestRelease: vi.fn(async () => release('0.1.3', 'spec.jev-0.1.3-linux-amd64.deb')),
+      downloadInstaller: vi.fn(async () => '/home/me/Downloads/spec.jev-0.1.3-linux-amd64.deb'),
       openPath: vi.fn(async () => 'No application knows how to open this file'),
     });
     expect(service.getState().method).toBe('installer');
     expect(await service.check()).toMatchObject({
       phase: 'available',
       installerReason: 'linux',
-      installerName: 'mu-0.1.3-linux-amd64.deb',
+      installerName: 'spec.jev-0.1.3-linux-amd64.deb',
     });
     expect(service.getState().error).toBeUndefined();
     expect(updater.checkForUpdates).not.toHaveBeenCalled();
@@ -480,7 +480,7 @@ describe('updates that come as an installer (Linux)', () => {
     expect(service.getState().error).toBeUndefined();
 
     await service.run('openInstaller');
-    expect(deps.showItemInFolder).toHaveBeenCalledWith('/home/me/Downloads/mu-0.1.3-linux-amd64.deb');
+    expect(deps.showItemInFolder).toHaveBeenCalledWith('/home/me/Downloads/spec.jev-0.1.3-linux-amd64.deb');
   });
 
   it('answers every step, even one that fails', async () => {

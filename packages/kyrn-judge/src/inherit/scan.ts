@@ -68,7 +68,7 @@ const TOOL_NAMES: Readonly<Record<InheritTool, string>> = {
 	claude: "Claude Code",
 	cursor: "Cursor",
 	codex: "Codex",
-	mu: "mu",
+	mu: "spec.jev",
 };
 
 /** "Inherited 3 rules, 12 skills and 2 MCP servers from Claude Code and Cursor." Undefined when nothing was inherited. */

@@ -146,7 +146,7 @@ async function printFolders() {
     };
     return Object.fromEntries(list.map((name) => [name, where(name)]));
   }, names);
-  console.log(`[mu e2e] the app's folders: ${JSON.stringify(folders)}`);
+  console.log(`[spec.jev e2e] the app's folders: ${JSON.stringify(folders)}`);
 }
 
 /**
@@ -257,9 +257,9 @@ test.beforeAll(async () => {
   // The harness's keys (a checkout's own .env; none beside the spec.jev a packaged app carries): stamped (never read)
   // before, compared after.
   run.untouched = [join(harness.root, '.env')].map((path) => ({ path, before: stamp(path) }));
-  console.log(`[mu e2e] app: ${app ? app.executable : join(desktopRoot, 'out')}`);
-  console.log(`[mu e2e] profile: ${run.profile.paths.root}`);
-  console.log(`[mu e2e] fake model: ${run.fake.baseUrl}`);
+  console.log(`[spec.jev e2e] app: ${app ? app.executable : join(desktopRoot, 'out')}`);
+  console.log(`[spec.jev e2e] profile: ${run.profile.paths.root}`);
+  console.log(`[spec.jev e2e] fake model: ${run.fake.baseUrl}`);
 });
 
 test.afterAll(async () => {
@@ -271,7 +271,7 @@ test.afterAll(async () => {
   if (run.passed && process.env.MU_E2E_KEEP !== '1' && !process.env.MU_E2E_ROOT) {
     rmSync(root, { recursive: true, force: true });
   } else {
-    console.log(`[mu e2e] kept for a look: ${root} (logs in ${join(root, 'logs')})`);
+    console.log(`[spec.jev e2e] kept for a look: ${root} (logs in ${join(root, 'logs')})`);
   }
 });
 
@@ -594,14 +594,14 @@ test('关于 shows the version, and 检查更新 downloads nothing', async () =>
         const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
         scope.__e2eRequests.push(url);
         if (url.startsWith('https://api.github.com/repos/qybaihe/mu/releases')) {
-          const names = [`mu-${newer}-mac-arm64.dmg`, `mu-${newer}-mac-x64.dmg`, `mu-${newer}-win-x64.exe`];
+          const names = [`spec.jev-${newer}-mac-arm64.dmg`, `spec.jev-${newer}-mac-x64.dmg`, `spec.jev-${newer}-win-x64.exe`];
           const release = {
             tag_name: `v${newer}`,
-            name: `mu ${newer}`,
+            name: `spec.jev ${newer}`,
             html_url: `https://github.com/qybaihe/mu/releases/tag/v${newer}`,
             prerelease: true,
             draft: false,
-            assets: [...names, `mu-${newer}-linux-amd64.deb`].map((name) => ({
+            assets: [...names, `spec.jev-${newer}-linux-amd64.deb`].map((name) => ({
               name,
               browser_download_url: `${assets}/${name}`,
               size: 123_456_789,
@@ -615,8 +615,8 @@ test('关于 shows the version, and 检查更新 downloads nothing', async () =>
       // the releases, newest first, and the update file of the newest one, which lists its installers.
       const files =
         platform === 'darwin'
-          ? [`mu-${newer}-mac-arm64.zip`, `mu-${newer}-mac-x64.zip`]
-          : [`mu-${newer}-win-x64.exe`, `mu-${newer}-win-arm64.exe`];
+          ? [`spec.jev-${newer}-mac-arm64.zip`, `spec.jev-${newer}-mac-x64.zip`]
+          : [`spec.jev-${newer}-win-x64.exe`, `spec.jev-${newer}-win-arm64.exe`];
       const sha512 = `${'A'.repeat(86)}==`;
       const updateFile = [
         `version: ${newer}`,
@@ -637,7 +637,7 @@ test('关于 shows the version, and 检查更新 downloads nothing', async () =>
         `    <id>tag:github.com,2008:Repository/1/v${newer}</id>`,
         '    <updated>2026-09-25T00:00:00Z</updated>',
         `    <link rel="alternate" type="text/html" href="https://github.com/qybaihe/mu/releases/tag/v${newer}"/>`,
-        `    <title>mu ${newer}</title>`,
+        `    <title>spec.jev ${newer}</title>`,
         '    <content type="html">No content.</content>',
         '  </entry>',
         '</feed>',
@@ -686,7 +686,7 @@ test('the test stayed in its profile, and left nothing running', async () => {
   for (const name of existsSync(join(home, '.mu', 'acp-sessions'))
     ? readdirSync(join(home, '.mu', 'acp-sessions'))
     : []) {
-    expect(existsSync(join(realMu, 'acp-sessions', name)), `nothing in the person's ~/.mu/acp-sessions (${name})`).toBe(
+    expect(existsSync(join(realMu, 'acp-sessions', name)), `nothing in the person's ~/.spec.jev/acp-sessions (${name})`).toBe(
       false
     );
   }

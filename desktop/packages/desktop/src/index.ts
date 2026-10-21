@@ -155,7 +155,7 @@ process.on('unhandledRejection', (reason, _promise) => {
 
 function logUncaught(diagnostics: UncaughtErrorDiagnostics): void {
   try {
-    console.error(`[mu] ${diagnostics.origin}:`, diagnostics);
+    console.error(`[spec.jev] ${diagnostics.origin}:`, diagnostics);
   } catch {
     // Logging must never escalate a swallowed error into a fatal one: a throw inside an
     // uncaughtException listener terminates the process, and the log transport itself can
@@ -344,7 +344,7 @@ function exposeBackendPort(backendPort: number): void {
 
 function markBackendReady(backendPort: number, source: string): void {
   if (backendStartedOk) return;
-  console.log(`[mu] ${source} ready (port=${backendPort})`);
+  console.log(`[spec.jev] ${source} ready (port=${backendPort})`);
   exposeBackendPort(backendPort);
   registerCronResumeBridge(backendPort);
   backendStartedOk = true;
@@ -402,7 +402,7 @@ function resolveDebugBackendStartupFailure(): BackendStartupFailureInfo | null {
     return { reason };
   }
 
-  console.warn(`[mu] Ignoring unknown MU_DEBUG_BACKEND_STARTUP_FAILURE value: ${reason}`);
+  console.warn(`[spec.jev] Ignoring unknown MU_DEBUG_BACKEND_STARTUP_FAILURE value: ${reason}`);
   return null;
 }
 
@@ -463,7 +463,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
       webviewTag: true, // 启用 webview 标签用于 HTML 预览 / Enable webview tag for HTML preview
     },
   });
-  console.log(`[mu] Main window created (id=${mainWindow.id})`);
+  console.log(`[spec.jev] Main window created (id=${mainWindow.id})`);
 
   // Show window after content is ready to prevent FOUC (Flash of Unstyled Content)
   // Use 'ready-to-show' which fires when renderer has painted first frame,
@@ -506,7 +506,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   const fallbackFile = path.join(__dirname, '../renderer/index.html');
 
   if (!app.isPackaged && rendererUrl) {
-    console.log(`[mu] Loading renderer URL: ${rendererUrl}`);
+    console.log(`[spec.jev] Loading renderer URL: ${rendererUrl}`);
     mainWindow.loadURL(rendererUrl).catch((error) => {
       console.error('[spec.jev] loadURL failed, falling back to file:', error.message || error);
       mainWindow.loadFile(fallbackFile).catch((e2) => {
@@ -514,7 +514,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
       });
     });
   } else {
-    console.log(`[mu] Loading renderer file: ${fallbackFile}`);
+    console.log(`[spec.jev] Loading renderer file: ${fallbackFile}`);
     mainWindow.loadFile(fallbackFile).catch((error) => {
       console.error('[spec.jev] loadFile failed:', error.message || error);
     });
@@ -538,14 +538,14 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
     const action = rendererRecovery.onCrash(details.reason);
 
     if (action.kind === 'relaunch') {
-      console.warn(`[mu] renderer cannot be recovered in-place (reason=${details.reason}); relaunching app`);
+      console.warn(`[spec.jev] renderer cannot be recovered in-place (reason=${details.reason}); relaunching app`);
       app.relaunch();
       app.exit(0);
       return;
     }
 
     if (action.kind === 'give-up') {
-      console.error(`[mu] renderer recovery exhausted (reason=${details.reason}); not retrying`);
+      console.error(`[spec.jev] renderer recovery exhausted (reason=${details.reason}); not retrying`);
       return;
     }
 
@@ -1010,7 +1010,7 @@ app.on('will-quit', () => {
 });
 
 app.on('quit', (_event, exitCode) => {
-  console.log(`[mu] quit (exitCode=${exitCode})`);
+  console.log(`[spec.jev] quit (exitCode=${exitCode})`);
 });
 
 // In this file you can include the rest of your app's specific main process

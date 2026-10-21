@@ -119,7 +119,7 @@ describe('default conversation name', () => {
     expect(isDefaultConversationName('New Chat')).toBe(true);
     expect(isDefaultConversationName('新会话')).toBe(true);
     expect(isDefaultConversationName('新會話')).toBe(true);
-    expect(isDefaultConversationName('Neuer Chat')).toBe(true);
+    expect(isDefaultConversationName('新しいチャット')).toBe(true);
     expect(isDefaultConversationName('Refactor the parser')).toBe(false);
     expect(isDefaultConversationName('')).toBe(false);
     expect(isDefaultConversationName(undefined)).toBe(false);

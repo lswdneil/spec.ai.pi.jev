@@ -164,12 +164,12 @@ describe('Jev hint chips', () => {
     expect(hintChips(en, ['', 'someday_hint'])).toEqual([{ id: 'someday_hint', label: 'someday_hint' }]);
   });
 
-  it('has a chip and a sentence for every hint in all 13 languages', () => {
+  it('has a chip and a sentence for every hint in all 5 languages', () => {
     const root = path.resolve(__dirname, '../../../..');
     const { supportedLanguages } = JSON.parse(
       readFileSync(path.join(root, 'packages/desktop/src/common/config/i18n-config.json'), 'utf8')
     ) as { supportedLanguages: string[] };
-    expect(supportedLanguages).toHaveLength(13);
+    expect(supportedLanguages).toHaveLength(5);
     for (const language of supportedLanguages) {
       const locale = JSON.parse(
         readFileSync(

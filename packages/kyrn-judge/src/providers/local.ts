@@ -72,7 +72,7 @@ export class LocalJudgeProvider implements JudgeProvider {
 			if (error instanceof Error && error.name === "AbortError") throw error;
 			throw new JudgeError(
 				"unreachable",
-				`Judge server is not reachable at ${this.baseUrl}; the local one starts with: mu judge start`,
+				`Judge server is not reachable at ${this.baseUrl}; the local one starts with: spec.jev judge start`,
 				{ cause: error },
 			);
 		}

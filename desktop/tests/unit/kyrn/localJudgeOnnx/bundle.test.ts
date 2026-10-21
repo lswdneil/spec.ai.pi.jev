@@ -52,8 +52,8 @@ describe('the Laya ONNX files', () => {
     expect(layaOnnxFileUrl('tokenizer/tokenizer.json')).toBe(
       `https://huggingface.co/mizchi/laya-multilingual-onnx/resolve/${LAYA_ONNX_REVISION}/tokenizer/tokenizer.json?download=true`
     );
-    expect(layaOnnxCommand('C:\\Users\\a\\.mu\\local-judge\\laya-multilingual-onnx')).toBe(
-      `hf download mizchi/laya-multilingual-onnx --revision ${LAYA_ONNX_REVISION} --local-dir "C:\\Users\\a\\.mu\\local-judge\\laya-multilingual-onnx"`
+    expect(layaOnnxCommand('C:\\Users\\a\\.spec.jev\\local-judge\\laya-multilingual-onnx')).toBe(
+      `hf download mizchi/laya-multilingual-onnx --revision ${LAYA_ONNX_REVISION} --local-dir "C:\\Users\\a\\.spec.jev\\local-judge\\laya-multilingual-onnx"`
     );
   });
 });

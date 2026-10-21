@@ -324,7 +324,7 @@ describe('a judgment, opened', () => {
   it('formats numbers in the app language rather than the operating system’s', async () => {
     const german = createInstance();
     await german.init({
-      lng: 'de-DE',
+      lng: 'zh-CN',
       fallbackLng: 'en',
       resources: { en: { translation: { common, mu } } },
       interpolation: { escapeValue: false },
@@ -347,10 +347,10 @@ describe('a judgment, opened', () => {
     );
 
     const card = within(cards()[0]);
-    expect(card.getByText(/12\.345 ms/)).toBeInTheDocument();
+    expect(card.getByText(/12,345 ms/)).toBeInTheDocument();
     fireEvent.click(card.getByText(copy.details));
-    expect(card.getByText(/Probability of yes: 93\s%/)).toBeInTheDocument();
-    expect(card.getByText(/Score: 0,50/)).toBeInTheDocument();
+    expect(card.getByText(/Probability of yes: 93\s?%/)).toBeInTheDocument();
+    expect(card.getByText(/Score: 0\.50/)).toBeInTheDocument();
   });
 
   it('keeps Chinese punctuation and list separators inside the Chinese texts', async () => {

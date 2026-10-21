@@ -7,7 +7,6 @@ describe('formatClock', () => {
   it('follows the app language, not the operating system', () => {
     expect(formatClock(at, 'zh-CN')).toBe('08:00:01');
     expect(formatClock(at, 'en-US')).toMatch(/^8:00:01\sAM$/);
-    expect(formatClock(at, 'de-DE')).toBe('08:00:01');
   });
 
   it('accepts a timestamp or an ISO string, and falls back to the default language', () => {

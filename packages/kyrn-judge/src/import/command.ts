@@ -150,7 +150,7 @@ export function formatList(conversations: readonly FoundConversation[], home: st
 		}
 	}
 	const count = conversations.length;
-	lines.push("", `${count} conversation${count === 1 ? "" : "s"}. Import one with: mu import <file>`);
+	lines.push("", `${count} conversation${count === 1 ? "" : "s"}. Import one with: spec.jev import <file>`);
 	return lines.join("\n");
 }
 
@@ -170,14 +170,14 @@ export function formatResult(result: ImportResult, home: string): string {
 		`  ${tilde(result.sessionFile, home)}`,
 		`  ${plural(counts.user, "message")} from you, ${plural(counts.assistant, "reply", "replies")}, ${plural(counts.toolCalls, "tool call")}${counts.compactions > 0 ? `, ${plural(counts.compactions, "compaction")}` : ""}`,
 		...(left.length > 0 ? [`  skipped: ${left.join(", ")}`] : []),
-		`  to continue: mu --session ${result.sessionFile}`,
+		`  to continue: spec.jev --session ${result.sessionFile}`,
 	].join("\n");
 }
 
 export async function main(argv: readonly string[], io: Io): Promise<number> {
 	const parsed = parseArgs(argv);
 	if ("error" in parsed) {
-		io.err(`mu import: ${parsed.error}\n\n${USAGE}`);
+		io.err(`spec.jev import: ${parsed.error}\n\n${USAGE}`);
 		return 2;
 	}
 	if (parsed.help || (!parsed.list && parsed.files.length === 0)) {

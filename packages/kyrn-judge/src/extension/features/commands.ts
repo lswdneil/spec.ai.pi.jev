@@ -21,7 +21,7 @@ const PROMPTS_DIR = fileURLToPath(new URL("../../../prompts", import.meta.url));
 const help = () => say({ zh: helpZh(), en: helpEn() });
 
 /** No aligned columns: Chinese is two cells wide in a terminal, so each line says "command: what it does". */
-const helpZh = () => `mu ${VERSIONS.mu} · 先判断再动手的编程代理，基于 pi ${VERSIONS.pi}
+const helpZh = () => `spec.jev ${VERSIONS.mu} · 先判断再动手的编程代理，基于 pi ${VERSIONS.pi}
 
 从这里开始
   /status：判定器、各判定点的模式、没放进上下文的内容、最近的判定
@@ -36,12 +36,12 @@ const helpZh = () => `mu ${VERSIONS.mu} · 先判断再动手的编程代理，�
   /mu judge <判定器>：由哪些模型来判定、按什么顺序，比如 laya | laya,jev | jev-opencode-free | clm | classifier:<提供商>/<模型> | llm:<提供商>/<模型>
   /mu route <判定点> <判定器|default>：让某一个判定点用自己的判定器，比如 browser.step llm:openai-codex/gpt-5.6-luna
   /mu mode <判定点|default> <off|shadow|active>：off 关闭，shadow 影子（只记录，不起作用），active 生效
-  /frame：查看任务帧，也就是 mu 记住的目标、你的硬约束（原话加出处）和验收条件
+  /frame：查看任务帧，也就是 spec.jev 记住的目标、你的硬约束（原话加出处）和验收条件
   /goal <条件>：让代理一直干到大模型判断条件成立；只输入 /goal 会问你条件（或显示正在进行的目标），
     /goal clear 结束
   /board on|off：为这个项目打开或关闭人话看板，用大白话讲进展、正在做什么、什么在等你；
     /board 查看，/board model 换个模型来讲
-  /permissions [模式]：mu 不问你就能做多少事，可选 full（完全访问）、jev（Jev 审批，由 Jev 替你批，
+  /permissions [模式]：spec.jev 不问你就能做多少事，可选 full（完全访问）、jev（Jev 审批，由 Jev 替你批，
     拿不准才问你）、ask（最小权限，除了读都要问你）
   /capabilities：装了哪些能力，判定器为这次任务打开了哪些
   /ledger [条数]：最近几条判定和用时
@@ -72,7 +72,7 @@ const helpZh = () => `mu ${VERSIONS.mu} · 先判断再动手的编程代理，�
 
 输入时：! 运行一条 shell 命令 · !! 运行但不放进上下文 · @ 附上一个文件`;
 
-const helpEn = () => `mu ${VERSIONS.mu} · a judgment-first coding agent, built on pi ${VERSIONS.pi}
+const helpEn = () => `spec.jev ${VERSIONS.mu} · a judgment-first coding agent, built on pi ${VERSIONS.pi}
 
 Start here
   /status                  show the model, the judge, each decision point's mode, what was kept out of context and recent verdicts
@@ -93,7 +93,7 @@ Judgment kernel
                            for one (or shows the current goal) and /goal clear ends it
   /board on|off            turn the plain-language board on or off for this project: progress, what's happening,
                            what's waiting on you; /board shows it, /board model picks the model that writes it
-  /permissions [mode]      set how much mu can do without asking: full (Full access), jev (Jev approves: allows
+  /permissions [mode]      set how much spec.jev can do without asking: full (Full access), jev (Jev approves: allows
                            what the task clearly needs and asks you about the rest), ask (Ask first: asks before
                            anything but reading)
   /capabilities            show what's installed and what the judge turned on for this task

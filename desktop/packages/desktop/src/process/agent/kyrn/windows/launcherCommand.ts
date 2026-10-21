@@ -245,5 +245,5 @@ export async function ownLauncher(launcher: string, patch: Partial<LauncherDeps>
   }
   const why =
     'fail' in plan ? plan.fail : `${launcher} has spaces and no short name, and no forwarder could be written`;
-  throw new KyrnError('installPath', `mu cannot be started from where it is installed: ${why}`);
+  throw new KyrnError('installPath', `spec.jev cannot be started from where it is installed: ${why}`);
 }

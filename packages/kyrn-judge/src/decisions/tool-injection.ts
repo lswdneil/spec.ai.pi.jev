@@ -35,7 +35,7 @@ export const WITHHELD_NOTE = "[spec.jev withheld ";
  * The note as it stands in a result. The parent of a sub-agent counts it in the child's event stream, and so knows
  * the child read text aimed at an AI; the number after the prefix tells it apart from a source file that quotes it.
  */
-export const WITHHELD_NOTES = /\[mu withheld \d+ characters here:/g;
+export const WITHHELD_NOTES = /\[spec\.jev withheld \d+ characters here:/g;
 
 function injectionQuestion(field: string): Question {
 	return {

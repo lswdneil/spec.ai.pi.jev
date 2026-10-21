@@ -78,7 +78,7 @@ const measure = (line: string): void => {
   if (measuring) console.log(`[measure] ${line}`);
 };
 
-describe.skipIf(skip !== undefined)(`native conversations on a mu checkout${skip ? ` (${skip})` : ''}`, () => {
+describe.skipIf(skip !== undefined)(`native conversations on a spec.jev checkout${skip ? ` (${skip})` : ''}`, () => {
   const { harness, node } = 'skip' in found ? { harness: { root: '' }, node: '' } : found;
   let model: Awaited<ReturnType<typeof startFakeModel>>;
   const registries: NativeConversations[] = [];

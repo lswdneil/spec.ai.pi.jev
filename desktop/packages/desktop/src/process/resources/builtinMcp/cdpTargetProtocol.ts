@@ -88,7 +88,7 @@ export const buildTargetInfo = (title: string, url: string): TargetInfo => ({
 export const buildVersionPayload = (wsUrl: string, chromeVersion: string) => ({
   Browser: `Chrome/${chromeVersion}`,
   'Protocol-Version': '1.3',
-  'User-Agent': `mu in-app browser (Chrome/${chromeVersion})`,
+  'User-Agent': `spec.jev in-app browser (Chrome/${chromeVersion})`,
   'V8-Version': process.versions.v8 ?? '',
   'WebKit-Version': '',
   webSocketDebuggerUrl: wsUrl,

@@ -40,7 +40,7 @@ export type HarnessDeps = {
   resourcesPath: string | undefined;
 };
 
-export const PACKAGE_NAME = 'mu-agent';
+export const PACKAGE_NAME = 'spec.jev';
 
 /** pi's minimum, the same as the harness launcher's. */
 export const MIN_NODE: readonly [number, number] = [22, 19];

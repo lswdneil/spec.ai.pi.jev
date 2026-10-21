@@ -3,14 +3,14 @@ const path = require('path');
 
 /**
  * What the packaged app has to carry of mu (scripts/kyrn/bundle-harness.mjs puts it in resources/harness, which
- * electron-builder copies to <resources>/harness): the npm package mu-agent with the files the app starts and reads,
+ * electron-builder copies to <resources>/harness): the npm package spec.jev with the files the app starts and reads,
  * its dependencies installed, and a record of the platform and arch they were installed for. mu runs from there on
  * the app's own binary as Node, so nothing else provides it on the machine the app runs on.
  */
 const HARNESS_FILES = [
   // The launcher the adapter and the sign-in start.
   'kyrn/bin/mu.mjs',
-  // pi, the judgment layer (judge/dist/kyrn-judge.js up to mu-agent 0.1.8), and `mu auth` (the subscription sign-in).
+  // pi, the judgment layer (judge/dist/kyrn-judge.js up to spec.jev 0.1.8), and `mu auth` (the subscription sign-in).
   'dist/bundle/cli.js',
   ['judge/mu/index.js', 'judge/dist/kyrn-judge.js'],
   'judge/dist/auth.js',
@@ -56,20 +56,20 @@ function verifyBundledHarness({ resourcesDir, electronPlatformName, targetArch }
     checked.push(shown);
     if (!ok) missing.push(shown);
   };
-  const inPackage = (relativePath) => path.join(root, 'mu-agent', ...relativePath.split('/'));
+  const inPackage = (relativePath) => path.join(root, 'spec.jev', ...relativePath.split('/'));
 
   const manifest = readJson(inPackage('package.json'));
-  need('mu-agent/package.json', manifest?.name === 'mu-agent');
+  need('spec.jev/package.json', manifest?.name === 'spec.jev');
   for (const entry of HARNESS_FILES) {
     // A list is one file at the paths it has had: any of them will do.
     const files = [entry].flat();
     need(
-      `mu-agent/${files[0]}`,
+      `spec.jev/${files[0]}`,
       files.some((file) => isFile(inPackage(file)))
     );
   }
   for (const name of Object.keys(manifest?.dependencies ?? {})) {
-    need(`mu-agent/node_modules/${name}/package.json`, isFile(inPackage(`node_modules/${name}/package.json`)));
+    need(`spec.jev/node_modules/${name}/package.json`, isFile(inPackage(`node_modules/${name}/package.json`)));
   }
 
   // The native host (docs/native-host.md) starts pi with two functions of the launcher. A mu without them would not
@@ -78,7 +78,7 @@ function verifyBundledHarness({ resourcesDir, electronPlatformName, targetArch }
   if (launcher !== null) {
     for (const name of NATIVE_HOST_EXPORTS) {
       if (!new RegExp(`export (?:async )?function ${name}\\b`).test(launcher))
-        missing.push(`harness/mu-agent/kyrn/bin/mu.mjs<export:${name}>`);
+        missing.push(`harness/spec.jev/kyrn/bin/mu.mjs<export:${name}>`);
     }
   }
 

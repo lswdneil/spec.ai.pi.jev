@@ -224,7 +224,7 @@ export class NativeHost {
       child = this.fork(this.launch);
     } catch (error) {
       this.finish(
-        new NativeHostError('failed', `The mu host did not start: ${error instanceof Error ? error.message : error}`)
+        new NativeHostError('failed', `The spec.jev host did not start: ${error instanceof Error ? error.message : error}`)
       );
       return;
     }
@@ -351,7 +351,7 @@ export class NativeHost {
       return;
     }
     if (envelope.type === 'failed') {
-      this.failure = `The mu host could not ${envelope.stage === 'import' ? 'load pi' : 'start pi'}: ${envelope.message}`;
+      this.failure = `The spec.jev host could not ${envelope.stage === 'import' ? 'load pi' : 'start pi'}: ${envelope.message}`;
       return;
     }
     let record: unknown;
@@ -432,7 +432,7 @@ export class NativeHost {
         const request = this.pending.get(id);
         if (!request) return;
         this.pending.delete(id);
-        request.reject(new NativeHostError('timeout', `mu did not answer ${request.type} in ${ms} ms`));
+        request.reject(new NativeHostError('timeout', `spec.jev did not answer ${request.type} in ${ms} ms`));
       }, ms)
     );
   }
@@ -481,8 +481,8 @@ export class NativeHost {
       const message =
         this.failure ??
         (this.alive
-          ? `The mu host stopped by itself (exit code ${code ?? 'none'})`
-          : `The mu host stopped before pi started (exit code ${code ?? 'none'})`);
+          ? `The spec.jev host stopped by itself (exit code ${code ?? 'none'})`
+          : `The spec.jev host stopped before pi started (exit code ${code ?? 'none'})`);
       this.finish(new NativeHostError(this.alive ? 'crashed' : 'failed', message, { code, stderr }));
     }
     for (const resolve of this.exitWaiters.splice(0)) resolve();

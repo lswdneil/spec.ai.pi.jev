@@ -135,7 +135,7 @@ describe("test-log admission in a session", () => {
 		}
 		expect(result.text.match(/data-testid="sider-item-7"/g)).toHaveLength(1);
 		expect(result.text).toMatch(
-			/\[mu: omitted \d+ lines: identical to lines \d+-\d+ of the full output, kept above\]/,
+			/\[spec\.jev: omitted \d+ lines: identical to lines \d+-\d+ of the full output, kept above\]/,
 		);
 		expect(result.text).toContain("Command exited with code 1");
 		const archive = /full output: (\S+)\]/.exec(result.text)?.[1] ?? "";

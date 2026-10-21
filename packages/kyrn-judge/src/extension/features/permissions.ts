@@ -265,7 +265,7 @@ export function registerPermissions(runtime: KyrnRuntime, roots: HarnessRoots | 
 		if (!ctx.hasUI) {
 			return {
 				block: true,
-				reason: `mu: this needs the user's permission (${modeLabel(mode)}: ${why}), and there is nobody to ask here. Do not try another way around it; say what you needed.`,
+				reason: `spec.jev: this needs the user's permission (${modeLabel(mode)}: ${why}), and there is nobody to ask here. Do not try another way around it; say what you needed.`,
 			};
 		}
 		const id = `permission-${++asked}`;
@@ -301,7 +301,7 @@ export function registerPermissions(runtime: KyrnRuntime, roots: HarnessRoots | 
 		try {
 			picked = await ctx.ui.select(
 				[
-					say({ zh: `mu 想${KIND_TEXT[need.kind].zh}，需要你授权`, en: `mu wants to ${KIND_TEXT[need.kind].en}` }),
+					say({ zh: `spec.jev 想${KIND_TEXT[need.kind].zh}，需要你授权`, en: `spec.jev wants to ${KIND_TEXT[need.kind].en}` }),
 					need.summary,
 					why,
 				].join("\n"),
@@ -355,7 +355,7 @@ export function registerPermissions(runtime: KyrnRuntime, roots: HarnessRoots | 
 					.catch(() => false);
 				if (allowed) return undefined;
 			}
-			return { block: true, reason: `mu could not check permission for this call: ${problem}` };
+			return { block: true, reason: `spec.jev could not check permission for this call: ${problem}` };
 		}
 	});
 

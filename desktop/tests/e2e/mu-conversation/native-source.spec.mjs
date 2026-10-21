@@ -72,7 +72,7 @@ test.beforeAll(() => {
   const line = `export PATH='${bin}':"$PATH"\n`;
   writeFileSync(join(home, '.zprofile'), line);
   writeFileSync(join(home, '.bash_profile'), line);
-  console.log(`[mu e2e] git for the app: ${GIT} (linked in ${bin})`);
+  console.log(`[spec.jev e2e] git for the app: ${GIT} (linked in ${bin})`);
 });
 
 const tab = (name) => page().locator(`[role="tab"][data-tab="${name}"]`);

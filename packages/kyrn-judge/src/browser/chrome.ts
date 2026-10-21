@@ -240,7 +240,7 @@ export function planBrowserLaunch(input: {
 		cwd = dirname(browser.executable);
 	} else {
 		const base = confinedProfileBase(browser.executable, host);
-		if (base) profileDir = posix.join(base, `mu-${basename(profileDir)}`);
+		if (base) profileDir = posix.join(base, `spec.jev-${basename(profileDir)}`);
 		spelled = profileDir;
 	}
 	const args = [

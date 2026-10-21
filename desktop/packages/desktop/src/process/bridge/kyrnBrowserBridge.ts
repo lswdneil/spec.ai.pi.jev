@@ -96,7 +96,7 @@ async function start(): Promise<void> {
   const home = muHome();
   writeAdvert(home, { url: server.url, pid: process.pid });
   // The port is no secret; the token in the path is, and is never logged.
-  console.log(`[mu browser] offered to the harness on 127.0.0.1:${server.port}`);
+  console.log(`[spec.jev browser] offered to the harness on 127.0.0.1:${server.port}`);
   app.once('will-quit', () => {
     removeAdvert(home, server.url);
     bridge.dispose();

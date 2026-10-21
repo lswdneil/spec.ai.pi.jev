@@ -238,7 +238,7 @@ describe("the app view", () => {
 
 	it("on Windows asks for junctions, copies the two files, refreshes a stale copy and never deletes a folder", () => {
 		const upstream = "C:\\repo\\packages\\coding-agent";
-		const app = "C:\\Users\\bai\\.mu\\app";
+		const app = "C:\\Users\\bai\\.spec.jev\\app";
 		type Node = { kind: "file" | "dir" | "link"; text?: string; mtimeMs: number; target?: string };
 		const nodes = new Map<string, Node>([
 			[`${upstream}\\README.md`, { kind: "file", text: "new readme", mtimeMs: 200 }],
@@ -386,10 +386,10 @@ describe("starting pi", () => {
 		expect(plan.args.join(" ")).not.toMatch(/\.cmd|\.bin/);
 		expect(plan.strategy).toBe("spawn");
 		expect(plan.env).toMatchObject({
-			PI_PACKAGE_DIR: "C:\\Users\\bai\\.mu\\app",
-			MU_CODING_AGENT_DIR: "C:\\Users\\bai\\.mu\\agent",
-			KYRN_CODING_AGENT_DIR: "C:\\Users\\bai\\.mu\\agent",
-			PI_CODING_AGENT_DIR: "C:\\Users\\bai\\.mu\\agent",
+			PI_PACKAGE_DIR: "C:\\Users\\bai\\.spec.jev\\app",
+			MU_CODING_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
+			KYRN_CODING_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
+			PI_CODING_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
 			PI_SKIP_VERSION_CHECK: "1",
 		});
 	});
@@ -485,7 +485,7 @@ describe("pi inside another program (the desktop app's runtime host)", () => {
 			argv: rpc,
 			root: WIN_PACKAGE,
 			home: WIN_HOME,
-			fs: disk({ ...winPackage, "C:\\Users\\bai\\.mu\\.env": "TYPESAFE_API_KEY=from-home\n" }),
+			fs: disk({ ...winPackage, "C:\\Users\\bai\\.spec.jev\\.env": "TYPESAFE_API_KEY=from-home\n" }),
 		};
 		const host = planHost(input);
 		if (host.error !== undefined) throw new Error(host.error);
@@ -495,7 +495,7 @@ describe("pi inside another program (the desktop app's runtime host)", () => {
 			args: ["-e", `${WIN_PACKAGE}\\judge\\mu\\index.js`, "--mode", "rpc"],
 			layout: "package",
 			appDir: WIN_PACKAGE,
-			agentDir: "C:\\Users\\bai\\.mu\\agent",
+			agentDir: "C:\\Users\\bai\\.spec.jev\\agent",
 		});
 		// The command line's pi and the app's are one: the same home, settings, sign-ins and keys.
 		expect(host.env).toEqual(launch({ ...input, execPath: "node.exe" }).env);
@@ -517,7 +517,7 @@ describe("pi inside another program (the desktop app's runtime host)", () => {
 			execArgv: POSIX_NATIVE,
 			args: ["-e", `${POSIX_ROOT}/packages/kyrn-judge/src/extension/kyrn-judge.ts`, "--mode", "rpc"],
 			layout: "repo",
-			appDir: "/home/bai/.mu/app",
+			appDir: "/home/bai/.spec.jev/app",
 		});
 		expect(host.env).toEqual(launch({ argv: rpc }).env);
 	});
@@ -665,7 +665,7 @@ describe("the npm package (spec.jev)", () => {
 		expect(plan.strategy).toBe("spawn");
 		expect(plan.env).toMatchObject({
 			PI_PACKAGE_DIR: WIN_PACKAGE,
-			MU_CODING_AGENT_DIR: "C:\\Users\\bai\\.mu\\agent",
+			MU_CODING_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
 			PI_SKIP_VERSION_CHECK: "1",
 			// pi's install report goes to pi.dev; spec.jev is not a pi install.
 			PI_TELEMETRY: "0",
@@ -679,14 +679,14 @@ describe("the npm package (spec.jev)", () => {
 			env: { PI_TELEMETRY: "1" },
 			fs: disk({
 				...posixPackage,
-				"/home/bai/.mu/.env": "AI_GATEWAY_API_KEY=from-home\n",
+				"/home/bai/.spec.jev/.env": "AI_GATEWAY_API_KEY=from-home\n",
 				[`${POSIX_PACKAGE}/.env`]: "TYPESAFE_API_KEY=beside-the-package\n",
 			}),
 		});
 		expect(plan.env.AI_GATEWAY_API_KEY).toBe("from-home");
 		expect(plan.env.TYPESAFE_API_KEY).toBeUndefined();
 		expect(plan.env.PI_TELEMETRY).toBe("1");
-		expect(envFilePath({ layout: "repo", root: POSIX_ROOT, muDir: "/home/bai/.mu", platform: "linux" })).toBe(
+		expect(envFilePath({ layout: "repo", root: POSIX_ROOT, muDir: "/home/bai/.spec.jev", platform: "linux" })).toBe(
 			`${POSIX_ROOT}/.env`,
 		);
 		// A checkout keeps reporting nothing new: its telemetry is pi's own business, as before.
@@ -720,15 +720,15 @@ describe("the npm package (spec.jev)", () => {
 			fs: disk({
 				...winPackage,
 				[`${WIN_PACKAGE}\\judge\\dist\\auth.js`]: "",
-				"C:\\Users\\bai\\.mu\\.env": "TYPESAFE_API_KEY=x\n",
+				"C:\\Users\\bai\\.spec.jev\\.env": "TYPESAFE_API_KEY=x\n",
 			}),
 		});
 		if (plan.error !== undefined) throw new Error(plan.error);
 		expect(plan.command).toBe("C:\\Program Files\\spec.jev\\mu.exe");
 		expect(plan.args).toEqual([`${WIN_PACKAGE}\\judge\\dist\\auth.js`, "login", "openai-codex"]);
 		expect(plan.strategy).toBe("spawn");
-		expect(plan.env).toEqual({ Path: "C:\\Windows", MU_AGENT_DIR: "C:\\Users\\bai\\.mu\\agent" });
-		expect(plan.agentDir).toBe("C:\\Users\\bai\\.mu\\agent");
+		expect(plan.env).toEqual({ Path: "C:\\Windows", MU_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent" });
+		expect(plan.agentDir).toBe("C:\\Users\\bai\\.spec.jev\\agent");
 		// A package that lost its sign-in says so.
 		const broken = planAuth({
 			platform: "linux",
@@ -842,7 +842,7 @@ describe("the repo-root .env", () => {
 		expect(plan.env.TYPESAFE_API_KEY).toBe("fixture-direct-key");
 		expect(plan.env.AFTER).toBe("from-the-shell");
 		// What the launcher decides is not the file's to change.
-		expect(plan.env.MU_CODING_AGENT_DIR).toBe("/home/bai/.mu/agent");
+		expect(plan.env.MU_CODING_AGENT_DIR).toBe("/home/bai/.spec.jev/agent");
 		expect(plan.notes.join("\n")).toContain("skipped line 11");
 		const said = JSON.stringify([plan.notes, plan.preface, plan.args]);
 		for (const secret of ["fixture-direct-key", "fixture gateway", "secret without a name", "BEGIN"]) {
@@ -855,7 +855,7 @@ describe("the repo-root .env", () => {
 
 describe("the local judge away from macOS", () => {
 	it("is started by the launcher on macOS only", () => {
-		const files = { ...posixInstalled, "/home/bai/.mu/agent/mu.json": '{ "tiers": ["laya", "jev"] }' };
+		const files = { ...posixInstalled, "/home/bai/.spec.jev/agent/mu.json": '{ "tiers": ["laya", "jev"] }' };
 		expect(launch({ platform: "darwin", fs: disk(files) })).toMatchObject({ startJudge: true, notes: [] });
 
 		const linux = launch({ fs: disk(files) });
@@ -873,8 +873,8 @@ describe("the local judge away from macOS", () => {
 		expect(launch({ env: { KYRN_JUDGE: "jev,laya" }, fs: disk(posixInstalled) }).notes).toHaveLength(1);
 		const legacy = {
 			...posixInstalled,
-			"/home/bai/.mu/agent/mu.json": "{}",
-			"/home/bai/.mu/agent/kyrn.json": '{"tiers":["laya"]}',
+			"/home/bai/.spec.jev/agent/mu.json": "{}",
+			"/home/bai/.spec.jev/agent/kyrn.json": '{"tiers":["laya"]}',
 		};
 		expect(launch({ fs: disk(legacy) }).notes).toEqual([]);
 	});
@@ -915,9 +915,9 @@ describe("spec.jev import", () => {
 		expect(checkout).toMatchObject({
 			command: "/usr/bin/node",
 			args: ["--disable-warning=ExperimentalWarning", source, "--list"],
-			agentDir: "/home/bai/.mu/agent",
+			agentDir: "/home/bai/.spec.jev/agent",
 		});
-		expect(checkout.error === undefined && checkout.env.MU_CODING_AGENT_DIR).toBe("/home/bai/.mu/agent");
+		expect(checkout.error === undefined && checkout.env.MU_CODING_AGENT_DIR).toBe("/home/bai/.spec.jev/agent");
 
 		expect(planImport({ ...importArgs, platform: "linux", root: POSIX_ROOT, fs: disk({}) }).error).toContain(
 			"spec.jev import is missing from this checkout",
@@ -929,7 +929,7 @@ describe("spec.jev import", () => {
 		const installed = { [`${pkg}/dist/bundle/cli.js`]: "", [`${pkg}/judge/mu/index.js`]: "" };
 		expect(
 			planImport({ ...importArgs, platform: "linux", root: pkg, fs: disk({ ...installed, [built]: "" }) }),
-		).toMatchObject({ command: "/usr/bin/node", args: [built, "--list"], agentDir: "/home/bai/.mu/agent" });
+		).toMatchObject({ command: "/usr/bin/node", args: [built, "--list"], agentDir: "/home/bai/.spec.jev/agent" });
 		// A package built before spec.jev import says to update, instead of passing `import` to pi as a message.
 		expect(planImport({ ...importArgs, platform: "linux", root: pkg, fs: disk(installed) }).error).toContain(
 			"npm i -g spec.jev",
@@ -1056,7 +1056,7 @@ describe("spec.jev link on Windows", () => {
 	it("links, and says how to put the folder on PATH without touching PATH itself", () => {
 		const plan = link({}, { Path: "C:\\Windows\\System32" });
 		if (plan.action !== "link") throw new Error("expected a link");
-		expect(plan).toMatchObject({ link: `${LINKS}\\mu.cmd`, content: ours, message: `mu -> ${BIN}\\mu.cmd` });
+		expect(plan).toMatchObject({ link: `${LINKS}\\mu.cmd`, content: ours, message: `spec.jev -> ${BIN}\\mu.cmd` });
 		expect(plan.notes.join("\n")).toContain("is not on your PATH yet");
 		expect(plan.notes.join("\n")).toContain('GetEnvironmentVariable("Path", "User")');
 		expect(plan.notes.join("\n")).not.toContain("setx");
@@ -1313,7 +1313,7 @@ describe("the launcher, run for real on this machine", () => {
 		// cmd reads a batch file in the console's code page: the shim names mu.cmd relative to itself, through %~dp0,
 		// which cmd fills in itself.
 		const dir = join(temp(), "白鹤");
-		const bin = join(dir, "code", "mu", "kyrn", "bin");
+		const bin = join(dir, "code", "spec.jev", "kyrn", "bin");
 		const links = join(dir, ".local", "bin");
 		mkdirSync(bin, { recursive: true });
 		mkdirSync(links, { recursive: true });

@@ -64,7 +64,7 @@ function approvalText(definition: McpServerDefinition): string {
 		transport.type === "stdio"
 			? `command: ${[transport.command, ...transport.args].join(" ")}${Object.keys(transport.env).length > 0 ? `\nsets: ${Object.keys(transport.env).join(", ")}` : ""}`
 			: `connects to: ${transport.url}${Object.keys(transport.headers).length > 0 ? `\nsends headers: ${Object.keys(transport.headers).join(", ")}` : ""}`;
-	return `This project defines the MCP server "${definition.name}" in ${definition.source}.\n\n${what}\n\nStarting it runs that on your machine. Allow it only if you trust this repository. mu asks again when the definition changes.`;
+	return `This project defines the MCP server "${definition.name}" in ${definition.source}.\n\n${what}\n\nStarting it runs that on your machine. Allow it only if you trust this repository. spec.jev asks again when the definition changes.`;
 }
 
 /** Short values ("1", "true", "prod") are not secrets, and replacing them would shred the text. */
@@ -195,7 +195,7 @@ export function registerMcp(runtime: KyrnRuntime, roots: HarnessRoots | undefine
 		if (!store.isApproved(ctx.cwd, definition)) {
 			if (!ctx.hasUI) {
 				throw codedError(
-					`it is defined by the project (${definition.source}) and has not been approved. Start mu in this folder interactively and open it once, or define it in mu.json`,
+					`it is defined by the project (${definition.source}) and has not been approved. Start spec.jev in this folder interactively and open it once, or define it in mu.json`,
 					{ code: "needs_approval", params: { source: definition.source } },
 				);
 			}

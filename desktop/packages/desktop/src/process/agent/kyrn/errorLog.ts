@@ -39,10 +39,10 @@ export function describeError(error: unknown): string {
  */
 export function logUncaught(target: NodeJS.Process = process): void {
   target.on('unhandledRejection', (reason) => {
-    log(`[mu] a promise failed and nothing handled it; the adapter goes on: ${describeError(reason)}\n`);
+    log(`[spec.jev] a promise failed and nothing handled it; the adapter goes on: ${describeError(reason)}\n`);
   });
   target.on('uncaughtException', (error) => {
-    log(`[mu] the adapter stops on an error nothing handled: ${describeError(error)}\n`);
+    log(`[spec.jev] the adapter stops on an error nothing handled: ${describeError(error)}\n`);
     target.exit(1);
   });
 }

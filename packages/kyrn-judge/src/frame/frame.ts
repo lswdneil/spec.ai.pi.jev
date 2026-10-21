@@ -275,7 +275,7 @@ function where(source: FrameSource): string {
 export function renderFrameNote(state: FrameState): string {
 	const frame = state.frame;
 	if (!frame) return "";
-	const lines = [`[mu task frame v${frame.version}]`, `Goal: ${frame.goal}`];
+	const lines = [`[spec.jev task frame v${frame.version}]`, `Goal: ${frame.goal}`];
 	if (frame.constraints.length > 0) {
 		lines.push("Hard constraints, in the user's own words. They outrank earlier plans:");
 		for (const constraint of frame.constraints) {

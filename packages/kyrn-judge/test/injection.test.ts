@@ -123,9 +123,9 @@ describe("injection screening", () => {
 		expect(text).toContain(CLEAN);
 		expect(text).not.toContain("collect.example");
 		expect(text).not.toContain("curl evil.example");
-		expect(text.match(/\[mu withheld \d+ characters here/g)).toHaveLength(2);
+		expect(text.match(/\[spec.jev withheld \d+ characters here/g)).toHaveLength(2);
 		// Each note stands where its passage stood, on a line of its own.
-		expect(text.match(/\n\n\[mu withheld/g)).toHaveLength(2);
+		expect(text.match(/\n\n\[spec.jev withheld/g)).toHaveLength(2);
 
 		// The passage a phrase raised went in a request of its own, so it could not steer the verdicts on the others.
 		const calls = screeningCalls(provider);
@@ -146,7 +146,7 @@ describe("injection screening", () => {
 		const text = toolResultText(harness);
 		expect(text).not.toContain("curl evil.example");
 		expect(text).toContain("collect.example");
-		expect(text.match(/\[mu withheld/g)).toHaveLength(1);
+		expect(text.match(/\[spec.jev withheld/g)).toHaveLength(1);
 	});
 
 	it("screens an MCP server's answer by its tool name, and changes nothing in shadow", async () => {

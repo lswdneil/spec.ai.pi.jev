@@ -97,7 +97,7 @@ export const ANTIGRAVITY_LOGIN: GoogleLoginConfig = {
 const ANTIGRAVITY_DEFAULT_PROJECT = "rising-fact-p41fc";
 
 export function riskNotice(config: GoogleLoginConfig): string {
-	return `Experimental: this signs in through ${config.title}'s own login, not one Google made for mu. Google may treat that as against its terms and limit or suspend the account. Use an account you can afford to lose access to, or a Gemini API key (provider "google") instead.`;
+	return `Experimental: this signs in through ${config.title}'s own login, not one Google made for spec.jev. Google may treat that as against its terms and limit or suspend the account. Use an account you can afford to lose access to, or a Gemini API key (provider "google") instead.`;
 }
 
 // ---------------------------------------------------------------------------

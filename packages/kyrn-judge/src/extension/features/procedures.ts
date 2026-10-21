@@ -130,8 +130,8 @@ export function registerProcedures(runtime: KyrnRuntime, roots?: HarnessRoots): 
 			if (!shown?.hasUI) return;
 			shown.ui.notify(
 				say({
-					zh: `mu：把这次的做法起草成了技能「${draft.name}」：${draft.description}\n/skills show ${draft.name} 看全文，/skills accept ${draft.name} 安装，/skills reject ${draft.name} 丢掉。`,
-					en: `mu: drafted the skill "${draft.name}" from this run: ${draft.description}\n/skills show ${draft.name} to read it, /skills accept ${draft.name} to install it, /skills reject ${draft.name} to discard it.`,
+					zh: `spec.jev：把这次的做法起草成了技能「${draft.name}」：${draft.description}\n/skills show ${draft.name} 看全文，/skills accept ${draft.name} 安装，/skills reject ${draft.name} 丢掉。`,
+					en: `spec.jev: drafted the skill "${draft.name}" from this run: ${draft.description}\n/skills show ${draft.name} to read it, /skills accept ${draft.name} to install it, /skills reject ${draft.name} to discard it.`,
 				}),
 				"info",
 			);

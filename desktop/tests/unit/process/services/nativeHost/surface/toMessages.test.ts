@@ -39,7 +39,7 @@ const rows = (view: NativeView, extra: Partial<MessageOptions> = {}): TMessage[]
 function brief(row: TMessage): string {
   switch (row.type) {
     case 'text':
-      return `${row.position === 'right' ? 'person' : 'mu'}: ${row.content.content}`;
+      return `${row.position === 'right' ? 'person' : 'spec.jev'}: ${row.content.content}`;
     case 'thinking':
       return `thinking (${row.content.status}): ${row.content.content}`;
     case 'tips':
@@ -72,7 +72,7 @@ describe('the recorded conversation', () => {
     expect(list.map(brief)).toEqual([
       'person: E2E:PLAIN',
       'jev: classified',
-      `mu: ${PLAIN_TEXT}`,
+      `spec.jev: ${PLAIN_TEXT}`,
       'person: E2E:WRITE notes/hello.txt',
       'jev: fallback',
       'call write completed: Successfully wrote to notes/hello.txt',

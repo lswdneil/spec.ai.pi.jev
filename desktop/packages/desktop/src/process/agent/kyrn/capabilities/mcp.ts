@@ -333,7 +333,7 @@ export function addMcpServer(roots: McpRoots, input: McpServerInput): MuMcpServe
   const clash = listMcpServers(roots).servers.find(
     (server) => server.source === 'mu' && namespace(server.name) === namespace(name)
   );
-  if (clash) throw new KyrnError('mcpExists', `mu already has an MCP server named ${clash.name}`, { name: clash.name });
+  if (clash) throw new KyrnError('mcpExists', `spec.jev already has an MCP server named ${clash.name}`, { name: clash.name });
   const file = mcpFile(roots);
   edit(file, (document) => {
     const entries = piEntries(document, file);

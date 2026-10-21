@@ -128,7 +128,7 @@ async function converse(harness, world) {
       fs: launcherFs(harness.root),
       note: (line) => console.error(`launcher: ${line}`),
     });
-    host = new NativeHost({ launch, fork: forkWithNode(entry), log: (line) => console.error(`mu: ${line}`) });
+    host = new NativeHost({ launch, fork: forkWithNode(entry), log: (line) => console.error(`spec.jev: ${line}`) });
     host.subscribe((each) => records.push(each));
     host.start();
     const state = await host.request({ type: 'get_state' });

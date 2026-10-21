@@ -260,19 +260,19 @@ async function applyBuiltinOverrides(overrides: BuiltinOverride[]): Promise<numb
       const reason = r.reason;
       if (isBackendHttpError(reason) && reason.status === 404) {
         skipped += 1;
-        console.warn(`[mu] Skipped override for retired built-in '${overrides[i].id}' (no longer in backend manifest)`);
+        console.warn(`[spec.jev] Skipped override for retired built-in '${overrides[i].id}' (no longer in backend manifest)`);
         return;
       }
       failed += 1;
-      console.error(`[mu] Failed to apply builtin override for ${overrides[i].id}:`, reason);
+      console.error(`[spec.jev] Failed to apply builtin override for ${overrides[i].id}:`, reason);
     }
   });
   const applied = overrides.length - failed - skipped;
   if (failed === 0) {
-    console.log(`[mu] Applied ${applied} builtin disabled-state override(s) (skipped ${skipped} retired id(s))`);
+    console.log(`[spec.jev] Applied ${applied} builtin disabled-state override(s) (skipped ${skipped} retired id(s))`);
   } else {
     console.error(
-      `[mu] Builtin override partial: ${failed}/${overrides.length} failed, ${skipped} skipped, ${applied} applied`
+      `[spec.jev] Builtin override partial: ${failed}/${overrides.length} failed, ${skipped} skipped, ${applied} applied`
     );
   }
   return failed;
@@ -352,20 +352,20 @@ async function applyBuiltinAgentIdOverrides(overrides: BuiltinAgentIdOverride[])
       if (isBackendHttpError(reason) && reason.status === 404) {
         skipped += 1;
         console.warn(
-          `[mu] Skipped agent_id override for retired built-in '${overrides[i].id}' (no longer in backend manifest)`
+          `[spec.jev] Skipped agent_id override for retired built-in '${overrides[i].id}' (no longer in backend manifest)`
         );
         return;
       }
       failed += 1;
-      console.error(`[mu] Failed to apply agent_id override for ${overrides[i].id}:`, reason);
+      console.error(`[spec.jev] Failed to apply agent_id override for ${overrides[i].id}:`, reason);
     }
   });
   const applied = overrides.length - failed - skipped;
   if (failed === 0) {
-    console.log(`[mu] Applied ${applied} builtin agent_id override(s) (skipped ${skipped} retired id(s))`);
+    console.log(`[spec.jev] Applied ${applied} builtin agent_id override(s) (skipped ${skipped} retired id(s))`);
   } else {
     console.error(
-      `[mu] Builtin agent_id override partial: ${failed}/${overrides.length} failed, ${skipped} skipped, ${applied} applied`
+      `[spec.jev] Builtin agent_id override partial: ${failed}/${overrides.length} failed, ${skipped} skipped, ${applied} applied`
     );
   }
   return failed;
@@ -499,7 +499,7 @@ async function uploadLegacyAssistantRules(legacyAssistantIds: Set<string>): Prom
     if (r.status === 'rejected') {
       failed += 1;
       console.error(
-        `[mu] Failed to upload legacy rule for '${ruleEntries[i].id}' (${ruleEntries[i].locale}):`,
+        `[spec.jev] Failed to upload legacy rule for '${ruleEntries[i].id}' (${ruleEntries[i].locale}):`,
         r.reason
       );
       return;
@@ -509,10 +509,10 @@ async function uploadLegacyAssistantRules(legacyAssistantIds: Set<string>): Prom
   });
   if (failed === 0) {
     if (uploaded > 0 || skipped > 0) {
-      console.log(`[mu] Legacy rule upload: ${uploaded} uploaded, ${skipped} skipped`);
+      console.log(`[spec.jev] Legacy rule upload: ${uploaded} uploaded, ${skipped} skipped`);
     }
   } else {
-    console.error(`[mu] Legacy rule upload partial: ${failed}/${ruleEntries.length} failed`);
+    console.error(`[spec.jev] Legacy rule upload partial: ${failed}/${ruleEntries.length} failed`);
   }
   return failed;
 }
@@ -619,11 +619,11 @@ export async function migrateAssistantsToBackend(configFile: ConfigFile): Promis
         assistants: userAssistants.map((assistant) => legacyAssistantToCreateRequest(assistant, agentIdByRuntimeKey)),
       });
       if (result.failed !== 0) {
-        console.error(`[mu] Assistant migration partial: ${result.failed} failed`, result.errors);
+        console.error(`[spec.jev] Assistant migration partial: ${result.failed} failed`, result.errors);
         return false;
       }
       if (result.imported > 0 || result.skipped > 0) {
-        console.log(`[mu] migrated ${result.imported} assistants (skipped ${result.skipped})`);
+        console.log(`[spec.jev] migrated ${result.imported} assistants (skipped ${result.skipped})`);
       }
     } catch (error) {
       console.error('[spec.jev] Assistant migration failed:', error);

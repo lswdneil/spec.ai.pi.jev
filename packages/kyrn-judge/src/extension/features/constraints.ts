@@ -65,7 +65,7 @@ export function registerConstraints(runtime: KyrnRuntime): void {
 			runtime.present("constraint.blocked", { toolName: event.toolName, constraints: broken });
 			return {
 				block: true,
-				reason: `mu: this call goes against what the user said: ${broken.map((text) => `"${clip(text, 200)}"`).join("; ")}. Do it another way, or ask the user whether the instruction still holds.`,
+				reason: `spec.jev: this call goes against what the user said: ${broken.map((text) => `"${clip(text, 200)}"`).join("; ")}. Do it another way, or ask the user whether the instruction still holds.`,
 			};
 		}),
 	);

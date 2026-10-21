@@ -193,7 +193,7 @@ export function registerInherit(runtime: KyrnRuntime, roots: HarnessRoots | unde
 					rule.content.length > options.maxRuleChars
 						? `${rule.content.slice(0, options.maxRuleChars)}\n[cut here; the whole rule: ${rule.path}]`
 						: rule.content;
-				return `[mu: a project rule applies to files like this one (${ruleLabel(rule)}, for ${rule.globs.join(", ")}). Follow it for the rest of the session.]\n${body}`;
+				return `[spec.jev: a project rule applies to files like this one (${ruleLabel(rule)}, for ${rule.globs.join(", ")}). Follow it for the rest of the session.]\n${body}`;
 			});
 			return { content: [...event.content, { type: "text" as const, text: notes.join("\n\n") }] };
 		}),

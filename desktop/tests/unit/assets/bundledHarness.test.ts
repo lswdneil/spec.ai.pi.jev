@@ -29,15 +29,15 @@ function writeFile(filePath: string, content = '') {
 
 /** resources/harness as scripts/kyrn/bundle-harness.mjs leaves it. */
 function seedHarness(resourcesDir: string, { platform = 'darwin', arch = 'arm64', version = '0.1.1' } = {}) {
-  const pkg = join(resourcesDir, 'harness', 'mu-agent');
-  writeFile(join(pkg, 'package.json'), JSON.stringify({ name: 'mu-agent', version, dependencies: DEPENDENCIES }));
+  const pkg = join(resourcesDir, 'harness', 'spec.jev');
+  writeFile(join(pkg, 'package.json'), JSON.stringify({ name: 'spec.jev', version, dependencies: DEPENDENCIES }));
   for (const file of PACKAGE_FILES)
     writeFile(join(pkg, ...file.split('/')), file === 'kyrn/bin/mu.mjs' ? LAUNCHER : '');
   for (const name of Object.keys(DEPENDENCIES))
     writeFile(join(pkg, 'node_modules', ...name.split('/'), 'package.json'));
   writeFile(
     join(resourcesDir, 'harness', 'bundle.json'),
-    JSON.stringify({ name: 'mu-agent', version, platform, arch })
+    JSON.stringify({ name: 'spec.jev', version, platform, arch })
   );
   return pkg;
 }
@@ -104,8 +104,8 @@ describe('verifyBundledHarness', () => {
     const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'darwin', targetArch: 'arm64' });
     expect(result.missing).toEqual([]);
     expect(result.version).toBe('0.1.1');
-    expect(result.checked).toContain('harness/mu-agent/judge/dist/auth.js');
-    expect(result.checked).toContain('harness/mu-agent/node_modules/@earendil-works/chord/package.json');
+    expect(result.checked).toContain('harness/spec.jev/judge/dist/auth.js');
+    expect(result.checked).toContain('harness/spec.jev/node_modules/@earendil-works/chord/package.json');
   });
 
   it('takes the judgment layer where spec.jev 0.1.8 and earlier put it, and names its current place when it is missing', () => {
@@ -116,7 +116,7 @@ describe('verifyBundledHarness', () => {
     expect(verify().missing).toEqual([]);
 
     rmSync(join(pkg, 'judge', 'dist', 'kyrn-judge.js'));
-    expect(verify().missing).toEqual(['harness/mu-agent/judge/mu/index.js']);
+    expect(verify().missing).toEqual(['harness/spec.jev/judge/mu/index.js']);
   });
 
   it('names every file the app would miss', () => {
@@ -125,8 +125,8 @@ describe('verifyBundledHarness', () => {
     rmSync(join(pkg, 'node_modules', 'jiti'), { recursive: true });
     const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'darwin', targetArch: 'arm64' });
     expect(result.missing).toEqual([
-      'harness/mu-agent/judge/dist/auth.js',
-      'harness/mu-agent/node_modules/jiti/package.json',
+      'harness/spec.jev/judge/dist/auth.js',
+      'harness/spec.jev/node_modules/jiti/package.json',
     ]);
   });
 
@@ -139,15 +139,15 @@ describe('verifyBundledHarness', () => {
     );
     const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'darwin', targetArch: 'arm64' });
     expect(result.missing).toEqual([
-      'harness/mu-agent/kyrn/bin/mu.mjs<export:planHost>',
-      'harness/mu-agent/kyrn/bin/mu.mjs<export:prepareLaunch>',
+      'harness/spec.jev/kyrn/bin/mu.mjs<export:planHost>',
+      'harness/spec.jev/kyrn/bin/mu.mjs<export:prepareLaunch>',
     ]);
   });
 
   it('fails without spec.jev at all', () => {
     const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'win32', targetArch: 'x64' });
-    expect(result.missing).toContain('harness/mu-agent/package.json');
-    expect(result.missing).toContain('harness/mu-agent/kyrn/bin/mu.mjs');
+    expect(result.missing).toContain('harness/spec.jev/package.json');
+    expect(result.missing).toContain('harness/spec.jev/kyrn/bin/mu.mjs');
     expect(result.missing).toContain('harness/bundle.json');
   });
 
@@ -155,7 +155,7 @@ describe('verifyBundledHarness', () => {
     seedHarness(resourcesDir, { platform: 'darwin', arch: 'arm64' });
     writeFile(
       join(resourcesDir, 'harness', 'bundle.json'),
-      JSON.stringify({ name: 'mu-agent', version: '0.1.0', platform: 'darwin', arch: 'arm64' })
+      JSON.stringify({ name: 'spec.jev', version: '0.1.0', platform: 'darwin', arch: 'arm64' })
     );
     const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'win32', targetArch: 'x64' });
     expect(result.missing).toEqual([
@@ -218,7 +218,7 @@ describe('bundle-harness', () => {
 
   it('puts the given tarball in resources/harness, installs for the target, and checks the result', () => {
     const files: Record<string, string> = {
-      'package/package.json': JSON.stringify({ name: 'mu-agent', version: '0.1.1', dependencies: DEPENDENCIES }),
+      'package/package.json': JSON.stringify({ name: 'spec.jev', version: '0.1.1', dependencies: DEPENDENCIES }),
     };
     for (const file of PACKAGE_FILES) files[`package/${file}`] = file === 'kyrn/bin/mu.mjs' ? LAUNCHER : '';
     tarball(join(tmp, 'mu-agent-0.1.1.tgz'), files);
@@ -230,7 +230,7 @@ describe('bundle-harness', () => {
       return '';
     };
     // What a build before left is replaced.
-    writeFile(join(tmp, 'resources', 'harness', 'mu-agent', 'stale.js'));
+    writeFile(join(tmp, 'resources', 'harness', 'spec.jev', 'stale.js'));
     const result = bundleHarness({
       root: tmp,
       platform: 'linux',
@@ -240,14 +240,14 @@ describe('bundle-harness', () => {
       log: () => {},
     });
     expect(result.version).toBe('0.1.1');
-    expect(calls).toEqual([{ args: installArgs('linux', 'x64'), cwd: join(tmp, 'resources', 'harness', 'mu-agent') }]);
+    expect(calls).toEqual([{ args: installArgs('linux', 'x64'), cwd: join(tmp, 'resources', 'harness', 'spec.jev') }]);
     expect(JSON.parse(readFileSync(join(tmp, 'resources', 'harness', 'bundle.json'), 'utf8'))).toEqual({
-      name: 'mu-agent',
+      name: 'spec.jev',
       version: '0.1.1',
       platform: 'linux',
       arch: 'x64',
     });
-    expect(existsSync(join(tmp, 'resources', 'harness', 'mu-agent', 'stale.js'))).toBe(false);
+    expect(existsSync(join(tmp, 'resources', 'harness', 'spec.jev', 'stale.js'))).toBe(false);
   });
 
   it('says what to do when the pinned version cannot be fetched', () => {

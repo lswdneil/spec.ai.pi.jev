@@ -256,9 +256,9 @@ describe("what needs permission", () => {
 	it("leaves spec.jev's own settings to the user, however a command spells the folder", () => {
 		// A home as this machine writes one: /home/me, or <drive>:\home\me on Windows.
 		const home = resolve("/home/me");
-		const agentDir = join(home, ".mu", "agent");
+		const agentDir = join(home, ".spec.jev", "agent");
 		const protectedPaths = protectedSpellings(agentDir, home, process.platform);
-		expect(permissionNeed("write", { path: join(agentDir, "mu.json") }, cwd, protectedPaths)).toMatchObject({
+		expect(permissionNeed("write", { path: join(agentDir, "spec.jev.json") }, cwd, protectedPaths)).toMatchObject({
 			protected: agentDir,
 		});
 		const command = permissionNeed(
@@ -267,18 +267,18 @@ describe("what needs permission", () => {
 			cwd,
 			protectedPaths,
 		);
-		expect(command).toMatchObject({ protected: "~/.mu/agent" });
+		expect(command).toMatchObject({ protected: "~/.spec.jev/agent" });
 		expect(command?.grant).toBeUndefined();
 	});
 
 	it("leaves spec.jev's own settings to the user on Windows too: either slash, from the home, in any case", () => {
-		const protectedPaths = protectedSpellings("C:\\Users\\Me\\.mu\\agent", "C:\\Users\\Me", "win32");
+		const protectedPaths = protectedSpellings("C:\\Users\\Me\\.spec.jev\\agent", "C:\\Users\\Me", "win32");
 		for (const command of [
 			"echo {} > C:\\Users\\Me\\.spec.jev\\agent\\spec.jev\\permissions.json",
-			"echo {} > c:/users/me/.mu/agent/mu/permissions.json",
+			"echo {} > c:/users/me/.spec.jev/agent/mu/permissions.json",
 			"echo {} > ~/.spec.jev/agent/mu/permissions.json",
-			"echo {} > $HOME/.mu/agent/mu.json",
-			"echo {} > /c/Users/Me/.mu/agent/mu.json",
+			"echo {} > $HOME/.spec.jev/agent/mu.json",
+			"echo {} > /c/Users/Me/.spec.jev/agent/mu.json",
 			"Set-Content $env:USERPROFILE\\.spec.jev\\agent\\mu.json '{}'",
 			"type nul > %USERPROFILE%\\.spec.jev\\agent\\mu.json",
 		]) {

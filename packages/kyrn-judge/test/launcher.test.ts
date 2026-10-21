@@ -116,7 +116,7 @@ describe("the spec.jev launcher", () => {
 		"rebuilds an app view that still carries the old name, keeping pi's package name",
 		() => {
 			const dir = home();
-			const app = join(dir, ".mu/app");
+			const app = join(dir, ".spec.jev/app");
 			mkdirSync(app, { recursive: true });
 			const stale = { name: "@earendil-works/pi-coding-agent", piConfig: { name: "kyrn", configDir: ".kyrn" } };
 			writeFileSync(join(app, "package.json"), JSON.stringify(stale));
@@ -127,9 +127,9 @@ describe("the spec.jev launcher", () => {
 
 			expect(version.code).toBe(0);
 			const rebuilt = JSON.parse(readFileSync(join(app, "package.json"), "utf8"));
-			expect(rebuilt.piConfig).toEqual({ name: "mu", configDir: ".mu" });
+			expect(rebuilt.piConfig).toEqual({ name: "mu", configDir: ".spec.jev" });
 			expect(rebuilt.name).toBe("@earendil-works/pi-coding-agent");
-			expect(existsSync(join(dir, ".mu/agent"))).toBe(true);
+			expect(existsSync(join(dir, ".spec.jev/agent"))).toBe(true);
 		},
 		60_000,
 	);
@@ -142,7 +142,7 @@ describe("the spec.jev launcher", () => {
 
 			expect(run("mu", ["--version"], { HOME: dir }).code).toBe(0);
 
-			expect(existsSync(join(dir, ".mu"))).toBe(false);
+			expect(existsSync(join(dir, ".spec.jev"))).toBe(false);
 			expect(JSON.parse(readFileSync(join(dir, ".kyrn/app/package.json"), "utf8")).piConfig.name).toBe("mu");
 		},
 		60_000,
@@ -221,21 +221,21 @@ describe("spec.jev migrate", () => {
 		const moved = run("mu", ["migrate"], processes(dir, "nothing-is-running"));
 
 		expect(moved.code).toBe(0);
-		expect(isLink(join(dir, ".mu"))).toBe(false);
+		expect(isLink(join(dir, ".spec.jev"))).toBe(false);
 		expect(isLink(join(dir, ".kyrn"))).toBe(true);
 		// A junction on Windows, whose target comes back with a trailing backslash.
 		const target = readlinkSync(join(dir, ".kyrn"));
-		expect(windows ? resolve(target) : target).toBe(join(dir, ".mu"));
-		expect(JSON.parse(readFileSync(join(dir, ".mu/agent/mu.json"), "utf8"))).toEqual({ tiers: ["old"] });
-		expect(existsSync(join(dir, ".mu/agent/kyrn.json"))).toBe(false);
-		expect(readFileSync(join(dir, ".mu/agent/auth.json"), "utf8")).toBe("stand-in-login");
+		expect(windows ? resolve(target) : target).toBe(join(dir, ".spec.jev"));
+		expect(JSON.parse(readFileSync(join(dir, ".spec.jev/agent/mu.json"), "utf8"))).toEqual({ tiers: ["old"] });
+		expect(existsSync(join(dir, ".spec.jev/agent/kyrn.json"))).toBe(false);
+		expect(readFileSync(join(dir, ".spec.jev/agent/auth.json"), "utf8")).toBe("stand-in-login");
 		// Windows has no mode bits to keep.
-		if (!windows) expect(statSync(join(dir, ".mu/agent/auth.json")).mode & 0o777).toBe(0o600);
+		if (!windows) expect(statSync(join(dir, ".spec.jev/agent/auth.json")).mode & 0o777).toBe(0o600);
 		expect(moved.out).not.toContain("stand-in-login");
 		// The desktop's session mappings store absolute paths into the old home.
 		expect(existsSync(join(dir, ".kyrn/acp-sessions/a.json"))).toBe(true);
 
-		const again = run("mu", ["migrate"], processes(join(dir, ".mu"), "nothing-is-running"));
+		const again = run("mu", ["migrate"], processes(join(dir, ".spec.jev"), "nothing-is-running"));
 		expect(again.code).toBe(0);
 		expect(again.out).toContain("Nothing to move");
 		expect(run("mu", ["migrate"], { HOME: dir }).out).toContain("Already moved");
@@ -249,14 +249,14 @@ describe("spec.jev migrate", () => {
 		expect(dry.code).toBe(0);
 		expect(dry.out).toContain("Nothing was changed");
 		expect(isLink(join(dir, ".kyrn"))).toBe(false);
-		expect(existsSync(join(dir, ".mu"))).toBe(false);
+		expect(existsSync(join(dir, ".spec.jev"))).toBe(false);
 		expect(existsSync(join(dir, ".kyrn/agent/kyrn.json"))).toBe(true);
 	});
 
 	it("never merges into or overwrites a ~/.spec.jev that is already there", () => {
 		const dir = oldHome();
-		mkdirSync(join(dir, ".mu/agent"), { recursive: true });
-		writeFileSync(join(dir, ".mu/agent/mu.json"), JSON.stringify({ tiers: ["new"] }));
+		mkdirSync(join(dir, ".spec.jev/agent"), { recursive: true });
+		writeFileSync(join(dir, ".spec.jev/agent/mu.json"), JSON.stringify({ tiers: ["new"] }));
 
 		const refused = run("mu", ["migrate"], processes(dir, "nothing-is-running"));
 
@@ -264,7 +264,7 @@ describe("spec.jev migrate", () => {
 		expect(refused.out).toContain("already exists");
 		expect(isLink(join(dir, ".kyrn"))).toBe(false);
 		expect(JSON.parse(readFileSync(join(dir, ".kyrn/agent/kyrn.json"), "utf8"))).toEqual({ tiers: ["old"] });
-		expect(JSON.parse(readFileSync(join(dir, ".mu/agent/mu.json"), "utf8"))).toEqual({ tiers: ["new"] });
+		expect(JSON.parse(readFileSync(join(dir, ".spec.jev/agent/mu.json"), "utf8"))).toEqual({ tiers: ["new"] });
 	});
 
 	it.each([
@@ -283,7 +283,7 @@ describe("spec.jev migrate", () => {
 		expect(refused.out).toContain("Nothing was moved");
 		expect(refused.out).toContain(names);
 		expect(isLink(join(dir, ".kyrn"))).toBe(false);
-		expect(existsSync(join(dir, ".mu"))).toBe(false);
+		expect(existsSync(join(dir, ".spec.jev"))).toBe(false);
 	});
 
 	it("sees a session that really runs, in the machine's own list of processes", async () => {

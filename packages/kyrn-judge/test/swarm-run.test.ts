@@ -613,7 +613,7 @@ describe("swarm run", () => {
 			}),
 		);
 		expect(web.state.withheld).toBe(2);
-		expect(web.report).toMatch(/^\(Warning: this sub-agent read outside text in which mu withheld 2 passages/);
+		expect(web.report).toMatch(/^\(Warning: this sub-agent read outside text in which spec.jev withheld 2 passages/);
 		expect(web.report).toContain("FOUND: the parser crashes on empty input.");
 		expect(code.state.withheld).toBe(0);
 		expect(code.report).toBe("FOUND: src/parser.ts:41 throws on empty input.");

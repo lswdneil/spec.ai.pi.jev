@@ -31,7 +31,7 @@ type Home = McpRoots & {
 function home(): Home {
   const dir = mkdtempSync(join(tmpdir(), 'mu-mcp-'));
   dirs.push(dir);
-  const agentDir = join(dir, '.mu', 'agent');
+  const agentDir = join(dir, '.spec.jev', 'agent');
   mkdirSync(agentDir, { recursive: true });
   const write = (path: string, value: unknown) => {
     mkdirSync(join(path, '..'), { recursive: true });

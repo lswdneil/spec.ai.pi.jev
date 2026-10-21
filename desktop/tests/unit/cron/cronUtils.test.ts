@@ -67,7 +67,7 @@ describe('cronUtils', () => {
     // The previous hardcoded DD-MM-YY read as the wrong date in month-first
     // locales; the date part now follows the app language.
     expect(formatCronRunConversationTitle('Daily report', runAt, 'en-US')).toBe('Daily report 07/01/26');
-    expect(formatCronRunConversationTitle('Daily report', runAt, 'de-DE')).toBe('Daily report 01.07.26');
+    expect(formatCronRunConversationTitle('Daily report', runAt, 'zh-CN')).toBe('Daily report 26/07/01');
     // No language falls back to the default (en-US), never the host locale.
     expect(formatCronRunConversationTitle('Daily report', runAt)).toBe('Daily report 07/01/26');
   });

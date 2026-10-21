@@ -231,8 +231,8 @@ describe('the words of the work panel', () => {
     readFileSync(path.join(REPO_ROOT, 'packages/desktop/src/common/config/i18n-config.json'), 'utf8')
   ) as { supportedLanguages: string[] };
 
-  it('has every tab, label and line in all 13 languages', () => {
-    expect(config.supportedLanguages).toHaveLength(13);
+  it('has every tab, label and line in all 5 languages', () => {
+    expect(config.supportedLanguages).toHaveLength(5);
     for (const language of config.supportedLanguages) {
       const common = JSON.parse(
         readFileSync(

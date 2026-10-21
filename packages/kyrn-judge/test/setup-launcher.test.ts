@@ -69,7 +69,7 @@ const WIN_PACKAGE = "C:\\Users\\bai\\AppData\\Roaming\\npm\\node_modules\\mu-age
 const WIN_HOME = "C:\\Users\\bai";
 const winPackage = {
 	[`${WIN_PACKAGE}\\dist\\bundle\\cli.js`]: "",
-	[`${WIN_PACKAGE}\\judge\\mu\\index.js`]: "",
+	[`${WIN_PACKAGE}\\judge\\spec.jev\\index.js`]: "",
 };
 
 const setupArgs = { env: {}, home: "/home/bai", execPath: "/usr/bin/node" };
@@ -92,16 +92,16 @@ describe("spec.jev setup, as the launcher starts it", () => {
 		expect(plan.args.join(" ")).not.toContain(KEY);
 		expect(plan.keyGiven).toBe(true);
 		expect(plan.strategy).toBe("spawn");
-		expect(plan.agentDir).toBe("/home/bai/.mu/agent");
+		expect(plan.agentDir).toBe("/home/bai/.spec.jev/agent");
 		expect(plan.env).toEqual({
 			PATH: "/usr/bin",
 			LANG: "zh_CN.UTF-8",
 			MU_SETUP_KEY: KEY,
-			MU_AGENT_DIR: "/home/bai/.mu/agent",
-			MU_CODING_AGENT_DIR: "/home/bai/.mu/agent",
-			KYRN_CODING_AGENT_DIR: "/home/bai/.mu/agent",
-			PI_CODING_AGENT_DIR: "/home/bai/.mu/agent",
-			MU_SETUP_HOME: "/home/bai/.mu",
+			MU_AGENT_DIR: "/home/bai/.spec.jev/agent",
+			MU_CODING_AGENT_DIR: "/home/bai/.spec.jev/agent",
+			KYRN_CODING_AGENT_DIR: "/home/bai/.spec.jev/agent",
+			PI_CODING_AGENT_DIR: "/home/bai/.spec.jev/agent",
+			MU_SETUP_HOME: "/home/bai/.spec.jev",
 			// A checkout's session reads the .env at its root: the Jev key goes there.
 			MU_SETUP_ENV_FILE: `${POSIX_ROOT}/.env`,
 		});
@@ -142,9 +142,9 @@ describe("spec.jev setup, as the launcher starts it", () => {
 		expect(plan.args).toEqual([built]);
 		expect(plan.env).toMatchObject({
 			MU_SETUP_KEY: KEY,
-			MU_AGENT_DIR: "C:\\Users\\bai\\.mu\\agent",
-			MU_SETUP_HOME: "C:\\Users\\bai\\.mu",
-			MU_SETUP_ENV_FILE: "C:\\Users\\bai\\.mu\\.env",
+			MU_AGENT_DIR: "C:\\Users\\bai\\.spec.jev\\agent",
+			MU_SETUP_HOME: "C:\\Users\\bai\\.spec.jev",
+			MU_SETUP_ENV_FILE: "C:\\Users\\bai\\.spec.jev\\.env",
 		});
 		// A package built before spec.jev setup says to update, instead of passing `setup` to pi as a message.
 		const old = planSetup({
@@ -195,12 +195,13 @@ describe("spec.jev setup, as the launcher starts it", () => {
 		expect(SETUP_EXIT_START).toBe(SETUP_EXIT.start);
 		expect(SETUP_EXIT_CANCELLED).toBe(SETUP_EXIT.cancelled);
 		expect([...SETUP_VALUE_FLAGS]).toEqual([...WIZARD_VALUE_FLAGS]);
-		expect(usage("linux")).toContain("spec.jev setup                 connect a model");
+		expect(usage("linux")).toContain("spec.jev setup");
+		expect(usage("linux")).toContain("connect a model");
 	});
 });
 
 describe("the first start", () => {
-	const agentDir = "/home/bai/.mu/agent";
+	const agentDir = "/home/bai/.spec.jev/agent";
 	const first = (overrides: Partial<Parameters<typeof planFirstRun>[0]> = {}, files: Record<string, string> = {}) =>
 		planFirstRun({
 			platform: "linux",
@@ -303,7 +304,7 @@ describe("the first start", () => {
 	});
 
 	it("reads Windows paths on Windows", () => {
-		const winAgent = "C:\\Users\\bai\\.mu\\agent";
+		const winAgent = "C:\\Users\\bai\\.spec.jev\\agent";
 		const files = { [`${winAgent}\\auth.json`]: '{"openai":{}}' };
 		expect(
 			planFirstRun({ platform: "win32", env: {}, argv: [], interactive: true, agentDir: winAgent, fs: disk(files) }),
@@ -389,7 +390,7 @@ describe("spec.jev setup, run for real on this machine", () => {
 					{ url: "/models", authorization: `Bearer ${key}` },
 					{ url: "/v1/models", authorization: `Bearer ${key}` },
 				]);
-				const agent = join(home, ".mu", "agent");
+				const agent = join(home, ".spec.jev", "agent");
 				const provider = `local-${port}`;
 				expect(JSON.parse(readFileSync(join(agent, "auth.json"), "utf8"))).toEqual({
 					[provider]: { type: "api_key", key },

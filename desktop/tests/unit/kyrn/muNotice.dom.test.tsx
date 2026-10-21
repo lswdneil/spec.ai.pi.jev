@@ -65,7 +65,7 @@ describe('the bridge’s notices', () => {
       Object.keys(MU_NOTICES).toSorted()
     );
     const languages = readdirSync(LOCALES).filter((name) => /^[a-z]{2}-[A-Z]{2}$/.test(name));
-    expect(languages).toHaveLength(13);
+    expect(languages).toHaveLength(5);
     for (const language of languages) {
       const mu = JSON.parse(readFileSync(join(LOCALES, language, 'mu.json'), 'utf8')) as Record<string, unknown>;
       const sentence = (key: string): unknown =>

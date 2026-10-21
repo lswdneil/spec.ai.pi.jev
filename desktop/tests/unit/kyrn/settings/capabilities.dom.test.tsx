@@ -74,7 +74,7 @@ const ok = <T,>(data: T): KyrnResult<T> => ({ ok: true, data });
 const failed = (code: string, params: Record<string, unknown> = {}) => ({ ok: false, error: 'raw', code, params });
 const draw = (page: React.ReactElement) => render(<I18nextProvider i18n={i18n}>{page}</I18nextProvider>);
 
-const FOLDER = '/home/me/.mu/agent/skills';
+const FOLDER = '/home/me/.spec.jev/agent/skills';
 const skill = (name: string, source: MuSkill['source'], file = `${FOLDER}/${name}/SKILL.md`): MuSkill => ({
   name,
   description: `What ${name} does.`,
@@ -162,7 +162,7 @@ describe('spec.jev’s skills while spec.jev runs inside the app', () => {
 
     bridge.skillAdd.mockResolvedValue(failed('skillExists', { name: 'review' }));
     fireEvent.click(screen.getByRole('button', { name: 'Add skill' }));
-    expect(await screen.findByText('mu already has a skill named review.')).toBeInTheDocument();
+    expect(await screen.findByText('spec.jev already has a skill named review.')).toBeInTheDocument();
     // Nothing picked: nothing is added.
     bridge.showOpen.mockResolvedValue(undefined);
     fireEvent.click(screen.getByRole('button', { name: 'Add skill' }));
@@ -189,14 +189,14 @@ describe('spec.jev’s skills while spec.jev runs inside the app', () => {
     bridge.skills.mockResolvedValue(failed('unreadable', { file: FOLDER }));
     bridge.capabilityReveal.mockResolvedValue(ok(undefined));
     draw(<MuSkillsPage />);
-    expect(await screen.findByText("Couldn't read mu's skills.")).toBeInTheDocument();
+    expect(await screen.findByText("Couldn't read spec.jev's skills.")).toBeInTheDocument();
     expect(screen.getByText(`Couldn't read ${FOLDER}.`)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Open folder' }));
     expect(bridge.capabilityReveal).toHaveBeenCalledWith({ what: 'skills' });
   });
 });
 
-const MCP_FILE = '/home/me/.mu/agent/mcp.json';
+const MCP_FILE = '/home/me/.spec.jev/agent/mcp.json';
 const server = (patch: Partial<MuMcpServer> & Pick<MuMcpServer, 'name'>): MuMcpServer => ({
   source: 'mu',
   file: MCP_FILE,
@@ -233,7 +233,7 @@ const SERVERS: MuMcpServers = {
   ],
 };
 
-describe('mu’s MCP servers while mu runs inside the app', () => {
+describe('spec.jev’s MCP servers while spec.jev runs inside the app', () => {
   it('lists every server under where it is set up, with what it runs, its switch, or why it has none', async () => {
     bridge.mcpServers.mockResolvedValue(ok(SERVERS));
     draw(<MuMcpPage />);
@@ -249,7 +249,7 @@ describe('mu’s MCP servers while mu runs inside the app', () => {
     expect(claude).toHaveTextContent('From ~/.claude.json.');
     expect(within(claude).getByRole('switch', { name: 'Use sentry' })).toBeInTheDocument();
     expect(within(claude).queryByRole('button', { name: /Remove/ })).not.toBeInTheDocument();
-    // Off in Cursor's own file, or of a kind mu cannot speak to: it says so, with no switch.
+    // Off in Cursor's own file, or of a kind spec.jev cannot speak to: it says so, with no switch.
     expect(screen.getByTestId('mu-mcp-lock-linear')).toHaveTextContent('Off in its source');
     expect(screen.getByTestId('mu-mcp-lock-legacy')).toHaveTextContent('Not supported');
     expect(screen.queryByRole('switch', { name: 'Use linear' })).not.toBeInTheDocument();
@@ -266,13 +266,13 @@ describe('mu’s MCP servers while mu runs inside the app', () => {
     await waitFor(() => expect(screen.getByRole('switch', { name: 'Use sentry' })).not.toBeChecked());
     expect(bridge.mcpSwitch).toHaveBeenCalledWith({ name: 'sentry', on: false });
 
-    bridge.mcpSwitch.mockResolvedValue(failed('unwritable', { file: '/home/me/.mu/agent/mu.json' }));
+    bridge.mcpSwitch.mockResolvedValue(failed('unwritable', { file: '/home/me/.spec.jev/agent/mu.json' }));
     fireEvent.click(screen.getByRole('switch', { name: 'Use filesystem' }));
-    expect(await screen.findByText("Couldn't write /home/me/.mu/agent/mu.json.")).toBeInTheDocument();
+    expect(await screen.findByText("Couldn't write /home/me/.spec.jev/agent/mu.json.")).toBeInTheDocument();
     expect(screen.getByRole('switch', { name: 'Use filesystem' })).toBeChecked();
   });
 
-  it('asks before it removes one of mu’s own servers, naming the file', async () => {
+  it('asks before it removes one of spec.jev’s own servers, naming the file', async () => {
     bridge.mcpServers.mockResolvedValue(ok(SERVERS));
     draw(<MuMcpPage />);
     await screen.findByTestId('mu-mcp-mu');
@@ -291,9 +291,9 @@ describe('mu’s MCP servers while mu runs inside the app', () => {
       ok({ ...SERVERS, feature: false, unreadable: ['/home/me/.claude.json'], servers: [] })
     );
     draw(<MuMcpPage />);
-    expect(await screen.findByText(/The MCP feature is off in mu.json/)).toBeInTheDocument();
+    expect(await screen.findByText(/The MCP feature is off in spec\.jev\.json/)).toBeInTheDocument();
     expect(screen.getByText(/so their servers are missing: \/home\/me\/.claude.json/)).toBeInTheDocument();
-    expect(screen.getByText("mu isn't using any MCP servers yet.")).toBeInTheDocument();
+    expect(screen.getByText("spec.jev isn't using any MCP servers yet.")).toBeInTheDocument();
   });
 });
 
@@ -357,7 +357,7 @@ describe('adding an MCP server', () => {
     type(dialog, 'Headers', 'Authorization: Bearer abc');
     bridge.mcpAdd.mockResolvedValue(failed('mcpExists', { name: 'remote' }));
     submit(dialog);
-    expect(await within(dialog).findByRole('alert')).toHaveTextContent('mu already has a server named remote.');
+    expect(await within(dialog).findByRole('alert')).toHaveTextContent('spec.jev already has a server named remote.');
     expect(bridge.mcpAdd).toHaveBeenLastCalledWith({
       name: 'remote',
       url: 'https://mcp.example.com/mcp',

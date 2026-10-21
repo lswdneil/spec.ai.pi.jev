@@ -68,7 +68,7 @@ describe("the rename from KYRN to spec.jev", () => {
 		mkdirSync(join(before, ".kyrn"));
 		expect(muHome(before)).toBe(join(before, ".kyrn"));
 
-		// A home from the mu years keeps being used until it is moved to ~/.spec.jev by hand.
+		// A home from the spec.jev years keeps being used until it is moved to ~/.spec.jev by hand.
 		const after = temp();
 		mkdirSync(join(after, ".mu"));
 		mkdirSync(join(after, ".kyrn"));

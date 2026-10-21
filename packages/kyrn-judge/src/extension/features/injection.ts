@@ -72,7 +72,7 @@ export function fetchesOutside(command: string, programs: readonly string[] = FE
 	});
 }
 
-/** Where the outside text starts: after mu's own label, when the tool put one in front of it. */
+/** Where the outside text starts: after spec.jev's own label, when the tool put one in front of it. */
 export function screenedFrom(text: string): number {
 	let from = 0;
 	for (const label of LABELS) {

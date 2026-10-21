@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Puts mu inside the app: the npm package mu-agent, with its dependencies, in resources/harness/mu-agent, which
+// Puts mu inside the app: the npm package spec.jev, with its dependencies, in resources/harness/spec.jev, which
 // electron-builder copies to <resources>/harness (packages/desktop/electron-builder.yml, extraResources). The app runs
 // it on its own binary as Node (resources/mu/acp, process/agent/kyrn/harness.ts), so the machine the app runs on needs
 // no Node, no npm and no download.
@@ -7,7 +7,7 @@
 //   node scripts/kyrn/bundle-harness.mjs [--platform darwin|linux|win32] [--arch arm64|x64]
 //
 // Which mu: MU_HARNESS_TARBALL, a tarball packed from a harness checkout (`node kyrn/npm/build.mjs --pack`; the MU
-// repository's CI packs it from the same commit as the app), else mu-agent from the npm registry at the version
+// repository's CI packs it from the same commit as the app), else spec.jev from the npm registry at the version
 // pinned in this repository's package.json, "muAgentVersion". Its dependencies are installed with npm for the target
 // platform and arch, without install scripts: npm is needed here, at build time, and nowhere else.
 //
@@ -26,16 +26,16 @@ const { verifyBundledHarness } = require('../../packages/shared-scripts/src/veri
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
-/** The mu-agent version the app carries when no tarball is given. Pinned in one place: the root package.json. */
+/** The spec.jev version the app carries when no tarball is given. Pinned in one place: the root package.json. */
 export function pinnedVersion(root = projectRoot) {
   const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).muAgentVersion;
   if (typeof version !== 'string' || !/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(version)) {
-    throw new Error('package.json has no "muAgentVersion": the version of mu-agent the app carries');
+    throw new Error('package.json has no "muAgentVersion": the version of spec.jev the app carries');
   }
   return version;
 }
 
-/** npm's arguments for mu-agent's own dependencies, for the system and processor the app is built for. */
+/** npm's arguments for spec.jev's own dependencies, for the system and processor the app is built for. */
 export function installArgs(platform, arch) {
   return [
     'install',
@@ -146,7 +146,7 @@ export function bundleHarness({
 } = {}) {
   const resources = join(root, 'resources');
   const harness = join(resources, 'harness');
-  const target = join(harness, 'mu-agent');
+  const target = join(harness, 'spec.jev');
   rmSync(harness, { recursive: true, force: true });
   mkdirSync(target, { recursive: true });
   const scratch = mkdtempSync(join(tmpdir(), 'mu-harness-'));
@@ -154,13 +154,13 @@ export function bundleHarness({
     let file = tarball ? resolve(tarball) : undefined;
     if (!file) {
       const version = pinnedVersion(root);
-      log(`Getting mu-agent ${version} from the npm registry`);
+      log(`Getting spec.jev ${version} from the npm registry`);
       let packed;
       try {
-        packed = JSON.parse(npm(['pack', `mu-agent@${version}`, '--json', '--pack-destination', scratch], scratch));
+        packed = JSON.parse(npm(['pack', `spec.jev@${version}`, '--json', '--pack-destination', scratch], scratch));
       } catch (error) {
         throw new Error(
-          `mu-agent ${version} could not be fetched (${error instanceof Error ? error.message : String(error)}). ` +
+          `spec.jev ${version} could not be fetched (${error instanceof Error ? error.message : String(error)}). ` +
             'Set MU_HARNESS_TARBALL to a tarball packed from the harness (node kyrn/npm/build.mjs --pack), or publish that version.'
         );
       }
@@ -168,8 +168,8 @@ export function bundleHarness({
     }
     extractPackage(file, target);
     const manifest = JSON.parse(readFileSync(join(target, 'package.json'), 'utf8'));
-    if (manifest.name !== 'mu-agent') throw new Error(`${file} is ${manifest.name}, not mu-agent`);
-    log(`Installing what mu-agent ${manifest.version} depends on, for ${platform}-${arch}`);
+    if (manifest.name !== 'spec.jev') throw new Error(`${file} is ${manifest.name}, not spec.jev`);
+    log(`Installing what spec.jev ${manifest.version} depends on, for ${platform}-${arch}`);
     npm(installArgs(platform, arch), target);
     const record = { name: manifest.name, version: manifest.version, platform, arch };
     writeFileSync(join(harness, 'bundle.json'), `${JSON.stringify(record, null, 2)}\n`);
@@ -177,7 +177,7 @@ export function bundleHarness({
     if (check.missing.length > 0) throw new Error(`The bundled mu is incomplete: ${check.missing.join(', ')}`);
     const { files, bytes } = sizeOf(harness);
     log(
-      `Bundled mu-agent ${manifest.version} for ${platform}-${arch} in resources/harness: ${files} files, ${(bytes / 1048576).toFixed(1)} MiB`
+      `Bundled spec.jev ${manifest.version} for ${platform}-${arch} in resources/harness: ${files} files, ${(bytes / 1048576).toFixed(1)} MiB`
     );
     return { version: manifest.version, files, bytes };
   } finally {

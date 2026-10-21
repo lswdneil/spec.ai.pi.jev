@@ -214,7 +214,7 @@ describe('ipcBridge backend texts shown as spec.jev', () => {
     expect(await acpConversation.getManagedAgents.invoke()).toEqual([
       {
         id: '632f31d2',
-        name: 'mu',
+        name: 'spec.jev',
         backend: 'aionrs',
         agent_source: 'internal',
         last_check_error_message: 'Internal spec.jev does not support overrides',

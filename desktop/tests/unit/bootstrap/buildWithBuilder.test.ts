@@ -321,7 +321,7 @@ function ensurePlaceholder(relativePath) {
   }
 }
 
-// Bundling mu (scripts/kyrn/bundle-harness.mjs) would fetch the pinned mu-agent: record the system and processor
+// Bundling spec.jev (scripts/kyrn/bundle-harness.mjs) would fetch the pinned spec.jev: record the system and processor
 // it is asked for instead.
 const originalExecFileSync = childProcess.execFileSync;
 childProcess.execFileSync = function mockedExecFileSync(file, args, options) {

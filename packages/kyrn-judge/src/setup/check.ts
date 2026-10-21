@@ -294,8 +294,8 @@ export function explainProblem(problem: Problem, context: ExplainContext, langua
 				: "The key works but can't list models (it's a restricted key). Give it permission to read models, or use another key.";
 		case "balance":
 			return zh
-				? `${service} 的账户没有余额或额度了。充值后重新运行 mu setup。`
-				: `The ${service} account has no balance or quota left. Top it up, then run mu setup again.`;
+				? `${service} 的账户没有余额或额度了。充值后重新运行 spec.jev setup。`
+				: `The ${service} account has no balance or quota left. Top it up, then run spec.jev setup again.`;
 		case "region":
 			return zh
 				? `${service} 不向你所在的地区提供服务。需要一个位于支持地区的代理或 VPN。${proxyHint}`

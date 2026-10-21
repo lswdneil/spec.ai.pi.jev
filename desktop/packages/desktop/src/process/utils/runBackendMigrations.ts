@@ -467,9 +467,9 @@ export async function runBackendMigrations(configFile: ConfigFile): Promise<void
     const start = Date.now();
     try {
       await step.run();
-      console.info(`[mu] Backend migration step completed: ${step.name} (${Date.now() - start}ms)`);
+      console.info(`[spec.jev] Backend migration step completed: ${step.name} (${Date.now() - start}ms)`);
     } catch (error) {
-      console.error(`[mu] Backend migration step failed: ${step.name} (${Date.now() - start}ms)`, error);
+      console.error(`[spec.jev] Backend migration step failed: ${step.name} (${Date.now() - start}ms)`, error);
     }
   }, Promise.resolve());
 
@@ -480,21 +480,21 @@ export async function runBackendMigrations(configFile: ConfigFile): Promise<void
       const completed = await step.run(configFile);
       const elapsed = Date.now() - start;
       if (!completed) {
-        console.warn(`[mu] Backend migration step incomplete: ${step.name} (${elapsed}ms)`);
+        console.warn(`[spec.jev] Backend migration step incomplete: ${step.name} (${elapsed}ms)`);
         return;
       }
-      console.info(`[mu] Backend migration step completed: ${step.name} (${elapsed}ms)`);
+      console.info(`[spec.jev] Backend migration step completed: ${step.name} (${elapsed}ms)`);
     } catch (error) {
       const elapsed = Date.now() - start;
-      console.error(`[mu] Backend migration step failed: ${step.name} (${elapsed}ms)`, error);
+      console.error(`[spec.jev] Backend migration step failed: ${step.name} (${elapsed}ms)`, error);
     }
   }, Promise.resolve());
 
   const syncStart = Date.now();
   try {
     await syncBuiltinMcpConfig(configFile);
-    console.info(`[mu] Backend migration step completed: syncBuiltinMcpConfig (${Date.now() - syncStart}ms)`);
+    console.info(`[spec.jev] Backend migration step completed: syncBuiltinMcpConfig (${Date.now() - syncStart}ms)`);
   } catch (error) {
-    console.error(`[mu] Backend migration step failed: syncBuiltinMcpConfig (${Date.now() - syncStart}ms)`, error);
+    console.error(`[spec.jev] Backend migration step failed: syncBuiltinMcpConfig (${Date.now() - syncStart}ms)`, error);
   }
 }

@@ -44,7 +44,7 @@ afterEach(() => {
 });
 
 const JUDGE_URL = 'http://127.0.0.1:47823';
-const FOLDER = '/home/someone/.mu/local-judge/laya-multilingual-onnx';
+const FOLDER = '/home/someone/.spec.jev/local-judge/laya-multilingual-onnx';
 const ALL = [
   'model.onnx',
   'onnx_config.json',

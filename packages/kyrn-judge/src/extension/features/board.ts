@@ -753,8 +753,8 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 		pendingAsk = { id: ask.id, summary: ask.summary };
 		const kind = PERMISSION_KINDS[String(ask.kind)] ?? PERMISSION_KINDS.other;
 		const line = words({
-			zh: `mu 想${kind.zh}：${ask.summary}。在等你允许。`,
-			en: `mu wants to ${kind.en}: ${ask.summary}. It's waiting for your permission.`,
+			zh: `spec.jev 想${kind.zh}：${ask.summary}。在等你允许。`,
+			en: `spec.jev wants to ${kind.en}: ${ask.summary}. It's waiting for your permission.`,
 		});
 		sayNow({ ...(board ?? emptyBoard()), confirm: [line], confirmCodes: [null], needsUser: true, ended: false });
 	});
@@ -788,7 +788,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 			const next = typeof state.next === "string" && state.next ? ` (next: ${clip(state.next, 160)})` : "";
 			log({
 				kind: "step",
-				text: `mu sent it back to work, round ${state.continuations}${reason ? `: ${reason}` : ""}${next}`,
+				text: `spec.jev sent it back to work, round ${state.continuations}${reason ? `: ${reason}` : ""}${next}`,
 			});
 			tell("goal", "goal_round", { round: state.continuations, reason: tail });
 		} else if (state.status === "met") {
@@ -810,8 +810,8 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 			kind: "step",
 			text:
 				kind === "loop"
-					? `mu noticed it repeating the same step: ${clip(detail, 160)}`
-					: `mu noticed: ${clip(detail, 160)}`,
+					? `spec.jev noticed it repeating the same step: ${clip(detail, 160)}`
+					: `spec.jev noticed: ${clip(detail, 160)}`,
 			failed: true,
 		});
 		tell("trouble", kind === "loop" ? "trouble_loop" : "trouble", { detail: clip(detail, 160) }, true);

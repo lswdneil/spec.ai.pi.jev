@@ -9,7 +9,7 @@ main(process.argv.slice(2), processIo()).then(
 		process.exitCode = code;
 	},
 	(error: unknown) => {
-		process.stderr.write(`mu import: ${error instanceof Error ? error.message : String(error)}\n`);
+		process.stderr.write(`spec.jev import: ${error instanceof Error ? error.message : String(error)}\n`);
 		process.exitCode = 1;
 	},
 );

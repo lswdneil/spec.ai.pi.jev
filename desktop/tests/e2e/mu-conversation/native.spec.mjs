@@ -90,7 +90,7 @@ test('a plain reply streams in, in several pieces', async () => {
     if (text && seen[seen.length - 1] !== text) seen.push(text);
     if (text.includes(PLAIN_TEXT)) break;
     const why = await hostFailure();
-    if (why !== undefined) throw new Error(`mu's host stopped: ${why}`);
+    if (why !== undefined) throw new Error(`spec.jev's host stopped: ${why}`);
     await sleep(25);
   }
   expect(seen[seen.length - 1]).toContain(PLAIN_TEXT);

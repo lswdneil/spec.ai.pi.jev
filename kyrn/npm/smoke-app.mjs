@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// The desktop app carries mu inside it (resources/harness/mu-agent) and runs it on its own binary as Node, with
+// The desktop app carries spec.jev inside it (resources/harness/spec.jev) and runs it on its own binary as Node, with
 // ELECTRON_RUN_AS_NODE. After a desktop build: does that copy start, on this system, the way the app starts it?
 //
 //   node kyrn/npm/smoke-app.mjs <the builder's output folder, or one app> [arm64|x64]
@@ -7,7 +7,7 @@
 // An output folder (desktop/out) holds an unpacked app per system and processor: win-unpacked, win-arm64-unpacked,
 // linux-unpacked, linux-arm64-unpacked, mac, mac-arm64. The one for the processor named is taken, by default this
 // Node's: a runner's Node may be an x64 one emulated on an arm64 machine. One app is a `.app` on macOS, an unpacked
-// folder elsewhere. A `mu` that starts the app's binary on the carried launcher is written to a temporary folder and
+// folder elsewhere. A `spec.jev` that starts the app's binary on the carried launcher is written to a temporary folder and
 // handed to smoke.mjs, which checks it in a throwaway home: no model is called.
 import { spawnSync } from "node:child_process";
 import { chmodSync, existsSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
@@ -73,11 +73,11 @@ if (!app) {
 }
 const launcher = join(app.resources, "harness", "mu-agent", "kyrn", "bin", "mu.mjs");
 if (!existsSync(launcher)) {
-	console.error(`The app carries no mu: ${launcher} is missing`);
+	console.error(`The app carries no spec.jev: ${launcher} is missing`);
 	process.exit(2);
 }
 console.log(`app binary: ${app.binary}`);
-console.log(`mu launcher: ${launcher}`);
+console.log(`spec.jev launcher: ${launcher}`);
 
 // What the app itself does (piRpc.ts, launchCommand): its binary as Node, the launcher as the script.
 const folder = mkdtempSync(join(tmpdir(), "mu-app-smoke-"));
@@ -93,5 +93,5 @@ if (!windows) chmodSync(mu, 0o755);
 const smoke = join(dirname(fileURLToPath(import.meta.url)), "smoke.mjs");
 const result = spawnSync(process.execPath, [smoke, mu], { stdio: "inherit" });
 rmSync(folder, { recursive: true, force: true });
-console.log(`${basename(app.binary)} ran its own mu: ${result.status === 0 ? "ok" : "FAILED"}`);
+console.log(`${basename(app.binary)} ran its own spec.jev: ${result.status === 0 ? "ok" : "FAILED"}`);
 process.exit(result.status ?? 1);

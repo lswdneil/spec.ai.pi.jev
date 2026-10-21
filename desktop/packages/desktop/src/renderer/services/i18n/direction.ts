@@ -16,16 +16,19 @@
  * than fighting the document direction.
  */
 
-import { normalizeLanguageCode } from '@/common/config/i18n';
-
-const RTL_LANGUAGES: ReadonlySet<string> = new Set(['fa-IR']);
+const RTL_LANGUAGES: ReadonlySet<string> = new Set(['ar', 'dv', 'fa', 'he', 'ps', 'sd', 'ug', 'ur', 'yi']);
 
 export type LayoutDirection = 'ltr' | 'rtl';
 
 /** Whether the given app language lays out right-to-left. */
 export function isRtlLanguage(language: string | undefined | null): boolean {
   if (!language) return false;
-  return RTL_LANGUAGES.has(normalizeLanguageCode(language));
+  const base = language
+    .trim()
+    .toLowerCase()
+    .replace(/_/g, '-')
+    .split('-')[0];
+  return RTL_LANGUAGES.has(base);
 }
 
 /** Resolve the document direction for the given app language. */
@@ -44,6 +47,6 @@ export function applyDocumentDirection(language: string | undefined | null): voi
   if (typeof document === 'undefined') return;
   document.documentElement.dir = directionForLanguage(language);
   if (language) {
-    document.documentElement.lang = normalizeLanguageCode(language);
+    document.documentElement.lang = language.trim().replace(/_/g, '-');
   }
 }

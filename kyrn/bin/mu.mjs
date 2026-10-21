@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-// mu command line: everything the launcher does, in plain Node so that it runs on macOS, Linux, WSL and Windows.
-// (`mu help` prints the commands: see USAGE below.)
+// spec.jev command line: everything the launcher does, in plain Node so that it runs on macOS, Linux, WSL and Windows.
+// (`spec.jev help` prints the commands: see USAGE below.)
 //
 // Who starts this file:
 // - kyrn/bin/mu      (bash) on macOS, Linux and WSL. It only finds a Node >= 22.19, from PATH or from nvm: a
 //                    machine whose default Node is older cannot be trusted to run this file at all.
 // - kyrn/bin/mu.cmd  on Windows, with whatever `node` is on PATH (mu.ps1 is the same for PowerShell).
-// - npm's own `mu` command, in the npm package mu-agent (kyrn/npm/build.mjs). The package is laid out like the
+// - npm's own `spec.jev` command, in the npm package spec.jev (kyrn/npm/build.mjs). The package is laid out like the
 //   repository, so this file is at kyrn/bin/mu.mjs there too, and the root is two folders up in both.
 //
 // No dependency and no TypeScript here: this runs before anything that could run TypeScript has been found.
@@ -17,15 +17,15 @@
 // (packages/kyrn-judge/test/launcher-platforms.test.ts); `main` only carries the plans out.
 //
 // What the launcher sets up:
-// - mu's own home, ~/.mu/agent (auth, sessions, settings), apart from a stock pi in ~/.pi.
-//   A machine that still has ~/.kyrn and no ~/.mu keeps using ~/.kyrn until that folder is moved (`mu migrate`).
-// - mu's name on the agent: PI_PACKAGE_DIR points at ~/.mu/app, a view of packages/coding-agent whose
-//   package.json carries piConfig {name: mu, configDir: .mu}. No upstream file is edited.
-// - the judgment layer (packages/kyrn-judge), with judges from ~/.mu/agent/mu.json or MU_JUDGE
+// - spec.jev's own home, ~/.spec.jev/agent (auth, sessions, settings), apart from a stock pi in ~/.pi.
+//   A machine that still has ~/.kyrn and no ~/.spec.jev keeps using ~/.kyrn until that folder is moved (`spec.jev migrate`).
+// - spec.jev's name on the agent: PI_PACKAGE_DIR points at ~/.spec.jev/app, a view of packages/coding-agent whose
+//   package.json carries piConfig {name: spec.jev, configDir: .spec.jev}. No upstream file is edited.
+// - the judgment layer (packages/kyrn-judge), with judges from ~/.spec.jev/agent/mu.json or MU_JUDGE
 //   (e.g. "laya", "laya,luna", "laya,jev", "off"). When "laya" is among them the sidecar is started (macOS only).
-//   kyrn.json and every KYRN_* variable are still read when the mu spelling is absent.
+//   kyrn.json and every KYRN_* variable are still read when the spec.jev spelling is absent.
 // - the repo-root .env (the Jev key), read as data and handed to the agent without ever being printed.
-//   The npm package reads ~/.mu/.env instead: there is no repository around it.
+//   The npm package reads ~/.spec.jev/.env instead: there is no repository around it.
 import { spawn, spawnSync } from "node:child_process";
 import {
 	accessSync,
@@ -84,7 +84,7 @@ export function withSpecJevEnv(env) {
 }
 
 /**
- * ~/.spec.jev, or the older home this machine already has (~/.mu, then ~/.kyrn). Nothing here ever creates a
+ * ~/.spec.jev, or the older home this machine already has (~/.spec.jev, then ~/.kyrn). Nothing here ever creates a
  * new home beside an old one: two homes would mean two logins and two session lists.
  */
 export function muHome({ home, platform, isDir }) {
@@ -93,7 +93,7 @@ export function muHome({ home, platform, isDir }) {
 	return candidates.find((candidate) => isDir(candidate)) ?? candidates[0];
 }
 
-/** WSL is Linux to the launcher. It matters to the browser and to what `mu doctor` reports. */
+/** WSL is Linux to the launcher. It matters to the browser and to what `spec.jev doctor` reports. */
 export function detectWsl({ platform, env, procVersion }) {
 	if (platform !== "linux") return false;
 	return Boolean(env.WSL_DISTRO_NAME) || /microsoft/i.test(procVersion ?? "");
@@ -108,28 +108,34 @@ export function platformName({ platform, wsl }) {
 
 export function usage(platform) {
 	const linkDir = platform === "win32" ? "%USERPROFILE%\\.local\\bin" : "~/.local/bin";
+	const rows = [
+		["", "start a session in the current directory"],
+		['"prompt"', "start a session with this prompt"],
+		['-p "prompt"', "run one prompt, print the answer and exit"],
+		["-c | -r", "continue the last session | pick a session to resume"],
+		["setup", "connect a model (paste an API key or pick a service) and choose a judge"],
+		["", "(see spec.jev setup --help for scripting, reading a key from stdin and the supported services)"],
+		["judge <cmd>", "manage the local judge, Laya (macOS on Apple silicon): setup | start | stop | status | run"],
+		["ledger [n] [--json]", "print the judge's verdicts from the last n sessions"],
+		["import --list | <file>...", "import Claude Code and Codex conversations (spec.jev import --help)"],
+		["doctor", "check the installation, the judges and the connections"],
+		["auth <cmd>", "sign-in helper for the desktop app (JSON lines):"],
+		["", "status | login <provider> | logout <provider>"],
+		["link | unlink", `put the spec.jev command on your PATH (${linkDir}) | remove it`],
+		["help | version", "show this help | print the version"],
+	];
+	const commands = rows.map(([argument, text]) =>
+		argument ? `${`  spec.jev ${argument}`.padEnd(28)} ${text}` : `${"".padEnd(28)} ${text}`,
+	);
 	return [
 		"spec.jev: a coding agent with a judgment kernel, built on pi.",
 		"",
-		"  spec.jev                 start a session in the current directory",
-		'  spec.jev "prompt"        start a session with this prompt',
-		'  spec.jev -p "prompt"     run one prompt, print the answer and exit',
-		"  spec.jev -c | -r         continue the last session | pick a session to resume",
-		"  spec.jev setup           connect a model (paste an API key or pick a service) and choose a judge",
-		"                           (see spec.jev setup --help for scripting, reading a key from stdin and the supported services)",
-		"  spec.jev judge <cmd>     manage the local judge, Laya (macOS on Apple silicon): setup | start | stop | status | run",
-		"  spec.jev ledger [n] [--json]   print the judge's verdicts from the last n sessions",
-		"  spec.jev import --list | <file>...   import Claude Code and Codex conversations (spec.jev import --help)",
-		"  spec.jev doctor          check the installation, the judges and the connections",
-		"  spec.jev auth <cmd>      sign-in helper for the desktop app (JSON lines):",
-		"                           status | login <provider> | logout <provider>",
-		`  spec.jev link | unlink   put the spec.jev command on your PATH (${linkDir}) | remove it`,
-		"  spec.jev help | version  show this help | print the version",
+		...commands,
 		"",
 		"Everything else goes to pi unchanged: spec.jev --help also shows pi's options,",
 		"and spec.jev install|remove|update|list|config manage pi packages.",
 		"",
-		"Names before spec.jev still work: `mu` and `kyrn` are aliases, and ~/.mu or ~/.kyrn is used when it exists.",
+		"Names before spec.jev still work: `spec.jev` and `kyrn` are aliases, and ~/.spec.jev or ~/.kyrn is used when it exists.",
 	].join("\n");
 }
 
@@ -193,7 +199,7 @@ function closingQuote(text, quote) {
 
 /**
  * What the file adds to the environment: only the variables that are not already there. The real environment
- * wins, also with an empty value (`AI_GATEWAY_API_KEY= mu` is how one run goes without the key).
+ * wins, also with an empty value (`AI_GATEWAY_API_KEY= spec.jev` is how one run goes without the key).
  * Windows treats variable names without regard to case.
  */
 export function envFileAdditions({ env, entries, platform }) {
@@ -233,7 +239,7 @@ export function appViewPlan(platform) {
 
 /**
  * Its package name stays pi's: pi updates itself by that name, and `spec.jev` on npm is someone else's package.
- * `configDir` follows the home that was chosen, so an existing ~/.mu keeps holding this app's files.
+ * `configDir` follows the home that was chosen, so an existing ~/.spec.jev keeps holding this app's files.
  */
 export function appPackageJson(upstreamText, configDir = ".spec.jev") {
 	const pkg = JSON.parse(upstreamText);
@@ -327,8 +333,8 @@ export function ensureAppView({ platform, app, upstream, configDir = ".spec.jev"
 // ---------------------------------------------------------------------------------------------------------
 
 /**
- * Where this mu comes from: "repo", a checkout that runs the TypeScript sources (sourceRuntime), or "package", the
- * npm package mu-agent, which carries pi's bundle (dist/bundle/cli.js) and the judgment layer built to
+ * Where this spec.jev comes from: "repo", a checkout that runs the TypeScript sources (sourceRuntime), or "package", the
+ * npm package spec.jev, which carries pi's bundle (dist/bundle/cli.js) and the judgment layer built to
  * JavaScript (judge/mu/index.js). A checkout without its dependencies is still a checkout.
  */
 export function layoutOf({ root, platform, exists }) {
@@ -338,8 +344,8 @@ export function layoutOf({ root, platform, exists }) {
 }
 
 /**
- * The files the npm package runs: pi, the judgment layer, the sign-in of `mu auth`, the importer of `mu import` and the
- * wizard of `mu setup`.
+ * The files the npm package runs: pi, the judgment layer, the sign-in of `spec.jev auth`, the importer of `spec.jev import` and the
+ * wizard of `spec.jev setup`.
  */
 export function packageEntries({ root, platform }) {
 	const path = pathFor(platform);
@@ -352,7 +358,7 @@ export function packageEntries({ root, platform }) {
 	};
 }
 
-/** The .env the launcher reads: the checkout's, or for the npm package the one in mu's home. */
+/** The .env the launcher reads: the checkout's, or for the npm package the one in spec.jev's home. */
 export function envFilePath({ layout, root, muDir, platform }) {
 	return pathFor(platform).join(layout === "package" ? muDir : root, ".env");
 }
@@ -379,13 +385,13 @@ export function installHint({ root, platform }) {
 		: `spec.jev's dependencies aren't installed. Run:  ${steps.join(" && ")}`;
 }
 
-/** What mu says on a Node that does not strip TypeScript types, which a checkout cannot run on. */
+/** What spec.jev says on a Node that does not strip TypeScript types, which a checkout cannot run on. */
 const NO_TYPE_STRIPPING =
 	"spec.jev runs a source checkout's TypeScript with Node's built-in type stripping (on by default since Node 22.18), but this Node doesn't strip types. Use Node 22.19 or newer.";
 
 /**
  * Node's arguments for running a checkout's TypeScript, up to the entry file. Node strips the types itself (on by
- * default from 22.18, in both Electrons the desktop app runs mu with too) and runs the sources as they are, with
+ * default from 22.18, in both Electrons the desktop app runs spec.jev with too) and runs the sources as they are, with
  * pi's own source resolver (packages/coding-agent/src/experimental/source-resolver.ts: each workspace package
  * resolves to its sources, as tsconfig.json's paths say) and Node's compile cache (compile-cache.mjs), the way pi
  * runs its own checkout (pi-test.sh). A runtime that does not strip types, a checkout whose dependencies are not
@@ -411,7 +417,7 @@ export function sourceRuntime({ root, platform, stripsTypes, exists }) {
 }
 
 /**
- * pi reads <APP NAME>_CODING_AGENT_DIR and nothing else, so with the app named mu that export decides the
+ * pi reads <APP NAME>_CODING_AGENT_DIR and nothing else, so with the app named spec.jev that export decides the
  * home. The pi and KYRN spellings are exported too, for scripts that still read them.
  */
 export function agentDirFor({ env, muDir, platform }) {
@@ -476,14 +482,14 @@ function judgeArgs({ argv, layout, root, platform, agentDir, readFile }) {
 	return [...extension, ...themeArgs({ argv, layout, root, platform, agentDir, readFile })];
 }
 
-/** mu's own terminal themes, beside the judgment layer's files. */
+/** spec.jev's own terminal themes, beside the judgment layer's files. */
 export function themesDir({ layout, root, platform }) {
 	const path = pathFor(platform);
 	return layout === "package" ? path.join(root, "judge", "themes") : path.join(root, "packages", "kyrn-judge", "themes");
 }
 
 /**
- * An interactive session gets mu's themes (mu-light and mu-dark, which /settings then lists beside pi's) and, while the
+ * An interactive session gets spec.jev's themes (mu-light and mu-dark, which /settings then lists beside pi's) and, while the
  * person has chosen no theme of their own, starts in them: light or dark as the terminal is. A theme chosen in
  * /settings is saved in settings.json and wins; so does --use-theme. Print and RPC modes draw nothing and get neither.
  */
@@ -533,7 +539,7 @@ export function planLaunch({
 	}
 
 	const muDir = muHome({ home, platform, isDir: fs.isDir });
-	// The package names itself mu in its own package.json; a checkout needs the view at <home>/app for that.
+	// The package names itself spec.jev in its own package.json; a checkout needs the view at <home>/app for that.
 	const appDir = layout === "package" ? root : muEnv("APP_DIR", env) || path.join(muDir, "app");
 	const agentDir = agentDirFor({ env, muDir, platform });
 
@@ -561,7 +567,7 @@ export function planLaunch({
 	// pi's release check asks pi.dev about pi's versions, which say nothing about spec.jev's: a checkout follows
 	// upstream through git, and the package through npm.
 	childEnv.PI_SKIP_VERSION_CHECK = childEnv.PI_SKIP_VERSION_CHECK || "1";
-	// pi reports a fresh install to pi.dev with its version. mu-agent is not a pi install; asked for, it still can be.
+	// pi reports a fresh install to pi.dev with its version. spec.jev is not a pi install; asked for, it still can be.
 	if (layout === "package" && childEnv.PI_TELEMETRY === undefined) childEnv.PI_TELEMETRY = "0";
 
 	let startJudge = false;
@@ -629,11 +635,11 @@ export function planHost({ platform, env, argv, root, home, fs, wsl = false, str
 	};
 }
 
-/** What mu says when the local judge does not come up. */
+/** What spec.jev says when the local judge does not come up. */
 const LOCAL_JUDGE_NOT_STARTED =
 	"spec.jev: the local judge (Laya) didn't start; decision points use the next judge or their fallbacks. Run spec.jev judge status for details.";
 
-/** The part of the preparation that is files: the app view of a checkout, mu's agent folder, the configuration's notes. */
+/** The part of the preparation that is files: the app view of a checkout, spec.jev's agent folder, the configuration's notes. */
 function prepareFiles({ plan, platform, root, err }) {
 	const path = pathFor(platform);
 	if (plan.layout === "repo") {
@@ -650,7 +656,7 @@ function prepareFiles({ plan, platform, root, err }) {
 
 /**
  * What is done before pi starts, for the command line and the desktop app's runtime host alike: the app view that
- * names a checkout mu, mu's agent folder, the configuration's notes (to `err`), and the local judge when the
+ * names a checkout spec.jev, spec.jev's agent folder, the configuration's notes (to `err`), and the local judge when the
  * configuration asks for it. `bin` is this launcher's folder. The local judge is one shared sidecar: starting it is
  * idempotent and never blocks pi.
  */
@@ -684,14 +690,14 @@ export async function prepareLaunchAsync({ plan, platform, root, bin, err }) {
 }
 
 // ---------------------------------------------------------------------------------------------------------
-// mu auth
+// spec.jev auth
 // ---------------------------------------------------------------------------------------------------------
 
-/** What `mu auth` answers itself. Every other `auth` command (check, print-api-key, ...) is pi's own. */
+/** What `spec.jev auth` answers itself. Every other `auth` command (check, print-api-key, ...) is pi's own. */
 export const AUTH_COMMANDS = ["status", "login", "logout"];
 
 /**
- * `mu auth status | login <provider> | logout <provider>`: the sign-in the desktop app runs, with pi's own OAuth
+ * `spec.jev auth status | login <provider> | logout <provider>`: the sign-in the desktop app runs, with pi's own OAuth
  * flows and credential store (packages/kyrn-judge/src/auth). It is pi's code, so it runs the way pi does here:
  * from its sources in a checkout (sourceRuntime), built in the package. It reads no key, so no .env is read for it.
  */
@@ -720,10 +726,10 @@ export function planAuth({ platform, env, argv, root, home, execPath, fs, canExe
 }
 
 // ---------------------------------------------------------------------------------------------------------
-// mu judge
+// spec.jev judge
 // ---------------------------------------------------------------------------------------------------------
 
-/** What `mu judge <cmd>` does here: the macOS script, a look at a server of one's own, or a plain explanation. */
+/** What `spec.jev judge <cmd>` does here: the macOS script, a look at a server of one's own, or a plain explanation. */
 export function planJudge({ platform, env, argv, bin, wsl = false }) {
 	const args = argv.length > 0 ? argv : ["status"];
 	const support = localJudgeSupport({ platform, env, wsl });
@@ -733,11 +739,11 @@ export function planJudge({ platform, env, argv, bin, wsl = false }) {
 }
 
 // ---------------------------------------------------------------------------------------------------------
-// mu import
+// spec.jev import
 // ---------------------------------------------------------------------------------------------------------
 
 /**
- * `mu import`: Claude Code and Codex conversations into mu's sessions (packages/kyrn-judge/src/import). The importer
+ * `spec.jev import`: Claude Code and Codex conversations into spec.jev's sessions (packages/kyrn-judge/src/import). The importer
  * needs nothing but Node: the npm package runs its build, judge/dist/import.js, and a checkout its TypeScript with
  * Node's own type stripping (on by default from 22.18).
  */
@@ -747,7 +753,7 @@ export function planImport({ platform, env, argv, root, home, execPath, fs, stri
 	if (layoutOf({ root, platform, exists: fs.exists }) === "package") {
 		const built = packageEntries({ root, platform }).import;
 		if (!fs.exists(built)) {
-			return { error: `This spec.jev package has no spec.jev import (${built} is missing). Update it: npm i -g mu-agent` };
+			return { error: `This spec.jev package has no spec.jev import (${built} is missing). Update it: npm i -g spec.jev` };
 		}
 		entry = [built];
 	} else {
@@ -766,19 +772,19 @@ export function planImport({ platform, env, argv, root, home, execPath, fs, stri
 }
 
 // ---------------------------------------------------------------------------------------------------------
-// mu setup
+// spec.jev setup
 // ---------------------------------------------------------------------------------------------------------
 
 /** What a "no" to the first-start question leaves in the agent folder (packages/kyrn-judge/src/setup/wizard.ts). */
 export const SETUP_DECLINED_FILE = "setup-declined";
 
-/** How `mu setup` says: set up, and start a session now. */
+/** How `spec.jev setup` says: set up, and start a session now. */
 export const SETUP_EXIT_START = 3;
 
-/** How `mu setup` says it was cancelled (ctrl+c): a first start then goes no further. */
+/** How `spec.jev setup` says it was cancelled (ctrl+c): a first start then goes no further. */
 export const SETUP_EXIT_CANCELLED = 130;
 
-/** The options of `mu setup` that take a value (wizard.ts keeps the same list): the word after one is not a key. */
+/** The options of `spec.jev setup` that take a value (wizard.ts keeps the same list): the word after one is not a key. */
 export const SETUP_VALUE_FLAGS = ["--service", "--model", "--base-url", "--api", "--name", "--judge"];
 
 /**
@@ -831,9 +837,9 @@ export const MODEL_KEY_VARIABLES = [
 ];
 
 /**
- * `mu setup`: the wizard that connects a model and chooses the judge (packages/kyrn-judge/src/setup). It is pi's code,
- * so it runs the way `mu auth` runs: from the sources in a checkout, built in the package. A key on the command line
- * (`mu setup <key>`) goes to the wizard in the environment, MU_SETUP_KEY, never in its argv, which every process on
+ * `spec.jev setup`: the wizard that connects a model and chooses the judge (packages/kyrn-judge/src/setup). It is pi's code,
+ * so it runs the way `spec.jev auth` runs: from the sources in a checkout, built in the package. A key on the command line
+ * (`spec.jev setup <key>`) goes to the wizard in the environment, MU_SETUP_KEY, never in its argv, which every process on
  * the machine can read. The launcher waits for the wizard, since a finished setup may go on into a session.
  */
 export function planSetup({ platform, env, argv, root, home, execPath, fs, stripsTypes = true }) {
@@ -843,7 +849,7 @@ export function planSetup({ platform, env, argv, root, home, execPath, fs, strip
 	if (layout === "package") {
 		const { setup } = packageEntries({ root, platform });
 		if (!fs.exists(setup)) {
-			return { error: `This mu-agent package has no mu setup (${setup} is missing). Update it: npm i -g mu-agent` };
+			return { error: `This spec.jev package has no spec.jev setup (${setup} is missing). Update it: npm i -g spec.jev` };
 		}
 		entry = [setup];
 	} else {
@@ -860,7 +866,7 @@ export function planSetup({ platform, env, argv, root, home, execPath, fs, strip
 			if (index + 1 < argv.length) args.push(argv[++index]);
 		} else if (arg.startsWith("-") || arg === "help") args.push(arg);
 		else if (key === undefined) key = arg;
-		else return { error: "mu setup takes one key at most (mu setup --help)", code: 2 };
+		else return { error: "spec.jev setup takes one key at most (spec.jev setup --help)", code: 2 };
 	}
 	const muDir = muHome({ home, platform, isDir: fs.isDir });
 	const agentDir = agentDirFor({ env, muDir, platform });
@@ -896,7 +902,7 @@ const MCP_ADD_VALUES = new Set([
 ]);
 
 /**
- * `mu mcp add` without `--exposure`: the server's tools are `deferred`, loaded by tool_search when a task needs them,
+ * `spec.jev mcp add` without `--exposure`: the server's tools are `deferred`, loaded by tool_search when a task needs them,
  * instead of pi's default `codemode`, which reaches them only from scripts. Like pi, the options end at `--` or at the
  * second positional argument; what follows belongs to the server's command.
  */
@@ -930,8 +936,8 @@ const NO_SETUP_FLAGS = new Set([
 ]);
 
 /**
- * Whether `mu` offers to set up a model before a session: only to a person at a terminal (stdin and stdout) who starts
- * a session, on a machine where nothing gives mu a model yet, and who has not answered no before (SETUP_DECLINED_FILE)
+ * Whether `spec.jev` offers to set up a model before a session: only to a person at a terminal (stdin and stdout) who starts
+ * a session, on a machine where nothing gives spec.jev a model yet, and who has not answered no before (SETUP_DECLINED_FILE)
  * or turned the question off (MU_NO_SETUP=1). Nothing gives a model: no credential in auth.json, no provider in
  * models.json, no default provider in settings.json, no key of MODEL_KEY_VARIABLES in the environment or the .env.
  * A file that cannot be read counts as set up: the question is for an empty home, never for a broken one.
@@ -973,7 +979,7 @@ export function planFirstRun({ platform, env, argv, interactive, agentDir, envTe
 }
 
 // ---------------------------------------------------------------------------------------------------------
-// mu link | unlink
+// spec.jev link | unlink
 // ---------------------------------------------------------------------------------------------------------
 
 export function linkPath({ platform, env, home }) {
@@ -982,10 +988,10 @@ export function linkPath({ platform, env, home }) {
 	return path.join(dir, platform === "win32" ? "mu.cmd" : "mu");
 }
 
-const SHIM_MARK = "rem mu-link-shim: written by `mu link`, removed by `mu unlink`.";
+const SHIM_MARK = "rem mu-link-shim: written by `spec.jev link`, removed by `spec.jev unlink`.";
 
 /**
- * The file `mu link` writes on Windows, where a link to a script cannot be run. It names mu.cmd relative to
+ * The file `spec.jev link` writes on Windows, where a link to a script cannot be run. It names mu.cmd relative to
  * itself when both are on one drive: cmd reads a batch file in the console's code page, so a path written
  * out in full breaks under a non-ASCII user name, while %~dp0 is filled in by cmd itself.
  */
@@ -1026,7 +1032,7 @@ export function onPath({ dir, platform, env }) {
 }
 
 /**
- * Homebrew's maildir-utils is also called `mu`. A command that is not this one is never replaced, and never
+ * Homebrew's maildir-utils is also called `spec.jev`. A command that is not this one is never replaced, and never
  * shadowed silently. `fs` is { realPath, exists, isFile, readFile }: realPath follows links the way a shell
  * does, also through a link whose target is gone.
  */
@@ -1052,7 +1058,7 @@ export function planLink({ platform, env, home, bin, argv, fs }) {
 		return {
 			action: "refuse",
 			errors: [
-				`${link} already exists and is not this mu, so it was left alone. To use another folder: MU_LINK_DIR=<dir> mu link`,
+				`${link} already exists and is not this spec.jev, so it was left alone. To use another folder: MU_LINK_DIR=<dir> spec.jev link`,
 			],
 		};
 	}
@@ -1061,8 +1067,8 @@ export function planLink({ platform, env, home, bin, argv, fs }) {
 		return {
 			action: "refuse",
 			errors: [
-				`Another mu is already on your PATH: ${other}`,
-				"Nothing was linked. To put this one first anyway: mu link --force (or MU_LINK_DIR=<dir> mu link)",
+				`Another spec.jev is already on your PATH: ${other}`,
+				"Nothing was linked. To put this one first anyway: spec.jev link --force (or MU_LINK_DIR=<dir> spec.jev link)",
 			],
 		};
 	}
@@ -1080,11 +1086,11 @@ export function planLink({ platform, env, home, bin, argv, fs }) {
 	if (windows && /[^\x00-\x7f]/.test(content)) {
 		notes.push(
 			"Note: the path from that folder to this repository has non-ASCII characters in it, and cmd reads a batch file in the",
-			"console's code page. If mu then can't find its target, choose a folder on the same drive (MU_LINK_DIR), or put",
+			"console's code page. If spec.jev then can't find its target, choose a folder on the same drive (MU_LINK_DIR), or put",
 			`${bin} on your PATH instead.`,
 		);
 	}
-	return { action: "link", link, target: mine, content, message: `mu -> ${mine}`, notes };
+	return { action: "link", link, target: mine, content, message: `spec.jev -> ${mine}`, notes };
 }
 
 export function planUnlink({ platform, env, home, fs }) {
@@ -1096,14 +1102,14 @@ export function planUnlink({ platform, env, home, fs }) {
 		} catch {}
 		return text?.includes(SHIM_MARK)
 			? { remove: link, message: `removed ${link}` }
-			: { message: `${link} is not a shim written by mu link; nothing removed` };
+			: { message: `${link} is not a shim written by spec.jev link; nothing removed` };
 	}
 	return fs.isLink(link)
 		? { remove: link, message: `removed ${link}` }
 		: { message: `${link} is not a link; nothing removed` };
 }
 
-/** What `mu doctor` says about the command. */
+/** What `spec.jev doctor` says about the command. */
 export function linkState({ platform, link, bin, fs }) {
 	if (platform === "win32") {
 		try {
@@ -1120,7 +1126,7 @@ export function linkState({ platform, link, bin, fs }) {
 }
 
 // ---------------------------------------------------------------------------------------------------------
-// mu migrate
+// spec.jev migrate
 // ---------------------------------------------------------------------------------------------------------
 
 /** Minimal CSV, as `tasklist /FO CSV` and PowerShell's ConvertTo-Csv write it: quoted fields, "" for a quote. */
@@ -1229,7 +1235,7 @@ export function findBusy({ platform, old, run, self }) {
 }
 
 /**
- * ~/.kyrn becomes ~/.mu: one rename of the whole folder, so nothing inside is opened, copied or rewritten,
+ * ~/.kyrn becomes ~/.spec.jev: one rename of the whole folder, so nothing inside is opened, copied or rewritten,
  * and the login files keep their permissions. The old path stays behind as a link (a junction on Windows),
  * because the desktop app's session mappings store absolute paths into it.
  *
@@ -1238,7 +1244,9 @@ export function findBusy({ platform, old, run, self }) {
 export function migrate({ platform, home, argv, fs, run, alive, self, out, err }) {
 	const path = pathFor(platform);
 	const old = path.join(home, ".kyrn");
-	const next = path.join(home, ".mu");
+	// The home this machine already uses wins; a new move lands in the current name.
+	const legacy = path.join(home, ".mu");
+	const next = fs.isDir(legacy) || fs.isLink(legacy) ? legacy : path.join(home, ".spec.jev");
 	const dry = argv[0] === "--dry-run";
 	if (fs.isLink(old)) {
 		out(`Already moved: ${old} is a link to ${fs.readlink(old)}.`);
@@ -1249,7 +1257,7 @@ export function migrate({ platform, home, argv, fs, run, alive, self, out, err }
 		return 0;
 	}
 	if (fs.exists(next) || fs.isLink(next)) {
-		err(`${next} already exists, so nothing was moved. mu never merges or overwrites two home folders:`);
+		err(`${next} already exists, so nothing was moved. spec.jev never merges or overwrites two home folders:`);
 		err("look at both and decide which one to keep.");
 		return 1;
 	}
@@ -1259,17 +1267,17 @@ export function migrate({ platform, home, argv, fs, run, alive, self, out, err }
 	try {
 		pid = Number.parseInt(fs.readFile(path.join(old, "local-judge", "judge.pid")).trim(), 10);
 	} catch {}
-	if (pid > 0 && alive(pid)) busy.push(`  the local judge (pid ${pid}). Stop it with mu judge stop`);
+	if (pid > 0 && alive(pid)) busy.push(`  the local judge (pid ${pid}). Stop it with spec.jev judge stop`);
 	const found = findBusy({ platform, old, run, self });
 	if (!found) {
-		err("Nothing was moved: mu couldn't read the list of running processes (tasklist, powershell), so it can't tell whether mu is still running.");
+		err("Nothing was moved: spec.jev couldn't read the list of running processes (tasklist, powershell), so it can't tell whether spec.jev is still running.");
 		return 1;
 	}
 	const list = (pids) => pids.join(" ");
 	if (found.sessions.length > 0) {
-		busy.push(`  mu sessions, in a terminal or behind the desktop app (pid ${list(found.sessions)}). Close them.`);
+		busy.push(`  spec.jev sessions, in a terminal or behind the desktop app (pid ${list(found.sessions)}). Close them.`);
 	}
-	if (found.browser.length > 0) busy.push(`  the mu browser (pid ${list(found.browser)}). Close it.`);
+	if (found.browser.length > 0) busy.push(`  the spec.jev browser (pid ${list(found.browser)}). Close it.`);
 	if (found.desktop.length > 0) {
 		busy.push(`  the desktop app's backend (pid ${list(found.desktop)}). Quit the desktop app.`);
 	}
@@ -1296,7 +1304,7 @@ export function migrate({ platform, home, argv, fs, run, alive, self, out, err }
 		out(`renamed  ${path.join(next, config)} -> mu.json`);
 	}
 	out(`linked   ${old} -> ${next} (paths stored from before the rename keep working)`);
-	out("To check it, run mu doctor");
+	out("To check it, run spec.jev doctor");
 	return 0;
 }
 
@@ -1378,7 +1386,7 @@ function handOver({ command, args, env, strategy }) {
 		for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) process.on(signal, () => relay(signal));
 		if (process.platform === "win32") process.on("SIGBREAK", () => {});
 		child.on("error", (error) => {
-			err(`mu: couldn't start ${command}: ${error.message}`);
+			err(`spec.jev: couldn't start ${command}: ${error.message}`);
 			resolve(1);
 		});
 		child.on("exit", (code, signal) => resolve(code ?? 128 + (osConstants.signals[signal] ?? 0)));
@@ -1500,7 +1508,7 @@ export async function main(argv = process.argv.slice(2)) {
 		}
 		return handOver({ command: plan.command, args: plan.args, env: plan.env, strategy });
 	}
-	// What the session gets, when there is one: after a `mu setup` that ends in "start mu now", a plain session.
+	// What the session gets, when there is one: after a `spec.jev setup` that ends in "start spec.jev now", a plain session.
 	let sessionArgv = mcpAddDefaults(argv);
 	if (command === "setup") {
 		const plan = planSetup({
@@ -1518,7 +1526,7 @@ export async function main(argv = process.argv.slice(2)) {
 			return plan.code ?? 1;
 		}
 		// The key leaves this process's own command line too, as far as the platform lets a process rewrite it.
-		if (plan.keyGiven) process.title = "mu setup";
+		if (plan.keyGiven) process.title = "spec.jev setup";
 		mkdirSync(plan.agentDir, { recursive: true });
 		const code = await handOver(plan);
 		if (code !== SETUP_EXIT_START) return code;
@@ -1534,7 +1542,7 @@ export async function main(argv = process.argv.slice(2)) {
 		});
 	}
 	if ((command === "link" || command === "unlink") && layout === "package") {
-		out("This mu was installed with npm, which already put `mu` on your PATH (npm i -g mu-agent); nothing to link.");
+		out("This spec.jev was installed with npm, which already put `spec.jev` on your PATH (npm i -g spec.jev); nothing to link.");
 		return 0;
 	}
 	if (command === "link") {
@@ -1584,8 +1592,8 @@ export async function main(argv = process.argv.slice(2)) {
 		return 0;
 	}
 
-	// A first start with nothing to work with: one question, and the wizard, before the session (`mu setup`). Never
-	// right after `mu setup` itself: its subscription route leaves nothing written, and the person was just asked.
+	// A first start with nothing to work with: one question, and the wizard, before the session (`spec.jev setup`). Never
+	// right after `spec.jev setup` itself: its subscription route leaves nothing written, and the person was just asked.
 	const muDir = muHome({ home, platform, isDir });
 	let envText;
 	try {
@@ -1656,7 +1664,7 @@ if (isMain()) {
 		// Everything was written synchronously, so nothing is cut off; an idle keep-alive socket must not hold the exit up.
 		(code) => process.exit(code),
 		(error) => {
-			err(`mu: ${error instanceof Error ? error.message : String(error)}`);
+			err(`spec.jev: ${error instanceof Error ? error.message : String(error)}`);
 			process.exitCode = 1;
 		},
 	);

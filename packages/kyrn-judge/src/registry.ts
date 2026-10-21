@@ -89,7 +89,7 @@ function createProvider(name: string, judge: JudgeConfig, host: JudgeHost): Judg
 		case "classifier": {
 			if (!judge.model?.includes("/")) throw new TypeError(`Judge "${name}" needs a model ("provider/model-id")`);
 			const call = host.classify?.(judge.model);
-			if (!call) throw new TypeError(`Judge "${name}": classifier models need a mu session`);
+			if (!call) throw new TypeError(`Judge "${name}": classifier models need a spec.jev session`);
 			return new ClassifierJudgeProvider({ model: judge.model, call });
 		}
 		case "typesafe": {

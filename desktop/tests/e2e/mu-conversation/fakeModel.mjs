@@ -50,7 +50,7 @@ export function textOf(content) {
  * spec.jev's own note about the task frame goes to the model as a user message after the person's (a session it has no frame
  * for yet, an imported one, gets one at its first message): it is not the person's turn.
  */
-const isFrameNote = (message) => /^\s*\[mu task frame/.test(textOf(message?.content));
+const isFrameNote = (message) => /^\s*\[spec.jev task frame/.test(textOf(message?.content));
 
 /**
  * What to answer, from the request's messages: the turn is the last user message (not spec.jev's note about the task frame),

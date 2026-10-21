@@ -190,12 +190,12 @@ describe('a fixed line of the account in the app’s language', () => {
     ]);
   });
 
-  it('has every fixed line in all 13 languages, each filled with what it names, at any count', async () => {
+  it('has every fixed line in all 5 languages, each filled with what it names, at any count', async () => {
     const root = path.resolve(__dirname, '../../..');
     const { supportedLanguages } = JSON.parse(
       readFileSync(path.join(root, 'packages/desktop/src/common/config/i18n-config.json'), 'utf8')
     ) as { supportedLanguages: string[] };
-    expect(supportedLanguages).toHaveLength(13);
+    expect(supportedLanguages).toHaveLength(5);
     const locales = await Promise.all(
       supportedLanguages.map(async (language) => {
         const common = JSON.parse(

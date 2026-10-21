@@ -111,7 +111,7 @@ describe('the step bar above a page spec.jev is driving', () => {
     view.unmount();
     show(<StepBar run={run({ paused: true, pausedBy: 'interaction' })} />);
     expect(screen.queryByText('暂停')).toBeNull();
-    expect(screen.getByText(/你刚才操作了页面，mu 已自动暂停/)).toBeTruthy();
+    expect(screen.getByText(/你刚才操作了页面，spec\.jev 已自动暂停/)).toBeTruthy();
     fireEvent.click(screen.getByText('继续'));
     expect(control).toHaveBeenLastCalledWith({ tabId: 'browser-1', action: 'resume' });
     expect(screen.getByTestId('mu-step-bar').getAttribute('data-tone')).toBe('paused');

@@ -119,7 +119,7 @@ export function findHarnessSource(desktopRoot) {
     }
   }
   throw new Error(
-    `No mu harness found (looked in ${candidates.join(', ')}). Set MU_ROOT to a harness checkout or a mu-agent package.`
+    `No spec.jev harness found (looked in ${candidates.join(', ')}). Set MU_ROOT to a harness checkout or a spec.jev package.`
   );
 }
 
@@ -325,7 +325,7 @@ export function createProfile({ desktopRoot, root, language = 'zh-CN', app } = {
   if (app) {
     const carried = join(app.resources, 'harness', 'mu-agent');
     if (!existsSync(join(carried, 'kyrn', 'bin', 'mu.mjs'))) {
-      throw new Error(`The packaged app carries no mu: ${join(carried, 'kyrn', 'bin', 'mu.mjs')} is missing.`);
+      throw new Error(`The packaged app carries no spec.jev: ${join(carried, 'kyrn', 'bin', 'mu.mjs')} is missing.`);
     }
     const env = profileEnv({ paths, language });
     const harness = { root: carried, layout: 'package', view: carried };

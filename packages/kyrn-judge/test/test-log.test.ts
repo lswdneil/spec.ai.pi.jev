@@ -386,7 +386,7 @@ function expandDuplicates(rendered: string, original: string): string {
 	const source = original.match(/[^\n]*\n|[^\n]+$/g) ?? [];
 	let text = "";
 	for (const line of rendered.match(/[^\n]*\n|[^\n]+$/g) ?? []) {
-		const list = /^\[mu: omitted \d+ lines: identical to lines (.+) of the full output, kept above\]/.exec(line)?.[1];
+		const list = /^\[spec\.jev: omitted \d+ lines: identical to lines (.+) of the full output, kept above\]/.exec(line)?.[1];
 		if (line.startsWith("[spec.jev: ") && line.includes("full output: ")) continue;
 		if (!list) {
 			text += line;

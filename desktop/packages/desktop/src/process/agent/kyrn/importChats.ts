@@ -102,7 +102,7 @@ export function runCommand(
       err.push(chunk);
     });
     child.on('error', (error) =>
-      finish(() => reject(new KyrnError('importFailed', `mu import did not start: ${error.message}`)))
+      finish(() => reject(new KyrnError('importFailed', `spec.jev import did not start: ${error.message}`)))
     );
     child.on('close', (code) =>
       finish(() =>
@@ -129,7 +129,7 @@ export function importCli(harness: Pick<Harness, 'root' | 'layout'>, deps: Impor
   const run = deps.run ?? runCommand;
   return async (args, timeoutMs) => {
     const entry = importEntryOf(harness, platform);
-    if (!exists(entry)) throw new KyrnError('importMissing', `This mu has no import command: ${entry} is missing`);
+    if (!exists(entry)) throw new KyrnError('importMissing', `This spec.jev has no import command: ${entry} is missing`);
     const start = launchCommand(launcherOf(harness, platform), ['import', ...args]);
     return run(start.command, start.args, timeoutMs, { ...process.env, ...start.env });
   };
@@ -146,7 +146,7 @@ function cliList(output: CliOutput, key: 'conversations' | 'results'): unknown[]
   const list = asRecord(parsed)[key];
   if (Array.isArray(list)) return list;
   const said = (output.stderr.trim() || output.stdout.trim()).split('\n').slice(-8).join('\n');
-  throw new KyrnError('importFailed', said || `mu import ended with code ${output.code ?? 'none'}`);
+  throw new KyrnError('importFailed', said || `spec.jev import ended with code ${output.code ?? 'none'}`);
 }
 
 /** One conversation of the list, as far as it is well formed. */
@@ -341,7 +341,7 @@ function contentText(content: unknown): string {
  */
 export function readImportedHistory(file: string): ImportedHistory {
   const session = readImportedSession(file);
-  if (!session) throw new KyrnError('importFailed', `Not a session mu import wrote: ${file}`);
+  if (!session) throw new KyrnError('importFailed', `Not a session spec.jev import wrote: ${file}`);
   const lines = readFileSync(file, 'utf8').split('\n');
   // The header, then the entries the import wrote; a session from before the count was kept is read whole.
   const end = session.entries > 0 ? Math.min(lines.length, session.entries + 1) : lines.length;
@@ -497,7 +497,7 @@ export function importService(deps: ImportServiceDeps): ImportService {
       outcome: { status: 'failed', source, reason, detail } as const,
     });
     const session = readImportedSession(file);
-    if (!session) return failed('other', `mu import wrote no session at ${file}`);
+    if (!session) return failed('other', `spec.jev import wrote no session at ${file}`);
     if (!folder.exists(session.cwd)) return failed('folderMissing', session.cwd);
     const name = session.name || IMPORT_TOOL_NAMES[session.tool];
     const created = asRecord(
@@ -537,7 +537,7 @@ export function importService(deps: ImportServiceDeps): ImportService {
   const nativeOutcome = (result: Record<string, unknown>, source: string, file: string): ImportOutcome => {
     const session = readImportedSession(file);
     if (!session?.id)
-      return { status: 'failed', source, reason: 'other', detail: `mu import wrote no session at ${file}` };
+      return { status: 'failed', source, reason: 'other', detail: `spec.jev import wrote no session at ${file}` };
     if (!folder.exists(session.cwd)) return { status: 'failed', source, reason: 'folderMissing', detail: session.cwd };
     const name = session.name || IMPORT_TOOL_NAMES[session.tool];
     return result.status === 'already-imported'

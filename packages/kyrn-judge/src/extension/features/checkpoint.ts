@@ -196,8 +196,8 @@ export function offNotice(
 		case "home_folder":
 			return {
 				line: say({
-					zh: `mu：本次会话不拍检查点，因为这个文件夹是你的主目录，或者包含它。${start.zh}。`,
-					en: `mu: checkpoints are off for this session because this folder is, or contains, your home folder. ${start.en}.`,
+					zh: `spec.jev：本次会话不拍检查点，因为这个文件夹是你的主目录，或者包含它。${start.zh}。`,
+					en: `spec.jev: checkpoints are off for this session because this folder is, or contains, your home folder. ${start.en}.`,
 				}),
 				params: {},
 			};
@@ -212,24 +212,24 @@ export function offNotice(
 		case "too_many_files":
 			return {
 				line: say({
-					zh: `mu：本次会话不拍检查点，因为这个文件夹要拍的文件超过 ${limits.maxFiles} 个。${start.zh}，或者调高 features.checkpoint.maxFiles。`,
-					en: `mu: checkpoints are off for this session because this folder has more than ${limits.maxFiles} files to snapshot. ${start.en}, or raise features.checkpoint.maxFiles.`,
+					zh: `spec.jev：本次会话不拍检查点，因为这个文件夹要拍的文件超过 ${limits.maxFiles} 个。${start.zh}，或者调高 features.checkpoint.maxFiles。`,
+					en: `spec.jev: checkpoints are off for this session because this folder has more than ${limits.maxFiles} files to snapshot. ${start.en}, or raise features.checkpoint.maxFiles.`,
 				}),
 				params: { limit: limits.maxFiles },
 			};
 		case "too_many_bytes":
 			return {
 				line: say({
-					zh: `mu：本次会话不拍检查点，因为这个文件夹要拍的文件加起来超过 ${limits.maxTotalMb} MB。${start.zh}，或者调高 features.checkpoint.maxTotalMb。`,
-					en: `mu: checkpoints are off for this session because this folder has more than ${limits.maxTotalMb} MB of files to snapshot. ${start.en}, or raise features.checkpoint.maxTotalMb.`,
+					zh: `spec.jev：本次会话不拍检查点，因为这个文件夹要拍的文件加起来超过 ${limits.maxTotalMb} MB。${start.zh}，或者调高 features.checkpoint.maxTotalMb。`,
+					en: `spec.jev: checkpoints are off for this session because this folder has more than ${limits.maxTotalMb} MB of files to snapshot. ${start.en}, or raise features.checkpoint.maxTotalMb.`,
 				}),
 				params: { limitMb: limits.maxTotalMb },
 			};
 		case "too_slow":
 			return {
 				line: say({
-					zh: `mu：本次会话不拍检查点，因为列出这个文件夹里要拍的文件用了超过 ${seconds} 秒。${start.zh}。`,
-					en: `mu: checkpoints are off for this session because listing this folder's files took more than ${seconds} s. ${start.en}.`,
+					zh: `spec.jev：本次会话不拍检查点，因为列出这个文件夹里要拍的文件用了超过 ${seconds} 秒。${start.zh}。`,
+					en: `spec.jev: checkpoints are off for this session because listing this folder's files took more than ${seconds} s. ${start.en}.`,
 				}),
 				params: { seconds },
 			};
@@ -349,7 +349,7 @@ export function registerCheckpoint(
 		} else if (!turn.snapshotFailed) {
 			turn.snapshotFailed = true;
 			const reason = error instanceof Error ? error.message : String(error);
-			if (ctx.hasUI) ctx.ui.notify(`mu: no checkpoint for this turn (${clip(reason, 200)}).`, "warning");
+			if (ctx.hasUI) ctx.ui.notify(`spec.jev: no checkpoint for this turn (${clip(reason, 200)}).`, "warning");
 		}
 	};
 
@@ -523,7 +523,7 @@ export function registerCheckpoint(
 	): Promise<Set<string> | undefined> => {
 		if (byHand.length === 0) return new Set();
 		const choice = await ctx.ui.select(
-			`mu: ${byHand.length} of these files changed after the agent's last action, probably edited by you: ${listed(byHand)}`,
+			`spec.jev: ${byHand.length} of these files changed after the agent's last action, probably edited by you: ${listed(byHand)}`,
 			["Keep those files as they are", "Rewind them too (a snapshot taken now can bring them back)", "Cancel"],
 		);
 		if (choice?.startsWith("Keep")) return new Set(byHand);
@@ -564,7 +564,7 @@ export function registerCheckpoint(
 				body = clip(lines.join("\n"), 600).replace(" Abandoned because:", "\nAbandoned because:");
 		}
 		return [
-			`mu went back to checkpoint #${checkpoint.id}, to before "${checkpoint.label}". An attempt made after it was abandoned and its file changes were undone.`,
+			`spec.jev went back to checkpoint #${checkpoint.id}, to before "${checkpoint.label}". An attempt made after it was abandoned and its file changes were undone.`,
 			body,
 			files.length > 0 ? `Files it had changed: ${listed(files)}` : "",
 			"Take a different approach.",
@@ -626,7 +626,7 @@ export function registerCheckpoint(
 
 	const rewindTo = async (ctx: ExtensionCommandContext, checkpoint: CheckpointEntry, asked?: RewindScope) => {
 		const { opened, plan, byHand } = await exclusive(() => preview(ctx, checkpoint));
-		const title = `mu: go back to checkpoint #${checkpoint.id}, before "${checkpoint.label}"?`;
+		const title = `spec.jev: go back to checkpoint #${checkpoint.id}, before "${checkpoint.label}"?`;
 		let scope = asked;
 		if (scope) {
 			if (!(await ctx.ui.confirm(title, describePlan(plan)))) return ctx.ui.notify("Nothing was changed.", "info");
@@ -666,7 +666,7 @@ export function registerCheckpoint(
 				: moved
 					? "The conversation is back to before that request, which is in the editor so you can send it again."
 					: // pi lets only a command move the leaf, and it refused or is not bound here: one step is left to the user.
-						`mu couldn't move the conversation from here. To finish, run /tree and pick the message "${checkpoint.label}".`,
+						`spec.jev couldn't move the conversation from here. To finish, run /tree and pick the message "${checkpoint.label}".`,
 		].filter(Boolean);
 		ctx.ui.notify(said.join("\n"), "info");
 	};
@@ -795,7 +795,7 @@ export function registerCheckpoint(
 				return undefined;
 			}
 			const approved = await ctx.ui.confirm(
-				`mu: this looks like a dead end. Go back to checkpoint #${checkpoint.id}, before "${checkpoint.label}"?`,
+				`spec.jev: this looks like a dead end. Go back to checkpoint #${checkpoint.id}, before "${checkpoint.label}"?`,
 				`${trigger}\n\n${describePlan(plan)}\n\nThe agent will then start over from your request, with a note about what didn't work. /rewind undo reverses this.`,
 				options.confirmSeconds > 0 ? { timeout: options.confirmSeconds * 1000 } : undefined,
 			);

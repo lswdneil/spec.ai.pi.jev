@@ -72,7 +72,8 @@ describe.sequential("OAuth callback server", () => {
 		// spec.jev: the page is spec.jev's own (src/utils/oauth-page.ts): headed "Signed in", with spec.jev's mark instead of pi's logo.
 		expect(success.body).toContain("<h1>Signed in</h1>");
 		expect(success.body).toContain("Signed in to Example.");
-		expect(success.body).toContain('id="mu-tile"');
+		expect(success.body).toContain('class="mark"');
+	expect(success.body).toContain("data:image/png;base64,");
 		await expect(server.wait()).resolves.toBe("completed:the-code");
 	});
 

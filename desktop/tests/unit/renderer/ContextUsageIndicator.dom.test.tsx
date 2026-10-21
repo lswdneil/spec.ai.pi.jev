@@ -109,7 +109,7 @@ describe('ContextUsageIndicator', () => {
   });
 
   it('formats cost, percentage and token counts in the app language, not the host locale', () => {
-    mockLanguage = 'de-DE';
+    mockLanguage = 'zh-CN';
     const { getByTestId } = render(
       <ContextUsageIndicator
         tokenUsage={{
@@ -122,15 +122,15 @@ describe('ContextUsageIndicator', () => {
     );
 
     const popover = getByTestId('popover-content').textContent ?? '';
-    // German writes the decimal separator as a comma and puts the currency
-    // symbol last — for every number in the popover, not just the cost.
-    expect(popover).toContain('0,42\u00a0$');
-    expect(popover).toContain('1,4\u00a0%');
-    expect(popover).toContain('14,1K');
-    expect(popover).toContain('Input 14,1K');
+    // Chinese writes the currency code before the amount, and groups and
+    // separates every number the same way, not just the cost.
+    expect(popover).toContain('US$0.42');
+    expect(popover).toContain('1.4%');
+    expect(popover).toContain('14.1K');
+    expect(popover).toContain('Input 14.1K');
     // The separators must not be mixed within one popover.
-    expect(popover).not.toContain('14.1K');
-    expect(popover).not.toContain('$0.42');
+    expect(popover).not.toContain('14,1K');
+    expect(popover).not.toContain('0,42');
   });
 
   it("words every popover line as one sentence of the app language, numbers inside, in that language's order", () => {
@@ -179,9 +179,9 @@ describe('formatTokenCount', () => {
   it('keeps the K/M suffix but localises the decimal separator', () => {
     // Intl compact notation is not usable here: de-DE renders 12600 as
     // "12.600", which reads as a grouped integer rather than a compact one.
-    expect(formatTokenCount(12_600, 'de-DE')).toBe('12,6K');
-    expect(formatTokenCount(262_144, 'fr-FR')).toBe('262,1K');
-    expect(formatTokenCount(1_000_000, 'de-DE', true)).toBe('1M');
+    expect(formatTokenCount(12_600, 'zh-CN')).toBe('12.6K');
+    expect(formatTokenCount(262_144, 'zh-TW')).toBe('262.1K');
+    expect(formatTokenCount(1_000_000, 'zh-CN', true)).toBe('1M');
   });
 
   it('collapses a trailing zero decimal exactly as before', () => {
@@ -194,7 +194,7 @@ describe('formatTokenCount', () => {
 describe('formatCostAmount', () => {
   it('formats in the given app language', () => {
     expect(formatCostAmount({ amount: 0.42, currency: 'USD' }, 'en-US')).toBe('$0.42');
-    expect(formatCostAmount({ amount: 0.42, currency: 'USD' }, 'de-DE')).toBe('0,42\u00a0$');
+    expect(formatCostAmount({ amount: 0.42, currency: 'USD' }, 'zh-CN')).toBe('US$0.42');
   });
 
   it('keeps four fraction digits for ordinary amounts', () => {
@@ -212,7 +212,7 @@ describe('formatCostAmount', () => {
     // these to zero, which reads as free.
     expect(formatCostAmount({ amount: 0.00003, currency: 'USD' }, 'en-US')).toBe('$0.00003');
     expect(formatCostAmount({ amount: 0.000012, currency: 'USD' }, 'en-US')).toBe('$0.000012');
-    expect(formatCostAmount({ amount: 0.00003, currency: 'USD' }, 'de-DE')).toBe('0,00003\u00a0$');
+    expect(formatCostAmount({ amount: 0.00003, currency: 'USD' }, 'zh-CN')).toBe('US$0.00003');
   });
 
   it('falls back to "<amount> <code>" for a currency code Intl cannot render', () => {

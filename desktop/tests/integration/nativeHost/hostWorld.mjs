@@ -93,7 +93,7 @@ export function hostEnvironment(desktopRoot) {
   } catch {
     return { skip: 'no spec.jev harness (MU_ROOT, or ../KYRN beside this checkout)' };
   }
-  if (!launcherPlansHosts(harness.root)) return { skip: `${harness.root} is a mu from before the native host` };
+  if (!launcherPlansHosts(harness.root)) return { skip: `${harness.root} is a spec.jev from before the native host` };
   try {
     return { harness, node: findNode().bin };
   } catch {

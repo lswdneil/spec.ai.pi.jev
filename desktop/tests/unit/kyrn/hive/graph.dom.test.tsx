@@ -115,7 +115,7 @@ describe('the map of a run', () => {
     expect(within(map).getByText('spec.jev')).toBeInTheDocument();
     const reports = screen.getAllByTestId('hive-report');
     expect(reports.map((line) => [line.getAttribute('data-from'), line.getAttribute('data-to')])).toEqual([
-      ['reviewer', 'mu'],
+      ['reviewer', 'spec.jev'],
     ]);
     expect(screen.getByRole('list', { name: 'Legend' })).toHaveTextContent('report');
     expect(screen.queryByText(/ out · /)).not.toBeInTheDocument();

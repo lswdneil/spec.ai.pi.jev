@@ -84,7 +84,7 @@ export async function nativeHostReady(options: NativeHostReadyOptions = {}): Pro
   const env = options.env ?? process.env;
   const setting = nativeHostSetting(env);
   if (setting !== 'auto') return setting === 'on';
-  const note = options.note ?? ((line: string) => console.warn(`[mu] ${line}`));
+  const note = options.note ?? ((line: string) => console.warn(`[spec.jev] ${line}`));
   try {
     const harness = harnessOf(env);
     if (!harness) {
@@ -142,12 +142,12 @@ export async function startNativeHost(options: StartNativeHostOptions): Promise<
     platform: process.platform,
     stripsTypes: Boolean(process.features.typescript),
     fs: options.fs,
-    note: (line) => console.warn(`[mu] ${line}`),
+    note: (line) => console.warn(`[spec.jev] ${line}`),
   });
   const host = new NativeHost({
     launch,
     fork: forkUtility(options.entry ?? nativeHostEntry()),
-    log: (line) => console.log(`[mu host] ${line}`),
+    log: (line) => console.log(`[spec.jev host] ${line}`),
   });
   host.start();
   return host;

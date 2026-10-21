@@ -119,7 +119,7 @@ test('a session of thousands of messages opens from the sidebar, and a new messa
   const file = join(folder, `2026-09-01T10-00-00-000Z_${session.id}.jsonl`);
   writeFileSync(file, session.text);
   const megabytes = (statSync(file).size / 1_048_576).toFixed(1);
-  console.log(`[mu e2e] long session: ${session.messages} entries, ${megabytes} MB`);
+  console.log(`[spec.jev e2e] long session: ${session.messages} entries, ${megabytes} MB`);
 
   await start();
   const p = page();
@@ -140,7 +140,7 @@ test('a session of thousands of messages opens from the sidebar, and a new messa
       .last()
   ).toBeVisible({ timeout: 120_000 });
   const openMs = Date.now() - opened;
-  console.log(`[mu e2e] opened in ${openMs} ms`);
+  console.log(`[spec.jev e2e] opened in ${openMs} ms`);
   if (cdp) {
     const { profile } = await cdp.send('Profiler.stop');
     writeFileSync(join(paths().logs, 'open-long-session.cpuprofile'), JSON.stringify(profile));
@@ -156,7 +156,7 @@ test('a session of thousands of messages opens from the sidebar, and a new messa
     });
     const top = [...self.entries()].sort((a, b) => b[1] - a[1]).slice(0, 14);
     console.log(
-      `[mu e2e] top self time while opening:\n${top.map(([key, us]) => `  ${(us / 1000).toFixed(0).padStart(6)} ms  ${key}`).join('\n')}`
+      `[spec.jev e2e] top self time while opening:\n${top.map(([key, us]) => `  ${(us / 1000).toFixed(0).padStart(6)} ms  ${key}`).join('\n')}`
     );
   }
   await expect(userRows().last()).toContainText(`TURN-${TURNS}`);
@@ -165,7 +165,7 @@ test('a session of thousands of messages opens from the sidebar, and a new messa
   expect(openMs, 'opening the long session').toBeLessThan(8_000);
   // Only the latest rows are in the page: a window of them, not the thousands of the session.
   const drawn = await rowsInDom().count();
-  console.log(`[mu e2e] rows in the page after opening: ${drawn}`);
+  console.log(`[spec.jev e2e] rows in the page after opening: ${drawn}`);
   expect(drawn).toBeGreaterThan(0);
   expect(drawn).toBeLessThan(400);
 
@@ -173,7 +173,7 @@ test('a session of thousands of messages opens from the sidebar, and a new messa
   await send('E2E:ECHO AFTER-LONG-OK');
   await replyWith('AFTER-LONG-OK', 120_000);
   const resumeMs = Date.now() - resumed;
-  console.log(`[mu e2e] a new message answered in ${resumeMs} ms (host start included)`);
+  console.log(`[spec.jev e2e] a new message answered in ${resumeMs} ms (host start included)`);
   expect(resumeMs, 'resuming the long session with a message').toBeLessThan(30_000);
 
   // A reply that streams in a long session: every piece redraws the last row, and the page must not stall meanwhile
@@ -196,7 +196,7 @@ test('a session of thousands of messages opens from the sidebar, and a new messa
   const streaming = await p.evaluate(() => window.__streaming);
   const longest = Math.max(0, ...streaming.tasks);
   console.log(
-    `[mu e2e] a reply streamed in the long session: ${streaming.tasks.length} tasks over 50 ms (longest ${Math.round(longest)} ms), longest gap between frames ${Math.round(streaming.gap)} ms`
+    `[spec.jev e2e] a reply streamed in the long session: ${streaming.tasks.length} tasks over 50 ms (longest ${Math.round(longest)} ms), longest gap between frames ${Math.round(streaming.gap)} ms`
   );
   expect(longest, 'the longest task while a reply streams').toBeLessThan(500);
   expectNoProblems();
@@ -244,7 +244,7 @@ test('scrolling to the top shows the rows before, and the reader keeps their pla
   await p.waitForTimeout(1_000);
   const settled = await offsetOf(before.id);
   console.log(
-    `[mu e2e] a step up: ${before.count} -> ${(await first()).count} rows; the row that was first moved ${Math.round(anchored - before.offset)} px at once, ${Math.round(settled - before.offset)} px after a second`
+    `[spec.jev e2e] a step up: ${before.count} -> ${(await first()).count} rows; the row that was first moved ${Math.round(anchored - before.offset)} px at once, ${Math.round(settled - before.offset)} px after a second`
   );
   expect(Math.abs(anchored - before.offset), 'the reader keeps their place, at once').toBeLessThan(40);
   expect(Math.abs(settled - before.offset), 'the reader keeps their place, after the rows are drawn').toBeLessThan(40);
@@ -264,7 +264,7 @@ test('scrolling to the top shows the rows before, and the reader keeps their pla
   }
   const readMs = Date.now() - reading;
   const total = (await first()).count;
-  console.log(`[mu e2e] back to the first message in ${steps} steps, ${readMs} ms, ${total} rows in the page`);
+  console.log(`[spec.jev e2e] back to the first message in ${steps} steps, ${readMs} ms, ${total} rows in the page`);
   await expect(firstMessage).toHaveCount(1);
   expect(steps).toBeGreaterThan(5);
   expect(readMs, 'reading a long session back to its first message').toBeLessThan(90_000);

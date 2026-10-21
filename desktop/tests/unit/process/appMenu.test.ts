@@ -132,7 +132,7 @@ describe('the macOS application menu', () => {
     const actions = fakeActions();
     const help = submenuOf(mac(false, actions), 'common.menu.help');
 
-    click(help.find((item) => item.label === 'common.menu.projectPage(mu)'));
+    click(help.find((item) => item.label === 'common.menu.projectPage(spec.jev)'));
 
     expect(actions.openProjectPage).toHaveBeenCalledTimes(1);
     expect(help.some((item) => item.label === 'common.menu.checkForUpdates')).toBe(false);
@@ -252,7 +252,7 @@ describe('the installed menu', () => {
   it("opens spec.jev's GitHub page", () => {
     setupApplicationMenu();
 
-    click(itemLabelled(installed(), i18n.t('common.menu.projectPage', { name: 'mu' })));
+    click(itemLabelled(installed(), i18n.t('common.menu.projectPage', { name: 'spec.jev' })));
 
     expect(electron.shell.openExternal).toHaveBeenCalledWith(MU_PROJECT_URL);
     expect(MU_PROJECT_URL).toBe('https://github.com/qybaihe/mu');
@@ -263,7 +263,7 @@ describe('the installed menu', () => {
     electron.shell.openExternal.mockImplementationOnce(() => Promise.reject(new Error('no browser')));
     setupApplicationMenu();
 
-    click(itemLabelled(installed(), i18n.t('common.menu.projectPage', { name: 'mu' })));
+    click(itemLabelled(installed(), i18n.t('common.menu.projectPage', { name: 'spec.jev' })));
 
     await vi.waitFor(() => expect(error).toHaveBeenCalled());
     error.mockRestore();

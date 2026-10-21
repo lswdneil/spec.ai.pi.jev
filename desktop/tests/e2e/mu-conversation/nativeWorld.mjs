@@ -87,7 +87,7 @@ export function createNativeWorld({ desktopRoot, prepare }) {
     const watch = (async () => {
       while (!over) {
         const why = await hostFailure().catch(() => undefined);
-        if (why !== undefined) throw new Error(`mu's host stopped: ${why}`);
+        if (why !== undefined) throw new Error(`spec.jev's host stopped: ${why}`);
         await sleep(500);
       }
       return undefined;
@@ -158,7 +158,7 @@ export function createNativeWorld({ desktopRoot, prepare }) {
   async function shot(name) {
     const file = join(paths().logs, `shot-${name}.png`);
     await page().screenshot({ path: file });
-    console.log(`[mu e2e] screenshot: ${file}`);
+    console.log(`[spec.jev e2e] screenshot: ${file}`);
   }
 
   /** Leaves the guide (a fresh profile opens on it) and unfolds a sidebar that a small window folded to its rail. */
@@ -229,7 +229,7 @@ export function createNativeWorld({ desktopRoot, prepare }) {
     const deadline = Date.now() + 60_000;
     while ((await dialogs().count()) === 0 && Date.now() < deadline) {
       const why = await hostFailure();
-      if (why !== undefined) throw new Error(`mu's host stopped: ${why}`);
+      if (why !== undefined) throw new Error(`spec.jev's host stopped: ${why}`);
       await sleep(50);
     }
     await expect(dialogs()).toHaveCount(1);
@@ -281,9 +281,9 @@ export function createNativeWorld({ desktopRoot, prepare }) {
     // The harness's keys (a checkout's own .env; none beside the spec.jev a packaged app carries): stamped (never read)
     // before, compared after.
     run.untouched = [join(harness.root, '.env')].map((path) => ({ path, before: stamp(path) }));
-    console.log(`[mu e2e] app: ${app ? app.executable : join(desktopRoot, 'out')}`);
-    console.log(`[mu e2e] profile: ${where.root}`);
-    console.log(`[mu e2e] fake model: ${run.fake.baseUrl}`);
+    console.log(`[spec.jev e2e] app: ${app ? app.executable : join(desktopRoot, 'out')}`);
+    console.log(`[spec.jev e2e] profile: ${where.root}`);
+    console.log(`[spec.jev e2e] fake model: ${run.fake.baseUrl}`);
   });
 
   test.afterAll(async () => {
@@ -295,7 +295,7 @@ export function createNativeWorld({ desktopRoot, prepare }) {
     if (run.passed && process.env.MU_E2E_KEEP !== '1' && !process.env.MU_E2E_ROOT) {
       rmSync(root, { recursive: true, force: true });
     } else {
-      console.log(`[mu e2e] kept for a look: ${root} (logs in ${join(root, 'logs')})`);
+      console.log(`[spec.jev e2e] kept for a look: ${root} (logs in ${join(root, 'logs')})`);
     }
   });
 
@@ -328,7 +328,7 @@ export function createNativeWorld({ desktopRoot, prepare }) {
           )
       )
       .catch(() => []);
-    console.log(`[mu e2e] controls on screen at the failure:\n${controls.join('\n')}`);
+    console.log(`[spec.jev e2e] controls on screen at the failure:\n${controls.join('\n')}`);
     for (const log of [run.state.mainLog, run.state.rendererLog]) {
       if (existsSync(log)) await testInfo.attach(log.split(/[\\/]/).pop() ?? 'log', { path: log });
     }

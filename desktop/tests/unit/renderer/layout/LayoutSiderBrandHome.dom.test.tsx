@@ -283,7 +283,7 @@ describe('Layout sider brand Home button', () => {
 
     // The icon is the div wrapping the spec.jev mark, separate from the wordmark.
     const icon = screen.getByTestId('sider-brand-mark');
-    expect(icon.querySelector('svg')).toBeTruthy();
+    expect(icon.querySelector('img')).toBeTruthy();
     for (let i = 0; i < 4; i++) fireEvent.click(icon);
     expect(openDevTools).toHaveBeenCalled();
     expect(navigate).not.toHaveBeenCalled();

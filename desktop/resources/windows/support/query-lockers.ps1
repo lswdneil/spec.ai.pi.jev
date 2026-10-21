@@ -43,7 +43,7 @@ function Test-SamePath([string]$left, [string]$right) {
 }
 
 function New-SelfLockProcess([int]$processId) {
-  return [pscustomobject]@{ name = 'mu installer'; pid = $processId }
+  return [pscustomobject]@{ name = 'spec.jev installer'; pid = $processId }
 }
 
 function Write-LockersAndExit($lockers, [string]$fallbackReason, [string]$message, [int]$exitCode, [int]$resources, [int]$count) {

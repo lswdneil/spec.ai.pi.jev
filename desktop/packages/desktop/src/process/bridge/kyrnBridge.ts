@@ -85,7 +85,7 @@ export function initKyrnBridge(): void {
   const found = findHarness(checkout);
   const harness = found ?? expectedHarness(checkout, process.resourcesPath);
   console.log(
-    `[mu] harness: ${found ? `${found.source}, ${found.layout}` : 'none found, expected'} at ${harness.root}`
+    `[spec.jev] harness: ${found ? `${found.source}, ${found.layout}` : 'none found, expected'} at ${harness.root}`
   );
   const root = harness.root;
   const home = muHome();
@@ -107,7 +107,7 @@ export function initKyrnBridge(): void {
     owning ??= ownLauncher(launcher).then(
       (registered) => {
         if (registered.command !== launcher)
-          console.log(`[mu] launcher: ${launcher}, registered as ${registered.command}`);
+          console.log(`[spec.jev] launcher: ${launcher}, registered as ${registered.command}`);
         return registered;
       },
       (error: unknown) => {

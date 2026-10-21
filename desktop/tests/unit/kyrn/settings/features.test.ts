@@ -21,12 +21,12 @@ function fixture(config: Json | undefined, harness: unknown = manifest) {
   const root = mkdtempSync(join(tmpdir(), 'mu-features-'));
   const dir = join(root, 'agent');
   mkdirSync(dir);
-  if (config) writeFileSync(join(dir, 'mu.json'), JSON.stringify(config, null, '\t'));
+  if (config) writeFileSync(join(dir, 'spec.jev.json'), JSON.stringify(config, null, '\t'));
   if (harness !== null) {
     mkdirSync(join(root, 'packages', 'kyrn-judge'), { recursive: true });
     writeFileSync(join(root, 'packages', 'kyrn-judge', 'manifest.json'), JSON.stringify(harness));
   }
-  const file = () => JSON.parse(readFileSync(join(dir, 'mu.json'), 'utf8')) as Json;
+  const file = () => JSON.parse(readFileSync(join(dir, 'spec.jev.json'), 'utf8')) as Json;
   return {
     dir,
     store: new SettingsStore(dir, root),
@@ -309,12 +309,12 @@ describe('what a save leaves alone', () => {
   });
   it('does not rewrite a file it has nothing to change in, nor freeze the built-in judges into it', () => {
     using(fixture({ tiers: ['jev'] }), (f) => {
-      const before = readFileSync(join(f.dir, 'mu.json'), 'utf8');
+      const before = readFileSync(join(f.dir, 'spec.jev.json'), 'utf8');
       f.store.save(f.store.read());
-      expect(readFileSync(join(f.dir, 'mu.json'), 'utf8')).toBe(before);
+      expect(readFileSync(join(f.dir, 'spec.jev.json'), 'utf8')).toBe(before);
       f.store.save({ ...f.store.read(), mode: 'shadow' });
       // Tabs, as the file had them, and no `judges` block full of defaults.
-      expect(readFileSync(join(f.dir, 'mu.json'), 'utf8')).toBe(
+      expect(readFileSync(join(f.dir, 'spec.jev.json'), 'utf8')).toBe(
         '{\n\t"tiers": [\n\t\t"jev"\n\t],\n\t"modes": {\n\t\t"default": "shadow"\n\t}\n}\n'
       );
     });

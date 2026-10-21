@@ -32,7 +32,7 @@ function skill(path: string, fields: Record<string, string> = {}, body = 'How to
 /** A home with spec.jev's agent folder in it, and a harness's folder of the skills that come with spec.jev. */
 function roots(): SkillRoots & { muJson: (value: unknown) => void } {
   const home = temp();
-  const agentDir = join(home, '.mu', 'agent');
+  const agentDir = join(home, '.spec.jev', 'agent');
   mkdirSync(agentDir, { recursive: true });
   const builtinDir = join(temp(), 'skills');
   skill(join(builtinDir, 'mu-browser', 'SKILL.md'), { name: 'mu-browser' });
@@ -135,7 +135,7 @@ describe('the skills spec.jev loads', () => {
 
   it('finds the agent folder as spec.jev’s launcher does', () => {
     const home = temp();
-    expect(muAgentDir({}, home)).toBe(join(home, '.mu', 'agent'));
+    expect(muAgentDir({}, home)).toBe(join(home, '.spec.jev', 'agent'));
     expect(muAgentDir({ MU_CODING_AGENT_DIR: '/x/coding' }, home)).toBe('/x/coding');
     expect(muAgentDir({ MU_AGENT_DIR: '/x/agent', MU_CODING_AGENT_DIR: '/x/coding' }, home)).toBe('/x/agent');
     expect(muAgentDir({ KYRN_AGENT_DIR: '/x/old' }, home)).toBe('/x/old');

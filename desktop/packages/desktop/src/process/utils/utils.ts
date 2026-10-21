@@ -401,8 +401,8 @@ export const copyFilesToDirectory = async (
     try {
       await fs.access(absoluteFilePath);
     } catch (error) {
-      console.warn(`[mu] Source file does not exist, skipping: ${absoluteFilePath}`);
-      console.warn(`[mu] Original path: ${file}`);
+      console.warn(`[spec.jev] Source file does not exist, skipping: ${absoluteFilePath}`);
+      console.warn(`[spec.jev] Original path: ${file}`);
       // 跳过不存在的文件，而不是抛出错误
       continue;
     }
@@ -433,7 +433,7 @@ export const copyFilesToDirectory = async (
       await fs.copyFile(absoluteFilePath, destPath);
       copiedFiles.push(destPath);
     } catch (error) {
-      console.error(`[mu] Failed to copy file from ${absoluteFilePath} to ${destPath}:`, error);
+      console.error(`[spec.jev] Failed to copy file from ${absoluteFilePath} to ${destPath}:`, error);
       // 继续处理其他文件，而不是完全失败
     }
 

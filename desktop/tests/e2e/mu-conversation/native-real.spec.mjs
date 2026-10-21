@@ -180,7 +180,7 @@ test('the sidebar lists every session of the copy', async () => {
   const kinds = ['Codex', 'Claude Code', ''].map(
     (kind) => `${sessions.filter((one) => one.imported === kind).length} ${kind ? `from ${kind}` : 'made here'}`
   );
-  console.log(`[mu e2e] real sessions: ${sessions.length} (${kinds.join(', ')}), ${(bytes / 1_048_576).toFixed(0)} MB`);
+  console.log(`[spec.jev e2e] real sessions: ${sessions.length} (${kinds.join(', ')}), ${(bytes / 1_048_576).toFixed(0)} MB`);
   expect(sessions.length).toBeGreaterThan(0);
   // The ones to continue run in the test's own folder, not in a folder of the person's.
   continuing = continuePicks(sessions);
@@ -193,13 +193,13 @@ test('the sidebar lists every session of the copy', async () => {
   await start();
   await reachSidebar();
   await expect(sidebarRows().first()).toBeVisible({ timeout: 60_000 });
-  console.log(`[mu e2e] the sidebar shows its first rows ${seconds(Date.now() - started)} after the start`);
+  console.log(`[spec.jev e2e] the sidebar shows its first rows ${seconds(Date.now() - started)} after the start`);
   const more = page().getByTestId('native-sidebar-more');
   await expect(more).toBeVisible();
   const unfolded = Date.now();
   await more.click();
   await expect(sidebarRows()).toHaveCount(sessions.length, { timeout: 60_000 });
-  console.log(`[mu e2e] all ${sessions.length} rows drawn in ${Date.now() - unfolded} ms`);
+  console.log(`[spec.jev e2e] all ${sessions.length} rows drawn in ${Date.now() - unfolded} ms`);
   await shot('real-sidebar');
   expectNoProblems();
 });
@@ -207,7 +207,7 @@ test('the sidebar lists every session of the copy', async () => {
 test('each picked session opens and draws its rows', async () => {
   const p = page();
   const chosen = picks(sessions);
-  console.log(`[mu e2e] opening ${chosen.length} sessions`);
+  console.log(`[spec.jev e2e] opening ${chosen.length} sessions`);
   const table = [];
   for (const one of chosen) {
     const row = p.locator(`[data-testid="native-sidebar-item"][data-id="${one.id}"]`);
@@ -226,7 +226,7 @@ test('each picked session opens and draws its rows', async () => {
     const drawn = await rowsInDom().count();
     table.push({ label: one.label, mb: (one.size / 1_048_576).toFixed(1), messages: one.messages, drawn, took });
     console.log(
-      `[mu e2e] ${one.label}: ${(one.size / 1_048_576).toFixed(1)} MB, ${one.messages} messages, ${one.images} images, ${one.tools} tool calls -> ${drawn} rows in ${seconds(took)}`
+      `[spec.jev e2e] ${one.label}: ${(one.size / 1_048_576).toFixed(1)} MB, ${one.messages} messages, ${one.images} images, ${one.tools} tool calls -> ${drawn} rows in ${seconds(took)}`
     );
     expect(took, `opening the ${one.label} session`).toBeLessThan(30_000);
 
@@ -235,9 +235,9 @@ test('each picked session opens and draws its rows', async () => {
     expectNoProblems();
   }
   const slowest = table.toSorted((a, b) => b.took - a.took)[0];
-  console.log(`[mu e2e] slowest open: ${slowest.label}, ${seconds(slowest.took)}`);
+  console.log(`[spec.jev e2e] slowest open: ${slowest.label}, ${seconds(slowest.took)}`);
   const heap = await p.evaluate(() => Math.round(/** @type {any} */ (performance).memory?.usedJSHeapSize / 1_048_576));
-  console.log(`[mu e2e] page heap after them: ${heap} MB`);
+  console.log(`[spec.jev e2e] page heap after them: ${heap} MB`);
 });
 
 test('the session with the most messages reads back to its first message', async () => {
@@ -289,13 +289,13 @@ test('the session with the most messages reads back to its first message', async
   }
   const total = (await top()).count;
   console.log(
-    `[mu e2e] read back ${longest.messages} messages (${longest.tools} tool calls) in ${steps} steps, ${seconds(Date.now() - reading)}; ${total} rows in the page; the first message is ${firstMessage ? ((await firstMessage.count()) > 0 ? 'there' : 'NOT there') : 'not searched for'}`
+    `[spec.jev e2e] read back ${longest.messages} messages (${longest.tools} tool calls) in ${steps} steps, ${seconds(Date.now() - reading)}; ${total} rows in the page; the first message is ${firstMessage ? ((await firstMessage.count()) > 0 ? 'there' : 'NOT there') : 'not searched for'}`
   );
   if (firstMessage) await expect(firstMessage.first()).toBeVisible();
   // With every row of the session in the page, each place pi compacted it has its line (in the app's language: 压缩).
   const compactionLines = await p.getByTestId('mu-notice').filter({ hasText: '压缩' }).count();
   console.log(
-    `[mu e2e] ${compactionLines} compaction lines in the page for ${longest.compactions} compactions in the file`
+    `[spec.jev e2e] ${compactionLines} compaction lines in the page for ${longest.compactions} compactions in the file`
   );
   if (firstMessage) expect(compactionLines).toBe(longest.compactions);
   await shot('real-first-message');
@@ -333,7 +333,7 @@ test('a message to a session of each kind reaches the model with its history, an
       .find((each) => each.lastUser.includes(word));
     expect(request, `a request carrying ${word}`).toBeDefined();
     console.log(
-      `[mu e2e] continued (${one.label}): ${(one.size / 1_048_576).toFixed(1)} MB, ${one.messages} messages, ${one.tools} tool calls -> the model got ${request?.messageCount} messages (${JSON.stringify(request?.roles)}), ${((request?.bodyBytes ?? 0) / 1_048_576).toFixed(1)} MB; answered in ${seconds(Date.now() - started)}`
+      `[spec.jev e2e] continued (${one.label}): ${(one.size / 1_048_576).toFixed(1)} MB, ${one.messages} messages, ${one.tools} tool calls -> the model got ${request?.messageCount} messages (${JSON.stringify(request?.roles)}), ${((request?.bodyBytes ?? 0) / 1_048_576).toFixed(1)} MB; answered in ${seconds(Date.now() - started)}`
     );
     // The history went along with the message (pi may leave some of it out, but not all), and no notice says it failed.
     expect(request?.messageCount ?? 0).toBeGreaterThan(Math.min(one.messages, 4));
@@ -344,7 +344,7 @@ test('a message to a session of each kind reaches the model with its history, an
     expect(after.split(word).length - 1, `${word} in the session's file`).toBeGreaterThanOrEqual(2);
     // What pi left out of the request: it compacts a history that is over the (fake) model's window before it asks.
     console.log(
-      `[mu e2e]   compactions in the file: ${one.compactions} before, ${after.split('\n').filter((line) => line.startsWith('{"type":"compaction"')).length} after`
+      `[spec.jev e2e]   compactions in the file: ${one.compactions} before, ${after.split('\n').filter((line) => line.startsWith('{"type":"compaction"')).length} after`
     );
     await shot(`real-continued-${n}`);
   }
@@ -358,7 +358,7 @@ test('a session whose project folder is gone opens, and a message to it says wha
     .filter((one) => one.cwd && !existsSync(one.cwd) && one.messages > 0)
     .toSorted((a, b) => a.size - b.size)[0];
   test.skip(!gone, 'every session of the copy has its project folder');
-  console.log(`[mu e2e] a session whose folder is gone: ${gone.messages} messages`);
+  console.log(`[spec.jev e2e] a session whose folder is gone: ${gone.messages} messages`);
   const row = p.locator(`[data-testid="native-sidebar-item"][data-id="${gone.id}"]`);
   await row.scrollIntoViewIfNeeded();
   await row.click();
@@ -375,7 +375,7 @@ test('a session whose project folder is gone opens, and a message to it says wha
   const started = Date.now();
   await expect(failed).toBeVisible({ timeout: 90_000 });
   console.log(
-    `[mu e2e] the message to it got a notice: ${(await failed.innerText()).replace(/\s+/g, ' ').slice(0, 300)} in ${seconds(Date.now() - started)}`
+    `[spec.jev e2e] the message to it got a notice: ${(await failed.innerText()).replace(/\s+/g, ' ').slice(0, 300)} in ${seconds(Date.now() - started)}`
   );
   await shot('real-folder-gone');
   // Said in its own words, with the folder named, and the message still in the box.

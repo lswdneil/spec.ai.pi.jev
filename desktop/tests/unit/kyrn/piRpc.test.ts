@@ -171,7 +171,7 @@ createInterface({ input: process.stdin }).on('line', (line) => {
     });
     // As the harness logs a promise nothing handled in RPC mode (kyrn-judge's rejections.ts), and a line cut in two.
     start(`
-process.stderr.write('[mu] a promise failed and nothing handled it; mu goes on: Error: x\\n[mu]     at y (b.ts:1:1)\\r\\nnoise that stays out\\n[mu] cut ');
+process.stderr.write('[spec.jev] a promise failed and nothing handled it; spec.jev goes on: Error: x\\n[spec.jev]     at y (b.ts:1:1)\\r\\nnoise that stays out\\n[spec.jev] cut ');
 setTimeout(() => process.stderr.write('across writes\\n'), 50);
 setTimeout(() => {}, 5000);
 `);

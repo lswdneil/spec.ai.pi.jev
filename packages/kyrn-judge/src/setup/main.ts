@@ -103,6 +103,6 @@ for (const signal of ["SIGTERM", "SIGINT", "SIGHUP"] as const)
 	process.on(signal, () => leave(128 + constants.signals[signal]));
 main().then(leave, (error: unknown) => {
 	const message = error instanceof Error ? error.message : String(error);
-	process.stderr.write(`mu setup: ${redactSecrets(message, givenKey ? [givenKey] : [])}\n`);
+	process.stderr.write(`spec.jev setup: ${redactSecrets(message, givenKey ? [givenKey] : [])}\n`);
 	leave(1);
 });

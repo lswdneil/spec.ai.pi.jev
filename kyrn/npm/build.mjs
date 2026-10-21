@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Builds the npm package spec.jev: `npm i -g spec.jev`, then `spec.jev` (the `mu` command stays as an alias).
+// Builds the npm package spec.jev: `npm i -g spec.jev`, then `spec.jev` (the `spec.jev` command stays as an alias).
 //
 //   node kyrn/npm/build.mjs          stage the package in .artifacts/npm/spec.jev/
 //   node kyrn/npm/build.mjs --pack   and write the tarball beside it (npm pack)
@@ -10,17 +10,17 @@
 // The package is laid out like the repository, so the launcher finds everything two folders above
 // kyrn/bin/mu.mjs either way (it tells the two apart with layoutOf):
 //
-//   kyrn/bin/          mu.mjs (npm's `spec.jev` and `mu`), kyrn-doctor, kyrn-ledger, kyrn-judge-local
+//   kyrn/bin/          mu.mjs (npm's `spec.jev` and `spec.jev`), kyrn-doctor, kyrn-ledger, kyrn-judge-local
 //   kyrn/local-judge/  the Laya sidecar's server (macOS). `spec.jev judge setup` installs its venv and weights
 //                      into ~/.spec.jev/local-judge, and only when asked to
 //   dist/              pi's Node bundle (dist/bundle/cli.js), with its themes, assets, export templates and
 //                      the native clipboard helpers of pi-tui
 //   judge/             the judgment layer built to JavaScript, with its prompts, skills and agents, and the
-//                      manifest.json the desktop app reads its settings from; dist/auth.js is `mu auth`, the
-//                      desktop app's subscription sign-in, dist/import.js is `mu import` and dist/setup.js
-//                      is `mu setup`
+//                      manifest.json the desktop app reads its settings from; dist/auth.js is `spec.jev auth`, the
+//                      desktop app's subscription sign-in, dist/import.js is `spec.jev import` and dist/setup.js
+//                      is `spec.jev setup`
 //   docs/, examples/   pi's documentation, which the agent reads when asked about itself
-//   package.json       names the app mu (piConfig), so pi keeps its files in ~/.mu
+//   package.json       names the app spec.jev (piConfig), so pi keeps its files in ~/.spec.jev
 import { execFileSync, spawnSync } from "node:child_process";
 import {
 	chmodSync,
@@ -47,7 +47,7 @@ const judgeSource = join(repo, "packages", "kyrn-judge");
 /** Optional modules their callers try and do without, as pi's own bundle allows them (scripts/build-coding-agent-bundle.mjs). */
 const OPTIONAL = new Set(["bufferutil", "utf-8-validate", "kerberos", "supports-color"]);
 
-/** pi's bundle, where judge/dist/auth.js (`mu auth`) finds pi: the index of pi's public API. */
+/** pi's bundle, where judge/dist/auth.js (`spec.jev auth`) finds pi: the index of pi's public API. */
 const PI_BUNDLE_INDEX = "../../dist/bundle/index.js";
 
 /** From judge/dist/, where the judgment layer's bundle is, to the chunks of pi's bundle. */
@@ -90,7 +90,7 @@ export function hostModulesChunk(bundleDir) {
  *
  * Why it matters: an extension that Node cannot import is transpiled by jiti with Babel before it runs. For the
  * judgment layer's 3 MB bundle that took more than 500 MB of heap and, on a 1 GB server, minutes of CPU, until V8
- * ran out of memory before the first frame (mu 0.1.3). Nothing was cached either, because the process died first.
+ * ran out of memory before the first frame (spec.jev 0.1.3). Nothing was cached either, because the process died first.
  *
  * Each name becomes a small CommonJS module, `module.exports = VIRTUAL_MODULES[name]`. esbuild then reads every
  * imported binding off pi's module object where it is used, as jiti's transpiled code did: a binding stays live,
@@ -197,11 +197,11 @@ async function buildJudge(out) {
 	const results = [
 		await build({
 			...common,
-			// pi lists an extension by its file name, or by the folder of an index file: judge/mu/index.js is `mu`.
+			// pi lists an extension by its file name, or by the folder of an index file: judge/mu/index.js is `spec.jev`.
 			entryPoints: { index: join(judgeSource, "src/extension/kyrn-judge.ts") },
 			outdir: join(judgeRoot, "mu"),
 		}),
-		// `mu doctor` looks for a browser with the same code the browser feature uses.
+		// `spec.jev doctor` looks for a browser with the same code the browser feature uses.
 		await build({ ...common, entryPoints: { chrome: join(judgeSource, "src/browser/chrome.ts") }, outdir: join(judgeRoot, "dist") }),
 	];
 	// Node imports the bundle only when it finds everything the bundle imports: its own modules and pi's host chunk.
@@ -217,7 +217,7 @@ async function buildJudge(out) {
 			}
 		}
 	}
-	// `mu auth` (src/auth) and `mu setup` (src/setup) run outside pi, where no module is handed over: each carries what
+	// `spec.jev auth` (src/auth) and `spec.jev setup` (src/setup) run outside pi, where no module is handed over: each carries what
 	// it imports, and takes pi's model runtime (and settings, and proxy setup) from pi's own bundle, whose index exports
 	// what they use.
 	const piIndex = (command) => ({
@@ -264,7 +264,7 @@ async function buildJudge(out) {
 		plugins: [piIndex("mu setup"), plugins[1]],
 	});
 	carried(setup, "mu setup");
-	// `mu import` (src/import) runs on a bare Node: what it takes from pi are types, so it carries everything it runs
+	// `spec.jev import` (src/import) runs on a bare Node: what it takes from pi are types, so it carries everything it runs
 	// and leaves nothing but Node's own modules to be found.
 	const importer = await build({
 		...common,
@@ -274,11 +274,11 @@ async function buildJudge(out) {
 	for (const output of Object.values(importer.metafile.outputs)) {
 		for (const imported of output.imports) {
 			if (imported.external && !isBuiltin(imported.path)) {
-				throw new Error(`mu import leaves ${imported.path} to be found at run time; it must run on Node alone`);
+				throw new Error(`spec.jev import leaves ${imported.path} to be found at run time; it must run on Node alone`);
 			}
 		}
 	}
-	// manifest.json is what the desktop app draws its settings from, also for an mu that came from npm.
+	// manifest.json is what the desktop app draws its settings from, also for an spec.jev that came from npm.
 	for (const name of ["agents", "prompts", "skills", "themes", "manifest.json", "THIRD_PARTY_NOTICES.md"]) {
 		cpSync(join(judgeSource, name), join(judgeRoot, name), { recursive: true });
 	}

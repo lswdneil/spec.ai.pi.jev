@@ -333,7 +333,7 @@ export function registerBackground(runtime: KyrnRuntime): void {
 			if (stopped > 0 && event.reason !== "quit" && ctx.hasUI) {
 				ctx.ui.setStatus(STATUS_KEY, undefined);
 				ctx.ui.notify(
-					`mu stopped ${stopped} background job${stopped === 1 ? "" : "s"} when the session ended.`,
+					`spec.jev stopped ${stopped} background job${stopped === 1 ? "" : "s"} when the session ended.`,
 					"info",
 				);
 			}

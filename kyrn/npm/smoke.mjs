@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// After `npm i -g mu-agent`: does the installed `mu` run, does it load the judgment layer, do `mu auth`,
-// `mu import` and `mu setup` answer?
+// After `npm i -g spec.jev`: does the installed `spec.jev` run, does it load the judgment layer, do `spec.jev auth`,
+// `spec.jev import` and `spec.jev setup` answer?
 //
-//   node kyrn/npm/smoke.mjs [the mu command]
+//   node kyrn/npm/smoke.mjs [the spec.jev command]
 //
-// Runs in a throwaway home with no keys, so nothing is read from or written to the real ~/.mu and no model can
+// Runs in a throwaway home with no keys, so nothing is read from or written to the real ~/.spec.jev and no model can
 // be called. The judgment layer is checked over RPC: its commands, prompt templates and skills are listed
 // without a turn being taken.
 import { spawn, spawnSync } from "node:child_process";
@@ -16,7 +16,7 @@ const mu = process.argv[2] ?? "mu";
 const windows = process.platform === "win32";
 const home = mkdtempSync(join(tmpdir(), "mu-smoke-"));
 const env = { PATH: process.env.PATH ?? process.env.Path, HOME: home, USERPROFILE: home, TERM: "dumb", PI_OFFLINE: "1" };
-// What Windows itself needs to start programs, and where `mu doctor` looks for a browser there.
+// What Windows itself needs to start programs, and where `spec.jev doctor` looks for a browser there.
 for (const name of [
 	"SystemRoot",
 	"SYSTEMROOT",
@@ -32,7 +32,7 @@ for (const name of [
 ]) {
 	if (process.env[name]) env[name] = process.env[name];
 }
-// npm's `mu` is a .cmd shim on Windows, which only a shell can start; every argument here is fixed.
+// npm's `spec.jev` is a .cmd shim on Windows, which only a shell can start; every argument here is fixed.
 const options = { env, cwd: home, encoding: "utf8", shell: windows, timeout: 120_000 };
 
 const failures = [];
@@ -42,18 +42,18 @@ function check(name, ok, detail) {
 }
 
 const version = spawnSync(mu, ["version"], options);
-check("mu version", version.status === 0 && /^mu \d+\.\d+\.\d+ \(pi \d/.test(version.stdout), version.stdout.trim() || version.stderr.trim());
+check("spec.jev version", version.status === 0 && /^mu \d+\.\d+\.\d+ \(pi \d/.test(version.stdout), version.stdout.trim() || version.stderr.trim());
 
 const help = spawnSync(mu, ["--help"], options);
 check(
-	"mu --help",
+	"spec.jev --help",
 	help.status === 0 && help.stdout.includes("a coding agent with a judgment kernel") && help.stdout.includes("pi's help"),
 );
 
 // Without a login, doctor has something to fix and says so with exit code 1; the package row must be fine.
 const doctor = spawnSync(mu, ["doctor"], options);
 console.log(doctor.stdout.trimEnd().replace(/^/gm, "     "));
-check("mu doctor", /^\s*ok\s+package\s/m.test(doctor.stdout), doctor.stderr.trim());
+check("spec.jev doctor", /^\s*ok\s+package\s/m.test(doctor.stdout), doctor.stderr.trim());
 
 // The desktop app's sign-in: one JSON line that offers pi's own subscriptions, and nobody signed in yet.
 const auth = spawnSync(mu, ["auth", "status"], options);
@@ -62,7 +62,7 @@ try {
 	status = JSON.parse(auth.stdout.trim().split("\n").at(-1));
 } catch {}
 check(
-	"mu auth status",
+	"spec.jev auth status",
 	auth.status === 0 &&
 		status?.type === "status" &&
 		["openai-codex", "anthropic", "xai"].every((provider) => status.offered.includes(provider)) &&
@@ -77,7 +77,7 @@ try {
 	found = JSON.parse(imports.stdout);
 } catch {}
 check(
-	"mu import --list",
+	"spec.jev import --list",
 	imports.status === 0 && Array.isArray(found?.conversations) && found.conversations.length === 0,
 	imports.stderr.trim() || imports.stdout.trim().slice(0, 300),
 );
@@ -85,12 +85,12 @@ check(
 // The setup wizard starts with pi's bundle behind it; its help tells scripts to give the key on stdin. No key is checked.
 const setupHelp = spawnSync(mu, ["setup", "--help"], options);
 check(
-	"mu setup --help",
+	"spec.jev setup --help",
 	setupHelp.status === 0 && setupHelp.stdout.includes("--key-stdin"),
 	setupHelp.stderr.trim() || setupHelp.stdout.trim().slice(0, 300),
 );
 
-// Within the heap of a 1 GB server. mu 0.1.3 transpiled the judgment layer with Babel at every start, which took
+// Within the heap of a 1 GB server. spec.jev 0.1.3 transpiled the judgment layer with Babel at every start, which took
 // more than 500 MB, and there V8 aborted before the first frame. A transpiled copy is cached in the temp folder, and
 // with one from an earlier run 0.1.3 passed here, so the temp folder is a new one.
 const temp = join(home, "tmp");
@@ -123,7 +123,7 @@ const rpc = await new Promise((resolve) => {
 				if (!message.success) return done({ error: message.error });
 				seen.names = message.data.commands.map((command) => `${command.source}:${command.name}`);
 			}
-			// /help answers with a notice whose first line names mu's version and pi's, as the welcome screen does.
+			// /help answers with a notice whose first line names spec.jev's version and pi's, as the welcome screen does.
 			if (message.type === "extension_ui_request" && message.method === "notify" && String(message.message).includes("judgment-first")) {
 				seen.help = String(message.message).split("\n")[0];
 			}
@@ -150,10 +150,10 @@ check(
 		? rpc.error
 		: `${names.length} commands, ${expected.filter((name) => !names.includes(name)).join(", ") || "all expected ones"} ${expected.every((name) => names.includes(name)) ? "present" : "missing"}`,
 );
-// mu 0.1.3 said "mu 0.1.0 · …, built on pi 0.1.3": its judgment layer's own version, and pi's, read from mu-agent's folder.
+// spec.jev 0.1.3 said "spec.jev 0.1.0 · …, built on pi 0.1.3": its judgment layer's own version, and pi's, read from spec.jev's folder.
 const versions = /^mu (\S+) \(pi ([^,)]+)/.exec(version.stdout.trim());
-const greeting = versions ? `mu ${versions[1]} · a judgment-first coding agent, built on pi ${versions[2]}` : undefined;
-check("/help names mu's version and pi's, as mu version does", greeting !== undefined && rpc.help === greeting, rpc.help ?? rpc.error);
+const greeting = versions ? `spec.jev ${versions[1]} · a judgment-first coding agent, built on pi ${versions[2]}` : undefined;
+check("/help names spec.jev's version and pi's, as spec.jev version does", greeting !== undefined && rpc.help === greeting, rpc.help ?? rpc.error);
 
 try {
 	rmSync(home, { recursive: true, force: true });
@@ -164,4 +164,4 @@ if (failures.length > 0) {
 	console.error(`\n${failures.length} check(s) failed: ${failures.join(", ")}`);
 	process.exit(1);
 }
-console.log("\nThe installed mu runs and loads the judgment layer.");
+console.log("\nThe installed spec.jev runs and loads the judgment layer.");

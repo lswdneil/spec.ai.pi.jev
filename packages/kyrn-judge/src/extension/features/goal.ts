@@ -214,7 +214,7 @@ export function registerGoal(runtime: KyrnRuntime): void {
 		save({ ...goal, status: "paused", reason, next: undefined }, coded);
 		show(
 			ctx,
-			say({ zh: `mu 目标已暂停：${reason}。\n${goal.text}`, en: `mu goal paused: ${reason}.\n${goal.text}` }),
+			say({ zh: `spec.jev 目标已暂停：${reason}。\n${goal.text}`, en: `spec.jev goal paused: ${reason}.\n${goal.text}` }),
 			"warning",
 		);
 	};
@@ -391,8 +391,8 @@ export function registerGoal(runtime: KyrnRuntime): void {
 				show(
 					ctx,
 					say({
-						zh: `mu 目标已达成（续跑了 ${n} 次）。${why}\n${goal.text}`,
-						en: `mu goal met after ${n} continuation${n === 1 ? "" : "s"}.${why}\n${goal.text}`,
+						zh: `spec.jev 目标已达成（续跑了 ${n} 次）。${why}\n${goal.text}`,
+						en: `spec.jev goal met after ${n} continuation${n === 1 ? "" : "s"}.${why}\n${goal.text}`,
 					}),
 				);
 				return undefined;
@@ -517,8 +517,8 @@ export function registerGoal(runtime: KyrnRuntime): void {
 		show(
 			ctx,
 			say({
-				zh: `mu 目标已设定：代理会一直干到它成立为止（最多续跑 ${options.maxContinuations} 次）。`,
-				en: `mu goal set. The agent will keep working until it's met (up to ${options.maxContinuations} continuations).`,
+				zh: `spec.jev 目标已设定：代理会一直干到它成立为止（最多续跑 ${options.maxContinuations} 次）。`,
+				en: `spec.jev goal set. The agent will keep working until it's met (up to ${options.maxContinuations} continuations).`,
 			}),
 		);
 		pi.sendMessage(

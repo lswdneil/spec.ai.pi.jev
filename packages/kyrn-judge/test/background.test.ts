@@ -588,7 +588,7 @@ describe.skipIf(!posix)("background feature", () => {
 
 		const output = results(harness)[1];
 		expect(output).toContain("exited with code 0");
-		expect(output).toMatch(/\[mu: omitted \d+ lines: identical to lines/);
+		expect(output).toMatch(/\[spec\.jev: omitted \d+ lines: identical to lines/);
 		expect(output).toContain("shows the wordmark");
 		expect(output).toContain("collapses on a narrow window");
 		expect(output.length).toBeLessThan(log.length * 0.7);

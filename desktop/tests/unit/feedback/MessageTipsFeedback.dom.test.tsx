@@ -401,10 +401,10 @@ describe('MessageTips — error chips', () => {
   });
 
   it('shows a mu bridge error under a translated headline and keeps the original text as a detail', () => {
-    render(<MessageTips message={buildTips('error', 'Internal error: A mu turn is already running')} />);
+    render(<MessageTips message={buildTips('error', 'Internal error: A spec.jev turn is already running')} />);
 
     expect(screen.getByText('mu.turnErrors.turnRunning')).toBeInTheDocument();
-    expect(screen.getByText('Internal error: A mu turn is already running')).toBeInTheDocument();
+    expect(screen.getByText('Internal error: A spec.jev turn is already running')).toBeInTheDocument();
   });
 
   it('puts a mu bridge error headline into the body of a classified error', () => {
@@ -426,7 +426,7 @@ describe('MessageTips — error chips', () => {
   it('shows the upstream product names in a backend tip as mu', () => {
     render(<MessageTips message={buildTips('warning', 'AionCore restarted the agent')} />);
 
-    expect(screen.getByText('mu restarted the agent')).toBeInTheDocument();
+    expect(screen.getByText('spec.jev restarted the agent')).toBeInTheDocument();
     expect(screen.queryByText(/AionCore/)).not.toBeInTheDocument();
   });
 
@@ -440,7 +440,7 @@ describe('MessageTips — error chips', () => {
       />
     );
 
-    expect(screen.getAllByText('mu lost its Agent protocol connection').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('spec.jev lost its Agent protocol connection').length).toBeGreaterThan(0);
     expect(screen.queryByText(/AionUI/)).not.toBeInTheDocument();
   });
 });
@@ -504,7 +504,7 @@ describe('agent error locale copy', () => {
       const locale = JSON.parse(readFileSync(path.join(localeDir, localeName, 'conversation.json'), 'utf8'));
       const agentError = locale.agentError;
 
-      expect(agentError.ownership.spec.jev, localeName).not.toMatch(/AionUi/);
+      expect(agentError.ownership.mu, localeName).not.toMatch(/AionUi/);
 
       for (const [code, copy] of Object.entries<Record<string, string>>(agentError.codes)) {
         if (!code.startsWith('MU_')) continue;

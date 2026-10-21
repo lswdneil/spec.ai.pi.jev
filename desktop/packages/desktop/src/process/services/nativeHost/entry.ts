@@ -98,7 +98,7 @@ let ended = false;
 
 function fail(stage: 'init' | 'import' | 'main', error: unknown): void {
   const message = error instanceof Error ? error.message : String(error);
-  process.stderr.write(`mu host: ${stage} failed: ${error instanceof Error && error.stack ? error.stack : message}\n`);
+  process.stderr.write(`spec.jev host: ${stage} failed: ${error instanceof Error && error.stack ? error.stack : message}\n`);
   parent.post({ type: 'failed', stage, message });
   void parent.sent().finally(() => process.exit(1));
 }
@@ -175,7 +175,7 @@ async function applyNodeOptions(execArgv: readonly string[]): Promise<void> {
     // oxlint-disable-next-line no-await-in-loop -- one after the other, as Node runs --import: the order is the plan's
     if (option.flag === '--import') await import(/* @vite-ignore */ importable(option.value));
     else if (option.flag !== '--disable-warning')
-      process.stderr.write(`mu host: ${option.flag} cannot take effect in a running process and is left out\n`);
+      process.stderr.write(`spec.jev host: ${option.flag} cannot take effect in a running process and is left out\n`);
   }
 }
 
@@ -185,7 +185,7 @@ async function start(init: Extract<ToHost, { type: 'init' }>): Promise<void> {
     await applyNodeOptions(init.execArgv);
     pi = (await import(/* @vite-ignore */ pathToFileURL(init.module).href)) as PiModule;
     if (typeof pi.setupCli !== 'function' || typeof pi.main !== 'function')
-      throw new Error(`${init.module} exports no setupCli and main: a mu from before the native host`);
+      throw new Error(`${init.module} exports no setupCli and main: a spec.jev from before the native host`);
   } catch (error) {
     return fail('import', error);
   }

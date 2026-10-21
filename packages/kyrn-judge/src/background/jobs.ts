@@ -240,7 +240,7 @@ export class JobManager {
 			setTimeout(announce, 500).unref();
 		};
 		child.once("error", (error) => {
-			append(`[mu: the command could not be started: ${error.message}]\n`);
+			append(`[spec.jev: the command could not be started: ${error.message}]\n`);
 			job.exitCode = 127;
 			finish();
 		});
@@ -260,7 +260,7 @@ export class JobManager {
 		if (!job.log) return;
 		const limit = this.options.maxLogBytes ?? 50 * 1024 * 1024;
 		if (job.logBytes + data.length > limit) {
-			job.log.write(`\n[mu: the log stops here at ${limit} bytes; the job goes on]\n`);
+			job.log.write(`\n[spec.jev: the log stops here at ${limit} bytes; the job goes on]\n`);
 			this.closeLog(job);
 			return;
 		}

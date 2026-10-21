@@ -2,7 +2,7 @@
 
 # Features
 
-Each feature is configured under `features.<name>` in `~/.mu/agent/mu.json`. `false` turns a feature off, `true` turns it on with its defaults, and an object overrides single options:
+Each feature is configured under `features.<name>` in `~/.spec.jev/agent/spec.jev.json`. `false` turns a feature off, `true` turns it on with its defaults, and an object overrides single options:
 
 ```json
 {
@@ -228,7 +228,7 @@ On by default: yes. Decision points: `diagnostics.delivery`.
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `builtin` | `true` | Use the built-in list of well-known servers. Well-known servers for TypeScript, Python, Go, Rust and C/C++, found on PATH only. Add your own under features.lsp.servers in mu.json. |
+| `builtin` | `true` | Use the built-in list of well-known servers. Well-known servers for TypeScript, Python, Go, Rust and C/C++, found on PATH only. Add your own under features.lsp.servers in spec.jev.json. |
 | `editTools` | `edit`, `write` | Tools that count as editing a file. |
 | `subAgents` | `false` | Subagents start language servers too. Off by default: a set of servers per subagent is heavy on the machine. |
 | `settleMs` | `1500` ms | Wait for the server after an edit, at most `1500` ms. Past this, nothing waits: late diagnostics are handled at the next edit or when the turn ends. Range 0 to 10000. |
@@ -457,13 +457,13 @@ On by default: yes.
 | `codex` | `true` | From Codex. |
 | `rules` | `true` | Inherit rules. |
 | `skills` | `true` | Inherit skills. |
-| `mcp` | `true` | Inherit MCP servers. When off, only the servers under mcp.servers in mu.json are used. |
+| `mcp` | `true` | Inherit MCP servers. When off, only the servers under mcp.servers in spec.jev.json are used. |
 | `maxRuleChars` | `4000` chars | Max size of a file-scoped rule passed along. The rest stays in the file for the model to read. Range 500 to 20000. |
 | `maxAlwaysChars` | `16000` chars | Budget for always-on rules. Always-on rules that don't fit are listed by description instead, so they can't bloat the prompt. Range 0 to 100000. |
 
 ## mcp
 
-**MCP servers.** MCP servers connect through pi's own client (stdio and Streamable HTTP, OAuth sign-in, managed with /mcp). Each server spec.jev inherits from Claude Code, Cursor, Codex or mu.json is a hidden catalog entry: it starts, and its tools reach the model, only when the judge finds the task needs it or the model asks through find_capability. Tool lists are cached, so the judge has a description even before a server has run. A server defined by a project asks before its first start, and again when its definition changes. "exposure": "always" under mcp.servers in mu.json keeps a server open. Servers added with spec.jev mcp add belong to pi: they connect with the session, and tool_search loads their tools when needed.
+**MCP servers.** MCP servers connect through pi's own client (stdio and Streamable HTTP, OAuth sign-in, managed with /mcp). Each server spec.jev inherits from Claude Code, Cursor, Codex or spec.jev.json is a hidden catalog entry: it starts, and its tools reach the model, only when the judge finds the task needs it or the model asks through find_capability. Tool lists are cached, so the judge has a description even before a server has run. A server defined by a project asks before its first start, and again when its definition changes. "exposure": "always" under mcp.servers in spec.jev.json keeps a server open. Servers added with spec.jev mcp add belong to pi: they connect with the session, and tool_search loads their tools when needed.
 
 On by default: yes.
 
@@ -493,7 +493,7 @@ On by default: yes. Decision points: `review.triage`.
 | `maxSideLines` | `80` | Lines shown per side of a conflict block. Range 10 to 1000. |
 | `maxConflictChars` | `20000` | Max characters of conflicts shown per file. Range 2000 to 200000. |
 | `maxFindings` | `40` | Max findings ranked per triage. The rest are still reported, just not ranked. Range 5 to 200. |
-| `debugger` | `true` | Debugger: breakpoints, stepping, variables. Runs a program under a debugger and stops at breakpoints or uncaught exceptions, showing the call stack and variables. Uses debugpy for Python, delve for Go and lldb-dap for compiled programs, if installed; add your own under debugAdapters in mu.json. One run at a time, ended with the session. |
+| `debugger` | `true` | Debugger: breakpoints, stepping, variables. Runs a program under a debugger and stops at breakpoints or uncaught exceptions, showing the call stack and variables. Uses debugpy for Python, delve for Go and lldb-dap for compiled programs, if installed; add your own under debugAdapters in spec.jev.json. One run at a time, ended with the session. |
 | `maxFrames` | `20` | Frames shown at a stop. Range 1 to 200. |
 | `maxVariables` | `50` | Variables listed per scope. Range 5 to 1000. |
 | `debugOutputChars` | `4000` chars | Max program output per result. When there's more, only the end is kept. Range 500 to 100000. |

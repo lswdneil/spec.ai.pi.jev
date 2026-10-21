@@ -425,12 +425,12 @@ describe('the first-run guide', () => {
     bridge.settings.mockResolvedValueOnce({
       ok: false,
       code: 'unreadable',
-      params: { file: '/home/me/.mu/agent/settings.json' },
-      error: "EACCES: permission denied, open '/home/me/.mu/agent/settings.json'",
+      params: { file: '/home/me/.spec.jev/agent/settings.json' },
+      error: "EACCES: permission denied, open '/home/me/.spec.jev/agent/settings.json'",
     });
     at('/welcome', <Welcome />);
     expect(await screen.findByText("Couldn't load the settings")).toBeInTheDocument();
-    expect(screen.getByText("Couldn't read /home/me/.mu/agent/settings.json.")).toBeInTheDocument();
+    expect(screen.getByText("Couldn't read /home/me/.spec.jev/agent/settings.json.")).toBeInTheDocument();
     expect(screen.getByTestId('mu-error-detail')).toHaveTextContent('EACCES: permission denied');
     fireEvent.click(screen.getByText('Reload'));
 

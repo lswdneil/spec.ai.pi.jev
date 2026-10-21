@@ -17,7 +17,7 @@ import {
 } from '../../../../packages/desktop/src/process/agent/kyrn/windows/launcherCommand.ts';
 
 // Issue #4: the installer's default folder, C:\Program Files\spec.jev. AionCore started the launcher as `C:\Program`.
-const INSTALLED = 'C:\\Program Files\\spec.jev\\resources\\spec.jev\\acp.cmd';
+const INSTALLED = 'C:\\Program Files\\spec.jev\\resources\\mu\\acp.cmd';
 const SHORT = 'C:\\PROGRA~1\\mu\\resources\\mu\\acp.cmd';
 const ENV: NodeJS.ProcessEnv = {
   LOCALAPPDATA: 'C:\\Users\\someone\\AppData\\Local',
@@ -184,7 +184,7 @@ describe('which registered commands run this launcher', () => {
       INSTALLED.toLowerCase(),
       SHORT,
       SHORT.toLowerCase(),
-      'c:/program files/mu/resources/mu/acp.cmd',
+      'c:/program files/spec.jev/resources/mu/acp.cmd',
       LOCAL_FORWARDER,
       'C:\\ProgramData\\mu-desktop\\acp.cmd',
       'C:\\Users\\Public\\mu-desktop\\ACP.CMD',

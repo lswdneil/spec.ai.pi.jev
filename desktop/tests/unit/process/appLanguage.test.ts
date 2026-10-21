@@ -19,17 +19,17 @@ describe('writeAppLanguageFile', () => {
   it('creates ~/.spec.jev and writes the language code and a newline', async () => {
     await writeAppLanguageFile('en-US', home);
 
-    expect(readFileSync(join(home, '.mu', 'app-language'), 'utf8')).toBe('en-US\n');
-    expect(appLanguageFilePath(home)).toBe(join(home, '.mu', 'app-language'));
+    expect(readFileSync(join(home, '.spec.jev', 'app-language'), 'utf8')).toBe('en-US\n');
+    expect(appLanguageFilePath(home)).toBe(join(home, '.spec.jev', 'app-language'));
   });
 
   it('writes the normalized code and replaces the previous language', async () => {
     await writeAppLanguageFile('zh-CN', home);
     await writeAppLanguageFile('zh_TW', home);
 
-    expect(readFileSync(join(home, '.mu', 'app-language'), 'utf8')).toBe('zh-TW\n');
+    expect(readFileSync(join(home, '.spec.jev', 'app-language'), 'utf8')).toBe('zh-TW\n');
     // The temporary file of the atomic write never stays behind.
-    expect(readdirSync(join(home, '.mu'))).toEqual(['app-language']);
+    expect(readdirSync(join(home, '.spec.jev'))).toEqual(['app-language']);
   });
 
   it('writes into ~/.kyrn on a machine whose home has not moved yet', async () => {
@@ -38,13 +38,13 @@ describe('writeAppLanguageFile', () => {
     await writeAppLanguageFile('ja-JP', home);
 
     expect(readFileSync(join(home, '.kyrn', 'app-language'), 'utf8')).toBe('ja-JP\n');
-    expect(existsSync(join(home, '.mu'))).toBe(false);
+    expect(existsSync(join(home, '.spec.jev'))).toBe(false);
   });
 
   it('logs and returns instead of throwing when the file cannot be written', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     // A file where the spec.jev home directory should be: mkdir and the write both fail.
-    writeFileSync(join(home, '.mu'), 'not a directory');
+    writeFileSync(join(home, '.spec.jev'), 'not a directory');
 
     await expect(writeAppLanguageFile('en-US', home)).resolves.toBeUndefined();
     expect(warn).toHaveBeenCalled();

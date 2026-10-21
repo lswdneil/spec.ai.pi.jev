@@ -123,7 +123,7 @@ describe('the local judge as the app manages it', () => {
   });
 
   it('stops a judge spec.jev started, and says of one it did not start that it cannot stop it here', async () => {
-    const pidFile = join(HOME, '.mu', 'local-judge', 'judge.pid');
+    const pidFile = join(HOME, '.spec.jev', 'local-judge', 'judge.pid');
     const own = judge(
       {
         health: async () => true,

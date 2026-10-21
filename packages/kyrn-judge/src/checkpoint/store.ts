@@ -402,7 +402,7 @@ export async function snapshot(store: Store, name: string, limits?: ScanLimits):
 	const excluded = [...ignored, ...leftOut];
 	const meta: SnapshotMeta = excluded.length > MAX_EXCLUDED ? { excluded: [], overflow: true } : { excluded };
 	const commit = (
-		await git(store, ["commit-tree", tree, "-m", `mu checkpoint ${name}\n\n${JSON.stringify(meta)}`])
+		await git(store, ["commit-tree", tree, "-m", `spec.jev checkpoint ${name}\n\n${JSON.stringify(meta)}`])
 	).trim();
 	await git(store, ["update-ref", `${REF_PREFIX}${name}`, commit]);
 	return { commit, tree };

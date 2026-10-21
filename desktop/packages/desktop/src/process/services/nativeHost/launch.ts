@@ -119,18 +119,18 @@ async function planned(options: PrepareOptions): Promise<{ launcher: Launcher; p
   const bin = p.join(harness.root, 'kyrn', 'bin');
   const file = p.join(bin, 'mu.mjs');
   const fs = options.fs ?? realFs;
-  if (!fs.exists(file)) throw new NativeHostError('no-harness', `No mu launcher at ${file}`);
+  if (!fs.exists(file)) throw new NativeHostError('no-harness', `No spec.jev launcher at ${file}`);
   let launcher: unknown;
   try {
     launcher = await (options.importLauncher ?? importFile)(file);
   } catch (error) {
     throw new NativeHostError(
       'no-harness',
-      `mu's launcher did not load (${file}): ${error instanceof Error ? error.message : error}`
+      `spec.jev's launcher did not load (${file}): ${error instanceof Error ? error.message : error}`
     );
   }
   if (!isLauncher(launcher))
-    throw new NativeHostError('old-harness', `This mu cannot run inside the app yet (${file} has no planHost)`);
+    throw new NativeHostError('old-harness', `This spec.jev cannot run inside the app yet (${file} has no planHost)`);
   const plan = launcher.planHost({
     platform,
     env: options.env,
@@ -181,7 +181,7 @@ export async function prepareHost(options: PrepareOptions): Promise<PreparedHost
     // The app view or the agent folder could not be made (a full disk, a folder without write permission).
     throw new NativeHostError(
       'plan',
-      `mu could not prepare the launch: ${error instanceof Error ? error.message : String(error)}`
+      `spec.jev could not prepare the launch: ${error instanceof Error ? error.message : String(error)}`
     );
   }
   return {

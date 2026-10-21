@@ -291,8 +291,8 @@ describe('Runtime event lines by the harness codes', () => {
       [
         'needs_approval',
         { source: '.mcp.json' },
-        "github: it's defined by the project (.mcp.json) and hasn't been approved; open this folder in spec.jev and allow it once, or define it in mu.json",
-        'github：它由项目定义（.mcp.json），还没有获得批准；在 spec.jev 中打开这个文件夹并允许一次，或者在 mu.json 中定义它',
+        "github: it's defined by the project (.mcp.json) and hasn't been approved; open this folder in spec.jev and allow it once, or define it in spec.jev.json",
+        'github：它由项目定义（.mcp.json），还没有获得批准；在 spec.jev 中打开这个文件夹并允许一次，或者在 spec.jev.json 中定义它',
       ],
       [
         'denied',
@@ -456,9 +456,9 @@ describe('Browser run lines', () => {
       ],
       [
         'profile_no_windows_path',
-        { profileDir: '/home/me/.mu/browser-profile' },
-        'The profile folder /home/me/.mu/browser-profile has no Windows path (WSL_DISTRO_NAME is not set).',
-        '浏览器配置文件夹 /home/me/.mu/browser-profile 没有对应的 Windows 路径（未设置 WSL_DISTRO_NAME）。',
+        { profileDir: '/home/me/.spec.jev/browser-profile' },
+        'The profile folder /home/me/.spec.jev/browser-profile has no Windows path (WSL_DISTRO_NAME is not set).',
+        '浏览器配置文件夹 /home/me/.spec.jev/browser-profile 没有对应的 Windows 路径（未设置 WSL_DISTRO_NAME）。',
       ],
       [
         'browser_spawn_failed',

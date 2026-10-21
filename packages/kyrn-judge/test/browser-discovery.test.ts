@@ -141,8 +141,8 @@ describe("finding a browser on Linux", () => {
 			headless: false,
 		});
 		// A snap cannot see ~/.spec.jev (hidden) nor the machine's /tmp.
-		expect(plan.profileDir).toBe("/home/bai/snap/chromium/common/mu-browser-profile");
-		expect(plan.args[0]).toBe("--user-data-dir=/home/bai/snap/chromium/common/mu-browser-profile");
+		expect(plan.profileDir).toBe("/home/bai/snap/chromium/common/spec.jev-browser-profile");
+		expect(plan.args[0]).toBe("--user-data-dir=/home/bai/snap/chromium/common/spec.jev-browser-profile");
 		expect(plan.args).not.toContain("--headless=new");
 	});
 

@@ -178,7 +178,7 @@ describe('AboutModalContent', () => {
         method: 'installer',
         version: '0.1.3',
         installerReason: 'linux',
-        installerName: 'mu-0.1.3-linux-amd64.deb',
+        installerName: 'spec.jev-0.1.3-linux-amd64.deb',
       })
     );
     expect(screen.getByText('update.installerReason.linux')).toBeInTheDocument();
@@ -187,7 +187,7 @@ describe('AboutModalContent', () => {
 
     act(() =>
       mocks.push?.(
-        state({ phase: 'installerReady', version: '0.1.3', installerPath: '/home/me/Downloads/mu-0.1.3.deb' })
+        state({ phase: 'installerReady', version: '0.1.3', installerPath: '/home/me/Downloads/spec.jev-0.1.3.deb' })
       )
     );
     fireEvent.click(screen.getByRole('button', { name: 'update.openInstaller' }));

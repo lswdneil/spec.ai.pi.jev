@@ -1064,7 +1064,7 @@ describe("spec.jev setup in a script", () => {
 			env: { OPENCODE_API_KEY: "o" },
 			respond: () => listing("deepseek-v4-pro"),
 		});
-		expect(keyed.json("mu.json")).toEqual({ tiers: ["jev-opencode"] });
+		expect(keyed.json("spec.jev.json")).toEqual({ tiers: ["jev-opencode"] });
 	});
 
 	it("checks an OpenRouter key where only a working key is answered", async () => {

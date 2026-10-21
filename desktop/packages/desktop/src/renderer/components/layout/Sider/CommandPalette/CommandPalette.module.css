@@ -3,7 +3,7 @@
  * text. The only colour is the thin bar on the chosen row's leading edge. No gradients.
  *
  * Arco's modal chrome is reduced to that surface. `.wrap` scopes the overrides, and the doubled `.palette` outranks
- * `[data-color-scheme='spec.jev'] .arco-modal` (a heavier shadow) and the dark theme's
+ * `[data-color-scheme='mu'] .arco-modal` (a heavier shadow) and the dark theme's
  * `body[arco-theme='dark'] .arco-modal` (a grey fill, !important).
  */
 .wrap .palette.palette {

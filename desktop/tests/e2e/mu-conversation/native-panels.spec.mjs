@@ -133,7 +133,7 @@ test('the work panel shows the folder, its lessons, Jev’s judgments, the board
     await expect(p.getByTestId('kyrn-judge')).toBeVisible();
     await expect(p.getByTestId('judge-line').first()).toBeVisible({ timeout: 30_000 });
     const codes = await p.getByTestId('judge-line').evaluateAll((lines) => lines.map((line) => line.dataset.code));
-    console.log(`[mu e2e] judge lines: ${codes.join(', ')}`);
+    console.log(`[spec.jev e2e] judge lines: ${codes.join(', ')}`);
     await shot('panel-judge');
   });
 

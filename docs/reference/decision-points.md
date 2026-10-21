@@ -2,7 +2,7 @@
 
 # Decision points
 
-Every decision point mu has, 40 in all, grouped as the desktop app's settings group them. Each is asked as a short question about a small state; [How mu works](../architecture.md) explains the engine and [Judges](../judges.md) who answers.
+Every decision point spec.jev has, 40 in all, grouped as the desktop app's settings group them. Each is asked as a short question about a small state; [How spec.jev works](../architecture.md) explains the engine and [Judges](../judges.md) who answers.
 
 Each point has a mode:
 
@@ -10,7 +10,7 @@ Each point has a mode:
 - `shadow`: Asked and logged, but changes nothing. Use it to see how well the judge does before relying on it.
 - `off`: Not asked; this decision point is off.
 
-Every point is `active` unless set otherwise (`"modes": { "default": "active" }` is the built-in default). `context.compact` and `output.drift` belong to features that are off by default, so they don't run until you turn those features on. Set `"default": "shadow"`, or a point's own mode, in `~/.mu/agent/mu.json` to only record verdicts; the desktop app's settings switch a point on or off; `/mu mode <point|default> <off|shadow|active>` switches one for the current session. See [Configuration](../configuration.md).
+Every point is `active` unless set otherwise (`"modes": { "default": "active" }` is the built-in default). `context.compact` and `output.drift` belong to features that are off by default, so they don't run until you turn those features on. Set `"default": "shadow"`, or a point's own mode, in `~/.spec.jev/agent/spec.jev.json` to only record verdicts; the desktop app's settings switch a point on or off; `/mu mode <point|default> <off|shadow|active>` switches one for the current session. See [Configuration](../configuration.md).
 
 The feature column names the switch in `features` that turns the whole behavior off; its options are in [Features](features.md).
 

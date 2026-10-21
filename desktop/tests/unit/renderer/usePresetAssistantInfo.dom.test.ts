@@ -533,12 +533,12 @@ describe('usePresetAssistantInfo', () => {
     const named = renderHook(() =>
       usePresetAssistantInfo(makeConversation({ agent_id: 'runtime-1', agent_name: 'Aion CLI', backend: 'aionrs' }))
     );
-    expect(named.result.current.info?.name).toBe('mu');
+    expect(named.result.current.info?.name).toBe('spec.jev');
 
     const unnamed = renderHook(() =>
       usePresetAssistantInfo(makeConversation({ agent_id: 'runtime-1', backend: 'aionrs' }))
     );
-    expect(unnamed.result.current.info?.name).toBe('mu');
+    expect(unnamed.result.current.info?.name).toBe('spec.jev');
   });
 
   it('still finds a legacy assistant whose stored rules name it AionUi Butler', () => {

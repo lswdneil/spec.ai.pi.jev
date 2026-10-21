@@ -38,7 +38,7 @@ const valueAt = (copy: Record<string, unknown>, key: string): unknown =>
 
 describe('command palette copy', () => {
   it('covers all thirteen languages', () => {
-    expect(supportedLanguages).toHaveLength(13);
+    expect(supportedLanguages).toHaveLength(5);
   });
 
   it.each(supportedLanguages)('has every palette string in %s', (lang) => {

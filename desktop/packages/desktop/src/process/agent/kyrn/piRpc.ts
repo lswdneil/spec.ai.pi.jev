@@ -93,9 +93,9 @@ export function stoppedReport(
     // spec.jev's own log lines are in the log already (see PiRpc.forward).
     .filter((line) => line.trim() && !line.startsWith(MU_LINE))
     .slice(-40)
-    .map((line) => `[mu harness] ${line}`);
+    .map((line) => `[spec.jev harness] ${line}`);
   const what = unreadable ? 'stopped reading its input and was ended' : 'stopped by itself';
-  return [`[mu] the harness ${what} (${exit})${tail.length ? '; the end of its error output:' : ''}`, ...tail]
+  return [`[spec.jev] the harness ${what} (${exit})${tail.length ? '; the end of its error output:' : ''}`, ...tail]
     .join('\n')
     .concat('\n');
 }
@@ -198,7 +198,7 @@ export class PiRpc implements RpcPort {
     const lines = `${this.partial}${chunk}`.split(/\r?\n/);
     // A line too long for a log line is not kept whole.
     this.partial = (lines.pop() ?? '').slice(0, STDERR_TAIL);
-    for (const line of lines) if (line.startsWith(MU_LINE)) log(`[mu harness] ${line.slice(MU_LINE.length)}\n`);
+    for (const line of lines) if (line.startsWith(MU_LINE)) log(`[spec.jev harness] ${line.slice(MU_LINE.length)}\n`);
   }
   /** Logs why spec.jev stopped, once the last of its error output is in (a crash writes it just before the exit). */
   private report(code: number | null, signal: NodeJS.Signals | null): void {
@@ -232,7 +232,7 @@ export class PiRpc implements RpcPort {
     try {
       this.onEvent(event);
     } catch (error) {
-      log(`[mu] handling a ${text(event.type) || 'mu'} event failed: ${String(error)}\n`);
+      log(`[spec.jev] handling a ${text(event.type) || 'mu'} event failed: ${String(error)}\n`);
     }
   }
   send(command: JsonRecord): Promise<JsonRecord> {

@@ -233,7 +233,7 @@ export async function addSkill(roots: SkillRoots, path: unknown): Promise<MuSkil
     (each) => each.name === skill.name && (each.source === 'mu' || each.source === 'agents')
   );
   if (known || isInside(canonical(folder), canonical(dir)) || occupied(target))
-    throw new KyrnError('skillExists', `mu already has a skill named ${skill.name}`, { name: skill.name });
+    throw new KyrnError('skillExists', `spec.jev already has a skill named ${skill.name}`, { name: skill.name });
   await checkSize(dir);
   try {
     await mkdir(folder, { recursive: true });
@@ -266,7 +266,7 @@ export async function removeSkill(
   if (!skill) throw new KyrnError('notFound', `No skill named ${wanted}`, { name: wanted });
   const target = skill.source === 'mu' ? removableTarget(folder, skill.file) : undefined;
   if (!target)
-    throw new KyrnError('notMine', `${wanted} is not in mu's skills folder`, { name: wanted, source: skill.source });
+    throw new KyrnError('notMine', `${wanted} is not in spec.jev's skills folder`, { name: wanted, source: skill.source });
   try {
     await trash(target);
   } catch (error) {

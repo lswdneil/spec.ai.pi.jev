@@ -34,7 +34,7 @@ beforeAll(async () => {
   // German with the English texts: what changes is only how numbers are written.
   await i18n.init({
     lng: 'en',
-    resources: { en: { translation: { common } }, 'de-DE': { translation: { common } } },
+    resources: { en: { translation: { common } }, 'zh-CN': { translation: { common } } },
     interpolation: { escapeValue: false },
   });
 });
@@ -216,11 +216,11 @@ describe('the board panel', () => {
   });
 
   it('writes the counts in the app language', async () => {
-    await i18n.changeLanguage('de-DE');
+    await i18n.changeLanguage('zh-CN');
     try {
       showBoard([switched(true), update({ done: 1000, total: 1234 })]);
-      expect(screen.getByText('1.000 of 1.234 checks done')).toBeInTheDocument();
-      expect(screen.getByRole('progressbar')).toHaveAttribute('aria-label', '1.000 of 1.234 checks done');
+      expect(screen.getByText('1,000 of 1,234 checks done')).toBeInTheDocument();
+      expect(screen.getByRole('progressbar')).toHaveAttribute('aria-label', '1,000 of 1,234 checks done');
     } finally {
       await i18n.changeLanguage('en');
     }
@@ -501,10 +501,10 @@ describe('the account under the board', () => {
   });
 
   it('writes a fixed line’s counts in the app language', async () => {
-    await i18n.changeLanguage('de-DE');
+    await i18n.changeLanguage('zh-CN');
     try {
       showBoard([switched(true), note({ code: 'looked', params: { count: 1234 }, text: 'Looked at 1234' })]);
-      expect(texts()).toEqual(['Looked at 1.234 files or places']);
+      expect(texts()).toEqual(['Looked at 1,234 files or places']);
     } finally {
       await i18n.changeLanguage('en');
     }

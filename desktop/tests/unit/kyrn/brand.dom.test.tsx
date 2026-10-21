@@ -231,7 +231,7 @@ describe('StartupGate', () => {
     );
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent(mu.errors.installPath);
-    expect(alert).toHaveTextContent('C:\\mu');
+    expect(alert).toHaveTextContent('C:\\spec.jev');
     expect(screen.queryByTestId('mu-error-detail')).not.toBeInTheDocument();
   });
 });

@@ -196,8 +196,8 @@ export function parseSetupArgs(argv: readonly string[]): SetupArgs | { readonly 
 	if (service !== undefined && !serviceById(service)) {
 		return {
 			error: {
-				zh: `没有叫 ${service} 的服务（mu setup --list 列出全部）`,
-				en: `no service named ${service} (mu setup --list shows them all)`,
+				zh: `没有叫 ${service} 的服务（spec.jev setup --list 列出全部）`,
+				en: `no service named ${service} (spec.jev setup --list shows them all)`,
 			},
 		};
 	}
@@ -361,7 +361,7 @@ interface Choice<T> {
 class Stop extends Error {
 	readonly code: number;
 	constructor(code: number) {
-		super(`mu setup stopped (${code})`);
+		super(`spec.jev setup stopped (${code})`);
 		this.code = code;
 	}
 }
@@ -421,7 +421,7 @@ class Setup {
 
 	/** A run that cannot go on, with the reason on stderr. */
 	private fail(text: Text, code: number = SETUP_EXIT.failed): Stop {
-		this.io.warn(`mu setup: ${this.t(text)}`);
+		this.io.warn(`spec.jev setup: ${this.t(text)}`);
 		return new Stop(code);
 	}
 
@@ -584,8 +584,8 @@ class Setup {
 			const auth = this.path(join(this.deps.paths.agentDir, "auth.json"));
 			this.io.say(
 				this.t({
-					zh: `订阅账号在 mu 里面登录：启动 mu，输入 /login，选 ChatGPT（OpenAI Codex）、Claude、Grok 或 Google，按提示在浏览器里完成。登录信息保存在 ${auth}。`,
-					en: `Subscriptions sign in from inside mu: start mu, type /login, choose ChatGPT (OpenAI Codex), Claude, Grok or Google, and finish in the browser. The sign-in is saved in ${auth}.`,
+					zh: `订阅账号在 spec.jev 里面登录：启动 spec.jev，输入 /login，选 ChatGPT（OpenAI Codex）、Claude、Grok 或 Google，按提示在浏览器里完成。登录信息保存在 ${auth}。`,
+					en: `Subscriptions sign in from inside spec.jev: start spec.jev, type /login, choose ChatGPT (OpenAI Codex), Claude, Grok or Google, and finish in the browser. The sign-in is saved in ${auth}.`,
 				}),
 			);
 			return "subscription";
@@ -635,8 +635,8 @@ class Setup {
 			return this.pickService(
 				matches,
 				this.t({
-					zh: `${this.names(matches)} 的密钥长得一样。这个密钥是哪家的？mu 只把密钥发给它所属的服务。`,
-					en: `${this.names(matches)} keys look the same. Which service is this key for? mu only sends a key to the service it belongs to.`,
+					zh: `${this.names(matches)} 的密钥长得一样。这个密钥是哪家的？spec.jev 只把密钥发给它所属的服务。`,
+					en: `${this.names(matches)} keys look the same. Which service is this key for? spec.jev only sends a key to the service it belongs to.`,
 				}),
 			);
 		}
@@ -765,7 +765,7 @@ class Setup {
 			const typed = await this.ask(
 				this.t({
 					zh: `给它起个简短的名字（字母、数字、-）[${provider}]：`,
-					en: `A short name for it in mu (letters, digits and -) [${provider}]: `,
+					en: `A short name for it in spec.jev (letters, digits and -) [${provider}]: `,
 				}),
 			);
 			if (typed) provider = typed.toLowerCase().replace(/[^a-z0-9-]+/g, "-");
@@ -922,8 +922,8 @@ class Setup {
 		const path = join(this.deps.paths.agentDir, "models.json");
 		if (readJsonFile(path).state !== "unreadable") return;
 		throw this.fail({
-			zh: `${this.path(path)} 不是纯 JSON（也许有注释或写错了），mu setup 不改写它。先修好它，或手动把服务加进去。`,
-			en: `${this.path(path)} isn't plain JSON (it may have comments or a typo), so mu setup won't rewrite it. Fix it, or add the service by hand.`,
+			zh: `${this.path(path)} 不是纯 JSON（也许有注释或写错了），spec.jev setup 不改写它。先修好它，或手动把服务加进去。`,
+			en: `${this.path(path)} isn't plain JSON (it may have comments or a typo), so spec.jev setup won't rewrite it. Fix it, or add the service by hand.`,
 		});
 	}
 
@@ -1301,8 +1301,8 @@ class Setup {
 				} catch {
 					notes.push(
 						this.t({
-							zh: `${this.path(settingsPath)} 读不了，默认模型没有保存。在 mu 里用 /model 选它。`,
-							en: `Couldn't read ${this.path(settingsPath)}, so the default model wasn't saved. Choose it inside mu with /model.`,
+							zh: `${this.path(settingsPath)} 读不了，默认模型没有保存。在 spec.jev 里用 /model 选它。`,
+							en: `Couldn't read ${this.path(settingsPath)}, so the default model wasn't saved. Choose it inside spec.jev with /model.`,
 						}),
 					);
 				}
@@ -1315,7 +1315,7 @@ class Setup {
 			for (const secret of [target?.key, judge?.kind === "jev" ? judge.key : undefined]) {
 				if (secret) reason = reason.replaceAll(secret, "…");
 			}
-			this.io.warn(this.t({ zh: `mu setup：保存时出错：${reason}`, en: `mu setup: saving failed: ${reason}` }));
+			this.io.warn(this.t({ zh: `spec.jev setup：保存时出错：${reason}`, en: `spec.jev setup: saving failed: ${reason}` }));
 			if (saved.length > 0) {
 				this.io.warn(this.t({ zh: "出错前已经保存的：", en: "Saved before the error:" }));
 				for (const entry of saved) this.io.warn(entry);
@@ -1418,8 +1418,8 @@ class Setup {
 		const done =
 			target && model
 				? this.t({
-						zh: `完成。mu 会用 ${this.name(target.service)} · ${model} 开始工作。`,
-						en: `Done. mu will start on ${this.name(target.service)} · ${model}.`,
+						zh: `完成。spec.jev 会用 ${this.name(target.service)} · ${model} 开始工作。`,
+						en: `Done. spec.jev will start on ${this.name(target.service)} · ${model}.`,
 					})
 				: this.t({ zh: "完成。", en: "Done." });
 		const judged =
@@ -1467,7 +1467,7 @@ function existingProviders(models: Record<string, unknown>): Record<string, Reco
 export async function runSetup(argv: readonly string[], deps: SetupDeps): Promise<number> {
 	const parsed = parseSetupArgs(argv);
 	if ("error" in parsed) {
-		deps.io.warn(`mu setup: ${parsed.error[deps.language]}`);
+		deps.io.warn(`spec.jev setup: ${parsed.error[deps.language]}`);
 		deps.io.warn(setupUsage(deps.language));
 		return SETUP_EXIT.usage;
 	}

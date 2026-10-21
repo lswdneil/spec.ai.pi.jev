@@ -67,7 +67,7 @@ describe('formatSkillSize', () => {
   it('formats the number in the app language', () => {
     expect(formatSkillSize(512, 'en-US')).toBe('512 B');
     expect(formatSkillSize(1536, 'en-US')).toBe('1.5 KB');
-    expect(formatSkillSize(1.5 * 1024 * 1024, 'de-DE')).toBe('1,5 MB');
+    expect(formatSkillSize(1.5 * 1024 * 1024, 'zh-TW')).toBe('1.5 MB');
     expect(formatSkillSize(12.4 * 1024 * 1024, 'en-US')).toBe('12 MB');
     expect(formatSkillSize(undefined, 'en-US')).toBeNull();
   });

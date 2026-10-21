@@ -23,8 +23,8 @@ const translator = (language: string): TFunction => {
 const [englishBoard, chineseBoard] = MU_COMMAND_WORDS.get('board') ?? [];
 
 describe("spec.jev's slash commands in the reader's language", () => {
-  it('has a line for every one of spec.jev’s commands in all 13 languages, and none for a command spec.jev does not have', () => {
-    expect(languages).toHaveLength(13);
+  it('has a line for every one of spec.jev’s commands in all 5 languages, and none for a command spec.jev does not have', () => {
+    expect(languages).toHaveLength(5);
     for (const language of languages) {
       const lines = muTexts(language).commands as Record<string, string>;
       expect(Object.keys(lines).toSorted(), language).toEqual([...MU_COMMAND_WORDS.keys()].toSorted());
@@ -43,7 +43,7 @@ describe("spec.jev's slash commands in the reader's language", () => {
 
   it('turns spec.jev’s English or Chinese into the reader’s language, whichever spec.jev started in', () => {
     const japanese = translator('ja-JP');
-    const german = translator('de-DE');
+    const german = translator('ko-KR');
     const line = (muTexts('ja-JP').commands as Record<string, string>).board;
     expect(commandDescription({ name: 'board', description: englishBoard }, japanese)).toBe(line);
     expect(commandDescription({ name: 'board', description: chineseBoard }, japanese)).toBe(line);
@@ -51,7 +51,7 @@ describe("spec.jev's slash commands in the reader's language", () => {
     expect(commandDescription({ name: 'board', description: chineseBoard }, translator('en-US'))).toBe(englishBoard);
     expect(
       commandDescription({ name: 'import-chat', description: MU_COMMAND_WORDS.get('import-chat')![0] }, german)
-    ).toBe((muTexts('de-DE').commands as Record<string, string>)['import-chat']);
+    ).toBe((muTexts('ko-KR').commands as Record<string, string>)['import-chat']);
   });
 
   it('leaves another agent’s command of the same name, a template or skill, and reworded text as they came', () => {

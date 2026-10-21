@@ -24,8 +24,8 @@ describe('sessionFolders', () => {
     const home = join(root, 'plain');
     mkdirSync(home);
     expect(sessionFolders({ env: {}, home, readFile: noSettings })).toEqual({
-      agentDir: join(home, '.mu', 'agent'),
-      sessionsDir: join(home, '.mu', 'agent', 'sessions'),
+      agentDir: join(home, '.spec.jev', 'agent'),
+      sessionsDir: join(home, '.spec.jev', 'agent', 'sessions'),
     });
   });
 

@@ -70,10 +70,10 @@ describe('context panel wording', () => {
   });
 
   it('follows the app language, not the operating system, for numbers', async () => {
-    show(await instance('de-DE', { en: { translation: { common } } }));
-    expect(screen.getByText('12.345 / 200.000')).toBeInTheDocument();
+    show(await instance('zh-CN', { en: { translation: { common } } }));
+    expect(screen.getByText('12,345 / 200,000')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Compaction results (2)'));
-    expect(screen.getByText(/^Context reduced by ≈75\s%$/)).toBeInTheDocument();
+    expect(screen.getByText(/^Context reduced by ≈75\s?%$/)).toBeInTheDocument();
   });
 
   it('says "about" in Chinese rather than gluing an English unit on', async () => {

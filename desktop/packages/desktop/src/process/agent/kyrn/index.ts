@@ -18,7 +18,7 @@ const desktopRoot =
   (source?.startsWith('file:') ? fileURLToPath(new URL('../../../../../../', source)) : undefined);
 if (!nodeVersionOk(process.versions.node)) {
   process.stderr.write(
-    `mu needs Node.js ${MIN_NODE.join('.')} or newer, found ${process.versions.node}. Install it from https://nodejs.org\n`
+    `spec.jev needs Node.js ${MIN_NODE.join('.')} or newer, found ${process.versions.node}. Install it from https://nodejs.org\n`
   );
   process.exit(1);
 }

@@ -132,7 +132,7 @@ export default function HiveGraph({
             style={{ left: layout.centre.x, top: layout.centre.y, width: 2 * HOME_RADIUS, height: 2 * HOME_RADIUS }}
             aria-hidden='true'
           >
-            mu
+            spec.jev
           </span>
         )}
         {bees.map((bee) => {

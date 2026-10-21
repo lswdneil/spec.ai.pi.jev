@@ -162,7 +162,7 @@ describe('UpdateNotice', () => {
         method: 'installer',
         version: '0.1.3',
         installerReason: 'linux',
-        installerName: 'mu-0.1.3-linux-amd64.deb',
+        installerName: 'spec.jev-0.1.3-linux-amd64.deb',
       })
     );
     const notice = screen.getByTestId('update-notice');
@@ -193,7 +193,7 @@ describe('UpdateNotice', () => {
     expect(screen.getByTestId('update-notice')).toHaveTextContent('update.downloadingInstaller(42%)');
 
     act(() =>
-      mocks.push?.(state({ phase: 'installerReady', version: '0.1.3', installerPath: '/Downloads/mu-0.1.3.deb' }))
+      mocks.push?.(state({ phase: 'installerReady', version: '0.1.3', installerPath: '/Downloads/spec.jev-0.1.3.deb' }))
     );
     expect(screen.getByTestId('update-notice')).toHaveTextContent('update.installerReadyTitle(0.1.3)');
     fireEvent.click(screen.getByRole('button', { name: 'update.openInstaller' }));

@@ -59,7 +59,7 @@ export const muTurnErrorKey = (code: MuTurnErrorCode): string => `mu.turnErrors.
 export function noModelDetail(text: string): string {
   return text
     .replace(/^Agent internal error \(code -?\d+\):\s*/, '')
-    .replace(/mu has no model to answer with:?\s*/, '')
+    .replace(/spec\.jev has no model to answer with:?\s*/, '')
     .split(/\n\s*\n/)[0]
     .replace(/\s*Use \/login[\s\S]*$/, '')
     .replace(/\s*See:?\s+\S+\.md\S*/g, '')

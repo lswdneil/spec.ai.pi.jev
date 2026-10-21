@@ -15,7 +15,7 @@ vi.mock('electron-log', () => ({ default: { info: vi.fn(), warn: vi.fn(), error:
 
 import { downloadInstaller } from '@/process/services/update/installerDownload';
 
-const ASSET_URL = 'https://github.com/qybaihe/mu/releases/download/v0.1.3/mu-0.1.3-linux-amd64.deb';
+const ASSET_URL = 'https://github.com/qybaihe/mu/releases/download/v0.1.3/spec.jev-0.1.3-linux-amd64.deb';
 const STORAGE_URL = 'https://release-assets.githubusercontent.com/github-production-release-asset/1/abc';
 
 let dir = '';
@@ -41,9 +41,9 @@ describe('downloadInstaller', () => {
     vi.stubGlobal('fetch', fetchMock);
     const onProgress = vi.fn();
 
-    const saved = await downloadInstaller({ name: 'mu-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir, onProgress });
+    const saved = await downloadInstaller({ name: 'spec.jev-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir, onProgress });
 
-    expect(saved).toBe(path.join(dir, 'mu-0.1.3-linux-amd64.deb'));
+    expect(saved).toBe(path.join(dir, 'spec.jev-0.1.3-linux-amd64.deb'));
     expect(readFileSync(saved, 'utf8')).toBe(body);
     expect(onProgress).toHaveBeenLastCalledWith(100);
     // Every hop is asked by hand, so its host is checked first.
@@ -51,14 +51,14 @@ describe('downloadInstaller', () => {
   });
 
   it('keeps an earlier download and saves beside it', async () => {
-    writeFileSync(path.join(dir, 'mu-0.1.3-linux-amd64.deb'), 'old');
+    writeFileSync(path.join(dir, 'spec.jev-0.1.3-linux-amd64.deb'), 'old');
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => new Response('new', { status: 200 }))
     );
-    const saved = await downloadInstaller({ name: 'mu-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir });
-    expect(path.basename(saved)).toBe('mu-0.1.3-linux-amd64 (1).deb');
-    expect(readFileSync(path.join(dir, 'mu-0.1.3-linux-amd64.deb'), 'utf8')).toBe('old');
+    const saved = await downloadInstaller({ name: 'spec.jev-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir });
+    expect(path.basename(saved)).toBe('spec.jev-0.1.3-linux-amd64 (1).deb');
+    expect(readFileSync(path.join(dir, 'spec.jev-0.1.3-linux-amd64.deb'), 'utf8')).toBe('old');
   });
 
   it('refuses any host but GitHub, redirects included, before asking it', async () => {
@@ -67,7 +67,7 @@ describe('downloadInstaller', () => {
     );
     vi.stubGlobal('fetch', fetchMock);
     await expect(
-      downloadInstaller({ name: 'mu-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir })
+      downloadInstaller({ name: 'spec.jev-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir })
     ).rejects.toMatchObject({ info: { code: 'downloadFailed' } });
     expect(fetchMock).toHaveBeenCalledTimes(1);
 
@@ -89,10 +89,10 @@ describe('downloadInstaller', () => {
       'fetch',
       vi.fn(async () => new Response(broken, { status: 200 }))
     );
-    await expect(downloadInstaller({ name: 'mu-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir })).rejects.toThrow(
+    await expect(downloadInstaller({ name: 'spec.jev-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir })).rejects.toThrow(
       'socket hang up'
     );
-    expect(existsSync(path.join(dir, 'mu-0.1.3-linux-amd64.deb'))).toBe(false);
+    expect(existsSync(path.join(dir, 'spec.jev-0.1.3-linux-amd64.deb'))).toBe(false);
   });
 
   it('says what the server answered', async () => {
@@ -101,7 +101,7 @@ describe('downloadInstaller', () => {
       vi.fn(async () => new Response('gone', { status: 410 }))
     );
     await expect(
-      downloadInstaller({ name: 'mu-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir })
+      downloadInstaller({ name: 'spec.jev-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir })
     ).rejects.toMatchObject({ info: { code: 'serverError', status: 410 } });
   });
 });

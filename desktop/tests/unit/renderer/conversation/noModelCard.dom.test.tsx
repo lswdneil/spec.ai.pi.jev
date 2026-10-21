@@ -68,7 +68,7 @@ describe('a conversation without a model', () => {
       tip({
         type: 'error',
         content: 'Agent internal error',
-        error: { message: `mu has no model to answer with: ${PI_WORDS}` },
+        error: { message: `spec.jev has no model to answer with: ${PI_WORDS}` },
       } as IMessageTips['content'])
     );
     const card = screen.getByTestId('mu-no-model');

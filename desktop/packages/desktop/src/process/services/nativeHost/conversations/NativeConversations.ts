@@ -99,7 +99,7 @@ export class NativeConversations implements NativeConversationsApi {
     this.idleMs = options.idleMs ?? IDLE_MS;
     this.maxLive = options.maxLive ?? MAX_LIVE_HOSTS;
     this.now = options.now ?? Date.now;
-    this.log = options.log ?? ((line) => console.warn(`[mu native] ${line}`));
+    this.log = options.log ?? ((line) => console.warn(`[spec.jev native] ${line}`));
     this.store = new SessionStore(options.folders);
     const env = options.env;
     this.owner = {
@@ -209,7 +209,7 @@ export class NativeConversations implements NativeConversationsApi {
   /** Only a file in spec.jev's session folders is ever removed. */
   private refuseOutside(file: string | undefined): void {
     if (file && existsSync(file) && !insideSessionFolders(this.folders(), file))
-      throw new NativeRequestError('invalid', `mu keeps no session at ${file}`);
+      throw new NativeRequestError('invalid', `spec.jev keeps no session at ${file}`);
   }
 
   /** Ends every host (the app quits). Calls after it fail with `closed`. */
