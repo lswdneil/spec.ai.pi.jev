@@ -188,6 +188,14 @@ function liveWithout(live: ViewLive, key: 'classifying' | 'progress' | 'retry' |
   return rest;
 }
 
+/**
+ * What the judgment layer said it was working out (Jev reviewing a command, choosing skills) is over once the model
+ * writes again or a tool starts: the line above the send box then says what happens now, not a review that ended.
+ */
+function stepOver(view: NativeView): NativeView {
+  return view.live.progress ? withLive(view, liveWithout(view.live, 'progress')) : view;
+}
+
 function withStatus(view: NativeView, status: TurnStatus, error?: string): NativeView {
   const { error: _previous, ...rest } = view;
   return error === undefined ? { ...rest, status } : { ...rest, status, error };
@@ -555,14 +563,16 @@ export function reduce(view: NativeView, record: PiRecord): NativeView {
       return addRunEvent(withStatus(view, 'working'), record);
     case 'agent_settled':
       return addRunEvent(settle(view), record);
-    case 'message_start':
-      return startMessage(view, asObject(record.message));
+    case 'message_start': {
+      const message = asObject(record.message);
+      return startMessage(message.role === 'assistant' ? stepOver(view) : view, message);
+    }
     case 'message_update':
       return streamInto(view, asObject(record.assistantMessageEvent));
     case 'message_end':
       return endMessage(view, asObject(record.message), entryIdOf(record.entryId));
     case 'tool_execution_start':
-      return updateTool(view, asText(record.toolCallId), (tool) => ({ ...tool, status: 'running' }));
+      return updateTool(stepOver(view), asText(record.toolCallId), (tool) => ({ ...tool, status: 'running' }));
     case 'tool_execution_update':
       return updateTool(view, asText(record.toolCallId), (tool) => ({
         ...tool,

@@ -18,6 +18,15 @@
   <a href="../../README.md">English</a> · <b>简体中文</b> · <a href="README.zh-TW.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a>
 </p>
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="run-dark.gif">
+    <img src="run-light.gif" alt="桌面端里的一次运行：测试在 main 上挂了，找原因并修好。Jev 把消息判为多步任务（input.preflight），模型跑测试、读解析器，说要把分钟改成 60,000 再跑一遍测试，然后停了。Jev 判定这次运行半途而止（turn.continue），mu 提醒模型这一轮还没完，模型改好单位、跑通测试。右侧判定面板逐条列出每次裁决、判定点和耗时。">
+  </picture>
+  <br>
+  <sub>在桌面端里录下的一次运行。编码模型的回复是为录制写好的脚本（界面上显示为 GPT-6.1 Sol）；判定器的裁决、耗时和那次恢复都是真的：模型话说一半就停了，<code>turn.continue</code> 发现了，mu 让它回去做完。</sub>
+</p>
+
 一个编码代理每次会话要做几百个和代码无关的决定：什么留在上下文里，一条命令安不安全，一个发现值不值得告诉另一个代理，活干完了没有。交给大模型，花的是 token、延迟和注意力；交给死规则，错得太多。mu 把它们交给一个**判定器**：一个小而快的模型，每次只回答一个有边界的问题，每一轮有 40 个判定点。大模型把注意力留给正事。
 
 - **mu**：命令行。pi 的全部能力，加上判定内核。
