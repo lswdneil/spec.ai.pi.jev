@@ -31,10 +31,6 @@ vi.mock('@/common/chat/chatLib', () => ({
   joinPath: (base: string, rel: string) => `${base}/${rel}`,
 }));
 
-vi.mock('@/renderer/hooks/chat/useAutoScroll', () => ({
-  useAutoScroll: () => {},
-}));
-
 vi.mock('@/renderer/hooks/ui/useTextSelection', () => ({
   useTextSelection: () => ({ selectedText: '', selectionPosition: null, clearSelection: vi.fn() }),
 }));
