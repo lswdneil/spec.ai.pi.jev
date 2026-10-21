@@ -238,7 +238,14 @@ mu とそのランタイムを内蔵したネイティブアプリです。Node 
 
 **ボード** · **判定**（リアルタイムの台帳：すべての判定とその問い） · **ハイブ** · **教訓** · **ファイル** · **プレビュー** · **ソース** · **ブラウザ**（エージェントが一歩ずつ操作する内蔵ブラウザ。目標、一時停止、停止付き）
 
-権限モードと目標は入力欄にあり、`⌘K` でコマンドパレットが開きます。モデルへのログインはアプリの中で行います。ChatGPT、Claude、Grok、Google（Gemini CLI / Antigravity）のサブスクリプションか、pi が対応する任意のプロバイダーの API キーを使えます。Claude Code と Codex CLI の会話は、インポートして続きから話せます。
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="app-dark.png">
+    <img src="app-light.png" width="880" alt="小さなプロジェクトで落ちていたテストを直したあとの mu デスクトップアプリ。Jev がメッセージを複数ステップのタスクと判定し（input.preflight）、エージェントはテストを走らせ、パーサーを読み、分の単位を直して、テストをもう一度走らせた。右の判定パネルには各判定が判定ポイントと所要時間（約 200〜400 ms）付きで並ぶ。下部のバーには判定器、40 の判定ポイントのうち有効な 38、判定 5 件、コンテキストの使用量が出ている。">
+  </picture>
+</p>
+
+画面下部のバーで、カーネルの状態をいつでも確認できます。どの判定器が答えていてどこで動いているか、有効な判定ポイントの数、会話中ならそれまでの判定数、直近の判定の所要時間、コンテキストの使用量です。権限モードと目標は入力欄にあり、`⌘K` でコマンドパレットが開きます。モデルへのログインはアプリの中で行います。ChatGPT、Claude、Grok、Google（Gemini CLI / Antigravity）のサブスクリプションか、pi が対応する任意のプロバイダーの API キーを使えます。Claude Code と Codex CLI の会話は、インポートして続きから話せます。
 
 macOS（Apple シリコン / Intel）、Windows（x64 / Arm）、Linux（x64 / Arm）向けのビルドは GitHub Actions で作成し、[Releases](https://github.com/qybaihe/mu/releases) で公開しています。
 
@@ -250,7 +257,14 @@ mu            # カレントディレクトリで対話セッションを始め�
 mu doctor     # インストール、判定器、各接続を確認する
 ```
 
-Node 22.19 以降が必要です。`mu -p "prompt"` は 1 回だけ実行して結果を出力し、`mu -c` は前回のセッションを続けます。`mu import --list` は Claude Code と Codex の会話を探し、`mu import <file>` はそれを取り込みます。`mu ledger [n]` は直近 n 回のセッションで判定器が下した判定を出力します。コマンドラインとデスクトップアプリは、アカウント、設定、教訓を共有します。
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="cli-dark.png">
+    <img src="cli-light.png" width="720" alt="ターミナルでの mu のウェルカム画面：μ のマーク、「mu v0.1.9, judgment-first coding agent, built on pi 1.3.0」、続いて判定器（Jev 1.13、無料、428 ms で応答、判定ポイント有効）、モデルと作業ディレクトリ、覚えておくと便利なキー。">
+  </picture>
+</p>
+
+Node 22.19 以降が必要です。`mu -p "prompt"` は 1 回だけ実行して結果を出力し、`mu -c` は前回のセッションを続けます。`mu import --list` は Claude Code と Codex の会話を探し、`mu import <file>` はそれを取り込みます。`mu ledger [n]` は直近 n 回のセッションで判定器が下した判定を出力します。コマンドラインとデスクトップアプリは、アカウント、設定、教訓を共有します。ターミナルでは、`/settings` でテーマを選ぶまで mu 独自の `mu-dark` と `mu-light` を使います（`system` はターミナルの配色に合わせます）。
 
 | コマンド | 内容 |
 | --- | --- |

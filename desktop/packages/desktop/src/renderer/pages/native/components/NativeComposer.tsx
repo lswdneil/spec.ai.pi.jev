@@ -28,7 +28,7 @@ import { useNativeAttachments } from '../hooks/useNativeAttachments';
 import { useNativeCommands } from '../hooks/useNativeCommands';
 import type { NativeConversationApi, NativeConversationState, SendMode } from '../hooks/useNativeConversation';
 import { useNativeModels } from '../hooks/useNativeModels';
-import { contextUsageOf, goalOnScreen } from '../utils/composerLines';
+import { contextUsageOf, goalOnScreen, showsContextRing } from '../utils/composerLines';
 import { useNativeClient } from '../utils/nativeClient';
 import { isWorking } from '../utils/statusRow';
 import { mentionPath, permissionState, runsCommand, sendBoxMessages, withFiles } from './composer/composerModel';
@@ -315,8 +315,9 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
             }
             rightTools={<NativeModelChip models={models} busy={working || held} />}
             sendButtonPrefix={
-              // The context's fill against its window, once pi has said it (a host ran); nothing before.
-              usage ? (
+              // The context's fill against its window, once pi has said it (a host ran); nothing before. Beside the kernel
+              // bar, which shows it too, only when the window runs short.
+              usage && showsContextRing(usage, !isMobile) ? (
                 <span
                   className='flex'
                   data-testid='native-context-usage'
