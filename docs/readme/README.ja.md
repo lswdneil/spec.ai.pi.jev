@@ -10,7 +10,7 @@
   <a href="https://github.com/qybaihe/mu/actions/workflows/desktop.yml"><img src="https://github.com/qybaihe/mu/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
   <a href="https://www.npmjs.com/package/mu-agent"><img src="https://img.shields.io/npm/v/mu-agent?label=mu-agent" alt="npm"></a>
   <a href="https://github.com/qybaihe/mu/releases"><img src="https://img.shields.io/github/v/release/qybaihe/mu?include_prereleases&label=desktop" alt="Desktop release"></a>
-  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT%20%2B%20Apache--2.0-blue" alt="License"></a>
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
   <a href="https://github.com/qybaihe/mu/discussions"><img src="https://img.shields.io/github/discussions/qybaihe/mu?label=discussions" alt="Discussions"></a>
 </p>
 
@@ -292,7 +292,7 @@ npm run check                  # フォーマット、lint、型チェック
 
 ## クレジットとライセンス
 
-mu は [pi](https://github.com/earendil-works/pi)（コーディングエージェント、MIT。ルートの [LICENSE](../../LICENSE) が `packages/` と `kyrn/` に適用されます）と [AionUi](https://github.com/iOfficeAI/AionUi)（デスクトップアプリ、Apache 2.0。`desktop/` には AionUi の [LICENSE](../../desktop/LICENSE) を残しています）をもとに作られています。二つのプロジェクトに感謝します。いくつかの判定ポイントは他のプロジェクトのアイデアをもとにしています。プロンプトインジェクション検査の問い方は [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills) から、続行チェックと一括判定ツールは [oh-my-pi](https://github.com/can1357/oh-my-pi) にならっています。判定カーネルで使っているサードパーティのコードは [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md) に記載しています。
+mu のライセンスは MIT です（[LICENSE](../../LICENSE)。デスクトップアプリは [desktop/LICENSE](../../desktop/LICENSE)）。[pi](https://github.com/earendil-works/pi)（コーディングエージェント、MIT）と [AionUi](https://github.com/iOfficeAI/AionUi) をもとに作られています。二つのプロジェクトに感謝します。デスクトップアプリは AionUi のフォークから始まり、AionUi から来たファイルは [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt) に一覧があり、引き続き Apache 2.0 です（[desktop/NOTICE](../../desktop/NOTICE)）。いくつかの判定ポイントは他のプロジェクトのアイデアをもとにしています。プロンプトインジェクション検査の問い方は [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills) から、続行チェックと一括判定ツールは [oh-my-pi](https://github.com/can1357/oh-my-pi) にならっています。判定カーネルで使っているサードパーティのコードは [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md) に記載しています。
 
 ## コミュニティ
 
