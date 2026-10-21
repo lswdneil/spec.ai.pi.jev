@@ -179,7 +179,7 @@
     "download": "Download this version",
     "full_agent": "Full mu-agent changelog",
     "headlines": {
-      "v0.1.9": "a new look, and new providers set up from their model list",
+      "v0.1.9": "a new look, providers set up from their model list",
       "v0.1.8": "MCP tool descriptions screened for hidden instructions, long runs saved as draft skills"
     },
     "entries": []
