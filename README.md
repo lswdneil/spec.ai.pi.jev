@@ -39,7 +39,7 @@ What you get:
 
 > mu is in early development (0.1.x). See [Status and limitations](#status-and-limitations).
 
-**Contents:** [Quick start](#quick-start) · [How a turn works](#how-a-turn-works) · [Decision points](#decision-points) · [Judges](#judges) · [Measured](#measured) · [The hive](#the-hive) · [The board](#the-plain-language-board) · [Desktop app](#the-desktop-app) · [Command line](#command-line) · [Privacy](#privacy) · [Status](#status-and-limitations) · [Documentation](#documentation) · [Contributing](#contributing)
+**Contents:** [Quick start](#quick-start) · [How a turn works](#how-a-turn-works) · [Decision points](#decision-points) · [Judges](#judges) · [How mu is built](#how-mu-is-built) · [Measured](#measured) · [The hive](#the-hive) · [The board](#the-plain-language-board) · [Desktop app](#the-desktop-app) · [Command line](#command-line) · [Privacy](#privacy) · [Status](#status-and-limitations) · [Documentation](#documentation) · [Contributing](#contributing)
 
 ## Quick start
 
@@ -170,6 +170,28 @@ Every point, with its feature switch and options: [docs/reference/decision-point
 - **Laya** (local) is a 322M-parameter judge that runs on your machine and never touches the network. Nothing is downloaded without your consent. It's reliable on simple predicates and weaker on meta-judgments, so run it in shadow alongside Jev and read the ledger before you give it a decision point.
 - **Any classifier model** in pi's catalog can serve as a tier: `classifier:<provider>/<model>`. For example, Cloudflare's Clef (`clef`, `clef-flash`), the System One models on OpenRouter and the Vercel AI Gateway, or a llama.cpp classifier.
 - **Any LLM** can serve as a tier: `llm:<provider>/<model>`.
+
+## How mu is built
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/pieces-dark.svg">
+    <img src="docs/readme/pieces-light.svg" width="880" alt="The pieces. The desktop app (desktop/, which runs pi in a utility process over pi's RPC protocol) and the mu command (kyrn/bin/mu.mjs) both start pi, the coding agent: its agent loop, tools, sessions and providers. Inside pi runs the judgment kernel (packages/kyrn-judge): features hooked into pi's events, a decision engine with modes, judges and fallbacks, and the ledger. pi calls the main model. The engine asks the judges: Jev, Laya, any classifier or any LLM.">
+  </picture>
+</p>
+
+Everything mu adds to pi is one extension, the judgment kernel in `packages/kyrn-judge`, and mu's changes to pi itself are kept small and marked, so pi's updates merge in: a workflow brings them every Monday. The `mu` command handles mu's own commands (`setup`, `ledger`, `import`…) and starts pi with the kernel. The desktop app runs the same pi and kernel in a utility process, so the app and the command line share their sessions.
+
+Every decision point takes the same path, and a feature acts on a verdict only in `active` mode:
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/decision-dark.svg">
+    <img src="docs/readme/decision-light.svg" width="880" alt="A decision, end to end, with tool.injection screening a web page. 1: a feature hooks a pi event, web_fetch returning a page. 2: it asks a decision point with a small state and a bounded question. 3: the engine checks the mode and picks a judge from its tiers, with a fallback. 4: the judge answers, for example yes 0.97 in 0.3 seconds. 5: the ledger records the verdict. 6: in active mode the feature acts and the passage is withheld. In shadow mode it stops at step 5. Without a verdict, mu takes the fallback and the ledger says why.">
+  </picture>
+</p>
+
+The code map, and where each step lives: [docs/architecture.md](docs/architecture.md).
 
 ## Measured
 
