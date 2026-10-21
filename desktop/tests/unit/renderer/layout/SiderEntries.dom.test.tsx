@@ -1,10 +1,4 @@
 /**
- * @license
- * Copyright 2026 AionUi (aionui.com)
- * SPDX-License-Identifier: Apache-2.0
- */
-
-/**
  * The sidebar is three ways in and two things in the footer. Anything that used to have a row of
  * its own — assistants, the team section, signing out — is gone from here; the settings hold it.
  * Search is the command palette, which the sidebar keeps mounted on every page.

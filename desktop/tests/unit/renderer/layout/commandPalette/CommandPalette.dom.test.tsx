@@ -1,10 +1,4 @@
 /**
- * @license
- * Copyright 2026 AionUi (aionui.com)
- * SPDX-License-Identifier: Apache-2.0
- */
-
-/**
  * The command palette as a person meets it: Cmd/Ctrl+K opens it anywhere, one input finds conversations, settings
  * pages and the harness's slash commands, the arrow keys choose, Enter runs, Esc closes. Arco's modal, the app's
  * event bus, the shortcut hook and the palette's own hooks are real; the data sources are stubbed.

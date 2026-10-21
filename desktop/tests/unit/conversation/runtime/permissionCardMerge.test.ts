@@ -1,10 +1,4 @@
 /**
- * @license
- * Copyright 2025 AionUi (aionui.com)
- * SPDX-License-Identifier: Apache-2.0
- */
-
-/**
  * Replays the frames of a mu turn in 最小权限 (minimal permission) mode, as the conversation E2E test recorded them:
  * every frame of the turn shares one msg_id, and the permission card (`acp_permission`) arrives between the tool call
  * it asks about and that call's result.

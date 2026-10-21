@@ -1,10 +1,4 @@
 /**
- * @license
- * Copyright 2026 AionUi (aionui.com)
- * SPDX-License-Identifier: Apache-2.0
- */
-
-/**
  * The Jev preflight row the mu bridge adds at the top of every turn (`process/agent/kyrn/events.ts`): a tool call whose
  * id starts with `jev:`. The bridge has no i18n and its title is stored with the conversation, so the row is read from
  * stable data, `rawOutput.preflight` and the verdict's turn type, and named in the reader's language where it is shown

@@ -1,10 +1,4 @@
 /**
- * @license
- * Copyright 2026 AionUi (aionui.com)
- * SPDX-License-Identifier: Apache-2.0
- */
-
-/**
  * mu's slash commands, by name, with the words mu-agent gives each one in English and in Chinese (pi's
  * `get_commands`, with MU_LANG en or zh), then any earlier English wording an older mu may still send. `llama` and
  * `mcp` are pi's own commands, in English only. `clear` and `new` are not in the menu (`process/agent/kyrn/commands.ts`).
