@@ -73,10 +73,10 @@ describe("welcome screen", () => {
 		const off = renderWelcome({ ...view, judge: "off" }, 100, plain);
 		const fresh = renderWelcome({ ...view, model: undefined, health: "checking" }, 100, plain);
 
-		expect(down.join("\n")).toContain("unreachable; using pi's default behavior");
-		expect(keyless.join("\n")).toContain("no usable key (run mu setup); using pi's default behavior");
-		expect(broken.join("\n")).toContain("failing (server); using pi's default behavior");
-		expect(off.join("\n")).toContain("off · pi's default behavior everywhere");
+		expect(down.join("\n")).toContain("unreachable; using the fallbacks");
+		expect(keyless.join("\n")).toContain("no usable key (run mu setup); using the fallbacks");
+		expect(broken.join("\n")).toContain("failing (server); using the fallbacks");
+		expect(off.join("\n")).toContain("off · every decision point uses its fallback");
 		expect(fresh.join("\n")).toContain("none yet · run /login, or mu setup in a terminal");
 		expect(fresh.join("\n")).toContain("checking");
 	});

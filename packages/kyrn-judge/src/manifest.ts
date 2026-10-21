@@ -127,7 +127,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "任务帧更新", en: "Task frame update" },
 			summary: {
 				zh: "每条消息判断一次：它是新任务、新的硬约束、对做法的纠正、新的子目标，还是什么都没变。只有变了才让模型重写任务帧。",
-				en: "Classifies each message as a new task, a new hard constraint, a correction, a new subgoal, or no change. Only a change makes a model rewrite the task frame.",
+				en: "Classifies each message as a new task, a new hard constraint, a correction, a new subgoal or no change. Only a change makes a model rewrite the task frame.",
 			},
 		},
 		{
@@ -237,7 +237,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "值不值得记", en: "Worth keeping" },
 			summary: {
 				zh: "模型自己想记下的经验、子代理报告里标出的经验，判断是以后还用得上、只关这一次，还是提示词或项目文件里早就有。只存以后用得上的。",
-				en: "For a lesson the model saves with the remember tool, or a Lesson: line in a subagent's report: will it help again, is it a one-off, or is it already in the prompt or project files? Only lessons that will help again are kept.",
+				en: "For a lesson the model saves with the remember tool, or a Lesson: line in a subagent's report: will it help again, is it a one-off or is it already in the prompt or project files? Only lessons that will help again are kept.",
 			},
 		},
 		{
@@ -297,7 +297,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "Jev 替你审批", en: "Jev approves for you" },
 			summary: {
 				zh: "在「Jev 审批」模式下，命令、项目外的改动、对外操作和子代理先交给 Jev：它确信这是任务需要、也是你会预期的做法才放行，否则在状态栏问你。",
-				en: "In Jev approves mode, commands, changes outside the project, outside actions and subagents go to Jev first. Only what Jev is sure the task needs, done the way you'd expect, runs without asking; anything else asks you in the status bar.",
+				en: "In Jev approves mode, commands, changes outside the project, external actions and subagents go to Jev first. Only what Jev is sure the task needs, done the way you'd expect, runs without asking; anything else asks you in the status bar.",
 			},
 		},
 		{
@@ -317,7 +317,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "外来内容里的指令", en: "Instructions in outside content" },
 			summary: {
 				zh: "网页、搜索结果、MCP 服务器返回的内容，以及 shell 命令从别的机器取回的内容（curl、gh issue view），模型读到之前先过一遍：哪一段是写给 AI 的指令（让它忽略规则、交出数据、跑命令，或借一个链接把对话带出去）。这样的段落被扣下，换成一行说明。Jev 没答上来时，只扣下明显的注入用语。子代理读到的内容里有段落被扣下时，它的报告交回时前面带一句警告。",
-				en: "Before the model reads a web page, search results, an MCP server's response or what a shell command fetched from another machine (curl, gh issue view), checks which passages carry instructions aimed at an AI (to ignore rules, hand over data, run commands, or leak the conversation through a link). Those passages are withheld and replaced with a one-line note. When Jev doesn't answer, only obvious injection phrases are withheld. If a subagent had passages withheld from what it read, its report comes back with a warning.",
+				en: "Before the model reads a web page, search results, an MCP server's response or what a shell command fetched from another machine (curl, gh issue view), checks which passages carry instructions aimed at an AI (to ignore rules, hand over data, run commands or leak the conversation through a link). Those passages are withheld and replaced with a one-line note. When Jev doesn't answer, only obvious injection phrases are withheld. If a subagent had passages withheld from what it read, its report comes back with a warning.",
 			},
 		},
 		{
@@ -327,7 +327,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "MCP 工具说明里的私货", en: "Hidden instructions in MCP tool descriptions" },
 			summary: {
 				zh: "MCP 服务器自己写工具说明，模型把它当工具列表的一部分来读。每个工具第一次出现、说明变了时问一次：这段说明是不是要 AI 做调用这个工具以外的事（读用不着的文件或密钥、把数据发到别处、改变它对待别的工具或你的方式、瞒着你）？是的话这个工具从列表里拿掉，调用也被拒绝，并告诉你。Jev 没答上来时，只按 <IMPORTANT> 块、「别告诉用户」这类明显标记处理。",
-				en: 'MCP servers write their own tool descriptions, and the model reads them as part of its tool list. Asked once per tool when it first appears and whenever its description changes: does the description ask the AI to do more than call this tool (read files or secrets it does not need, send data elsewhere, change how it treats other tools or you, hide something from you)? If so, the tool is removed from the list, calls to it are refused, and you are told. When Jev gives no answer, only obvious markers such as an <IMPORTANT> block or "do not tell the user" count.',
+				en: "MCP servers write their own tool descriptions, and the model reads them as part of its tool list. Asked once per tool when it first appears and whenever its description changes: does the description ask the AI to do more than call this tool (read files or secrets it doesn't need, send data elsewhere, change how it treats other tools or you, hide something from you)? If so, the tool is removed from the list, calls to it are refused and you're told. When Jev gives no answer, only obvious markers such as an <IMPORTANT> block or \"do not tell the user\" count.",
 			},
 		},
 		{
@@ -377,7 +377,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "判断回退", en: "Judged rewind" },
 			summary: {
 				zh: "监测发现原地打转或同一条命令连续失败时，判断这条路是不是死路；只有确信是死路且没有进展，才向你提议回到本回合开始前的检查点。它自己从不回退。",
-				en: "When the monitor sees the agent going in circles, or the same command failing again and again, judges whether the approach is a dead end. Only a confident dead end with no progress leads to a proposal to go back to the turn's checkpoint. It never rewinds on its own.",
+				en: "When the monitor sees the agent going in circles or the same command failing again and again, judges whether the approach is a dead end. Only a confident dead end with no progress makes mu propose going back to the turn's checkpoint; it never rewinds on its own.",
 			},
 		},
 		{
@@ -427,7 +427,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "诊断何时告知", en: "When to report diagnostics" },
 			summary: {
 				zh: "改完文件后语言服务器新报的错：现在就说、等模型停下再说，还是不说（风格类警告）。回合结束时仍在的新错误一定会说。",
-				en: "For new language server diagnostics after an edit: report now, when the model pauses, or never (style warnings). New errors still present when the turn ends are always reported.",
+				en: "For new language server diagnostics after an edit: report now, when the model pauses or never (style warnings). New errors still present when the turn ends are always reported.",
 			},
 		},
 		{
@@ -437,7 +437,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "目标是否达成（Jev 兜底）", en: "Goal met (Jev fallback)" },
 			summary: {
 				zh: "目标模式默认由大模型判断；这个判定点只在选了 Jev、或大模型没答上来时用：读结束语，判断目标是否达成、是否需要你拿主意。还有没勾掉的验收条件、或改完没跑过，一律算没达成。",
-				en: "By default a model checks goal mode; this decision point is used when Jev is chosen or the model doesn't answer. It reads the closing message to judge whether the goal is met and whether you're needed. An open acceptance item or an unverified edit always means not yet.",
+				en: "In goal mode, a model decides by default whether the goal is met. This decision point is used only when Jev is chosen or the model doesn't answer: it reads the closing message to judge whether the goal is met and whether you're needed. An open acceptance item or an unverified edit always means not yet.",
 			},
 		},
 		{
@@ -447,7 +447,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "人话看板：现在在干什么", en: "Plain-language board: where things stand" },
 			summary: {
 				zh: "打开人话看板的项目里，代理每说一段话、跑完检查或勾掉一条验收条件时、每做几步、以及每次停下时，用选择题读出它处在哪个阶段、在做哪条验收条件、是不是在等你，并把这段时间发生的事逐条分成「你会想知道的」和「例行步骤」。只有出现新情况，才把挑出来的要点交给会说人话的模型重写看板、并在流水里重讲一句；一轮结束时再挑一次整轮的要点，做个总结。",
-				en: "In a project with the board on, whenever the agent says something, after a check or a ticked acceptance item, every few tool calls, and whenever the agent stops, multiple-choice questions read its phase, the acceptance item it's working on and whether it's waiting for you, and sort what happened since the last update into news and routine. Only something new makes a plain-speaking model rewrite the board and retell the news in the running account; when a run ends, the news from the whole run is picked again for a summary.",
+				en: "In a project with the board on, multiple-choice questions run whenever the agent says something, after a check or a ticked acceptance item, every few tool calls and whenever the agent stops. They read the agent's phase, the acceptance item it's working on and whether it's waiting for you, and sort what happened since the last update into news and routine. Only something new makes a plain-speaking model rewrite the board and retell the news in the running account. When a run ends, the news from the whole run is picked again for a summary.",
 			},
 		},
 		{
@@ -457,7 +457,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "通知分流", en: "Notification routing" },
 			summary: {
 				zh: "上下文预算等事件出现时，判断该现在告诉模型、稍后再说，还是不必说。",
-				en: "For events such as the context budget: tell the model now, later, or not at all.",
+				en: "For events such as the context budget: tell the model now, later or not at all.",
 			},
 		},
 		{
@@ -487,7 +487,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "蜂群：发布发现", en: "Hive: publishing findings" },
 			summary: {
 				zh: "一只蜂的发现值不值得放到公告板上给其他蜂看。",
-				en: "Whether a bee's finding is worth putting on the board for the others.",
+				en: "Decides whether a bee's finding is worth putting on the board for the others.",
 			},
 		},
 		{
@@ -497,7 +497,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "蜂群：投递", en: "Hive: delivery" },
 			summary: {
 				zh: "公告板上的一条发现与某只蜂手头的工作有没有关系，有关系才送达。",
-				en: "Whether a finding on the board matters to a bee's current work; only then is it delivered.",
+				en: "Decides whether a finding on the board matters to a bee's current work; only then is it delivered.",
 			},
 		},
 		{
@@ -507,7 +507,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "蜂群：纠正", en: "Hive: corrections" },
 			summary: {
 				zh: "一条新发现对公告板上的旧发现意味着什么：更新了它、和它冲突、佐证它，还是无关。被更新的下线，听过它的蜂收到纠正；冲突两边都留着，交给蜂去核实。",
-				en: "How a new finding relates to an earlier one on the board: it replaces it, contradicts it, supports it, or is unrelated. A replaced finding is withdrawn and every bee that heard it is told; a contradiction keeps both sides for a bee to settle.",
+				en: "How a new finding relates to an earlier one on the board: it replaces it, contradicts it, supports it or is unrelated. A replaced finding is withdrawn and every bee that heard it is told; a contradiction keeps both sides for a bee to settle.",
 			},
 		},
 	],
@@ -667,7 +667,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "经验库", en: "Lessons" },
 			summary: {
 				zh: "从你的纠正、代理自己的脱困、模型和子代理的发现里学经验，存之前先和已有的合并，下次遇到相关任务时带上，没人照做的自动退役。随时可以查看、编辑或让一条退役。",
-				en: "Learns from your corrections, from the agent getting itself unstuck, and from what the model and subagents find. Merges each new lesson with existing ones before saving it, brings relevant lessons into later turns, and retires those that are never followed. /lessons lists them; /forget retires one.",
+				en: "Learns from your corrections, from the agent getting itself unstuck and from what the model and subagents find. Merges each new lesson with existing ones before saving it, brings relevant lessons into later turns and retires those that are never followed. /lessons lists them; /forget retires one.",
 			},
 			defaultEnabled: true,
 			options: [
@@ -812,7 +812,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "权限模式", en: "Permission modes" },
 			summary: {
 				zh: "完全访问、Jev 审批、最小权限三种模式，用 /permissions 随时切换；需要授权时在状态栏提示你，可以只允许这一次，或这次对话都允许。开着它时，危险命令的把关也归它管。",
-				en: "Full access, Jev approves, or Ask first; switch any time with /permissions. When a step needs your permission, the status bar asks; allow it once or for the whole conversation. While this feature is on, it also takes over the risky command guard.",
+				en: "Full access, Jev approves or Ask first; switch any time with /permissions. When a step needs your permission, the status bar asks; allow it once or for the whole conversation. While this feature is on, it also takes over the risky command guard.",
 			},
 			defaultEnabled: true,
 			options: [
@@ -945,7 +945,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "工具输出准入", en: "Tool output admission" },
 			summary: {
 				zh: "控制多长的工具输出、以什么方式进入上下文。",
-				en: "Controls how long tool output gets into the context.",
+				en: "Decides which parts of long tool output enter the context.",
 			},
 			defaultEnabled: true,
 			options: [
@@ -1310,7 +1310,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "语言服务器诊断", en: "Language server diagnostics" },
 			summary: {
 				zh: "接本机已装的语言服务器（不代装），只留这次改动新引入的报错，由判定器决定何时告诉模型。",
-				en: "Uses language servers already installed on this machine (it installs none), keeps only diagnostics an edit newly introduced, and lets the judge decide when to tell the model.",
+				en: "Uses language servers already installed on this machine (it installs none), keeps only diagnostics an edit newly introduced and lets the judge decide when to tell the model.",
 			},
 			defaultEnabled: true,
 			options: [
@@ -1416,7 +1416,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "写偏即停（实验）", en: "Mid-stream correction (experimental)" },
 			summary: {
 				zh: "语义版 TTSR：不用正则，而由判定器发现模型写偏，中断输出、摆出规则、从原处继续。默认关闭；开启后每隔一段输出就会多一次判定调用。",
-				en: "Semantic TTSR: the judge, not a regular expression, notices when output goes astray, cuts it off, shows the rule and lets the model continue. Off by default; when on, every stretch of output costs one more judge call.",
+				en: "The judge, not a regular expression, notices when output goes astray, cuts it off, shows the rule and lets the model continue. Off by default; when on, every stretch of output costs one more judge call.",
 			},
 			defaultEnabled: false,
 			options: [
@@ -1513,7 +1513,7 @@ export const MANIFEST: HarnessManifest = {
 					label: { zh: "判断最多等多久", en: "Max wait for the check" },
 					help: {
 						zh: "超时就退回 Jev 判定器，再退回只看事实。",
-						en: "After that, Jev decides; failing that, the facts alone.",
+						en: "If the check takes longer, Jev decides; if Jev can't, only the facts count.",
 					},
 				},
 				{
@@ -1574,7 +1574,7 @@ export const MANIFEST: HarnessManifest = {
 					key: "defaultOn",
 					kind: "boolean",
 					default: false,
-					label: { zh: "没单独设置过的项目也打开", en: "On for projects you haven't set yet" },
+					label: { zh: "没单独设置过的项目也打开", en: "On in projects you haven't set it for" },
 					help: {
 						zh: "默认关闭：看板每更新一次就调用一次模型。",
 						en: "Off by default: each board update costs a model call.",
@@ -1730,7 +1730,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "判定连接保温", en: "Judge connection warm-up" },
 			summary: {
 				zh: "会话在用时每隔一会儿问判定器一个小问题，让连接一直热着：一轮开始前的判定省下 1–3 秒的建连。",
-				en: "While the session is in use, a tiny question keeps the judge's connection warm, so the questions before a turn skip 1-3 s of connection setup.",
+				en: "While the session is in use, a tiny question keeps the judge's connection warm, so the questions before a turn skip 1–3 s of connection setup.",
 			},
 			defaultEnabled: true,
 			options: [
@@ -2091,7 +2091,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "网页读取与搜索", en: "Web reading and search" },
 			summary: {
 				zh: "把网页读成文字（限时限量，拒绝内网地址，页面文字标为不可信）；网页搜索用国内不需要密钥就能访问的搜索源。",
-				en: "web_fetch reads a page as text (with time and size limits, internal addresses refused, and page text labeled untrusted); web_search uses a source that works from mainland China without a key.",
+				en: "web_fetch reads a page as text (with time and size limits, internal addresses refused and page text labeled untrusted); web_search uses a source that works from mainland China without a key.",
 			},
 			defaultEnabled: true,
 			options: [
@@ -2174,7 +2174,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "欢迎页", en: "Welcome screen" },
 			summary: {
 				zh: "终端里的欢迎框和身份说明。",
-				en: "The terminal's welcome box and the identity note for the model.",
+				en: "The terminal's welcome screen and the identity note for the model.",
 			},
 			defaultEnabled: true,
 			options: [],

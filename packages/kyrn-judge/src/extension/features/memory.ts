@@ -692,7 +692,7 @@ export function registerMemory(runtime: KyrnRuntime, roots?: HarnessRoots): void
 	pi.registerCommand("lessons", {
 		description: say({
 			zh: "这个项目的经验：/lessons 列出 id · 类型 · 召回/照做次数 · 经验，/lessons all 连到处适用的和已退役的一起列",
-			en: "This project's lessons: /lessons lists id · kind · recalled/followed · lesson; /lessons all adds global and retired lessons",
+			en: "List this project's lessons (id · kind · recalled/followed · lesson); /lessons all adds global and retired lessons",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);

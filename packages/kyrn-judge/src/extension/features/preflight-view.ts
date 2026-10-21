@@ -25,9 +25,9 @@ const TURN_LABELS: Readonly<Record<string, string>> = {
 
 const GEAR_LABELS: Readonly<Record<Gear, string>> = {
 	chat: "answer directly",
-	light: "light touch",
-	standard: "standard gear",
-	heavy: "heavy gear",
+	light: "light effort",
+	standard: "standard effort",
+	heavy: "full effort",
 };
 
 /** What the judge is asked, in the words shown to the user, in the order it is shown. */
@@ -162,7 +162,7 @@ export function verdictHeadline(data: VerdictData, paint: Paint): string {
 	if (data.state === "none") {
 		const why = data.reason ? `no verdict (${data.reason})` : "no verdict";
 		const waited = data.latencyMs === undefined ? "" : `${dot}${paint.fg("dim", seconds(data.latencyMs))}`;
-		return `${mark} ${by}  ${paint.fg("warning", why)}${dot}${paint.fg("dim", "default behavior for this turn")}${waited}`;
+		return `${mark} ${by}  ${paint.fg("warning", why)}${dot}${paint.fg("dim", "using the fallback this turn")}${waited}`;
 	}
 	const parts = [
 		paint.bold(paint.fg(data.state === "applied" ? "accent" : "text", TURN_LABELS[data.turnType] ?? data.turnType)),

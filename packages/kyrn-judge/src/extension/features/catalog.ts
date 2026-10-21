@@ -177,7 +177,7 @@ export function registerCatalog(runtime: KyrnRuntime): void {
 	pi.registerCommand("capabilities", {
 		description: say({
 			zh: "装了哪些能力、这次打开了哪些：/capabilities 查看，/capabilities open <ID> 打开",
-			en: "What's installed and what's turned on: /capabilities lists them, /capabilities open <id> turns one on",
+			en: "Show what's installed and what's turned on; /capabilities open <id> turns one on",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);

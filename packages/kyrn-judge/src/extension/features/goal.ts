@@ -415,7 +415,7 @@ export function registerGoal(runtime: KyrnRuntime): void {
 					ctx,
 					say({
 						zh: "没有判定器能读出目标是否达成，也没有能证明还没做完的事",
-						en: "no judge could tell whether the goal is met, and nothing is provably unfinished",
+						en: "no judge could tell whether the goal is met, and nothing shows it's unfinished",
 					}),
 					{ code: "unjudged" },
 				);

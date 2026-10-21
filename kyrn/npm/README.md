@@ -40,21 +40,21 @@ Verdicts take effect from the start (`active`). To only record what the judge wo
 ## Commands
 
 ```text
-mu                       interactive session in the current directory
-mu "prompt"              interactive session, starting with this prompt
-mu -p "prompt"           one-shot: print the answer and exit
-mu -c | -r               continue the last session | pick one to resume
-mu setup                 connect a model and choose a judge (mu setup --help for scripts and services)
-mu judge <cmd>           the local judge (Laya): setup | start | stop | status | run
-mu ledger [n] [--json]   the judge's verdicts from the last n sessions
+mu                       start a session in the current directory
+mu "prompt"              start a session with this prompt
+mu -p "prompt"           run one prompt, print the answer and exit
+mu -c | -r               continue the last session | pick a session to resume
+mu setup                 connect a model and choose a judge (see mu setup --help for scripting and services)
+mu judge <cmd>           manage the local judge, Laya (macOS on Apple silicon): setup | start | stop | status | run
+mu ledger [n] [--json]   print the judge's verdicts from the last n sessions
 mu import --list | <file>...   import Claude Code and Codex conversations (mu import --help)
-mu doctor                check the installation
-mu auth <cmd>            subscription sign-in for the desktop app: status | login | logout
+mu doctor                check the installation, the judges and the connections
+mu auth <cmd>            sign-in helper for the desktop app: status | login | logout
 mu link | unlink         put the mu command on your PATH | remove it
-mu help | version
+mu help | version        show this help | print the version
 ```
 
-Everything else goes to the agent unchanged: `mu --help` lists every flag. mu keeps its files in `~/.mu`, separate from a regular pi install in `~/.pi`.
+Everything else goes to pi unchanged: `mu --help` also shows pi's options. mu keeps its files in `~/.mu`, separate from a regular pi install in `~/.pi`.
 
 ## Themes
 

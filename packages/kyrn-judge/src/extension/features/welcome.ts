@@ -99,14 +99,14 @@ export function judgeDisplayName(label: string): string {
 }
 
 function healthText(view: WelcomeView, paint: Paint): string {
-	if (view.judge === "off") return paint.fg("muted", "off · pi's default behavior everywhere");
+	if (view.judge === "off") return paint.fg("muted", "off · every decision point uses its fallback");
 	const judge = judgeDisplayName(view.judge);
 	if (view.health === "checking") return `${judge} ${paint.fg("dim", "· checking…")}`;
 	if (view.health.ok) {
 		return `${judge} ${paint.fg("success", `· answering in ${view.health.latencyMs} ms`)} ${paint.fg("dim", `· decision points ${view.mode === "shadow" ? "in shadow" : view.mode}`)}`;
 	}
 	const why = HEALTH_ERROR[view.health.error ?? ""] ?? `failing (${view.health.error ?? "error"})`;
-	return `${judge} ${paint.fg("warning", `· ${why}; using pi's default behavior`)}`;
+	return `${judge} ${paint.fg("warning", `· ${why}; using the fallbacks`)}`;
 }
 
 /** The rule under the header: as wide as the screen, up to the width the header itself takes. */
@@ -147,12 +147,12 @@ export function renderWelcome(view: WelcomeView, width: number, paint: Paint): s
 		`${paint.fg("dim", view.keys.thinking)} thinking`,
 		`${paint.fg("dim", view.keys.expand)} ${view.expanded ? "less" : "more"}`,
 	].join(dot);
-	const tryLine = `${paint.fg("dim", "Try")} /help${dot}/status${dot}/agents${dot}/browse <url> <goal>${dot}/init`;
+	const tryLine = `${paint.fg("dim", "Try")} /help${dot}/status${dot}/agents${dot}/browse <url> [goal]${dot}/init`;
 	const more = view.expanded
 		? [
 				"",
 				paint.fg("muted", "What the judge does here"),
-				"  reads every message first and sets the turn's thinking level and hints",
+				"  reads every message first, sets the turn's thinking level and adds hints",
 				"  keeps noisy tool output, stale results and irrelevant skills out of context",
 				'  checks risky commands, and catches drift, loops and unverified "done"',
 				"  drives the browser click by click and gives each subagent a role and a model",

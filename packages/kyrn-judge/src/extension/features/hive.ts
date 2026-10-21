@@ -687,7 +687,7 @@ function registerHiveCommand(runtime: KyrnRuntime): void {
 	pi.registerCommand("hive", {
 		description: say({
 			zh: "让几个调查员同时查一个问题：/hive <问题>；不带问题时同 /swarm，看正在干活的子代理",
-			en: "Have several investigators work on one question at once: /hive <question>. Without a question, same as /swarm",
+			en: "Have several investigators work on one question at once: /hive <question>. With no question, it works like /swarm",
 		}),
 		// No argument completions, like /swarm: "/hive stop" is typed by someone who wants it to happen now.
 		handler: async (args, ctx) => {

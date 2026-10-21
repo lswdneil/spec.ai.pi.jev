@@ -836,7 +836,7 @@ describe("mu setup, asking in a terminal", () => {
 			"http://127.0.0.1:8080/models",
 			"http://127.0.0.1:8080/v1/models",
 		]);
-		expect(run.said).toContain("Checking box (127.0.0.1:8080)...");
+		expect(run.said).toContain("Checking box (127.0.0.1:8080)…");
 		expect(providerOf(run.json("models.json"), "box")).toEqual({
 			baseUrl: "http://127.0.0.1:8080/v1",
 			api: "openai-completions",
@@ -851,7 +851,7 @@ describe("mu setup, asking in a terminal", () => {
 			answers: ["2", "14", "7", "my-model", "4", "n"],
 			respond: () => listing("a-coder", "b-coder"),
 		});
-		expect(run.said).toContain("Type a number from 1-2, or a model name.");
+		expect(run.said).toContain("Type a number from 1 to 2, or a model name.");
 		expect((run.pi as FakePi).defaults).toEqual([{ provider: "ollama", model: "my-model" }]);
 	});
 
@@ -902,7 +902,7 @@ describe("mu setup in a script", () => {
 		const run = await stdinRun([], `${KEYS.hex32}\n`);
 		expect(run.code).toBe(SETUP_EXIT.usage);
 		expect(run.warned.join("\n")).toContain(
-			"DeepSeek and Qwen keys look the same. Say which with --service deepseek or qwen",
+			"DeepSeek and Qwen keys look the same. Choose one with --service deepseek or qwen",
 		);
 		expect(run.calls).toEqual([]);
 	});
