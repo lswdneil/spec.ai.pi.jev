@@ -2997,14 +2997,14 @@
 			"fa-IR": "تکرارهایی که حلقه به شمار می‌آیند"
 		},
 		"features[name=monitor].options[key=window].label": {
-			"en": "Window",
+			"en": "Recent calls checked",
 			"zh-TW": "觀察視窗",
 			"ja-JP": "観察ウィンドウ",
 			"ko-KR": "관찰 구간",
 			"de-DE": "Beobachtungsfenster",
 			"fr-FR": "Fenêtre d’observation",
-			"es-ES": "Ventana",
-			"pt-BR": "Janela",
+			"es-ES": "Llamadas recientes revisadas",
+			"pt-BR": "Chamadas recentes verificadas",
 			"ru-RU": "Окно наблюдения",
 			"uk-UA": "Вікно спостереження",
 			"tr-TR": "Gözlem penceresi",

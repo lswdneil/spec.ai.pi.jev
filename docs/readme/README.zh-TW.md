@@ -30,8 +30,8 @@
 一個程式設計代理每個工作階段要做幾百個和程式碼無關的決定：什麼留在上下文裡，一條指令安不安全，一個發現值不值得告訴另一個代理，工作做完了沒有。交給大模型，花的是 token、延遲和注意力；交給寫死的規則，錯得太多。mu 把它們交給一個**判定器**：一個小而快的模型，每次只回答一個有邊界的問題，每一輪有 40 個判定點。大模型把注意力留給正事。
 
 - **mu**：命令列。pi 的全部能力，加上判定核心。
-- **mu 桌面版**：原生應用程式，內建 mu 和執行環境。下載，接上一個模型，開始。
-- **Jev**：判定器。是非題、選擇題、評分題，每個答案帶機率，每一次判定都記進判定帳本。本機判定器（Laya）或任何一個大模型都可以接管某個判定點。
+- **mu 桌面版**：內建 mu 和執行環境的桌面應用程式。下載，接上一個模型，開始。
+- **Jev**：判定器。是非題、選擇題、評分題，每個答案帶機率，每一次判定都記進判定帳本。除了審批只由 Jev 決定，任何判定點都可以交給本機判定器（Laya）或任何一個大模型。
 
 > 還在早期開發。預發布版（0.1.x）在 npm 和 [Releases](https://github.com/qybaihe/mu/releases) 上，作者每天都在用。名稱、設定和格式都可能改變。
 
@@ -90,7 +90,7 @@ mu                  # 在目前目錄開一個工作階段
 | `tool.admission` | 一段長工具輸出的每一塊：現在重要嗎？ | 重要的進上下文；其餘封存，留一個指標 |
 | `tool.admission.test-log` | 測試記錄裡哪些是重複？ | 完全相同的重複只留一份，無損；也可以讓判定器從剩下的裡面挑 |
 | `context.forget` | 上下文超過門檻後，哪些工具結果已經過期？ | 每一條在送出的請求裡變成一行墓碑 |
-| `context.compact` | 這一段留還是刪？ | 依判定壓縮；不寫摘要 |
+| `context.compact` | 這一段留還是刪？ | 預設關閉。依判定壓縮；不寫摘要 |
 | `memory.recall` | 哪些經驗適用於這個任務？ | 帶進這一輪 |
 | `memory.capture` | 這則訊息是在糾正代理，還是在立一條規矩？ | 變成一條經驗 |
 | `memory.outcome` | 繞了圈子之後，最後走通的那條路值得記嗎？ | 從執行中學來的經驗，不是你教的 |
@@ -105,7 +105,7 @@ mu                  # 在目前目錄開一個工作階段
 | 判定點 | 問題 | 效果 |
 | --- | --- | --- |
 | `tool.risk` | 一條被規則標記的指令：是你要的嗎？ | 拿不準就問你 |
-| `tool.approval` | 在「Jev 審批」模式下：這條指令、這個專案外的變更、這個對外動作、這個子代理，任務明確需要嗎？ | 確定需要的直接放行；其餘問你 |
+| `tool.approval` | 在「Jev 審批」模式下：這條指令、這個專案外的變更、這個對外動作、這個子代理，任務明確需要嗎？ | Jev 確定需要的直接放行；其餘問你 |
 | `tool.constraint` | 在一個會改變東西的呼叫之前：它越過了你定下的約束嗎？ | 呼叫被攔下 |
 | `tool.injection` | 網頁、搜尋結果、MCP 伺服器的輸出，或指令從別的機器取回的內容（`curl`、`gh issue view`），一段一段看：裡面有沒有衝著 AI 來的指令？ | 這些段落不會到達模型，原處留一條說明。讀到過這種段落的子代理，報告交回時前面會附一句警告 |
 | `tool.description` | MCP 工具自己的說明，第一次出現或變了時：是不是要 AI 做呼叫這個工具以外的事（讀金鑰、把資料送到別處、瞞著你）？ | 這個工具從模型的工具列表裡拿掉，呼叫也會被拒絕，並告訴你 |
@@ -123,7 +123,7 @@ mu                  # 在目前目錄開一個工作階段
 | `turn.rewind` | 同一個失敗一次又一次：這條路是死路嗎？ | 退回到某個檢查點 |
 | `turn.completion` | 模型說做完了：有什麼東西驗證過嗎？ | 沒有就提醒一次 |
 | `turn.continue` | 一輪停在「接下來我跑一下測試」，或在你已經要它做的事上問「要我動手嗎」：是不是沒做完就停了？ | 讓它接著做，每則訊息最多兩次；難以撤銷的一步不會推它去做 |
-| `output.drift` | 模型正在寫的時候：輸出的末尾越過了你的約束嗎？ | 實驗性；邊寫邊糾正 |
+| `output.drift` | 模型正在寫的時候：輸出的末尾越過了你的約束嗎？ | 實驗性，預設關閉；邊寫邊糾正 |
 | `goal.met` | 目標模式下大模型給不出答案時：條件成立了嗎？ | `/goal` 的備援 |
 | `board.read` | 事情做到哪了，選擇題？ | 供人話看板使用 |
 | `notify.routing` | 上下文預算之類的事件：現在告訴模型，晚點，還是不說？ | 模型在合適的時候被告知 |
@@ -147,7 +147,7 @@ mu                  # 在目前目錄開一個工作階段
 - **pi 模型目錄裡的任何分類模型**，作為一個層級：`classifier:<provider>/<model>`。例如 Cloudflare 的 Clef（`clef`、`clef-flash`）、OpenRouter 和 Vercel AI Gateway 上的 System One 模型、llama.cpp 的分類模型。
 - **任何大模型**，作為一個層級：`llm:<provider>/<model>`。
 
-這換來什麼，以作者自己的工作階段為準：上下文從不填滿，因為工具輸出逐塊進入、過期結果不寫摘要直接放下；最長的幾份失敗測試記錄裡，折疊完全相同的重複省下 51% 的字元，一個字元也沒丟（見[實測](#實測)）；提示快取保持熱的，因為核心會猜你什麼時候回來。
+這換來什麼，以作者自己的工作階段為準：上下文很少填滿，因為工具輸出逐塊進入、過期結果不寫摘要直接放下；測試記錄精簡預設關閉，開啟後折疊完全相同的重複，在最長的幾份失敗測試記錄裡省下 51% 的字元，一個字元也沒丟（見[實測](#實測)）；提示快取過期之前，核心會判斷你會不會回來，會回來就提前續上。
 
 ## 實測
 
@@ -234,7 +234,7 @@ mu                  # 在目前目錄開一個工作階段
 
 ## 桌面版
 
-原生應用程式，內建 mu 和執行環境：不用安裝 Node，第一次啟動不下載任何東西。命令列有的它都有，另外在對話旁邊加了一塊工作面板：
+桌面應用程式，內建 mu 和執行環境：不用安裝 Node，第一次啟動不下載任何東西。命令列有的它都有，另外在對話旁邊加了一塊工作面板：
 
 **看板** · **判定**（即時的判定帳本：每一次判定和它的問題） · **蜂群** · **經驗** · **檔案** · **預覽** · **原始碼** · **瀏覽器**（代理一步步操作的內建瀏覽器，帶目標、暫停和停止）
 
@@ -315,7 +315,7 @@ npm run check                  # 格式、靜態檢查、型別
 
 ## 來源與授權
 
-mu 採用 MIT 授權（[LICENSE](../../LICENSE)；桌面版見 [desktop/LICENSE](../../desktop/LICENSE)）。它以 [pi](https://github.com/earendil-works/pi)（程式設計代理，MIT）和 [AionUi](https://github.com/iOfficeAI/AionUi) 為基礎改造，感謝這兩個專案：桌面版起步於 AionUi 的分支，來自 AionUi 的檔案列在 [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt)，仍以 Apache 2.0 授權（見 [desktop/NOTICE](../../desktop/NOTICE)）。有幾個判定點參考了其他專案：提示注入篩檢的問法來自 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)，續跑檢查和批次判定工具參考了 [oh-my-pi](https://github.com/can1357/oh-my-pi)。判定核心用到的第三方程式碼列在 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)。
+mu 採用 MIT 授權（[LICENSE](../../LICENSE)；桌面版見 [desktop/LICENSE](../../desktop/LICENSE)）。它以 [pi](https://github.com/earendil-works/pi)（程式設計代理，MIT）和 [AionUi](https://github.com/iOfficeAI/AionUi) 為基礎改造，感謝這兩個專案：桌面版最初從 AionUi fork 而來，來自 AionUi 的檔案列在 [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt)，仍以 Apache 2.0 授權（見 [desktop/NOTICE](../../desktop/NOTICE)）。有幾個判定點參考了其他專案：提示注入篩檢的問法來自 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)，續跑檢查和批次判定工具參考了 [oh-my-pi](https://github.com/can1357/oh-my-pi)。判定核心用到的第三方程式碼列在 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)。
 
 ## 社群支援
 

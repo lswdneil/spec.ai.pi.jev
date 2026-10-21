@@ -1302,7 +1302,14 @@ export const MANIFEST: HarnessManifest = {
 					max: 20,
 					label: { zh: "同一调用重复几次算打转", en: "Repeats that count as a loop" },
 				},
-				{ key: "window", kind: "number", default: 8, min: 2, max: 100, label: { zh: "观察窗口", en: "Window" } },
+				{
+					key: "window",
+					kind: "number",
+					default: 8,
+					min: 2,
+					max: 100,
+					label: { zh: "观察窗口", en: "Recent calls checked" },
+				},
 			],
 		},
 		{

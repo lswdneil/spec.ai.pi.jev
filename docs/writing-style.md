@@ -54,7 +54,7 @@ Product terms. Use these spellings and meanings everywhere; don't invent synonym
 | board | The plain-language progress board. | "the board" after first mention. |
 | hive, bee | A group of read-only investigator subagents and one member. | Keep the metaphor light. |
 | subagent | A helper agent the main agent starts. | One word. Not "sub-agent", "helper". |
-| permission mode | Full access, Jev approves, or Ask first. | |
+| permission mode | Full access, Jev approves or Ask first. | |
 | provider, model | Where models come from, and the model itself. | "Sign in with ChatGPT", "add an API key". |
 | session, conversation | CLI: session. Desktop: conversation. | |
 

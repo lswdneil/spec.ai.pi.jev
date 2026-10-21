@@ -29,12 +29,12 @@
 
 A coding agent makes hundreds of decisions per session that aren't about the code: what goes into the context, whether a command is safe, whether a finding is worth passing to another agent, whether the work is really done. Handing these to the main model costs tokens, time and focus. Fixed rules get them wrong too often. mu hands them to a **judge**: a small, fast model that answers one bounded question at a time, at 40 decision points in the agent loop. The main model keeps its attention on the work.
 
-mu comes as a command-line tool, `mu`, which does everything pi does and adds the judgment kernel, and as a desktop app that bundles mu and its runtime. The default judge is Jev, a hosted model that answers yes/no, choice and score questions with a probability for each answer. A local judge (Laya) or any LLM can take over any decision point.
+mu comes as a command-line tool, `mu`, which does everything pi does and adds the judgment kernel, and as a desktop app that bundles mu and its runtime. The default judge is Jev, a hosted model that answers yes/no, choice and score questions with a probability for each answer. A local judge (Laya) or any LLM can take over any decision point except approvals, which only Jev decides.
 
 What you get:
 
-- **A lean context and a warm cache.** In the authors' own sessions, the context never fills: long tool output is judged chunk by chunk so only what's needed enters, and stale results are dropped without writing a summary. In the longest failing test logs, folding exact repeats cut 51% of the characters, losslessly (see [Measured](#measured)). The prompt cache stays warm because the kernel predicts when you'll be back.
-- **Permission checks that don't stop you at every step.** In *Jev approves* mode, the default, the judge lets through what the task clearly needs and asks you about the rest. Rules catch risky commands first, and web pages and MCP output are screened for instructions aimed at the AI before the model sees them.
+- **A lean context and a warm cache.** In the authors' own sessions, the context rarely fills: long tool output is judged chunk by chunk so only what's needed enters, and stale results are dropped without writing a summary. Test-log trimming, off by default, folds exact repeats: on the longest failing test logs it cut 51% of the characters, losslessly (see [Measured](#measured)). Before the prompt cache expires, the kernel predicts whether you'll be back and refreshes the cache if you will.
+- **Permission checks that don't stop you at every step.** In *Jev approves* mode, the default, Jev lets through what the task clearly needs and asks you about the rest. Rules catch risky commands first, and web pages and MCP output are screened for instructions aimed at the AI before the model sees them.
 - **Decisions you can audit.** Every verdict goes into a local ledger with its probabilities and timing (`mu ledger`, `/status` or the desktop app's Judge tab). Any decision point can run in shadow mode, asked and logged but changing nothing, so you can compare judges before you rely on one.
 
 > mu is in early development (0.1.x). See [Status and limitations](#status-and-limitations).
@@ -64,7 +64,7 @@ You don't need a judge key to start: until you set one, the free Jev on OpenCode
   </picture>
 </p>
 
-Each name in the diagram is a decision point, asked as a short question about a small piece of state. Its verdict steers what happens next. Rules set the floor: they catch a dangerous-looking command first, and the judge can only vouch that you asked for it.
+Each name in the diagram is a decision point, asked as a short question about a small piece of state. Its verdict steers what happens next. Rules set the floor: they catch a dangerous-looking command first, and the judge can only clear it by confirming you asked for it.
 
 ## Decision points
 
@@ -99,7 +99,7 @@ The 40 points fall into five groups:
 | `tool.admission` | For each chunk of a long tool output: does it matter now? | What matters enters the context; the rest is archived behind a pointer |
 | `tool.admission.test-log` | What in this test log is repetition? | Exact repeats are folded losslessly; optionally, the judge chooses what to keep from the rest |
 | `context.forget` | Past a context threshold: which tool results are stale? | Each stale result becomes a one-line tombstone in outgoing requests |
-| `context.compact` | Keep or prune this passage? | Compaction by judgment; no summary is written |
+| `context.compact` | Keep or prune this passage? | Off by default. Compaction by judgment; no summary is written |
 | `memory.recall` | Which lessons apply to this task? | They're brought into the turn |
 | `memory.capture` | Does this message correct the agent or set a rule? | It becomes a lesson |
 | `memory.outcome` | The agent went in circles and found a way out: does that deserve a lesson? | A lesson learned from the run, not from you |
@@ -117,7 +117,7 @@ The 40 points fall into five groups:
 | Decision point | Question | Effect |
 | --- | --- | --- |
 | `tool.risk` | The rules flagged a command: did you ask for it? | If the judge is unsure, mu asks you |
-| `tool.approval` | In *Jev approves* mode: does the task clearly need this command, this change outside the project, this external action or this subagent? | Only what the judge is sure of runs; everything else asks you |
+| `tool.approval` | In *Jev approves* mode: does the task clearly need this command, this change outside the project, this external action or this subagent? | Only what Jev is sure of runs; everything else asks you |
 | `tool.constraint` | Before a call that changes something: does it cross a constraint you stated? | The call is stopped |
 | `tool.injection` | Passage by passage, in a web page, a search result, an MCP server's output or something a command fetched from another machine (`curl`, `gh issue view`): is there an instruction aimed at the AI? | Those passages never reach the model; a note marks where each one was. A subagent that read such passages hands back its report under a warning |
 | `tool.description` | When an MCP tool's description first appears or changes: does it ask the AI for more than calling the tool (reading secrets, sending data elsewhere, hiding something from you)? | The tool is removed from the model's list, calls to it are refused, and you're told |
@@ -138,7 +138,7 @@ The 40 points fall into five groups:
 | `turn.rewind` | The same failure, again and again: is this approach a dead end? | Back to a checkpoint |
 | `turn.completion` | The model says it's done: did anything verify that? | One nudge if not |
 | `turn.continue` | The run ends on "Let me run the tests next", or on a request for a go-ahead on work you already asked for: did it stop short? | It's sent back to work, at most twice per message, and never toward a step that's hard to undo |
-| `output.drift` | While the model is writing: does the tail of its output cross your constraints? | Experimental; corrected mid-stream |
+| `output.drift` | While the model is writing: does the tail of its output cross your constraints? | Experimental and off by default; corrected mid-stream |
 | `goal.met` | In goal mode, when the main model gives no answer: is the condition met? | The fallback for `/goal` |
 | `board.read` | Where do things stand? Asked as multiple choice | Feeds the plain-language board |
 | `notify.routing` | An event such as the context budget: tell the model now, later or never? | The model hears about it at the right time |
@@ -189,7 +189,7 @@ Judges can be chained in tiers, cheapest first:
   </picture>
 </p>
 
-Everything mu adds to pi is one extension, the judgment kernel in `packages/kyrn-judge`, and mu's changes to pi itself are kept small and marked, so pi's updates merge in: a workflow brings them every Monday. The `mu` command handles mu's own commands (`setup`, `ledger`, `import`…) and starts pi with the kernel. The desktop app runs the same pi and kernel in a utility process, so the app and the command line share their sessions.
+Everything mu adds to pi is one extension, the judgment kernel in `packages/kyrn-judge`, and mu's changes to pi itself are kept small and marked, so upstream pi changes merge cleanly; a workflow pulls them in every Monday. The `mu` command handles mu's own commands (`setup`, `ledger`, `import`…) and starts pi with the kernel. The desktop app runs the same pi and kernel in a utility process, so the app and the command line share their sessions.
 
 Every decision point takes the same path, and a feature acts on a verdict only in `active` mode:
 
@@ -228,7 +228,7 @@ The numbers below come from the repository's own replay script, [`kyrn/spikes/ju
 
 *Perfect judge* reads the labels, so it shows the most a correct judge could cut. *Keep failures only* is a judge that always answers "leave it out", which is effectively what a goal-blind filter does. The study's 282 live Jev requests cost about $0.017 in total at list price; with the default wording, the median request took 345 ms.
 
-Both are off by default. To fold repeats, set `"features": { "admission": { "testLog": "rules" } }` in `~/.mu/agent/mu.json`, or turn on *Test log trimming* in the desktop app's settings. `"jev"` also asks the judge which of the remaining parts the current goal needs; `/mu mode tool.admission.test-log shadow` records that choice without acting on it.
+Both are off by default. To fold repeats, set `"features": { "admission": { "testLog": "rules" } }` in `~/.mu/agent/mu.json`, or turn on *Test log trimming* in the desktop app's settings. Setting it to `"jev"` also asks the judge which of the remaining parts the current goal needs; `/mu mode tool.admission.test-log shadow` records that choice without acting on it.
 
 What these numbers don't show:
 
@@ -273,7 +273,7 @@ Because the board is append-only, a later conclusion can overturn an earlier one
 
 You can watch all of this in the desktop app's Hive tab. Each bee gets a row: its role, its model and what it's doing or has just said. The map shows who delivered findings to whom, and the more findings travel along a line, the thicker it gets. Corrections and disputes have their own marks, and a line lights up the moment a finding arrives. The information flow lists the text of every delivery, and every verdict is listed too. The hive card in the conversation shows a miniature of the map and opens this tab.
 
-One real run: three bees, nine minutes, 117 candidates judged, 27 posted to the board and 16 delivered to the bee that needed them. Every verdict is in the run's log.
+One real run: 3 bees, 9 minutes, 117 candidates judged, 27 posted to the board and 16 delivered to the bees that needed them. Every verdict is in the run's log.
 
 `/swarm` shows what each bee is doing, `/swarm stop` asks them to report now and `/swarm kill` ends them. A bee that runs out of time is asked for its report and ended if none arrives, and a watchdog handles a stuck model or tool. A hive always reports back.
 
@@ -281,7 +281,7 @@ One real run: three bees, nine minutes, 117 candidates judged, 27 posted to the 
 
 Frontier models keep getting better at the work and worse at talking about it. Each generation's progress updates read more like output meant for another machine: denser, more opaque, less like a person talking. mu doesn't ask the working model to narrate itself.
 
-With the board on (`/board`, or the switch on the desktop app's Board tab), each step the agent takes becomes one plain line on the board as soon as it finishes: a file changed, a check passed or failed, a command ran. Reading is folded into a single line with a running count. Whenever the agent says something mid-run, `board.read` asks the judge whether it's news. If it is, a model picked for one quality only, plain speech (`/board model`), retells it for a person and keeps the board's status current: what's happening now, how many checklist items are done and what's waiting on you. When a run finishes, a summary becomes the last line, with the full account kept above it, so you see what was done, not just that it's done.
+With the board on (`/board`, or the switch on the desktop app's Board tab), each step the agent takes becomes one plain line on the board as soon as it finishes: a file changed, a check passed or failed, a command ran. Reading is folded into a single line with a running count. Whenever the agent says something mid-run, `board.read` asks the judge whether it's news. If it is, a model chosen only for plain writing (`/board model`) rewrites it for a person and keeps the board's status current: what's happening now, how many checklist items are done and what's waiting on you. When a run finishes, a summary becomes the last line, with the full account kept above it, so you see what was done, not just that it's done.
 
 <p align="center"><img src="docs/readme/board.png" width="960" alt="The desktop app's plain-language board: how far along the work is, what's happening now and what happened before, with context use and cache hit rate at the top"></p>
 
@@ -289,7 +289,7 @@ The working model keeps its own language for the work, and the board stays reada
 
 ## The desktop app
 
-A native app with mu and its runtime built in: there's no Node.js to install and nothing to download on first launch. It has everything the command line has, plus a work panel beside the conversation:
+A desktop app with mu and its runtime built in: there's no Node.js to install and nothing to download on first launch. It has everything the command line has, plus a work panel beside the conversation:
 
 **Board** · **Judge** (the live ledger: every verdict with its question, decision point and latency) · **Hive** · **Lessons** · **Files** · **Preview** · **Source** · **Browser** (the built-in browser the agent drives one step at a time; it shows the goal and lets you pause or stop)
 
@@ -353,8 +353,8 @@ Your keys stay on your machine. mu never downloads a model or a runtime on its o
 - The measurements above come from the authors' own sessions and from synthetic projects. The test-log repeats cover Vitest only.
 - The test-log numbers measure what reaches the model, not whether the model then finishes the task. There's no end-to-end comparison with pi, Claude Code or Codex on the same tasks yet.
 - Laya, the local judge, runs only on macOS on Apple silicon, and it's weaker on meta-judgments than on simple predicates. Run it in shadow before you give it a decision point.
-- The free Jev on OpenCode Zen is free for a limited time only.
-- `output.drift` is experimental.
+- Jev on OpenCode Zen is free for a limited time only.
+- `output.drift` is experimental and off by default.
 
 ## Documentation
 
@@ -387,4 +387,4 @@ If mu is useful to you, a star helps others find it.
 
 ## Credits and license
 
-mu is under the MIT license ([LICENSE](LICENSE); the desktop app's is [desktop/LICENSE](desktop/LICENSE)). It is built on [pi](https://github.com/earendil-works/pi) (the coding agent, MIT) and [AionUi](https://github.com/iOfficeAI/AionUi): the desktop app began as AionUi's fork, and the files that came from it, listed in [desktop/AIONUI-FILES.txt](desktop/AIONUI-FILES.txt), stay under Apache 2.0 ([desktop/NOTICE](desktop/NOTICE)). We're grateful to both. Some decision points build on ideas from other projects: the wording of the prompt-injection screen comes from [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills), and the continuation check (`turn.continue`) and the bulk judging tool (`judge_items`) follow [oh-my-pi](https://github.com/can1357/oh-my-pi). Third-party code in the judgment kernel is listed in [THIRD_PARTY_NOTICES.md](packages/kyrn-judge/THIRD_PARTY_NOTICES.md).
+mu is under the MIT license ([LICENSE](LICENSE); the desktop app's is [desktop/LICENSE](desktop/LICENSE)). It is built on [pi](https://github.com/earendil-works/pi) (the coding agent, MIT) and [AionUi](https://github.com/iOfficeAI/AionUi): the desktop app began as a fork of AionUi, and the files that came from it, listed in [desktop/AIONUI-FILES.txt](desktop/AIONUI-FILES.txt), stay under Apache 2.0 ([desktop/NOTICE](desktop/NOTICE)). We're grateful to both. Some decision points build on ideas from other projects: the wording of the prompt-injection screen comes from [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills), and the continuation check (`turn.continue`) and the bulk judging tool (`judge_items`) follow [oh-my-pi](https://github.com/can1357/oh-my-pi). Third-party code in the judgment kernel is listed in [THIRD_PARTY_NOTICES.md](packages/kyrn-judge/THIRD_PARTY_NOTICES.md).

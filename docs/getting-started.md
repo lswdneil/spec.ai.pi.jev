@@ -48,7 +48,7 @@ mu asks a small, fast judge the routine questions that come up in a session. You
 
 ## Decisions and their modes
 
-Every decision point is **active** from the start: mu asks the judge and acts on its verdicts. Every verdict is logged, so you can see what the judge decided (`/status`, `mu ledger` or the Judge tab in the app).
+38 of the 40 decision points are **active** from the start: mu asks the judge and acts on its verdicts. `context.compact` and `output.drift` are off until you turn them on. Every verdict is logged, so you can see what the judge decided (`/status`, `mu ledger` or the Judge tab in the app).
 
 To watch the judge before you trust it, set the default mode to **shadow**. The judge is still asked and its verdicts are logged, but they change nothing. In `~/.mu/agent/mu.json`:
 
@@ -56,7 +56,7 @@ To watch the judge before you trust it, set the default mode to **shadow**. The 
 { "modes": { "default": "shadow" } }
 ```
 
-Or run `/mu mode default shadow` for the current session. In the app, Settings → decision points turns each point, and the default, on or off; a point in shadow mode shows as off there.
+Or run `/mu mode default shadow` for the current session. In the app, Settings → Decision points has a switch for each point and for the default; a point in shadow mode shows as off there.
 
 You can also put individual points in shadow or turn them off; see [Configuration](configuration.md). Two things work regardless of the mode: the permission mode you choose (*Jev approves* is how you opt in to `tool.approval`), and the `judge_items` tool when the model calls it.
 
@@ -65,7 +65,7 @@ You can also put individual points in shadow or turn them off; see [Configuratio
 The permission mode controls how much mu may do without asking. It's shown in the status line and in the app's composer. Switch it with `/permissions`:
 
 - **Full access**: everything runs.
-- **Jev approves** (the default): reads and edits inside the project run. Anything else runs only when the judge is sure the task needs it; otherwise mu asks you.
+- **Jev approves** (the default): reads and edits inside the project run. Anything else runs only when Jev is sure the task needs it; otherwise mu asks you.
 - **Ask first**: only reads run without asking.
 
 Risky commands (`rm -rf`, force pushes, `sudo`, running a downloaded script…) can never be allowed for a whole conversation, and the constraints you state ("don't touch the migrations") hold in every mode. More in [the permissions design note](../kyrn/docs/features/permissions.md).

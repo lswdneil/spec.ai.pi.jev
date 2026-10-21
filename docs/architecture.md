@@ -38,7 +38,7 @@ Every decision point follows these principles:
 
 - **Small state, bounded question.** The judge reads summaries and metadata, not bulk text, and answers yes/no, a closed choice (always with an escape answer such as `unclear`) or a score.
 - **A safe fallback.** Without a verdict, mu does what it would do without a judge.
-- **Verdicts change what the model does, never whether it asks the user.**
+- **No new questions for you.** A verdict never makes the model ask you something; only the permission checks, `tool.risk` and `tool.approval`, decide whether mu asks you.
 - **Shadow first.** A point earns `active` with numbers from real sessions.
 
 ## Code map

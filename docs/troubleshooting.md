@@ -6,7 +6,7 @@ If that doesn't help, [open an issue](https://github.com/qybaihe/mu/issues/new/c
 
 ## Installing and starting
 
-**`mu needs Node >= 22.19 (found v20…)`.** The command line needs Node.js 22.19 or newer: run `nvm install 24`, or install your system's package. The desktop app bundles its own Node.js and needs nothing.
+**`mu needs Node >= 22.19 (found v20…)`.** The command line needs Node.js 22.19 or newer: run `nvm install 24`, or install Node.js with your system's package manager. The desktop app bundles its own Node.js and needs nothing.
 
 **Windows shows a SmartScreen warning.** The Windows builds aren't code-signed yet. Choose "More info" → "Run anyway". The checksums of every download are in `SHA256SUMS` on the release page.
 
@@ -14,7 +14,7 @@ If that doesn't help, [open an issue](https://github.com/qybaihe/mu/issues/new/c
 
 **The app installed in `C:\Program Files\mu` can't start mu.** Fixed in 0.1.5 ([#4](https://github.com/qybaihe/mu/issues/4)). Install the latest release over the old one; your data is kept.
 
-**`mu install`, `mu list` or `mu config` starts a session instead.** Fixed after 0.1.7 ([#8](https://github.com/qybaihe/mu/issues/8)); the fix ships in the next release and is already on `main`.
+**`mu install`, `mu list` or `mu config` starts a session instead.** Fixed in mu-agent 0.1.8 and the desktop app 0.1.7 ([#8](https://github.com/qybaihe/mu/issues/8)). Update to the latest release.
 
 ## Models and networks
 
@@ -32,11 +32,11 @@ If that doesn't help, [open an issue](https://github.com/qybaihe/mu/issues/new/c
 
 **Verdicts are slow.** Every decision point has a time limit, after which mu carries on without the verdict, so nothing blocks for long. `mu ledger --json` shows each verdict's latency. If a judge is far away on the network or busy, you can replace it per point with `routes`.
 
-**The local judge wants to download a model.** Laya's model is several hundred megabytes. mu downloads it only after you agree, in `mu judge setup` or in the app.
+**The local judge wants to download a model.** Laya's model is about 930 MB. mu downloads it only after you agree, in `mu judge setup` or in the app.
 
 ## The terminal UI
 
-**The terminal UI crashes with "Rendered line … exceeds terminal width" when a subagent starts.** Fixed after 0.1.7 ([#7](https://github.com/qybaihe/mu/issues/7)). Until the next release, make the terminal wider than the status line.
+**The terminal UI crashes with "Rendered line … exceeds terminal width" when a subagent starts.** Fixed in mu-agent 0.1.8 and the desktop app 0.1.7 ([#7](https://github.com/qybaihe/mu/issues/7)). Update to the latest release.
 
 ## Starting over
 
