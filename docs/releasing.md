@@ -11,7 +11,7 @@ For maintainers. mu ships two things, versioned separately:
 | --- | --- | --- |
 | `ci.yml` | Every push to `main` and every pull request | `npm run check` and the tests; the app's lint, format, i18n, type and unit checks; MCP conformance |
 | `windows-tests.yml`, `windows-permission.yml` | Pushes and pull requests | The kernel's and the app's unit tests on Windows; the startup chain and a permission round trip |
-| `npm.yml` | Pushes to `main` that touch the harness | Builds and packs `mu-agent`, installs the tarball and runs it on Linux (Node 22.19), macOS and Windows; keeps the tarball as an artifact |
+| `npm.yml` | Pushes to `main` that touch the harness, and `mu-agent-v*` tags | Builds and packs `mu-agent`, installs the tarball and runs it on Linux (Node 22.19), macOS and Windows; keeps the tarball as an artifact; on a tag, publishes it to npm |
 | `desktop.yml` | Pushes to `main` that touch `desktop/`, and `v*` tags | Packs this commit's mu, builds the app for macOS, Windows and Linux (x64 and arm64), signs and notarizes the macOS builds, and holds a real conversation in each built app; on a tag, publishes the release |
 | `npm-audit.yml` | Daily | Audits the dependencies |
 
@@ -19,8 +19,9 @@ For maintainers. mu ships two things, versioned separately:
 
 1. Add the release's section to `kyrn/npm/CHANGELOG.md` (move `[Unreleased]` under a version and date) and bump the version.
 2. Push to `main` and wait for `npm.yml` to pass on all three systems.
-3. From an account with publish rights, publish the tarball that CI built and tested (the `mu-agent-tarball` artifact), not one built locally: `npm publish mu-agent-X.Y.Z.tgz`.
-4. Check the registry's shasum against the tarball's, and tag the commit `mu-agent-vX.Y.Z` (a tag only, no GitHub release).
+3. Tag that commit and push the tag: `git tag mu-agent-vX.Y.Z && git push origin mu-agent-vX.Y.Z` (a tag only, no GitHub release). The tag's `npm.yml` run builds and tests the package on every system again, publishes that tarball to npm and checks that npm serves the same shasum. It refuses a tag whose version isn't the package's, or a version that's already on npm.
+
+npm trusts the workflow through [trusted publishing](https://docs.npmjs.com/trusted-publishers), so no npm token is stored in the repository. It needs a one-time setup on npmjs.com by an owner of the package: mu-agent → Settings → Trusted publishing → GitHub Actions, with user `qybaihe`, repository `mu` and workflow `npm.yml`. npm also attaches provenance to every version published this way.
 
 ## Releasing the desktop app
 
