@@ -2,8 +2,8 @@ import { fileURLToPath } from 'node:url';
 
 // Use the same public API as AionUi's Add Custom Agent form; never edit its database.
 // The lookup and update rules are the ones in packages/desktop/src/process/agent/kyrn/product.ts.
-if (!process.env.AIONUI_BACKEND_URL) throw new Error('Set AIONUI_BACKEND_URL to the running local backend URL');
-const base = new URL(process.env.AIONUI_BACKEND_URL);
+if (!process.env.MU_BACKEND_URL) throw new Error('Set MU_BACKEND_URL to the running local backend URL');
+const base = new URL(process.env.MU_BACKEND_URL);
 if (base.protocol !== 'http:' || !['127.0.0.1', 'localhost', '[::1]'].includes(base.hostname)) {
   throw new Error('Registration requires the local AionUi backend URL');
 }

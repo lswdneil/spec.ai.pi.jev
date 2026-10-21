@@ -2,7 +2,7 @@
  * Resolve the aioncore binary path.
  *
  * Search order:
- *  1. AIONUI_BACKEND_BIN env override (path, resolved to absolute)
+ *  1. MU_BACKEND_BIN env override (path, resolved to absolute)
  *  2. Bundled with app (production)
  *  3. System PATH
  */
@@ -12,7 +12,7 @@ import { join, resolve } from 'node:path';
 import { execSync } from 'node:child_process';
 
 const BINARY_NAME = 'aioncore';
-const BIN_ENV_VAR = 'AIONUI_BACKEND_BIN';
+const BIN_ENV_VAR = 'MU_BACKEND_BIN';
 const MAX_DIR_ENTRIES = 20;
 const MAX_LOOKUP_TEXT_LENGTH = 1000;
 
@@ -93,7 +93,7 @@ export function resolveBinaryPath(): string {
 }
 
 /**
- * Honor the AIONUI_BACKEND_BIN env override.
+ * Honor the MU_BACKEND_BIN env override.
  * The value is resolved to an absolute path (relative to process.cwd) so it
  * survives the backend launcher spawning with a different working directory.
  * Returns the path when it points at an existing file. When the variable is

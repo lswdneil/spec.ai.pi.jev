@@ -199,12 +199,12 @@ async function launchApp(): Promise<ElectronApplication> {
 
   const commonEnv = {
     ...process.env,
-    AIONUI_EXTENSIONS_PATH: process.env.AIONUI_EXTENSIONS_PATH || path.join(projectRoot, 'examples'),
-    AIONUI_EXTENSION_STATES_FILE: process.env.AIONUI_EXTENSION_STATES_FILE || e2eStateFile,
-    AIONUI_DISABLE_AUTO_UPDATE: '1',
-    AIONUI_DISABLE_DEVTOOLS: '1',
-    AIONUI_E2E_TEST: '1',
-    AIONUI_E2E_USER_DATA_DIR: process.env.AIONUI_E2E_USER_DATA_DIR || e2eUserDataDir,
+    MU_EXTENSIONS_PATH: process.env.MU_EXTENSIONS_PATH || path.join(projectRoot, 'examples'),
+    MU_EXTENSION_STATES_FILE: process.env.MU_EXTENSION_STATES_FILE || e2eStateFile,
+    MU_DISABLE_AUTO_UPDATE: '1',
+    MU_DISABLE_DEVTOOLS: '1',
+    MU_E2E_TEST: '1',
+    MU_E2E_USER_DATA_DIR: process.env.MU_E2E_USER_DATA_DIR || e2eUserDataDir,
     /**
      * 以前这里设 '0' 把 CDP 整个关掉，因为那时开 CDP 等于开 Chromium 的应用级
      * remote-debugging-port —— 无认证地暴露每个 WebContents，还会在多实例间抢端口，
@@ -222,7 +222,7 @@ async function launchApp(): Promise<ElectronApplication> {
      * the risk is gone. Leaving it off would mean these security properties are never
      * exercised in E2E: the tests would silently skip and look like passes.
      */
-    AIONUI_CDP_PORT: process.env.AIONUI_CDP_PORT || '9230',
+    MU_CDP_PORT: process.env.MU_CDP_PORT || '9230',
   };
 
   if (usePackaged) {

@@ -70,7 +70,7 @@ type AssistantDetail = {
 function resolveBackendBinary(): string {
   const projectRoot = process.cwd();
   const candidates = [
-    process.env.AIONUI_BACKEND_BINARY,
+    process.env.MU_BACKEND_BINARY,
     path.join(projectRoot, '../aionCore/target/debug/aioncore'),
     path.join(os.homedir(), '.cargo', 'bin', 'aioncore'),
   ].filter((value): value is string => Boolean(value));
@@ -198,7 +198,7 @@ test.describe('Assistant Settings Migration', () => {
       env: {
         ...process.env,
         RUST_LOG: 'warn',
-        AIONUI_EXTENSIONS_PATH: path.join(process.cwd(), 'examples'),
+        MU_EXTENSIONS_PATH: path.join(process.cwd(), 'examples'),
       },
     });
     try {

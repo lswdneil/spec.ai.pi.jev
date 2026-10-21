@@ -119,7 +119,7 @@ installed from `bun.lock` with `--frozen-lockfile --ignore-scripts`; no npm
 lifecycle hooks were run. Agent registration is saved by AionUi itself.
 
 For a different local AionUi instance, set
-`AIONUI_BACKEND_URL` to that instance's loopback URL and run
+`MU_BACKEND_URL` to that instance's loopback URL and run
 `node scripts/kyrn/register.mjs`. It follows the same rules as startup and never replaces an unrelated registration.
 
 ## Native settings and collaboration

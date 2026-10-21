@@ -580,7 +580,7 @@
    - 清理:测试后通过 `invokeBridge('fs.deleteSkill', { skillName: 'E2E-Test-*' })` 批量删除
 
 3. **Extension Skills 数据来源**?
-   - E2E 环境的 `AIONUI_EXTENSIONS_PATH` 已在 `fixtures.ts:112` 设置为 `examples/`
+   - E2E 环境的 `MU_EXTENSIONS_PATH` 已在 `fixtures.ts:112` 设置为 `examples/`
    - **需确认**:`examples/` 中是否有贡献 skill 的扩展?
    - **验证方法**:Glob `examples/*/skills/` 或 Grep `ExtensionRegistry` 注册逻辑
    - **如果不存在**:E2E 测试需跳过 Extension Skills 板块,或在 examples 中添加测试扩展
@@ -599,7 +599,7 @@
 
 **建议**:在需求文档**新增第 10 节:"E2E 测试前置依赖项"**,包含:
 
-- 环境配置(`AIONUI_EXTENSIONS_PATH`)
+- 环境配置(`MU_EXTENSIONS_PATH`)
 - 临时目录创建策略
 - 外部源构造方案
 - My Skills 预置方案
@@ -706,7 +706,7 @@
 
 **依赖外部系统**:
 
-- Extension Skills:依赖 `AIONUI_EXTENSIONS_PATH`(已在 fixtures.ts 配置)
+- Extension Skills:依赖 `MU_EXTENSIONS_PATH`(已在 fixtures.ts 配置)
 - Auto Skills:依赖 `_builtin/` 目录存在
 
 **需确认**:
@@ -953,7 +953,7 @@ await page.locator('[data-testid="manual-import-button"]').click();
 **内容**:
 
 1. **环境配置**
-   - `AIONUI_EXTENSIONS_PATH` 指向 `examples/`(已在 fixtures.ts 配置)
+   - `MU_EXTENSIONS_PATH` 指向 `examples/`(已在 fixtures.ts 配置)
    - 临时测试目录创建:`fs.mkdtempSync(path.join(os.tmpdir(), 'e2e-skills-'))`
 
 2. **测试数据构造**
@@ -1680,7 +1680,7 @@ Engineer review（discussion-log 第 10 节）提到需确认 `examples/` 中是
 **建议**：在 2.1.3 补充：
 
 ```markdown
-**注意**：E2E 测试依赖 `AIONUI_EXTENSIONS_PATH=examples/`（已在 `fixtures.ts:112` 配置）。
+**注意**：E2E 测试依赖 `MU_EXTENSIONS_PATH=examples/`（已在 `fixtures.ts:112` 配置）。
 如 `examples/` 中无扩展贡献 skill，则此板块在 E2E 中不可见，需跳过相关测试。
 ```
 
@@ -2256,7 +2256,7 @@ Engineer review 提出 P0 阻塞项后，经过讨论达成一致：
 
 **依赖**：
 
-- `AIONUI_EXTENSIONS_PATH` 环境变量（已在 E2E fixtures 中配置为 `examples/`）
+- `MU_EXTENSIONS_PATH` 环境变量（已在 E2E fixtures 中配置为 `examples/`）
 - 需确认 `examples/` 中是否有贡献技能的扩展
 
 **建议补充**：
@@ -2496,7 +2496,7 @@ Engineer review 提出 P0 阻塞项后，经过讨论达成一致：
 
 **前置依赖**：
 
-- `AIONUI_EXTENSIONS_PATH` 环境变量指向 `examples/`
+- `MU_EXTENSIONS_PATH` 环境变量指向 `examples/`
 - `examples/` 中存在至少 1 个贡献技能的扩展
 
 **已知限制**：
@@ -3003,7 +3003,7 @@ v1.2 包含两轮修订：
 ```markdown
 **前置条件**：
 
-- `AIONUI_EXTENSIONS_PATH` 环境变量指向 `examples/`
+- `MU_EXTENSIONS_PATH` 环境变量指向 `examples/`
 - `examples/` 中存在至少 1 个贡献技能的扩展
 
 **已知限制**：
@@ -3365,7 +3365,7 @@ team-lead 指出 v1.1/v1.2 中 TC-S-27/28 违反硬性规则：
 
 **前置条件**：
 
-- `AIONUI_EXTENSIONS_PATH` 环境变量指向 `examples/`
+- `MU_EXTENSIONS_PATH` 环境变量指向 `examples/`
 - `examples/` 中存在至少 1 个贡献技能的扩展
 
 **预期结果**：

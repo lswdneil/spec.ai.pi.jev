@@ -97,8 +97,8 @@ chmod +x "$out/aioncore"
 }
 
 afterEach(() => {
-  delete process.env.AIONUI_BACKEND_RUN_ID;
-  delete process.env.AIONUI_BACKEND_LOCAL_BINARY;
+  delete process.env.MU_BACKEND_RUN_ID;
+  delete process.env.MU_BACKEND_LOCAL_BINARY;
   rmSync(join(tmpdir(), 'aioncore-prepare', 'v0.1.46'), { recursive: true, force: true });
   rmSync(join(tmpdir(), 'aioncore-prepare-actions', '123'), { recursive: true, force: true });
 });
@@ -140,7 +140,7 @@ describe('prepare-aioncore GitHub Actions artifact resolver', () => {
     const fakeBin = createFakeToolchain(tmp);
     const previousPath = process.env.PATH;
     process.env.PATH = `${fakeBin}${delimiter}${previousPath || ''}`;
-    process.env.AIONUI_BACKEND_RUN_ID = '123';
+    process.env.MU_BACKEND_RUN_ID = '123';
 
     try {
       expect(() =>
@@ -187,7 +187,7 @@ describe('prepare-aioncore GitHub Actions artifact resolver', () => {
     const fakeBin = createFakeToolchain(tmp, { curlFails: true });
     const previousPath = process.env.PATH;
     process.env.PATH = `${fakeBin}${delimiter}${previousPath || ''}`;
-    process.env.AIONUI_BACKEND_LOCAL_BINARY = localBinary;
+    process.env.MU_BACKEND_LOCAL_BINARY = localBinary;
 
     try {
       expect(() =>

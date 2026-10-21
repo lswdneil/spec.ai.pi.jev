@@ -28,7 +28,7 @@
 - ✅ Electron app 单实例启动(`workers: 1`)
 - ✅ 用户数据目录隔离(`userData: tmpDir`)
 - ✅ SQLite 数据库独立(`aionui.db`)
-- ✅ 扩展路径指向示例目录(`AIONUI_EXTENSIONS_PATH=examples/`)
+- ✅ 扩展路径指向示例目录(`MU_EXTENSIONS_PATH=examples/`)
 
 ### 2.2 Skills 模块特定配置
 
@@ -175,7 +175,7 @@ for (const skillName of testSkills) {
 
 **依赖配置**:
 
-- E2E 框架已设置 `AIONUI_EXTENSIONS_PATH=examples/`(`fixtures.ts:112`)
+- E2E 框架已设置 `MU_EXTENSIONS_PATH=examples/`(`fixtures.ts:112`)
 
 **验证 examples/ 中是否有扩展贡献 skill**:
 

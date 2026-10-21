@@ -12,6 +12,9 @@ const MU_CODE_PREFIX = 'MU_';
 /** The ownership AionCore gives its own errors; the app calls it `mu`. */
 const AIONCORE_OWN_OWNERSHIP = 'aionui';
 
+/** The variable in which AionCore names the conversation to an agent it starts (the ACP adapter). */
+export const AIONCORE_CONVERSATION_ID_ENV = 'AIONUI_CONVERSATION_ID';
+
 /** The suffix AionCore adds to the name of a file it stores for a message: `_aionui_` and the time in milliseconds. */
 export const AIONCORE_UPLOAD_SUFFIX = /_aionui_\d{13}(\.\w+)?$/;
 

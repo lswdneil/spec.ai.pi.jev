@@ -84,7 +84,7 @@ const e2eStateFile = path.join(e2eStateSandboxDir, 'extension-states.json');
 **Environment variable** (L113):
 
 ```typescript
-AIONUI_EXTENSION_STATES_FILE: process.env.AIONUI_EXTENSION_STATES_FILE || e2eStateFile;
+MU_EXTENSION_STATES_FILE: process.env.MU_EXTENSION_STATES_FILE || e2eStateFile;
 ```
 
 **Current isolation**: Each worker creates unique temp directory → **no conflict** (✅ parallel-safe for this resource)
@@ -94,7 +94,7 @@ AIONUI_EXTENSION_STATES_FILE: process.env.AIONUI_EXTENSION_STATES_FILE || e2eSta
 **CDP disabled** (`tests/e2e/fixtures.ts:117`):
 
 ```typescript
-AIONUI_CDP_PORT: '0';
+MU_CDP_PORT: '0';
 ```
 
 **Result**: No port binding conflicts → **parallel-safe** (✅)
@@ -122,13 +122,13 @@ AIONUI_CDP_PORT: '0';
 
 **Implementation**:
 
-1. Extend `AIONUI_E2E_TEST` to include worker ID:
+1. Extend `MU_E2E_TEST` to include worker ID:
    ```typescript
-   AIONUI_E2E_TEST_WORKER_ID: process.env.PLAYWRIGHT_WORKER_INDEX || '0';
+   MU_E2E_TEST_WORKER_ID: process.env.PLAYWRIGHT_WORKER_INDEX || '0';
    ```
 2. Modify `getDevAppName()` to return worker-specific name:
    ```typescript
-   const workerId = process.env.AIONUI_E2E_TEST_WORKER_ID || '0';
+   const workerId = process.env.MU_E2E_TEST_WORKER_ID || '0';
    return `AionUi-E2E-Worker-${workerId}`;
    ```
 3. Each worker gets isolated:
@@ -161,7 +161,7 @@ bun run test:e2e:skills      # Matches tests/e2e/specs/skills-*.e2e.ts
 
 **Approach**: Pass unique database path via environment variable per spec
 
-**Complexity**: High (requires main process to read `AIONUI_DATABASE_PATH`, conflicts with userData convention)
+**Complexity**: High (requires main process to read `MU_DATABASE_PATH`, conflicts with userData convention)
 
 **Not recommended**: Breaks Electron's standard paths, hard to maintain
 

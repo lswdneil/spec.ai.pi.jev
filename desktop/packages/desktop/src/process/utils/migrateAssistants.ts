@@ -546,11 +546,11 @@ async function uploadLegacyAssistantRules(legacyAssistantIds: Set<string>): Prom
  * `false` so the caller can log the partial state, but next launch
  * naturally retries the remaining work.
  *
- * Honors `AIONUI_SKIP_ELECTRON_MIGRATION=1` so E2E fixtures can seed via
+ * Honors `MU_SKIP_ELECTRON_MIGRATION=1` so E2E fixtures can seed via
  * `POST /api/assistants/import` directly.
  */
 export async function migrateAssistantsToBackend(configFile: ConfigFile): Promise<boolean> {
-  if (process.env.AIONUI_SKIP_ELECTRON_MIGRATION === '1') {
+  if (process.env.MU_SKIP_ELECTRON_MIGRATION === '1') {
     console.log('[mu] Assistant migration skipped (env flag set)');
     return false;
   }

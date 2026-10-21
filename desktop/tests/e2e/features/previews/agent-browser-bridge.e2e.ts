@@ -44,11 +44,11 @@ type BridgeEnv = { port: number | null; token: string | null };
 const readBridgeEnv = async (electronApp: ElectronApplication): Promise<BridgeEnv> => {
   const readOnce = (): Promise<BridgeEnv> =>
     electronApp.evaluate(async () => {
-      const rawPort = process.env.AIONUI_CDP_ACTIVE_PORT;
+      const rawPort = process.env.MU_CDP_ACTIVE_PORT;
       const parsed = rawPort ? Number(rawPort) : NaN;
       return {
         port: Number.isInteger(parsed) && parsed > 0 ? parsed : null,
-        token: process.env.AIONUI_CDP_BRIDGE_TOKEN ?? null,
+        token: process.env.MU_CDP_BRIDGE_TOKEN ?? null,
       };
     });
 
@@ -150,8 +150,8 @@ test.describe('Agent browser control (single-target CDP bridge)', () => {
           return null;
         }
         return {
-          token: env.match(/AIONUI_CDP_BRIDGE_TOKEN=(\S+)/)?.[1] ?? null,
-          activePort: env.match(/AIONUI_CDP_ACTIVE_PORT=(\d+)/)?.[1] ?? null,
+          token: env.match(/MU_CDP_BRIDGE_TOKEN=(\S+)/)?.[1] ?? null,
+          activePort: env.match(/MU_CDP_ACTIVE_PORT=(\d+)/)?.[1] ?? null,
         };
       }
       return null;

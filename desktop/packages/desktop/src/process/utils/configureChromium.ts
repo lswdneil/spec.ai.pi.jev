@@ -18,9 +18,9 @@ import { applyGpuRecoveryFlags } from './gpuRecovery';
 // BEFORE any getPath() call so the whole data tree (config, aioncore DB, logs)
 // lives in a disposable directory. This keeps tests off the developer's real
 // database — critical because AionCore refuses to boot when a shared DB fails
-// migration. Guarded by AIONUI_E2E_TEST so it never affects dev/production.
+// migration. Guarded by MU_E2E_TEST so it never affects dev/production.
 // 仅 E2E：把 userData 指向一次性沙箱目录，避免测试读写真实数据库。
-const e2eUserDataDir = process.env.AIONUI_E2E_TEST === '1' ? process.env.AIONUI_E2E_USER_DATA_DIR : undefined;
+const e2eUserDataDir = process.env.MU_E2E_TEST === '1' ? process.env.MU_E2E_USER_DATA_DIR : undefined;
 if (e2eUserDataDir && e2eUserDataDir.trim() !== '') {
   fs.mkdirSync(e2eUserDataDir, { recursive: true });
   app.setPath('userData', e2eUserDataDir);
@@ -72,7 +72,7 @@ applyGpuRecoveryFlags();
 // - enabled: boolean - whether agent browser control is enabled (default: on)
 // - port: number - legacy preferred-port field, retained for config compatibility
 //
-// Override via AIONUI_CDP_PORT env variable. Set to "0" or "false" to disable.
+// Override via MU_CDP_PORT env variable. Set to "0" or "false" to disable.
 // ---------------------------------------------------------------------------
 
 const CDP_CONFIG_FILE = 'cdp.config.json';
@@ -180,7 +180,7 @@ export function saveCdpConfig(config: CdpConfig): void {
  * 关掉后 Agent 就无法操作浏览器（此时 MCP 启动器会拒绝启动，不会偷偷开一个
  * 用户看不见的 Chrome）。
  *
- * AIONUI_CDP_PORT 现在只当开关用（"0"/"false" 关闭，其它非空值开启）。它的数值不再
+ * MU_CDP_PORT 现在只当开关用（"0"/"false" 关闭，其它非空值开启）。它的数值不再
  * 决定端口 —— 通道走 listen(0)，端口由系统分配。名字保留是为了不破坏既有脚本和 E2E 夹具。
  *
  * Enabled by default, production included: the in-app browser cannot be driven by the agent
@@ -189,12 +189,12 @@ export function saveCdpConfig(config: CdpConfig): void {
  * after which the agent simply cannot drive the browser (the MCP launcher refuses to start
  * rather than quietly opening a Chrome the user cannot see).
  *
- * AIONUI_CDP_PORT now acts purely as a switch ("0"/"false" disables, any other non-empty
+ * MU_CDP_PORT now acts purely as a switch ("0"/"false" disables, any other non-empty
  * value enables). Its numeric value no longer selects a port — the bridge uses listen(0) and
  * the OS assigns one. The name is kept so existing scripts and E2E fixtures keep working.
  */
 function shouldEnableCdp(config: CdpConfig): boolean {
-  const envVal = process.env.AIONUI_CDP_PORT;
+  const envVal = process.env.MU_CDP_PORT;
   if (envVal === '0' || envVal === 'false') return false;
   if (envVal) return true;
 

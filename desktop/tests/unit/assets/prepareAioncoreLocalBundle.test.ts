@@ -13,8 +13,8 @@ describe('prepare-aioncore local bundle input', () => {
     mkdirSync(join(localBundle, 'managed-resources'), { recursive: true });
     writeFileSync(join(localBundle, 'aioncore.exe'), '');
 
-    const previous = process.env.AIONUI_BACKEND_LOCAL_BUNDLE_DIR;
-    process.env.AIONUI_BACKEND_LOCAL_BUNDLE_DIR = localBundle;
+    const previous = process.env.MU_BACKEND_LOCAL_BUNDLE_DIR;
+    process.env.MU_BACKEND_LOCAL_BUNDLE_DIR = localBundle;
     try {
       expect(() =>
         prepareAioncore({
@@ -25,8 +25,8 @@ describe('prepare-aioncore local bundle input', () => {
         })
       ).toThrow(/managed-resources\/manifest\.json/);
     } finally {
-      if (previous === undefined) delete process.env.AIONUI_BACKEND_LOCAL_BUNDLE_DIR;
-      else process.env.AIONUI_BACKEND_LOCAL_BUNDLE_DIR = previous;
+      if (previous === undefined) delete process.env.MU_BACKEND_LOCAL_BUNDLE_DIR;
+      else process.env.MU_BACKEND_LOCAL_BUNDLE_DIR = previous;
       rmSync(tmp, { recursive: true, force: true });
     }
   });
@@ -53,15 +53,15 @@ describe('prepare-aioncore local bundle input', () => {
       })
     );
 
-    const previous = process.env.AIONUI_BACKEND_LOCAL_BUNDLE_DIR;
-    process.env.AIONUI_BACKEND_LOCAL_BUNDLE_DIR = localBundle;
+    const previous = process.env.MU_BACKEND_LOCAL_BUNDLE_DIR;
+    process.env.MU_BACKEND_LOCAL_BUNDLE_DIR = localBundle;
     try {
       prepareAioncore({ projectRoot, platform: 'darwin', arch: 'arm64', version: 'v0.2.2' });
       const copied = join(projectRoot, 'resources/bundled-aioncore/darwin-arm64/managed-resources', nodeRoot);
       expect(readlinkSync(join(copied, 'bin/npm'))).toBe('../lib/node_modules/npm/bin/npm-cli.js');
     } finally {
-      if (previous === undefined) delete process.env.AIONUI_BACKEND_LOCAL_BUNDLE_DIR;
-      else process.env.AIONUI_BACKEND_LOCAL_BUNDLE_DIR = previous;
+      if (previous === undefined) delete process.env.MU_BACKEND_LOCAL_BUNDLE_DIR;
+      else process.env.MU_BACKEND_LOCAL_BUNDLE_DIR = previous;
       rmSync(tmp, { recursive: true, force: true });
     }
   });

@@ -163,8 +163,8 @@ function launch(scriptName, withExtensions) {
 
   const env = { ...process.env };
   if (withExtensions) {
-    env.AIONUI_EXTENSIONS_PATH = path.resolve(process.cwd(), 'examples');
-    log(`AIONUI_EXTENSIONS_PATH=${env.AIONUI_EXTENSIONS_PATH}`);
+    env.MU_EXTENSIONS_PATH = path.resolve(process.cwd(), 'examples');
+    log(`MU_EXTENSIONS_PATH=${env.MU_EXTENSIONS_PATH}`);
   }
 
   const child = spawn('bun', ['run', scriptName], {

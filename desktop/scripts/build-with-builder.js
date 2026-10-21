@@ -26,7 +26,7 @@ const DMG_RETRY_DELAY_SEC = 30;
 
 // Incremental build: hash of source files to detect changes
 const INCREMENTAL_CACHE_FILE = 'out/.build-hash';
-const DEBUG_AUTO_UPDATE_CURRENT_VERSION_ENV = 'AIONUI_DEBUG_AUTO_UPDATE_CURRENT_VERSION';
+const DEBUG_AUTO_UPDATE_CURRENT_VERSION_ENV = 'MU_DEBUG_AUTO_UPDATE_CURRENT_VERSION';
 
 // The installer's session variables (resources/windows/installer-observability.nsh) that the
 // patched uninstaller ExecWait lines pass on, so the uninstaller logs into the same session.

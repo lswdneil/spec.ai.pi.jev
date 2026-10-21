@@ -31,7 +31,7 @@ describe.skipIf(!supported)('planStartupNodeRuntime', () => {
 
   beforeEach(() => {
     dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mu-node-runtime-'));
-    vi.stubEnv('AIONUI_E2E_TEST', '');
+    vi.stubEnv('MU_E2E_TEST', '');
     vi.stubEnv('MU_NODE_RUNTIME', '');
     mocks.showMessageBox.mockReset();
     mocks.focus.mockReset();
@@ -90,7 +90,7 @@ describe.skipIf(!supported)('planStartupNodeRuntime', () => {
   });
 
   it('downloads nothing in an automated run unless MU_NODE_RUNTIME says so', async () => {
-    vi.stubEnv('AIONUI_E2E_TEST', '1');
+    vi.stubEnv('MU_E2E_TEST', '1');
     await expect(planStartupNodeRuntime({ dataDir, isPackaged: false, systemLocale: 'en-US' })).resolves.toBe('later');
     vi.stubEnv('MU_NODE_RUNTIME', 'download');
     await expect(planStartupNodeRuntime({ dataDir, isPackaged: false, systemLocale: 'en-US' })).resolves.toBe(

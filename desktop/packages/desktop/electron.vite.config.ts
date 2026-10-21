@@ -272,7 +272,7 @@ export default defineConfig(({ mode }) => {
       define: {
         'process.env.NODE_ENV': JSON.stringify(mode),
         'process.env.env': JSON.stringify(process.env.env),
-        'process.env.AIONUI_MULTI_INSTANCE': JSON.stringify(process.env.AIONUI_MULTI_INSTANCE ?? ''),
+        'process.env.MU_MULTI_INSTANCE': JSON.stringify(process.env.MU_MULTI_INSTANCE ?? ''),
         // The app's version (root package.json), shown on 关于 until the main process says which version runs.
         __APP_VERSION__: JSON.stringify(rootPackageJson.version),
         global: 'globalThis',
