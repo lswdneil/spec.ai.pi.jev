@@ -10,8 +10,11 @@ Install the root dependencies first, so the app runs the mu in the same reposito
 npm install --ignore-scripts               # at the repository root
 cd desktop
 bun install
+node scripts/prepareAioncore.js            # once: the local service the app starts
 KYRN_ROOT="$(cd .. && pwd)" bun run start
 ```
+
+More in [docs/contributing/development.md](docs/contributing/development.md).
 
 ## Checks
 
