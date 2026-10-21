@@ -1076,24 +1076,6 @@
         "idle": "Juiz de prontidão",
         "judging": "Juiz avaliando",
         "off": "Juiz desativado"
-      },
-      "starters": {
-        "hint": "Não sabe por onde começar? Experimente uma destas opções:",
-        "understand": {
-          "title": "Entender este projeto",
-          "desc": "Mapear a estrutura, os pontos de entrada e os módulos principais",
-          "prompt": "Primeiro leia este projeto e me explique a estrutura geral, os principais pontos de entrada e os módulos mais importantes. Indique os três arquivos que vale a pena ler primeiro."
-        },
-        "fix": {
-          "title": "Encontrar e corrigir um problema",
-          "desc": "Partir de um erro ou sintoma até chegar à causa",
-          "prompt": "Encontrei um problema: <descreva o sintoma ou cole o erro>. Primeiro reproduza e encontre a causa raiz, depois faça a menor correção possível e execute os testes relacionados para verificar."
-        },
-        "plan": {
-          "title": "Planejar uma mudança",
-          "desc": "Primeiro o plano; as alterações, depois da sua confirmação",
-          "prompt": "Quero implementar: <descreva o que você precisa>. Primeiro apresente um plano de implementação e os arquivos envolvidos, e só comece a editar depois que eu confirmar."
-        }
       }
     },
     "toolStatus": {
@@ -1451,8 +1433,7 @@
       "kernel": "Núcleo de julgamento",
       "judgeReady": "{{judge}} está pronto",
       "judgeOff": "Juiz desativado",
-      "title": "No que o mu deve trabalhar?",
-      "lead": "Cada pequena decisão de um turno passa primeiro por um juiz rápido: o que entra no contexto, se um comando é seguro, se o trabalho está mesmo pronto. O modelo fica focado no código."
+      "title": "No que o mu deve trabalhar?"
     }
   },
   "menu": {

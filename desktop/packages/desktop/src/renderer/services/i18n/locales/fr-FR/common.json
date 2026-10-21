@@ -1076,24 +1076,6 @@
         "idle": "Juge en attente",
         "judging": "Juge au travail",
         "off": "Juge désactivé"
-      },
-      "starters": {
-        "hint": "Vous ne savez pas par où commencer ? Essayez l’une de ces pistes :",
-        "understand": {
-          "title": "Comprendre ce projet",
-          "desc": "Cartographier la structure, les points d’entrée et les modules clés",
-          "prompt": "Commencez par parcourir ce projet, puis expliquez-moi sa structure, ses principaux points d’entrée et ses modules essentiels. Indiquez les trois fichiers à lire en premier."
-        },
-        "fix": {
-          "title": "Trouver et corriger un problème",
-          "desc": "Partir d’une erreur ou d’un symptôme pour remonter à la cause",
-          "prompt": "J’ai rencontré un problème : <décrivez le symptôme ou collez l’erreur>. Reproduisez-le et trouvez d’abord la cause, puis apportez la correction la plus petite possible et lancez les tests concernés pour vérifier."
-        },
-        "plan": {
-          "title": "Planifier une modification",
-          "desc": "D’abord un plan, les modifications après votre accord",
-          "prompt": "Je souhaite réaliser : <décrivez votre besoin>. Proposez d’abord un plan de mise en œuvre et les fichiers concernés, et ne commencez à modifier qu’après ma confirmation."
-        }
       }
     },
     "toolStatus": {
@@ -1451,8 +1433,7 @@
       "kernel": "Noyau de jugement",
       "judgeReady": "{{judge}} est prêt",
       "judgeOff": "Jugement désactivé",
-      "title": "Sur quoi mu doit-il travailler ?",
-      "lead": "Chaque petite décision d'un tour passe d'abord par un juge rapide : ce qui entre dans le contexte, si une commande est sûre, si le travail est vraiment terminé. Le modèle reste concentré sur le code."
+      "title": "Sur quoi mu doit-il travailler ?"
     }
   },
   "menu": {

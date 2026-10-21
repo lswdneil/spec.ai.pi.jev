@@ -10,7 +10,6 @@ import JudgePulse from '@/renderer/components/brand/JudgePulse';
 import { MU_GLYPH_PATH } from '@/renderer/components/brand/glyph';
 import MuMark from '@/renderer/components/brand/MuMark';
 
-import MuStarters, { MU_STARTERS } from '@/renderer/components/brand/MuStarters';
 import StartupGate from '@/renderer/pages/settings/KyrnSettings/StartupGate';
 
 const { catalog, closeWindow, minimize, maximize, isDesktop, isMac } = vi.hoisted(() => ({
@@ -105,21 +104,6 @@ describe('JudgePulse', () => {
       </I18nextProvider>
     );
     expect(screen.getByRole('status')).toHaveAccessibleName(copy.brand.judge.off);
-  });
-});
-
-describe('MuStarters', () => {
-  it('offers three starting points in Chinese and only hands the prompt over', () => {
-    const onPick = vi.fn();
-    view(<MuStarters onPick={onPick} />);
-    expect(MU_STARTERS).toHaveLength(3);
-    for (const { key } of MU_STARTERS) {
-      expect(screen.getByText(copy.brand.starters[key].title)).toBeInTheDocument();
-      expect(screen.getByText(copy.brand.starters[key].desc)).toBeInTheDocument();
-    }
-    fireEvent.click(screen.getByTestId('mu-starter-fix'));
-    expect(onPick).toHaveBeenCalledTimes(1);
-    expect(onPick).toHaveBeenCalledWith(copy.brand.starters.fix.prompt);
   });
 });
 

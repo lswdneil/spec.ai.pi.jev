@@ -505,8 +505,9 @@ describe('GuidPage', () => {
 
     expect(screen.queryByLabelText('common.back')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('Assistant Details')).not.toBeInTheDocument();
-    // The hero, which only the home page has: the kernel's status line, the question and the lead.
+    // The hero, which only the home page has: the judge's status line and the question, with no lead under it.
     expect(screen.getByText('common.kyrn.hero.title')).toBeInTheDocument();
+    expect(screen.queryByText('common.kyrn.hero.lead')).not.toBeInTheDocument();
     expect(screen.getByTestId('mu-hero')).toHaveAttribute('data-state', 'shown');
     expect(screen.queryByTestId('mu-mark')).not.toBeInTheDocument();
     expect(screen.getByTestId('assistant-selection-area')).toBeInTheDocument();
@@ -543,7 +544,7 @@ describe('GuidPage', () => {
     );
   });
 
-  it('renders example prompts with wrapping text for long assistant suggestions', () => {
+  it('offers no example prompts under the input, even when the assistant suggests some', () => {
     agentSelectionMock.assistants = [
       {
         id: 'bare-aionrs',
@@ -559,43 +560,22 @@ describe('GuidPage', () => {
         disabled_builtin_skills: [],
         context_i18n: {},
         prompts: [],
-        prompts_i18n: {
-          'en-US': [
-            'Create a three-page financial dashboard with profit, revenue mix, and conditional formatting highlights',
-          ],
-        },
+        prompts_i18n: { 'en-US': ['Create a three-page financial dashboard'] },
         models: [],
         agent_status: 'online',
         team_selectable: true,
         deletable: false,
       },
     ];
-
-    swrMock.useSWRMock.mockImplementation((key: string | null) => {
-      if (key?.startsWith('guid.assistant.detail.')) {
-        return {
-          data: assistantDetailFixture,
-        };
-      }
-      return { data: null };
-    });
+    swrMock.useSWRMock.mockImplementation((key: string | null) =>
+      key?.startsWith('guid.assistant.detail.') ? { data: assistantDetailFixture } : { data: null }
+    );
 
     render(<GuidPage />);
 
-    const promptButton = screen.getByRole('button', {
-      name: /Create a three-page financial dashboard with profit/i,
-    });
-
-    expect(promptButton.className).toContain('!whitespace-normal');
-    expect(promptButton.className).toContain('!break-words');
-  });
-
-  it('falls back to default instruction prompts when the selected assistant has no recommendations', () => {
-    render(<GuidPage />);
-
-    expect(screen.getByRole('button', { name: 'guid.defaultPrompts.understand' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'guid.defaultPrompts.cleanup' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'guid.defaultPrompts.create' })).toBeInTheDocument();
+    expect(screen.queryByText('Create a three-page financial dashboard')).not.toBeInTheDocument();
+    expect(screen.queryByText('guid.promptExamplesHint')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('mu-starters')).not.toBeInTheDocument();
   });
 
   it('does not seed skill defaults from the assistant list while detail is loading', async () => {
