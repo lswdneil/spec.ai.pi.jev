@@ -78,7 +78,7 @@
   stroke-width: 1.5px;
 }
 
-/* Whom the sub-agents of a delegate call stand around: mu, whom each of them reports back to. */
+/* Whom the sub-agents of a delegate call stand around: spec.jev, whom each of them reports back to. */
 .home {
   position: absolute;
   transform: translate(-50%, -50%);

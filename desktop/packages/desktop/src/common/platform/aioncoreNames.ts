@@ -2,14 +2,14 @@
  * Names that AionCore, the bundled backend (a separate program, see NOTICE), reads and writes. It began as AionUi's
  * backend and still uses AionUi's names in its protocol: in the error codes and ownership it gives its own errors, in
  * its environment variables, headers and files. The app can't rename them, so it speaks them only here and at the
- * launcher, and turns AionCore's answers into mu's names where they come in.
+ * launcher, and turns AionCore's answers into spec.jev's names where they come in.
  */
 
 /** The prefix AionCore gives the codes of its own errors (`AIONUI_STREAM_BROKEN`); the app calls them `MU_…`. */
 const AIONCORE_CODE_PREFIX = 'AIONUI_';
 const MU_CODE_PREFIX = 'MU_';
 
-/** The ownership AionCore gives its own errors; the app calls it `mu`. */
+/** The ownership AionCore gives its own errors; the app calls it `spec.jev`. */
 const AIONCORE_OWN_OWNERSHIP = 'aionui';
 
 /** AionCore's file name for its database, in the app's data folder. */

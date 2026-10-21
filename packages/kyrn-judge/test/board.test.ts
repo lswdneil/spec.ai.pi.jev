@@ -291,7 +291,7 @@ describe("board words", () => {
 		expect(parseBoardEntry({ now: "n" })).toBeUndefined();
 		expect(describeBoard(board, "zh")).toBe("进展: p\n正在做: n\n需要你确认:\n  - c");
 		expect(describeBoard(undefined, "en")).toContain("Nothing on the board yet");
-		// Greek mu, U+03BC, never the micro sign.
+		// Greek spec.jev, U+03BC, never the micro sign.
 		expect(boardWidget(board as BoardUpdate, "zh")).toEqual(["\u03bc 看板 · p", "  n", "  要你确认: c"]);
 		expect(boardWidget(board as BoardUpdate, "zh")[0].codePointAt(0)).toBe(0x3bc);
 	});
@@ -646,7 +646,7 @@ describe("board feature", () => {
 		expect(count.reads).toBe(before);
 	});
 
-	it("writes in the app's language when the desktop says which, even one mu has no wording for", async () => {
+	it("writes in the app's language when the desktop says which, even one spec.jev has no wording for", async () => {
 		vi.stubEnv("MU_LANG", "ja-JP");
 		const { harness } = await start(reading(() => ({ phase: choice("changing"), needs_user: no, changed: yes })));
 		await harness.session.prompt("/board on");
@@ -983,7 +983,7 @@ describe("board feature", () => {
 		await harness.session.prompt("Run the tests.");
 		await vi.waitFor(() => expect(boards(harness).at(-1)?.ended).toBe(true), { timeout: 5000 });
 		// While the picker was open, the board already said what waits on the person, from fixed sentences.
-		expect(whileAsked).toEqual(["mu wants to run a command: npm test. It's waiting for your permission."]);
+		expect(whileAsked).toEqual(["spec.jev wants to run a command: npm test. It's waiting for your permission."]);
 		const updates = events
 			.filter((event) => event.kind === "board.update")
 			.map((event) => event.payload as BoardUpdate);
@@ -1020,7 +1020,7 @@ describe("board feature", () => {
 		await vi.waitFor(() => expect(boards(harness).at(-1)?.ended).toBe(true), { timeout: 8000 });
 		// The first run's end was no end for the person: the goal sent the agent back, and the board said so.
 		expect(boards(harness).filter((update) => update.ended)).toHaveLength(1);
-		expect(judged.join("\n")).toContain("mu sent it back to work, round 1");
+		expect(judged.join("\n")).toContain("spec.jev sent it back to work, round 1");
 		expect(judged.at(-1)).toContain("the goal is paused");
 	});
 
@@ -1110,7 +1110,7 @@ describe("board feature", () => {
 		harness.setResponses(Array.from({ length: 8 }, () => router(agent, [], [])));
 		await harness.session.prompt("Fix the tests.");
 		await vi.waitFor(() => expect(boards(harness).at(-1)?.ended).toBe(true), { timeout: 5000 });
-		expect(judged.join("\n")).toContain("mu noticed it repeating the same step: bash: npm test -> ok");
+		expect(judged.join("\n")).toContain("spec.jev noticed it repeating the same step: bash: npm test -> ok");
 		expect(boards(harness).some((update) => !update.ended && update.phase === "stuck")).toBe(true);
 	});
 
@@ -1307,7 +1307,7 @@ describe("board account", () => {
 		expect(noteText("helpers_sent", { count: 1, titles: "scout" }, "en")).toBe("Started 1 subagent: scout");
 		expect(noteText("helpers_back", { count: 2 }, "zh")).toBe("2 个助手回来了");
 		expect(noteText("goal_round", { round: 2, reason: reasonTail("tests still fail", "en") }, "en")).toBe(
-			"The goal isn't met yet, so mu kept the agent working (round 2): tests still fail",
+			"The goal isn't met yet, so spec.jev kept the agent working (round 2): tests still fail",
 		);
 		expect(noteText("goal_paused", { reason: reasonTail("", "zh") }, "zh")).toBe("目标暂停了");
 		expect(noteText("goal_paused", { reason: reasonTail("你打断了", "zh") }, "zh")).toBe("目标暂停了：你打断了");

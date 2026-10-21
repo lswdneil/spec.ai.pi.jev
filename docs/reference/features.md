@@ -191,17 +191,17 @@ On by default: no. Decision points: `context.compact`.
 
 ## checkpoint
 
-**Checkpoints and rewind.** Before the first file change in each turn, snapshots the working tree into mu's own shadow git directory, without touching your repository. /rewind restores files and the conversation; /rewind undo reverses a rewind.
+**Checkpoints and rewind.** Before the first file change in each turn, snapshots the working tree into spec.jev's own shadow git directory, without touching your repository. /rewind restores files and the conversation; /rewind undo reverses a rewind.
 
 On by default: yes. Decision points: `turn.rewind`.
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `dir` | empty | Where snapshots are kept. Empty means mu/checkpoints in mu's home folder, with one shadow repository per project. |
+| `dir` | empty | Where snapshots are kept. Empty means mu/checkpoints in spec.jev's home folder, with one shadow repository per project. |
 | `keep` | `50` | Snapshots kept per project. Range 1 to 1000. |
 | `maxAgeDays` | `14` days | Days a snapshot is kept. Range 1 to 365. |
 | `maxFileMb` | `5` MB | Largest file in a snapshot. Larger files stay out of snapshots, and a rewind never touches them. Range 1 to 1024. |
-| `maxFiles` | `5000` files | Max files per snapshot. With more files than this, the session runs without checkpoints and tells you once. Your home folder and mu's own folders are never snapshotted. Range 100 to 1000000. |
+| `maxFiles` | `5000` files | Max files per snapshot. With more files than this, the session runs without checkpoints and tells you once. Your home folder and spec.jev's own folders are never snapshotted. Range 100 to 1000000. |
 | `maxTotalMb` | `200` MB | Max total snapshot size. Above this, the session runs without checkpoints and tells you once. Range 1 to 100000. |
 | `ignore` | none | Extra paths to ignore. gitignore patterns, one per line. The project's own .gitignore and the built-in list (node_modules, build outputs and so on) always apply. |
 | `timeoutMs` | `30000` ms | Max time for a snapshot. Past this, the turn runs without a checkpoint; the tool call still runs. Range 1000 to 600000. |
@@ -398,8 +398,12 @@ On by default: yes. Decision points: `browser.step`.
 | `headless` | `true` | Run headless. |
 | `maxSteps` | `40` | Max steps per run. Range 1 to 200. |
 | `textChars` | `4000` chars | Page text read per step. Range 500 to 50000. |
-| `embedded` | `true` | Use the desktop app's browser panel when it's running. Every step is then visible and can be paused, stopped or taken over; without the app, mu uses its own browser. |
-| `profileDir` | empty | Browser profile folder. Empty uses mu's own folder. |
+| `embedded` | `true` | Use the desktop app's browser panel when it's running. Every step is then visible and can be paused, stopped or taken over; without the app, spec.jev uses its own browser. |
+| `profileDir` | empty | Browser profile folder. Empty uses spec.jev's own folder. |
+| `backend` | `auto` | Browser backend. auto: moli when it is installed, Chrome otherwise; chrome: a Chromium browser only; moli: moli or nothing. |
+| `moliPath` | empty | moli executable. Empty searches the usual install places and PATH; SPECJEV_MOLI does the same. |
+| `moliUrl` | empty | Running moli address. For example http://127.0.0.1:9222; empty lets spec.jev start its own. |
+| `fetchChars` | `12000` chars | Characters kept from a fetch. Range 1000 to 200000. |
 
 ## background
 
@@ -413,7 +417,7 @@ On by default: yes.
 | `bufferChars` | `262144` chars | Output kept in memory per job. The newest output is kept; the log file has everything. |
 | `maxOutputChars` | `20000` chars | Max output per bg_output call. |
 | `killGraceMs` | `3000` ms | Wait before force-killing a job. SIGTERM first (taskkill without /F on Windows), then force after this long. |
-| `logDir` | empty | Log directory. Empty means ~/.mu/jobs/<session id>, cleared after 7 days. |
+| `logDir` | empty | Log directory. Empty means ~/.spec.jev/jobs/<session id>, cleared after 7 days. |
 | `inheritShell` | `true` | Use the foreground shell settings. Reads shellPath and shellCommandPrefix from settings.json, like the bash tool. |
 | `wakeWhenIdle` | `false` | A finished job may wake an idle agent. Only a verdict of "now" starts a turn; when off, the notice is only appended. |
 
@@ -459,7 +463,7 @@ On by default: yes.
 
 ## mcp
 
-**MCP servers.** MCP servers connect through pi's own client (stdio and Streamable HTTP, OAuth sign-in, managed with /mcp). Each server mu inherits from Claude Code, Cursor, Codex or mu.json is a hidden catalog entry: it starts, and its tools reach the model, only when the judge finds the task needs it or the model asks through find_capability. Tool lists are cached, so the judge has a description even before a server has run. A server defined by a project asks before its first start, and again when its definition changes. "exposure": "always" under mcp.servers in mu.json keeps a server open. Servers added with mu mcp add belong to pi: they connect with the session, and tool_search loads their tools when needed.
+**MCP servers.** MCP servers connect through pi's own client (stdio and Streamable HTTP, OAuth sign-in, managed with /mcp). Each server spec.jev inherits from Claude Code, Cursor, Codex or mu.json is a hidden catalog entry: it starts, and its tools reach the model, only when the judge finds the task needs it or the model asks through find_capability. Tool lists are cached, so the judge has a description even before a server has run. A server defined by a project asks before its first start, and again when its definition changes. "exposure": "always" under mcp.servers in mu.json keeps a server open. Servers added with spec.jev mcp add belong to pi: they connect with the session, and tool_search loads their tools when needed.
 
 On by default: yes.
 
@@ -470,7 +474,7 @@ On by default: yes.
 
 ## packs
 
-**Capability packs.** Tool packs that ship with mu and stay hidden until a task needs them; if a required program is missing, mu shows how to install it.
+**Capability packs.** Tool packs that ship with spec.jev and stay hidden until a task needs them; if a required program is missing, spec.jev shows how to install it.
 
 On by default: yes. Decision points: `review.triage`.
 
@@ -497,7 +501,7 @@ On by default: yes. Decision points: `review.triage`.
 
 ## googleLogin
 
-**Sign in with Google (experimental).** Adds two entries to /login: Gemini CLI's sign-in for the Gemini models, and Antigravity's for Gemini, Claude and GPT-OSS. These are Google's sign-ins for its own tools; using them from another program may violate Google's terms and get the account limited or suspended, so mu explains the risk first and continues only if you agree. The official routes need none of this: a Gemini API key (provider google) or Vertex AI (provider google-vertex, signed in with gcloud).
+**Sign in with Google (experimental).** Adds two entries to /login: Gemini CLI's sign-in for the Gemini models, and Antigravity's for Gemini, Claude and GPT-OSS. These are Google's sign-ins for its own tools; using them from another program may violate Google's terms and get the account limited or suspended, so spec.jev explains the risk first and continues only if you agree. The official routes need none of this: a Gemini API key (provider google) or Vertex AI (provider google-vertex, signed in with gcloud).
 
 On by default: yes.
 

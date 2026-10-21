@@ -157,7 +157,7 @@ describe("test-log admission in a session", () => {
 			intent: "Running the tests to see what fails.",
 			call: "run_tests: vitest run format",
 		});
-		expect(result.text).toContain("[mu: omitted 70 lines: passing tests (test/format.test.ts)]");
+		expect(result.text).toContain("[spec.jev: omitted 70 lines: passing tests (test/format.test.ts)]");
 		expect(result.text).toContain("Tests  70 passed (70)");
 		expect(result.text).not.toContain("pads minute 33");
 	});
@@ -167,7 +167,7 @@ describe("test-log admission in a session", () => {
 		expect(toolResult(await run({ testLog: "jev" }, "vitest run format", provider, "shadow")).text).toBe(passingRun);
 		expect(selectionCalls(provider)).toHaveLength(1);
 		const failing = toolResult(await run({ testLog: "jev" }, "vitest run sider", notNeeded(), "shadow"));
-		expect(failing.text).toContain("[mu: omitted");
+		expect(failing.text).toContain("[spec.jev: omitted");
 	});
 
 	it("tells test runners that an agent is reading, unless told not to", async () => {

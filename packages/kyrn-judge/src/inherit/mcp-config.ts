@@ -85,7 +85,7 @@ export function normalizeServer(
 		source: origin.source,
 		tool: origin.tool,
 		scope: origin.scope,
-		// Pinning a server open is the user's call, made in mu's own file.
+		// Pinning a server open is the user's call, made in spec.jev's own file.
 		exposure: origin.tool === "mu" && raw.exposure === "always" ? ("always" as const) : ("judged" as const),
 		description: typeof raw.description === "string" && raw.description.trim() ? raw.description.trim() : undefined,
 		startTimeoutMs:
@@ -97,7 +97,7 @@ export function normalizeServer(
 	};
 
 	if (typeof raw.url === "string" && raw.url.trim()) {
-		if (type === "sse") return { skipped: "uses the deprecated HTTP+SSE transport, which mu does not speak" };
+		if (type === "sse") return { skipped: "uses the deprecated HTTP+SSE transport, which spec.jev does not speak" };
 		const headers = { ...stringMap(raw.headers), ...stringMap(raw.http_headers) };
 		// Codex keeps secrets out of the file by naming the variable that holds them.
 		for (const [header, variable] of Object.entries(stringMap(raw.env_http_headers))) {

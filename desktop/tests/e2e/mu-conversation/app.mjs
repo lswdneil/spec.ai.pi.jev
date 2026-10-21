@@ -1,9 +1,9 @@
-// Starts the mu desktop app for the conversation E2E test and keeps what it says: the main process's output, the
+// Starts the spec.jev desktop app for the conversation E2E test and keeps what it says: the main process's output, the
 // renderer's console and page errors, and the app's log folders. `problems()` lists the errors nothing handled, which
 // fail the test; `leftoverProcesses()` lists what still runs from the profile after a quit.
 //
 // The app is the checkout's build in out/, run on an Electron executable, or a packaged app electron-builder made
-// (`packagedApp()`), which carries mu and the backend itself.
+// (`packagedApp()`), which carries spec.jev and the backend itself.
 import { execFile, spawn } from 'node:child_process';
 import { appendFileSync, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -20,7 +20,7 @@ const MAIN_PROBLEMS = [
   /\[mu\] App initialization failed/,
   /Failed to initialize process/,
 ];
-/** Lines of the logs that mean the adapter or mu met an error nothing handled. */
+/** Lines of the logs that mean the adapter or spec.jev met an error nothing handled. */
 const ADAPTER_PROBLEMS = [
   /\[mu\] a promise failed and nothing handled it/,
   /\[mu\] the adapter stops on an error nothing handled/,
@@ -254,7 +254,7 @@ export function logFolders(profile) {
 
 /**
  * Errors nothing handled, in this start of the app: page errors, renderer console errors that mean a broken page, the
- * main process's own reports (on its output and in its log), and the adapter's and mu's reports in the logs (the
+ * main process's own reports (on its output and in its log), and the adapter's and spec.jev's reports in the logs (the
  * backend logs the adapter's error output).
  */
 export function problems(state, profile, { ignore = [] } = {}) {
@@ -427,7 +427,7 @@ export function descendants(table, pid) {
   return found;
 }
 
-/** The processes started under `pid` (the app's main process: the backend, the adapter, mu and their children). */
+/** The processes started under `pid` (the app's main process: the backend, the adapter, spec.jev and their children). */
 export async function processTree(pid) {
   return descendants(await processes(), pid);
 }
@@ -441,7 +441,7 @@ const identity = (entry) => `${entry.pid}\n${entry.start}\n${entry.command}`;
 /**
  * What still runs after a quit, in a process table: any of `seen` (processes the app started, gathered while it ran)
  * that is alive, and any process whose command line names the profile's folder `root` (the backend's data folder,
- * Electron's user data, mu from the profile's view of the harness). A process counts as seen only with its pid, start
+ * Electron's user data, spec.jev from the profile's view of the harness). A process counts as seen only with its pid, start
  * and command line all the same: a pid the system has given to another process since is no leftover. On Windows the
  * folder is looked for in any case and with either slash, as programs write it both ways.
  */

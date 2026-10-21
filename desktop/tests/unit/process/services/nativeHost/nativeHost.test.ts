@@ -225,7 +225,7 @@ describe('NativeHost', () => {
     expect(outcome).toBeUndefined();
     await vi.advanceTimersByTimeAsync(1);
     expect(outcome).toBeInstanceOf(NativeHostError);
-    expect(outcome).toMatchObject({ kind: 'timeout', message: 'mu did not answer get_state in 100 ms' });
+    expect(outcome).toMatchObject({ kind: 'timeout', message: 'spec.jev did not answer get_state in 100 ms' });
   });
 
   it('never gives up on a turn, and keeps a deadline the caller chose', async () => {
@@ -246,7 +246,7 @@ describe('NativeHost', () => {
     await vi.advanceTimersByTimeAsync(499);
     expect(chosen).toBeUndefined();
     await vi.advanceTimersByTimeAsync(1);
-    expect(chosen).toMatchObject({ kind: 'timeout', message: 'mu did not answer get_entries in 500 ms' });
+    expect(chosen).toMatchObject({ kind: 'timeout', message: 'spec.jev did not answer get_entries in 500 ms' });
     await vi.advanceTimersByTimeAsync(10 * 60_000);
     expect(prompt).toBeUndefined();
     child.write({ type: 'response', id: 'h2', command: 'prompt', success: true });
@@ -265,7 +265,7 @@ describe('NativeHost', () => {
     expect(error).toMatchObject({
       kind: 'crashed',
       code: 134,
-      message: 'The mu host stopped by itself (exit code 134)',
+      message: 'The spec.jev host stopped by itself (exit code 134)',
       stderr: 'some output\nError: out of memory',
     });
     expect(host.state).toEqual({ phase: 'failed', error });
@@ -344,7 +344,7 @@ describe('NativeHost', () => {
     child.stderr.write('No models available, said something else\n');
     child.exit(1);
     const state = await reaches(host, 'failed');
-    expect(state).toMatchObject({ error: { kind: 'crashed', message: 'The mu host stopped by itself (exit code 1)' } });
+    expect(state).toMatchObject({ error: { kind: 'crashed', message: 'The spec.jev host stopped by itself (exit code 1)' } });
   });
 
   it('says why a host could not load pi', async () => {
@@ -354,7 +354,7 @@ describe('NativeHost', () => {
     child.exit(1);
     const state = await reaches(host, 'failed');
     expect(state).toMatchObject({
-      error: { kind: 'failed', code: 1, message: "The mu host could not load pi: Cannot find module '/mu/index.ts'" },
+      error: { kind: 'failed', code: 1, message: "The spec.jev host could not load pi: Cannot find module '/mu/index.ts'" },
     });
   });
 
@@ -365,7 +365,7 @@ describe('NativeHost', () => {
     child.exit(1);
     const state = await reaches(host, 'failed');
     expect(state).toMatchObject({
-      error: { kind: 'failed', message: 'The mu host stopped before pi started (exit code 1)' },
+      error: { kind: 'failed', message: 'The spec.jev host stopped before pi started (exit code 1)' },
     });
     expect((state as { error: NativeHostError }).error.stderr).toBe('SyntaxError: Unexpected token');
   });
@@ -380,7 +380,7 @@ describe('NativeHost', () => {
     host.start();
     expect(host.state).toMatchObject({
       phase: 'failed',
-      error: { kind: 'failed', message: 'The mu host did not start: spawn ENOENT' },
+      error: { kind: 'failed', message: 'The spec.jev host did not start: spawn ENOENT' },
     });
     await expect(host.request({ type: 'get_state' })).rejects.toMatchObject({ kind: 'failed' });
   });
@@ -396,7 +396,7 @@ describe('NativeHost', () => {
     await disposed;
     expect(host.state).toEqual({ phase: 'stopped' });
     expect(child.kills).toBe(0);
-    await expect(turn).rejects.toMatchObject({ kind: 'closed', message: 'The mu host was closed' });
+    await expect(turn).rejects.toMatchObject({ kind: 'closed', message: 'The spec.jev host was closed' });
   });
 
   it('kills a host that does not exit in time', async () => {
@@ -425,9 +425,9 @@ describe('NativeHost', () => {
 
   it('passes pi’s log lines on, whole, and nothing else', async () => {
     const { child, logs } = running();
-    child.stderr.write('[mu] judge: mo');
-    child.stderr.write('ck, shadow\nnot for the log\r\n[mu] second\n');
-    child.stdout.write('[mu] stdout is not the log\n');
+    child.stderr.write('[spec.jev] judge: mo');
+    child.stderr.write('ck, shadow\nnot for the log\r\n[spec.jev] second\n');
+    child.stdout.write('[spec.jev] stdout is not the log\n');
     await settle();
     expect(logs).toEqual(['judge: mock, shadow', 'second']);
   });
@@ -436,7 +436,7 @@ describe('NativeHost', () => {
     const { host } = setup();
     await expect(host.request({ type: 'get_state' })).rejects.toMatchObject({
       kind: 'closed',
-      message: 'The mu host has not been started',
+      message: 'The spec.jev host has not been started',
     });
     host.start();
     expect(() => host.start()).toThrow('This host was started already');

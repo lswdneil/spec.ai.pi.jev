@@ -51,7 +51,7 @@ import styles from './Welcome.module.css';
 
 type Step = 'intro' | 'model' | 'permissions' | 'judge' | 'done';
 /**
- * A tile of the model step: an API key of a service mu knows, an account mu is signed in to, or one of the two API
+ * A tile of the model step: an API key of a service spec.jev knows, an account spec.jev is signed in to, or one of the two API
  * families at an address typed in.
  */
 type Way = 'key' | 'signedIn' | 'openai' | 'anthropic';
@@ -82,10 +82,10 @@ function Ready({ text, testId }: { text: string; testId: string }) {
 }
 
 /**
- * The first-run guide: what mu is, then connect a model, choose how much it does without asking, pick a judge, done. One question at a time, nothing that
+ * The first-run guide: what spec.jev is, then connect a model, choose how much it does without asking, pick a judge, done. One question at a time, nothing that
  * can wait; all of it is written in one save at the end, and every step can be skipped. Everything here is also in
  * the settings. The last step also offers the Claude Code and Codex conversations on this computer, to go on with
- * them in mu.
+ * them in spec.jev.
  */
 export default function Welcome() {
   const { t } = useTranslation();
@@ -130,7 +130,7 @@ export default function Welcome() {
 
   const { base, draft } = mu;
   const chosenWay: Way | undefined = way;
-  // The steps of the setup itself; the introduction before them is not one. The permission step only when this mu
+  // The steps of the setup itself; the introduction before them is not one. The permission step only when this spec.jev
   // has permission modes and they are on.
   const permissionModes =
     base && draft?.settings.features.permissions?.enabled !== false ? permissionModesOf(base) : [];
@@ -215,7 +215,7 @@ export default function Welcome() {
     tried && problem === field ? t(`mu.welcome.model.problems.${field}`) : undefined;
   const fieldStatus = (field: 'baseUrl' | 'key' | 'model'): 'error' | undefined =>
     fieldProblem(field) ? 'error' : undefined;
-  // What already works, so someone who set mu up before is not asked again as if it were the first time.
+  // What already works, so someone who set spec.jev up before is not asked again as if it were the first time.
   const saved = base.models.defaults;
   const savedModel =
     saved.provider && saved.model

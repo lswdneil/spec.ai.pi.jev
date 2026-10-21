@@ -3,12 +3,12 @@ import { resolve } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 
 /**
- * How `mu auth` ends. pi keeps the credentials (auth.json) and the model catalogue (models-store.json) under a lock:
+ * How `spec.jev auth` ends. pi keeps the credentials (auth.json) and the model catalogue (models-store.json) under a lock:
  * a folder beside the file, `<file>.lock` (proper-lockfile), made by an asynchronous mkdir and removed by an
- * asynchronous rmdir. A process that exits in between leaves the folder behind, and every other mu then waits on
+ * asynchronous rmdir. A process that exits in between leaves the folder behind, and every other spec.jev then waits on
  * that file until the lock counts as stale, 30 s later: a conversation the app starts meanwhile finds no model.
  *
- * The answer of `mu auth` is out while pi is still at work: registering a provider starts a catalogue refresh that
+ * The answer of `spec.jev auth` is out while pi is still at work: registering a provider starts a catalogue refresh that
  * nobody waits for. So the exit waits until this process can make every lock folder itself, all in one go: then no
  * lock work of its own is under way. It removes them and exits in that same step, before anything else of the
  * process can run. A lock another process keeps past `limitMs` is that process's own: the exit stops waiting for it.
@@ -33,8 +33,8 @@ export async function exitWhenUnlocked(
 }
 
 /**
- * How a session of mu ends (`session_shutdown`, reason `quit`): pi calls process.exit soon after, and a lock of its
- * stores this process is taking or dropping then stays behind, as with `mu auth` above. pi still awaits things before
+ * How a session of spec.jev ends (`session_shutdown`, reason `quit`): pi calls process.exit soon after, and a lock of its
+ * stores this process is taking or dropping then stays behind, as with `spec.jev auth` above. pi still awaits things before
  * it exits (its output is flushed), so looking once would not do: the lock folders are taken as soon as none is held,
  * and kept until the process exits, which removes them in the same step. Whatever of this process wants one
  * meanwhile waits, and never starts. A lock another process keeps past `limitMs` is that process's own: then nothing

@@ -2,7 +2,7 @@
 
 > English translation of [09-test-log-admission.md](09-test-log-admission.md); the Chinese original is authoritative.
 >
-> The project was renamed mu on 2026-09-21 (command `mu`, logo μ). This note was written before the rename and its text is left as it was; [10-rename-to-mu.md](10-rename-to-mu.md) maps the old names to the new ones.
+> The project was renamed spec.jev on 2026-09-21 (command `spec.jev`, logo μ). This note was written before the rename and its text is left as it was; [10-rename-to-spec.jev.md](10-rename-to-spec.jev.md) maps the old names to the new ones.
 
 Date: 2026-09-21. Status: **wired in as an optional strategy, off by default** (`features.admission.testLog`, one of `off`, `rules` or `jev`).
 

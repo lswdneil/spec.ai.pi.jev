@@ -89,7 +89,7 @@ const AboutModalContent: React.FC = () => {
       className={classNames('flex w-full flex-col gap-16px', !isPageMode && 'px-24px pb-16px')}
       data-testid='about-content'
     >
-      {/* Which mu this is: the mark and the name, set on the left like every settings page. In the app the version
+      {/* Which spec.jev this is: the mark and the name, set on the left like every settings page. In the app the version
           heads the update row, beside the button that checks it; elsewhere it sits by the name. */}
       <div className='flex items-center gap-16px'>
         <MuMark size={48} halo />

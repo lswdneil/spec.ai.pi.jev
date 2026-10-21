@@ -16,7 +16,7 @@ function rows(value: unknown, key: string): JsonRecord[] {
 const options = (value: unknown): JsonRecord[] => rows(value, 'config_options');
 
 /**
- * What mu last told the backend it can use, from the agent's record in `/api/agents/management`.
+ * What spec.jev last told the backend it can use, from the agent's record in `/api/agents/management`.
  * The adapter reports each model as `provider/model-id` with the provider as its description
  * (`KyrnAgent.options`), and the backend keeps the last handshake. So this is a snapshot: a login made in a
  * terminal shows up after the next connection, not at once. No credential file is opened for it.

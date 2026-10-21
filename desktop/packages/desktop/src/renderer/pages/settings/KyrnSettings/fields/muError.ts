@@ -5,7 +5,7 @@ import { localized, type HarnessManifest, type OptionProblem } from '@/common/ky
 import { formatNumber } from '@/renderer/services/i18n/format';
 import { formatNameList } from '@/renderer/services/i18n/list';
 
-/** A failure as mu's screens keep it: the code the main process gave, its params, and its plain English message. */
+/** A failure as spec.jev's screens keep it: the code the main process gave, its params, and its plain English message. */
 export type MuError = { code: KyrnErrorCode; params: KyrnErrorParams; message: string };
 
 /** What to show: a translated sentence, and the raw message as a secondary detail where it says more ('' if not). */

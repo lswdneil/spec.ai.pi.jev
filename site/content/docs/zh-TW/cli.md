@@ -1,41 +1,41 @@
 ---
 title: 命令列
-summary: mu 的指令、工作階段裡的斜線指令，以及原樣來自 pi 的部分。
+summary: spec.jev 的指令、工作階段裡的斜線指令，以及原樣來自 pi 的部分。
 ---
 
-`mu` 指令就是載入了 mu 判定核心的 pi（一個程式設計代理）。pi 能做的一切照常可用；mu 在此之上加了自己的指令和判定點。
+`spec.jev` 指令就是載入了 spec.jev 判定核心的 pi（一個程式設計代理）。pi 能做的一切照常可用；spec.jev 在此之上加了自己的指令和判定點。
 
 ```bash
-npm i -g mu-agent      # 需要 Node.js 22.19 或更新版本
-mu                     # 在目前目錄開啟一個互動式工作階段
+npm i -g spec.jev      # 需要 Node.js 22.19 或更新版本
+spec.jev                     # 在目前目錄開啟一個互動式工作階段
 ```
 
-## 啟動 mu {#starting}
+## 啟動 spec.jev {#starting}
 
 | 指令 | 做什麼 |
 | --- | --- |
-| `mu` | 在目前目錄開啟一個互動式工作階段 |
-| `mu "prompt"` | 互動式工作階段，以這則提示開始 |
-| `mu -p "prompt"` | 一次性：印出回答後結束 |
-| `mu -c` | 接著上一個工作階段 |
-| `mu -r` | 選一個工作階段來恢復 |
-| `mu --help` | 代理的所有參數 |
+| `spec.jev` | 在目前目錄開啟一個互動式工作階段 |
+| `spec.jev "prompt"` | 互動式工作階段，以這則提示開始 |
+| `spec.jev -p "prompt"` | 一次性：印出回答後結束 |
+| `spec.jev -c` | 接著上一個工作階段 |
+| `spec.jev -r` | 選一個工作階段來恢復 |
+| `spec.jev --help` | 代理的所有參數 |
 
-`mu install`、`remove`、`update`、`list` 和 `config` 管理 pi 的套件，和 pi 裡一樣。
+`spec.jev install`、`remove`、`update`、`list` 和 `config` 管理 pi 的套件，和 pi 裡一樣。
 
-## mu 自己的指令 {#commands}
+## spec.jev 自己的指令 {#commands}
 
 | 指令 | 做什麼 |
 | --- | --- |
-| `mu setup` | 接上一個模型（一組 API 金鑰，或從清單裡選一個服務），並選擇判定器。`mu setup --help` 列出指令碼用的形式。 |
-| `mu doctor` | 檢查安裝、模型、判定器和各項連線，並告訴你要修什麼 |
-| `mu ledger [n] [--json]` | 最近 n 個工作階段裡判定器做了哪些決定。`--json` 給出每筆紀錄及其機率和耗時。 |
-| `mu import --list` | 找出你的 Claude Code 和 Codex 對話 |
-| `mu import <file>…` | 把它們匯入 mu，在這裡接著聊 |
-| `mu judge setup \| start \| stop \| status` | 本機判定器 Laya。`setup` 下載模型前會先問你。 |
-| `mu link` / `mu unlink` | 把 `mu` 指令放進 PATH（`~/.local/bin`），或移除 |
-| `mu auth status \| login <provider> \| logout <provider>` | 訂閱登入，和桌面版用的一樣 |
-| `mu migrate [--dry-run]` | 一次性：把改名前的主目錄 `~/.kyrn` 搬到 `~/.mu` |
+| `spec.jev setup` | 接上一個模型（一組 API 金鑰，或從清單裡選一個服務），並選擇判定器。`spec.jev setup --help` 列出指令碼用的形式。 |
+| `spec.jev doctor` | 檢查安裝、模型、判定器和各項連線，並告訴你要修什麼 |
+| `spec.jev ledger [n] [--json]` | 最近 n 個工作階段裡判定器做了哪些決定。`--json` 給出每筆紀錄及其機率和耗時。 |
+| `spec.jev import --list` | 找出你的 Claude Code 和 Codex 對話 |
+| `spec.jev import <file>…` | 把它們匯入 spec.jev，在這裡接著聊 |
+| `spec.jev judge setup \| start \| stop \| status` | 本機判定器 Laya。`setup` 下載模型前會先問你。 |
+| `spec.jev link` / `spec.jev unlink` | 把 `spec.jev` 指令放進 PATH（`~/.local/bin`），或移除 |
+| `spec.jev auth status \| login <provider> \| logout <provider>` | 訂閱登入，和桌面版用的一樣 |
+| `spec.jev migrate [--dry-run]` | 一次性：把改名前的主目錄 `~/.kyrn` 搬到 `~/.spec.jev` |
 
 ## 工作階段裡的指令 {#slash-commands}
 
@@ -64,15 +64,15 @@ pi 自己的指令原樣保留：`/model`、`/thinking`、`/login`、`/resume`�
 
 ## 判定行 {#verdict-line}
 
-一輪開始之前，mu 會稍等一下判定器對你這則訊息的判斷，並把它顯示在輸入框上方，例如「◆ jev-1.13-free  multi-step task · full effort · 699 ms」。按 <kbd>Esc</kbd> 可以不等它直接開始。狀態列顯示權限模式；有目標在執行時，也會顯示這個目標。
+一輪開始之前，spec.jev 會稍等一下判定器對你這則訊息的判斷，並把它顯示在輸入框上方，例如「◆ jev-1.13-free  multi-step task · full effort · 699 ms」。按 <kbd>Esc</kbd> 可以不等它直接開始。狀態列顯示權限模式；有目標在執行時，也會顯示這個目標。
 
 ## 只對一次執行有效的環境變數 {#env}
 
 | 變數 | 效果 |
 | --- | --- |
-| `MU_JUDGE=laya,jev mu` | 只為這次執行指定判定器。`MU_JUDGE=off` 關掉判定核心。 |
-| `MU_JUDGE_MODE=shadow mu` | 這次執行裡所有判定點都用影子模式 |
-| `MU_PERMISSIONS=ask mu` | 這次執行的權限模式：`full`、`jev` 或 `ask` |
-| `MU_LANG=zh-CN mu` | mu 自己的訊息用中文（`zh`）或英文（其他任何值） |
+| `MU_JUDGE=laya,jev spec.jev` | 只為這次執行指定判定器。`MU_JUDGE=off` 關掉判定核心。 |
+| `MU_JUDGE_MODE=shadow spec.jev` | 這次執行裡所有判定點都用影子模式 |
+| `MU_PERMISSIONS=ask spec.jev` | 這次執行的權限模式：`full`、`jev` 或 `ask` |
+| `MU_LANG=zh-CN spec.jev` | spec.jev 自己的訊息用中文（`zh`）或英文（其他任何值） |
 
 完整清單請見[設定](@docs/configuration#env)。

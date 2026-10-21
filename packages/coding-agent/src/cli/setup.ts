@@ -3,7 +3,7 @@ import { configureHttpDispatcher } from "../core/http-dispatcher.ts";
 
 /**
  * Whether naming the process is safe. On macOS, renaming a process that runs an app bundle's Electron binary as Node
- * (ELECTRON_RUN_AS_NODE, how the mu desktop app runs pi) registers it with LaunchServices as a foreground app: a Dock
+ * (ELECTRON_RUN_AS_NODE, how the spec.jev desktop app runs pi) registers it with LaunchServices as a foreground app: a Dock
  * icon that bounces until the process exits, one per session.
  */
 export function canNameProcess(platform: NodeJS.Platform, electron: string | undefined): boolean {

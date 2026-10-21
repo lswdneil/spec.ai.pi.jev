@@ -6,15 +6,7 @@
     "en-US",
     "ja-JP",
     "zh-TW",
-    "ko-KR",
-    "tr-TR",
-    "ru-RU",
-    "uk-UA",
-    "pt-BR",
-    "de-DE",
-    "es-ES",
-    "fr-FR",
-    "fa-IR"
+    "ko-KR"
   ],
   "modules": [
     "common",

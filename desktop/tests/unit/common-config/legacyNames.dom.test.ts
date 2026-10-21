@@ -1,5 +1,5 @@
 /**
- * What an earlier version left under its old names is found under mu's: the local storage keys move once, and the
+ * What an earlier version left under its old names is found under spec.jev's: the local storage keys move once, and the
  * theme painted before the renderer starts reads the old theme keys too.
  */
 

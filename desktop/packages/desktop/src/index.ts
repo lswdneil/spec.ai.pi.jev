@@ -83,7 +83,7 @@ const skipSingleInstanceLock = isE2ETestMode || process.env.MU_MULTI_INSTANCE ==
 const deepLinkFromArgv = process.argv.find((arg) => arg.startsWith(`${PROTOCOL_SCHEME}://`));
 const gotTheLock = skipSingleInstanceLock ? true : app.requestSingleInstanceLock({ deepLinkUrl: deepLinkFromArgv });
 if (!gotTheLock) {
-  console.warn('[mu] Another instance is already running; current process will exit.');
+  console.warn('[spec.jev] Another instance is already running; current process will exit.');
   app.quit();
 } else {
   app.on('second-instance', (_event, argv, _workingDirectory, additionalData) => {
@@ -101,7 +101,7 @@ if (!gotTheLock) {
       showOrCreateMainWindow({
         mainWindow,
         createWindow: () => {
-          console.log('[mu] second-instance received with no active main window, recreating main window');
+          console.log('[spec.jev] second-instance received with no active main window, recreating main window');
           createWindow();
         },
       });
@@ -304,7 +304,7 @@ function registerCronResumeBridge(backendPort: number): void {
         [AIONCORE_INTERNAL_HEADER]: '1',
       },
     }).catch((error) => {
-      console.error('[mu] Failed to notify backend about system resume:', error);
+      console.error('[spec.jev] Failed to notify backend about system resume:', error);
     });
   };
 
@@ -327,9 +327,9 @@ const scheduleBackendMigrations = (): void => {
     try {
       const { runBackendMigrations } = await import('./process/utils/runBackendMigrations');
       await runBackendMigrations(ProcessConfig);
-      console.info('[mu] runBackendMigrations completed');
+      console.info('[spec.jev] runBackendMigrations completed');
     } catch (error) {
-      console.error('[mu] Backend migration hook threw:', error);
+      console.error('[spec.jev] Backend migration hook threw:', error);
     }
   })();
 };
@@ -362,7 +362,7 @@ function resolveDebugBackendStartupFailure(): BackendStartupFailureInfo | null {
     return null;
   }
   if (app.isPackaged && !isE2ETestMode) {
-    console.warn('[mu] Ignoring MU_DEBUG_BACKEND_STARTUP_FAILURE outside desktop dev/e2e mode.');
+    console.warn('[spec.jev] Ignoring MU_DEBUG_BACKEND_STARTUP_FAILURE outside desktop dev/e2e mode.');
     return null;
   }
 
@@ -413,7 +413,7 @@ function applyDebugBackendStartupFailure(failure: BackendStartupFailureInfo): vo
 }
 
 const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): void => {
-  console.log('[mu] Creating main window...');
+  console.log('[spec.jev] Creating main window...');
   const { x: windowX, y: windowY, width: windowWidth, height: windowHeight } = resolveInitialBounds();
 
   // Get app icon for development mode (Windows/Linux need icon in BrowserWindow)
@@ -471,18 +471,18 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   if (showOnReady) {
     const showWindow = () => {
       if (!mainWindow.isDestroyed() && !mainWindow.isVisible()) {
-        console.log('[mu] Showing main window');
+        console.log('[spec.jev] Showing main window');
         mainWindow.show();
         mainWindow.focus();
       }
     };
     mainWindow.once('ready-to-show', () => {
-      console.log('[mu] Window ready-to-show');
+      console.log('[spec.jev] Window ready-to-show');
       showWindow();
     });
     // Belt-and-suspenders: also show on did-finish-load in case ready-to-show already fired
     mainWindow.webContents.once('did-finish-load', () => {
-      console.log('[mu] Renderer did-finish-load');
+      console.log('[spec.jev] Renderer did-finish-load');
       showWindow();
       scheduleBackendMigrations();
     });
@@ -508,20 +508,20 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   if (!app.isPackaged && rendererUrl) {
     console.log(`[mu] Loading renderer URL: ${rendererUrl}`);
     mainWindow.loadURL(rendererUrl).catch((error) => {
-      console.error('[mu] loadURL failed, falling back to file:', error.message || error);
+      console.error('[spec.jev] loadURL failed, falling back to file:', error.message || error);
       mainWindow.loadFile(fallbackFile).catch((e2) => {
-        console.error('[mu] loadFile fallback also failed:', e2.message || e2);
+        console.error('[spec.jev] loadFile fallback also failed:', e2.message || e2);
       });
     });
   } else {
     console.log(`[mu] Loading renderer file: ${fallbackFile}`);
     mainWindow.loadFile(fallbackFile).catch((error) => {
-      console.error('[mu] loadFile failed:', error.message || error);
+      console.error('[spec.jev] loadFile failed:', error.message || error);
     });
   }
 
   mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL, isMainFrame) => {
-    console.error('[mu] did-fail-load:', { errorCode, errorDescription, validatedURL, isMainFrame });
+    console.error('[spec.jev] did-fail-load:', { errorCode, errorDescription, validatedURL, isMainFrame });
   });
 
   // Recovery policy for renderer crashes: reload with backoff for ordinary
@@ -532,7 +532,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   const rendererRecovery = createRendererRecoveryPolicy();
 
   mainWindow.webContents.on('render-process-gone', (_event, details) => {
-    console.error('[mu] render-process-gone:', details);
+    console.error('[spec.jev] render-process-gone:', details);
     if (mainWindow.isDestroyed()) return;
 
     const action = rendererRecovery.onCrash(details.reason);
@@ -553,15 +553,15 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
     // to the dead webContents while the reload is in progress.
     const reload = () => {
       if (mainWindow.isDestroyed()) return;
-      console.log('[mu] Attempting to recover from renderer crash by reloading...');
+      console.log('[spec.jev] Attempting to recover from renderer crash by reloading...');
 
       if (!app.isPackaged && rendererUrl) {
         mainWindow.loadURL(rendererUrl).catch((error) => {
-          console.error('[mu] Recovery loadURL failed:', error.message || error);
+          console.error('[spec.jev] Recovery loadURL failed:', error.message || error);
         });
       } else {
         mainWindow.loadFile(fallbackFile).catch((error) => {
-          console.error('[mu] Recovery loadFile failed:', error.message || error);
+          console.error('[spec.jev] Recovery loadFile failed:', error.message || error);
         });
       }
     };
@@ -574,11 +574,11 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   });
 
   mainWindow.webContents.on('unresponsive', () => {
-    console.warn('[mu] Renderer became unresponsive');
+    console.warn('[spec.jev] Renderer became unresponsive');
   });
 
   mainWindow.on('closed', () => {
-    console.log('[mu] Main window closed');
+    console.log('[spec.jev] Main window closed');
   });
 
   // DevTools is no longer auto-opened at startup.
@@ -752,7 +752,7 @@ const handleAppReady = async (): Promise<void> => {
       if (nodeRuntimePlan === 'later') nodeRuntimeDeferred = true;
       mark(`nodeRuntime:${nodeRuntimePlan}`);
     } catch (error) {
-      console.error('[mu] Could not ask about the Node.js runtime; starting without downloading it:', error);
+      console.error('[spec.jev] Could not ask about the Node.js runtime; starting without downloading it:', error);
       nodeRuntimeDeferred = true;
     }
     if (nodeRuntimeDeferred) backendManager.preferBundledManagedResources();
@@ -819,7 +819,7 @@ const handleAppReady = async (): Promise<void> => {
     initializeZoomFactor(await ProcessConfig.get('ui.zoomFactor'));
     mark('initializeZoomFactor');
   } catch (error) {
-    console.error('[mu] Failed to restore zoom factor:', error);
+    console.error('[spec.jev] Failed to restore zoom factor:', error);
     initializeZoomFactor(undefined);
   }
 
@@ -827,14 +827,14 @@ const handleAppReady = async (): Promise<void> => {
     loadSavedWindowBounds(await ProcessConfig.get('window.bounds'));
     mark('restoreWindowBounds');
   } catch (error) {
-    console.error('[mu] Failed to restore window bounds:', error);
+    console.error('[spec.jev] Failed to restore window bounds:', error);
     loadSavedWindowBounds(undefined);
   }
 
   try {
     initializeWindowAppearance(await ProcessConfig.get('window.appearance'));
   } catch (error) {
-    console.error('[mu] Failed to restore the window appearance:', error);
+    console.error('[spec.jev] Failed to restore the window appearance:', error);
     initializeWindowAppearance(undefined);
   }
   followSystemAppearance();
@@ -864,13 +864,13 @@ const handleAppReady = async (): Promise<void> => {
     appReadyDone = true;
     mark('createWindow');
 
-    // mu updates itself from the releases of github.com/qybaihe/mu (process/services/update): a check a little after
+    // spec.jev updates itself from the releases of github.com/qybaihe/mu (process/services/update): a check a little after
     // the start and then every 6 hours, besides the one on 关于 (About). A build run from its sources and automated
     // runs (CI, E2E, MU_DISABLE_AUTO_UPDATE=1) check only when asked.
     const updates = getUpdateService();
     updates.setInstallHooks({
       beforeInstall: async () => {
-        // The installer quits mu: its windows must close, not hide in the tray, and the backend must let go of the
+        // The installer quits spec.jev: its windows must close, not hide in the tray, and the backend must let go of the
         // files the installer replaces.
         setIsQuitting(true);
         await backendManager.stop();
@@ -950,7 +950,7 @@ if (shouldRegisterBackendStartup(gotTheLock)) {
     .then(handleAppReady)
     .catch((error) => {
       // App initialization failed
-      console.error('[mu] App initialization failed:', error);
+      console.error('[spec.jev] App initialization failed:', error);
       app.quit();
     });
 }
@@ -1006,7 +1006,7 @@ installQuitCleanup({
 });
 
 app.on('will-quit', () => {
-  console.log('[mu] will-quit — all cleanup should be complete');
+  console.log('[spec.jev] will-quit — all cleanup should be complete');
 });
 
 app.on('quit', (_event, exitCode) => {

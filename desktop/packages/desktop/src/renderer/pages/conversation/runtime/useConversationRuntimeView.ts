@@ -156,7 +156,7 @@ export const useConversationRuntimeView = (conversation_id: string): UseConversa
   const markSendAccepted = useCallback(
     (turn_id: string, runtime: TConversationRuntimeSummary, msg_id?: string) => {
       flushRuntimeViewLogs(localSendAccepted(conversation_id, turn_id, runtime, msg_id));
-      // The response can come after the turn it started has ended (a command mu answers at once): the sidebar then
+      // The response can come after the turn it started has ended (a command spec.jev answers at once): the sidebar then
       // knows the turn is over and keeps its spinner out.
       reconcileGeneratingFromRuntime(conversation_id, runtime.is_processing === true, runtime.turn_id ?? turn_id);
     },

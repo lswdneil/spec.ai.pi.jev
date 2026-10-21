@@ -14,7 +14,7 @@ type AddMcpServerModalProps = {
 };
 
 /**
- * A new MCP server in mu's `mcp.json`, as `mu mcp add` writes it: a name, then either the command mu starts (one line,
+ * A new MCP server in spec.jev's `mcp.json`, as `spec.jev mcp add` writes it: a name, then either the command spec.jev starts (one line,
  * as in a terminal) with its environment variables, or the address of a server that runs elsewhere with its headers.
  * Shown while it is open, so every opening starts empty.
  */

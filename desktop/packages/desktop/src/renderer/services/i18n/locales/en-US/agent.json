@@ -1,7 +1,7 @@
 {
   "health": {
     "detectedError": "The current agent ({{agent}}) ran into an error",
-    "autoSwitching": ". mu will try to switch automatically.",
+    "autoSwitching": ". spec.jev will try to switch automatically.",
     "evaluating": "Checking network latency and model availability…",
     "checking": "Checking the {{agent}} endpoint…",
     "foundBest": "Found the best alternative",
@@ -51,7 +51,7 @@
   },
   "runtimeRestart": {
     "tooltip": "Reconnect agent",
-    "confirmContent": "Restart the agent process so it picks up CLI config changes made outside mu, such as a new API key or provider. Conversation history is kept, and the agent picks up where it left off when it can.",
+    "confirmContent": "Restart the agent process so it picks up CLI config changes made outside spec.jev, such as a new API key or provider. Conversation history is kept, and the agent picks up where it left off when it can.",
     "success": "Agent reconnected",
     "failed": "Couldn't reconnect agent",
     "initializingTooltip": "Reconnect once the agent has finished starting",

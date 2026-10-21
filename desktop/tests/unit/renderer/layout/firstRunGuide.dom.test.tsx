@@ -7,7 +7,7 @@ import PanelRoute from '@/renderer/components/layout/Router';
 import { ONBOARDING_KEY } from '@/renderer/pages/welcome/onboarding';
 
 // A first start drew the home page, then the route loader for 300 ms while the guide's code came, then the guide over
-// both: the sidebar showed up and went away again. The check now runs while the start screen waits for mu.
+// both: the sidebar showed up and went away again. The check now runs while the start screen waits for spec.jev.
 
 const { catalog, settings, home, loader } = vi.hoisted(() => ({
   catalog: vi.fn(),
@@ -28,7 +28,7 @@ vi.mock('@/renderer/hooks/system/useCrossSessionRateLimitNotice', () => ({ useCr
 vi.mock('@renderer/pages/guid', () => ({ default: () => home() ?? <p>home page</p> }));
 vi.mock('@renderer/pages/welcome', () => ({ default: () => <p>the guide</p> }));
 
-/** mu's settings as the check reads them: with or without the model new conversations start on. */
+/** spec.jev's settings as the check reads them: with or without the model new conversations start on. */
 const withModel = (provider: string) => ({ ok: true, data: { models: { defaults: { provider } } } });
 
 beforeEach(() => {
@@ -57,7 +57,7 @@ describe('the first-run guide at the first start', () => {
   it('is the first page drawn: no home page and no route loader before it', async () => {
     settings.mockResolvedValue(withModel(''));
     const muIsUp = start();
-    // While mu starts, the settings were read and the guide's code loaded: the app is on the guide's route already.
+    // While spec.jev starts, the settings were read and the guide's code loaded: the app is on the guide's route already.
     await waitFor(() => expect(window.location.hash).toBe('#/welcome'));
     expect(screen.getByTestId('mu-startup')).toBeInTheDocument();
     muIsUp();

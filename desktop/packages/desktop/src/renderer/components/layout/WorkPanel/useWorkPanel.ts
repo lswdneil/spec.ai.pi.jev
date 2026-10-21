@@ -26,8 +26,8 @@ import {
  * the workspace toggle event), a sub-agent line clicked in the transcript (its hive tab), a file the person opens
  * (its preview) and a web page the person opens (its browser). What only marks a tab as new: a new board, a new
  * verdict, a sub-agent starting or ending, a lesson stored, recalled, followed, retired or merged, a file the agent
- * changed, and on the browser a page the agent opened, a run of mu's starting in it, or the agent's browser tool
- * at work. Nothing else the agent does opens the panel; the one exception is mu's browser typing into its page or
+ * changed, and on the browser a page the agent opened, a run of spec.jev's starting in it, or the agent's browser tool
+ * at work. Nothing else the agent does opens the panel; the one exception is spec.jev's browser typing into its page or
  * asking the person to confirm a step on it, which is done where the person can see it (see `previewOpeners.ts`).
  */
 export function useWorkPanel(conversationId: string | null, kernel: { events: Activity[]; settled: boolean }) {

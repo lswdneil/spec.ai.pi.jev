@@ -29,7 +29,7 @@ export type LocalJudgeDeps = {
   env: NodeJS.ProcessEnv;
   home: string;
   /**
-   * Where the venv and the weights are: beside the sidecar in a checkout, in mu's home for the npm package, which
+   * Where the venv and the weights are: beside the sidecar in a checkout, in spec.jev's home for the npm package, which
    * npm replaces on every update (the script decides the same way).
    */
   stateDir?: string;
@@ -132,7 +132,7 @@ export class LocalJudge {
   }
 
   /**
-   * Whether the judge was started by mu: the script keeps its pid in mu's home (`~/.mu/local-judge`, or `~/.kyrn` on
+   * Whether the judge was started by spec.jev: the script keeps its pid in spec.jev's home (`~/.spec.jev/local-judge`, or `~/.kyrn` on
    * a machine whose home has not been moved), and only a live process named there can be stopped from here.
    */
   private started(): boolean {
@@ -168,7 +168,7 @@ export class LocalJudge {
       if (!consent) throw new KyrnError('invalid', 'Installing the local judge downloads files: it needs consent');
       if (this.support() !== 'ok') throw new KyrnError('invalid', 'This machine cannot install the local judge');
     }
-    // A judge that answers but was not started by mu (another home, another user's session) cannot be stopped from
+    // A judge that answers but was not started by spec.jev (another home, another user's session) cannot be stopped from
     // here: the script would say it is not running, and the panel would still show it running.
     if (action === 'stop' && !this.started() && (await this.deps.health(this.url))) {
       this.task = { id: ++this.next, action, phase: 'failed', output: [], problem: 'foreign' };

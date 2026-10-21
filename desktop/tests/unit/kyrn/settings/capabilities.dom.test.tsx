@@ -93,8 +93,8 @@ const SKILLS: MuSkills = {
   ],
 };
 
-describe('mu’s skills while mu runs inside the app', () => {
-  it('lists every skill under where it comes from, in the order mu loads them, and only mu’s own can be removed', async () => {
+describe('spec.jev’s skills while spec.jev runs inside the app', () => {
+  it('lists every skill under where it comes from, in the order spec.jev loads them, and only spec.jev’s own can be removed', async () => {
     bridge.skills.mockResolvedValue(ok(SKILLS));
     draw(<MuSkillsPage />);
     const own = await screen.findByTestId('mu-skills-mu');
@@ -102,7 +102,7 @@ describe('mu’s skills while mu runs inside the app', () => {
       group.getAttribute('data-testid')
     );
     expect(groups).toEqual(['mu-skills-mu', 'mu-skills-agents', 'mu-skills-builtin', 'mu-skills-claude']);
-    expect(own).toHaveTextContent("mu's skills");
+    expect(own).toHaveTextContent("spec.jev's skills");
     expect(own).toHaveTextContent(`In ${FOLDER}.`);
     expect(within(own).getByTestId('mu-skill-review')).toHaveTextContent('What review does.');
     expect(within(own).getByRole('button', { name: 'review: Remove' })).toBeInTheDocument();
@@ -111,7 +111,7 @@ describe('mu’s skills while mu runs inside the app', () => {
     expect(inherited).toHaveTextContent('From ~/.claude/skills.');
     for (const id of ['mu-skills-agents', 'mu-skills-builtin', 'mu-skills-claude'])
       expect(within(screen.getByTestId(id)).queryByRole('button', { name: /Remove/ })).not.toBeInTheDocument();
-    // A project's own skills are not mu's to list here: the page says so.
+    // A project's own skills are not spec.jev's to list here: the page says so.
     expect(screen.getByText(/load only in that project's conversations/)).toBeInTheDocument();
   });
 

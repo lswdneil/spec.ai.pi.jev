@@ -1,9 +1,9 @@
 ---
 title: Lessons
-summary: What mu learns from your corrections and from getting itself unstuck, how lessons are merged and recalled, and how unused ones retire.
+summary: What spec.jev learns from your corrections and from getting itself unstuck, how lessons are merged and recalled, and how unused ones retire.
 ---
 
-The lessons library is what mu remembers between sessions: your corrections, the rules you set, and the traps the agent fell into and how it got out. The command line and the desktop app share it. The judge decides what is worth keeping, whether it is new, when it applies and whether it was followed; a small writing model puts it into words.
+The lessons library is what spec.jev remembers between sessions: your corrections, the rules you set, and the traps the agent fell into and how it got out. The command line and the desktop app share it. The judge decides what is worth keeping, whether it is new, when it applies and whether it was followed; a small writing model puts it into words.
 
 ## Where lessons come from {#sources}
 
@@ -25,7 +25,7 @@ When a message arrives, at the same time as the preflight, the judge is asked of
 
 ## Followed or not {#applied}
 
-At the end of a turn, the judge reads what happened and asks of each recalled lesson whether it was followed (`memory.applied`). A lesson recalled eight times and never followed retires itself, and mu says so.
+At the end of a turn, the judge reads what happened and asks of each recalled lesson whether it was followed (`memory.applied`). A lesson recalled eight times and never followed retires itself, and spec.jev says so.
 
 ## Commands {#commands}
 
@@ -38,4 +38,4 @@ At the end of a turn, the judge reads what happened and asks of each recalled le
 
 In the desktop app, the **Lessons** tab shows the same list; you can edit a lesson or retire it there.
 
-The library is one file, `~/.mu/agent/mu/lessons.jsonl`. Each lesson has a kind (correction, preference, pitfall, workaround or fact), when it applies, what to do and whether it holds for this project only or everywhere.
+The library is one file, `~/.spec.jev/agent/mu/lessons.jsonl`. Each lesson has a kind (correction, preference, pitfall, workaround or fact), when it applies, what to do and whether it holds for this project only or everywhere.

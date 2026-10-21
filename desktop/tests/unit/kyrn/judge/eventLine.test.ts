@@ -15,7 +15,7 @@ let en: TFunction;
 let zh: TFunction;
 let tw: TFunction;
 beforeAll(async () => {
-  // mu's words too: a checkpoint line says what the conversation's notice says.
+  // spec.jev's words too: a checkpoint line says what the conversation's notice says.
   const make = async (lng: string, common: unknown, preview: unknown, mu: unknown) => {
     const i18n = createInstance();
     await i18n.init({
@@ -139,13 +139,13 @@ describe('Runtime event lines by the harness codes', () => {
       [
         'no_progress',
         { runs: 3 },
-        'Paused: no progress in 3 runs in a row; tell mu how to continue',
+        'Paused: no progress in 3 runs in a row; tell spec.jev how to continue',
         '已暂停：连续 3 次没有进展，告诉它接下来怎么做',
       ],
       [
         'no_progress',
         { runs: 3, detail: 'tests still red' },
-        'Paused: no progress in 3 runs in a row (tests still red); tell mu how to continue',
+        'Paused: no progress in 3 runs in a row (tests still red); tell spec.jev how to continue',
         '已暂停：连续 3 次没有进展（tests still red），告诉它接下来怎么做',
       ],
       [
@@ -231,7 +231,7 @@ describe('Runtime event lines by the harness codes', () => {
 
   it('says each search problem by its code, one line each', () => {
     const payload = {
-      query: 'mu harness',
+      query: 'spec.jev harness',
       results: 0,
       problems: ['p1', 'p2', 'p3', 'p4', 'p5', 'p6'],
       problemCodes: [
@@ -291,8 +291,8 @@ describe('Runtime event lines by the harness codes', () => {
       [
         'needs_approval',
         { source: '.mcp.json' },
-        "github: it's defined by the project (.mcp.json) and hasn't been approved; open this folder in mu and allow it once, or define it in mu.json",
-        'github：它由项目定义（.mcp.json），还没有获得批准；在 mu 中打开这个文件夹并允许一次，或者在 mu.json 中定义它',
+        "github: it's defined by the project (.mcp.json) and hasn't been approved; open this folder in spec.jev and allow it once, or define it in mu.json",
+        'github：它由项目定义（.mcp.json），还没有获得批准；在 spec.jev 中打开这个文件夹并允许一次，或者在 mu.json 中定义它',
       ],
       [
         'denied',
@@ -316,8 +316,8 @@ describe('Runtime event lines by the harness codes', () => {
       [
         'closed',
         undefined,
-        'github: its connection closed while mu was still waiting for an answer',
-        'github：mu 还在等回应时，连接就关闭了',
+        'github: its connection closed while spec.jev was still waiting for an answer',
+        'github：spec.jev 还在等回应时，连接就关闭了',
       ],
       ['timeout', undefined, "github: it didn't respond in time", 'github：它没有及时响应'],
       ['aborted', undefined, 'github: the start was canceled', 'github：启动被取消了'],
@@ -332,8 +332,8 @@ describe('Runtime event lines by the harness codes', () => {
       [
         'crashed',
         { willRestart: 1 },
-        'github: it crashed while running; mu restarts it once',
-        'github：运行时崩溃了，mu 会重启它一次',
+        'github: it crashed while running; spec.jev restarts it once',
+        'github：运行时崩溃了，spec.jev 会重启它一次',
       ],
       [
         'crashed',
@@ -371,13 +371,13 @@ describe('Runtime event lines by the harness codes', () => {
     expect(say(zh, 'mcp.failed', { ...payload, code: 'needs_approval' })).toEqual(['github：spawn gh-mcp ENOENT']);
     // A crash without the 0/1 param still reads the event's own flag.
     expect(say(zh, 'mcp.failed', { ...payload, code: 'crashed', willRestart: true })).toEqual([
-      'github：运行时崩溃了，mu 会重启它一次',
+      'github：运行时崩溃了，spec.jev 会重启它一次',
       '详情：spawn gh-mcp ENOENT',
     ]);
     expect(say(zh, 'mcp.failed', { ...payload, code: 'crashed' })).toEqual(['github：spawn gh-mcp ENOENT']);
     // A connection that dropped after the start: pi's words stay as the detail.
     expect(say(zh, 'mcp.failed', { ...payload, code: 'disconnected', willRestart: true })).toEqual([
-      'github：连接断开了；下次调用时 mu 会重新连接',
+      'github：连接断开了；下次调用时 spec.jev 会重新连接',
       '详情：spawn gh-mcp ENOENT',
     ]);
     expect(say(zh, 'mcp.failed', { reason: 'no name given' })).toEqual(['no name given']);
@@ -410,8 +410,8 @@ describe('Runtime event lines by the harness codes', () => {
   });
 
   it('says a notice about the judge by its code, and leaves an unknown one to the generic line', () => {
-    expect(both('judge.notice', { code: 'free_jev', message: 'mu: no Jev key is set…' })).toEqual([
-      ["No Jev key is set, so mu is using Jev's free tier on OpenCode Zen"],
+    expect(both('judge.notice', { code: 'free_jev', message: 'spec.jev: no Jev key is set…' })).toEqual([
+      ["No Jev key is set, so spec.jev is using Jev's free tier on OpenCode Zen"],
       ['未配置 Jev 密钥，使用 OpenCode Zen 上的免费 Jev'],
     ]);
     expect(say(tw, 'judge.notice', { code: 'free_jev_unavailable' }, 'zh-TW')).toEqual([
@@ -549,7 +549,7 @@ describe('Browser run lines', () => {
       ],
       [
         finished('blocked', 'no_value', { label: 'Email' }, 'x'),
-        'Blocked: mu couldn\'t produce a value for "Email".',
+        'Blocked: spec.jev couldn\'t produce a value for "Email".',
         '受阻：无法为「Email」生成要填写的内容。',
       ],
       [
@@ -646,7 +646,7 @@ describe('Odd payloads', () => {
 });
 
 describe('Permission lines', () => {
-  it('says mu waits for the person’s permission, with the call it asks about as it came', () => {
+  it('says spec.jev waits for the person’s permission, with the call it asks about as it came', () => {
     expect(both('permissions.request', { id: 'p1', kind: 'shell', summary: 'rm -rf build', reason: 'unsure' })).toEqual(
       [['Waiting for your permission: rm -rf build'], ['等你授权：rm -rf build']]
     );
@@ -692,12 +692,12 @@ describe('Checkpoint lines', () => {
     ]);
   });
 
-  it('keeps mu’s own line for a code without words, or one whose numbers did not come', () => {
-    expect(say(en, 'checkpoint.off', { code: 'melted', params: {}, message: 'mu: checkpoints are off.' })).toEqual([
-      'mu: checkpoints are off.',
+  it('keeps spec.jev’s own line for a code without words, or one whose numbers did not come', () => {
+    expect(say(en, 'checkpoint.off', { code: 'melted', params: {}, message: 'spec.jev: checkpoints are off.' })).toEqual([
+      'spec.jev: checkpoints are off.',
     ]);
-    expect(say(en, 'checkpoint.off', { code: 'too_slow', params: {}, message: 'mu: listing took too long.' })).toEqual([
-      'mu: listing took too long.',
+    expect(say(en, 'checkpoint.off', { code: 'too_slow', params: {}, message: 'spec.jev: listing took too long.' })).toEqual([
+      'spec.jev: listing took too long.',
     ]);
   });
 });
@@ -728,10 +728,10 @@ describe('Injection lines', () => {
     ]);
   });
 
-  it('says when mu’s rules decided because the judge gave no answer, and leaves odd payloads to the summary', () => {
+  it('says when spec.jev’s rules decided because the judge gave no answer, and leaves odd payloads to the summary', () => {
     expect(say(en, 'tool.injection', screened({ source: 'rules', excerpts: [] }))).toEqual([
       'web_fetch: withheld 2 of 9 passages because they carried instructions aimed at the agent',
-      "the judge didn't answer, so mu's rules decided",
+      "the judge didn't answer, so spec.jev's rules decided",
     ]);
     expect(say(en, 'tool.injection', { tool: 'web_fetch', withheld: 'two' })).toBeUndefined();
   });

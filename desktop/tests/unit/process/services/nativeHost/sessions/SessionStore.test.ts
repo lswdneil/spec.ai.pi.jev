@@ -79,7 +79,7 @@ describe('SessionStore', () => {
     expect(listed[1]).toMatchObject({ id: 's3', file: empty, updatedAt: at(10) });
   });
 
-  it('reads a session mu wrote: the recorded conversation', async () => {
+  it('reads a session spec.jev wrote: the recorded conversation', async () => {
     const { store, project } = world();
     const file = join(project('tmp-mu-fixture-project'), '2026-09-29T12-44-12-067Z_01a0ed31.jsonl');
     mkdirSync(project('tmp-mu-fixture-project'), { recursive: true });
@@ -238,7 +238,7 @@ describe('SessionStore', () => {
     expect(listed.find((session) => session.id === 's1')?.parentSession).toBeUndefined();
   });
 
-  it('lists nothing when mu has no sessions yet', async () => {
+  it('lists nothing when spec.jev has no sessions yet', async () => {
     const store = new SessionStore(() => ({
       agentDir: join(root, 'none'),
       sessionsDir: join(root, 'none', 'sessions'),

@@ -84,7 +84,7 @@ async function start(options: {
 	const harness = await createHarness({
 		tools: [readTool()],
 		extensionFactories: [
-			// pi's MCP client, as it is built in: it connects what mu registers, and its own mcp.json.
+			// pi's MCP client, as it is built in: it connects what spec.jev registers, and its own mcp.json.
 			createMcpExtension({
 				loadConfig: (ctx) =>
 					agentDir
@@ -253,7 +253,7 @@ describe("MCP servers in the capability catalog", () => {
 		await vi.waitFor(() => expect(running()).toBe(false), { timeout: 10_000, interval: 100 });
 	});
 
-	it("starts a server without mu's environment, which holds model keys", async () => {
+	it("starts a server without spec.jev's environment, which holds model keys", async () => {
 		process.env.MU_MCP_TEST_MODEL_KEY = SECRET;
 		try {
 			const { harness, events } = await start({
@@ -273,7 +273,7 @@ describe("MCP servers in the capability catalog", () => {
 
 	it("passes values literally: pi reads neither a variable nor a command into them", async () => {
 		process.env.MU_MCP_TEST_VALUE = "!a$b";
-		// mu's own placeholder, as Claude Code writes it.
+		// spec.jev's own placeholder, as Claude Code writes it.
 		const placeholder = ["$", "{MU_MCP_TEST_VALUE}"].join("");
 		try {
 			const { harness, events } = await start({
@@ -367,7 +367,7 @@ describe("MCP servers in the capability catalog", () => {
 		]);
 		await harness.session.prompt("List.");
 		const listing = toolResults(harness)[0];
-		// mu's "files" yields; the other one keeps a name of its own.
+		// spec.jev's "files" yields; the other one keeps a name of its own.
 		expect(listing).not.toContain("mcp:files ");
 		expect(listing).toContain("mcp:files_other");
 		expect(mcpTools(harness)).toContain("mcp__files__echo");

@@ -175,8 +175,8 @@ export function registerProcedures(runtime: KyrnRuntime, roots?: HarnessRoots): 
 		const all = drafts.list();
 		if (all.length === 0) {
 			return say({
-				zh: "没有待审的技能草稿。一次步骤多、以成功结束的运行被判定为可复用的做法时，mu 会起草一个。",
-				en: "No skill drafts to review. mu drafts one when the judge finds that a long, successful run is a reusable procedure.",
+				zh: "没有待审的技能草稿。一次步骤多、以成功结束的运行被判定为可复用的做法时，spec.jev 会起草一个。",
+				en: "No skill drafts to review. spec.jev drafts one when the judge finds that a long, successful run is a reusable procedure.",
 			});
 		}
 		const lines = all.map(
@@ -191,8 +191,8 @@ export function registerProcedures(runtime: KyrnRuntime, roots?: HarnessRoots): 
 
 	pi.registerCommand("skills", {
 		description: say({
-			zh: "mu 从运行里起草的技能：/skills 列出草稿，/skills show|accept|reject <名字>；accept 加 --project 装进这个项目",
-			en: "Review skills mu drafted from past runs: /skills lists drafts, /skills show|accept|reject <name>; accept --project installs into this project",
+			zh: "spec.jev 从运行里起草的技能：/skills 列出草稿，/skills show|accept|reject <名字>；accept 加 --project 装进这个项目",
+			en: "Review skills spec.jev drafted from past runs: /skills lists drafts, /skills show|accept|reject <name>; accept --project installs into this project",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);

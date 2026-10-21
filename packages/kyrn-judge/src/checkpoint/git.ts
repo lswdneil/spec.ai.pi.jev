@@ -65,7 +65,7 @@ export class GitFailed extends Error {
 	}
 }
 
-/** What mu looks at before it first starts git (`stubProblem`). Tests stand in for a Mac here. */
+/** What spec.jev looks at before it first starts git (`stubProblem`). Tests stand in for a Mac here. */
 export interface GitProbe {
 	readonly platform: NodeJS.Platform;
 	/** The file `binary` is on this PATH, as spawn finds it. */

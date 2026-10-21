@@ -3,12 +3,12 @@ title: The desktop app
 summary: The conversation, the work panel beside it, the send box, settings and how the app shares everything with the command line.
 ---
 
-The desktop app runs on macOS, Windows and Linux and bundles mu and its runtime. It runs the same agent and judgment kernel as the command line, in a process of its own, so everything the command line can do, the app can do. It adds a work panel next to the conversation, so you can see what the agent and the judge are doing.
+The desktop app runs on macOS, Windows and Linux and bundles spec.jev and its runtime. It runs the same agent and judgment kernel as the command line, in a process of its own, so everything the command line can do, the app can do. It adds a work panel next to the conversation, so you can see what the agent and the judge are doing.
 
 ## The conversation {#conversation}
 
-- **One list for both.** The conversation list is mu's own session files. A session you started in a terminal shows up in the app, and one started in the app can be continued with `mu -c` or `mu -r`.
-- **Quiet by default.** What mu says to the model on its own, such as a reminder to verify, a goal continuation, a new error or a rewind, shows as a single line in your language; the original text is one click away. A run of tool calls is folded into one line that says what was done, such as *read 3 files · ran 1 command*.
+- **One list for both.** The conversation list is spec.jev's own session files. A session you started in a terminal shows up in the app, and one started in the app can be continued with `spec.jev -c` or `spec.jev -r`.
+- **Quiet by default.** What spec.jev says to the model on its own, such as a reminder to verify, a goal continuation, a new error or a rewind, shows as a single line in your language; the original text is one click away. A run of tool calls is folded into one line that says what was done, such as *read 3 files · ran 1 command*.
 - **Fork from any message.** Each message has a fork button that starts a new branch from that point.
 - **Row menu.** Rename, pin, mark as unread, archive or delete a conversation.
 - **Notifications.** When another conversation finishes or waits for you, the system tells you.
@@ -19,7 +19,7 @@ The desktop app runs on macOS, Windows and Linux and bundles mu and its runtime.
 - **Goal.** Set a goal, and the agent keeps working until it holds. While a goal runs, a goal line above the box shows its state. See [Goal mode](@docs/goal).
 - **Context ring.** How full the context is, at a glance.
 - **Queued messages.** A message sent while the agent works waits in a queue and can be taken back before it is used.
-- **Slash commands.** Type `/` for mu's and pi's commands, the same as in the terminal.
+- **Slash commands.** Type `/` for spec.jev's and pi's commands, the same as in the terminal.
 
 <kbd>⌘K</kbd> (<kbd>Ctrl K</kbd> on Windows and Linux) opens the command palette.
 
@@ -32,7 +32,7 @@ The panel beside the conversation has eight tabs:
 | **Board** | The [plain-language board](@docs/board): how far the work is, what's happening now, what waits for you and a running account |
 | **Judge** | The live ledger: every verdict with its question, its answer, its probability and how long it took |
 | **Hive** | The [hive](@docs/hive): each bee, what it's doing and a map of which finding went to whom |
-| **Lessons** | The [lessons library](@docs/lessons): what mu has learned, how often each lesson was recalled and followed; edit or retire one |
+| **Lessons** | The [lessons library](@docs/lessons): what spec.jev has learned, how often each lesson was recalled and followed; edit or retire one |
 | **Files** | The project's files |
 | **Preview** | A preview of the page or file being worked on |
 | **Source** | The folder's git changes and their diffs |
@@ -51,17 +51,17 @@ Google's two sign-ins are Google's logins for its own tools. Using them from ano
 Settings are grouped by area, each page short: **Preferences**, **Models**, **Kernel**, **Details**, **Capabilities** and **System**. A search box at the top of the sidebar finds any setting.
 
 - **Kernel** lists each feature as one row with a switch; its decision points are listed under it, each with its own switch. The judges page chooses who answers.
-- **Capabilities** lists skills by source (mu's own, the project's or inherited from Claude Code, Codex and Cursor), lets you add a skill folder and remove your own; and lists MCP servers, each with a switch. Keys passed to a server as arguments are masked.
-- Everything the settings change is written to `~/.mu/agent/mu.json`, so it holds for the command line too, and vice versa.
+- **Capabilities** lists skills by source (spec.jev's own, the project's or inherited from Claude Code, Codex and Cursor), lets you add a skill folder and remove your own; and lists MCP servers, each with a switch. Keys passed to a server as arguments are masked.
+- Everything the settings change is written to `~/.spec.jev/agent/spec.jev.json`, so it holds for the command line too, and vice versa.
 
 Light and dark follow the system. The interface comes in 13 languages, including Simplified and Traditional Chinese, English, Japanese and Korean.
 
 ## Importing conversations {#import}
 
-Conversations from Claude Code and the Codex CLI can be imported and continued in mu. The first-run guide offers this when it finds some; the command line does it with `mu import --list` and `mu import <file>`.
+Conversations from Claude Code and the Codex CLI can be imported and continued in spec.jev. The first-run guide offers this when it finds some; the command line does it with `spec.jev import --list` and `spec.jev import <file>`.
 
 ## Updates, proxies and logs {#updates}
 
 - **Updates.** The app tells you when a new release is out, with its size; it downloads only after you agree and installs at the next restart.
-- **Proxy.** With no `HTTPS_PROXY` set, mu, the sign-ins and the key checks in the app follow the system proxy.
+- **Proxy.** With no `HTTPS_PROXY` set, spec.jev, the sign-ins and the key checks in the app follow the system proxy.
 - **Logs.** Settings → About opens the log folder.

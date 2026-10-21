@@ -17,7 +17,7 @@ import { UpdateService } from './updateService';
 let service: UpdateService | null = null;
 
 /**
- * The app's one update service. An installed mu on macOS or Windows updates on a restart (electron-updater); Linux
+ * The app's one update service. An installed spec.jev on macOS or Windows updates on a restart (electron-updater); Linux
  * and a build run from its sources get the new installer to open instead: installing a .deb takes an administrator's
  * password, which electron-updater could only ask for in a terminal.
  */

@@ -63,7 +63,7 @@ export function loopbackSocket(url: string): boolean {
 
 /**
  * Where the app's browser listens, if an app is running: `MU_BROWSER_ENDPOINT`,
- * or the advert the app writes into the mu home (readable by the user only).
+ * or the advert the app writes into the spec.jev home (readable by the user only).
  * An advert left behind by an app that has quit is ignored.
  */
 export function findEmbeddedEndpoint(host: Host = {}): EmbeddedEndpoint | undefined {

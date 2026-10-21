@@ -74,16 +74,16 @@ describe("welcome screen", () => {
 		const fresh = renderWelcome({ ...view, model: undefined, health: "checking" }, 100, plain);
 
 		expect(down.join("\n")).toContain("unreachable; using the fallbacks");
-		expect(keyless.join("\n")).toContain("no usable key (run mu setup); using the fallbacks");
+		expect(keyless.join("\n")).toContain("no usable key (run spec.jev setup); using the fallbacks");
 		expect(broken.join("\n")).toContain("failing (server); using the fallbacks");
 		expect(off.join("\n")).toContain("off · every decision point uses its fallback");
-		expect(fresh.join("\n")).toContain("none yet · run /login, or mu setup in a terminal");
+		expect(fresh.join("\n")).toContain("none yet · run /login, or spec.jev setup in a terminal");
 		expect(fresh.join("\n")).toContain("checking");
 	});
 
-	// mu 0.1.3 from npm greeted with "v0.1.0 · built on pi 0.1.3": the judgment layer's own version, and pi's
-	// VERSION, which pi reads from the folder the launcher points it at, mu-agent's.
-	it("shows mu's version and pi's, from the npm package and from a source checkout", () => {
+	// spec.jev 0.1.3 from npm greeted with "v0.1.0 · built on pi 0.1.3": the judgment layer's own version, and pi's
+	// VERSION, which pi reads from the folder the launcher points it at, spec.jev's.
+	it("shows spec.jev's version and pi's, from the npm package and from a source checkout", () => {
 		const pkg = mkdtempSync(join(tmpdir(), "mu-versions-"));
 		try {
 			writeFileSync(
@@ -95,7 +95,7 @@ describe("welcome screen", () => {
 			// Where the bundled welcome.ts looks from: the build rewrites import.meta.url to its source's place in judge/.
 			const bundle = pathToFileURL(join(pkg, "judge", "mu", "index.js")).href;
 			const source = new URL("src/extension/features/welcome.ts", new URL("../", bundle));
-			// pi's own VERSION in the package is mu's: it must not be taken for pi's.
+			// pi's own VERSION in the package is spec.jev's: it must not be taken for pi's.
 			expect(readVersions(new URL("../../../", source), "0.1.4")).toEqual({ mu: "0.1.4", pi: "0.86.0" });
 		} finally {
 			rmSync(pkg, { recursive: true, force: true });
@@ -109,7 +109,7 @@ describe("welcome screen", () => {
 			pi: versionOf("packages/coding-agent/package.json"),
 		});
 		const header = renderWelcome({ ...view, version: "0.1.4", piVersion: "0.86.0" }, 100, plain).join("\n");
-		expect(header).toContain("mu  v0.1.4");
+		expect(header).toContain("spec.jev  v0.1.4");
 		expect(header).toContain("built on pi 0.86.0");
 	});
 });

@@ -22,8 +22,8 @@ const translator = (language: string): TFunction => {
 
 const [englishBoard, chineseBoard] = MU_COMMAND_WORDS.get('board') ?? [];
 
-describe("mu's slash commands in the reader's language", () => {
-  it('has a line for every one of mu’s commands in all 13 languages, and none for a command mu does not have', () => {
+describe("spec.jev's slash commands in the reader's language", () => {
+  it('has a line for every one of spec.jev’s commands in all 13 languages, and none for a command spec.jev does not have', () => {
     expect(languages).toHaveLength(13);
     for (const language of languages) {
       const lines = muTexts(language).commands as Record<string, string>;
@@ -32,7 +32,7 @@ describe("mu's slash commands in the reader's language", () => {
     }
   });
 
-  it('shows an English reader mu’s English words, and a Chinese reader mu’s Chinese words', () => {
+  it('shows an English reader spec.jev’s English words, and a Chinese reader spec.jev’s Chinese words', () => {
     const english = translator('en-US');
     const chinese = translator('zh-CN');
     for (const [name, words] of MU_COMMAND_WORDS) {
@@ -41,13 +41,13 @@ describe("mu's slash commands in the reader's language", () => {
     }
   });
 
-  it('turns mu’s English or Chinese into the reader’s language, whichever mu started in', () => {
+  it('turns spec.jev’s English or Chinese into the reader’s language, whichever spec.jev started in', () => {
     const japanese = translator('ja-JP');
     const german = translator('de-DE');
     const line = (muTexts('ja-JP').commands as Record<string, string>).board;
     expect(commandDescription({ name: 'board', description: englishBoard }, japanese)).toBe(line);
     expect(commandDescription({ name: 'board', description: chineseBoard }, japanese)).toBe(line);
-    // The app was switched to English after mu started in Chinese.
+    // The app was switched to English after spec.jev started in Chinese.
     expect(commandDescription({ name: 'board', description: chineseBoard }, translator('en-US'))).toBe(englishBoard);
     expect(
       commandDescription({ name: 'import-chat', description: MU_COMMAND_WORDS.get('import-chat')![0] }, german)

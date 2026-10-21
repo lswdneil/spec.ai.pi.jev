@@ -37,7 +37,7 @@ function machine(platform: NodeJS.Platform, files: string[], patch: Partial<Harn
   };
 }
 
-describe('where the desktop finds the mu harness', () => {
+describe('where the desktop finds the spec.jev harness', () => {
   it('takes MU_ROOT or KYRN_ROOT first, as in development', () => {
     const deps = machine('darwin', [], { env: { KYRN_ROOT: '/work/KYRN' } });
     expect(findHarness('/work/KYRN-desktop', deps)).toEqual({ root: '/work/KYRN', layout: 'repo', source: 'env' });
@@ -59,16 +59,16 @@ describe('where the desktop finds the mu harness', () => {
     expect(findHarness(undefined, app)).toEqual({ root: bundled, layout: 'package', source: 'bundled' });
     expect(findHarness('/work/KYRN-desktop', app)?.source).toBe('bundled');
     expect(findHarness(undefined, { ...app, env: { MU_ROOT: '/work/KYRN' } })?.source).toBe('env');
-    // Development: Electron's own resources folder holds no mu.
+    // Development: Electron's own resources folder holds no spec.jev.
     expect(findHarness('/work/KYRN-desktop', { ...app, resourcesPath: '/dev/electron/Resources' })?.source).toBe(
       'beside'
     );
-    expect(bundledHarnessRoot('C:\\Program Files\\mu\\resources', 'win32')).toBe(
-      'C:\\Program Files\\mu\\resources\\harness\\mu-agent'
+    expect(bundledHarnessRoot('C:\\Program Files\\spec.jev\\resources', 'win32')).toBe(
+      'C:\\Program Files\\spec.jev\\resources\\harness\\spec.jev'
     );
   });
 
-  it('names where mu should be when none is found: the packaged app’s own copy, else the checkout beside', () => {
+  it('names where spec.jev should be when none is found: the packaged app’s own copy, else the checkout beside', () => {
     expect(expectedHarness(undefined, '/Applications/mu.app/Contents/Resources', 'darwin')).toEqual({
       root: '/Applications/mu.app/Contents/Resources/harness/mu-agent',
       layout: 'package',
@@ -95,7 +95,7 @@ describe('where the desktop finds the mu harness', () => {
     expect(findHarness(undefined, monorepo)).toBeUndefined();
   });
 
-  it('then mu-agent installed with npm, found from `mu` on PATH or in the usual global folders', () => {
+  it('then spec.jev installed with npm, found from `spec.jev` on PATH or in the usual global folders', () => {
     const pkg = '/usr/local/lib/node_modules/mu-agent';
     const packaged = [`${pkg}/kyrn/bin/mu.mjs`, `${pkg}/dist/bundle/cli.js`];
     // npm links bin/mu to the package's launcher.
@@ -123,14 +123,14 @@ describe('where the desktop finds the mu harness', () => {
     const beside = machine('win32', [`${nodeDir}\\mu.cmd`, `${nodeDir}\\node_modules\\mu-agent\\kyrn\\bin\\mu.mjs`], {
       env: { PATH: `C:\\Windows;${nodeDir}` },
     });
-    expect(findHarness('C:\\Program Files\\mu', beside)?.root).toBe(`${nodeDir}\\node_modules\\mu-agent`);
+    expect(findHarness('C:\\Program Files\\spec.jev', beside)?.root).toBe(`${nodeDir}\\node_modules\\mu-agent`);
     const appData = 'C:\\Users\\someone\\AppData\\Roaming';
     const pkg = `${appData}\\npm\\node_modules\\mu-agent`;
     const roaming = machine('win32', [`${pkg}\\kyrn\\bin\\mu.mjs`, `${pkg}\\dist\\bundle\\cli.js`], {
       env: { APPDATA: appData },
     });
-    expect(findHarness('C:\\Program Files\\mu', roaming)).toEqual({ root: pkg, layout: 'package', source: 'global' });
-    expect(findHarness('C:\\Program Files\\mu', machine('win32', []))).toBeUndefined();
+    expect(findHarness('C:\\Program Files\\spec.jev', roaming)).toEqual({ root: pkg, layout: 'package', source: 'global' });
+    expect(findHarness('C:\\Program Files\\spec.jev', machine('win32', []))).toBeUndefined();
   });
 
   it('tells a checkout from the npm package as the harness does', () => {
@@ -183,7 +183,7 @@ describe('how the harness is started and where it keeps things', () => {
     expect(calls).toEqual(['group 42 SIGTERM', 'taskkill /pid 42 /T /F', 'own SIGKILL']);
   });
 
-  it('reads keys from mu’s home and the manifest from the built layer when mu comes from npm', () => {
+  it('reads keys from spec.jev’s home and the manifest from the built layer when spec.jev comes from npm', () => {
     const repo = { root: '/work/KYRN', layout: 'repo' as const };
     const pkg = { root: '/g/mu-agent', layout: 'package' as const };
     expect(envFileOf(repo, '/home/someone/.mu', 'linux')).toBe('/work/KYRN/.env');
@@ -218,7 +218,7 @@ describe('files of an npm-installed harness', () => {
     expect(loadManifest(dir)).toEqual({ status: 'missing' });
   });
 
-  it('finds the Core ML judge’s venv and weights in mu’s home', async () => {
+  it('finds the Core ML judge’s venv and weights in spec.jev’s home', async () => {
     // Spelled by this machine's join, as the judge builds its paths whatever platform it is told it runs on.
     const state = join('/home/someone', '.mu', 'local-judge');
     const files = new Set([

@@ -42,13 +42,13 @@ describe('the emoji check', () => {
 });
 
 describe('no emoji in what the app shows', () => {
-  it('has none in any locale value, in each of the 13 languages', () => {
+  it('has none in any locale value, in each of the 5 languages', () => {
     const languages = readdirSync(localeRoot, { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
       .toSorted();
     expect(languages).toEqual([...SUPPORTED_LANGUAGES].toSorted());
-    expect(languages).toHaveLength(13);
+    expect(languages).toHaveLength(5);
 
     const offenders: string[] = [];
     let checked = 0;

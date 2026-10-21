@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import AppearanceModalContent from '@/renderer/components/settings/SettingsModal/contents/AppearanceModalContent';
 import { SettingsPage } from '../components/SettingsPageHeader';
 
-/** How mu looks: the language, the theme, the type and the scale. */
+/** How spec.jev looks: the language, the theme, the type and the scale. */
 const AppearanceSettings: React.FC = () => {
   const { t } = useTranslation();
   return (

@@ -1,5 +1,5 @@
 /**
- * The mu harness layer as a pi extension.
+ * The spec.jev harness layer as a pi extension.
  *
  *   pi -e packages/kyrn-judge/src/extension/kyrn-judge.ts
  *
@@ -86,7 +86,7 @@ export interface KyrnJudgeExtensionOptions {
 	/** Extra catalog entries, for embedding and tests. Whoever passes them registers their tools. */
 	capabilities?: readonly Capability[];
 	/**
-	 * The home folder whose Claude Code, Cursor and Codex setup is inherited, and the agent directory mu keeps its
+	 * The home folder whose Claude Code, Cursor and Codex setup is inherited, and the agent directory spec.jev keeps its
 	 * state in. Default: the real ones, unless `config` or `provider` was injected, in which case no home is read.
 	 */
 	roots?: HarnessRoots;
@@ -141,11 +141,11 @@ export default function kyrnJudgeExtension(pi: ExtensionAPI): void {
 }
 
 function registerKyrn(pi: ExtensionAPI, options: KyrnJudgeExtensionOptions): void {
-	// The desktop app runs mu on its own Electron as Node, which only ELECTRON_RUN_AS_NODE makes it do, and every child
-	// inherits that variable: an Electron app the agent starts would run as a script. Only mu's own sub-agents, which
+	// The desktop app runs spec.jev on its own Electron as Node, which only ELECTRON_RUN_AS_NODE makes it do, and every child
+	// inherits that variable: an Electron app the agent starts would run as a script. Only spec.jev's own sub-agents, which
 	// run on this same binary, get it back (swarm.ts).
 	delete process.env.ELECTRON_RUN_AS_NODE;
-	// Whatever else is on or off: in RPC mode, a promise nothing handled is logged instead of ending mu.
+	// Whatever else is on or off: in RPC mode, a promise nothing handled is logged instead of ending spec.jev.
 	registerRejectionLog(pi);
 	// An injected provider or config means the caller owns the setup: do not read the user's files.
 	const loaded =

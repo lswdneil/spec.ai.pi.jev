@@ -1,5 +1,5 @@
 /**
- * What mu takes over from the tools a user already set up: Claude Code,
+ * What spec.jev takes over from the tools a user already set up: Claude Code,
  * Cursor and Codex. Everything here is read-only towards those tools: their
  * folders are never written to.
  */
@@ -89,7 +89,7 @@ export interface McpServerDefinition {
 	readonly source: string;
 	readonly tool: InheritTool;
 	readonly scope: InheritScope;
-	/** `always` pins the server open; the default is `judged`. Only mu's own section can set it. */
+	/** `always` pins the server open; the default is `judged`. Only spec.jev's own section can set it. */
 	readonly exposure: "always" | "judged";
 	/** Overrides the description built from the server's tools. */
 	readonly description?: string;

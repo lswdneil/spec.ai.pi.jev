@@ -176,11 +176,11 @@ describe("the conversation E2E's look at the processes", () => {
     const one = JSON.stringify({ pid: 4, ppid: 0, start: 0, command: '' });
     expect(parseProcesses('win32', one)).toEqual([{ pid: 4, ppid: 0, start: 0, command: '' }]);
     const many = JSON.stringify([
-      { pid: 10, ppid: 4, start: 1_700_000_000_000, command: '"C:\\mu\\mu.exe" --lang=zh-CN' },
+      { pid: 10, ppid: 4, start: 1_700_000_000_000, command: '"C:\\spec.jev\\mu.exe" --lang=zh-CN' },
       { pid: 11, ppid: 10, start: 1_700_000_000_500, command: null },
     ]);
     expect(parseProcesses('win32', `${many}\r\n`)).toEqual([
-      { pid: 10, ppid: 4, start: 1_700_000_000_000, command: '"C:\\mu\\mu.exe" --lang=zh-CN' },
+      { pid: 10, ppid: 4, start: 1_700_000_000_000, command: '"C:\\spec.jev\\mu.exe" --lang=zh-CN' },
       { pid: 11, ppid: 10, start: 1_700_000_000_500, command: '' },
     ]);
     expect(parseProcesses('win32', '')).toEqual([]);

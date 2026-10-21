@@ -336,8 +336,8 @@ describe('AgentModeSelector', () => {
     expect(screen.getByTestId('agent-mode-selector-codex')).toHaveTextContent('权限 · agent-full-access');
   });
 
-  // QA on macOS, 2026-09-25: mu writes its modes' descriptions in Chinese or English only, fixed when it starts.
-  it("describes mu's modes in the app's language, and keeps the backend's words where the app has none", () => {
+  // QA on macOS, 2026-09-25: spec.jev writes its modes' descriptions in Chinese or English only, fixed when it starts.
+  it("describes spec.jev's modes in the app's language, and keeps the backend's words where the app has none", () => {
     useAcpConfigOptionsMock.mockImplementation(() => ({
       setStatus: { state: 'idle' },
       isLoading: false,

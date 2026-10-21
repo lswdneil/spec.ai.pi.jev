@@ -70,7 +70,7 @@ const toModels = (value: unknown): LoginModel[] =>
     .map((model) => ({ id: str(model.id), name: str(model.name) || str(model.id) }));
 
 /**
- * One sign-in at a time. The flow runs in a child process, `mu auth` (pi's code, pi's credential store); this keeps the
+ * One sign-in at a time. The flow runs in a child process, `spec.jev auth` (pi's code, pi's credential store); this keeps the
  * state a screen polls, opens the provider's page in the browser, and passes the person's answer to a prompt back in.
  */
 export class LoginManager {
@@ -80,7 +80,7 @@ export class LoginManager {
   private readonly runs = new Set<RunnerProcess>();
   /**
    * The look at who is signed in that runs now. Every screen that opens asks; the ones that ask while it runs get its
-   * answer. Two runners at once fought over mu's model store: the first could exit holding its lock, and the second,
+   * answer. Two runners at once fought over spec.jev's model store: the first could exit holding its lock, and the second,
    * and the conversation started next, waited half a minute for it.
    */
   private looking: Promise<LoginStatus> | undefined;
@@ -308,9 +308,9 @@ export class LoginManager {
 }
 
 /**
- * The runner as a child process: `mu auth status | login <provider> | logout <provider>`, the harness's own sign-in,
- * started through its launcher as a session is (harness.ts, launcherOf), so it is the same for a checkout, mu-agent
- * from npm and the copy inside the packaged app. It signs in to mu's agent dir, the one the settings read. Without a
+ * The runner as a child process: `spec.jev auth status | login <provider> | logout <provider>`, the harness's own sign-in,
+ * started through its launcher as a session is (harness.ts, launcherOf), so it is the same for a checkout, spec.jev
+ * from npm and the copy inside the packaged app. It signs in to spec.jev's agent dir, the one the settings read. Without a
  * shell, so nothing in a path is ever parsed as a command, on Windows as elsewhere.
  */
 export function spawnAuth(launcher: string, agentDir: string): SpawnRunner {

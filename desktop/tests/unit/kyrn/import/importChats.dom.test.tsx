@@ -14,7 +14,7 @@ import ImportedHistoryModal from '@/renderer/pages/conversation/platforms/acp/Im
 type Answer<T> = { ok: true; data: T } | { ok: false; error: string };
 
 const { list, run, history, navigate, said, native } = vi.hoisted(() => ({
-  /** Whether the app runs mu itself (the native host): imported sessions are then conversations of their own. */
+  /** Whether the app runs spec.jev itself (the native host): imported sessions are then conversations of their own. */
   native: { on: false, rereads: 0 },
   list: vi.fn<(request: { cwd?: string }) => Promise<Answer<ImportList>>>(),
   run: vi.fn<(request: { paths: string[]; locale: string }) => Promise<Answer<ImportOutcome[]>>>(),
@@ -167,7 +167,7 @@ describe('the import dialog', () => {
     expect(said).toEqual([['success', "Imported 1 conversation. It's in your conversation list."]]);
   });
 
-  it('with the app running mu itself, opens the session an import became, and reads the native list again', async () => {
+  it('with the app running spec.jev itself, opens the session an import became, and reads the native list again', async () => {
     native.on = true;
     native.rereads = 0;
     try {
@@ -235,10 +235,10 @@ describe('the import dialog', () => {
   });
 
   it('says what went wrong when the conversations cannot be listed, and tries again', async () => {
-    list.mockResolvedValueOnce({ ok: false, error: 'mu import did not start' });
+    list.mockResolvedValueOnce({ ok: false, error: 'spec.jev import did not start' });
     render(<Dialog />);
     await settle();
-    expect(screen.getByRole('alert').textContent).toContain('mu import did not start');
+    expect(screen.getByRole('alert').textContent).toContain('spec.jev import did not start');
     expect(screen.queryByPlaceholderText('Search by text or folder')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
     await settle();

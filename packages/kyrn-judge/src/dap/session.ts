@@ -267,7 +267,7 @@ export class DebugSession {
 		return frame;
 	}
 
-	/** The variables of a frame's first cheap scope (its locals, in every adapter mu knows). */
+	/** The variables of a frame's first cheap scope (its locals, in every adapter spec.jev knows). */
 	async locals(index: number): Promise<{ scope?: string; variables: Variable[] }> {
 		const frame = this.frame(index);
 		const answer = await this.client

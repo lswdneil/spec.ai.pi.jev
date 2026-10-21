@@ -2,7 +2,7 @@
  * What only a live host says, folded into a view's `host` part (view.ts `ViewHost`) and never into what a session file
  * gives: the judgment layer's presentation frames and the run's edges for the Jev panel (`activity`), what extensions
  * notify (`notices`), pi's queue of steering and follow-up messages, and the session as pi describes it when asked.
- * Also the permission question mu announces before it opens the dialog that asks it.
+ * Also the permission question spec.jev announces before it opens the dialog that asks it.
  *
  * Pure, like the reducer that calls it: no I/O, no clock (a time is the latest one the view has seen), and the view
  * passed in is never changed.
@@ -135,7 +135,7 @@ function addNotice(view: NativeView, notice: Omit<ViewNotice, 'id' | 'after'>): 
 
 /**
  * What an extension notified: an answer (`info`) each time it comes, a warning or an error once, as the CLI bridge
- * says them (`KyrnAgent.harnessNotice`). A line a coded notice already carries (mu's `judge.notice` comes first) is not
+ * says them (`KyrnAgent.harnessNotice`). A line a coded notice already carries (spec.jev's `judge.notice` comes first) is not
  * said again.
  */
 export function takeNotify(view: NativeView, record: PiRecord): NativeView {
@@ -148,7 +148,7 @@ export function takeNotify(view: NativeView, record: PiRecord): NativeView {
 }
 
 /**
- * mu's `checkpoint.off`: the session goes without checkpoints, said once, by its code, so the app words it. mu sends its
+ * spec.jev's `checkpoint.off`: the session goes without checkpoints, said once, by its code, so the app words it. spec.jev sends its
  * own line as a warning just before; that line becomes the coded notice where it stands.
  */
 export function takeCheckpointOff(view: NativeView, payload: JsonObject): NativeView {
@@ -168,10 +168,10 @@ export function takeCheckpointOff(view: NativeView, payload: JsonObject): Native
 }
 
 /**
- * mu's `judge.notice`: the judge answers with the free Jev on OpenCode Zen (`free_jev`), or the free Jev stopped
- * (`free_jev_unavailable`, with `paid` or `gone`), said once each, by code, so the app words it. mu sends its own line
+ * spec.jev's `judge.notice`: the judge answers with the free Jev on OpenCode Zen (`free_jev`), or the free Jev stopped
+ * (`free_jev_unavailable`, with `paid` or `gone`), said once each, by code, so the app words it. spec.jev sends its own line
  * with `notify` right after (`takeNotify` drops it); a line already said becomes the coded notice where it stands. A
- * code this build does not know leaves mu's line to say it.
+ * code this build does not know leaves spec.jev's line to say it.
  */
 export function takeJudgeNotice(view: NativeView, payload: JsonObject): NativeView {
   const named = asText(payload.code);
@@ -271,7 +271,7 @@ const callId = (value: unknown): string | undefined =>
   typeof value === 'string' && value && value.length <= 256 && !/[\r\n]/.test(value) ? value : undefined;
 
 /**
- * mu's `permissions.request`, as the CLI bridge reads it (process/agent/kyrn/permissions.ts `readRequest`): none
+ * spec.jev's `permissions.request`, as the CLI bridge reads it (process/agent/kyrn/permissions.ts `readRequest`): none
  * without at least two answers. Ids count only as a full, distinct set in the answers' order.
  */
 export function readPermission(payload: JsonObject): ViewPermission | undefined {

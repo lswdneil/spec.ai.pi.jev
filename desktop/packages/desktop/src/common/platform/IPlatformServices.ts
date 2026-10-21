@@ -13,7 +13,7 @@ export interface IPlatformPaths {
   getHomeDir(): string;
   /**
    * Application log directory.
-   * In non-Electron mode respects LOGS_DIR env var, falls back to ~/.mu-server/logs.
+   * In non-Electron mode respects LOGS_DIR env var, falls back to ~/.spec.jev-server/logs.
    */
   getLogsDir(): string;
   /**

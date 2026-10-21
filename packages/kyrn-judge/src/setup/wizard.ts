@@ -31,7 +31,7 @@ import {
 } from "./services.ts";
 
 /**
- * `mu setup`, the first thing a newcomer runs: which service a key belongs to, one request that shows the key works,
+ * `spec.jev setup`, the first thing a newcomer runs: which service a key belongs to, one request that shows the key works,
  * the model to start with, the judge, and then the files, each copied before it changes. pi's own files go through pi
  * (PiAccess: auth.json, settings.json); models.json, mu.json and the .env are written here. main.ts connects this to the
  * terminal and to pi; everything comes in as a parameter, so that the tests can run it whole.
@@ -221,40 +221,40 @@ export function parseSetupArgs(argv: readonly string[]): SetupArgs | { readonly 
 export function setupUsage(language: SetupLanguage): string {
 	if (language === "zh") {
 		return [
-			"mu setup：给 mu 接上一个干活的模型，再选一个判定器。",
+			"spec.jev setup：给 spec.jev 接上一个干活的模型，再选一个判定器。",
 			"",
-			"  mu setup                 在终端里一步一步问",
-			"  mu setup <密钥>          从一个 API 密钥开始：mu 按密钥的样子认出它属于哪个服务",
-			"  mu setup --service <id> --key-stdin [--model <id>] [--base-url <地址>] [--judge <判定器>] [--yes]",
+			"  spec.jev setup                 在终端里一步一步问",
+			"  spec.jev setup <密钥>          从一个 API 密钥开始：spec.jev 按密钥的样子认出它属于哪个服务",
+			"  spec.jev setup --service <id> --key-stdin [--model <id>] [--base-url <地址>] [--judge <判定器>] [--yes]",
 			"                           给脚本用：密钥从标准输入读取",
-			"  mu setup --list          mu 认识的服务和它们的 id",
+			"  spec.jev setup --list          spec.jev 认识的服务和它们的 id",
 			"",
 			"为什么脚本要从标准输入给密钥：写在命令行上的密钥会留在 shell 的历史记录里，",
-			"这台电脑上能列出进程的程序也都看得到它。mu setup <密钥> 只是为了上手快；能在提示里粘贴就粘贴。",
+			"这台电脑上能列出进程的程序也都看得到它。spec.jev setup <密钥> 只是为了上手快；能在提示里粘贴就粘贴。",
 			"",
 			"  --judge jev     Jev 密钥（TypeSafe）写在标准输入的第二行；已经设置了 TYPESAFE_API_KEY 就不用",
 			"  --judge opencode  OpenCode Zen 上的 Jev，用 OpenCode 的密钥（--service opencode 或 OPENCODE_API_KEY）",
 			"  --judge free    OpenCode Zen 上限时免费的 Jev，不用密钥（没有密钥时本来就用它）",
 			"  --judge model   用刚设置的模型当判定器（更慢，每次判断都花 token）",
 			"  --judge none    不改判定器；不写 --judge 时也不改",
-			"  --api, --name   服务 other 的接口（openai 或 anthropic）和它在 mu 里的名字",
+			"  --api, --name   服务 other 的接口（openai 或 anthropic）和它在 spec.jev 里的名字",
 			"  --yes           不提问；替换已有的设置（订阅登录、同名服务的地址、Jev 密钥）",
 			"",
-			"会改动的文件：~/.mu/agent 里的 auth.json（密钥）、models.json、settings.json、mu.json，",
-			"以及 mu 读取的 .env（Jev 密钥）。每个文件改动前都会先复制到 ~/.mu/backups/<时间>/。",
+			"会改动的文件：~/.spec.jev/agent 里的 auth.json（密钥）、models.json、settings.json、mu.json，",
+			"以及 spec.jev 读取的 .env（Jev 密钥）。每个文件改动前都会先复制到 ~/.spec.jev/backups/<时间>/。",
 		].join("\n");
 	}
 	return [
-		"mu setup: connect a model for mu to work with, and choose a judge.",
+		"spec.jev setup: connect a model for spec.jev to work with, and choose a judge.",
 		"",
-		"  mu setup                 walks you through it, one question at a time",
-		"  mu setup <key>           starts from an API key and detects its service from the key's format",
-		"  mu setup --service <id> --key-stdin [--model <id>] [--base-url <url>] [--judge <judge>] [--yes]",
+		"  spec.jev setup                 walks you through it, one question at a time",
+		"  spec.jev setup <key>           starts from an API key and detects its service from the key's format",
+		"  spec.jev setup --service <id> --key-stdin [--model <id>] [--base-url <url>] [--judge <judge>] [--yes]",
 		"                           for scripts: reads the key from stdin",
-		"  mu setup --list          lists the services mu knows and their ids",
+		"  spec.jev setup --list          lists the services spec.jev knows and their ids",
 		"",
 		"Why stdin for scripts: a key on the command line stays in your shell history, and any program on this",
-		"computer that lists processes can read it. `mu setup <key>` is a shortcut for getting started; paste the key",
+		"computer that lists processes can read it. `spec.jev setup <key>` is a shortcut for getting started; paste the key",
 		"at the prompt when you can.",
 		"",
 		"  --judge jev     read the Jev key (TypeSafe) from stdin's second line, unless TYPESAFE_API_KEY is already set",
@@ -262,12 +262,12 @@ export function setupUsage(language: SetupLanguage): string {
 		"  --judge free    use the free Jev on OpenCode Zen (limited time, no key; the default while no key is set)",
 		"  --judge model   use the model you just set up as the judge (slower, and every verdict costs tokens)",
 		"  --judge none    leave the judge unchanged (the same as omitting --judge)",
-		"  --api, --name   for the service `other`: its API (openai or anthropic) and its name in mu",
+		"  --api, --name   for the service `other`: its API (openai or anthropic) and its name in spec.jev",
 		"  --yes           don't ask; replace what's already set up (a subscription sign-in, a provider's address,",
 		"                  the Jev key)",
 		"",
-		"Files it changes: auth.json (keys), models.json, settings.json and mu.json in ~/.mu/agent, and the .env",
-		"mu reads (the Jev key). Each one is backed up to ~/.mu/backups/<time>/ before it changes.",
+		"Files it changes: auth.json (keys), models.json, settings.json and mu.json in ~/.spec.jev/agent, and the .env",
+		"spec.jev reads (the Jev key). Each one is backed up to ~/.spec.jev/backups/<time>/ before it changes.",
 	].join("\n");
 }
 
@@ -377,7 +377,7 @@ class Setup {
 	private jevFromStdin: string | undefined;
 	/** The key given for the model: a Jev key is never the same one. */
 	private modelKey: string | undefined;
-	/** The provider id a service of one's own (`other`) gets in mu. */
+	/** The provider id a service of one's own (`other`) gets in spec.jev. */
 	private customName: string | undefined;
 
 	constructor(args: SetupArgs, deps: SetupDeps) {
@@ -477,8 +477,8 @@ class Setup {
 			if (deps.stdinTerminal) {
 				throw this.fail(
 					{
-						zh: "--key-stdin 从管道读密钥。在终端里请直接运行 mu setup，在提示里粘贴密钥（不会显示）。",
-						en: "--key-stdin reads the key from a pipe. In a terminal, run mu setup and paste the key at the prompt (it won't be shown).",
+						zh: "--key-stdin 从管道读密钥。在终端里请直接运行 spec.jev setup，在提示里粘贴密钥（不会显示）。",
+						en: "--key-stdin reads the key from a pipe. In a terminal, run spec.jev setup and paste the key at the prompt (it won't be shown).",
 					},
 					SETUP_EXIT.usage,
 				);
@@ -495,8 +495,8 @@ class Setup {
 				deps.interactive
 					? { zh: "没有密钥，也没有 --service", en: "no key or --service given" }
 					: {
-							zh: "问题要在终端里回答。脚本里用：mu setup --service <id> --key-stdin（见 mu setup --help）",
-							en: "no terminal to ask in. In a script, use mu setup --service <id> --key-stdin (see mu setup --help)",
+							zh: "问题要在终端里回答。脚本里用：spec.jev setup --service <id> --key-stdin（见 spec.jev setup --help）",
+							en: "no terminal to ask in. In a script, use spec.jev setup --service <id> --key-stdin (see spec.jev setup --help)",
 						},
 				SETUP_EXIT.usage,
 			);
@@ -504,8 +504,8 @@ class Setup {
 		if (!args.firstRun) {
 			this.io.say(
 				this.t({
-					zh: "mu setup：给 mu 接上一个干活的模型，再选一个判定器。",
-					en: "mu setup: connect a model for mu to work with, and choose a judge.",
+					zh: "spec.jev setup：给 spec.jev 接上一个干活的模型，再选一个判定器。",
+					en: "spec.jev setup: connect a model for spec.jev to work with, and choose a judge.",
 				}),
 			);
 		}
@@ -527,8 +527,8 @@ class Setup {
 	private async firstStart(): Promise<boolean> {
 		const yes = await this.confirm(
 			this.t({
-				zh: "mu 还没有可用的模型。现在设置一个吗？[Y/n] ",
-				en: "mu has no model to work with yet. Set one up now? [Y/n] ",
+				zh: "spec.jev 还没有可用的模型。现在设置一个吗？[Y/n] ",
+				en: "spec.jev has no model to work with yet. Set one up now? [Y/n] ",
 			}),
 			true,
 		);
@@ -537,15 +537,15 @@ class Setup {
 			mkdirSync(this.deps.paths.agentDir, { recursive: true });
 			writeFileSync(
 				join(this.deps.paths.agentDir, SETUP_DECLINED_FILE),
-				"mu asked on its first start whether to set up a model, and the answer was no.\nDelete this file to be asked again; run mu setup any time.\n",
+				"spec.jev asked on its first start whether to set up a model, and the answer was no.\nDelete this file to be asked again; run spec.jev setup any time.\n",
 			);
 		} catch {
 			// Then the question comes again next time, which does no harm.
 		}
 		this.io.say(
 			this.t({
-				zh: "好的，以后不再问了。需要时运行 mu setup，或在 mu 里输入 /login。",
-				en: "OK, mu won't ask again. Run mu setup whenever you're ready, or type /login inside mu.",
+				zh: "好的，以后不再问了。需要时运行 spec.jev setup，或在 spec.jev 里输入 /login。",
+				en: "OK, spec.jev won't ask again. Run spec.jev setup whenever you're ready, or type /login inside spec.jev.",
 			}),
 		);
 		return false;
@@ -560,12 +560,12 @@ class Setup {
 		if (named) return this.keyFor(named, key);
 		if (key !== undefined) return { service: await this.serviceOf(key), key };
 		const route = await this.choose(
-			this.t({ zh: "mu 用什么方式连接模型？", en: "How should mu connect to a model?" }),
+			this.t({ zh: "spec.jev 用什么方式连接模型？", en: "How should spec.jev connect to a model?" }),
 			[
 				{
 					label: this.t({
-						zh: "粘贴 API 密钥（mu 会认出它属于哪个服务）",
-						en: "Paste an API key (mu detects which service it belongs to)",
+						zh: "粘贴 API 密钥（spec.jev 会认出它属于哪个服务）",
+						en: "Paste an API key (spec.jev detects which service it belongs to)",
 					}),
 					value: "key",
 				},
@@ -580,7 +580,7 @@ class Setup {
 			] as const,
 		);
 		if (route === "subscription") {
-			// pi's /login already does every sign-in: the browser, device codes, a pasted redirect. mu leaves it to pi.
+			// pi's /login already does every sign-in: the browser, device codes, a pasted redirect. spec.jev leaves it to pi.
 			const auth = this.path(join(this.deps.paths.agentDir, "auth.json"));
 			this.io.say(
 				this.t({
@@ -625,8 +625,8 @@ class Setup {
 							en: `${this.names(matches)} keys look the same. Choose one with --service ${matches.map((service) => service.id).join(" or ")}`,
 						}
 					: {
-							zh: "认不出这个密钥属于哪个服务。用 --service <id> 说明（mu setup --list 列出全部）",
-							en: "mu doesn't recognize this key's format. Say which service it's for with --service <id> (mu setup --list)",
+							zh: "认不出这个密钥属于哪个服务。用 --service <id> 说明（spec.jev setup --list 列出全部）",
+							en: "spec.jev doesn't recognize this key's format. Say which service it's for with --service <id> (spec.jev setup --list)",
 						},
 				SETUP_EXIT.usage,
 			);
@@ -643,8 +643,8 @@ class Setup {
 		return this.pickService(
 			SETUP_SERVICES.filter((service) => !service.keyless),
 			this.t({
-				zh: "mu 认不出这个密钥。它是哪个服务的？",
-				en: "mu doesn't recognize this key. Which service is it for?",
+				zh: "spec.jev 认不出这个密钥。它是哪个服务的？",
+				en: "spec.jev doesn't recognize this key. Which service is it for?",
 			}),
 		);
 	}
@@ -803,7 +803,7 @@ class Setup {
 					true,
 				)) || undefined;
 		}
-		// A provider of mu's lives in models.json, which is never rewritten when it cannot be read: said before anything is sent.
+		// A provider of spec.jev's lives in models.json, which is never rewritten when it cannot be read: said before anything is sent.
 		if (!reaches[0].builtIn || this.args.baseUrl) this.modelsFileWritable();
 		await this.oauthConflict(service, reaches);
 		for (;;) {
@@ -973,7 +973,7 @@ class Setup {
 			return options[0];
 		}
 		const shown = options.slice(0, 20);
-		this.io.say(this.t({ zh: "mu 先用哪个模型？", en: "Which model should mu start with?" }));
+		this.io.say(this.t({ zh: "spec.jev 先用哪个模型？", en: "Which model should spec.jev start with?" }));
 		for (const [index, id] of shown.entries()) this.io.say(`  ${index + 1}) ${id}`);
 		if (options.length > shown.length) {
 			const more = options.length - shown.length;
@@ -1116,15 +1116,15 @@ class Setup {
 		}
 		choices.push({
 			label: this.t({
-				zh: "暂时不要：mu 就像 pi 一样工作，没有判定器回答",
-				en: "Not now: mu works like plain pi, with no judge",
+				zh: "暂时不要：spec.jev 就像 pi 一样工作，没有判定器回答",
+				en: "Not now: spec.jev works like plain pi, with no judge",
 			}),
 			value: "none",
 		});
 		const picked = await this.choose(
 			this.t({
-				zh: "mu 工作时要做很多小判断：这条消息该怎么处理、这一步会不会违反你定的规则……判定器负责回答。选哪个判定器？",
-				en: "As it works, mu faces many small decisions: how to handle a message, whether a step breaks your rules. A judge answers them. Which judge do you want?",
+				zh: "spec.jev 工作时要做很多小判断：这条消息该怎么处理、这一步会不会违反你定的规则……判定器负责回答。选哪个判定器？",
+				en: "As it works, spec.jev faces many small decisions: how to handle a message, whether a step breaks your rules. A judge answers them. Which judge do you want?",
 			}),
 			choices,
 		);
@@ -1442,17 +1442,17 @@ class Setup {
 		this.io.say(
 			target
 				? this.t({
-						zh: "在 mu 里用 /model 换模型；随时可以再运行 mu setup。",
-						en: "Switch models inside mu with /model, and run mu setup again any time.",
+						zh: "在 spec.jev 里用 /model 换模型；随时可以再运行 spec.jev setup。",
+						en: "Switch models inside spec.jev with /model, and run spec.jev setup again any time.",
 					})
-				: this.t({ zh: "启动 mu 后输入 /login 登录。", en: "Start mu and type /login to sign in." }),
+				: this.t({ zh: "启动 spec.jev 后输入 /login 登录。", en: "Start spec.jev and type /login to sign in." }),
 		);
 	}
 
 	/** On its own, a finished setup offers a session; on a first start the launcher goes on into one anyway. */
 	private async offerSession(): Promise<number> {
 		if (this.args.firstRun || this.scripted) return SETUP_EXIT.done;
-		const start = await this.confirm(this.t({ zh: "现在启动 mu 吗？[Y/n] ", en: "Start mu now? [Y/n] " }), true);
+		const start = await this.confirm(this.t({ zh: "现在启动 spec.jev 吗？[Y/n] ", en: "Start spec.jev now? [Y/n] " }), true);
 		return start ? SETUP_EXIT.start : SETUP_EXIT.done;
 	}
 }

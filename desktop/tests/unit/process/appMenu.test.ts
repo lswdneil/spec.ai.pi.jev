@@ -96,7 +96,7 @@ describe('the macOS application menu', () => {
     ]);
   });
 
-  it("opens mu's settings with ⌘,", () => {
+  it("opens spec.jev's settings with ⌘,", () => {
     const actions = fakeActions();
     const settings = itemLabelled(mac(false, actions), 'common.menu.settings');
 
@@ -249,7 +249,7 @@ describe('the installed menu', () => {
     expect(bridge.menuCommand).toHaveBeenCalledWith({ command: 'openSettings' });
   });
 
-  it("opens mu's GitHub page", () => {
+  it("opens spec.jev's GitHub page", () => {
     setupApplicationMenu();
 
     click(itemLabelled(installed(), i18n.t('common.menu.projectPage', { name: 'mu' })));

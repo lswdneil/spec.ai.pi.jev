@@ -42,7 +42,7 @@ import type { ConversationEvents, ConversationHost, StartHost } from './types.ts
  *   (`snapshot` reads the file then). Two calls at once start one host.
  * - Every record of the host folds into the view (`reduce`) and goes out numbered (`seq`, which only grows, across
  *   hosts too). A host that is starting holds its records back: its view goes out whole (`replaced`) once it runs.
- * - pi may run another session, or move the leaf of its branch, without a command of the app's: mu's `/clear`, an
+ * - pi may run another session, or move the leaf of its branch, without a command of the app's: spec.jev's `/clear`, an
  *   import, a checkpoint rewind. After every run and every slash command the conversation asks pi where its session
  *   is; when it is not where the view says, the view is rebuilt from the session (`replaced`), and a new session's id
  *   becomes the conversation's (the owner announces it).
@@ -86,12 +86,12 @@ const QUIET_ANSWERS: ReadonlySet<string> = new Set<PiCommandType>([
  */
 export const ATTENTION_DELAY_MS = 1200;
 
-/** proper-lockfile's words for a store another mu process holds: pi did not start the prompt (KyrnAgent.ts). */
+/** proper-lockfile's words for a store another spec.jev process holds: pi did not start the prompt (KyrnAgent.ts). */
 const STORE_LOCKED = /Lock file is already being held|ELOCKED/;
 /** A prompt refused because the model store was locked goes again after these waits (KyrnAgent.ts). */
 export const LOCKED_RETRY_MS = [1500, 3000] as const;
 
-/** Permission modes are words (`full`, `jev`, `ask`), as mu names them (process/agent/kyrn/permissions.ts). */
+/** Permission modes are words (`full`, `jev`, `ask`), as spec.jev names them (process/agent/kyrn/permissions.ts). */
 const MODE_ID = /^[a-z][a-z0-9-]{0,31}$/;
 
 /** The roles whose `message_end` pi saves as a `message` entry (AgentSession's `_savesMessage`, custom ones aside). */
@@ -131,7 +131,7 @@ function modeOf(payload: JsonObject): string | undefined {
 
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => unref(setTimeout(resolve, ms)));
 
-const closed = (): NativeHostError => new NativeHostError('closed', 'The mu host was closed');
+const closed = (): NativeHostError => new NativeHostError('closed', 'The spec.jev host was closed');
 
 const unref = (timer: ReturnType<typeof setTimeout>): ReturnType<typeof setTimeout> => {
   (timer as { unref?: () => void }).unref?.();
@@ -167,7 +167,7 @@ export type ConversationOwner = {
   view(file: string): Promise<SessionViewRead>;
   /** A session file read whole (readSessionFile). */
   read(file: string): Promise<SessionRead>;
-  /** What mu gets in its environment for this conversation, besides the app's (hostEnv.ts). */
+  /** What spec.jev gets in its environment for this conversation, besides the app's (hostEnv.ts). */
   env(conversation: Conversation): Record<string, string>;
   /** The model new sessions start on, for a host that started without one. */
   defaultModel(): ModelChoice | undefined;
@@ -195,7 +195,7 @@ export type ConversationInit = {
   createdAt: number;
   updatedAt: number;
   permissions?: string;
-  /** The app's name for the conversation in mu's environment (MU_DESKTOP_SESSION). Default: a new one. */
+  /** The app's name for the conversation in spec.jev's environment (MU_DESKTOP_SESSION). Default: a new one. */
   desktopSession?: string;
   /** The session's `message` entries, when known. */
   messageCount?: number;
@@ -206,7 +206,7 @@ export type ConversationInit = {
 export class Conversation {
   id: string;
   readonly cwd: string;
-  /** The app's name for the conversation, which never changes (MU_DESKTOP_SESSION): mu hands it back to the browser. */
+  /** The app's name for the conversation, which never changes (MU_DESKTOP_SESSION): spec.jev hands it back to the browser. */
   readonly desktopSession: string;
   /** Made here, and pi has not named its session yet. */
   draft: boolean;
@@ -215,7 +215,7 @@ export class Conversation {
   firstText: string | undefined;
   createdAt: number;
   updatedAt: number;
-  /** The permission mode mu last said the conversation is in, for its next host (MU_PERMISSIONS). */
+  /** The permission mode spec.jev last said the conversation is in, for its next host (MU_PERMISSIONS). */
   permissions: string | undefined;
   /** The session's `message` entries; undefined when the list could not count them (a large file read in part). */
   messageCount: number | undefined;
@@ -325,7 +325,7 @@ export class Conversation {
     const { view, settings } = await this.fileRead();
     // A host may have started while the file was read: its view is the one records follow.
     if (this.host && this.ready) return this.hostSnapshot();
-    // What the next host resumes with: the file's own, else the mode mu will start in here (MU_PERMISSIONS).
+    // What the next host resumes with: the file's own, else the mode spec.jev will start in here (MU_PERMISSIONS).
     const permissions = settings.permissions ?? this.permissions;
     const session = { ...settings, ...(permissions ? { permissions } : {}) };
     return {
@@ -357,7 +357,7 @@ export class Conversation {
 
   /** Answers a dialog pi waits on. */
   respond(dialogId: string, answer: DialogAnswer): void {
-    if (!this.host || !this.ready) throw new NativeHostError('closed', 'No mu runs for this conversation');
+    if (!this.host || !this.ready) throw new NativeHostError('closed', 'No spec.jev runs for this conversation');
     this.host.respondToDialog(dialogId, answer);
     this.owner.touched(this);
   }
@@ -691,7 +691,7 @@ export class Conversation {
 
   /**
    * A message goes to pi. With no model yet, the conversation looks for one briefly first. A prompt pi refused
-   * because another mu process held the model store goes again (pi had not started it, so nothing runs twice).
+   * because another spec.jev process held the model store goes again (pi had not started it, so nothing runs twice).
    */
   private async prompt(host: ConversationHost, command: Extract<PiCommand, { type: 'prompt' }>): Promise<unknown> {
     if (this.current.phase === 'needs-model') {
@@ -789,7 +789,7 @@ export class Conversation {
 
   /**
    * The view anew from pi's session: what its file has, and what pi has not written yet. The dialogs pi waits on, the
-   * live part of a run and what only the live host says (`host`: the Jev panel's activity, mu's notices, pi's queue)
+   * live part of a run and what only the live host says (`host`: the Jev panel's activity, spec.jev's notices, pi's queue)
    * stay as they were: a session file has none of them.
    */
   private async rebuild(host: ConversationHost, known?: PiSessionState): Promise<void> {

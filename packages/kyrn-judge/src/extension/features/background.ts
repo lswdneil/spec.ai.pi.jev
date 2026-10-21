@@ -66,7 +66,7 @@ export function registerBackground(runtime: KyrnRuntime): void {
 		bufferChars: 262_144,
 		maxOutputChars: 20_000,
 		killGraceMs: 3000,
-		/** Empty means `<mu home>/jobs/<session id>`. */
+		/** Empty means `<spec.jev home>/jobs/<session id>`. */
 		logDir: "",
 		/** Take `shellPath` and `shellCommandPrefix` from pi's settings, as the foreground bash tool does. */
 		inheritShell: true,

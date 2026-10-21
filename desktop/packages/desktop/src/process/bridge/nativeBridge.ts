@@ -143,7 +143,7 @@ export function readAnswer(value: unknown): DialogAnswer {
   throw invalid('Invalid dialog answer');
 }
 
-/** Permission modes are words (`full`, `jev`, `ask`), as mu names them. */
+/** Permission modes are words (`full`, `jev`, `ask`), as spec.jev names them. */
 const MODE_ID = /^[a-z][a-z0-9-]{0,31}$/;
 
 function readCreate(value: unknown): { cwd: string; permissions?: string } {
@@ -169,8 +169,8 @@ const params = (value: unknown): Record<string, unknown> => (isObject(value) ? v
 
 /**
  * Answers every provider of the bridge from `conversations`, or with `off` for all but `enabled` when there are none
- * (MU_NATIVE_HOST=0). `ready` is the rest of `enabled`: whether the mu on this machine can run inside the app (the
- * screens show the native host only when it can, and an older mu leaves every conversation on AionCore).
+ * (MU_NATIVE_HOST=0). `ready` is the rest of `enabled`: whether the spec.jev on this machine can run inside the app (the
+ * screens show the native host only when it can, and an older spec.jev leaves every conversation on AionCore).
  */
 export function registerNativeBridge(
   conversations: NativeConversationsApi | undefined,
@@ -231,7 +231,7 @@ let conversations: NativeConversations | undefined;
 
 /**
  * The native conversations in the app, unless MU_NATIVE_HOST=0: the bridge answers from them, and every host ends
- * before the app quits. Turned off, every provider but `enabled` answers `off`. Whether the mu on this machine can
+ * before the app quits. Turned off, every provider but `enabled` answers `off`. Whether the spec.jev on this machine can
  * run inside the app is looked at once, now, so the first window finds the answer waiting (`nativeHostReady`).
  */
 export function initNativeBridge(): void {
@@ -248,7 +248,7 @@ export function initNativeBridge(): void {
     env: (conversation) => hostEnv(conversation),
     // A removed conversation's session goes to the bin, where the person can still get it back.
     trash: (file) => shell.trashItem(file),
-    // Sessions AionCore's mu conversations run (the ACP adapter's records) are listed there, not here as well.
+    // Sessions AionCore's spec.jev conversations run (the ACP adapter's records) are listed there, not here as well.
     bound: () => bindings.files(),
   });
   conversations = native;
@@ -274,6 +274,6 @@ export function initNativeBridge(): void {
   });
 }
 
-/** The native conversation mu names by MU_DESKTOP_SESSION when it drives the app's browser (kyrnBrowserBridge.ts). */
+/** The native conversation spec.jev names by MU_DESKTOP_SESSION when it drives the app's browser (kyrnBrowserBridge.ts). */
 export const nativeConversationOf = (desktopSession: string): string | undefined =>
   conversations?.conversationOf(desktopSession);

@@ -81,7 +81,7 @@ describe('addImportantToAll', () => {
     expect(out).toContain('url(http://x/y.png) !important');
   });
 
-  it('gives a component class named by its old name its mu name, and leaves other classes alone', () => {
+  it('gives a component class named by its old name its spec.jev name, and leaves other classes alone', () => {
     const out = addImportantToAll(
       '.aionui-modal .arco-modal-content, .aionui-modal-standard { color: red } .aionui-markdown p { margin: 0 } .aion-select .arco-select-view { color: red } .aionui-other, .aion-other { color: blue }'
     );

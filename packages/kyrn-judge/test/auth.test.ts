@@ -17,7 +17,7 @@ import {
 import { antigravityProvider, geminiCliProvider } from "../src/google-login/providers.ts";
 
 /**
- * `mu auth`, the desktop app's subscription sign-in, against a stand-in for pi's model runtime: the JSON lines it
+ * `spec.jev auth`, the desktop app's subscription sign-in, against a stand-in for pi's model runtime: the JSON lines it
  * speaks are the contract with the app (process/agent/kyrn/login.ts there).
  */
 
@@ -88,8 +88,8 @@ function pipe() {
 const preferred = { "openai-codex": "gpt-5.5", anthropic: "claude-opus-4-8" };
 const googleish = (id: string) => ({ id }) as Provider;
 
-describe("mu auth", () => {
-	it("says who is signed in with a subscription, and what this mu can sign in to", async () => {
+describe("spec.jev auth", () => {
+	it("says who is signed in with a subscription, and what this spec.jev can sign in to", async () => {
 		const runtime = new FakeRuntime();
 		runtime.credentials = [
 			{ providerId: "openai-codex", type: "oauth" },
@@ -120,7 +120,7 @@ describe("mu auth", () => {
 		expect(runtime.refreshed).toEqual([]);
 	});
 
-	it("offers mu's own sign-ins when they are on, loaded without going to the network", async () => {
+	it("offers spec.jev's own sign-ins when they are on, loaded without going to the network", async () => {
 		const runtime = new FakeRuntime();
 		const { io, said } = pipe();
 		const extra = [googleish("google-gemini-cli"), googleish("google-antigravity")];
@@ -258,10 +258,10 @@ describe("mu auth", () => {
 
 	it("says what went wrong, as a line, with exit code 1", async () => {
 		const cases: [string[], string][] = [
-			[[], "usage: mu auth status | mu auth login <provider> | mu auth logout <provider>"],
-			[["login"], "usage: mu auth status | mu auth login <provider> | mu auth logout <provider>"],
-			[["login", "google-gemini-cli"], "This version of mu can't sign in to google-gemini-cli"],
-			[["logout", "openrouter"], "This version of mu can't sign in to openrouter"],
+			[[], "usage: spec.jev auth status | spec.jev auth login <provider> | spec.jev auth logout <provider>"],
+			[["login"], "usage: spec.jev auth status | spec.jev auth login <provider> | spec.jev auth logout <provider>"],
+			[["login", "google-gemini-cli"], "This version of spec.jev can't sign in to google-gemini-cli"],
+			[["logout", "openrouter"], "This version of spec.jev can't sign in to openrouter"],
 		];
 		for (const [argv, message] of cases) {
 			const app = pipe();
@@ -289,13 +289,13 @@ describe("mu auth", () => {
 
 	it("answers the same subcommands the launcher sends it, and finds its starting models in pi's own index", () => {
 		expect(LAUNCHER_COMMANDS).toEqual(AUTH_COMMANDS);
-		// The npm package runs `mu auth` on pi's bundle, whose index must carry both.
+		// The npm package runs `spec.jev auth` on pi's bundle, whose index must carry both.
 		expect(typeof pi.ModelRuntime.create).toBe("function");
 		expect(pi.defaultModelPerProvider["openai-codex"]).toEqual(expect.any(String));
 	});
 });
 
-describe("how mu auth ends", () => {
+describe("how spec.jev auth ends", () => {
 	const dirs: string[] = [];
 	afterEach(() => {
 		while (dirs.length > 0) rmSync(dirs.pop() as string, { recursive: true, force: true });
@@ -306,7 +306,7 @@ describe("how mu auth ends", () => {
 		return dir;
 	};
 
-	// QA on macOS, 2026-09-25: the desktop started two `mu auth` runs 0.7 s apart. The first exited with
+	// QA on macOS, 2026-09-25: the desktop started two `spec.jev auth` runs 0.7 s apart. The first exited with
 	// models-store.json.lock still there, the second waited on it until the app killed it, and a conversation
 	// started in the next 30 s found no model.
 	it("does not leave the model catalogue locked while pi's background refresh is still at work", async () => {
@@ -314,7 +314,7 @@ describe("how mu auth ends", () => {
 		const lock = join(dir, "models-store.json.lock");
 		const extra = [geminiCliProvider(), antigravityProvider()];
 		// pi's own store locks the file around each read. This one keeps the lock until the test lets go, for the
-		// catalogues only pi's background refresh reads: the one `mu auth` waits for reads mu's own providers alone.
+		// catalogues only pi's background refresh reads: the one `spec.jev auth` waits for reads spec.jev's own providers alone.
 		let letGo = () => {};
 		const released = new Promise<void>((resolve) => {
 			letGo = resolve;
@@ -343,7 +343,7 @@ describe("how mu auth ends", () => {
 		const app = pipe();
 		const code = await runAuth(["status"], { runtime, preferred, extra, io: app.io });
 		expect(app.said).toEqual([expect.objectContaining({ type: "status" })]);
-		// The answer is out, and registering mu's own sign-ins has pi refreshing every catalogue, which nobody waits
+		// The answer is out, and registering spec.jev's own sign-ins has pi refreshing every catalogue, which nobody waits
 		// for: an exit right here left the lock behind.
 		expect(existsSync(lock)).toBe(true);
 		setTimeout(letGo, 100);
@@ -356,7 +356,7 @@ describe("how mu auth ends", () => {
 
 	it("never holds one lock while it waits for the other, and leaves another process's lock alone", async () => {
 		const dir = agentDir();
-		// Another mu is inside the model catalogue, and stays there.
+		// Another spec.jev is inside the model catalogue, and stays there.
 		const held = join(dir, "models-store.json.lock");
 		mkdirSync(held);
 		const seen: boolean[] = [];
@@ -393,7 +393,7 @@ describe("how mu auth ends", () => {
 	});
 });
 
-describe("how a session of mu ends", () => {
+describe("how a session of spec.jev ends", () => {
 	const dirs: string[] = [];
 	const releases: (() => void)[] = [];
 	afterEach(() => {

@@ -6,11 +6,11 @@
 
 - 用户希望用 Google 账号直接用 Gemini（比如 Gemini 3.8 Flash，人话看板写字用得上），也要把 Antigravity 的登录写好。
 - 上游 pi 在 2026-04-30（提交 `fe66edd94`）删掉了 Gemini CLI 和 Antigravity 的 OAuth。这两个登录用的是 Google 给自家工具注册的客户端；别的程序借来用，Google 可能认为违反条款，账号可能被限制或封禁。
-- 用户 2026-09-22 同意支持。mu 把它们作为**实验**功能加回来：名字里都带 “(experimental)”；**登录前先显示风险说明**，选 “I understand the risk, sign in” 才继续，选 Cancel 就结束，不开浏览器、不起本地回调服务、不发任何请求。
+- 用户 2026-09-22 同意支持。spec.jev 把它们作为**实验**功能加回来：名字里都带 “(experimental)”；**登录前先显示风险说明**，选 “I understand the risk, sign in” 才继续，选 Cancel 就结束，不开浏览器、不起本地回调服务、不发任何请求。
 
 ## 2. 用 Google 模型的四种方式
 
-| 方式 | 提供商 | mu 要做什么 |
+| 方式 | 提供商 | spec.jev 要做什么 |
 | --- | --- | --- |
 | Gemini API key（AI Studio） | `google` | 不用做：pi 自带。设 `GEMINI_API_KEY`，或 `/login` 里填 key |
 | Vertex AI（gcloud 登录） | `google-vertex` | 不用做：pi 自带。`gcloud auth application-default login`，再在 `/login` 里填项目和区域（或设 `GOOGLE_CLOUD_PROJECT`、`GOOGLE_CLOUD_LOCATION`） |
@@ -19,13 +19,13 @@
 
 前两种是官方方式，没有封号风险，推荐优先用。
 
-Grok 的登录（SuperGrok / X Premium，提供商 `xai`）是 pi 自带的，终端里 `/login` 就有 “Sign in with SuperGrok or X Premium”，用设备码登录，mu 这边不用写代码。
+Grok 的登录（SuperGrok / X Premium，提供商 `xai`）是 pi 自带的，终端里 `/login` 就有 “Sign in with SuperGrok or X Premium”，用设备码登录，spec.jev 这边不用写代码。
 
 ## 3. 怎么用
 
 1. `/login`，选 “Google Gemini CLI (experimental)” 或 “Google Antigravity (experimental)”。
 2. 读风险说明，同意后浏览器打开 Google 登录页。
-3. 登录完浏览器跳回本机（Gemini CLI 用端口 8085，Antigravity 用 51121，这是 Google 登记这两个客户端时定死的）。浏览器在另一台机器上时，把浏览器最后停在的地址整个粘贴回 mu 就行。
+3. 登录完浏览器跳回本机（Gemini CLI 用端口 8085，Antigravity 用 51121，这是 Google 登记这两个客户端时定死的）。浏览器在另一台机器上时，把浏览器最后停在的地址整个粘贴回 spec.jev 就行。
 4. `/model` 选模型。
 
 端口被占用（比如 Gemini CLI 自己正在登录）时会直接说明，关掉占用的程序再试。
@@ -93,6 +93,6 @@ Grok（`xai`）用设备码：`notify({ type: "device_code", userCode, verificat
 - 提供商：Gemini CLI 的模型筛选；Antigravity 模型列表的解析（已知模型保留已知的，新的按家族，非对话模型去掉，格式不对时为空）；只有登录后才去问，第一个地址失败换下一个。
 - 通过 pi：两个登录出现在 pi 的提供商里，`ModelRuntime.login` 在风险确认选 cancel 时结束；存好的凭据经过 pi 的鉴权变成请求里的令牌和项目；关掉一项后它不再出现。
 
-做过变异检查：去掉风险确认、去掉回调和粘贴时的 state 检查、刷新时丢项目、去掉 403 换地址、不重试空回答、Claude 不用 `parameters`、不筛模型，都有用例失败。另外在 tsx 加根 `tsconfig.json`（`mu` 的真实启动方式）下加载过这些模块，路径都能解析。
+做过变异检查：去掉风险确认、去掉回调和粘贴时的 state 检查、刷新时丢项目、去掉 403 换地址、不重试空回答、Claude 不用 `parameters`、不筛模型，都有用例失败。另外在 tsx 加根 `tsconfig.json`（`spec.jev` 的真实启动方式）下加载过这些模块，路径都能解析。
 
 未验证：真实的 Google 登录和接口（特别是 `fetchAvailableModels` 的回答格式，是按 CLIProxyAPI 的读法写的，并做了防御）；Windows；桌面端。

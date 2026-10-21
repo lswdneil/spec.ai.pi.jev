@@ -11,7 +11,7 @@ import type { SubscriptionLoginFlow } from './useSubscriptionLogin';
 type AccountDetailProps = {
   provider: SubscriptionProvider;
   flow: SubscriptionLoginFlow;
-  /** What mu reported for this id while nobody is signed in: usable through an API key (Claude, Grok). */
+  /** What spec.jev reported for this id while nobody is signed in: usable through an API key (Claude, Grok). */
   byKey?: { models: { id: string; name: string }[] };
   /** Opens the provider whose sign-in is running, when it is another one. */
   onShow: (provider: SubscriptionProvider) => void;

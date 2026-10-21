@@ -93,14 +93,14 @@ export type SettingsPage = {
   /** i18n key of the shorter label the rail shows under its group's header, when the group already says the rest. */
   railLabelKey?: string;
   Icon: unknown;
-  /** A page for the people who build mu: in the rail and the palette of a development build only. */
+  /** A page for the people who build spec.jev: in the rail and the palette of a development build only. */
   devOnly?: boolean;
   /**
-   * A page of what the app keeps for the classic mode (MU_NATIVE_HOST=0), which mu does not read: not listed while mu
+   * A page of what the app keeps for the classic mode (MU_NATIVE_HOST=0), which spec.jev does not read: not listed while spec.jev
    * runs inside the app, and its route leads to {@link NATIVE_REPLACEMENTS} then.
    */
   classicOnly?: boolean;
-  /** The page's name while mu runs inside the app, when the page then shows something else. */
+  /** The page's name while spec.jev runs inside the app, when the page then shows something else. */
   nativeLabelKey?: string;
 };
 
@@ -197,7 +197,7 @@ export const SETTINGS_PAGES = [
     labelKey: 'mu.sections.judgeOrder',
     Icon: ListNumbers,
   },
-  // The switches that say what mu is; each leads to its row among the details.
+  // The switches that say what spec.jev is; each leads to its row among the details.
   {
     id: 'features',
     group: 'kernel',
@@ -216,7 +216,7 @@ export const SETTINGS_PAGES = [
     labelKey: 'settings.skills',
     Icon: Book,
   },
-  // While mu runs inside the app, the tools are the MCP servers mu uses: it does not use the image generation.
+  // While spec.jev runs inside the app, the tools are the MCP servers spec.jev uses: it does not use the image generation.
   // Both labels stay apart from the details' tools page in the rail.
   {
     id: 'tools',
@@ -227,7 +227,7 @@ export const SETTINGS_PAGES = [
     nativeLabelKey: 'mu.capabilities.mcp.title',
     Icon: Toolkit,
   },
-  // The assistants are the classic mode's: mu running inside the app has none.
+  // The assistants are the classic mode's: spec.jev running inside the app has none.
   {
     id: 'assistants',
     group: 'capabilities',
@@ -253,7 +253,7 @@ export const SETTINGS_PAGES = [
     labelKey: 'settings.archived.navLabel',
     Icon: Inbox,
   },
-  // DevTools and the in-app browser's debugging port, for the people who build mu.
+  // DevTools and the in-app browser's debugging port, for the people who build spec.jev.
   {
     id: 'developer',
     group: 'system',
@@ -298,7 +298,7 @@ export const RETIRED_SETTINGS_PATHS: Record<string, string> = {
   '/settings/more-features-tools': '/settings/details-tools',
   '/settings/more-features-turn': '/settings/details-turn',
   '/settings/more-features-other': '/settings/details-other',
-  // mu's own sections when they lived under /settings/kyrn.
+  // spec.jev's own sections when they lived under /settings/kyrn.
   '/settings/kyrn': '/settings/providers',
   '/settings/kyrn/models': '/settings/providers',
   '/settings/kyrn/permissions': PERMISSION_MODE_PAGE,
@@ -321,7 +321,7 @@ export const RETIRED_SETTINGS_PATHS: Record<string, string> = {
   '/settings/judge-tiers': '/settings/judge-order',
   '/settings/context': '/settings/details-context',
   '/settings/permissions': PERMISSION_MODE_PAGE,
-  // The web server mu no longer runs, the voice input and the desktop pet it no longer has: the page each sat next to.
+  // The web server spec.jev no longer runs, the voice input and the desktop pet it no longer has: the page each sat next to.
   '/settings/webui': '/settings/system',
   '/settings/voice': '/settings/system',
   '/settings/pet': '/settings/appearance',
@@ -423,27 +423,27 @@ export const SETTINGS_ANCHOR_REMAP: Record<string, SettingsPageId> = {
 /** The entries whose sub-pages are one feature's options each: `<route>/<feature>`, and `/<part>` past the first. */
 export const FEATURE_LIST_PAGES: readonly SettingsPageId[] = DETAIL_AREAS.map(detailsPageOf);
 
-/** A development build: one run from its sources, where the pages for the people who build mu are listed. */
+/** A development build: one run from its sources, where the pages for the people who build spec.jev are listed. */
 const DEVELOPMENT_BUILD = process.env.NODE_ENV !== 'production';
 
 /**
- * Whether a page is listed in the rail, the phone's row of chips and the palette of this build; `native`: while mu runs
+ * Whether a page is listed in the rail, the phone's row of chips and the palette of this build; `native`: while spec.jev runs
  * inside the app.
  */
 export const isSettingsPageListed = (page: SettingsPage, native = false): boolean =>
   (!page.devOnly || DEVELOPMENT_BUILD) && !(native && page.classicOnly);
 
-/** A page's name where it stands alone, while mu runs inside the app (`native`) or not. */
+/** A page's name where it stands alone, while spec.jev runs inside the app (`native`) or not. */
 export const settingsPageLabelKey = (page: SettingsPage, native = false): string =>
   (native && page.nativeLabelKey) || page.labelKey;
 
-/** The rail's shorter name of a page, while mu runs inside the app (`native`) or not. */
+/** The rail's shorter name of a page, while spec.jev runs inside the app (`native`) or not. */
 export const settingsPageRailLabelKey = (page: SettingsPage, native = false): string =>
   (native && page.nativeLabelKey) || page.railLabelKey || page.labelKey;
 
 /**
- * Where the route of a classic-only page leads while mu runs inside the app: the assistants to the skills, the page
- * next to them, where what mu brings to a task is.
+ * Where the route of a classic-only page leads while spec.jev runs inside the app: the assistants to the skills, the page
+ * next to them, where what spec.jev brings to a task is.
  */
 export const NATIVE_REPLACEMENTS: Partial<Record<SettingsPageId, string>> = {
   assistants: '/settings/skills',

@@ -19,7 +19,7 @@ export const isSubscriptionProvider = (value: unknown): value is SubscriptionPro
   SUBSCRIPTION_PROVIDERS.includes(value as SubscriptionProvider);
 
 /**
- * The Google sign-ins borrow Google's logins for its own tools. mu's harness adds them (experimental, and only while
+ * The Google sign-ins borrow Google's logins for its own tools. spec.jev's harness adds them (experimental, and only while
  * its `googleLogin` feature is on); before the browser opens, the flow asks the person to accept the risk.
  */
 export const GOOGLE_PROVIDERS: readonly SubscriptionProvider[] = ['google-gemini-cli', 'google-antigravity'];
@@ -29,7 +29,7 @@ export const isGoogleProvider = (provider: SubscriptionProvider | undefined) =>
 /** What every harness can sign in to: pi's own flows. The rest is only offered when the runner says so. */
 export const BUILT_IN_PROVIDERS: readonly SubscriptionProvider[] = ['openai-codex', 'anthropic', 'xai'];
 /**
- * Subscriptions whose provider id also takes an API key (pi reads ANTHROPIC_API_KEY and XAI_API_KEY): mu can report
+ * Subscriptions whose provider id also takes an API key (pi reads ANTHROPIC_API_KEY and XAI_API_KEY): spec.jev can report
  * them as usable while nobody is signed in. The others are usable only signed in.
  */
 export const KEY_PROVIDERS: readonly SubscriptionProvider[] = ['anthropic', 'xai'];

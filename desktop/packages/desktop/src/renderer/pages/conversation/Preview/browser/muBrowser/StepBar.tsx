@@ -55,7 +55,7 @@ const NoticeLine: React.FC<{ notice: BrowserRunNotice }> = ({ notice }) => {
 };
 
 /**
- * The slim bar above a page that mu is driving: what it just did and how sure the judge was, the steps so far, the
+ * The slim bar above a page that spec.jev is driving: what it just did and how sure the judge was, the steps so far, the
  * goal, the time, and the three things a person can do about it. It stays after the run with the final status.
  */
 const StepBar: React.FC<{ run: BrowserRunState }> = ({ run }) => {

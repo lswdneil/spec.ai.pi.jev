@@ -1,5 +1,5 @@
 /**
- * A dialog pi waits on, shown above the send box: mu's permission question as the transcript's permission card, any
+ * A dialog pi waits on, shown above the send box: spec.jev's permission question as the transcript's permission card, any
  * other choice as its buttons, a line to type (`input`) or a text to edit (`editor`). A dialog with a time limit says
  * how long it has and closes itself when the time is up (pi then goes on with its default). An answer closes it at
  * once; one that does not go through brings it back, and the screen says why.
@@ -26,7 +26,7 @@ type Props = {
 
 const CARD = 'rd-12px border border-solid border-[var(--color-border-2)] bg-1 p-12px flex flex-col gap-10px';
 
-/** mu's permission question: the permission card, worded from mu's codes. */
+/** spec.jev's permission question: the permission card, worded from spec.jev's codes. */
 const PermissionDialog: React.FC<{ dialog: ViewDialog; answer: Answer }> = ({ dialog, answer }) => {
   const { t, i18n } = useTranslation();
   const card = useMemo(
@@ -60,7 +60,7 @@ const PermissionDialog: React.FC<{ dialog: ViewDialog; answer: Answer }> = ({ di
   );
 };
 
-/** A choice that is not mu's permission question: a `select`'s options, or a `confirm`'s yes and no. */
+/** A choice that is not spec.jev's permission question: a `select`'s options, or a `confirm`'s yes and no. */
 const ChoiceDialog: React.FC<{ dialog: ViewDialog; answer: Answer }> = ({ dialog, answer }) => {
   const { t } = useTranslation();
   const [busy, setBusy] = useState<string>();

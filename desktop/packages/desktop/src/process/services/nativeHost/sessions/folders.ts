@@ -4,12 +4,12 @@ import path from 'node:path';
 import { muEnv, muHome } from '../../../agent/kyrn/naming.ts';
 
 /**
- * Where this computer's mu keeps its sessions, worked out without starting anything: no launcher import, no
+ * Where this computer's spec.jev keeps its sessions, worked out without starting anything: no launcher import, no
  * `prepareLaunch` (which can start the local judge). The rules are the launcher's (`agentDirFor` and `muHome` in the
  * harness's kyrn/bin/mu.mjs) and pi's (its session folder in main.ts and session-manager.ts):
  *
  * - the agent folder is MU_AGENT_DIR, else MU_CODING_AGENT_DIR (either with the old KYRN_ spelling), else
- *   `<mu home>/agent`, where the mu home is `~/.mu` (or `~/.kyrn` on a machine not moved yet);
+ *   `<spec.jev home>/agent`, where the spec.jev home is `~/.spec.jev` (or `~/.kyrn` on a machine not moved yet);
  * - pi keeps a session in `<agent folder>/sessions/--<project path>--/<time>_<id>.jsonl`, unless
  *   MU_CODING_AGENT_SESSION_DIR or the agent folder's settings (`sessionDir`) name a folder of their own, which then
  *   holds every project's sessions side by side.

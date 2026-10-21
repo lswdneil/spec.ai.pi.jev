@@ -65,7 +65,7 @@ const resolveAgentTipBody = (
 };
 
 /**
- * mu has no model to answer with (none set up, or none with a key): what to do about it, and the way to the providers'
+ * spec.jev has no model to answer with (none set up, or none with a key): what to do about it, and the way to the providers'
  * settings where it is done. pi's own text tells a terminal user to run `/login` and names a harness doc; neither is
  * shown, only the provider it names, if any, as a detail.
  */
@@ -112,7 +112,7 @@ const MessageTips: React.FC<{ message: IMessageTips }> = ({ message }) => {
   const { json, data } = useFormatContent(localizedTipBody);
 
   const displayContent = json ? '' : localizedTipBody;
-  // An error the mu bridge raised in fixed English: headline in the reader's language, the original as a detail.
+  // An error the spec.jev bridge raised in fixed English: headline in the reader's language, the original as a detail.
   const muError =
     type === 'error' ? findMuTurnError([structuredError?.detail, structuredError?.message, content]) : undefined;
   const muErrorHeadline = muError ? t(muTurnErrorKey(muError)) : undefined;

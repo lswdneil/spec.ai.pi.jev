@@ -10,7 +10,7 @@ const HOME_ROUTES = new Set(['/', '/guid']);
 /**
  * Opens the first-run guide once, for someone with no startup model yet. Anyone else never sees it unasked.
  *
- * The app's layout runs it as it mounts, while the start screen still waits for mu: the settings are read and the
+ * The app's layout runs it as it mounts, while the start screen still waits for spec.jev: the settings are read and the
  * guide's code is loaded by then, and the guide is the first page drawn. Run from the home page, a first start drew the
  * home page, then the route loader for 300 ms, then the guide over both. Only the home page is left for the guide: a
  * reload or a link that opened another page keeps it.

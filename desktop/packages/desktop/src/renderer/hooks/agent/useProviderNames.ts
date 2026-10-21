@@ -5,7 +5,7 @@ import type { ProviderNames } from '@/renderer/utils/model/providerName';
 const NONE: ProviderNames = new Map();
 
 /**
- * The names of the providers set up by hand, as the settings keep them in mu's models.json: the providers the settings
+ * The names of the providers set up by hand, as the settings keep them in spec.jev's models.json: the providers the settings
  * edit and the entries written by hand. A name left empty is no name. Nothing when the settings cannot be read.
  */
 async function readProviderNames(): Promise<ProviderNames> {

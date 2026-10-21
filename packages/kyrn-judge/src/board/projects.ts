@@ -4,7 +4,7 @@ import { join, resolve } from "node:path";
 /**
  * Which projects have the plain-language board on, in `<agentDir>/mu/board.json`.
  * The switch is per project and belongs to the user: a repository cannot
- * turn it on for itself (mu reads no settings from a project), because every
+ * turn it on for itself (spec.jev reads no settings from a project), because every
  * update of the board costs a model call. Without a directory (tests,
  * embedding) the switches live in memory.
  */

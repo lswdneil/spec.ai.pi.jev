@@ -21,14 +21,6 @@ import zhCN from './locales/zh-CN/index';
 import jaJP from './locales/ja-JP/index';
 import zhTW from './locales/zh-TW/index';
 import koKR from './locales/ko-KR/index';
-import trTR from './locales/tr-TR/index';
-import ruRU from './locales/ru-RU/index';
-import ukUA from './locales/uk-UA/index';
-import ptBR from './locales/pt-BR/index';
-import deDE from './locales/de-DE/index';
-import esES from './locales/es-ES/index';
-import frFR from './locales/fr-FR/index';
-import faIR from './locales/fa-IR/index';
 export type { I18nKey, I18nModule } from './i18n-keys';
 
 // Re-exports
@@ -43,14 +35,6 @@ const localeData: LocaleData = {
   'ja-JP': jaJP,
   'zh-TW': zhTW,
   'ko-KR': koKR,
-  'tr-TR': trTR,
-  'ru-RU': ruRU,
-  'uk-UA': ukUA,
-  'pt-BR': ptBR,
-  'de-DE': deDE,
-  'es-ES': esES,
-  'fr-FR': frFR,
-  'fa-IR': faIR,
 };
 
 const fallbackLocale = localeData[DEFAULT_LANGUAGE] ?? {};
@@ -134,7 +118,7 @@ i18n
     fallbackLng: DEFAULT_LANGUAGE,
     debug: false,
     interpolation: { escapeValue: false },
-    // The upstream strings name the product AionUi: shown as mu (see common/kyrn/displayName.ts).
+    // The upstream strings name the product AionUi: shown as spec.jev (see common/kyrn/displayName.ts).
     postProcess: [MU_NAME_POST_PROCESSOR],
   })
   .catch((error: Error) => {

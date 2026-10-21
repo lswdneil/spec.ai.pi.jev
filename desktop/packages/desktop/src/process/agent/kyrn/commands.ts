@@ -4,15 +4,15 @@ import { array, asRecord, text, type JsonRecord } from './piRpc.ts';
 /** A name the send box can offer: one word, `skill:<name>` included. */
 const NAME = /^[\w:.-]{1,64}$/;
 /**
- * Not offered in the menu (still run when typed): `/clear` and `/new` start a fresh mu session under the same app
+ * Not offered in the menu (still run when typed): `/clear` and `/new` start a fresh spec.jev session under the same app
  * conversation, which the app would then reopen on the old one. The app has its own button for a new conversation.
  */
 const NOT_OFFERED: ReadonlySet<string> = new Set(['clear', 'new']);
 
 /**
- * mu's slash commands for the app's `/` menu, from pi's `get_commands`: mu's and its extensions' own first, then
+ * spec.jev's slash commands for the app's `/` menu, from pi's `get_commands`: spec.jev's and its extensions' own first, then
  * prompt templates, then skills (`skill:<name>`), each once, with the first line of what it does. Picking one puts
- * `/<name>` in the message, and mu runs it when it is sent.
+ * `/<name>` in the message, and spec.jev runs it when it is sent.
  */
 export function slashCommands(result: JsonRecord): AvailableCommand[] {
   const seen = new Set<string>();

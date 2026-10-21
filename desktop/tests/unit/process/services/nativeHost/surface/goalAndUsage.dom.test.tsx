@@ -17,8 +17,8 @@ import { createFakeHost, type FakeHost } from './fakeClient';
 import { ended, frame, reply, text, user } from './records';
 
 /**
- * What the native send box shows besides the text, against an in-memory host: mu's goal in the line above it (live
- * from mu's `goal.state` frames, and from the session file's `kyrn.goal` entries with no host), ended from the line
+ * What the native send box shows besides the text, against an in-memory host: spec.jev's goal in the line above it (live
+ * from spec.jev's `goal.state` frames, and from the session file's `kyrn.goal` entries with no host), ended from the line
  * with `/goal clear`; the context ring beside the send button once pi has said how full the context is, with pi's
  * session counts asked after each run; and a command an extension answers (`/goal …`) that is not left on its way.
  */
@@ -108,7 +108,7 @@ function file(entries: Array<Record<string, unknown>>) {
 }
 
 describe('the goal line of a native conversation', () => {
-  it('shows the goal mu sets, and ends it with /goal clear, stopping the run that goes', async () => {
+  it('shows the goal spec.jev sets, and ends it with /goal clear, stopping the run that goes', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1' });
     host.setStatus('c1', { phase: 'running' });
@@ -166,7 +166,7 @@ describe('the goal line of a native conversation', () => {
       )
     );
     await mount(host);
-    // No mu runs: a goal the file says runs waits for the next message, as mu says when it resumes the session.
+    // No spec.jev runs: a goal the file says runs waits for the next message, as spec.jev says when it resumes the session.
     expect(line()).toHaveAttribute('data-status', 'paused');
     expect(screen.getByTestId('composer-goal-text')).toHaveTextContent('the docs build');
     await act(async () => {
@@ -267,7 +267,7 @@ describe('the context ring of a native conversation', () => {
 });
 
 describe('a command an extension answers', () => {
-  it('is not left on its way when it starts a run (mu’s /goal)', async () => {
+  it('is not left on its way when it starts a run (spec.jev’s /goal)', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1' });
     host.setStatus('c1', { phase: 'running' });

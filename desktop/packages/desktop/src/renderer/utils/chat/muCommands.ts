@@ -1,13 +1,13 @@
 /**
- * mu's slash commands, by name, with the words mu-agent gives each one in English and in Chinese (pi's
- * `get_commands`, with MU_LANG en or zh), then any earlier English wording an older mu may still send. `llama` and
+ * spec.jev's slash commands, by name, with the words spec.jev gives each one in English and in Chinese (pi's
+ * `get_commands`, with MU_LANG en or zh), then any earlier English wording an older spec.jev may still send. `llama` and
  * `mcp` are pi's own commands, in English only. `clear` and `new` are not in the menu (`process/agent/kyrn/commands.ts`).
  *
- * pi gives a command no code to translate by, and mu has wording in those two languages only: a reader of the app in
- * any other language, or one who switched it after mu started, would read mu's English or Chinese. So the app knows
- * mu's own commands by their name and words, and shows its own line (`mu.commands.<name>`) in the reader's language.
+ * pi gives a command no code to translate by, and spec.jev has wording in those two languages only: a reader of the app in
+ * any other language, or one who switched it after spec.jev started, would read spec.jev's English or Chinese. So the app knows
+ * spec.jev's own commands by their name and words, and shows its own line (`mu.commands.<name>`) in the reader's language.
  * Anything else keeps its words: another agent's command of the same name (Claude Code has a /review too), a prompt
- * template or a skill, or a description mu has since reworded.
+ * template or a skill, or a description spec.jev has since reworded.
  */
 export const MU_COMMAND_WORDS: ReadonlyMap<string, readonly string[]> = new Map([
   [
@@ -53,9 +53,9 @@ export const MU_COMMAND_WORDS: ReadonlyMap<string, readonly string[]> = new Map(
   [
     'permissions',
     [
-      'How much mu can do without asking: /permissions full | jev | ask, or no argument for a picker. /permissions reset clears what you allowed for this conversation',
-      'mu 不问你就能做多少事：/permissions full（完全访问）| jev（Jev 审批）| ask（最小权限），不带参数就弹出选择；/permissions reset 忘掉这次对话里允许过的操作',
-      'How much mu may do without asking: /permissions full | jev | ask, or a picker. /permissions reset forgets what you allowed for this conversation',
+      'How much spec.jev can do without asking: /permissions full | jev | ask, or no argument for a picker. /permissions reset clears what you allowed for this conversation',
+      'spec.jev 不问你就能做多少事：/permissions full（完全访问）| jev（Jev 审批）| ask（最小权限），不带参数就弹出选择；/permissions reset 忘掉这次对话里允许过的操作',
+      'How much spec.jev may do without asking: /permissions full | jev | ask, or a picker. /permissions reset forgets what you allowed for this conversation',
     ],
   ],
   [
@@ -133,12 +133,12 @@ export const MU_COMMAND_WORDS: ReadonlyMap<string, readonly string[]> = new Map(
   [
     'inherit',
     [
-      'What mu inherited from Claude Code, Cursor and Codex, and from which files',
-      'mu 从 Claude Code、Cursor 和 Codex 沿用了什么，各来自哪个文件',
-      'What mu took over from Claude Code, Cursor and Codex, and from where',
+      'What spec.jev inherited from Claude Code, Cursor and Codex, and from which files',
+      'spec.jev 从 Claude Code、Cursor 和 Codex 沿用了什么，各来自哪个文件',
+      'What spec.jev took over from Claude Code, Cursor and Codex, and from where',
     ],
   ],
-  // pi's own command since mu took pi's MCP client (2026-10-05), in English only.
+  // pi's own command since spec.jev took pi's MCP client (2026-10-05), in English only.
   ['mcp', ['Manage MCP servers: sign in, reconnect, enable or disable, and change exposure']],
   [
     'jobs',
@@ -167,9 +167,9 @@ export const MU_COMMAND_WORDS: ReadonlyMap<string, readonly string[]> = new Map(
   [
     'mu',
     [
-      "Show mu's status. Also: /mu judge <tiers> | /mu route <decision> <tiers|default> | /mu mode <decision|default> <off|shadow|active>",
-      'mu 的状态。另外：/mu judge <判定器> | /mu route <判定点> <判定器|default> | /mu mode <判定点|default> <off|shadow|active>',
-      'mu status. Also: /mu judge <tiers> | /mu route <decision> <tiers|default> | /mu mode <decision|default> <off|shadow|active>',
+      "Show spec.jev's status. Also: /mu judge <tiers> | /mu route <decision> <tiers|default> | /mu mode <decision|default> <off|shadow|active>",
+      'spec.jev 的状态。另外：/mu judge <判定器> | /mu route <判定点> <判定器|default> | /mu mode <判定点|default> <off|shadow|active>',
+      'spec.jev status. Also: /mu judge <tiers> | /mu route <decision> <tiers|default> | /mu mode <decision|default> <off|shadow|active>',
     ],
   ],
   [
@@ -183,9 +183,9 @@ export const MU_COMMAND_WORDS: ReadonlyMap<string, readonly string[]> = new Map(
   [
     'help',
     [
-      'What mu can do, and the commands worth knowing',
-      'mu 能做什么，以及常用命令一览',
-      'What mu can do and every command worth knowing',
+      'What spec.jev can do, and the commands worth knowing',
+      'spec.jev 能做什么，以及常用命令一览',
+      'What spec.jev can do and every command worth knowing',
     ],
   ],
   [
@@ -209,7 +209,7 @@ export const MU_COMMAND_WORDS: ReadonlyMap<string, readonly string[]> = new Map(
     [
       'Import a Claude Code or Codex conversation from this project and continue it here: /import-chat [file]',
       '导入这个项目在 Claude Code 或 Codex 里的对话，接着在这里聊：/import-chat [文件]',
-      'Bring a Claude Code or Codex conversation of this project into mu and continue it: /import-chat [file]',
+      'Bring a Claude Code or Codex conversation of this project into spec.jev and continue it: /import-chat [file]',
     ],
   ],
   ['llama', ['Manage llama.cpp router models']],
@@ -217,7 +217,7 @@ export const MU_COMMAND_WORDS: ReadonlyMap<string, readonly string[]> = new Map(
 
 type Translate = (key: string, options?: Record<string, unknown>) => string;
 
-/** A slash command's description in the reader's language when it is one of mu's own, and as it came otherwise. */
+/** A slash command's description in the reader's language when it is one of spec.jev's own, and as it came otherwise. */
 export function commandDescription(
   command: { readonly name: string; readonly description: string },
   t: Translate

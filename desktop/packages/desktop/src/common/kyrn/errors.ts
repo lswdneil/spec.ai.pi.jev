@@ -1,5 +1,5 @@
 /**
- * Failures the main process reports to mu's screens. The message stays plain English, for logs and tests; a screen
+ * Failures the main process reports to spec.jev's screens. The message stays plain English, for logs and tests; a screen
  * shows the translated text for the code (`mu.errors.*`, mapped in `renderer/pages/settings/KyrnSettings/fields/
  * muError.ts`), and at most the raw message as a secondary detail. Codes are stable: add one, never rename one.
  */
@@ -34,39 +34,39 @@ export const KYRN_ERROR_CODES = [
   'unreadable',
   /** A configuration file cannot be written (permissions, a full disk). Params: `file` (its path). */
   'unwritable',
-  /** The health check says the mu runtime is not online. */
+  /** The health check says the spec.jev runtime is not online. */
   'runtimeOffline',
-  /** Another command is registered under mu's name. */
+  /** Another command is registered under spec.jev's name. */
   'otherRegistration',
   /**
-   * mu's launcher cannot be registered from where the app is installed (Windows): its path has spaces, which a command
+   * spec.jev's launcher cannot be registered from where the app is installed (Windows): its path has spaces, which a command
    * the backend runs cannot have, it has no short name without them, and no launcher forwarding to it could be written.
    */
   'installPath',
   /** The local backend answered with an HTTP error. Params: `status`. */
   'backend',
-  /** This mu cannot import Claude Code or Codex conversations: it is older than `mu import`. */
+  /** This spec.jev cannot import Claude Code or Codex conversations: it is older than `spec.jev import`. */
   'importMissing',
-  /** `mu import` failed or answered with something else than its JSON: the message says what it printed. */
+  /** `spec.jev import` failed or answered with something else than its JSON: the message says what it printed. */
   'importFailed',
   /** The folder chosen as a skill has no SKILL.md with a description. */
   'skillInvalid',
   /** A skill's name cannot be a folder name (lowercase letters, digits and hyphens). Params: `name`. */
   'skillName',
-  /** mu already has a skill of that name. Params: `name`. */
+  /** spec.jev already has a skill of that name. Params: `name`. */
   'skillExists',
   /** The folder chosen as a skill holds far more files than a skill would. */
   'skillTooLarge',
   /** No skill or MCP server of that name is in the list. Params: `name`. */
   'notFound',
   /**
-   * The skill or MCP server comes from somewhere mu does not change (Claude Code, Codex, Cursor, a folder agents
-   * share, mu itself). Params: `name`, `source` (a `SkillSource` or `McpSource`).
+   * The skill or MCP server comes from somewhere spec.jev does not change (Claude Code, Codex, Cursor, a folder agents
+   * share, spec.jev itself). Params: `name`, `source` (a `SkillSource` or `McpSource`).
    */
   'notMine',
   /** An MCP server's name has characters other than letters, digits, `_` and `-`. Params: `name`. */
   'mcpName',
-  /** mu already has an MCP server of that name. Params: `name`. */
+  /** spec.jev already has an MCP server of that name. Params: `name`. */
   'mcpExists',
   /** An MCP server's command, address, variables or headers are not usable. Params: `field`. */
   'mcpInvalid',

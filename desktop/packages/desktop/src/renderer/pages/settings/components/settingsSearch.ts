@@ -72,7 +72,7 @@ const PAGE_TEXTS: Partial<Record<SettingsPageId, string[]>> = {
   about: ['settings.aboutDescription'],
 };
 
-/** The texts of the pages that show something else while mu runs inside the app. */
+/** The texts of the pages that show something else while spec.jev runs inside the app. */
 const NATIVE_PAGE_TEXTS: Partial<Record<SettingsPageId, string[]>> = {
   skills: ['mu.capabilities.skills.lead', 'mu.capabilities.skills.add'],
   tools: ['mu.capabilities.mcp.lead', 'mu.capabilities.mcp.add'],
@@ -93,7 +93,7 @@ const pageName = (t: TFunction, area: DetailArea): string => t(`mu.pages.details
 /**
  * Everything whose texts hold every word of the query, in the rail's order: the pages first (by their name, the group
  * they are in and the texts on them), then the features (in every language the harness has, so an English word finds
- * its entry in a Chinese screen too) and the decision points whose names are not their feature's. `native`: while mu
+ * its entry in a Chinese screen too) and the decision points whose names are not their feature's. `native`: while spec.jev
  * runs inside the app, which leaves some pages out and has others show something else.
  */
 export function searchSettings(

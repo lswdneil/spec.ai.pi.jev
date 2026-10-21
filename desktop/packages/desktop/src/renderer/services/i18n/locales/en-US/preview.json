@@ -85,7 +85,7 @@
       "outsideSandbox": "This file is outside the project folder."
     },
     "serverInstall": {
-      "hint": "mu is running on a server. Install the preview component on that server, then retry:",
+      "hint": "spec.jev is running on a server. Install the preview component on that server, then retry:",
       "icuNote": "If it still fails to start, install the ICU library on the server (Debian/Ubuntu: apt-get install -y libicu-dev)."
     }
   },
@@ -98,7 +98,7 @@
       "loading": "Loading Word document…",
       "installing": "Installing officecli…",
       "startFailed": "Couldn't start the Word preview",
-      "installHint": "Requires officecli. mu installs it automatically."
+      "installHint": "Requires officecli. spec.jev installs it automatically."
     }
   },
   "excel": {
@@ -115,7 +115,7 @@
       "loading": "Loading Excel file…",
       "installing": "Installing officecli…",
       "startFailed": "Couldn't start the Excel preview",
-      "installHint": "Requires officecli. mu installs it automatically."
+      "installHint": "Requires officecli. spec.jev installs it automatically."
     }
   },
   "pdf": {
@@ -156,7 +156,7 @@
     "agentActiveTooltip": "The agent is using this tab",
     "tabLimitReached": "Browser tab limit reached ({{count}}). The oldest tab was reused.",
     "agentFirstUseTitle": "The agent is using the in-app browser",
-    "agentFirstUseContent": "It can open pages, click on them and read their content in this panel. Sites stay signed in after you restart mu.",
+    "agentFirstUseContent": "It can open pages, click on them and read their content in this panel. Sites stay signed in after you restart spec.jev.",
     "agentFirstUseAction": "Open settings"
   },
   "saveConflict": "Couldn't save: this file changed on disk since you opened it. Reload to see the other changes — your edits are still here, unsaved.",
@@ -189,28 +189,28 @@
     "elapsed": "Time elapsed",
     "steps": "Steps ({{total}})",
     "noSteps": "No steps yet",
-    "reason": "In mu's words",
+    "reason": "In spec.jev's words",
     "goal": "Goal",
     "pause": "Pause",
     "resume": "Resume",
     "stop": "Stop",
     "takeover": "Take over",
-    "takeoverTip": "Pauses the run and gives you control of the page. Press Resume when you're done, and mu checks the page again before it continues.",
+    "takeoverTip": "Pauses the run and gives you control of the page. Press Resume when you're done, and spec.jev checks the page again before it continues.",
     "pausedShort": "Paused",
     "stopping": "Stopping…",
     "paused": {
-      "user": "Paused. When you resume, mu checks the page again before its next step.",
-      "takeover": "You're in control. Use the page yourself, then press Resume and mu checks the page again.",
-      "interaction": "You interacted with the page, so mu paused to avoid clicking at the same time. When you resume, it checks the page again."
+      "user": "Paused. When you resume, spec.jev checks the page again before its next step.",
+      "takeover": "You're in control. Use the page yourself, then press Resume and spec.jev checks the page again.",
+      "interaction": "You interacted with the page, so spec.jev paused to avoid clicking at the same time. When you resume, it checks the page again."
     },
     "statusHint": {
-      "blocked": "mu found nothing on the page that moves toward the goal, so it stopped.",
-      "needs_confirmation": "The action looked irreversible and wasn't allowed, so mu didn't do it.",
+      "blocked": "spec.jev found nothing on the page that moves toward the goal, so it stopped.",
+      "needs_confirmation": "The action looked irreversible and wasn't allowed, so spec.jev didn't do it.",
       "budget": "The run used up its step limit.",
       "stopped": "You stopped this run.",
       "failed": "Something went wrong while browsing, and the run didn't finish."
     },
-    "detachedHint": "mu lost its connection to this page, so the run can't continue.",
+    "detachedHint": "spec.jev lost its connection to this page, so the run can't continue.",
     "verb": {
       "click": "Click",
       "fill": "Type into",
@@ -238,7 +238,7 @@
       "popup": "Pop-up blocked: {{detail}}"
     },
     "confirm": {
-      "title": "mu wants to do something that may be irreversible",
+      "title": "spec.jev wants to do something that may be irreversible",
       "action": "Action",
       "page": "Page",
       "allow": "Allow",
@@ -249,7 +249,7 @@
     "detachCause": "Cause",
     "detachReason": {
       "tab_closed": "The tab was closed.",
-      "connection": "mu's browsing session ended before the run finished.",
+      "connection": "spec.jev's browsing session ended before the run finished.",
       "devtools": "The developer tools were opened on this page.",
       "crashed": "The page crashed."
     },
@@ -276,7 +276,7 @@
       "no_judge": "No judge could choose an action ({{judgeReason}}).",
       "no_progress": "The judge found no action that moves toward the goal.",
       "not_confirmed": "\"{{label}}\" looks irreversible and wasn't confirmed.",
-      "no_value": "mu couldn't produce a value for \"{{label}}\".",
+      "no_value": "spec.jev couldn't produce a value for \"{{label}}\".",
       "stuck": "{{count}} actions in a row changed nothing.",
       "stuck_one": "{{count}} action changed nothing.",
       "stuck_other": "{{count}} actions in a row changed nothing."

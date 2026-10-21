@@ -148,7 +148,7 @@ function normalizeAvatar(avatar: string | undefined): { logo: string; isEmoji: b
   return { logo: resolved.value, isEmoji: true };
 }
 
-/** The catalog shows backend names as mu (see `assistants.list`); rules stored before that still have the old names. */
+/** The catalog shows backend names as spec.jev (see `assistants.list`); rules stored before that still have the old names. */
 function normalizeAssistantLabel(value: string | undefined): string {
   return showAsMu(value || '')
     .normalize('NFKC')

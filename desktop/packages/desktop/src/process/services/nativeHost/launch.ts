@@ -1,5 +1,5 @@
 /**
- * How a native host is started, decided by mu's own launcher (`kyrn/bin/mu.mjs` in the harness, types in
+ * How a native host is started, decided by spec.jev's own launcher (`kyrn/bin/mu.mjs` in the harness, types in
  * `mu.d.mts`): `planHost` says which module to import pi from, with which Node flags, arguments and environment, and
  * `prepareLaunchAsync` (or, in a launcher from before it, `prepareLaunch`) does what the command line does before pi
  * starts (the app view of a checkout, the agent folder, the configuration's notes, the local judge). The app's pi and
@@ -71,7 +71,7 @@ export type PrepareOptions = {
   cwd: string;
   /** pi's arguments after the judgment layer. Default `--mode rpc`. */
   argv?: string[];
-  /** The environment pi would get on the command line; the launcher adds the `.env` keys and mu's folders. */
+  /** The environment pi would get on the command line; the launcher adds the `.env` keys and spec.jev's folders. */
   env: Env;
   home: string;
   platform: NodeJS.Platform;
@@ -147,7 +147,7 @@ async function planned(options: PrepareOptions): Promise<{ launcher: Launcher; p
 /**
  * Whether a host could start with this harness: its launcher loads, has the native host's two functions and accepts a
  * plan. Nothing is prepared (no folder is made, no judge starts). Undefined when one could; else what a start would
- * fail with, which is how the app tells a mu too old to run inside it from one that is fine.
+ * fail with, which is how the app tells a spec.jev too old to run inside it from one that is fine.
  */
 export async function checkHost(options: PrepareOptions): Promise<NativeHostError | undefined> {
   try {

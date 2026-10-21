@@ -9,7 +9,7 @@ import { NativeConversations } from '@process/services/nativeHost/conversations/
 import { FakePi } from '../conversations/fakePi';
 
 /**
- * mu's browser tool names the conversation it works for by the session name the app gave its mu (MU_DESKTOP_SESSION);
+ * spec.jev's browser tool names the conversation it works for by the session name the app gave its spec.jev (MU_DESKTOP_SESSION);
  * the app's browser panel opens the run's tab beside that conversation (process/bridge/kyrnBrowserBridge.ts). For a
  * native conversation the name is the one the app handed its host, and the conversation is answered by the id it has
  * now: a draft's id gives way to its session's once pi names it.
@@ -44,8 +44,8 @@ function world() {
 const realTimeout = globalThis.setTimeout;
 const quiet = () => new Promise((resolve) => realTimeout(resolve, 20));
 
-describe('the conversation a run of mu’s browser belongs to', () => {
-  it('is a native conversation by the name its mu was given, else the ACP session’s, else none', () => {
+describe('the conversation a run of spec.jev’s browser belongs to', () => {
+  it('is a native conversation by the name its spec.jev was given, else the ACP session’s, else none', () => {
     const lookups = {
       native: (session: string) => (session === 'n-1' ? 'session-1' : undefined),
       classic: (session: string) => (session === 'acp-1' ? 'conv-1' : ''),

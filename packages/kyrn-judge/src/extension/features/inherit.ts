@@ -13,11 +13,11 @@ import type { InheritedRule } from "../../inherit/types.ts";
 import { say } from "../../language.ts";
 import { clip, failOpen, type KyrnRuntime } from "../runtime.ts";
 
-/** Where inherited configuration and mu's own state live. Tests and embedders point these at fixtures. */
+/** Where inherited configuration and spec.jev's own state live. Tests and embedders point these at fixtures. */
 export interface HarnessRoots {
 	/** The user's home: `.claude`, `.cursor`, `.codex` and `.claude.json` are looked for here. */
 	readonly home: string;
-	/** pi's agent directory. mu keeps its state in `<agentDir>/mu`. */
+	/** pi's agent directory. spec.jev keeps its state in `<agentDir>/mu`. */
 	readonly agentDir: string;
 }
 
@@ -48,7 +48,7 @@ export function inheritedFor(
 	own?: unknown,
 ): InheritanceScan {
 	const options = runtime.options("inherit", INHERIT_DEFAULTS);
-	// Without roots nothing on disk is looked at: only mu's own servers, from the configuration that was handed over.
+	// Without roots nothing on disk is looked at: only spec.jev's own servers, from the configuration that was handed over.
 	if (!roots) {
 		return scanInheritance({
 			roots: { home: ctx.cwd, projectDir: ctx.cwd, projectTrusted: false },
@@ -78,7 +78,7 @@ export function inheritedFor(
 
 /**
  * First run, nothing to set up: the rules and skills a user already wrote for
- * Claude Code, Cursor and Codex are in effect in mu as well. (Their MCP servers
+ * Claude Code, Cursor and Codex are in effect in spec.jev as well. (Their MCP servers
  * are the MCP feature's business; this one only counts them for the notice.)
  *
  * Rules follow "install a lot, expose little". An always-on rule is part of
@@ -210,8 +210,8 @@ export function registerInherit(runtime: KyrnRuntime, roots: HarnessRoots | unde
 
 	pi.registerCommand("inherit", {
 		description: say({
-			zh: "mu 从 Claude Code、Cursor 和 Codex 沿用了什么，各来自哪个文件",
-			en: "Show what mu inherited from Claude Code, Cursor and Codex, and from which files",
+			zh: "spec.jev 从 Claude Code、Cursor 和 Codex 沿用了什么，各来自哪个文件",
+			en: "Show what spec.jev inherited from Claude Code, Cursor and Codex, and from which files",
 		}),
 		handler: async (_args, ctx) => {
 			runtime.touch(ctx);

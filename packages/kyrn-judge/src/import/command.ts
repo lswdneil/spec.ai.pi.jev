@@ -1,10 +1,10 @@
 /**
- * What `mu import` does and prints (cli.ts only starts it):
+ * What `spec.jev import` does and prints (cli.ts only starts it):
  *
- *   mu import --list [--json] [--cwd <dir>] [--sub-agents] [--agent-dir <dir>]
- *   mu import <file>... [--json] [--agent-dir <dir>]
+ *   spec.jev import --list [--json] [--cwd <dir>] [--sub-agents] [--agent-dir <dir>]
+ *   spec.jev import <file>... [--json] [--agent-dir <dir>]
  *
- * mu's agent folder comes from --agent-dir, else MU_CODING_AGENT_DIR (the launcher sets it), else ~/.mu/agent.
+ * spec.jev's agent folder comes from --agent-dir, else MU_CODING_AGENT_DIR (the launcher sets it), else ~/.spec.jev/agent.
  * Sessions go where pi puts them: MU_CODING_AGENT_SESSION_DIR, else `sessionDir` in the agent folder's
  * settings.json, else `<agent folder>/sessions/<project>/`.
  */
@@ -23,12 +23,12 @@ import {
 import { absolute } from "./session.ts";
 
 export const USAGE = [
-	"mu import: import Claude Code and Codex conversations so you can continue them in mu.",
+	"spec.jev import: import Claude Code and Codex conversations so you can continue them in spec.jev.",
 	"",
-	"  mu import --list [--json] [--cwd <dir>]   list conversations on this machine (with --cwd, only <dir>'s)",
-	"  mu import <file>... [--json]              import these transcripts; each becomes a mu session",
+	"  spec.jev import --list [--json] [--cwd <dir>]   list conversations on this machine (with --cwd, only <dir>'s)",
+	"  spec.jev import <file>... [--json]              import these transcripts; each becomes a spec.jev session",
 	"",
-	"  --agent-dir <dir>   mu's agent folder (default: MU_CODING_AGENT_DIR, else ~/.mu/agent)",
+	"  --agent-dir <dir>   spec.jev's agent folder (default: MU_CODING_AGENT_DIR, else ~/.spec.jev/agent)",
 	"  --sub-agents        also list subagent threads",
 	"",
 	"Looks in ~/.claude/projects (CLAUDE_CONFIG_DIR) and ~/.codex/sessions (CODEX_HOME).",
@@ -81,7 +81,7 @@ export interface Io {
 	home: string;
 }
 
-/** Where mu keeps its sessions, decided the way pi decides it (apart from a project's own settings). */
+/** Where spec.jev keeps its sessions, decided the way pi decides it (apart from a project's own settings). */
 export function storeFor(agentDirArg: string | undefined, io: Pick<Io, "env" | "home" | "cwd">): SessionStore {
 	const agentDir = absolute(
 		agentDirArg ?? io.env.MU_CODING_AGENT_DIR ?? io.env.KYRN_CODING_AGENT_DIR ?? join(io.home, ".mu", "agent"),

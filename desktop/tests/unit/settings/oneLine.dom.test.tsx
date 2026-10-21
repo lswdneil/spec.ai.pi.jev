@@ -42,7 +42,7 @@ describe('a setting’s sentence on one line', () => {
   });
 
   it('has nothing to open when the sentence fits, and draws nothing for no sentence', () => {
-    const { container } = render(<OneLine text='Start mu when the computer starts.' />);
+    const { container } = render(<OneLine text='Start spec.jev when the computer starts.' />);
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
     cleanup();
     render(<OneLine text='' />);

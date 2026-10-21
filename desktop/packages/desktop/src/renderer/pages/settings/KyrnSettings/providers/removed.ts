@@ -1,7 +1,7 @@
 /**
- * Providers removed on this screen since the app started. What mu reports it can use is a snapshot of its last
+ * Providers removed on this screen since the app started. What spec.jev reports it can use is a snapshot of its last
  * connection, so a provider removed here would otherwise come back as "other built-in, usable" (and as a startup
- * model) until mu connects again.
+ * model) until spec.jev connects again.
  */
 const removed = new Set<string>();
 

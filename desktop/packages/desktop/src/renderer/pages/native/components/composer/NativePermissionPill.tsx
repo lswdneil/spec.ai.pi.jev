@@ -1,9 +1,9 @@
 /**
- * What mu may do without asking in this conversation (full access, Jev approves, minimal), as a pill at the left of
- * the send box, with the look of the permission pill in mu's other conversations (AgentModeSelector, compact). The mode
- * in force is mu's latest `permissions.mode` frame, else what the session file says, else mu's default; a pick sends
- * mu's own `/permissions <mode> --here`, which switches this conversation only (the mode new conversations start in is
- * set in the settings). It runs at once, during a run too: mu checks the next call under the new mode.
+ * What spec.jev may do without asking in this conversation (full access, Jev approves, minimal), as a pill at the left of
+ * the send box, with the look of the permission pill in spec.jev's other conversations (AgentModeSelector, compact). The mode
+ * in force is spec.jev's latest `permissions.mode` frame, else what the session file says, else spec.jev's default; a pick sends
+ * spec.jev's own `/permissions <mode> --here`, which switches this conversation only (the mode new conversations start in is
+ * set in the settings). It runs at once, during a run too: spec.jev checks the next call under the new mode.
  */
 import { Dropdown, Menu, Tooltip } from '@arco-design/web-react';
 import { Down, Shield } from '@icon-park/react';
@@ -26,7 +26,7 @@ const NativePermissionPill: React.FC<{
   const [visible, setVisible] = useState(false);
   const [switching, setSwitching] = useState(false);
   const { mode, modes } = state;
-  // A conversation that has said no mode yet starts in mu's default: the pill names it rather than "mu's default".
+  // A conversation that has said no mode yet starts in spec.jev's default: the pill names it rather than "spec.jev's default".
   const fallback = useMuDefaultPermission();
   const shown = mode ?? fallback;
   const nameOf = (id: string, label?: string): string => t(`agentMode.${id}`, { defaultValue: label || id });

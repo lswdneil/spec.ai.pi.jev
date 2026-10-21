@@ -1,4 +1,4 @@
-/* The mu settings area: one section as a settings page, one save bar below it. Alone (outside the settings routes)
+/* The spec.jev settings area: one section as a settings page, one save bar below it. Alone (outside the settings routes)
    a section list sits on the left. It sizes itself by its own width, so it works in narrow windows alike. */
 .area {
   display: flex;

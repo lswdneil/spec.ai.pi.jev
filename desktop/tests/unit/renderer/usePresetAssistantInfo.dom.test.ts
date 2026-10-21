@@ -523,7 +523,7 @@ describe('usePresetAssistantInfo', () => {
     });
   });
 
-  it('shows the backend’s built-in agent as mu, by its stored name or by its backend id', () => {
+  it('shows the backend’s built-in agent as spec.jev, by its stored name or by its backend id', () => {
     useSWRMock.mockImplementation((key: unknown) => {
       if (key === 'assistants.list') return { data: [], isLoading: false };
       if (key === 'extensions.acpAdapters') return { data: [], isLoading: false };
@@ -544,9 +544,9 @@ describe('usePresetAssistantInfo', () => {
   it('still finds a legacy assistant whose stored rules name it AionUi Butler', () => {
     useSWRMock.mockImplementation((key: unknown) => {
       if (key === 'assistants.list') {
-        // The catalog shows the backend's names as mu (ipcBridge.assistants.list).
+        // The catalog shows the backend's names as spec.jev (ipcBridge.assistants.list).
         return {
-          data: [{ id: 'butler-1', name: 'mu Butler', avatar: '🤵', name_i18n: { 'en-US': 'mu Butler' } }],
+          data: [{ id: 'butler-1', name: 'spec.jev Butler', avatar: '🤵', name_i18n: { 'en-US': 'spec.jev Butler' } }],
           isLoading: false,
         };
       }
@@ -557,10 +557,10 @@ describe('usePresetAssistantInfo', () => {
     const conversation = makeConversation({ preset_context: '# AionUi Butler\n\nYou are AionUi’s built-in butler.' });
     const { result } = renderHook(() => usePresetAssistantInfo(conversation));
 
-    expect(result.current.info).toMatchObject({ name: 'mu Butler', assistantId: 'butler-1' });
+    expect(result.current.info).toMatchObject({ name: 'spec.jev Butler', assistantId: 'butler-1' });
   });
 
-  it('shows the assistant name a conversation stored from the backend as mu', () => {
+  it('shows the assistant name a conversation stored from the backend as spec.jev', () => {
     useSWRMock.mockImplementation((key: unknown) => {
       if (key === 'assistants.list') return { data: [], isLoading: false };
       if (key === 'extensions.acpAdapters') return { data: [], isLoading: false };
@@ -573,7 +573,7 @@ describe('usePresetAssistantInfo', () => {
     } as TChatConversation;
     const { result } = renderHook(() => usePresetAssistantInfo(conversation));
 
-    expect(result.current.info).toMatchObject({ name: 'mu Butler', assistantId: 'aionui-assistant' });
+    expect(result.current.info).toMatchObject({ name: 'spec.jev Butler', assistantId: 'aionui-assistant' });
   });
 
   it('treats legacy custom_agent_id as runtime-only when resolving explicit assistant identity', () => {

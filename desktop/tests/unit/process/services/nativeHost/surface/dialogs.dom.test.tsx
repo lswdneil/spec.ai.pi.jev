@@ -11,7 +11,7 @@ import enCommon from '@/renderer/services/i18n/locales/en-US/common.json';
 import enMessages from '@/renderer/services/i18n/locales/en-US/messages.json';
 import enMu from '@/renderer/services/i18n/locales/en-US/mu.json';
 
-/** The dialogs pi waits on, as the native screen asks them: mu's permission question, choices, text, a countdown. */
+/** The dialogs pi waits on, as the native screen asks them: spec.jev's permission question, choices, text, a countdown. */
 
 afterEach(() => {
   cleanup();
@@ -40,7 +40,7 @@ const permission: ViewPermission = {
 const asking = (extra: Partial<ViewDialog> = {}): ViewDialog => ({
   id: 'd1',
   method: 'select',
-  title: 'mu wants to run a command\nls -la\nJev is not sure this is what you want.',
+  title: 'spec.jev wants to run a command\nls -la\nJev is not sure this is what you want.',
   options: ANSWERS,
   inRun: true,
   permission,
@@ -73,10 +73,10 @@ function show(dialog: ViewDialog, result: NativeResult<void> = { ok: true, data:
 }
 
 describe('the permission card of a native dialog', () => {
-  it('words mu’s question from its codes and sends mu’s own answer text back', async () => {
+  it('words spec.jev’s question from its codes and sends spec.jev’s own answer text back', async () => {
     const { answered } = show(asking());
     expect(screen.getByTestId('native-dialog')).toHaveAttribute('data-method', 'select');
-    expect(screen.getByText('mu wants to run a command')).toBeInTheDocument();
+    expect(screen.getByText('spec.jev wants to run a command')).toBeInTheDocument();
     expect(screen.getByText("Jev isn't sure this step is what you want.")).toBeInTheDocument();
     expect(screen.getByText('ls -la')).toBeInTheDocument();
     expect(options().map((option) => option.textContent)).toEqual(ANSWERS);
@@ -100,7 +100,7 @@ describe('the permission card of a native dialog', () => {
     expect(options()).toHaveLength(3);
   });
 
-  it('keeps mu’s own words when it sends no codes the app knows, and reads answers by their place', () => {
+  it('keeps spec.jev’s own words when it sends no codes the app knows, and reads answers by their place', () => {
     const card = permissionCard(
       asking({ title: 'Do the thing\nthing --now\nBecause.', options: ['Yes', 'Only now', 'No'] }),
       { kind: 'teleport', summary: 'thing --now', answers: ['Yes', 'Only now', 'No'] },
@@ -186,7 +186,7 @@ describe('other native dialogs', () => {
     const dialog: ViewDialog = { id: 'd6', method: 'confirm', title: 'Quick?', timeout: 3000, inRun: true };
     const { expired } = show(dialog, undefined, 2);
     expect(screen.getByTestId('native-dialog-countdown')).toHaveTextContent(
-      'Closes in 3s, then mu continues without your answer.'
+      'Closes in 3s, then spec.jev continues without your answer.'
     );
     expect(screen.getByText('2 more waiting')).toBeInTheDocument();
     act(() => {

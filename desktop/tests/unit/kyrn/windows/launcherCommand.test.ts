@@ -16,8 +16,8 @@ import {
   type LauncherDeps,
 } from '../../../../packages/desktop/src/process/agent/kyrn/windows/launcherCommand.ts';
 
-// Issue #4: the installer's default folder, C:\Program Files\mu. AionCore started the launcher as `C:\Program`.
-const INSTALLED = 'C:\\Program Files\\mu\\resources\\mu\\acp.cmd';
+// Issue #4: the installer's default folder, C:\Program Files\spec.jev. AionCore started the launcher as `C:\Program`.
+const INSTALLED = 'C:\\Program Files\\spec.jev\\resources\\spec.jev\\acp.cmd';
 const SHORT = 'C:\\PROGRA~1\\mu\\resources\\mu\\acp.cmd';
 const ENV: NodeJS.ProcessEnv = {
   LOCALAPPDATA: 'C:\\Users\\someone\\AppData\\Local',
@@ -68,7 +68,7 @@ async function failure(work: Promise<unknown>): Promise<unknown> {
   return undefined;
 }
 
-describe('the command mu registers for its launcher', () => {
+describe('the command spec.jev registers for its launcher', () => {
   it('registers the launcher of macOS and Linux as it is, spaces and all, and asks nothing', async () => {
     const launcher = '/Users/some one/Applications/mu.app/Contents/Resources/mu/acp';
     const { deps, asked, written } = machine({ platform: 'darwin' });
@@ -120,7 +120,7 @@ describe('the command mu registers for its launcher', () => {
   it('does not trust a short answer that names another file: it forwards instead', async () => {
     const other = 'C:\\PROGRA~2\\mu\\resources\\mu\\acp.cmd';
     const { deps } = machine({
-      files: { [INSTALLED]: INSTALLED, [other]: 'C:\\Program Files (x86)\\mu\\resources\\mu\\acp.cmd' },
+      files: { [INSTALLED]: INSTALLED, [other]: 'C:\\Program Files (x86)\\spec.jev\\resources\\spec.jev\\acp.cmd' },
       short: other,
       writable: [ENV.LOCALAPPDATA as string],
     });
@@ -142,9 +142,9 @@ describe('the command mu registers for its launcher', () => {
   });
 
   it('forwards to an ASCII short spelling of a folder outside ASCII', async () => {
-    const launcher = 'C:\\Program Files\\Müller\\mu\\resources\\mu\\acp.cmd';
+    const launcher = 'C:\\Program Files\\Müller\\spec.jev\\resources\\spec.jev\\acp.cmd';
     // Only the second folder has a short name: the spelling still has a space, but it is ASCII.
-    const short = 'C:\\Program Files\\MLLER~1\\mu\\resources\\mu\\acp.cmd';
+    const short = 'C:\\Program Files\\MLLER~1\\spec.jev\\resources\\spec.jev\\acp.cmd';
     const { deps, written } = machine({
       files: { [launcher]: launcher, [short]: launcher },
       short,
@@ -155,7 +155,7 @@ describe('the command mu registers for its launcher', () => {
   });
 
   it('fails with installPath when a folder outside ASCII has no short name, and writes nothing', async () => {
-    const launcher = 'C:\\Program Files\\Müller\\mu\\resources\\mu\\acp.cmd';
+    const launcher = 'C:\\Program Files\\Müller\\spec.jev\\resources\\spec.jev\\acp.cmd';
     const { deps, written } = machine({
       files: { [launcher]: launcher },
       short: launcher,
@@ -243,7 +243,7 @@ describe('restoring an uninstalled launcher', () => {
       'resources\\mu\\acp.cmd',
       'C:\\custom\\acp.cmd',
       '\\\\server\\share\\resources\\mu\\acp.cmd',
-      'C:\\mu\\resources\\mu\\acp.cmd --flag',
+      'C:\\spec.jev\\resources\\spec.jev\\acp.cmd --flag',
     ])
       expect(own.canRestore?.(file), file).toBe(false);
     expect(checked).toHaveLength(before);
@@ -302,8 +302,8 @@ describe('the forwarder', () => {
   });
 
   it('doubles a percent sign of the path, as a batch file says one', () => {
-    expect(forwarderContent('C:\\100% apps\\mu\\resources\\mu\\acp.cmd')).toContain(
-      '"C:\\100%% apps\\mu\\resources\\mu\\acp.cmd" %*'
+    expect(forwarderContent('C:\\100% apps\\spec.jev\\resources\\spec.jev\\acp.cmd')).toContain(
+      '"C:\\100%% apps\\spec.jev\\resources\\spec.jev\\acp.cmd" %*'
     );
   });
 

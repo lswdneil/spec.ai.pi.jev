@@ -15,7 +15,7 @@ const KEY = 'common.kyrn.lessonsView';
 const NONE: StoredLesson[] = [];
 
 /**
- * The lessons tab: what mu has learned for this project, read from its lessons file and folded by id. The lessons in
+ * The lessons tab: what spec.jev has learned for this project, read from its lessons file and folded by id. The lessons in
  * use, the most followed first; "all" adds the retired and replaced ones, greyed. Above the list, a few quiet lines say
  * what the lessons did in this session. A lesson in use can be reworded or retired, each one line appended to the file
  * the harness writes too. The file is read when the tab comes into view and after every lesson event of the session.

@@ -273,7 +273,7 @@ const handleSocketMessage = async (ws: WebSocket, raw: string, announcedSessions
     sendError(
       ws,
       id,
-      'The in-app browser is not currently attached. Open the browser panel in mu so a page is available to control.',
+      'The in-app browser is not currently attached. Open the browser panel in spec.jev so a page is available to control.',
       sessionId
     );
     return;

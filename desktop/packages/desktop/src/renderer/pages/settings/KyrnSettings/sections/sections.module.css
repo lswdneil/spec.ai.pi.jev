@@ -1,4 +1,4 @@
-/* A page of mu's settings: the page header, then plain panels. Each section is its own size container, so its rows
+/* A page of spec.jev's settings: the page header, then plain panels. Each section is its own size container, so its rows
    and the provider manager lay themselves out by the room they really have (a page or a narrow window). */
 .section {
   display: flex;

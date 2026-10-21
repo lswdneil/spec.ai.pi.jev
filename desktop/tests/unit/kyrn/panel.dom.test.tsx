@@ -37,7 +37,7 @@ beforeAll(async () => {
 });
 beforeEach(() => {
   activity.mockResolvedValue({ ok: true, data: { sessionId: 'session', cursor: 0, more: false, events: [] } });
-  // The models mu last reported, as the send box's picker names them.
+  // The models spec.jev last reported, as the send box's picker names them.
   availableModels.mockResolvedValue({
     ok: true,
     data: {
@@ -271,7 +271,7 @@ describe('the kernel tabs: entry and hive navigation', () => {
     // The model by the name the send box gives it, once the names are read; never its raw provider/id.
     expect(await within(audit).findByText('investigator · GPT-5.6 Terra · High')).toBeVisible();
     expect(audit.textContent).not.toContain('openai-codex/');
-    // A model mu did not report goes by its id, without the provider.
+    // A model spec.jev did not report goes by its id, without the provider.
     expect(within(study).getByTestId('hive-row-who')).toHaveTextContent(/^investigator · custom-7b$/);
 
     // The task alone on its line, whole on hover; who it is sits on the line of what it does.

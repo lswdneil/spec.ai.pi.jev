@@ -13,7 +13,7 @@
  *   `decision` presentation frame), once in the file, and count once by record id. Each is filed under the turn that
  *   asked (`origin.turn`), not the turn during which it arrived.
  * - The verdict line of a message (`kyrn.verdict`) follows its user message, live and in the file.
- * - mu's goal is its latest `kyrn.goal` entry, or a `goal.state` frame after it (view.ts `ViewGoal`).
+ * - spec.jev's goal is its latest `kyrn.goal` entry, or a `goal.state` frame after it (view.ts `ViewGoal`).
  * - The status comes from pi's events: `agent_start` to `agent_settled` is a run, a thinking block is `thinking`, and
  *   how the run ended is its last assistant message's stop reason. Nothing is inferred from timing.
  *
@@ -64,7 +64,7 @@ import { wordsOf } from './words.ts';
 export const DECISION_ENTRY = 'kyrn.decision';
 /** The verdict line the preflight shows under a message (VERDICT_ENTRY in the harness). */
 export const VERDICT_ENTRY = 'kyrn.verdict';
-/** mu's goal, saved each time it changes (GOAL_ENTRY in the harness); its `goal.state` frame says the same. */
+/** spec.jev's goal, saved each time it changes (GOAL_ENTRY in the harness); its `goal.state` frame says the same. */
 export const GOAL_ENTRY = 'kyrn.goal';
 export const GOAL_FRAME = 'goal.state';
 
@@ -438,7 +438,7 @@ function openDialog(view: NativeView, record: PiRecord, method: DialogMethod): N
   if (!id) return view;
   const timeout = asNumber(record.timeout);
   const options = method === 'select' ? asList(record.options).map(asText) : undefined;
-  // mu's permission question comes right after what it said about it (the CLI bridge pairs them the same way).
+  // spec.jev's permission question comes right after what it said about it (the CLI bridge pairs them the same way).
   const asked = view.live.permission;
   const permission =
     options && asked && asked.answers.length === options.length && asked.answers.every((a, i) => a === options[i])
@@ -499,7 +499,7 @@ function uiRequest(view: NativeView, record: PiRecord): NativeView {
       return permission ? withLive(shown, { ...shown.live, permission }) : shown;
     }
     case 'permissions.resolved': {
-      // Answered, or given up when the run was stopped (mu then says `deny` and pi says nothing of the dialog).
+      // Answered, or given up when the run was stopped (spec.jev then says `deny` and pi says nothing of the dialog).
       const toolCallId = asText(frame.payload.toolCallId);
       const dialogs = toolCallId
         ? shown.dialogs.filter((dialog) => dialog.permission?.toolCallId !== toolCallId)

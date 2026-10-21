@@ -86,7 +86,7 @@ export interface McpStdioServerConfig extends McpServerConfigBase {
 	/** Relative paths resolve against the session working directory. */
 	cwd?: string;
 	/**
-	 * mu: false starts the server with `env` only, without pi's own environment, which holds model keys. mu
+	 * spec.jev: false starts the server with `env` only, without pi's own environment, which holds model keys. spec.jev
 	 * registers the servers it takes over from other tools this way, with the few variables a program needs.
 	 * Default: true.
 	 */

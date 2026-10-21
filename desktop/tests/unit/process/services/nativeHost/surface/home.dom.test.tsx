@@ -131,7 +131,7 @@ describe('the home page’s send on the native host', () => {
     expect(host.calls.some((call) => call.method === 'remove')).toBe(false);
   });
 
-  it('sends an image it cannot read as its path, a mode that is not mu’s and a model without a provider not at all', async () => {
+  it('sends an image it cannot read as its path, a mode that is not spec.jev’s and a model without a provider not at all', async () => {
     const host = createFakeHost();
     const { send } = home(host.client, {
       selectedMode: 'bypassPermissions',
@@ -196,7 +196,7 @@ describe('the home page’s send on the native host', () => {
     const host = createFakeHost();
     const { setters, send } = home(host.client, { dir: '' });
     await send();
-    expect(Message.warning).toHaveBeenCalledWith('Choose a folder for mu to work in first.');
+    expect(Message.warning).toHaveBeenCalledWith('Choose a folder for spec.jev to work in first.');
     expect(host.calls).toEqual([]);
     expect(setters.navigate).not.toHaveBeenCalled();
     expect(setters.setInput).not.toHaveBeenCalled();
@@ -206,21 +206,21 @@ describe('the home page’s send on the native host', () => {
     const host = createFakeHost();
     const { setters, send } = home({
       ...host.client,
-      create: async () => ({ ok: false, kind: 'no-harness', message: 'no mu at /opt/mu' }),
+      create: async () => ({ ok: false, kind: 'no-harness', message: 'no spec.jev at /opt/mu' }),
     });
     await send();
-    expect(Message.error).toHaveBeenCalledWith("The app can't find mu to run. no mu at /opt/mu");
+    expect(Message.error).toHaveBeenCalledWith("The app can't find spec.jev to run. no spec.jev at /opt/mu");
     expect(setters.navigate).not.toHaveBeenCalled();
     expect(setters.setInput).not.toHaveBeenCalled();
     expect(setters.setLoading).toHaveBeenLastCalledWith(false);
   });
 
-  it('leaves no conversation behind when mu does not start, and keeps what was typed', async () => {
+  it('leaves no conversation behind when spec.jev does not start, and keeps what was typed', async () => {
     const host = createFakeHost();
     host.answer(() => ({ ok: false, kind: 'failed', message: 'spawn ENOENT' }));
     const { setters, send } = home(host.client);
     await send();
-    expect(Message.error).toHaveBeenCalledWith('mu stopped before it could start. spawn ENOENT');
+    expect(Message.error).toHaveBeenCalledWith('spec.jev stopped before it could start. spawn ENOENT');
     expect(host.calls.map((call) => call.method)).toEqual(['create', 'request', 'remove']);
     expect(host.calls.at(-1)).toEqual({ method: 'remove', id: 'draft-1' });
     expect(setters.navigate).not.toHaveBeenCalled();

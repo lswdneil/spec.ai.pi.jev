@@ -3,7 +3,7 @@ title: Permissions and safety
 summary: The three permission modes, what Jev may approve for you, your hard constraints, risky commands and outside content.
 ---
 
-The **permission mode** sets how much mu may do without asking. It shows in the status line and in the app's send box, and `/permissions` switches it at any time.
+The **permission mode** sets how much spec.jev may do without asking. It shows in the status line and in the app's send box, and `/permissions` switches it at any time.
 
 ## The three modes {#modes}
 
@@ -13,15 +13,15 @@ The **permission mode** sets how much mu may do without asking. It shows in the 
 | **Jev approves** (the default) | Reading; editing files inside the project; whatever Jev is sure the task needs | Whatever Jev is unsure of, thinks goes beyond your request or thinks is unrelated |
 | **Ask first** | Reading only | Every edit, command, external action and subagent |
 
-`/permissions full`, `/permissions jev` and `/permissions ask` switch directly. A switch applies to this conversation and becomes the default for new ones; other running conversations keep their own mode. `MU_PERMISSIONS=ask mu` sets it for one run.
+`/permissions full`, `/permissions jev` and `/permissions ask` switch directly. A switch applies to this conversation and becomes the default for new ones; other running conversations keep their own mode. `MU_PERMISSIONS=ask spec.jev` sets it for one run.
 
 ## What Jev approves {#jev-approves}
 
 In *Jev approves*, each command, change outside the project, external action and subagent goes to Jev first, with one question: is this call **needed** for the task and what you said, does it go **beyond** it, is it **unrelated** or is it **unclear**? Only a *needed* verdict at 0.8 or higher runs without asking you. Anything else asks you, and the prompt says why, for example *Jev thinks this goes beyond what you asked for*.
 
-When no judge can answer (no key and the free Jev unavailable, an exhausted account or only a local judge, which isn't trusted with approvals), mu asks you about every step and says so. Set a Jev key with `mu setup`, or switch the mode.
+When no judge can answer (no key and the free Jev unavailable, an exhausted account or only a local judge, which isn't trusted with approvals), spec.jev asks you about every step and says so. Set a Jev key with `spec.jev setup`, or switch the mode.
 
-## When mu asks {#asking}
+## When spec.jev asks {#asking}
 
 A call that needs you shows one picker:
 
@@ -35,8 +35,8 @@ A command with chaining, redirection or substitution, or one starting with `sudo
 
 - **Your hard constraints.** What you rule out, such as *don't touch the migrations*, is kept word for word in the task frame. Before any call that changes something, the constraints are checked, and a confident violation is stopped in your own words. This holds even in full access, and subagents work under the same constraints.
 - **Reading is never asked about**: reading, searching and listing files, web search and web reading, and shell commands made only of read-only programs such as `git status` or `cat … | grep …`.
-- **Unknown tools are asked about.** A tool mu doesn't know, such as an MCP tool, needs permission.
-- **mu's own settings are yours.** A call that touches `~/.mu/agent` is asked every time; Jev can't approve it.
+- **Unknown tools are asked about.** A tool spec.jev doesn't know, such as an MCP tool, needs permission.
+- **spec.jev's own settings are yours.** A call that touches `~/.spec.jev/agent` is asked every time; Jev can't approve it.
 
 ## Risky commands {#risky}
 
@@ -50,7 +50,7 @@ Web pages, search results, the built-in browser and MCP servers can carry text w
 
 ## Undoing changes {#checkpoints}
 
-Before the first change of every turn that edits files, mu snapshots the project into a shadow git directory of its own. Your repository, index and branches are never touched, and the project doesn't need to be a git repository. Files holding secrets (`.env`, keys, certificates) are never snapshotted.
+Before the first change of every turn that edits files, spec.jev snapshots the project into a shadow git directory of its own. Your repository, index and branches are never touched, and the project doesn't need to be a git repository. Files holding secrets (`.env`, keys, certificates) are never snapshotted.
 
 - `/checkpoints` lists the checkpoints on the current branch of the conversation.
 - `/rewind` shows what would change, then takes the files, the conversation or both back. Files you edited yourself since are listed separately and asked about.

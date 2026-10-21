@@ -2,10 +2,10 @@ import type { CSSProperties } from 'react';
 import { vs, vs2015 } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 /**
- * Syntax colours of the mu colour scheme.
+ * Syntax colours of the spec.jev colour scheme.
  *
  * react-syntax-highlighter writes its colours inline, so a stylesheet cannot re-tint them. Each upstream style is
- * copied with its colours wrapped in `var(--mu-code-<token>, <upstream colour>)`: the mu scheme defines the tokens
+ * copied with its colours wrapped in `var(--mu-code-<token>, <upstream colour>)`: the spec.jev scheme defines the tokens
  * (mu-color-scheme.css, contrast held by scripts/kyrn/theme/contrast.mts), and under any scheme that does not, the
  * upstream colour is what renders. Nothing else of the upstream style is touched.
  */
@@ -56,7 +56,7 @@ export function withMuTokens(upstream: SyntaxStyle): SyntaxStyle {
   const fallbackText = String(upstream.hljs?.color ?? 'inherit');
   const style: SyntaxStyle = {};
   for (const [selector, value] of Object.entries(upstream)) style[selector] = tinted(selector, value, fallbackText);
-  // Tokens the upstream style leaves uncoloured (numbers in the light one) still get their mu colour.
+  // Tokens the upstream style leaves uncoloured (numbers in the light one) still get their spec.jev colour.
   for (const [selector, token] of Object.entries(TOKEN_OF_SELECTOR)) {
     if (style[selector] || token === 'add' || token === 'del') continue;
     style[selector] = { color: `var(--mu-code-${token}, ${fallbackText})` };

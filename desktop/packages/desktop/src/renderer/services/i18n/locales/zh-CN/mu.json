@@ -1,6 +1,6 @@
 {
-  "title": "mu 设置",
-  "description": "mu 支持的各项控制都在这里：判定器、判定点、功能、模型与上下文。与命令行里的 mu 共用同一份配置。",
+  "title": "spec.jev 设置",
+  "description": "spec.jev 支持的各项控制都在这里：判定器、判定点、功能、模型与上下文。与命令行里的 spec.jev 共用同一份配置。",
   "reload": "重新载入",
   "modified": "已修改",
   "applyNote": "修改对新会话生效。正在运行的会话沿用启动时的配置，重新连接后才会使用新配置。",
@@ -38,8 +38,8 @@
     "off": "关闭"
   },
   "harness": {
-    "tooOld": "当前的 mu 版本较旧，还不能列出自己的判定点和功能。更新 mu 后这里才会列出；基础设置仍可正常使用。",
-    "unsupported": "mu 用了本应用不认识的格式描述自己（版本 {{version}}）。请更新应用后再编辑判定点和功能。"
+    "tooOld": "当前的 spec.jev 版本较旧，还不能列出自己的判定点和功能。更新 spec.jev 后这里才会列出；基础设置仍可正常使用。",
+    "unsupported": "spec.jev 用了本应用不认识的格式描述自己（版本 {{version}}）。请更新应用后再编辑判定点和功能。"
   },
   "load": {
     "failed": "无法读取设置"
@@ -50,7 +50,7 @@
     "nothing": "没有未保存的修改",
     "unsavedDot": "有未保存的修改",
     "discard": "放弃修改",
-    "stale": "配置在载入之后被其他程序（命令行 mu 或运行中的会话）改过，因此这次没有保存。请重新载入查看最新状态；尚未保存的修改会丢失。",
+    "stale": "配置在载入之后被其他程序（命令行 spec.jev 或运行中的会话）改过，因此这次没有保存。请重新载入查看最新状态；尚未保存的修改会丢失。",
     "failed": "保存失败：{{reason}}"
   },
   "units": {
@@ -73,13 +73,13 @@
     "useDefault": "改回默认（{{mode}}）"
   },
   "features": {
-    "lead": "mu 在后台替你做的事。关掉一项，mu 就不再做这件事。",
+    "lead": "spec.jev 在后台替你做的事。关掉一项，spec.jev 就不再做这件事。",
     "beta": "测试版",
     "reset": "恢复默认",
     "boardModelElsewhere": "写看板的模型在「人话模型」里选。",
     "options": "选项",
     "noOptions": "没有别的可设置：只有这个开关。",
-    "noSuchFeature": "这个版本的 mu 没有这项功能。",
+    "noSuchFeature": "这个版本的 spec.jev 没有这项功能。",
     "none": "这里还没有功能。",
     "part": "选项第 {{part}} 页，共 {{parts}} 页",
     "previousPart": "上一页",
@@ -120,7 +120,7 @@
       },
       "opencode": {
         "name": "OpenCode Zen",
-        "help": "OpenCode Zen 上的 Jev 1.13，按次计费，记在你的 OpenCode 账户上。同一个密钥也能在 mu 里用 OpenCode Zen 的对话模型。",
+        "help": "OpenCode Zen 上的 Jev 1.13，按次计费，记在你的 OpenCode 账户上。同一个密钥也能在 spec.jev 里用 OpenCode Zen 的对话模型。",
         "key": "OpenCode API 密钥"
       },
       "cloudflare": {
@@ -142,14 +142,14 @@
     "baseUrlHelp": "留空则使用 TypeSafe 官方地址",
     "customUrlHelp": "该服务的 System One 地址。它的密钥只会发到这里。",
     "baseUrlNeeded": "自定义服务需要填写地址。",
-    "customTier": "你自己加的判定器，要改它请编辑 mu 的设置文件。",
+    "customTier": "你自己加的判定器，要改它请编辑 spec.jev 的设置文件。",
     "endpointDefault": "使用服务的默认地址",
     "types": {
       "localHelp": "在这台电脑上运行。",
       "clmHelp": "运行在你自己的 CLM 服务器上。",
-      "classifierHelp": "mu 模型目录里的分类模型：{{model}}。mu 用它所属服务商的密钥调用它。"
+      "classifierHelp": "spec.jev 模型目录里的分类模型：{{model}}。spec.jev 用它所属服务商的密钥调用它。"
     },
-    "intro": "mu 工作时要做很多小判断：这条消息该怎么处理、这一步会不会违反你定的规则……判定器负责回答。选一个就行。",
+    "intro": "spec.jev 工作时要做很多小判断：这条消息该怎么处理、这一步会不会违反你定的规则……判定器负责回答。选一个就行。",
     "mode": "判定生效",
     "modeHelp": "开着时，判定器的结论直接起作用；关掉后每一步照常进行。没有单独设置的环节都跟着它。",
     "choose": "选择判定器",
@@ -175,7 +175,7 @@
     "localAddress": "服务地址：{{address}}",
     "laya": {
       "running": "正在本机运行",
-      "stopped": "已安装，没有运行。mu 用到它时会自己启动。",
+      "stopped": "已安装，没有运行。spec.jev 用到它时会自己启动。",
       "missing": "还没有安装。",
       "platform": "这台电脑跑不了 Laya：它需要 Windows 或 Linux（x64 或 arm64），或者 Apple Silicon 的 Mac。",
       "needsUv": "安装需要先装好 uv（Python 的包管理工具），装好后回到这里。",
@@ -184,7 +184,7 @@
       "start": "启动",
       "stop": "停止",
       "confirmTitle": "下载并安装 Laya？",
-      "confirmText": "这会从 PyPI 和 Hugging Face 下载约 {{size}} MB（Python 依赖和模型权重）到 mu 的目录，需要几分钟。装好后 Laya 会自动启动。",
+      "confirmText": "这会从 PyPI 和 Hugging Face 下载约 {{size}} MB（Python 依赖和模型权重）到 spec.jev 的目录，需要几分钟。装好后 Laya 会自动启动。",
       "confirmOk": "下载并安装",
       "working": {
         "setup": "正在安装 Laya…",
@@ -197,11 +197,11 @@
         "stop": "Laya 没能停止。"
       },
       "onnx": {
-        "missing": "这台电脑上还没有 Laya 的模型（约 {{size}} MB）。mu 不会替你下载：请从 Hugging Face 下载这些文件，放进模型文件夹，再点「检查并启动」。",
-        "stopped": "模型已就位，Laya 没有运行。选了 Laya 作为判定器时，mu 会在打开 App 时自己启动它。",
+        "missing": "这台电脑上还没有 Laya 的模型（约 {{size}} MB）。spec.jev 不会替你下载：请从 Hugging Face 下载这些文件，放进模型文件夹，再点「检查并启动」。",
+        "stopped": "模型已就位，Laya 没有运行。选了 Laya 作为判定器时，spec.jev 会在打开 App 时自己启动它。",
         "starting": "正在检查模型并启动 Laya… 第一次检查要读完整个模型，需要一会儿。",
         "missingFiles": "还缺：{{files}}",
-        "wrongFiles": "这些文件不是 mu 测试过的版本，请重新下载：{{files}}",
+        "wrongFiles": "这些文件不是 spec.jev 测试过的版本，请重新下载：{{files}}",
         "folder": "模型文件夹：{{folder}}",
         "command": "装了 Hugging Face 命令行（hf）的话，一条命令就能下全：",
         "page": "去 Hugging Face 下载",
@@ -209,11 +209,11 @@
         "check": "检查并启动",
         "problem": {
           "missing": "缺少部分模型文件。",
-          "wrong": "部分模型文件不是 mu 测试过的版本，请重新下载。",
+          "wrong": "部分模型文件不是 spec.jev 测试过的版本，请重新下载。",
           "runtime": "这台电脑运行不了这个模型。",
           "port": "Laya 的端口（{{port}}）已被别的程序占用。",
           "stopped": "Laya 还没准备好就停了。",
-          "foreign": "这里在运行一个不是 mu 启动的 Laya，请在启动它的地方停止它。"
+          "foreign": "这里在运行一个不是 spec.jev 启动的 Laya，请在启动它的地方停止它。"
         }
       }
     },
@@ -224,7 +224,7 @@
       "keyPlaceholder": "服务器要求时才填",
       "keyHelp": "只有用 CLM_API_KEY 启动的服务器才要密钥：填同一个值。保存后不再显示。",
       "check": "检查服务器",
-      "unmeasured": "CLM 做 mu 的判定做得怎么样，目前还没有测过。",
+      "unmeasured": "CLM 做 spec.jev 的判定做得怎么样，目前还没有测过。",
       "status": {
         "checking": "正在询问服务器…",
         "ready": "正在应答 · {{models}} · {{ms}} 毫秒",
@@ -272,19 +272,19 @@
   },
   "permissionsCard": {
     "kind": {
-      "edit": "mu 想改文件，需要你授权",
-      "shell": "mu 想运行命令，需要你授权",
-      "run": "mu 想运行程序，需要你授权",
-      "outside": "mu 想改动项目外的文件，需要你授权",
-      "delegate": "mu 想派出子代理，需要你授权",
-      "other": "mu 想对外操作，需要你授权"
+      "edit": "spec.jev 想改文件，需要你授权",
+      "shell": "spec.jev 想运行命令，需要你授权",
+      "run": "spec.jev 想运行程序，需要你授权",
+      "outside": "spec.jev 想改动项目外的文件，需要你授权",
+      "delegate": "spec.jev 想派出子代理，需要你授权",
+      "other": "spec.jev 想对外操作，需要你授权"
     },
     "reason": {
       "ask": "最小权限模式：改文件、跑命令、对外操作都先问你。",
       "unsure": "Jev 拿不准这一步是不是你要的。",
       "beyond": "Jev 认为这一步超出了你的要求。",
       "unrelated": "Jev 认为这一步和当前任务无关。",
-      "protected": "这会动到 mu 自己的设置，只能由你决定。",
+      "protected": "这会动到 spec.jev 自己的设置，只能由你决定。",
       "nojudge": "还没有可用的判定器，所以每一步都先问你。",
       "judgedown": "判定器这次没有回答，所以先问你。"
     },
@@ -342,7 +342,7 @@
     "foreignHelp": "这个条目改写了内置提供商，或用了本页面不支持编辑的 API 格式。这里只能移除它，不能编辑；要修改请直接改 models.json。",
     "modelCount": "{{count, number}} 个模型",
     "usable": "可用",
-    "builtinHelp": "mu 上次连接时报告它能用，通常是因为环境里有它的 API 密钥。这里不能移除它：从环境变量里删掉那个密钥，mu 下次连接后它就不会再出现。",
+    "builtinHelp": "spec.jev 上次连接时报告它能用，通常是因为环境里有它的 API 密钥。这里不能移除它：从环境变量里删掉那个密钥，spec.jev 下次连接后它就不会再出现。",
     "noneYet": "暂无",
     "unreadable": "无法解析 models.json，提供商既不会显示也不会保存。请手动修复后重新载入。",
     "commented": "models.json 里有注释，从这里保存会把注释弄丢，所以提供商暂为只读。手动去掉注释后即可在此编辑。",
@@ -381,7 +381,7 @@
     "instant": "登录和退出立即生效，不用点保存。",
     "models": "可用的模型",
     "byKey": "可用（API 密钥）",
-    "byKeyHelp": "没有登录订阅，但 mu 上次连接时报告它能用，通常是因为环境里有它的 API 密钥。登录订阅后改用订阅。",
+    "byKeyHelp": "没有登录订阅，但 spec.jev 上次连接时报告它能用，通常是因为环境里有它的 API 密钥。登录订阅后改用订阅。",
     "otherRunning": "{{name}} 正在登录，同一时间只能进行一个登录。",
     "showRunning": "去看看"
   },
@@ -467,10 +467,10 @@
     "model": "模型",
     "notSet": "未选择",
     "pickProvider": "先选提供商",
-    "unset": "还没选：第一次打开看板时 mu 会问你。",
+    "unset": "还没选：第一次打开看板时 spec.jev 会问你。",
     "session": "跟着对话用的模型",
     "sessionHelp": "对话换了模型，看板也跟着换。",
-    "update": "这个版本的 mu 还不能在这里选写看板的模型，更新 mu 后就可以。"
+    "update": "这个版本的 spec.jev 还不能在这里选写看板的模型，更新 spec.jev 后就可以。"
   },
   "levels": {
     "off": "不思考",
@@ -497,7 +497,7 @@
     "start": "开始使用",
     "model": {
       "title": "连接一个模型",
-      "subtitle": "mu 用它写代码、回答问题。之后随时可以在设置里修改。",
+      "subtitle": "spec.jev 用它写代码、回答问题。之后随时可以在设置里修改。",
       "model": "模型",
       "baseUrl": "接口地址",
       "key": "API 密钥",
@@ -537,27 +537,27 @@
     "apiKey": {
       "title": "粘贴 API 密钥",
       "tag": "最省事",
-      "description": "DeepSeek、Kimi、通义千问、智谱、OpenAI、Claude、Gemini 等都行：mu 看密钥就知道是哪家，其余自动配好",
+      "description": "DeepSeek、Kimi、通义千问、智谱、OpenAI、Claude、Gemini 等都行：spec.jev 看密钥就知道是哪家，其余自动配好",
       "placeholder": "把密钥粘贴到这里",
       "service": "服务商",
       "servicePlaceholder": "根据密钥自动识别",
-      "serviceHint": "mu 会根据密钥认出服务商；认不出时，在这里选一下。",
+      "serviceHint": "spec.jev 会根据密钥认出服务商；认不出时，在这里选一下。",
       "recognized": "已根据密钥识别。",
       "ambiguous": "好几家服务商的密钥都长这样，这是哪家的？",
-      "unknown": "mu 认不出这种密钥，这是哪家的？",
+      "unknown": "spec.jev 认不出这种密钥，这是哪家的？",
       "keyPage": "去哪里获取密钥？",
       "checking": "正在向 {{service}} 验证密钥…",
       "lookingLocal": "正在本机查找 {{service}}…",
       "recheck": "重新检查",
-      "startsWith": "mu 先用这个模型",
+      "startsWith": "spec.jev 先用这个模型",
       "modelHint": "之后随时可以换。",
       "outcome": {
         "ok": "密钥可以用。",
         "okLocal": "本机的 {{service}} 正在运行。",
-        "openList": "{{service}} 有响应。它的模型列表谁都能看，所以密钥本身要等 mu 第一次用时才会验证。",
+        "openList": "{{service}} 有响应。它的模型列表谁都能看，所以密钥本身要等 spec.jev 第一次用时才会验证。",
         "empty": "密钥可以用，但 {{service}} 没有列出这个密钥能用的模型。",
         "emptyLocal": "{{service}} 里还没有模型。先下载一个（例如 ollama pull qwen3），再重新检查。",
-        "unlisted": "{{service}} 有响应，但不提供模型列表，密钥要等 mu 第一次用时才会验证。",
+        "unlisted": "{{service}} 有响应，但不提供模型列表，密钥要等 spec.jev 第一次用时才会验证。",
         "wrongKey": "{{service}} 没有接受这个密钥。请确认复制完整，并且密钥还有效。",
         "quota": "{{service}} 说这个账户没有余额或额度了。充值后再重新检查。",
         "unreachable": "连不上 {{service}}。请检查网络；如果这项服务在你所在的地区用不了，请打开代理后再重新检查。",
@@ -626,7 +626,7 @@
     },
     "judge": {
       "title": "选一个判定器",
-      "subtitle": "mu 工作时的各种小判断由判定器来回答。没有判定器也能运行，只是少了这些把关。",
+      "subtitle": "spec.jev 工作时的各种小判断由判定器来回答。没有判定器也能运行，只是少了这些把关。",
       "readyFree": "免费的 Jev 已经就绪，不用做任何事。",
       "readyKey": "Jev 已经就绪，用的是你设置的密钥。",
       "more": "换服务或用自己的密钥",
@@ -655,8 +655,8 @@
         "approval": "npm test 无需询问即可运行",
         "completion": "测试通过，工作完成"
       },
-      "title": "欢迎使用 mu",
-      "lead": "mu 是一个会动手的编程助手：它读你的项目、改代码、跑命令和测试，直到把事情做完。",
+      "title": "欢迎使用 spec.jev",
+      "lead": "spec.jev 是一个会动手的编程助手：它读你的项目、改代码、跑命令和测试，直到把事情做完。",
       "points": {
         "judge": {
           "title": "每一步都有把关",
@@ -664,7 +664,7 @@
         },
         "control": {
           "title": "看得见，管得住",
-          "text": "检查点让你可以回滚改动；mu 用应用内浏览器时，每一步都在眼前，可以暂停，也可以接管。"
+          "text": "检查点让你可以回滚改动；spec.jev 用应用内浏览器时，每一步都在眼前，可以暂停，也可以接管。"
         },
         "ready": {
           "title": "开箱即用",
@@ -714,7 +714,7 @@
       "waitingDevice": "已在浏览器打开 {{name}} 的验证页。核对页面上的验证码与这里的一致（没有自动填好就手动输入），同意后这里会自动继续。",
       "risk": {
         "title": "登录前请先了解风险",
-        "text": "这个登录借用的是 Google 给 {{tool}} 自己用的登录方式，不是 Google 为 mu 提供的。Google 可能认为这违反它的条款，限制甚至停用这个账号。",
+        "text": "这个登录借用的是 Google 给 {{tool}} 自己用的登录方式，不是 Google 为 spec.jev 提供的。Google 可能认为这违反它的条款，限制甚至停用这个账号。",
         "instead": "建议用一个出问题也不要紧的账号。想走官方的路，可以改用 Gemini API 密钥，或用 gcloud 登录 Vertex AI。",
         "continue": "我了解风险，继续登录",
         "cancel": "不登录了"
@@ -722,32 +722,32 @@
       "readingModels": "已登录 {{name}}，正在读取这个账号能用的模型…"
     },
     "permissions": {
-      "title": "mu 自己能做多少",
+      "title": "spec.jev 自己能做多少",
       "subtitle": "新对话从这里选的方式开始。之后随时可以在输入框里或用 /permissions 切换。",
       "recommended": "推荐"
     }
   },
   "turnErrors": {
-    "processExited": "mu 在这一轮中途退出了，重新发送消息即可重启。",
-    "regionBlocked": "模型服务拒绝了当前网络所在的地区。打开代理（mu 会跟随系统代理），或换一个模型。",
+    "processExited": "spec.jev 在这一轮中途退出了，重新发送消息即可重启。",
+    "regionBlocked": "模型服务拒绝了当前网络所在的地区。打开代理（spec.jev 会跟随系统代理），或换一个模型。",
     "unreachable": "连不上模型服务。检查网络或代理，或换一个模型。",
     "modelFailed": "模型请求失败。",
-    "turnRunning": "mu 还在处理上一条消息，请等待或先停止。",
+    "turnRunning": "spec.jev 还在处理上一条消息，请等待或先停止。",
     "busyConfig": "请等这一轮结束后再切换模型或思考强度。",
-    "unsupportedValue": "mu 不支持这个模型、思考强度或权限模式。",
-    "permissionsNotSwitched": "mu 没有切换权限模式。请重试，或在对话里输入 /permissions。",
+    "unsupportedValue": "spec.jev 不支持这个模型、思考强度或权限模式。",
+    "permissionsNotSwitched": "spec.jev 没有切换权限模式。请重试，或在对话里输入 /permissions。",
     "imageUnsupported": "只能发送 12 MB 以内的 PNG、JPEG、WebP 或 GIF 图片。",
-    "contentUnsupported": "mu 只接受文字、图片和文本文件。",
+    "contentUnsupported": "spec.jev 只接受文字、图片和文本文件。",
     "wrongProject": "这个对话属于另一个项目文件夹。",
-    "notPersisted": "mu 没能保存这个对话。",
-    "startFailed": "mu 无法启动。",
-    "timeout": "mu 没有及时响应。",
-    "processClosed": "mu 已退出，重新发送消息即可重启。",
-    "noModel": "mu 还没有可用的模型来回答。"
+    "notPersisted": "spec.jev 没能保存这个对话。",
+    "startFailed": "spec.jev 无法启动。",
+    "timeout": "spec.jev 没有及时响应。",
+    "processClosed": "spec.jev 已退出，重新发送消息即可重启。",
+    "noModel": "spec.jev 还没有可用的模型来回答。"
   },
   "noModel": {
     "title": "还没有可用的模型",
-    "body": "mu 需要一个能用的模型才能回答。请到「{{place}}」登录账号或填写密钥，然后重新发送消息。",
+    "body": "spec.jev 需要一个能用的模型才能回答。请到「{{place}}」登录账号或填写密钥，然后重新发送消息。",
     "open": "打开{{page}}",
     "chip": "选择模型"
   },
@@ -763,24 +763,24 @@
       "xcodeLicense": "这个对话的检查点已关闭：这台 Mac 要先同意 Xcode 许可协议才能运行 Git。在终端运行 sudo xcodebuild -license 同意后，新开一个对话就有了。",
       "developerToolsMissing": "这个对话的检查点已关闭：这台 Mac 没有装 Git 需要的命令行开发者工具。在终端运行 xcode-select --install 装好后，新开一个对话就有了。",
       "homeFolder": "这个对话的检查点已关闭：它的文件夹是你的主文件夹，或者包含主文件夹。在项目文件夹里开对话就有了。",
-      "muFolder": "这个对话的检查点已关闭：它的文件夹在 mu 自己的文件夹里。在项目文件夹里开对话就有了。",
+      "muFolder": "这个对话的检查点已关闭：它的文件夹在 spec.jev 自己的文件夹里。在项目文件夹里开对话就有了。",
       "tooManyFiles": "这个对话的检查点已关闭：它的文件夹里有超过 {{limit}} 个文件。在项目文件夹里开对话就有了。",
       "tooManyBytes": "这个对话的检查点已关闭：它的文件夹里的文件超过 {{limitMb}} MB。在项目文件夹里开对话就有了。",
       "tooSlow": "这个对话的检查点已关闭：列出它文件夹里的文件用了超过 {{seconds}} 秒。在项目文件夹里开对话就有了。"
     },
     "stopped": "你停止了这次回复。",
-    "answerLost": "mu 没有收到你的回答，已按不同意处理。",
-    "bashMissing": "mu 运行命令需要 Git for Windows，安装好后重新发送消息即可。下载地址：",
+    "answerLost": "spec.jev 没有收到你的回答，已按不同意处理。",
+    "bashMissing": "spec.jev 运行命令需要 Git for Windows，安装好后重新发送消息即可。下载地址：",
     "toModel": {
-      "nudge": "mu 提醒模型：这一轮还没收尾，让它做完",
-      "goal": "目标还没达成，mu 让模型继续",
-      "diagnostics": "mu 把改动留下的报错告诉了模型",
-      "steer": "mu 提醒模型换个做法",
-      "rewind": "mu 回退了文件，并告诉模型原因",
-      "hive": "mu 把蜂群里的新发现转给了模型",
-      "swarm": "mu 让子代理收尾、交报告",
-      "ttsr": "mu 提醒模型遵守你定的一条规则",
-      "other": "mu 给模型发了一条提醒",
+      "nudge": "spec.jev 提醒模型：这一轮还没收尾，让它做完",
+      "goal": "目标还没达成，spec.jev 让模型继续",
+      "diagnostics": "spec.jev 把改动留下的报错告诉了模型",
+      "steer": "spec.jev 提醒模型换个做法",
+      "rewind": "spec.jev 回退了文件，并告诉模型原因",
+      "hive": "spec.jev 把蜂群里的新发现转给了模型",
+      "swarm": "spec.jev 让子代理收尾、交报告",
+      "ttsr": "spec.jev 提醒模型遵守你定的一条规则",
+      "other": "spec.jev 给模型发了一条提醒",
       "show": "查看原文",
       "hide": "收起",
       "imported": "这段对话是从 Claude Code 或 Codex 导入的，在这里接着聊；思考过程和图片没有导入"
@@ -802,24 +802,24 @@
     },
     "invalidJson": "{{file}} 不是有效的 JSON，请手动修正后重新载入。",
     "unreadable": "无法读取 {{file}}。",
-    "runtimeOffline": "mu 的 Agent 没有响应。请重启 mu 后再试。",
-    "otherRegistration": "应用中已经注册了另一个 mu 命令。",
-    "installPath": "mu 无法从它的安装文件夹启动：这个文件夹的路径里有空格。请把 mu 重新安装到路径里没有空格的文件夹，例如 C:\\mu。",
+    "runtimeOffline": "spec.jev 的 Agent 没有响应。请重启 spec.jev 后再试。",
+    "otherRegistration": "应用中已经注册了另一个 spec.jev 命令。",
+    "installPath": "spec.jev 无法从它的安装文件夹启动：这个文件夹的路径里有空格。请把 spec.jev 重新安装到路径里没有空格的文件夹，例如 C:\\spec.jev。",
     "backend": "本地服务返回异常（HTTP {{status}}）。",
     "invalid": "有一项填写的值无效。",
-    "unknown": "mu 出了点问题。",
+    "unknown": "spec.jev 出了点问题。",
     "unwritable": "无法写入 {{file}}。",
     "contextLimit": "上下文上限必须是 0，或 {{min}} 到 {{max}} 之间的整数。",
-    "importMissing": "当前的 mu 版本还不能导入对话，请先更新 mu。",
-    "importFailed": "mu 没能导入这些对话。",
+    "importMissing": "当前的 spec.jev 版本还不能导入对话，请先更新 spec.jev。",
+    "importFailed": "spec.jev 没能导入这些对话。",
     "skillInvalid": "这个文件夹里没有带说明（description）的 SKILL.md，不是一个技能。",
     "skillName": "「{{name}}」不能用作技能的文件夹名：只能用小写字母、数字和连字符。",
-    "skillExists": "mu 已经有一个叫 {{name}} 的技能。",
+    "skillExists": "spec.jev 已经有一个叫 {{name}} 的技能。",
     "skillTooLarge": "这个文件夹太大（超过 2000 个文件或 50 MB），不像一个技能。",
     "notFound": "没有找到 {{name}}，可能已经被移走了。",
-    "notMine": "{{name}} 来自 {{source}}，mu 不改动那里的文件。",
+    "notMine": "{{name}} 来自 {{source}}，spec.jev 不改动那里的文件。",
     "mcpName": "「{{name}}」不能用作服务器名：只能用字母、数字、_ 和 -。",
-    "mcpExists": "mu 已经有一个叫 {{name}} 的服务器。",
+    "mcpExists": "spec.jev 已经有一个叫 {{name}} 的服务器。",
     "mcpInvalid": {
       "command": "这个命令不能用，请检查后再试。",
       "url": "网址要以 http:// 或 https:// 开头。",
@@ -829,11 +829,11 @@
   },
   "importChats": {
     "title": "导入对话",
-    "description": "把这台电脑上在 Claude Code 或 Codex 里聊过的对话带进 mu，在这里接着聊。",
+    "description": "把这台电脑上在 Claude Code 或 Codex 里聊过的对话带进 spec.jev，在这里接着聊。",
     "open": "选择对话",
     "dialog": {
       "title": "导入对话",
-      "hint": "选中的每段对话都会变成 mu 里的一个对话，放在原来的项目文件夹下。mu 会读到之前说过的全部内容，思考过程和图片不会带过来。",
+      "hint": "选中的每段对话都会变成 spec.jev 里的一个对话，放在原来的项目文件夹下。spec.jev 会读到之前说过的全部内容，思考过程和图片不会带过来。",
       "search": "按内容或文件夹搜索",
       "loading": "正在找对话…",
       "empty": "这台电脑上没有找到 Claude Code 或 Codex 的对话。",
@@ -864,7 +864,7 @@
     "notice": {
       "title": "从 {{tool}} 导入的对话",
       "counts": "你的消息 {{user}} 条 · 回答 {{assistant}} 条 · 工具调用 {{toolCalls}} 次",
-      "goOn": "在下面接着说就行，之前的内容 mu 都读过了。思考过程和图片没有带过来。",
+      "goOn": "在下面接着说就行，之前的内容 spec.jev 都读过了。思考过程和图片没有带过来。",
       "read": "查看之前的对话"
     },
     "history": {
@@ -885,7 +885,7 @@
     "lessons": "这个项目的经验：/lessons 列出 id · 类型 · 召回/照做次数 · 经验，/lessons all 连到处适用的和已退役的一起列",
     "forget": "让一条经验退役，以后不再召回：/forget <id 前几位>（id 见 /lessons）",
     "capabilities": "装了哪些能力、这次打开了哪些：/capabilities 查看，/capabilities open <ID> 打开",
-    "permissions": "mu 不问你就能做多少事：/permissions full（完全访问）| jev（Jev 审批）| ask（最小权限），不带参数就弹出选择；/permissions reset 忘掉这次对话里允许过的操作",
+    "permissions": "spec.jev 不问你就能做多少事：/permissions full（完全访问）| jev（Jev 审批）| ask（最小权限），不带参数就弹出选择；/permissions reset 忘掉这次对话里允许过的操作",
     "lsp": "语言服务器：装了哪些、哪些在运行、最近一次出错",
     "goal": "目标模式：让代理一直干到某个条件成立。/goal <条件> 设定，/goal 查看（没有时会问你），/goal clear 结束",
     "board": "人话看板：/board 查看，/board on、/board off 为这个项目打开或关闭，/board model 换个模型来讲",
@@ -895,14 +895,14 @@
     "agents": "列出 delegate 工具能用的子代理角色，以及在哪里加你自己的",
     "hive": "让几个调查员同时查一个问题：/hive <问题>；不带问题时同 /swarm，看正在干活的子代理",
     "browse": "让内置浏览器打开网址，照你说的去做：/browse <网址> [要做的事]",
-    "inherit": "mu 从 Claude Code、Cursor 和 Codex 沿用了什么，各来自哪个文件",
+    "inherit": "spec.jev 从 Claude Code、Cursor 和 Codex 沿用了什么，各来自哪个文件",
     "mcp": "管理 MCP 服务器：登录、重新连接、启用或停用、调整暴露方式",
     "jobs": "后台命令：/jobs 查看，/jobs stop <编号|all> 停掉",
     "commit": "把还没提交的改动拆成几个提交：先给你看计划，你同意才提交，从不推送",
     "review": "让评审子代理审查还没提交的改动（或你指定的内容），评审发现按轻重排成 P0 到 P3",
-    "mu": "mu 的状态。另外：/mu judge <判定器> | /mu route <判定点> <判定器|default> | /mu mode <判定点|default> <off|shadow|active>",
+    "mu": "spec.jev 的状态。另外：/mu judge <判定器> | /mu route <判定点> <判定器|default> | /mu mode <判定点|default> <off|shadow|active>",
     "status": "模型、判定器、各判定点的模式、省下的上下文和最近的判定",
-    "help": "mu 能做什么，以及常用命令一览",
+    "help": "spec.jev 能做什么，以及常用命令一览",
     "ledger": "判定器最近的判定和用时：/ledger [条数]",
     "doctor": "检查判定器、模型、浏览器和子代理有没有接好",
     "import-chat": "导入这个项目在 Claude Code 或 Codex 里的对话，接着在这里聊：/import-chat [文件]",
@@ -925,7 +925,7 @@
       "failed": "已停止"
     },
     "status": {
-      "starting": "正在启动 mu…",
+      "starting": "正在启动 spec.jev…",
       "classifying": "判定器正在读你的消息…",
       "compacting": "正在压缩对话…",
       "retrying": "模型请求失败，正在重试（第 {{attempt}} 次，共 {{max}} 次）…",
@@ -934,10 +934,10 @@
       "sending": "发送中…"
     },
     "send": {
-      "placeholder": "给 mu 发消息…",
-      "placeholderWorking": "现在引导 mu，或者留一条消息，等这一轮结束后再发…",
+      "placeholder": "给 spec.jev 发消息…",
+      "placeholderWorking": "现在引导 spec.jev，或者留一条消息，等这一轮结束后再发…",
       "steer": "现在",
-      "steerHint": "在 mu 的下一步送达",
+      "steerHint": "在 spec.jev 的下一步送达",
       "followUp": "之后",
       "followUpHint": "等这一轮运行结束后再发"
     },
@@ -954,27 +954,27 @@
       "cancel": "取消",
       "submit": "发送",
       "save": "保存",
-      "countdown": "{{seconds}} 秒后关闭，之后 mu 会不等你的回答继续。",
+      "countdown": "{{seconds}} 秒后关闭，之后 spec.jev 会不等你的回答继续。",
       "more": "后面还有：{{count}} 个"
     },
     "host": {
-      "output": "mu 最后的输出",
-      "restartHint": "发送一条消息即可重新启动 mu。"
+      "output": "spec.jev 最后的输出",
+      "restartHint": "发送一条消息即可重新启动 spec.jev。"
     },
     "error": {
       "off": "原生运行被关闭了（MU_NATIVE_HOST=0）。不带这个变量启动应用即可使用。",
-      "noHarness": "应用找不到可以运行的 mu。",
-      "oldHarness": "这个 mu 版本太旧，无法在应用里运行。请更新 mu 后再试。",
-      "plan": "应用没能确定怎样启动 mu。",
-      "noModels": "mu 已停止：没有可用的模型。",
-      "failed": "mu 在启动之前就停止了。",
-      "crashed": "mu 意外停止了。",
-      "closed": "这个对话的 mu 已关闭。",
-      "timeout": "mu 没有及时回应。",
-      "command": "mu 拒绝了这个请求。",
-      "noFolder": "这个对话的项目文件夹已经不存在了，mu 没法在里面运行。",
+      "noHarness": "应用找不到可以运行的 spec.jev。",
+      "oldHarness": "这个 spec.jev 版本太旧，无法在应用里运行。请更新 spec.jev 后再试。",
+      "plan": "应用没能确定怎样启动 spec.jev。",
+      "noModels": "spec.jev 已停止：没有可用的模型。",
+      "failed": "spec.jev 在启动之前就停止了。",
+      "crashed": "spec.jev 意外停止了。",
+      "closed": "这个对话的 spec.jev 已关闭。",
+      "timeout": "spec.jev 没有及时回应。",
+      "command": "spec.jev 拒绝了这个请求。",
+      "noFolder": "这个对话的项目文件夹已经不存在了，spec.jev 没法在里面运行。",
       "unknownConversation": "这个对话已经不存在了。",
-      "invalid": "应用发出了 mu 读不懂的请求。"
+      "invalid": "应用发出了 spec.jev 读不懂的请求。"
     },
     "open": {
       "home": "回到首页",
@@ -982,7 +982,7 @@
     },
     "empty": {
       "title": "在 {{folder}} 里的新对话",
-      "body": "mu 会在这个文件夹里工作。说说你想做什么。"
+      "body": "spec.jev 会在这个文件夹里工作。说说你想做什么。"
     },
     "sider": {
       "title": "最近",
@@ -1004,7 +1004,7 @@
       "recent": "最近的文件夹",
       "pick": "选择文件夹…",
       "permissions": "权限",
-      "defaultPermissions": "mu 的默认设置"
+      "defaultPermissions": "spec.jev 的默认设置"
     },
     "panel": {
       "noLessons": "对话打开后显示经验。",
@@ -1025,7 +1025,7 @@
       }
     },
     "home": {
-      "noFolder": "请先选择一个让 mu 工作的文件夹。"
+      "noFolder": "请先选择一个让 spec.jev 工作的文件夹。"
     },
     "attach": {
       "failed": "无法附加 {{name}}。"
@@ -1052,15 +1052,15 @@
     "toolsClassic": "MCP 与图像",
     "remove": "移除",
     "from": {
-      "mu": "mu 的技能文件夹",
+      "mu": "spec.jev 的技能文件夹",
       "agents": "共享的 .agents 文件夹",
-      "builtin": "mu 本身",
+      "builtin": "spec.jev 本身",
       "claude": "Claude Code",
       "codex": "Codex",
       "cursor": "Cursor"
     },
     "skills": {
-      "lead": "mu 在每个对话里都能用的技能，以及各自从哪里来。",
+      "lead": "spec.jev 在每个对话里都能用的技能，以及各自从哪里来。",
       "search": "搜索技能",
       "open": "打开文件夹",
       "add": "添加技能",
@@ -1068,36 +1068,36 @@
       "removed": "已把 {{name}} 移到废纸篓。",
       "removeTitle": "移除技能 {{name}}？",
       "removeContent": "它的文件夹会移到废纸篓，新对话里不再加载。",
-      "empty": "mu 还没有技能。",
+      "empty": "spec.jev 还没有技能。",
       "noMatch": "没有匹配的技能。",
-      "failed": "没能读取 mu 的技能。",
+      "failed": "没能读取 spec.jev 的技能。",
       "project": "项目自己的技能（.mu/skills、.agents/skills、.claude/skills）只在那个项目的对话里加载，这里不列出。",
       "groups": {
         "mu": {
-          "title": "mu 的技能",
+          "title": "spec.jev 的技能",
           "help": "在 {{folder}} 里。添加的技能放在这里，也只有这里的可以移除。"
         },
         "agents": {
           "title": "共享的技能",
-          "help": "在 ~/.agents/skills 里，几个代理共用。mu 只读取，不做改动。"
+          "help": "在 ~/.agents/skills 里，几个代理共用。spec.jev 只读取，不做改动。"
         },
         "builtin": {
-          "title": "mu 自带",
-          "help": "随 mu 提供，带来它的功能开着时才加载。"
+          "title": "spec.jev 自带",
+          "help": "随 spec.jev 提供，带来它的功能开着时才加载。"
         },
         "claude": {
           "title": "沿用 Claude Code",
-          "help": "来自 ~/.claude/skills。mu 只读取；在 mu.json 的 features.inherit 里可以不再沿用。"
+          "help": "来自 ~/.claude/skills。spec.jev 只读取；在 spec.jev.json 的 features.inherit 里可以不再沿用。"
         },
         "codex": {
           "title": "沿用 Codex",
-          "help": "来自 ~/.codex/skills。mu 只读取；在 mu.json 的 features.inherit 里可以不再沿用。"
+          "help": "来自 ~/.codex/skills。spec.jev 只读取；在 spec.jev.json 的 features.inherit 里可以不再沿用。"
         }
       }
     },
     "mcp": {
       "title": "MCP 服务器",
-      "lead": "mu 在每个对话里都能用的 MCP 服务器，以及各自在哪里设置。",
+      "lead": "spec.jev 在每个对话里都能用的 MCP 服务器，以及各自在哪里设置。",
       "open": "打开配置文件",
       "add": "添加服务器",
       "added": "已添加 {{name}}，新对话里可以用了。",
@@ -1105,37 +1105,37 @@
       "removeTitle": "移除服务器 {{name}}？",
       "removeContent": "它的设置会从 {{file}} 里删掉。",
       "use": "使用 {{name}}",
-      "empty": "mu 还没有用到 MCP 服务器。",
-      "failed": "没能读取 mu 的 MCP 服务器。",
-      "featureOff": "mu.json 里关闭了 MCP 功能：只使用 mcp.json 里的服务器。",
+      "empty": "spec.jev 还没有用到 MCP 服务器。",
+      "failed": "没能读取 spec.jev 的 MCP 服务器。",
+      "featureOff": "spec.jev.json 里关闭了 MCP 功能：只使用 mcp.json 里的服务器。",
       "unreadable": "这些文件读不了，其中的服务器没有列出：{{files}}",
       "project": "项目自己的服务器（.mu/mcp.json、.mcp.json、.cursor/mcp.json）只在那个项目的对话里使用，这里不列出。",
       "locked": {
         "offInSource": {
           "label": "已在原处关闭",
-          "help": "它在所属工具的设置里关掉了。mu 不改其他工具的文件，要用请到那里打开。"
+          "help": "它在所属工具的设置里关掉了。spec.jev 不改其他工具的文件，要用请到那里打开。"
         },
         "unsupported": {
           "label": "不支持",
-          "help": "它用的是旧的 HTTP+SSE 连接方式，mu 不支持。"
+          "help": "它用的是旧的 HTTP+SSE 连接方式，spec.jev 不支持。"
         }
       },
       "groups": {
         "mu": {
-          "title": "mu 的服务器",
-          "help": "在 mcp.json 和 mu.json 里。添加的服务器写进 {{file}}，和 mu mcp add 一样。"
+          "title": "spec.jev 的服务器",
+          "help": "在 mcp.json 和 spec.jev.json 里。添加的服务器写进 {{file}}，和 spec.jev mcp add 一样。"
         },
         "claude": {
           "title": "沿用 Claude Code",
-          "help": "来自 ~/.claude.json。在这里关掉只写进 mu.json，不改 Claude Code 的文件。"
+          "help": "来自 ~/.claude.json。在这里关掉只写进 spec.jev.json，不改 Claude Code 的文件。"
         },
         "cursor": {
           "title": "沿用 Cursor",
-          "help": "来自 ~/.cursor/mcp.json。在这里关掉只写进 mu.json，不改 Cursor 的文件。"
+          "help": "来自 ~/.cursor/mcp.json。在这里关掉只写进 spec.jev.json，不改 Cursor 的文件。"
         },
         "codex": {
           "title": "沿用 Codex",
-          "help": "来自 ~/.codex/config.toml。在这里关掉只写进 mu.json，不改 Codex 的文件。"
+          "help": "来自 ~/.codex/config.toml。在这里关掉只写进 spec.jev.json，不改 Codex 的文件。"
         }
       },
       "form": {
@@ -1145,7 +1145,7 @@
         "nameHelp": "字母、数字、_ 和 -",
         "kind": "连接方式",
         "command": "命令",
-        "commandHelp": "mu 启动的程序和参数，和在终端里输入的一样。",
+        "commandHelp": "spec.jev 启动的程序和参数，和在终端里输入的一样。",
         "env": "环境变量",
         "envPlaceholder": "KEY=value，每行一个，可不填",
         "url": "网址",

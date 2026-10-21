@@ -5,7 +5,7 @@
  *
  * - The person's message: `fork` at it, and its text comes back for the send box (edit it, or send it again, in the
  *   new session).
- * - mu's reply: the session as it stood at the end of that reply, which is `fork` at the person's next message (its text
+ * - spec.jev's reply: the session as it stood at the end of that reply, which is `fork` at the person's next message (its text
  *   is not wanted then), or `clone` when the reply is the last one.
  *
  * Pure: it reads the view only. A message pi has not saved yet, or one a harness too old to say which entry it is

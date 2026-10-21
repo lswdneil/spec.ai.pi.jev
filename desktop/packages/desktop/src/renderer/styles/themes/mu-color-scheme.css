@@ -1,5 +1,5 @@
 /*
- * mu colour scheme: white and black, with light lavender and light pink as a small accent.
+ * spec.jev colour scheme: white and black, with light lavender and light pink as a small accent.
  *
  * The page is neutral: the content surface is white with black text in light, near-black with white
  * text in dark. The titlebar and the sidebar take the faintest grey (--bg-2), set apart by hairlines, so
@@ -11,7 +11,7 @@
  * both), the selected row's thin bar, focus rings, selection, links and small dots. The judge keeps
  * pink as its mark, on a tint that is all but white.
  *
- * It is the default scheme (index.html carries data-color-scheme='mu'). Every variable the upstream
+ * It is the default scheme (index.html carries data-color-scheme='spec.jev'). Every variable the upstream
  * default scheme defines is defined again here, in both appearances, because the upstream dark block
  * is scoped to data-color-scheme='default' and would no longer match. Setting the attribute back to
  * 'default' brings the upstream colours back untouched.
@@ -24,7 +24,7 @@
  */
 
 /* Light */
-[data-color-scheme='mu'] {
+[data-color-scheme='spec.jev'] {
   /* Lavender. 1-4 are tints, 5 is a focus outline, 6 is accent text (links, checked marks), 7-10 deeper. */
   --mu-violet-1: #f6f4ff;
   --mu-violet-2: #ede9ff;
@@ -204,7 +204,7 @@
 }
 
 /* Dark: upstream's near-black greys; the accent stays light, with dark text on it */
-[data-color-scheme='mu'][data-theme='dark'] {
+[data-color-scheme='spec.jev'][data-theme='dark'] {
   --mu-violet-1: #17142a;
   --mu-violet-2: #201c3a;
   --mu-violet-3: #2d2752;

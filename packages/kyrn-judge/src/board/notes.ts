@@ -29,7 +29,7 @@ type Sentence = (params: NoteParams) => string;
 
 const one = (params: NoteParams, key: string) => Number(params[key] ?? 0) === 1;
 
-/** The fixed sentences, in the two languages mu has wording for; the desktop words the codes in eleven more. */
+/** The fixed sentences, in the two languages spec.jev has wording for; the desktop words the codes in eleven more. */
 const SENTENCES: Readonly<Record<string, { readonly zh: Sentence; readonly en: Sentence }>> = {
 	looked: {
 		zh: (p) => `看了 ${p.count} 个文件或地方`,

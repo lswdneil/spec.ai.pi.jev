@@ -1,6 +1,6 @@
 # Cache investigation and first fix
 
-> 已于 2026-09-21 更名为 mu（命令 `mu`，标识 μ）。本文是更名前的记录，正文保持原样；新旧名对照见 [10-rename-to-mu.md](10-rename-to-mu.md)。
+> 已于 2026-09-21 更名为 spec.jev（命令 `spec.jev`，标识 μ）。本文是更名前的记录，正文保持原样；新旧名对照见 [10-rename-to-spec.jev.md](10-rename-to-spec.jev.md)。
 
 Date: 2026-09-21. Scope: prompt-cache reuse in the existing KYRN/pi/ACP stack.
 No live model calls, configuration changes, desktop restarts, or release builds were used.

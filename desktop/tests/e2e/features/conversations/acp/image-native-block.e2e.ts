@@ -146,7 +146,7 @@ test.describe('ACP multimodal prompt', () => {
         timeout: 15_000,
       });
 
-      // 2. Attach the probe image by dropping it on the send box. mu is Electron
+      // 2. Attach the probe image by dropping it on the send box. spec.jev is Electron
       //    only: there is no hidden <input type="file"> any more, and the "+"
       //    button opens the host's own dialog, which Playwright cannot drive.
       //    A drop travels the same lane (processDroppedFiles → POST /api/fs/upload

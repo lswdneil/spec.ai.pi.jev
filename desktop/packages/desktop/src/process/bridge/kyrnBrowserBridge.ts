@@ -14,15 +14,15 @@ import { getDataPath } from '../utils/utils';
 import { nativeConversationOf } from './nativeBridge';
 
 /**
- * Offers the app's browser panel to a mu harness on this machine (kyrn/docs/features/embedded-browser.md in the
- * harness repository): a loopback socket with a random token as its path, advertised in the mu home for the user
+ * Offers the app's browser panel to a spec.jev harness on this machine (kyrn/docs/features/embedded-browser.md in the
+ * harness repository): a loopback socket with a random token as its path, advertised in the spec.jev home for the user
  * alone. The app never opens `--remote-debugging-port`; the debugger is attached to agent tabs only.
  *
- * Never in the way of startup: if anything here fails, mu simply keeps using its own browser.
+ * Never in the way of startup: if anything here fails, spec.jev simply keeps using its own browser.
  */
 export function initKyrnBrowserBridge(): void {
   void start().catch((error) => {
-    console.warn('[mu browser] not offered:', error instanceof Error ? error.message : error);
+    console.warn('[spec.jev browser] not offered:', error instanceof Error ? error.message : error);
   });
 }
 
@@ -35,7 +35,7 @@ async function start(): Promise<void> {
   const host = new PanelHost({
     request: (request) => kyrnBrowserBridge.request.emit(request),
     publish: (event) => kyrnBrowserBridge.events.emit(event),
-    // A native conversation's mu names it by the name the app gave it (MU_DESKTOP_SESSION); an ACP session by its own.
+    // A native conversation's spec.jev names it by the name the app gave it (MU_DESKTOP_SESSION); an ACP session by its own.
     conversationOf: (adapterSession) =>
       browserConversationOf(adapterSession, {
         native: nativeConversationOf,

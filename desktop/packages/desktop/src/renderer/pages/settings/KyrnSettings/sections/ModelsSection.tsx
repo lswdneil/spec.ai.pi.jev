@@ -21,13 +21,13 @@ type ModelsSectionProps = {
   onDraft: (change: (draft: Draft) => Draft) => void;
 };
 
-/** Removed here, but still in the snapshot of what mu last reported: offered neither as usable nor as a start. */
+/** Removed here, but still in the snapshot of what spec.jev last reported: offered neither as usable nor as a start. */
 const hiddenOf = ({ models }: KyrnSettings) =>
   hiddenIds([...models.providers.map((provider) => provider.id), ...models.foreign.map((entry) => entry.id)]);
 
 /**
  * Every provider behind the models: the subscriptions to sign in to, the endpoints set up here, and what else the
- * running mu reported. Which model a new session starts with is the next page.
+ * running spec.jev reported. Which model a new session starts with is the next page.
  */
 export default function ProvidersSection({ draft, base, available, onDraft }: ModelsSectionProps) {
   const { t } = useTranslation();

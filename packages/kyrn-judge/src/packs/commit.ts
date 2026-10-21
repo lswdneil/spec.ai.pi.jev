@@ -283,7 +283,7 @@ export async function applyPlan(
 	const applied = new Map<number, Set<number>>();
 
 	const restore = async (step: string, reason: string): Promise<ApplyOutcome> => {
-		if (repo.head) await git(["update-ref", "-m", "mu commit: undone", "HEAD", repo.head], { cwd });
+		if (repo.head) await git(["update-ref", "-m", "spec.jev commit: undone", "HEAD", repo.head], { cwd });
 		else if (made.length > 0) await git(["update-ref", "-d", "HEAD"], { cwd });
 		if (savedIndex) await writeFile(indexPath, savedIndex);
 		else await git(["read-tree", "--empty"], { cwd });

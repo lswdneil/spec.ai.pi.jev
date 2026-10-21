@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { kyrnBridge, unwrap } from '@/common/kyrn/bridge';
 
 /**
- * The permission mode mu starts a new conversation in, as the settings' Permissions page set it (or mu's own
+ * The permission mode spec.jev starts a new conversation in, as the settings' Permissions page set it (or spec.jev's own
  * default); undefined until it is read, and when it cannot be. Read once per visit of the home page, so a mode
  * changed in the settings shows the next time the page is opened.
  */

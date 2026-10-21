@@ -1,7 +1,7 @@
 /**
  * The native conversation bridge (docs/native-host.md, milestone 2): what the renderer asks the main process, and what
  * the main process pushes, so a conversation can run on the native host (pi in a process of its own) with no AionCore
- * and no ACP in its path. On unless the main process runs with MU_NATIVE_HOST=0, and only where the mu found on the
+ * and no ACP in its path. On unless the main process runs with MU_NATIVE_HOST=0, and only where the spec.jev found on the
  * machine can run inside the app (`enabled`).
  *
  * Two parts of the app build against this file at the same time, so it is the source of truth for both:
@@ -22,7 +22,7 @@ import type { DialogAnswer, NativeView, PiCommand, PiRecord, SessionSettings } f
 /**
  * Why a call failed. The first eleven are the native host manager's own kinds (`NativeHostErrorKind`,
  * process/services/nativeHost/NativeHost.ts; a test keeps the two in step): `off` is MU_NATIVE_HOST=0,
- * `no-harness` and `old-harness` a mu that is missing or too old to run inside the app, `plan` the launcher refusing,
+ * `no-harness` and `old-harness` a spec.jev that is missing or too old to run inside the app, `plan` the launcher refusing,
  * `no-models` a pi that stopped for want of a model, `failed` a host that stopped before pi started, `crashed` one that
  * stopped after, `closed` a host that was ended, `timeout` a command pi did not answer, `command` pi refusing one
  * (the message is pi's), `no-folder` a project folder that no longer exists (the message names it). `unknown-conversation`
@@ -108,7 +108,7 @@ export type NativeSnapshot = {
   /**
    * Only for a view read from the session file (no host runs): the model, thinking level and permission mode its
    * session runs with when a host resumes it, as its file says (`sessionSettings`), the permission mode `create` named
-   * when the file names none. A running host says them itself (`view.host.session`, mu's `permissions.mode` frame).
+   * when the file names none. A running host says them itself (`view.host.session`, spec.jev's `permissions.mode` frame).
    */
   session?: SessionSettings;
 };
@@ -120,9 +120,9 @@ export type NativeSnapshot = {
  * The renderer ignores one whose `seq` is not above its snapshot's. Records arrive as pi wrote them (pi's RPC mode
  * already sends a `message_update` as its delta alone, without the partial message), plus the `extension_ui_response`
  * the main process synthesizes when a dialog is answered (so every window closes the dialog), or when it ends without
- * an answer (`cancelled: true` once its `timeout` passed: pi then takes the default and says nothing). mu's notices
- * are among them as mu sends them (a `notify` request, a `checkpoint.off` frame): the view folds them like any other
- * record. Left out: a prompt pi refused because another mu held the model store, while the main process sends it
+ * an answer (`cancelled: true` once its `timeout` passed: pi then takes the default and says nothing). spec.jev's notices
+ * are among them as spec.jev sends them (a `notify` request, a `checkpoint.off` frame): the view folds them like any other
+ * record. Left out: a prompt pi refused because another spec.jev held the model store, while the main process sends it
  * again; and the responses of commands that only read (`get_entries`, `get_tree`, `get_messages`,
  * `get_fork_messages`, `get_available_models`, `get_available_thinking_levels`, `get_commands`,
  * `get_last_assistant_text`, `export_html`), whose data goes to whoever asked as the answer to its request.
@@ -148,19 +148,19 @@ export type NativeAttentionEvent = { id: string; kind: 'done' | 'error' | 'quest
 
 export const nativeBridge = {
   /**
-   * Whether conversations run on the native host: on unless MU_NATIVE_HOST=0, and only with a mu that can run inside
+   * Whether conversations run on the native host: on unless MU_NATIVE_HOST=0, and only with a spec.jev that can run inside
    * the app (an older one, which the packaged app may carry, leaves them on AionCore). Everything below fails with
    * `off` when MU_NATIVE_HOST=0.
    */
   enabled: bridge.buildProvider<boolean, void>('mu.native.enabled'),
   /**
-   * The conversations of this computer's mu, newest first, read from pi's session files (the CLI's sessions
+   * The conversations of this computer's spec.jev, newest first, read from pi's session files (the CLI's sessions
    * included), plus drafts made here that have no file yet. Reading files starts no host.
    */
   list: bridge.buildProvider<NativeResult<NativeConversation[]>, void>('mu.native.list'),
   /**
    * A new conversation in a project folder. No host starts until a command needs pi. `permissions`: the permission
-   * mode its mu starts in (`full`, `jev`, `ask`: MU_PERMISSIONS), mu's own default when left out.
+   * mode its spec.jev starts in (`full`, `jev`, `ask`: MU_PERMISSIONS), spec.jev's own default when left out.
    */
   create: bridge.buildProvider<NativeResult<NativeConversation>, { cwd: string; permissions?: string }>(
     'mu.native.create'

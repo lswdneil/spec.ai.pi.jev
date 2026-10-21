@@ -20,9 +20,9 @@ export const MU_PROJECT_URL = `https://github.com/${MU_REPO}`;
 export type ApplicationMenuActions = {
   /** 新会话: a new conversation, as the sidebar's button starts one. */
   newChat: () => void;
-  /** 设置…: mu's settings. */
+  /** 设置…: spec.jev's settings. */
   openSettings: () => void;
-  /** The update check of 关于 (About); mu updates itself from its GitHub releases in every build. */
+  /** The update check of 关于 (About); spec.jev updates itself from its GitHub releases in every build. */
   checkForUpdates: () => void;
   openProjectPage: () => void;
   /** The app's own zoom steps, as the keyboard's. */
@@ -190,7 +190,7 @@ const applicationMenuActions: ApplicationMenuActions = {
   },
   openProjectPage: () => {
     void shell.openExternal(MU_PROJECT_URL).catch((error: unknown) => {
-      console.error('[mu] Failed to open the project page:', error);
+      console.error('[spec.jev] Failed to open the project page:', error);
     });
   },
   zoom: zoomFromMenu,

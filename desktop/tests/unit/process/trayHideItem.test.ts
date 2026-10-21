@@ -18,8 +18,8 @@ describe('the tray menu item that hides the window', () => {
     await changeLanguage('en-US');
   });
 
-  it('says Hide mu on a Mac, as Mac apps do', () => {
-    expect(i18n.t(hideItemLabelKey('darwin'))).toBe('Hide mu');
+  it('says Hide spec.jev on a Mac, as Mac apps do', () => {
+    expect(i18n.t(hideItemLabelKey('darwin'))).toBe('Hide spec.jev');
   });
 
   it('names the tray on Windows and Linux', () => {

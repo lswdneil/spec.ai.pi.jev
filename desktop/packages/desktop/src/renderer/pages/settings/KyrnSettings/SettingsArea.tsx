@@ -14,7 +14,7 @@ import ProvidersSection, { BoardModelSection, DefaultModelSection } from './sect
 import { useMuSettings, useSharedMuSettings, type MuSettings } from './useMuSettings';
 import styles from './SettingsArea.module.css';
 
-/** mu's own entries of the settings rail, in the rail's order: each is a page of this area. */
+/** spec.jev's own entries of the settings rail, in the rail's order: each is a page of this area. */
 export const MU_PAGE_IDS = [
   'providers',
   'default-model',
@@ -65,7 +65,7 @@ type SettingsAreaProps = {
 };
 
 /**
- * Everything mu can be told: providers, the default model, the board's model, the judges and their order, the core
+ * Everything spec.jev can be told: providers, the default model, the board's model, the judges and their order, the core
  * features and the details (every feature with the decision points it asks), the context. They share one draft and
  * one save, because the files behind them share one revision.
  *

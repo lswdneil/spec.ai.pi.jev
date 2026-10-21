@@ -21,7 +21,7 @@ import {
 import { readFromHost, type ToHost } from './protocol.ts';
 
 /**
- * off: MU_NATIVE_HOST=0. no-harness: no mu found, or no launcher in it. old-harness: a mu whose launcher
+ * off: MU_NATIVE_HOST=0. no-harness: no spec.jev found, or no launcher in it. old-harness: a spec.jev whose launcher
  * cannot plan a host. plan: the launcher refused (its message says why). no-models: pi stopped at its start because no
  * model is set up (a pi that stops for it; today's stays up, see `needs-model`). failed: the host stopped before pi
  * wrote anything. crashed: it stopped after. closed: it was disposed. timeout: a command had no answer in time.
@@ -121,7 +121,7 @@ export type NativeHostOptions = {
   launch: HostLaunch;
   fork: (launch: HostLaunch) => HostChild;
   deadlines?: HostDeadlines;
-  /** pi's own log lines (`[mu] …` on its error output), as they come. */
+  /** pi's own log lines (`[spec.jev] …` on its error output), as they come. */
   log?: (line: string) => void;
   now?: () => number;
 };
@@ -149,7 +149,7 @@ const UNTIMED: ReadonlySet<PiCommandType> = new Set<PiCommandType>([
 /** How much of the end of the host's output is kept. */
 const OUTPUT_TAIL = 8 * 1024;
 /** How pi marks a line of its error output meant for the log. */
-const LOG_LINE = '[mu] ';
+const LOG_LINE = '[spec.jev] ';
 /** pi's words when nothing is set up (formatNoModelsAvailableMessage in the harness). */
 const NO_MODELS = /No models available/;
 /** How long the output of a process that exited may still take to arrive. */
@@ -329,8 +329,8 @@ export class NativeHost {
   private unavailable(): NativeHostError | undefined {
     const state = this.current;
     if (state.phase === 'failed') return state.error;
-    if (state.phase === 'stopped' || this.disposing) return new NativeHostError('closed', 'The mu host was closed');
-    if (!this.child) return new NativeHostError('closed', 'The mu host has not been started');
+    if (state.phase === 'stopped' || this.disposing) return new NativeHostError('closed', 'The spec.jev host was closed');
+    if (!this.child) return new NativeHostError('closed', 'The spec.jev host has not been started');
     return undefined;
   }
 
@@ -401,7 +401,7 @@ export class NativeHost {
     if (record.success === true) request.resolve(record.data);
     else
       request.reject(
-        new NativeHostError('command', typeof record.error === 'string' && record.error ? record.error : 'mu refused')
+        new NativeHostError('command', typeof record.error === 'string' && record.error ? record.error : 'spec.jev refused')
       );
   }
 
@@ -492,7 +492,7 @@ export class NativeHost {
   private finish(error: NativeHostError | undefined): void {
     const state = this.current.phase;
     if (state === 'stopped' || state === 'failed') return;
-    const reason = error ?? new NativeHostError('closed', 'The mu host was closed');
+    const reason = error ?? new NativeHostError('closed', 'The spec.jev host was closed');
     for (const request of this.pending.values()) {
       clearTimeout(request.timer);
       request.reject(reason);

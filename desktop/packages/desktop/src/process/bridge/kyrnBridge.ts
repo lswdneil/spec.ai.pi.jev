@@ -63,7 +63,7 @@ function activityKinds(kinds: unknown): string[] | undefined {
 }
 
 /**
- * An app conversation as mu sees it: its `extra` (the workspace among it), and the mu session behind it, '' when mu
+ * An app conversation as spec.jev sees it: its `extra` (the workspace among it), and the spec.jev session behind it, '' when spec.jev
  * does not run it (another agent, or not started yet). `sessionOf` asks the backend only the first time.
  */
 const { conversation: conversationOf, session: sessionOf } = conversationSessions(
@@ -77,10 +77,10 @@ const { conversation: conversationOf, session: sessionOf } = conversationSession
 
 export function initKyrnBridge(): void {
   const desktopRoot = process.env.KYRN_DESKTOP_ROOT || process.cwd();
-  // KYRN_ROOT / MU_ROOT, the copy the packaged app carries, a checkout beside this one, or mu-agent from npm. A
+  // KYRN_ROOT / MU_ROOT, the copy the packaged app carries, a checkout beside this one, or spec.jev from npm. A
   // packaged app runs from no checkout, so nothing is looked for beside the folder it happens to start in.
   const checkout = app.isPackaged && !process.env.KYRN_DESKTOP_ROOT ? undefined : desktopRoot;
-  // None found: where it should be, which then reads as no harness (no manifest) and mu offline. For a packaged app
+  // None found: where it should be, which then reads as no harness (no manifest) and spec.jev offline. For a packaged app
   // that is its own copy, which only a broken build lacks.
   const found = findHarness(checkout);
   const harness = found ?? expectedHarness(checkout, process.resourcesPath);
@@ -97,7 +97,7 @@ export function initKyrnBridge(): void {
   });
   // The registration is found by this path, so it stays `acp` where it always was. Windows cannot start a bash
   // script: there the command is acp.cmd, which runs the same adapter with Node. The packaged app has no sources:
-  // it carries the adapter bundled (out/main/mu-acp.js) and its launchers in resources/mu.
+  // it carries the adapter bundled (out/main/mu-acp.js) and its launchers in resources/spec.jev.
   const launchers = app.isPackaged ? join(process.resourcesPath, 'mu') : join(desktopRoot, 'scripts', 'kyrn');
   const launcher = join(launchers, process.platform === 'win32' ? 'acp.cmd' : 'acp');
   // What is registered: the launcher, or on Windows a spelling of it without spaces (windows/launcherCommand.ts).
@@ -149,7 +149,7 @@ export function initKyrnBridge(): void {
     rechecked = rechecked.catch((): undefined => undefined).then(recheck);
     return result(() => rechecked);
   });
-  // Chromium's network stack, not Node's: it goes through the system's proxy like a browser, and like mu (systemProxy.ts).
+  // Chromium's network stack, not Node's: it goes through the system's proxy like a browser, and like spec.jev (systemProxy.ts).
   kyrnBridge.testProvider.provider((input) =>
     result(() => testProvider(input, settings.storedKey(input.id), { fetch: (url, init) => net.fetch(url, init) }))
   );
@@ -168,7 +168,7 @@ export function initKyrnBridge(): void {
   const localJudge = usesOnnxJudge(process.platform, process.arch, process.env)
     ? new OnnxLocalJudge({
         fork: (env) =>
-          utilityProcess.fork(localJudgeEntry(), [], { env, stdio: 'pipe', serviceName: 'mu local judge' }),
+          utilityProcess.fork(localJudgeEntry(), [], { env, stdio: 'pipe', serviceName: 'spec.jev local judge' }),
         open: (folder) => openFolder(folder, (path) => shell.openPath(path)),
       })
     : new LocalJudge(
@@ -176,7 +176,7 @@ export function initKyrnBridge(): void {
         harness.layout === 'package' ? { stateDir: muEnv('LOCAL_JUDGE_RUN_DIR') || join(home, 'local-judge') } : {}
       );
   if (localJudge instanceof OnnxLocalJudge)
-    void localJudge.autoStart(agentDir).catch((error: unknown) => console.warn('[mu] local judge autostart:', error));
+    void localJudge.autoStart(agentDir).catch((error: unknown) => console.warn('[spec.jev] local judge autostart:', error));
   kyrnBridge.localJudgeState.provider(() => result(() => localJudge.state()));
   kyrnBridge.localJudgeRun.provider(({ action, consent }) => result(() => localJudge.run(action, consent === true)));
   kyrnBridge.clmCheck.provider(({ baseUrl }) =>
@@ -223,7 +223,7 @@ export function initKyrnBridge(): void {
     assistant: async () => {
       const { assistants } = await catalog();
       const assistant = assistants.find((row) => row.enabled !== false) ?? assistants[0];
-      if (!assistant) throw new KyrnError('runtimeOffline', 'mu has no assistant to start a conversation with');
+      if (!assistant) throw new KyrnError('runtimeOffline', 'spec.jev has no assistant to start a conversation with');
       return assistant.id;
     },
   });
@@ -232,8 +232,8 @@ export function initKyrnBridge(): void {
     result(() => imports.run(paths, locale, native === true))
   );
   kyrnBridge.importHistory.provider(({ conversationId }) => result(() => imports.history(conversationId)));
-  // The skills and MCP servers mu itself uses, for the settings pages while mu runs inside the app. The skills that
-  // come with mu lie next to its manifest.
+  // The skills and MCP servers spec.jev itself uses, for the settings pages while spec.jev runs inside the app. The skills that
+  // come with spec.jev lie next to its manifest.
   const skillRoots = {
     agentDir,
     home: homedir(),

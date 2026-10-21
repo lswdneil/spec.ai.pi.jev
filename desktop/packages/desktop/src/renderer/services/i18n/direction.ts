@@ -7,7 +7,7 @@
 /**
  * Layout direction for the app language.
  *
- * fa-IR is the only right-to-left language the app ships. Direction is derived
+ * No right-to-left language ships today; the set stays so that adding one is a
  * from the app language (`i18n.language`), never from the host OS, for the same
  * reason number and date formatting is: the two must not disagree.
  *

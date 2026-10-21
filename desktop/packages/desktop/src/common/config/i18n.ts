@@ -38,22 +38,6 @@ export function normalizeLanguageCode(language: string): SupportedLanguage {
       return 'ja-JP';
     case 'ko':
       return 'ko-KR';
-    case 'tr':
-      return 'tr-TR';
-    case 'ru':
-      return 'ru-RU';
-    case 'uk':
-      return 'uk-UA';
-    case 'pt':
-      return 'pt-BR';
-    case 'de':
-      return 'de-DE';
-    case 'es':
-      return 'es-ES';
-    case 'fr':
-      return 'fr-FR';
-    case 'fa':
-      return 'fa-IR';
     default:
       return DEFAULT_LANGUAGE;
   }

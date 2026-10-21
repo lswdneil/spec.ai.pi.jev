@@ -314,7 +314,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 	let reading: BoardNote | undefined;
 	/** The clock the board looks by while sub-agents work. */
 	let following: ReturnType<typeof setInterval> | undefined;
-	/** The person's turn the current run belongs to: a run mu starts itself (a goal continuation, a nudge) carries it on. */
+	/** The person's turn the current run belongs to: a run spec.jev starts itself (a goal continuation, a nudge) carries it on. */
 	let turnSeen = -1;
 	/** A permission the agent is waiting for, shown the moment it is asked. */
 	let pendingAsk: { id: string; summary: string } | undefined;
@@ -386,7 +386,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 		if (options.language === "zh" || options.language === "en") return options.language;
 		return appLanguage()?.wording ?? languageOf(`${runtime.frame?.goal ?? ""} ${runtime.turn.userMessage}`);
 	};
-	/** What the writer is told to write in: the app's own language when it has one mu has no wording for. */
+	/** What the writer is told to write in: the app's own language when it has one spec.jev has no wording for. */
 	const writeIn = (): string | undefined =>
 		options.language === "zh" || options.language === "en" ? undefined : appLanguage()?.name;
 
@@ -773,7 +773,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 		if (board?.needsUser) sayNow({ ...board, confirm: [], confirmCodes: [], needsUser: false });
 	});
 
-	// Goal mode: a run mu sends back to work has not ended for the person; what the check said is news.
+	// Goal mode: a run spec.jev sends back to work has not ended for the person; what the check said is news.
 	runtime.observe("goal.state", (payload) => {
 		const state = payload as {
 			status?: unknown;
@@ -929,7 +929,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 	pi.on(
 		"agent_start",
 		failOpen<AgentStartEvent, undefined>(() => {
-			// A run mu starts itself (a goal continuation, a nudge) carries the person's turn on: one summing up covers it all.
+			// A run spec.jev starts itself (a goal continuation, a nudge) carries the person's turn on: one summing up covers it all.
 			if (runtime.userTurns !== turnSeen) {
 				turnSeen = runtime.userTurns;
 				runStart = sequence;

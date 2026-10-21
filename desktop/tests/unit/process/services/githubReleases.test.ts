@@ -1,4 +1,4 @@
-/** The fallback's view of mu's releases: GitHub's API, the newest release, and the installer for this system. */
+/** The fallback's view of spec.jev's releases: GitHub's API, the newest release, and the installer for this system. */
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { fetchLatestRelease, isNewerVersion, pickRecommendedAsset } from '@/process/services/update/githubReleases';
@@ -42,7 +42,7 @@ const release = (tag: string, extra: Record<string, unknown> = {}) => {
   };
 };
 
-/** Only mu's own release list answers; any other request fails the test. */
+/** Only spec.jev's own release list answers; any other request fails the test. */
 const stubFetch = (answer: () => Response) => {
   const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
     if (String(input) === RELEASES_API) return answer();

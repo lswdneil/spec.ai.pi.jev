@@ -52,7 +52,7 @@ const { run, page, paths, sleep, start, stop, expectNoProblems, shot, reachSideb
 const gitIn = (...args) =>
   execFileSync(
     /** @type {string} */ (GIT),
-    ['-c', 'user.name=mu E2E', '-c', 'user.email=e2e@mu.invalid', '-c', 'commit.gpgsign=false', ...args],
+    ['-c', 'user.name=spec.jev E2E', '-c', 'user.email=e2e@mu.invalid', '-c', 'commit.gpgsign=false', ...args],
     {
       cwd: paths().project,
       env: { PATH: process.env.PATH ?? '', HOME: paths().home, GIT_CONFIG_NOSYSTEM: '1' },

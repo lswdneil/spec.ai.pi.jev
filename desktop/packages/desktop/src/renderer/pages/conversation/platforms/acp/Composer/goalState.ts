@@ -11,7 +11,7 @@ export type GoalSnapshot = {
 };
 
 /**
- * mu's command. A goal is one long command the person types: `/goal <condition>` sets it and mu works until the
+ * spec.jev's command. A goal is one long command the person types: `/goal <condition>` sets it and spec.jev works until the
  * condition holds; `/goal clear` ends it. The send box never writes the first one for them.
  */
 export const GOAL_COMMAND_NAME = 'goal';
@@ -22,7 +22,7 @@ export const GOAL_EVENT = 'goal.state';
 const STATUSES: ReadonlySet<string> = new Set(['active', 'paused', 'met', 'cleared']);
 
 /**
- * Whether the agent behind the send box runs goals: only mu offers `/goal`. Another agent has no goal to show, so the
+ * Whether the agent behind the send box runs goals: only spec.jev offers `/goal`. Another agent has no goal to show, so the
  * send box neither reads one nor offers to end one.
  */
 export function offersGoal(commands: readonly { name: string }[]): boolean {

@@ -10,7 +10,7 @@ import { asRecord } from './piRpc';
  */
 export async function checkClmServer(baseUrl: string, send: typeof fetch = fetch): Promise<ClmServerState> {
   const server = clmServer(baseUrl);
-  // The rule for every address mu sends a judge's questions to: they hold what the person wrote.
+  // The rule for every address spec.jev sends a judge's questions to: they hold what the person wrote.
   assertEndpoint(server);
   const get = (path: string) =>
     send(`${server}${path}`, {

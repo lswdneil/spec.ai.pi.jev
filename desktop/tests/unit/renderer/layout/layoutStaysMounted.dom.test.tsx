@@ -61,7 +61,7 @@ describe('the app layout', () => {
     expect(await screen.findByText('home page')).toBeInTheDocument();
 
     expect(layoutMounts).toBe(1);
-    // Back from the conversation, the gate already knows mu is up: it does not cover the app again.
+    // Back from the conversation, the gate already knows spec.jev is up: it does not cover the app again.
     expect(screen.queryByTestId('mu-startup')).not.toBeInTheDocument();
   });
 });

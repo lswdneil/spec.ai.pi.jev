@@ -14,9 +14,9 @@ import {
 } from '../../../packages/desktop/src/process/agent/kyrn/permissions.ts';
 
 /*
- * What the adapter reads of mu's permission events, and what it sends back. The happy paths run through the adapter
+ * What the adapter reads of spec.jev's permission events, and what it sends back. The happy paths run through the adapter
  * (adapter.test.ts); these are the edges: whatever a mode id, an answer id or a code is, only a word gets through,
- * because a mode id is sent to mu as part of a command and a code becomes part of the card's wording.
+ * because a mode id is sent to spec.jev as part of a command and a code becomes part of the card's wording.
  */
 
 const frame = (kind: string, payload: unknown) => ({
@@ -26,8 +26,8 @@ const frame = (kind: string, payload: unknown) => ({
   statusText: JSON.stringify({ kind, payload }),
 });
 
-describe('mu presentation events', () => {
-  it('reads a frame on mu’s status channel, and nothing else', () => {
+describe('spec.jev presentation events', () => {
+  it('reads a frame on spec.jev’s status channel, and nothing else', () => {
     expect(presentation(frame('permissions.mode', { mode: 'full' }))).toEqual({
       kind: 'permissions.mode',
       payload: { mode: 'full' },
@@ -46,13 +46,13 @@ describe('permission modes', () => {
     { id: 'ask', label: '', description: 'Asks first' },
   ];
 
-  it('takes the modes mu offers, with the current one among them', () => {
+  it('takes the modes spec.jev offers, with the current one among them', () => {
     expect(readModes({ mode: 'jev', modes, conversationSwitch: true })).toEqual({
       mode: 'jev',
       modes: [modes[0], modes[1], { id: 'ask', label: 'ask', description: 'Asks first' }],
       conversationSwitch: true,
     });
-    // An older mu does not say it can switch one conversation, and gets the plain command.
+    // An older spec.jev does not say it can switch one conversation, and gets the plain command.
     expect(readModes({ mode: 'full', modes })?.conversationSwitch).toBe(false);
     expect(readModes({ mode: 'full', modes, conversationSwitch: 'yes' })?.conversationSwitch).toBe(false);
   });
@@ -70,7 +70,7 @@ describe('permission modes', () => {
     expect(readModes({ mode: 'full', modes: 'full' })).toBeUndefined();
   });
 
-  it('sends only a word to mu as a mode', () => {
+  it('sends only a word to spec.jev as a mode', () => {
     for (const id of ['full', 'jev', 'ask', 'read-only', 'a1']) expect(isModeId(id)).toBe(true);
     for (const id of ['', 'Full', '1full', 'full ask', 'full\n/exit', '-x', 'a'.repeat(33)])
       expect(isModeId(id)).toBe(false);
@@ -98,7 +98,7 @@ describe('permission requests', () => {
     grant: { label: 'git push' },
   };
 
-  it('reads what mu is about to ask, with its codes', () => {
+  it('reads what spec.jev is about to ask, with its codes', () => {
     expect(readRequest(request)).toEqual({
       kind: 'shell',
       summary: 'git push --force',
@@ -154,11 +154,11 @@ describe('permission requests', () => {
     expect(asks(read, ['不允许', '本次对话都允许', '允许一次'])).toBe(false);
   });
 
-  it('shows the call on a card: what mu wants to do as the title, why under it, the call where a command goes', () => {
+  it('shows the call on a card: what spec.jev wants to do as the title, why under it, the call where a command goes', () => {
     const read = readRequest(request)!;
-    const call = permissionCall(read, 'mu 想运行命令\ngit push --force\n这条命令会改写远程历史');
+    const call = permissionCall(read, 'spec.jev 想运行命令\ngit push --force\n这条命令会改写远程历史');
     expect(call).toMatchObject({
-      title: 'mu 想运行命令',
+      title: 'spec.jev 想运行命令',
       kind: 'execute',
       rawInput: {
         command: 'git push --force',
@@ -167,7 +167,7 @@ describe('permission requests', () => {
       },
     });
     // A title of two lines has no reason line; an empty one falls back to the call.
-    expect(permissionCall(read, 'mu 想运行命令\ngit push --force').rawInput).not.toHaveProperty('description');
+    expect(permissionCall(read, 'spec.jev 想运行命令\ngit push --force').rawInput).not.toHaveProperty('description');
     expect(permissionCall(read, '').title).toBe('git push --force');
     expect(permissionCall({ ...read, kind: 'delegate' }, 't').kind).toBe('other');
     expect(permissionCall({ ...read, kind: 'outside' }, 't').kind).toBe('edit');
@@ -180,7 +180,7 @@ describe('an answered question', () => {
       answer: 'deny',
       toolCallId: 'call-7',
     });
-    // A mu from before the call was named, and words where an id belongs.
+    // A spec.jev from before the call was named, and words where an id belongs.
     expect(readResolved({ id: 'permission-1', answer: 'once' })).toEqual({ answer: 'once' });
     expect(readResolved({ answer: 'Don’t allow', toolCallId: 'call\n7' })).toEqual({});
   });
@@ -200,7 +200,7 @@ describe('answers', () => {
     expect([0, 1].map((index) => answerKind(index, 2))).toEqual(['allow_once', 'reject_once']);
   });
 
-  it('go by their ids when mu sent ids, else by position, and never by the other one', () => {
+  it('go by their ids when spec.jev sent ids, else by position, and never by the other one', () => {
     expect([0, 1, 2].map((index) => answerOptionId(withIds, index))).toEqual(['mu:once', 'mu:session', 'mu:deny']);
     expect([0, 1].map((index) => answerOptionId(withoutIds, index))).toEqual(['0', '1']);
 
@@ -214,7 +214,7 @@ describe('answers', () => {
   });
 
   it('never read a malformed option id as the first answer, which allows', () => {
-    // Number('') and Number(' ') are 0: an empty id once answered "allow once" to a mu that sent no ids.
+    // Number('') and Number(' ') are 0: an empty id once answered "allow once" to a spec.jev that sent no ids.
     for (const optionId of ['', ' ', '2', '-1', '1.5', '01', '1e0', '0x0', ' 1', 'allow']) {
       expect(answerIndex(withoutIds, optionId, 2)).toBe(-1);
     }

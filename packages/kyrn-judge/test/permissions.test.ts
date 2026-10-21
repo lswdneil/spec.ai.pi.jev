@@ -253,7 +253,7 @@ describe("what needs permission", () => {
 		expect(commandPrefix("find . -name '*.ts'")).toBe("find");
 	});
 
-	it("leaves mu's own settings to the user, however a command spells the folder", () => {
+	it("leaves spec.jev's own settings to the user, however a command spells the folder", () => {
 		// A home as this machine writes one: /home/me, or <drive>:\home\me on Windows.
 		const home = resolve("/home/me");
 		const agentDir = join(home, ".mu", "agent");
@@ -263,7 +263,7 @@ describe("what needs permission", () => {
 		});
 		const command = permissionNeed(
 			"bash",
-			{ command: "echo '{}' > ~/.mu/agent/mu/permissions.json" },
+			{ command: "echo '{}' > ~/.spec.jev/agent/mu/permissions.json" },
 			cwd,
 			protectedPaths,
 		);
@@ -271,16 +271,16 @@ describe("what needs permission", () => {
 		expect(command?.grant).toBeUndefined();
 	});
 
-	it("leaves mu's own settings to the user on Windows too: either slash, from the home, in any case", () => {
+	it("leaves spec.jev's own settings to the user on Windows too: either slash, from the home, in any case", () => {
 		const protectedPaths = protectedSpellings("C:\\Users\\Me\\.mu\\agent", "C:\\Users\\Me", "win32");
 		for (const command of [
-			"echo {} > C:\\Users\\Me\\.mu\\agent\\mu\\permissions.json",
+			"echo {} > C:\\Users\\Me\\.spec.jev\\agent\\spec.jev\\permissions.json",
 			"echo {} > c:/users/me/.mu/agent/mu/permissions.json",
-			"echo {} > ~/.mu/agent/mu/permissions.json",
+			"echo {} > ~/.spec.jev/agent/mu/permissions.json",
 			"echo {} > $HOME/.mu/agent/mu.json",
 			"echo {} > /c/Users/Me/.mu/agent/mu.json",
-			"Set-Content $env:USERPROFILE\\.mu\\agent\\mu.json '{}'",
-			"type nul > %USERPROFILE%\\.mu\\agent\\mu.json",
+			"Set-Content $env:USERPROFILE\\.spec.jev\\agent\\mu.json '{}'",
+			"type nul > %USERPROFILE%\\.spec.jev\\agent\\mu.json",
 		]) {
 			const need = permissionNeed("bash", { command }, "C:\\work\\project", protectedPaths);
 			expect(need?.protected, command).toBeDefined();
@@ -419,7 +419,7 @@ describe("permission modes in a session", () => {
 
 		expect(ran).toEqual(["edit src/a.ts", "edit src/b.ts", "bash ls"]);
 		expect(asked).toHaveLength(1);
-		expect(asked[0].title).toContain("mu wants to edit a file");
+		expect(asked[0].title).toContain("spec.jev wants to edit a file");
 		expect(asked[0].title).toContain("Ask first");
 		expect(asked[0].options).toEqual(["Allow once", "Allow for this conversation (edit)", "Don't allow"]);
 		// Shown while it waited, gone once answered.
@@ -578,7 +578,7 @@ describe("permission modes in a session", () => {
 			"npm publish",
 		);
 		expect(noKey.request).toMatchObject({ reason: "nojudge" });
-		expect(noKey.title).toContain("No judge is available yet, so mu asks you about every step.");
+		expect(noKey.title).toContain("No judge is available yet, so spec.jev asks you about every step.");
 		// An account without credit will not answer the next step either.
 		const noCredit = await refusedInJev(
 			failing(new JudgeError("payment_required", "The judge answered 402")),
@@ -592,7 +592,7 @@ describe("permission modes in a session", () => {
 		]) {
 			const down = await refusedInJev(failing(error), "npm publish");
 			expect(down.request, error.message).toMatchObject({ reason: "judgedown" });
-			expect(down.title, error.message).toContain("The judge didn't answer this time, so mu is asking you.");
+			expect(down.title, error.message).toContain("The judge didn't answer this time, so spec.jev is asking you.");
 		}
 		vi.stubEnv("MU_LANG", "zh-CN");
 		expect((await refusedInJev(failing(new JudgeError("auth", "no key")), "npm publish")).title).toContain(
@@ -708,7 +708,7 @@ describe("permission modes in a session", () => {
 		expect(judged.count).toBe(0);
 	});
 
-	it("mu's own settings are the user's to allow, even when Jev would, and never for the whole conversation", async () => {
+	it("spec.jev's own settings are the user's to allow, even when Jev would, and never for the whole conversation", async () => {
 		const dir = mkdtempSync(join(tmpdir(), "mu-permissions-"));
 		dirs.push(dir);
 		const { harness, ran, asked } = await start(
@@ -719,7 +719,7 @@ describe("permission modes in a session", () => {
 		harness.setResponses([call("write", { path: join(dir, "mu.json") }), fauxAssistantMessage("Left it.")]);
 		await harness.session.prompt("Turn permissions off in the config");
 		expect(ran).toEqual([]);
-		expect(asked[0].title).toContain("mu's own settings");
+		expect(asked[0].title).toContain("spec.jev's own settings");
 		expect(asked[0].options).toEqual(["Allow once", "Don't allow"]);
 	});
 
@@ -740,7 +740,7 @@ describe("permission modes in a session", () => {
 		expect(asked[0].title).toContain("change a file outside the project");
 	});
 
-	it("the project's own mu folder is the user's to allow: an extension there runs inside mu", async () => {
+	it("the project's own spec.jev folder is the user's to allow: an extension there runs inside spec.jev", async () => {
 		const { harness, ran, asked } = await start(
 			(request): Record<string, Answer> =>
 				"verdict" in request.questions ? { verdict: verdict("needed", 0.99) } : {},
@@ -752,7 +752,7 @@ describe("permission modes in a session", () => {
 		]);
 		await harness.session.prompt("Add a helper extension");
 		expect(ran).toEqual([]);
-		expect(asked[0].title).toContain("mu's own settings");
+		expect(asked[0].title).toContain("spec.jev's own settings");
 		expect(asked[0].options).toEqual(["Allow once", "Don't allow"]);
 	});
 

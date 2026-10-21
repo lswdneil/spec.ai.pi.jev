@@ -1,5 +1,5 @@
 /**
- * `mu import` (see command.ts). The launcher runs this file with Node's own type stripping in a checkout, and the
+ * `spec.jev import` (see command.ts). The launcher runs this file with Node's own type stripping in a checkout, and the
  * built judge/dist/import.js in the npm package: it needs nothing from node_modules either way.
  */
 import { main, processIo } from "./command.ts";

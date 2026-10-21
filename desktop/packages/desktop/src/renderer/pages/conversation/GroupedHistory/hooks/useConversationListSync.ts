@@ -390,7 +390,7 @@ const logGeneratingTransition = (conversation_id: string, next: boolean, source:
 
 /**
  * Turns that are over, per conversation, from a terminal frame or `turn.completed`. A runtime summary taken while one
- * of them ran must not light the spinner again, for nothing would put it out: a command mu answers at once (the
+ * of them ran must not light the spinner again, for nothing would put it out: a command spec.jev answers at once (the
  * board's `/board on`) ends its turn before the renderer reads the send response, whose summary still says
  * `is_processing` (seen live: the row kept spinning until the next turn ended, once for 78 minutes).
  */

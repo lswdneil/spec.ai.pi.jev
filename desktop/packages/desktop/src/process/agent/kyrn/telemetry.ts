@@ -267,7 +267,7 @@ export class Telemetry {
       const run = text(event.toolCallId);
       if (['hive', 'delegate'].includes(text(snapshot.kind))) {
         this.append('swarm.snapshot', snapshot, run);
-        // Only known mu temp run directories (still named kyrn-*) are eligible; never follow a tool-supplied arbitrary path.
+        // Only known spec.jev temp run directories (still named kyrn-*) are eligible; never follow a tool-supplied arbitrary path.
         const dir = realpathSync(text(snapshot.dir));
         if (dirname(dir) !== realpathSync(tmpdir()) || !/^kyrn-(hive|swarm|delegate)-[\w-]+$/.test(basename(dir)))
           return;

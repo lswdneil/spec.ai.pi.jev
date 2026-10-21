@@ -31,7 +31,7 @@ export type HiveRun = {
 const RELATIONS: readonly HiveRelationKind[] = ['supersedes', 'contradicts', 'supports'];
 
 /**
- * The runs whose turn is over: mu's turn settled, or its process closed, after the run's last word. A run that mu's
+ * The runs whose turn is over: spec.jev's turn settled, or its process closed, after the run's last word. A run that spec.jev's
  * death cut short sends no last snapshot to say so, and its bees would read as at work for good.
  */
 export function endedRuns(events: readonly Activity[]): ReadonlySet<string> {

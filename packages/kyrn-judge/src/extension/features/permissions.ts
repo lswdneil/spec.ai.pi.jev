@@ -53,19 +53,19 @@ const KIND_TEXT: Readonly<Record<PermissionKind, { zh: string; en: string }>> = 
 };
 
 const REASON_TEXT: Readonly<Record<Exclude<AskReason, "flagged">, { zh: string; en: string }>> = {
-	ask: { zh: "最小权限模式：每一步都先问你。", en: "Ask first: mu asks before every step." },
+	ask: { zh: "最小权限模式：每一步都先问你。", en: "Ask first: spec.jev asks before every step." },
 	unsure: { zh: "Jev 拿不准这一步是不是你要的。", en: "Jev isn't sure this step is what you want." },
 	beyond: { zh: "Jev 认为这一步超出了你的要求。", en: "Jev thinks this goes beyond what you asked for." },
 	unrelated: { zh: "Jev 认为这一步和当前任务无关。", en: "Jev thinks this isn't part of the task." },
 	protected: {
-		zh: "这会动到 mu 自己的设置，只能由你决定。",
-		en: "This touches mu's own settings; only you can allow it.",
+		zh: "这会动到 spec.jev 自己的设置，只能由你决定。",
+		en: "This touches spec.jev's own settings; only you can allow it.",
 	},
 	nojudge: {
 		zh: "还没有可用的判定器，所以每一步都先问你。",
-		en: "No judge is available yet, so mu asks you about every step.",
+		en: "No judge is available yet, so spec.jev asks you about every step.",
 	},
-	judgedown: { zh: "判定器这次没有回答，所以先问你。", en: "The judge didn't answer this time, so mu is asking you." },
+	judgedown: { zh: "判定器这次没有回答，所以先问你。", en: "The judge didn't answer this time, so spec.jev is asking you." },
 };
 
 /** The answers, fixed so a client can draw them as buttons. */
@@ -92,7 +92,7 @@ function unanswered(decision: Decision<unknown>): "nojudge" | "judgedown" | unde
 	return judges.includes("unavailable") ? "judgedown" : undefined;
 }
 
-/** Where mu keeps its own settings, as a command may spell it, and where it really is: a call touching it is the user's to allow. */
+/** Where spec.jev keeps its own settings, as a command may spell it, and where it really is: a call touching it is the user's to allow. */
 function protectedPaths(roots: HarnessRoots | undefined): string[] {
 	if (!roots) return [];
 	const spelled = protectedSpellings(roots.agentDir, homedir(), process.platform);
@@ -100,7 +100,7 @@ function protectedPaths(roots: HarnessRoots | undefined): string[] {
 	return real && real !== roots.agentDir ? [...spelled, real] : spelled;
 }
 
-/** The project's own mu folder (`.mu`, a stock pi's `.pi`): its settings and extensions run inside mu. */
+/** The project's own spec.jev folder (`.spec.jev`, a stock pi's `.pi`): its settings and extensions run inside spec.jev. */
 function projectSettings(cwd: string): string[] {
 	const spelled = join(resolve(cwd), CONFIG_DIR_NAME);
 	const real = toolPath(cwd, CONFIG_DIR_NAME) ?? spelled;
@@ -351,7 +351,7 @@ export function registerPermissions(runtime: KyrnRuntime, roots: HarnessRoots | 
 			if (ctx.signal?.aborted) return { block: true, reason: "Cancelled." };
 			if (ctx.hasUI) {
 				const allowed = await ctx.ui
-					.confirm(say({ zh: "mu 需要你授权", en: "mu needs your permission" }), `${event.toolName}\n\n${problem}`)
+					.confirm(say({ zh: "spec.jev 需要你授权", en: "spec.jev needs your permission" }), `${event.toolName}\n\n${problem}`)
 					.catch(() => false);
 				if (allowed) return undefined;
 			}
@@ -361,8 +361,8 @@ export function registerPermissions(runtime: KyrnRuntime, roots: HarnessRoots | 
 
 	pi.registerCommand("permissions", {
 		description: say({
-			zh: "mu 不问你就能做多少事：/permissions full（完全访问）| jev（Jev 审批）| ask（最小权限），不带参数就弹出选择；/permissions reset 忘掉这次对话里允许过的操作",
-			en: "Set how much mu can do without asking: /permissions full | jev | ask (no argument opens a picker); /permissions reset clears what you allowed in this session",
+			zh: "spec.jev 不问你就能做多少事：/permissions full（完全访问）| jev（Jev 审批）| ask（最小权限），不带参数就弹出选择；/permissions reset 忘掉这次对话里允许过的操作",
+			en: "Set how much spec.jev can do without asking: /permissions full | jev | ask (no argument opens a picker); /permissions reset clears what you allowed in this session",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);

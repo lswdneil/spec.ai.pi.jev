@@ -23,7 +23,7 @@ describe('offersGoal', () => {
 });
 
 describe('the goal command', () => {
-  it('ends a goal with mu’s own words for it', () => {
+  it('ends a goal with spec.jev’s own words for it', () => {
     expect(GOAL_CLEAR_COMMAND).toBe('/goal clear');
   });
 });

@@ -1,12 +1,12 @@
 import type { AuthInteraction, AuthPrompt, Provider } from "@earendil-works/pi-ai";
 
 /**
- * `mu auth`: signing in to a provider's subscription outside any session, for the desktop app, with pi's own
+ * `spec.jev auth`: signing in to a provider's subscription outside any session, for the desktop app, with pi's own
  * OAuth flows and pi's credential store (<agent dir>/auth.json), exactly as /login does in the terminal.
  *
- *   mu auth status               who is signed in, and what this mu can sign in to
- *   mu auth login <provider>     one sign-in, from the browser's page to the stored credential
- *   mu auth logout <provider>    signs that subscription out, then says who is still signed in
+ *   spec.jev auth status               who is signed in, and what this spec.jev can sign in to
+ *   spec.jev auth login <provider>     one sign-in, from the browser's page to the stored credential
+ *   spec.jev auth logout <provider>    signs that subscription out, then says who is still signed in
  *
  * It speaks JSON lines. Out: `event` (what the flow reports: the page to open, a device code, progress),
  * `prompt` and `prompt_done` (a question for the person, and its withdrawal when the browser answered first),
@@ -36,7 +36,7 @@ export interface AuthOptions {
 	readonly runtime: AuthRuntime;
 	/** The model pi starts each provider on (pi's defaultModelPerProvider). */
 	readonly preferred: Readonly<Record<string, string>>;
-	/** mu's own sign-ins (the Google ones), present while its googleLogin feature is on. */
+	/** spec.jev's own sign-ins (the Google ones), present while its googleLogin feature is on. */
 	readonly extra: readonly Provider[];
 	readonly io: AuthIo;
 	/** How long reading an account's models may take once it is signed in. */
@@ -45,7 +45,7 @@ export interface AuthOptions {
 
 export type AuthModel = { id: string; name: string };
 
-/** pi's own subscription flows, in every mu. */
+/** pi's own subscription flows, in every spec.jev. */
 export const BUILT_IN_PROVIDERS: readonly string[] = ["openai-codex", "anthropic", "xai"];
 /** A provider whose list of models comes from the account: read again once it is signed in. */
 const LISTED_BY_ACCOUNT = new Set(["google-antigravity"]);
@@ -53,9 +53,9 @@ const LISTED_BY_ACCOUNT = new Set(["google-antigravity"]);
 const MODELS_READ_MS = 20_000;
 /** pi's Codex flow asks how to sign in; from the app it is always the browser on this machine, never the headless way. */
 const BROWSER_METHOD = "browser";
-const USAGE = "usage: mu auth status | mu auth login <provider> | mu auth logout <provider>";
+const USAGE = "usage: spec.jev auth status | spec.jev auth login <provider> | spec.jev auth logout <provider>";
 
-/** The subcommands `mu auth` answers itself. The others (`check`, `print-api-key`, ...) are pi's own. */
+/** The subcommands `spec.jev auth` answers itself. The others (`check`, `print-api-key`, ...) are pi's own. */
 export const AUTH_COMMANDS: readonly string[] = ["status", "login", "logout"];
 
 /** What an account can use, from pi's catalogue, with the model pi starts that provider on first. */
@@ -82,7 +82,7 @@ function shown(prompt: AuthPrompt): Record<string, unknown> {
 	};
 }
 
-/** Runs one `mu auth` command to its end and gives back the exit code. */
+/** Runs one `spec.jev auth` command to its end and gives back the exit code. */
 export async function runAuth(argv: readonly string[], options: AuthOptions): Promise<number> {
 	const { runtime, preferred, io } = options;
 	try {

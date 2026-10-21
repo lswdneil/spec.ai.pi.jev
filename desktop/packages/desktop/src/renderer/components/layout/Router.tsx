@@ -140,7 +140,7 @@ const withRouteFallback = (Component: React.ComponentType) => (
   </RouteContent>
 );
 
-/** The page each entry of the settings rail opens: mu's own sections are one area, routed by the path. */
+/** The page each entry of the settings rail opens: spec.jev's own sections are one area, routed by the path. */
 const SETTINGS_PAGE_ELEMENTS: Record<SettingsPageId, PreloadablePage> = {
   appearance: AppearanceSettings,
   system: SystemSettings,
@@ -165,7 +165,7 @@ const SETTINGS_PAGE_ELEMENTS: Record<SettingsPageId, PreloadablePage> = {
 };
 
 /**
- * The pages that show what mu itself uses while it runs inside the app, in place of the app's own storage, which mu
+ * The pages that show what spec.jev itself uses while it runs inside the app, in place of the app's own storage, which spec.jev
  * does not read: its skills, and its MCP servers in place of the tools (MCP servers and the image generation).
  */
 const NATIVE_PAGE_ELEMENTS: Partial<Record<SettingsPageId, PreloadablePage>> = {
@@ -174,7 +174,7 @@ const NATIVE_PAGE_ELEMENTS: Partial<Record<SettingsPageId, PreloadablePage>> = {
 };
 
 /**
- * A page that depends on whether mu runs inside the app: there, its native page, or for a page of the classic mode
+ * A page that depends on whether spec.jev runs inside the app: there, its native page, or for a page of the classic mode
  * alone the page it leads to; otherwise the classic page. Nothing is drawn until the main process said which, so
  * neither page starts reading for the other.
  */
@@ -203,7 +203,7 @@ const settingsPageElement = (id: SettingsPageId): React.ReactElement =>
   );
 
 /**
- * Around every settings page: the one draft of mu's settings they all edit. A route change draws the page afresh, so
+ * Around every settings page: the one draft of spec.jev's settings they all edit. A route change draws the page afresh, so
  * the draft lives here, above the pages: a change typed on one page is still there, unsaved, on the next, until the
  * settings are left.
  */
@@ -264,7 +264,7 @@ const PanelRoute: React.FC<{ layout: React.ReactElement }> = ({ layout }) => {
           {/* A conversation on the native host: the page goes home unless the main process runs it (not with MU_NATIVE_HOST=0). */}
           <Route path='/conversation/native/:id' element={withRouteFallback(NativeConversation)} />
           <Route path='/team/:id' element={<Navigate to='/guid' replace />} />
-          {/* The settings rail: one route per entry, all under one draft of mu's settings. */}
+          {/* The settings rail: one route per entry, all under one draft of spec.jev's settings. */}
           <Route element={<SettingsScope />}>
             {SETTINGS_PAGES.map(({ id, route }) => (
               <Route
@@ -287,7 +287,7 @@ const PanelRoute: React.FC<{ layout: React.ReactElement }> = ({ layout }) => {
             {MOVED_FEATURE_LISTS.map((list) => (
               <Route key={list} path={`${list}/:feature/:part?`} element={withRouteFallback(MovedFeatureOptions)} />
             ))}
-            {/* The app's own skills' history and details: while mu runs inside the app, its skills page. */}
+            {/* The app's own skills' history and details: while spec.jev runs inside the app, its skills page. */}
             <Route path='/settings/skills/import-history' element={settingsPageElement('skills')} />
             <Route
               path='/settings/skills/detail/:skillName'

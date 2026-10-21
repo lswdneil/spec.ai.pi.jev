@@ -43,7 +43,7 @@ describe('classifyBackendStartupFailure', () => {
     error.details = {
       stage: 'spawn',
       workDir: 'D:\\ai\\mu\\工作目录',
-      causeMessage: 'ENOENT: no such file or directory, mkdir D:\\ai\\mu\\工作目录',
+      causeMessage: 'ENOENT: no such file or directory, mkdir D:\\ai\\spec.jev\\工作目录',
     };
 
     expect(classifyBackendStartupFailure(error)).toEqual({
@@ -59,7 +59,7 @@ describe('classifyBackendStartupFailure', () => {
     error.details = {
       stage: 'spawn',
       workDir: 'D:\\ai\\mu\\工作目录',
-      causeMessage: 'EPERM: operation not permitted, mkdir D:\\ai\\mu\\工作目录',
+      causeMessage: 'EPERM: operation not permitted, mkdir D:\\ai\\spec.jev\\工作目录',
     };
 
     expect(classifyBackendStartupFailure(error)).toEqual({
@@ -75,7 +75,7 @@ describe('classifyBackendStartupFailure', () => {
     error.details = {
       stage: 'spawn_error',
       binaryPath: 'D:\\apps\\mu\\resources\\bundled-aioncore\\win32-x64\\aioncore.exe',
-      causeMessage: 'spawn D:\\apps\\mu\\resources\\bundled-aioncore\\win32-x64\\aioncore.exe ENOENT',
+      causeMessage: 'spawn D:\\apps\\spec.jev\\resources\\bundled-aioncore\\win32-x64\\aioncore.exe ENOENT',
     };
 
     expect(classifyBackendStartupFailure(error)).toEqual({
@@ -287,7 +287,7 @@ describe('classifyBackendStartupFailure', () => {
   });
 
   it('classifies packaged macOS architecture mismatches separately from generic startup failures', () => {
-    const error = new Error('The mu package architecture does not match this Mac') as Error & {
+    const error = new Error('The spec.jev package architecture does not match this Mac') as Error & {
       details?: Record<string, unknown>;
     };
     error.details = {

@@ -41,7 +41,7 @@ export interface GoalState {
 	 */
 	readonly reasonCode?: string;
 	readonly reasonParams?: Readonly<Record<string, string | number>>;
-	/** Times mu sent the agent back to work since the user last spoke. */
+	/** Times spec.jev sent the agent back to work since the user last spoke. */
 	readonly continuations: number;
 	/** The next step the last check named. */
 	readonly next?: string;
@@ -549,8 +549,8 @@ export function registerGoal(runtime: KyrnRuntime): void {
 					const asked = (
 						await ctx.ui.input(
 							say({
-								zh: "mu 目标：做完时什么必须成立？",
-								en: "mu goal: what must be true when the work is done?",
+								zh: "spec.jev 目标：做完时什么必须成立？",
+								en: "spec.jev goal: what must be true when the work is done?",
 							}),
 							say({ zh: "比如：packages/x 的测试全部通过", en: "e.g. all tests in packages/x pass" }),
 						)
@@ -565,7 +565,7 @@ export function registerGoal(runtime: KyrnRuntime): void {
 			if (["clear", "off", "stop", "none"].includes(text.toLowerCase())) {
 				if (goal && goal.status !== "cleared")
 					save({ ...goal, status: "cleared", reason: undefined, next: undefined });
-				show(ctx, say({ zh: "mu 目标已清除。", en: "mu goal cleared." }));
+				show(ctx, say({ zh: "spec.jev 目标已清除。", en: "spec.jev goal cleared." }));
 				return;
 			}
 			begin(ctx, text);

@@ -15,7 +15,7 @@ import { fallbackKind, jevLine, judgeName } from '@/renderer/pages/conversation/
 import enCommon from '@/renderer/services/i18n/locales/en-US/common.json';
 import zhCommon from '@/renderer/services/i18n/locales/zh-CN/common.json';
 
-// Jev's class for a message, as the mu adapter sends it (a tool call with a `jev:` id), is one line of its own.
+// Jev's class for a message, as the spec.jev adapter sends it (a tool call with a `jev:` id), is one line of its own.
 // The list runs for real; unrelated rows are stubbed, as in the thinking-flow test.
 
 vi.mock('react-i18next', async (original) => {
@@ -485,7 +485,7 @@ describe('in the conversation', () => {
       call('bash-1', { title: 'bash' }),
       call('mu:notice:1', {
         sessionUpdate: 'tool_call',
-        title: "mu didn't receive your answer, so it continued as if you had declined.",
+        title: "spec.jev didn't receive your answer, so it continued as if you had declined.",
         raw_input: { notice: 'answer_lost' },
       }),
     ];

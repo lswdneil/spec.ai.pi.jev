@@ -11,7 +11,7 @@
  *
  * Log file location (managed by electron-log):
  *   - macOS:   ~/Library/Logs/mu/YYYY/MM/DD/YYYY-MM-DD.log
- *   - Windows: %USERPROFILE%\AppData\Roaming\mu\logs\YYYY\MM\DD\YYYY-MM-DD.log
+ *   - Windows: %USERPROFILE%\AppData\Roaming\spec.jev\logs\YYYY\MM\DD\YYYY-MM-DD.log
  *   - Linux:   ~/.config/mu/logs/YYYY/MM/DD/YYYY-MM-DD.log
  *
  * Users can share the relevant date's file for debugging (#1157).

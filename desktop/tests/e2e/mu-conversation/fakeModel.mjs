@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// A local stand-in for an OpenAI-compatible model, for the mu conversation E2E test. Node's own http module, nothing
+// A local stand-in for an OpenAI-compatible model, for the spec.jev conversation E2E test. Node's own http module, nothing
 // else. It speaks the part of the Chat Completions API that pi's `openai-completions` provider uses: `GET /models`
 // (the connection test in the settings) and `POST /chat/completions` with `stream: true`, text deltas, tool calls and
 // a usage chunk.
@@ -12,7 +12,7 @@
 //   E2E:SLOW [<n>]       a long reply, one chunk every 200 ms, for stopping in the middle; <n> chunks (150 without it)
 //   E2E:ECHO <text>      replies <text>
 //
-// Anything else (a request mu makes for itself) gets a short neutral reply; the board's writer gets the JSON it asks
+// Anything else (a request spec.jev makes for itself) gets a short neutral reply; the board's writer gets the JSON it asks
 // for. Every completion request is recorded (`GET /__e2e/log` returns them), so a test can check what the model was
 // sent; `hits` lists every request of any kind, to show what else reached the server.
 //
@@ -47,13 +47,13 @@ export function textOf(content) {
 }
 
 /**
- * mu's own note about the task frame goes to the model as a user message after the person's (a session it has no frame
+ * spec.jev's own note about the task frame goes to the model as a user message after the person's (a session it has no frame
  * for yet, an imported one, gets one at its first message): it is not the person's turn.
  */
 const isFrameNote = (message) => /^\s*\[mu task frame/.test(textOf(message?.content));
 
 /**
- * What to answer, from the request's messages: the turn is the last user message (not mu's note about the task frame),
+ * What to answer, from the request's messages: the turn is the last user message (not spec.jev's note about the task frame),
  * the step is how many tool results came back after it.
  */
 export function planReply(messages) {

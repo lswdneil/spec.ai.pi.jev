@@ -38,7 +38,7 @@ export * from "./types.ts";
 export * from "./utils/diagnostics.ts";
 export * from "./utils/event-stream.ts";
 export * from "./utils/json-parse.ts";
-// The sign-in result page: a pure string builder, exported so that mu's own sign-ins show the same page.
+// The sign-in result page: a pure string builder, exported so that spec.jev's own sign-ins show the same page.
 export { oauthErrorHtml, oauthSuccessHtml } from "./utils/oauth-page.ts";
 export * from "./utils/overflow.ts";
 export * from "./utils/retry.ts";

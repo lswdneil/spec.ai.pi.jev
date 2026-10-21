@@ -1,6 +1,6 @@
 # Custom Themes - Authoring Guide
 
-mu ships with **Light** and **Dark** themes, but you can create your own
+spec.jev ships with **Light** and **Dark** themes, but you can create your own
 color themes without touching any code. A custom theme is just a small block of
 CSS that overrides a set of documented **theme variables** (CSS custom
 properties). This guide shows you exactly what to write and how to apply it.
@@ -16,7 +16,7 @@ properties). This guide shows you exactly what to write and how to apply it.
 
 ## How theming works
 
-Every surface in mu reads its colors from a fixed set of **semantic
+Every surface in spec.jev reads its colors from a fixed set of **semantic
 variables** rather than hardcoded values. For example, the accent color is
 always `var(--primary)`, the main background is always `var(--bg-base)`, and so
 on. A theme simply supplies new values for those variables.

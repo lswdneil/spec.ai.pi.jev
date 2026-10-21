@@ -34,7 +34,7 @@ interface ThemePreviewPalette {
 }
 
 const fallbackThemePreviewPaletteByMode: Record<'light' | 'dark', ThemePreviewPalette> = {
-  // The built-in Light / Dark cards preview the default look, the mu colour scheme: a neutral page with a
+  // The built-in Light / Dark cards preview the default look, the spec.jev colour scheme: a neutral page with a
   // light lavender accent.
   light: {
     appBg: '#ffffff',

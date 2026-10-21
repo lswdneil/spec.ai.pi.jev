@@ -1,10 +1,10 @@
 /**
  * Bringing Claude Code and Codex conversations into the app (see common/kyrn/importChats.ts).
  *
- * The harness does the reading and the writing: `mu import --list --json` finds the transcripts on this computer and
- * `mu import --json <file>…` writes each one as a mu session. This module runs that command the way the app runs mu
+ * The harness does the reading and the writing: `spec.jev import --list --json` finds the transcripts on this computer and
+ * `spec.jev import --json <file>…` writes each one as a spec.jev session. This module runs that command the way the app runs spec.jev
  * (its launcher, through `launchCommand`), makes every imported session an app conversation in its project folder,
- * and leaves the conversation a record: `<mu home>/acp-sessions/imports/<conversation>.json`, which names the session
+ * and leaves the conversation a record: `<spec.jev home>/acp-sessions/imports/<conversation>.json`, which names the session
  * file. The adapter reads it when the conversation starts for the first time and opens that file instead of a new
  * session (`KyrnAgent.newSession`). The record stays, marked with the adapter session that took the file: a
  * conversation that is reset later starts afresh, and the list knows which transcripts already have a conversation.
@@ -42,12 +42,12 @@ import { array, asRecord, launchCommand, text } from './piRpc';
 import type { BackendRequest } from './product';
 
 // ---------------------------------------------------------------------------------------------------------------
-// Running `mu import`
+// Running `spec.jev import`
 // ---------------------------------------------------------------------------------------------------------------
 
 /**
- * The file `mu import` runs, where the harness's launcher looks for it (`planImport` in `kyrn/bin/mu.mjs`): the
- * sources of a checkout, or the built layer of the npm package. A mu without it is older than the command, and its
+ * The file `spec.jev import` runs, where the harness's launcher looks for it (`planImport` in `kyrn/bin/mu.mjs`): the
+ * sources of a checkout, or the built layer of the npm package. A spec.jev without it is older than the command, and its
  * launcher would take `import` for a message to the model.
  */
 export function importEntryOf(harness: Pick<Harness, 'root' | 'layout'>, platform: NodeJS.Platform): string {
@@ -57,10 +57,10 @@ export function importEntryOf(harness: Pick<Harness, 'root' | 'layout'>, platfor
     : join(harness.root, 'packages', 'kyrn-judge', 'src', 'import', 'cli.ts');
 }
 
-/** What `mu import` printed, whatever its exit code: it answers in JSON also when a transcript failed. */
+/** What `spec.jev import` printed, whatever its exit code: it answers in JSON also when a transcript failed. */
 export type CliOutput = { code: number | null; stdout: string; stderr: string };
 
-/** Runs `mu import <args>`. */
+/** Runs `spec.jev import <args>`. */
 export type ImportCli = (args: string[], timeoutMs: number) => Promise<CliOutput>;
 
 const MAX_STDOUT = 64 * 1024 * 1024;
@@ -90,10 +90,10 @@ export function runCommand(
       child.kill('SIGKILL');
       finish(() => reject(new KyrnError('importFailed', message)));
     };
-    const timer = setTimeout(() => fail('mu import did not finish in time'), timeoutMs);
+    const timer = setTimeout(() => fail('spec.jev import did not finish in time'), timeoutMs);
     child.stdout.on('data', (chunk: Buffer) => {
       outSize += chunk.length;
-      if (outSize > MAX_STDOUT) return fail('mu import printed more than it ever should');
+      if (outSize > MAX_STDOUT) return fail('spec.jev import printed more than it ever should');
       out.push(chunk);
     });
     child.stderr.on('data', (chunk: Buffer) => {
@@ -119,7 +119,7 @@ export type ImportCliDeps = {
 };
 
 /**
- * `mu import` through mu's launcher, started as the adapter and the sign-in start mu (`launchCommand`): the bash
+ * `spec.jev import` through spec.jev's launcher, started as the adapter and the sign-in start spec.jev (`launchCommand`): the bash
  * forwarder of a checkout picks its own Node; the Node launcher (Windows, the npm package, the copy inside the
  * packaged app) runs on `MU_NODE` or on the app's own binary as Node.
  */
@@ -135,7 +135,7 @@ export function importCli(harness: Pick<Harness, 'root' | 'layout'>, deps: Impor
   };
 }
 
-/** The list under `key` of what `mu import --json` printed; anything else is a failure that shows what it said. */
+/** The list under `key` of what `spec.jev import --json` printed; anything else is a failure that shows what it said. */
 function cliList(output: CliOutput, key: 'conversations' | 'results'): unknown[] {
   let parsed: unknown;
   try {
@@ -182,7 +182,7 @@ const HARNESS_FAILURES: Record<string, ImportFailure> = {
 /** An app conversation made from an imported session. */
 export type ImportRecord = {
   version: 1;
-  /** The mu session file the conversation goes on with. */
+  /** The spec.jev session file the conversation goes on with. */
   file: string;
   /** Its project folder with links resolved: the adapter holds it against the conversation's. */
   cwd: string;
@@ -258,7 +258,7 @@ export type ImportedSession = {
   user: number;
   assistant: number;
   toolCalls: number;
-  /** The session's entries the import wrote; the lines after them are the conversation going on in mu. */
+  /** The session's entries the import wrote; the lines after them are the conversation going on in spec.jev. */
   entries: number;
 };
 
@@ -286,7 +286,7 @@ function headLines(file: string, limit: number): string[] {
 }
 
 /**
- * The top of a session `mu import` wrote: the header, the marker naming its origin (`mu.import`), the name. Undefined
+ * The top of a session `spec.jev import` wrote: the header, the marker naming its origin (`mu.import`), the name. Undefined
  * for a file that is not one.
  */
 export function readImportedSession(file: string): ImportedSession | undefined {
@@ -386,16 +386,16 @@ export type ImportServiceDeps = {
   cli: ImportCli;
   /** The local backend. A conversation that is gone answers 404. */
   request: BackendRequest;
-  /** `<mu home>/acp-sessions`, the adapter's records; the import records live in it too. */
+  /** `<spec.jev home>/acp-sessions`, the adapter's records; the import records live in it too. */
   store: string;
-  /** The assistant new mu conversations are made with. */
+  /** The assistant new spec.jev conversations are made with. */
   assistant: () => Promise<string>;
   /** Whether a folder exists; its path with links resolved. */
   folder?: { exists: (dir: string) => boolean; real: (dir: string) => string };
 };
 
 export type ImportService = {
-  /** `native`: the app runs mu itself, and a mu session is a conversation of its own. */
+  /** `native`: the app runs spec.jev itself, and a spec.jev session is a conversation of its own. */
   list(cwd?: string, native?: boolean): Promise<ImportList>;
   run(paths: string[], locale: string, native?: boolean): Promise<ImportOutcome[]>;
   history(conversationId: string): Promise<ImportedHistory>;
@@ -531,7 +531,7 @@ export function importService(deps: ImportServiceDeps): ImportService {
   };
 
   /**
-   * With the native host on, the session `mu import` wrote is the conversation: it is listed with mu's others, and no
+   * With the native host on, the session `spec.jev import` wrote is the conversation: it is listed with spec.jev's others, and no
    * app conversation is made. Its folder must still exist, as a conversation runs in it.
    */
   const nativeOutcome = (result: Record<string, unknown>, source: string, file: string): ImportOutcome => {
@@ -571,7 +571,7 @@ export function importService(deps: ImportServiceDeps): ImportService {
       }
       const file = text(result.sessionFile);
       if (!file) {
-        outcomes.push({ status: 'failed', source, reason: 'other', detail: 'mu import named no session' });
+        outcomes.push({ status: 'failed', source, reason: 'other', detail: 'spec.jev import named no session' });
         continue;
       }
       if (native) {
@@ -591,7 +591,7 @@ export function importService(deps: ImportServiceDeps): ImportService {
         if (outcome.status === 'imported' && record) holder.made(outcome.conversationId, outcome.name, record);
         outcomes.push(outcome);
       } catch (error) {
-        // The session is in mu already: importing it again makes the conversation.
+        // The session is in spec.jev already: importing it again makes the conversation.
         const detail = error instanceof Error ? error.message : String(error);
         outcomes.push({ status: 'failed', source, reason: 'other', detail });
       }

@@ -26,7 +26,7 @@ const MessageAcpPermission: React.FC<MessageAcpPermissionProps> = React.memo(({ 
   const options = Array.isArray(content.options) ? content.options : [];
   const { t, i18n } = useTranslation();
   const toolCallId = tool_call?.tool_call_id;
-  // mu's own question, worded by its codes in the reader's language (mu writes it in Chinese or English only).
+  // spec.jev's own question, worded by its codes in the reader's language (spec.jev writes it in Chinese or English only).
   const muWording = useMemo(
     () => muPermissionWording(tool_call?.raw_input, t, (key) => i18n?.exists(key) ?? false),
     [i18n, tool_call?.raw_input, t]
@@ -37,7 +37,7 @@ const MessageAcpPermission: React.FC<MessageAcpPermissionProps> = React.memo(({ 
       options.map((option, index) => {
         const fallbackId = `option_${index}`;
         const value = option?.option_id || fallbackId;
-        // A generically named allow/reject answer is worded in the reader's language (the mu bridge's names are only
+        // A generically named allow/reject answer is worded in the reader's language (the spec.jev bridge's names are only
         // an English fallback); an agent's specific wording stays as sent.
         const labelKey = acpPermissionOptionLabelKey(option?.kind, option?.name);
         return {
@@ -83,7 +83,7 @@ const MessageAcpPermission: React.FC<MessageAcpPermissionProps> = React.memo(({ 
       : undefined;
   let rawDump: string | undefined;
   if (!command && tool_call.raw_input && typeof tool_call.raw_input === 'object') {
-    // mu's codes are for wording the card, not a detail to read.
+    // spec.jev's codes are for wording the card, not a detail to read.
     const rest = Object.fromEntries(
       Object.entries(tool_call.raw_input).filter(([key]) => key !== 'description' && !(muWording && key === 'mu'))
     );

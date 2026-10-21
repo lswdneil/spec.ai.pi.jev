@@ -17,7 +17,7 @@ export type JudgePulseProps = {
 };
 
 /**
- * The small dot beside the mu wordmark. It only ever says what it is told: it never infers activity
+ * The small dot beside the spec.jev wordmark. It only ever says what it is told: it never infers activity
  * from timing, and `judging` is a breathing dot, not a claim that anything was decided.
  */
 const JudgePulse: React.FC<JudgePulseProps> = ({ state = 'idle', className }) => {

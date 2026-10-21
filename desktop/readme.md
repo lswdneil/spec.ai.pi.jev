@@ -1,10 +1,10 @@
-# mu desktop
+# spec.jev desktop
 
-The desktop app of [mu](../README.md). It runs pi and mu's judgment kernel in an Electron utility process and shows each conversation with the judge's verdicts beside it: the work panel, the kernel bar, the settings drawn from the kernel's manifest, and the first-run guide. People who use mu download it from [Releases](https://github.com/qybaihe/mu/releases); this page is for working on it.
+The desktop app of [spec.jev](../README.md). It runs pi and spec.jev's judgment kernel in an Electron utility process and shows each conversation with the judge's verdicts beside it: the work panel, the kernel bar, the settings drawn from the kernel's manifest, and the first-run guide. People who use spec.jev download it from [Releases](https://github.com/qybaihe/mu/releases); this page is for working on it.
 
 ## Run it from this checkout
 
-Install the root dependencies first, so the app runs the mu in the same repository:
+Install the root dependencies first, so the app runs the spec.jev in the same repository:
 
 ```bash
 npm install --ignore-scripts               # at the repository root
@@ -36,7 +36,7 @@ bunx vitest run
 | `packages/desktop/src/renderer/services/i18n/locales/` | The 13 languages                                                                |
 | `tests/unit/`                                          | Unit tests (Vitest)                                                             |
 
-The conventions for code, CSS and text are in [AGENTS.md](AGENTS.md). How mu fits together is in [docs/architecture.md](../docs/architecture.md).
+The conventions for code, CSS and text are in [AGENTS.md](AGENTS.md). How spec.jev fits together is in [docs/architecture.md](../docs/architecture.md).
 
 ## Origin and license
 

@@ -121,7 +121,7 @@ describe("/hive in a session", () => {
 			fauxAssistantMessage("It fails because CI sets TZ=UTC; see the reports."),
 		]);
 
-		// The harness session is in print mode, as `mu -p "/hive …"` is: the process ends when this returns.
+		// The harness session is in print mode, as `spec.jev -p "/hive …"` is: the process ends when this returns.
 		await harness.session.prompt(`/hive ${QUESTION}`);
 
 		expect(harness.getPendingResponseCount()).toBe(0);

@@ -38,7 +38,7 @@ const bridge = vi.hoisted(() => ({
   localJudgeRun: vi.fn(),
   clmCheck: vi.fn(),
 }));
-// The pickers' copy of what mu offers, read again after mu is checked again.
+// The pickers' copy of what spec.jev offers, read again after spec.jev is checked again.
 const catalog = vi.hoisted(() => ({ refresh: vi.fn() }));
 vi.mock('@/renderer/hooks/agent/useManagedAgents', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/renderer/hooks/agent/useManagedAgents')>()),
@@ -509,7 +509,7 @@ describe('the save bar', () => {
     expect(sent).not.toHaveProperty('keys');
     expect(sent).not.toHaveProperty('credentials');
   });
-  it('has mu checked again after a save, and only then the pickers read what it offers', async () => {
+  it('has spec.jev checked again after a save, and only then the pickers read what it offers', async () => {
     let checked!: (value: { ok: true; data: undefined }) => void;
     bridge.recheck.mockReturnValue(new Promise((resolve) => (checked = resolve)));
     bridge.save.mockResolvedValueOnce({ ok: false, code: 'backend', error: 'EACCES: permission denied' });
@@ -517,7 +517,7 @@ describe('the save bar', () => {
     fireEvent.click(screen.getByRole('switch', { name: 'Automatic compaction' }));
     fireEvent.click(screen.getByText('Save'));
     expect(await within(screen.getByTestId('mu-save-bar')).findByText(/EACCES/)).toBeInTheDocument();
-    // Nothing was saved, so nothing changed for mu.
+    // Nothing was saved, so nothing changed for spec.jev.
     expect(bridge.recheck).not.toHaveBeenCalled();
 
     fireEvent.click(within(screen.getByTestId('mu-save-bar')).getByText('Save'));
@@ -639,7 +639,7 @@ describe('providers and the default model', () => {
       .map((item) => item.textContent);
     expect(names).toEqual(['ChatGPT', 'Claude', 'Grok', 'Relay', 'corp-gateway']);
     expect(screen.getByTestId('mu-provider-editor')).toHaveTextContent('Relay');
-    // mu reported openai-codex too: it is the subscription above, not another built-in provider.
+    // spec.jev reported openai-codex too: it is the subscription above, not another built-in provider.
     expect(screen.queryByTestId('mu-provider-item-builtin-openai-codex')).not.toBeInTheDocument();
     const relay = screen.getByTestId('mu-provider-item-custom-0');
     expect(within(relay).getByRole('img', { name: 'Available' })).toBeInTheDocument();
@@ -732,7 +732,7 @@ describe('providers and the default model', () => {
     fireEvent.click(within(xai).getByTestId('mu-account-signin-xai'));
     const failed = await within(xai).findByTestId('mu-login-problem');
     expect(failed).toHaveTextContent("Sign-in didn't finish. Try again.");
-    expect(failed).toHaveTextContent("mu's agent isn't responding.");
+    expect(failed).toHaveTextContent("spec.jev's agent isn't responding.");
     // A coded reason says all there is: the raw text is not repeated.
     expect(failed).not.toHaveTextContent('runtime offline');
   });
@@ -1003,7 +1003,7 @@ describe('providers and the default model', () => {
     expect(screen.queryByTestId('mu-defaults')).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Board model' })).toBeInTheDocument();
     const card = screen.getByTestId('mu-board-model');
-    expect(card).toHaveTextContent('None yet. mu asks the first time you turn on the board.');
+    expect(card).toHaveTextContent('None yet. spec.jev asks the first time you turn on the board.');
     expect(card).toHaveTextContent('Choose a provider first.');
     const user = userEvent.setup();
     await user.click(within(card).getByLabelText('Provider'));
@@ -1097,11 +1097,11 @@ describe('providers and the default model', () => {
     await user.click(within(board).getByLabelText('Model'));
     expect(await screen.findByText('Claude Opus 4.6 · recommended')).toHaveAttribute('title', 'claude-opus-4-6');
   });
-  it('says when this mu cannot be told which model writes the board', async () => {
+  it('says when this spec.jev cannot be told which model writes the board', async () => {
     bridge.settings.mockResolvedValue({ ok: true, data: settings({ boardModel: { supported: false, model: '' } }) });
     await open('board-model');
     const card = screen.getByTestId('mu-board-model');
-    expect(card).toHaveTextContent('Update mu first.');
+    expect(card).toHaveTextContent('Update spec.jev first.');
     expect(within(card).queryByRole('radio')).not.toBeInTheDocument();
   });
 
@@ -1192,7 +1192,7 @@ describe('providers and the default model', () => {
     expect(editor).toHaveTextContent('already in use');
   });
 
-  it('does not list a removed entry again from what mu last reported, nor offer it for the board', async () => {
+  it('does not list a removed entry again from what spec.jev last reported, nor offer it for the board', async () => {
     const base = settings();
     bridge.settings.mockResolvedValue({
       ok: true,
@@ -1226,7 +1226,7 @@ describe('providers and the default model', () => {
     expect(offered).not.toContain('Lab 2');
   });
 
-  it('shows Claude as usable through an API key when mu reported it and nobody is signed in', async () => {
+  it('shows Claude as usable through an API key when spec.jev reported it and nobody is signed in', async () => {
     bridge.availableModels.mockResolvedValue({
       ok: true,
       data: { providers: [{ id: 'anthropic', models: [{ id: 'claude-x', name: 'Claude X' }] }], thinkingLevels: [] },
@@ -1396,7 +1396,7 @@ describe('the permission modes and the board', () => {
     const { permissions: _permissions, boardModel: _boardModel, ...older } = withModes();
     bridge.settings.mockResolvedValue({ ok: true, data: older as KyrnSettings });
     render(<SettingsArea page='board-model' />, { wrapper });
-    expect(await screen.findByTestId('mu-board-model')).toHaveTextContent('Update mu');
+    expect(await screen.findByTestId('mu-board-model')).toHaveTextContent('Update spec.jev');
     expect(screen.queryByTestId('mu-save-bar')).not.toBeInTheDocument();
   });
 
@@ -1816,7 +1816,7 @@ describe('one draft across the settings pages', () => {
     );
   }
 
-  it('keeps an edit made on one page, unsaved, on the next and after a page that is not mu’s', async () => {
+  it('keeps an edit made on one page, unsaved, on the next and after a page that is not spec.jev’s', async () => {
     renderSettings('/settings/judges');
     fireEvent.click(await screen.findByTestId('mu-judge-choice-local'));
     expect(screen.getByTestId('mu-save-bar')).toHaveTextContent('Unsaved changes in: Judges');

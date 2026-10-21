@@ -10,7 +10,7 @@
 export type UriStyle =
 	| { readonly kind: "posix" }
 	| { readonly kind: "win32" }
-	/** mu runs inside WSL and the server is a Windows executable, which wants Windows paths. */
+	/** spec.jev runs inside WSL and the server is a Windows executable, which wants Windows paths. */
 	| { readonly kind: "wsl-windows"; readonly distro: string };
 
 type Env = Readonly<Record<string, string | undefined>>;

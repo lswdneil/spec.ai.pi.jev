@@ -131,9 +131,9 @@ describe("lsp diagnostics feature", () => {
 		]);
 		expect(starts()).toBe(1);
 		const result = toolResults().at(-1) ?? "";
-		expect(result).toContain("[mu diagnostics: 1 error that your edits introduced.");
+		expect(result).toContain("[spec.jev diagnostics: 1 error that your edits introduced.");
 		expect(result).toContain("a.fake:5:7 error E2 Cannot find helper 你好");
-		expect(result).toContain("[mu diagnostics end]");
+		expect(result).toContain("[spec.jev diagnostics end]");
 		// The old problem moved two lines down and is still not this edit's.
 		expect(result).not.toContain("was here before");
 		// The model was told and the error is still there when it stops: the rule says it once more, and only once.
@@ -162,12 +162,12 @@ describe("lsp diagnostics feature", () => {
 			fauxAssistantMessage("Done."),
 			fauxAssistantMessage("Seen."),
 		]);
-		expect(toolResults()[0]).not.toContain("mu diagnostics");
+		expect(toolResults()[0]).not.toContain("spec.jev diagnostics");
 		expect(toolResults()[1]).toContain("a.fake:3:7 error E2 introduced by the edit");
 		// The edit tool's own diff shows the old line as context; the diagnostics block must not.
 		const block = toolResults()[1].slice(
-			toolResults()[1].indexOf("[mu diagnostics"),
-			toolResults()[1].indexOf("[mu diagnostics end"),
+			toolResults()[1].indexOf("[spec.jev diagnostics"),
+			toolResults()[1].indexOf("[spec.jev diagnostics end"),
 		);
 		expect(block).not.toContain("was here before");
 	});
@@ -181,7 +181,7 @@ describe("lsp diagnostics feature", () => {
 			write("lib.fake", "export !provides helper\n", "And back."),
 			fauxAssistantMessage("All renamed."),
 		]);
-		expect(toolResults().join("\n")).not.toContain("mu diagnostics");
+		expect(toolResults().join("\n")).not.toContain("spec.jev diagnostics");
 		expect(kinds()).toEqual(["diagnostics.held"]);
 		expect(told()).toEqual([]);
 		expect(harness.getPendingResponseCount()).toBe(0);
@@ -202,7 +202,7 @@ describe("lsp diagnostics feature", () => {
 			fauxAssistantMessage("unused"),
 		]);
 		await vi.waitFor(() => expect(harness.getPendingResponseCount()).toBe(1));
-		expect(toolResults().join("\n")).not.toContain("mu diagnostics");
+		expect(toolResults().join("\n")).not.toContain("spec.jev diagnostics");
 		expect(told()).toHaveLength(1);
 		expect(told()[0]).toContain("still there");
 		expect(told()[0]).toContain("app.fake:1:5 error E_NEEDS Missing helper (in a file you did not edit)");
@@ -219,7 +219,7 @@ describe("lsp diagnostics feature", () => {
 			write("a.fake", "clean\nlet x !warn W1 x is never used\n", "Adding the variable."),
 			fauxAssistantMessage("Done."),
 		]);
-		expect(toolResults().join("\n")).not.toContain("mu diagnostics");
+		expect(toolResults().join("\n")).not.toContain("spec.jev diagnostics");
 		expect(kinds()).toEqual(["diagnostics.dropped"]);
 		expect(told()).toEqual([]);
 		expect(harness.getPendingResponseCount()).toBe(0);
@@ -235,7 +235,7 @@ describe("lsp diagnostics feature", () => {
 		]);
 		const result = toolResults()[0];
 		expect(result).toContain("5 errors that your edits introduced");
-		expect(result).toContain("[mu diagnostics end: 3 more not shown]");
+		expect(result).toContain("[spec.jev diagnostics end: 3 more not shown]");
 	});
 
 	for (const [name, mode, judge] of [
@@ -261,7 +261,7 @@ describe("lsp diagnostics feature", () => {
 				fauxAssistantMessage("unused"),
 			]);
 			await vi.waitFor(() => expect(harness.getPendingResponseCount()).toBe(1));
-			expect(toolResults().join("\n")).not.toContain("mu diagnostics");
+			expect(toolResults().join("\n")).not.toContain("spec.jev diagnostics");
 			expect(told()).toHaveLength(1);
 			expect(told()[0]).toContain("a.fake:1:5 error E1 broken build");
 			expect(told()[0]).not.toContain("looks odd");
@@ -280,7 +280,7 @@ describe("lsp diagnostics feature", () => {
 			fauxAssistantMessage("unused"),
 		]);
 		await vi.waitFor(() => expect(harness.getPendingResponseCount()).toBe(1));
-		expect(toolResults().join("\n")).not.toContain("mu diagnostics");
+		expect(toolResults().join("\n")).not.toContain("spec.jev diagnostics");
 		expect(told()).toHaveLength(1);
 		expect(told()[0]).toContain("a.fake:1:5 error E1 slow to be found");
 	});
@@ -315,7 +315,7 @@ describe("lsp diagnostics feature", () => {
 		]);
 		expect(starts()).toBe(2);
 		// The restarted server had no baseline for the file, so its first word is not called new.
-		expect(toolResults().join("\n")).not.toContain("mu diagnostics");
+		expect(toolResults().join("\n")).not.toContain("spec.jev diagnostics");
 	});
 
 	it("is silent when no server is installed, and finds one on PATH when it is", async () => {
@@ -325,7 +325,7 @@ describe("lsp diagnostics feature", () => {
 		vi.stubEnv("PATH", [bin, ...system].join(delimiter));
 		const silent = await start(verdict(no), { lsp: { builtin: true, servers: {} } });
 		await silent.run("Write it.", [write("a.ts", "const x: number = 'no';\n"), fauxAssistantMessage("Done.")]);
-		expect(silent.toolResults().join("\n")).not.toContain("mu diagnostics");
+		expect(silent.toolResults().join("\n")).not.toContain("spec.jev diagnostics");
 		expect(silent.kinds()).toEqual([]);
 
 		const log = join(bin, "found.log");
@@ -353,7 +353,7 @@ describe("lsp diagnostics feature", () => {
 			fauxAssistantMessage("Done."),
 			fauxAssistantMessage("Seen."),
 		]);
-		expect(found.toolResults()[0]).not.toContain("mu diagnostics");
+		expect(found.toolResults()[0]).not.toContain("spec.jev diagnostics");
 		expect(found.toolResults()[1]).toContain("a.ts:1:17 error TS2322 Type 'string' is not assignable");
 		expect(readFileSync(log, "utf8")).toContain("textDocument/didOpen");
 	});
@@ -382,7 +382,7 @@ describe("lsp diagnostics feature", () => {
 		projectFile(untrusted.harness.tempDir);
 		await untrusted.run("Write it.", [write("a.proj", "x !error E1 broken\n"), fauxAssistantMessage("Done.")]);
 		expect(existsSync(log)).toBe(false);
-		expect(untrusted.toolResults().join("\n")).not.toContain("mu diagnostics");
+		expect(untrusted.toolResults().join("\n")).not.toContain("spec.jev diagnostics");
 
 		const trusted = await start(verdict(no));
 		projectFile(trusted.harness.tempDir);

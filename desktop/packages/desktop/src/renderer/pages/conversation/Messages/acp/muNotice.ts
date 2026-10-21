@@ -1,11 +1,11 @@
 import type { TMessage } from '@/common/chat/chatLib';
 
 /**
- * A notice the mu bridge adds to a conversation (`MU_NOTICES` in `process/agent/kyrn/KyrnAgent.ts`): a tool call whose
+ * A notice the spec.jev bridge adds to a conversation (`MU_NOTICES` in `process/agent/kyrn/KyrnAgent.ts`): a tool call whose
  * id starts with `mu:notice:` and whose input carries the notice's code. It is shown as one line in the reader's
  * language, not as a tool call; a code this build has no words for shows the bridge's English title.
  *
- * What mu notified itself (a command's answer, a warning) comes the same way with no code, only its level: mu wrote it
+ * What spec.jev notified itself (a command's answer, a warning) comes the same way with no code, only its level: spec.jev wrote it
  * in the app's language already, and the line shows it as it is.
  */
 export const MU_NOTICE_CODES = [
@@ -22,12 +22,12 @@ export type MuNoticeLevel = 'info' | 'warning' | 'error';
 export type MuNotice = {
   code?: MuNoticeCode;
   title: string;
-  /** How a notice of mu's own reads; a coded one has its own look. */
+  /** How a notice of spec.jev's own reads; a coded one has its own look. */
   level?: MuNoticeLevel;
-  /** Why checkpoints are off (`checkpoint_off`), or why the free Jev stopped (`free_jev_unavailable`): mu's code. */
+  /** Why checkpoints are off (`checkpoint_off`), or why the free Jev stopped (`free_jev_unavailable`): spec.jev's code. */
   reason?: string;
   params?: Record<string, number>;
-  /** What mu told the model (`to_model`): the message's type (`kyrn.nudge`, …) and the words the model got. */
+  /** What spec.jev told the model (`to_model`): the message's type (`kyrn.nudge`, …) and the words the model got. */
   kind?: string;
   sent?: string;
 };
@@ -44,8 +44,8 @@ export const MU_NOTICE_KEYS: Readonly<Record<MuNoticeCode, string>> = {
 };
 
 /**
- * What mu told the model, by the message's type: one line in the reader's language that says what mu did. The words
- * the model got stay one click away, in the language mu wrote them in.
+ * What spec.jev told the model, by the message's type: one line in the reader's language that says what spec.jev did. The words
+ * the model got stay one click away, in the language spec.jev wrote them in.
  */
 export const TO_MODEL_KEYS: Readonly<Record<string, string>> = {
   'kyrn.nudge': 'mu.notices.toModel.nudge',
@@ -56,14 +56,14 @@ export const TO_MODEL_KEYS: Readonly<Record<string, string>> = {
   'kyrn.hive': 'mu.notices.toModel.hive',
   'kyrn.swarm': 'mu.notices.toModel.swarm',
   'kyrn.ttsr': 'mu.notices.toModel.ttsr',
-  // What `mu import` put at the top of an imported conversation: where it came from, for the model too.
+  // What `spec.jev import` put at the top of an imported conversation: where it came from, for the model too.
   'mu.import': 'mu.notices.toModel.imported',
 };
 
-/** mu's own messages to the model: every custom message type the harness sends starts with this. */
+/** spec.jev's own messages to the model: every custom message type the harness sends starts with this. */
 export const TO_MODEL_PREFIX = 'kyrn.';
 
-/** Why the free Jev stopped, by mu's reason (`paid`: it asks for a key or payment; `gone`: no longer offered). */
+/** Why the free Jev stopped, by spec.jev's reason (`paid`: it asks for a key or payment; `gone`: no longer offered). */
 export const FREE_JEV_UNAVAILABLE_KEYS: Readonly<Record<string, string>> = {
   paid: 'mu.notices.freeJevUnavailable.paid',
   gone: 'mu.notices.freeJevUnavailable.gone',
@@ -75,7 +75,7 @@ export const MU_NOTICE_LINKS: Readonly<Partial<Record<MuNoticeCode, string>>> = 
 };
 
 /**
- * Why a conversation goes without checkpoints, by mu's code (the harness's `checkpoint.off`), and the key of the
+ * Why a conversation goes without checkpoints, by spec.jev's code (the harness's `checkpoint.off`), and the key of the
  * sentence that says it in the app's words: what happened and what the person can do, never a setting's name.
  */
 export const CHECKPOINT_OFF_KEYS: Readonly<Record<string, string>> = {
@@ -89,7 +89,7 @@ export const CHECKPOINT_OFF_KEYS: Readonly<Record<string, string>> = {
   developer_tools_missing: 'mu.notices.checkpointOffWhy.developerToolsMissing',
 };
 
-/** The numbers each reason's sentence names; a reason whose numbers did not come is said in mu's own words. */
+/** The numbers each reason's sentence names; a reason whose numbers did not come is said in spec.jev's own words. */
 const CHECKPOINT_PARAMS: Readonly<Record<string, readonly string[]>> = {
   too_many_files: ['limit'],
   too_many_bytes: ['limitMb'],
@@ -138,7 +138,7 @@ export function muNotice(message: TMessage): MuNotice | undefined {
 
 /**
  * The i18n key and values of a checkpoint notice's sentence, or undefined when this build has no words for its reason
- * (or the numbers it names did not come): the line then shows mu's own, already in the app's language.
+ * (or the numbers it names did not come): the line then shows spec.jev's own, already in the app's language.
  */
 export function checkpointOffWords(notice: MuNotice): { key: string; values: Record<string, number> } | undefined {
   const key = notice.reason ? CHECKPOINT_OFF_KEYS[notice.reason] : undefined;

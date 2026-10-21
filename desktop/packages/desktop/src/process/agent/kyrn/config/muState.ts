@@ -3,7 +3,7 @@ import type { BoardModel, PermissionDefault } from '../../../../common/kyrn/type
 import { asRecord, text, type JsonRecord } from '../piRpc';
 
 /*
- * Two settings mu keeps in `<agentDir>/mu/` and that the settings page sets too: the permission mode new conversations
+ * Two settings spec.jev keeps in `<agentDir>/spec.jev/` and that the settings page sets too: the permission mode new conversations
  * start in (`permissions.json`, which `/permissions` also writes) and the model that writes the plain-language board
  * (`model` in `board.json`, which `/board model` also sets). The formats are the harness's (src/permissions/modes.ts,
  * src/board/projects.ts). Whatever else board.json holds, the per-project switches, is kept as it is.
@@ -21,7 +21,7 @@ function modeOption(manifest: HarnessManifest | undefined) {
 export const permissionModes = (manifest: HarnessManifest | undefined): string[] =>
   modeOption(manifest)?.choices.map((choice) => choice.value) ?? [];
 
-/** The mode permissions.json holds, when it is one mu reads. */
+/** The mode permissions.json holds, when it is one spec.jev reads. */
 function pickedMode(raw: string, modes: string[]): string | undefined {
   try {
     const parsed = asRecord(JSON.parse(raw));
@@ -32,7 +32,7 @@ function pickedMode(raw: string, modes: string[]): string | undefined {
   }
 }
 
-/** The mode a new conversation starts in, as mu works it out when nothing in the environment says otherwise. */
+/** The mode a new conversation starts in, as spec.jev works it out when nothing in the environment says otherwise. */
 export function readPermissionDefault(
   manifest: HarnessManifest | undefined,
   config: JsonRecord,
@@ -68,7 +68,7 @@ function boardFileModel(raw: string): string {
   }
 }
 
-/** mu.json's `features.board.model`, which mu reads before board.json; '' when it is not set. */
+/** mu.json's `features.board.model`, which spec.jev reads before board.json; '' when it is not set. */
 export function configuredBoardModel(config: JsonRecord): string {
   return text(asRecord(asRecord(config.features).board).model).trim();
 }
@@ -80,7 +80,7 @@ export function readBoardModel(manifest: HarnessManifest | undefined, config: Js
   return { supported, model: configuredBoardModel(config) || (raw ? boardFileModel(raw) : '') };
 }
 
-/** board.json with `model` set, or removed for ''. A file mu would not read starts over, as mu itself would. */
+/** board.json with `model` set, or removed for ''. A file spec.jev would not read starts over, as spec.jev itself would. */
 export function withBoardModel(raw: string, model: string): string {
   let doc: JsonRecord;
   try {

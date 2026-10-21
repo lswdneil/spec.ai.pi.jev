@@ -3,7 +3,7 @@ title: Subagents and the hive
 summary: Delegating to subagents with roles, isolated edits that come back as patches, and the hive, where Jev decides what passes between bees.
 ---
 
-mu can hand work to other agents in two ways: **subagents** take separate tasks, and a **hive** puts several bees on one hard problem at once.
+spec.jev can hand work to other agents in two ways: **subagents** take separate tasks, and a **hive** puts several bees on one hard problem at once.
 
 ## Subagents {#sub-agents}
 
@@ -18,7 +18,7 @@ The model delegates with the `delegate` tool, or you ask with `/agents`. For eac
 | `investigator` | Digs into one angle of a hard problem without changing anything |
 | `browser` | Does things on websites with the built-in browser |
 
-Your own roles go in `~/.mu/agent/agents/`. Up to three run at once. Subagents get the lessons that apply to their task, work under your hard constraints and inherit the conversation's permission mode. `features.swarm.models` lists the models they may be routed to, cheapest first; with none, every subagent uses the session's model.
+Your own roles go in `~/.spec.jev/agent/agents/`. Up to three run at once. Subagents get the lessons that apply to their task, work under your hard constraints and inherit the conversation's permission mode. `features.swarm.models` lists the models they may be routed to, cheapest first; with none, every subagent uses the session's model.
 
 ## Isolated edits {#isolation}
 

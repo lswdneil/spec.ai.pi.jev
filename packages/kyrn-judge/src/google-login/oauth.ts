@@ -11,7 +11,7 @@ import { ANTIGRAVITY_ENDPOINTS, CLOUD_CODE_ENDPOINT } from "./endpoints.ts";
 /**
  * Signing in to Google's Cloud Code Assist with the OAuth clients of Gemini
  * CLI and Antigravity, as pi did until it dropped both (upstream fe66edd94,
- * 2026-04-30). They are experimental in mu and say so before the browser
+ * 2026-04-30). They are experimental in spec.jev and say so before the browser
  * opens: these are Google's clients for its own tools, and Google may treat
  * their use from another program as against its terms.
  *
@@ -140,13 +140,13 @@ function listen(config: GoogleLoginConfig, state: string): Promise<Callback> {
 		});
 		const server = createServer((request, response) => {
 			const url = new URL(request.url ?? "/", `http://localhost:${config.callbackPort}`);
-			// The same page every sign-in of mu ends on (pi-ai's), so the look does not depend on the provider.
+			// The same page every sign-in of spec.jev ends on (pi-ai's), so the look does not depend on the provider.
 			const send = (status: number, html: string) => {
 				response.writeHead(status, { "Content-Type": "text/html; charset=utf-8" });
 				response.end(html);
 			};
 			if (url.pathname !== config.callbackPath) {
-				return send(404, oauthErrorHtml("This address is mu's sign-in callback; there is no page here."));
+				return send(404, oauthErrorHtml("This address is spec.jev's sign-in callback; there is no page here."));
 			}
 			const given = url.searchParams.get("state");
 			const error = url.searchParams.get("error");
@@ -160,9 +160,9 @@ function listen(config: GoogleLoginConfig, state: string): Promise<Callback> {
 			const code = url.searchParams.get("code");
 			if (!code || !given) return send(400, oauthErrorHtml("The code or the state is missing."));
 			if (given !== state) {
-				return send(400, oauthErrorHtml("This address belongs to another sign-in. Use the tab mu opened last."));
+				return send(400, oauthErrorHtml("This address belongs to another sign-in. Use the tab spec.jev opened last."));
 			}
-			send(200, oauthSuccessHtml("You can close this window and go back to mu."));
+			send(200, oauthSuccessHtml("You can close this window and go back to spec.jev."));
 			settle({ code, state: given });
 		});
 		server.once("error", (error: NodeJS.ErrnoException) =>

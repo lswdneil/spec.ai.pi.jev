@@ -132,7 +132,7 @@ describe('a folder’s lessons', () => {
         `${[line('own', real), line('other', '/work/other'), line('everywhere')].map((each) => JSON.stringify(each)).join('\n')}\n`
       );
       const store = new LessonsStore(agentDir);
-      // The screen names the folder as the conversation has it: a link to the folder mu wrote the lesson in.
+      // The screen names the folder as the conversation has it: a link to the folder spec.jev wrote the lesson in.
       const project = lessonsProject(join(agentDir, 'acp-sessions'), '', linked);
       expect(project).toEqual({ folder: real, places: [real, linked] });
       expect(store.view(project).lessons.map((lesson) => lesson.id)).toEqual(['own', 'everywhere']);

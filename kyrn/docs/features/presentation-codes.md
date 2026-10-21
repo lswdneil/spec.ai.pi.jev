@@ -4,14 +4,14 @@ The harness writes its presentation events in English. For a client that shows t
 
 Model-facing text (hints, tool results), paths, URLs, commands, the user's own words and model-written text have no codes. They are data and are shown as they are.
 
-The language the person reads mu in is `MU_LANG` (see `src/language.ts`). With it set to Chinese, several user-facing strings (goal mode, /commit, the guard, permissions, the board) are already written in Chinese by the harness itself. The codes below cover the rest.
+The language the person reads spec.jev in is `MU_LANG` (see `src/language.ts`). With it set to Chinese, several user-facing strings (goal mode, /commit, the guard, permissions, the board) are already written in Chinese by the harness itself. The codes below cover the rest.
 
 ## The `/` menu
 
-The command list (`get_commands` in RPC) is worded by `MU_LANG` when mu starts. It has no codes, because a description is only shown in the menu.
+The command list (`get_commands` in RPC) is worded by `MU_LANG` when spec.jev starts. It has no codes, because a description is only shown in the menu.
 
-- **mu's own commands.** Every description is written in Chinese and in English. The Chinese is used when `MU_LANG` is Chinese, and English for every other language. `/help` follows the same rule. A test fails if a command is added without its Chinese.
-- **mu's prompt templates** (`/implement`, `/scout-and-plan`, `/implement-and-review`, `/init`). Each template carries `description-zh` and `argument-hint-zh` beside its English. For Chinese, pi gets a copy of the templates with the Chinese in place. The copy is written to the system temp folder and named by its content, so an updated template is copied again. The body, which the model reads, is the same in both languages.
+- **spec.jev's own commands.** Every description is written in Chinese and in English. The Chinese is used when `MU_LANG` is Chinese, and English for every other language. `/help` follows the same rule. A test fails if a command is added without its Chinese.
+- **spec.jev's prompt templates** (`/implement`, `/scout-and-plan`, `/implement-and-review`, `/init`). Each template carries `description-zh` and `argument-hint-zh` beside its English. For Chinese, pi gets a copy of the templates with the Chinese in place. The copy is written to the system temp folder and named by its content, so an updated template is copied again. The body, which the model reads, is the same in both languages.
 - **Skills** (`skill:…`). Their descriptions are what the model reads to decide whether to load one, so they stay in English.
 - **pi's built-in commands** (`/model`, `/login`, `/new`, …). They are not in `get_commands`, which lists only extension commands, prompt templates and skills. Any menu entry the app shows for them uses the app's own wording.
 
@@ -184,11 +184,11 @@ One line of the board's running account. `sequence` and `at` together identify a
 | `helpers_back` | `count` | N 个助手回来了 / N helpers came back |
 | `permission_allowed` | `summary` | 你允许了：… / You allowed: … |
 | `permission_denied` | `summary` | 你没允许：… / You did not allow: … |
-| `goal_round` | `round`, `reason` (already "：…" / ": …", or empty) | 目标还没达成，mu 让它接着干（第 N 轮）… / The goal is not met yet; mu sent it back to work (round N)… |
+| `goal_round` | `round`, `reason` (already "：…" / ": …", or empty) | 目标还没达成，spec.jev 让它接着干（第 N 轮）… / The goal is not met yet; spec.jev sent it back to work (round N)… |
 | `goal_met` | `text` | 目标达成了：… / The goal holds: … |
 | `goal_paused` | `reason` (as above) | 目标暂停了… / The goal is paused… |
-| `trouble_loop` | `detail` | mu 发现它在重复同一步：… / mu noticed it repeating the same step: … |
-| `trouble` | `detail` | mu 发现：… / mu noticed: … |
+| `trouble_loop` | `detail` | spec.jev 发现它在重复同一步：… / spec.jev noticed it repeating the same step: … |
+| `trouble` | `detail` | spec.jev 发现：… / spec.jev noticed: … |
 | `did` | `tool`, `what` | 用 … 做了：… / Used …: … |
 | `said_quote` | `text` | 它说：… / It said: … (the agent's own words, when the model did not retell them) |
 | `ended` | | 停下来了。 / Stopped. |
@@ -213,8 +213,8 @@ These fields are added:
 
 | reason | English |
 | --- | --- |
-| `nojudge` | No judge is available yet, so mu asks about each step. |
-| `judgedown` | The judge did not answer this time, so mu asks you. |
+| `nojudge` | No judge is available yet, so spec.jev asks about each step. |
+| `judgedown` | The judge did not answer this time, so spec.jev asks you. |
 
 The mode labels and descriptions are already in Chinese or English. Key your own strings on `mode` and `modes[].id`.
 
@@ -245,7 +245,7 @@ The mode labels and descriptions are already in Chinese or English. Key your own
 | `start_failed` | the start failed; `reason` holds pi's words |
 | `disconnected` | the connection dropped after the start; pi connects again with the next call (`willRestart: true`) |
 
-Since 2026-10-05 pi's own MCP client runs the servers. The codes `unreachable`, `closed`, `aborted`, `rpc`, `protocol`, `crashed` {willRestart} and `restart_failed` {cause} came from mu's own client before that, and only an older harness sends them.
+Since 2026-10-05 pi's own MCP client runs the servers. The codes `unreachable`, `closed`, `aborted`, `rpc`, `protocol`, `crashed` {willRestart} and `restart_failed` {cause} came from spec.jev's own client before that, and only an older harness sends them.
 
 ## rewind.proposed
 
@@ -264,7 +264,7 @@ A new event (2026-10-05) about where the judge's questions go: `{ code, reason?,
 
 | code | reason | when | English |
 | --- | --- | --- | --- |
-| `free_jev` | | the `jev` judge answered with the free Jev on OpenCode Zen because no key is set; once a day (`<agentDir>/mu/notices.json`) | no Jev key is set, so the judge uses Jev 1.13 on OpenCode Zen, free for a limited time. What it judges is sent to OpenCode, which does not train on it. To use a key of your own, run mu setup, or fill one in under Settings → Judges in the desktop app |
+| `free_jev` | | the `jev` judge answered with the free Jev on OpenCode Zen because no key is set; once a day (`<agentDir>/mu/notices.json`) | no Jev key is set, so the judge uses Jev 1.13 on OpenCode Zen, free for a limited time. What it judges is sent to OpenCode, which does not train on it. To use a key of your own, run spec.jev setup, or fill one in under Settings → Judges in the desktop app |
 | `free_jev_unavailable` | `paid` | the free Jev answered 401/402/403: it asks for a key or payment now; once per session | the free Jev on OpenCode Zen now asks for a key or payment, so plain rules decide for now. Set a Jev key to get the judge back: … |
 | `free_jev_unavailable` | `gone` | the model is no longer offered (a 4xx, or gone from the catalog); once per session | OpenCode Zen no longer offers the free Jev, so plain rules decide for now. … |
 
@@ -277,8 +277,8 @@ A new event, sent once per session, when the session goes without checkpoints: `
 | `git_missing` | | checkpoints are off, because git was not found on this machine |
 | `xcode_license` | | checkpoints are off, because git cannot run on this Mac until the Xcode license is accepted. Accept it with sudo xcodebuild -license in Terminal, then start a new session to get them |
 | `developer_tools_missing` | | checkpoints are off, because this Mac has no command line developer tools, which git needs. Install them with xcode-select --install, then start a new session to get them |
-| `home_folder` | | checkpoints are off in this session, because this folder is your home folder or holds it. Start mu in a project folder to get them |
-| `mu_folder` | | … because this folder is inside mu's own folder |
-| `too_many_files` | `limit` | … because this folder has more than N files to snapshot. Start mu in a project folder to get them, or raise features.checkpoint.maxFiles |
+| `home_folder` | | checkpoints are off in this session, because this folder is your home folder or holds it. Start spec.jev in a project folder to get them |
+| `mu_folder` | | … because this folder is inside spec.jev's own folder |
+| `too_many_files` | `limit` | … because this folder has more than N files to snapshot. Start spec.jev in a project folder to get them, or raise features.checkpoint.maxFiles |
 | `too_many_bytes` | `limitMb` | … because this folder has more than N MB of files to snapshot. … or raise features.checkpoint.maxTotalMb |
-| `too_slow` | `seconds` | … because listing this folder's files took longer than N s. Start mu in a project folder to get them |
+| `too_slow` | `seconds` | … because listing this folder's files took longer than N s. Start spec.jev in a project folder to get them |

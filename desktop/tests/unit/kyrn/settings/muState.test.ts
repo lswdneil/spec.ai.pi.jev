@@ -8,7 +8,7 @@ import { withOwnPlaces } from './muState.fixture';
 
 type Json = Record<string, unknown>;
 
-/** A harness root with a manifest, and an agent directory with the given mu.json and files under `mu/`. */
+/** A harness root with a manifest, and an agent directory with the given mu.json and files under `spec.jev/`. */
 function fixture(config: Json | undefined, own: { permissions?: string; board?: string } = {}, harness: unknown) {
   const root = mkdtempSync(join(tmpdir(), 'mu-own-'));
   const dir = join(root, 'agent');
@@ -54,7 +54,7 @@ describe('the permission mode of a new conversation', () => {
     using(config, { permissions: picked('full') }, (f) =>
       expect(f.store.read().permissions).toEqual({ mode: 'full', from: 'picked' })
     );
-    // A file mu would not read does not count, as in mu.
+    // A file spec.jev would not read does not count, as in spec.jev.
     for (const permissions of [picked('full', 2), picked('root'), '{not json'])
       using(config, { permissions }, (f) =>
         expect(f.store.read().permissions).toEqual({ mode: 'ask', from: 'config' })
@@ -102,7 +102,7 @@ describe('the permission mode of a new conversation', () => {
 });
 
 describe('the model that writes the board', () => {
-  it('is the one picked for the board, unless mu.json names one, which mu reads first', () => {
+  it('is the one picked for the board, unless mu.json names one, which spec.jev reads first', () => {
     using(undefined, {}, (f) => expect(f.store.read().boardModel).toEqual({ supported: true, model: '' }));
     using(undefined, { board: board({ model: 'anthropic/claude-opus-4-6' }) }, (f) =>
       expect(f.store.read().boardModel.model).toBe('anthropic/claude-opus-4-6')
@@ -134,7 +134,7 @@ describe('the model that writes the board', () => {
     });
   });
 
-  it('refuses what mu would not read, and a harness that cannot be told', () => {
+  it('refuses what spec.jev would not read, and a harness that cannot be told', () => {
     using(undefined, {}, (f) => {
       const read = f.store.read();
       for (const model of ['no-slash', 'a b/c', '/model'])

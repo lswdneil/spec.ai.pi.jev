@@ -3,7 +3,7 @@ import type { DecisionMode, FeatureState, HarnessState } from './manifest';
 import type { ModelsSettings } from './models';
 
 export type Result<T> = { ok: true; data: T } | { ok: false; error: string };
-/** `classifier`: a classifier model of mu's model catalog, `model` = "provider/model-id" (Jev on OpenCode Zen, Clef…). */
+/** `classifier`: a classifier model of spec.jev's model catalog, `model` = "provider/model-id" (Jev on OpenCode Zen, Clef…). */
 export type JudgeType = 'jev' | 'typesafe' | 'clm' | 'gateway' | 'local' | 'http' | 'llm' | 'classifier' | 'mock';
 export type JudgeSettings = {
   type: JudgeType;
@@ -13,7 +13,7 @@ export type JudgeSettings = {
   timeoutMs: number;
 };
 /**
- * The permission mode a new conversation starts in. mu reads, in order: the conversation's own switch, `MU_PERMISSIONS`,
+ * The permission mode a new conversation starts in. spec.jev reads, in order: the conversation's own switch, `MU_PERMISSIONS`,
  * the last pick (`<agentDir>/mu/permissions.json`, written by `/permissions` and by this page), then mu.json.
  */
 export type PermissionDefault = {

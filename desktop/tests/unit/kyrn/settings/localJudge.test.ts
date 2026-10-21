@@ -40,7 +40,7 @@ function judge(patch: Partial<LocalJudgeDeps> = {}, files: string[] = []) {
     env: { PATH: ['/usr/bin', '/bin'].join(delimiter) },
     exists: (path) => found.has(path),
     health: async () => false,
-    // No pid file: nothing of mu's runs. The real file system is never read.
+    // No pid file: nothing of spec.jev's runs. The real file system is never read.
     readFile: () => undefined,
     alive: () => false,
     spawn: (command, args, options) => {
@@ -122,7 +122,7 @@ describe('the local judge as the app manages it', () => {
     expect(again.task).toMatchObject({ id: 2, phase: 'running', output: [] });
   });
 
-  it('stops a judge mu started, and says of one it did not start that it cannot stop it here', async () => {
+  it('stops a judge spec.jev started, and says of one it did not start that it cannot stop it here', async () => {
     const pidFile = join(HOME, '.mu', 'local-judge', 'judge.pid');
     const own = judge(
       {
@@ -135,7 +135,7 @@ describe('the local judge as the app manages it', () => {
     await own.local.run('stop');
     expect(own.spawned.map((each) => each.args[1])).toEqual(['stop']);
 
-    // It answers, and no pid in mu's home names it: another home's, or another user's.
+    // It answers, and no pid in spec.jev's home names it: another home's, or another user's.
     const other = judge({ health: async () => true }, [UV, PYTHON, WEIGHTS]);
     const refused = await other.local.run('stop');
     expect(other.spawned).toEqual([]);

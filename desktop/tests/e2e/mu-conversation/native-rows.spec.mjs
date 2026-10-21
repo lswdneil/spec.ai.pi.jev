@@ -59,7 +59,7 @@ test('two conversations are made', async () => {
 });
 
 test('the menu marks a conversation unread, painted, and read again', async () => {
-  // The run in ROWS-ONE ended while ROWS-TWO was on screen, so mu may have marked it by itself (a second or so after
+  // The run in ROWS-ONE ended while ROWS-TWO was on screen, so spec.jev may have marked it by itself (a second or so after
   // the run): let that come, then start from a row that is read.
   await sleep(2500);
   if ((await rowOf('ROWS-ONE').getAttribute('data-unread')) === 'true') await pick('ROWS-ONE', 'native-sidebar-mark');

@@ -7,8 +7,8 @@ import StepBar from './StepBar';
 import { forgetWebview, registerWebview } from './webviews';
 
 /**
- * A browser tab that mu opened: the same viewer as every other browser tab, in the agent's own session partition,
- * with the step bar above the page. Its webContents is reported to mu's bridge, not to the single-target one.
+ * A browser tab that spec.jev opened: the same viewer as every other browser tab, in the agent's own session partition,
+ * with the step bar above the page. Its webContents is reported to spec.jev's bridge, not to the single-target one.
  */
 const MuBrowserTab: React.FC<Omit<BrowserViewerProps, 'partition' | 'onWebContentsReady' | 'pristine'>> = (props) => {
   const { tabId } = props;
@@ -27,7 +27,7 @@ const MuBrowserTab: React.FC<Omit<BrowserViewerProps, 'partition' | 'onWebConten
     <div className='flex flex-col h-full w-full min-h-0'>
       {run && <StepBar run={run} />}
       <div className='flex-1 min-h-0'>
-        {/* Pristine: mu fills in forms and submits them, so the page keeps its own links and forms. */}
+        {/* Pristine: spec.jev fills in forms and submits them, so the page keeps its own links and forms. */}
         <BrowserViewer {...props} partition={MU_BROWSER_PARTITION} onWebContentsReady={handleReady} pristine />
       </div>
     </div>

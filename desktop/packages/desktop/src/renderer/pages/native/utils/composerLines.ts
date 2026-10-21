@@ -1,6 +1,6 @@
 /**
- * What the native send box shows about the conversation besides the text: mu's goal in the line above it, and how full
- * the model's context is in the ring beside the send button. Read from the view alone, as the classic mu conversation
+ * What the native send box shows about the conversation besides the text: spec.jev's goal in the line above it, and how full
+ * the model's context is in the ring beside the send button. Read from the view alone, as the classic spec.jev conversation
  * reads them from its activity and usage reports (`GoalLine`, `ContextUsageIndicator`). Pure.
  */
 import type { TokenUsageData } from '@/common/config/storage';
@@ -8,12 +8,12 @@ import type { NativeHostStatus } from '@/common/kyrn/nativeBridge';
 import { asNumber, type NativeView, type ViewUsage } from '@/common/utils/nativeHost';
 import { goalIsLive, type GoalSnapshot } from '@/renderer/pages/conversation/platforms/acp/Composer/goalState';
 
-/** Hosts whose mu runs: only there does a goal that says it runs go on by itself. */
+/** Hosts whose spec.jev runs: only there does a goal that says it runs go on by itself. */
 const RUNNING: ReadonlySet<NativeHostStatus['phase']> = new Set(['running', 'needs-model']);
 
 /**
  * The goal the line above the send box shows: one that runs or waits (`active`, `paused`), none once it is met or
- * cleared. With no mu running, a goal the session file says runs waits for the next message: mu, resuming the session,
+ * cleared. With no spec.jev running, a goal the session file says runs waits for the next message: spec.jev, resuming the session,
  * pauses it and goes on when the person writes, so the line says it is paused.
  */
 export function goalOnScreen(view: NativeView, host: NativeHostStatus): GoalSnapshot | null {

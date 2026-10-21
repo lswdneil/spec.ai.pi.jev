@@ -1,5 +1,5 @@
 /**
- * The sidebar's native conversations, while the native host is on: mu's own sessions (the CLI's included, the ones
+ * The sidebar's native conversations, while the native host is on: spec.jev's own sessions (the CLI's included, the ones
  * AionCore's conversations run left out), newest first and kept as they change, and a way to start one
  * (NativeNewConversation). A row has the menu classic rows have where it applies: pin (a pinned row stays above the
  * others), mark as unread or read, rename, archive (the row leaves the list for an "Archived" fold under it, whose rows
@@ -304,7 +304,7 @@ const Group: React.FC<{ onSessionClick?: () => void }> = ({ onSessionClick }) =>
     ],
     [listed, pinned]
   );
-  // A conversation that is gone (deleted, here or by another mu) keeps no mark.
+  // A conversation that is gone (deleted, here or by another spec.jev) keeps no mark.
   useEffect(() => {
     if (loading || failure) return;
     pruneNativeUnread(new Set(conversations.map((conversation) => conversation.id)));

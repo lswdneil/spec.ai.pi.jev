@@ -1,6 +1,6 @@
 # Sub-agents that work to a checklist
 
-This is the task frame applied to sub-agents. In pi's subagent example, a child gets one line of instructions and hands back its last words. In mu, the child gets its part of the task frame and hands back its checklist, so the parent can see what was done and on what evidence, not only what the child says.
+This is the task frame applied to sub-agents. In pi's subagent example, a child gets one line of instructions and hands back its last words. In spec.jev, the child gets its part of the task frame and hands back its checklist, so the parent can see what was done and on what evidence, not only what the child says.
 
 ## The brief
 

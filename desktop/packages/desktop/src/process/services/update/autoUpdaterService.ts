@@ -62,9 +62,9 @@ export class AutoUpdaterService implements RestartUpdater {
       autoUpdater.logger = log;
       // A check never downloads: the update downloads only when the person chooses 下载 (download).
       autoUpdater.autoDownload = false;
-      // "Later" still updates: the downloaded update installs when mu quits.
+      // "Later" still updates: the downloaded update installs when spec.jev quits.
       autoUpdater.autoInstallOnAppQuit = true;
-      // mu's releases are GitHub pre-releases. No channel is set: with none, electron-updater reads the newest
+      // spec.jev's releases are GitHub pre-releases. No channel is set: with none, electron-updater reads the newest
       // release, while a channel would also allow downgrades.
       autoUpdater.allowPrerelease = true;
       autoUpdater.disableWebInstaller = true;
@@ -193,13 +193,13 @@ export class AutoUpdaterService implements RestartUpdater {
       }, QUIT_HANDOFF_TIMEOUT_MS);
       nativeAutoUpdater.once('before-quit-for-update', onHandover);
     });
-    // Not silent: on Windows the installer shows its progress, then starts mu again.
+    // Not silent: on Windows the installer shows its progress, then starts spec.jev again.
     this.updater().quitAndInstall(false, true);
     if (!(await handedOver)) {
       throw new UpdateError({ code: 'prepareInstallFailed' }, 'The update installer did not start');
     }
     recordAutoUpdateQuitAndInstall(diagnosticOptions());
-    // mu can stay open with its windows closed (close to tray; macOS keeps an app running): make sure it exits, so
+    // spec.jev can stay open with its windows closed (close to tray; macOS keeps an app running): make sure it exits, so
     // the installer can replace it.
     setTimeout(() => app.exit(0), EXIT_AFTER_HANDOFF_MS);
   }

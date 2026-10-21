@@ -1,5 +1,5 @@
 /**
- * The `.env` the launcher reads (the checkout's, or ~/.mu/.env for the npm package): read the way kyrn/bin/mu.mjs
+ * The `.env` the launcher reads (the checkout's, or ~/.spec.jev/.env for the npm package): read the way kyrn/bin/mu.mjs
  * reads it (parseEnvFile there; a test holds the two to the same answers), and changed one variable at a time, every
  * other line kept as it was. A value is data: nothing in the file is executed or expanded.
  */

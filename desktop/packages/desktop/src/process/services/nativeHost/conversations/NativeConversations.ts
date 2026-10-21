@@ -36,12 +36,12 @@ export type NativeConversationsOptions = {
   startHost: StartHost;
   /** Where the sessions are (sessions/folders.ts), asked at each use: a changed setting counts at once. */
   folders: () => SessionFolders;
-  /** What mu gets in its environment for a conversation, besides the app's (hostEnv.ts in the app). */
+  /** What spec.jev gets in its environment for a conversation, besides the app's (hostEnv.ts in the app). */
   env: (conversation: { desktopSession: string; permissions?: string }) => Record<string, string>;
   /** Puts a removed conversation's session file away (the bin, in the app). */
   trash: (file: string) => Promise<void>;
   /**
-   * The session files AionCore's mu conversations use (sessions/acpBindings.ts): the list leaves them out, so no
+   * The session files AionCore's spec.jev conversations use (sessions/acpBindings.ts): the list leaves them out, so no
    * conversation is listed twice. None when left out.
    */
   bound?: () => Promise<ReadonlySet<string>>;
@@ -84,7 +84,7 @@ export class NativeConversations implements NativeConversationsApi {
   private readonly byId = new Map<string, Conversation>();
   /** Draft ids of conversations that have their session's id now. */
   private readonly drafts = new Map<string, Conversation>();
-  /** Conversations by the name mu hands back to the app's browser (MU_DESKTOP_SESSION). */
+  /** Conversations by the name spec.jev hands back to the app's browser (MU_DESKTOP_SESSION). */
   private readonly desktopSessions = new Map<string, Conversation>();
   /** Made from a session file (a list, an open): let go when the file is gone and no host runs. */
   private readonly fromFiles = new WeakSet<Conversation>();
@@ -206,7 +206,7 @@ export class NativeConversations implements NativeConversationsApi {
     this.events.changed({ removed: conversation.id });
   }
 
-  /** Only a file in mu's session folders is ever removed. */
+  /** Only a file in spec.jev's session folders is ever removed. */
   private refuseOutside(file: string | undefined): void {
     if (file && existsSync(file) && !insideSessionFolders(this.folders(), file))
       throw new NativeRequestError('invalid', `mu keeps no session at ${file}`);
@@ -220,7 +220,7 @@ export class NativeConversations implements NativeConversationsApi {
     await Promise.all([...this.byId.values()].map((conversation) => conversation.end().catch((): void => {})));
   }
 
-  /** The id a conversation has now, by the name mu hands back to the app's browser (MU_DESKTOP_SESSION). */
+  /** The id a conversation has now, by the name spec.jev hands back to the app's browser (MU_DESKTOP_SESSION). */
   conversationOf(desktopSession: string): string | undefined {
     return this.desktopSessions.get(desktopSession)?.id;
   }
@@ -301,7 +301,7 @@ export class NativeConversations implements NativeConversationsApi {
     const other = this.byId.get(conversation.id);
     if (other && other !== conversation) {
       // The session was a conversation of its own: this one is it now. One pi per session file, so a host that ran
-      // it ends (a mu command switched into a session another conversation runs; the app refuses its own switch).
+      // it ends (a spec.jev command switched into a session another conversation runs; the app refuses its own switch).
       for (const [draft, held] of this.drafts) if (held === other) this.drafts.set(draft, conversation);
       this.forget(other);
       if (other.live) {

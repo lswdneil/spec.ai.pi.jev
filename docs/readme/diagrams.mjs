@@ -8,7 +8,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const SANS = `-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;Noto Sans&quot;, Helvetica, Arial, sans-serif`;
 const MONO = `ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;, monospace`;
 
-/** GitHub's page colours for text and lines, with mu's violet (what acts) and pink (the judge). */
+/** GitHub's page colours for text and lines, with spec.jev's violet (what acts) and pink (the judge). */
 const THEMES = {
   dark: {
     text: '#f0f6fc',
@@ -189,7 +189,7 @@ function turn(c) {
     })
   );
   out.push(
-    text(40, judgeTop + 49, 'Every verdict goes to the ledger with its probabilities. Without one, mu does what it would do without a judge.', {
+    text(40, judgeTop + 49, 'Every verdict goes to the ledger with its probabilities. Without one, spec.jev does what it would do without a judge.', {
       size: 12.5,
       fill: c.faint,
     })
@@ -214,7 +214,7 @@ function pieces(c) {
   const H = 470;
   const out = [`<defs>${arrowHead('a', c.faint)}${arrowHead('p', c.pink)}</defs>`];
   out.push(text(0, 22, 'The pieces', { size: 18, weight: 600, fill: c.text }));
-  out.push(text(0, 46, 'mu is pi with a judgment kernel loaded as an extension. The desktop app runs the same two.', { size: 13.5, fill: c.muted }));
+  out.push(text(0, 46, 'spec.jev is pi with a judgment kernel loaded as an extension. The desktop app runs the same two.', { size: 13.5, fill: c.muted }));
   out.push(`<line x1="0" x2="${W}" y1="66" y2="66" stroke="${c.line}"/>`);
 
   // Where you work: the app and the command line.
@@ -222,7 +222,7 @@ function pieces(c) {
   const frontW = 300;
   const fronts = [
     { x: 0, name: 'Desktop app', path: 'desktop/', note: 'runs pi in a utility process, over pi’s RPC' },
-    { x: frontW + 24, name: 'mu command', path: 'kyrn/bin/mu.mjs', note: 'mu’s own commands, then starts pi' },
+    { x: frontW + 24, name: 'spec.jev command', path: 'kyrn/bin/mu.mjs', note: 'spec.jev’s own commands, then starts pi' },
   ];
   for (const f of fronts) {
     out.push(rect(f.x, front, frontW, 62, { fill: c.box, stroke: c.boxLine }));
@@ -251,7 +251,7 @@ function pieces(c) {
     out.push(text(px + w / 2, core + 56, part, { size: 12, fill: c.muted, anchor: 'middle' }));
     px += w + 8;
   }
-  // The kernel: what mu adds.
+  // The kernel: what spec.jev adds.
   const kx = 16;
   const ky = core + 76;
   const kw = coreW - 32;
@@ -303,7 +303,7 @@ function pieces(c) {
       width: W,
       height: H,
       title: 'The pieces',
-      desc: 'The desktop app (desktop/, which runs pi in a utility process over pi’s RPC protocol) and the mu command (kyrn/bin/mu.mjs) both start pi, the coding agent: its agent loop, tools, sessions and providers. Inside pi runs the judgment kernel (packages/kyrn-judge): features that hook pi’s events and act on verdicts, a decision engine with modes, judges and fallbacks, and a ledger of every verdict in the session. pi calls the main model, any provider it supports. The engine asks the judges: Jev (hosted, with probabilities), Laya (local, offline), any classifier model or any LLM.',
+      desc: 'The desktop app (desktop/, which runs pi in a utility process over pi’s RPC protocol) and the spec.jev command (kyrn/bin/mu.mjs) both start pi, the coding agent: its agent loop, tools, sessions and providers. Inside pi runs the judgment kernel (packages/kyrn-judge): features that hook pi’s events and act on verdicts, a decision engine with modes, judges and fallbacks, and a ledger of every verdict in the session. pi calls the main model, any provider it supports. The engine asks the judges: Jev (hosted, with probabilities), Laya (local, offline), any classifier model or any LLM.',
     },
     out
   );
@@ -346,13 +346,13 @@ function decision(c) {
     if (i < STEPS.length - 1) out.push(path(`M${x + w + 2},${y + 64} L${x + w + gap - 3},${y + 64}`, c.faint, { marker: 'a' }));
   });
   out.push(text(0, H - 24, 'In shadow mode it stops at 05: the verdict is recorded and nothing changes.', { size: 12, fill: c.faint }));
-  out.push(text(0, H - 6, 'No verdict (slow, down or unsure): the fallback, what mu would do without a judge, and the ledger says why.', { size: 12, fill: c.faint }));
+  out.push(text(0, H - 6, 'No verdict (slow, down or unsure): the fallback, what spec.jev would do without a judge, and the ledger says why.', { size: 12, fill: c.faint }));
   return svg(
     {
       width: W,
       height: H,
       title: 'A decision, end to end',
-      desc: 'Six steps, with tool.injection screening a web page as the example. 1: a feature hooks a pi event (web_fetch returns a page). 2: it asks a decision point, tool.injection, with a small state and a bounded question. 3: the engine checks the point’s mode and picks a judge from its tiers (for example laya, then jev), with a fallback. 4: the judge answers, for example yes with probability 0.97 in 0.3 seconds. 5: the ledger records the verdict, its answers, latency and usage as a kyrn.decision entry. 6: in active mode the feature acts and the passage is withheld; in shadow mode it stops at step 5. Without a verdict, mu takes the fallback and the ledger says why.',
+      desc: 'Six steps, with tool.injection screening a web page as the example. 1: a feature hooks a pi event (web_fetch returns a page). 2: it asks a decision point, tool.injection, with a small state and a bounded question. 3: the engine checks the point’s mode and picks a judge from its tiers (for example laya, then jev), with a fallback. 4: the judge answers, for example yes with probability 0.97 in 0.3 seconds. 5: the ledger records the verdict, its answers, latency and usage as a kyrn.decision entry. 6: in active mode the feature acts and the passage is withheld; in shadow mode it stops at step 5. Without a verdict, spec.jev takes the fallback and the ledger says why.',
     },
     out
   );
@@ -379,7 +379,7 @@ function tiers(c) {
     { x: 0, w: 150, name: 'Questions', lines: ['one or many,', 'from a decision point'], judge: false },
     { x: 214, w: 190, name: 'Laya', lines: ['local, offline, no cost', 'trusted on classifying'], judge: true },
     { x: 468, w: 190, name: 'Jev', lines: ['hosted, about 0.3 s', 'trusted on every kind'], judge: true },
-    { x: 722, w: 158, name: 'The fallback', lines: ['what mu would do', 'without a judge'], judge: false },
+    { x: 722, w: 158, name: 'The fallback', lines: ['what spec.jev would do', 'without a judge'], judge: false },
   ];
   for (const b of boxes) {
     out.push(rect(b.x, y, b.w, h, { fill: b.judge ? c.pinkFill : c.box, stroke: b.judge ? c.pinkLine : c.boxLine }));
@@ -429,7 +429,7 @@ function tiers(c) {
       width: W,
       height: H,
       title: 'Judges in tiers',
-      desc: 'A cascade such as laya,jev. All questions go to Laya first: local, offline and free, trusted on classifying. What Laya is sure of becomes a verdict; a yes/no answer is unsure when its probability is between 0.2 and 0.8, and unsure questions go on to Jev, hosted, about 0.3 seconds. What Jev is sure of becomes a verdict; what is still unsure, or what no judge answered, gets the fallback: what mu would do without a judge. The ledger records every answer, which judge gave it or why the fallback was used, and the time. Laya is not trusted on relating, scoring or meta-judgments, so those questions go on to Jev.',
+      desc: 'A cascade such as laya,jev. All questions go to Laya first: local, offline and free, trusted on classifying. What Laya is sure of becomes a verdict; a yes/no answer is unsure when its probability is between 0.2 and 0.8, and unsure questions go on to Jev, hosted, about 0.3 seconds. What Jev is sure of becomes a verdict; what is still unsure, or what no judge answered, gets the fallback: what spec.jev would do without a judge. The ledger records every answer, which judge gave it or why the fallback was used, and the time. Laya is not trusted on relating, scoring or meta-judgments, so those questions go on to Jev.',
     },
     out
   );

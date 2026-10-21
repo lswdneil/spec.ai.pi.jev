@@ -110,7 +110,7 @@ export function launchExtra(value: string | undefined): Record<string, unknown> 
  * The debugger pack: a program run under a debug adapter (debugpy, delve,
  * lldb-dap, or one the user configured), stopped at breakpoints or where an
  * uncaught exception is thrown, stepped, and looked at. One run at a time;
- * it ends with the session, and with mu itself.
+ * it ends with the session, and with spec.jev itself.
  */
 export function debuggerPack(shared: PackShared, options: DebuggerOptions): Pack {
 	const { runtime } = shared;

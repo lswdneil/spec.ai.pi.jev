@@ -9,7 +9,7 @@ import { isWsl, thisHost, wslMountRoot, wslToWindowsPath } from "../platform.ts"
 type Env = Readonly<Record<string, string | undefined>>;
 
 /**
- * Everything the search for a browser depends on, passed in: there is no Windows machine and no WSL where mu
+ * Everything the search for a browser depends on, passed in: there is no Windows machine and no WSL where spec.jev
  * is developed, so what happens there is decided by functions that can be called with those facts on a Mac.
  */
 export interface BrowserHost {
@@ -125,7 +125,7 @@ function sideOf(executable: string, host: BrowserHost): FoundBrowser["side"] {
 }
 
 /**
- * The browser mu would start. MU_CHROME (or KYRN_CHROME) wins. From inside WSL a browser on the Windows side
+ * The browser spec.jev would start. MU_CHROME (or KYRN_CHROME) wins. From inside WSL a browser on the Windows side
  * only counts when it can be reached: see `windowsSideProblem`.
  */
 export function findBrowser(host: BrowserHost): FoundBrowser | undefined {
@@ -159,7 +159,7 @@ const LINUX_INSTALL = [
 	"  Arch:                  sudo pacman -S chromium",
 ].join("\n");
 
-/** What to tell someone whose machine has no browser mu can use. */
+/** What to tell someone whose machine has no browser spec.jev can use. */
 export function browserAdvice(host: BrowserHost): string {
 	if (host.platform === "darwin") {
 		return "No Chrome, Chromium, Edge or Brave found in /Applications. Install one, or set MU_CHROME to a Chromium-based browser's executable.";
@@ -177,7 +177,7 @@ export function browserAdvice(host: BrowserHost): string {
 		windowsSide
 			? `No browser inside WSL. ${windowsSide.executable} is there, but ${windowsSideProblem(host) ?? "it was not chosen"}.`
 			: "No browser inside WSL, and none found on the Windows side.",
-		"Install one inside WSL (mu runs it headless, so no display is needed):",
+		"Install one inside WSL (spec.jev runs it headless, so no display is needed):",
 		LINUX_INSTALL,
 		"or, on Windows 11 22H2 and later, let WSL share Windows' loopback: put these two lines in %USERPROFILE%\\.wslconfig",
 		"  [wsl2]",
@@ -187,7 +187,7 @@ export function browserAdvice(host: BrowserHost): string {
 }
 
 /**
- * Where a confined browser may keep a profile. A snap sees no hidden folder of the home (so not ~/.mu) and
+ * Where a confined browser may keep a profile. A snap sees no hidden folder of the home (so not ~/.spec.jev) and
  * has a /tmp of its own; a flatpak sees its own data folder. Undefined for an ordinary install.
  */
 export function confinedProfileBase(executable: string, host: BrowserHost): string | undefined {
@@ -282,7 +282,7 @@ export function findChrome(env: Env = process.env, host: BrowserHost = thisBrows
 export interface LaunchedChrome {
 	/** WebSocket URL of the browser-level DevTools endpoint. */
 	readonly endpoint: string;
-	/** Undefined when an already running mu browser was reused. */
+	/** Undefined when an already running spec.jev browser was reused. */
 	readonly process?: ChildProcess;
 	/** Where the profile really is: not where it was asked for when the browser is confined (snap, flatpak). */
 	readonly profileDir: string;
@@ -311,7 +311,7 @@ async function isAlive(endpoint: string): Promise<boolean> {
 
 export interface LaunchOptions {
 	readonly executable?: string;
-	/** Default ~/.mu/browser-profile: mu's own profile, never the user's personal one. */
+	/** Default ~/.spec.jev/browser-profile: spec.jev's own profile, never the user's personal one. */
 	readonly profileDir?: string;
 	readonly headless?: boolean;
 	/** The machine to look at. Tests pass one; everything else uses this machine. */
@@ -334,7 +334,7 @@ function exitOf(child: ChildProcess, ms: number): Promise<void> {
 
 /**
  * Starts Chrome with a dedicated profile and a DevTools port, or reuses the
- * one mu already started. The user's own Chrome profile, with its cookies
+ * one spec.jev already started. The user's own Chrome profile, with its cookies
  * and logged-in sessions, is never touched.
  */
 export async function launchChrome(options: LaunchOptions = {}): Promise<LaunchedChrome> {

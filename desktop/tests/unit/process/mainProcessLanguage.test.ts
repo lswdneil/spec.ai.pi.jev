@@ -84,34 +84,34 @@ describe('main-process app language', () => {
     });
     const offGood = onAppLanguageApplied(after);
 
-    await applyAppLanguage('de-DE');
+    await applyAppLanguage('ja-JP');
     offBad();
     offGood();
 
-    expect(after).toHaveBeenCalledWith('de-DE');
+    expect(after).toHaveBeenCalledWith('ja-JP');
     error.mockRestore();
   });
 
   it('starts in the language the renderer saved in the backend', async () => {
-    mocks.httpRequest.mockResolvedValue({ language: 'fr-FR' });
-    await expect(loadStartupLanguage('en-US')).resolves.toBe('fr-FR');
+    mocks.httpRequest.mockResolvedValue({ language: 'ko-KR' });
+    await expect(loadStartupLanguage('en-US')).resolves.toBe('ko-KR');
     expect(mocks.httpRequest).toHaveBeenCalledWith('GET', '/api/settings/client?keys=language', undefined, {
       silentStatuses: [404],
     });
   });
 
   it('follows the system language when nothing is saved', async () => {
-    mocks.store.set('language', 'de-DE');
+    mocks.store.set('language', 'ja-JP');
     mocks.httpRequest.mockRejectedValue(
       new BackendHttpError({ method: 'GET', path: '/api/settings/client', status: 404, body: '' })
     );
-    await expect(loadStartupLanguage('es')).resolves.toBe('es-ES');
+    await expect(loadStartupLanguage('ja')).resolves.toBe('ja-JP');
   });
 
   it('applies the startup language', async () => {
-    mocks.httpRequest.mockResolvedValue({ language: 'pt-BR' });
-    await expect(applyStartupAppLanguage('en-US')).resolves.toBe('pt-BR');
-    expect(i18n.language).toBe('pt-BR');
+    mocks.httpRequest.mockResolvedValue({ language: 'zh-TW' });
+    await expect(applyStartupAppLanguage('en-US')).resolves.toBe('zh-TW');
+    expect(i18n.language).toBe('zh-TW');
   });
 
   it('lets a switch made while the startup language was being read win', async () => {
@@ -119,11 +119,11 @@ describe('main-process app language', () => {
     mocks.httpRequest.mockReturnValue(new Promise((resolve) => (answer = resolve)));
 
     const startup = applyStartupAppLanguage('en-US');
-    await applyAppLanguage('fr-FR');
-    answer({ language: 'ru-RU' });
+    await applyAppLanguage('ko-KR');
+    answer({ language: 'ja-JP' });
 
     await expect(startup).resolves.toBeUndefined();
-    expect(i18n.language).toBe('fr-FR');
+    expect(i18n.language).toBe('ko-KR');
   });
 
   it('gives texts in another language without switching the app', async () => {

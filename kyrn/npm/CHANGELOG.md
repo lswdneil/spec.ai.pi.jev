@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-21
+
+### Changed
+
+- The project is called **spec.jev**. The npm package and the command are `spec.jev`; the `mu` command stays as an alias.
+- A new machine keeps its files in `~/.spec.jev` and reads `~/.spec.jev/agent/spec.jev.json`. A machine that already has `~/.mu` (then `~/.kyrn`), `mu.json` (then `kyrn.json`) or a `MU_*` / `KYRN_*` variable keeps using it: the older spellings are read when the newer one is absent, so nothing moves and nothing splits.
+- `SPECJEV_*` is the current environment spelling; the launcher hands it to the agent under the `MU_*` names the rest of the code reads.
+- The desktop app is `spec.jev` (app id `com.specjev.desktop`).
+- The brand mark is the new loop logo: every icon (`app.png`, `app.ico`, `app.icns`, the PWA and site icons, the social card) is built from `desktop/resources/brand/mu-icon-source.png` by `desktop/scripts/kyrn/icon/build-icon.py`; the in-app mark and the sign-in page use the same artwork.
+- The app ships five languages: English, 简体中文, 繁體中文, 日本語 and 한국어. Deutsch, Español, Français, Português (BR), Русский, Українська, Türkçe and فارسی are gone from the desktop app, the settings catalog and the docs.
+- The copy is spec.jev's throughout: the desktop app's strings, the site, the documentation and the README no longer call the product `mu`. Identifiers keep their names (`mu.json`, `.mu`, `/mu`, `MU_*`, `qybaihe/mu`), so existing files, scripts and links keep working.
+- Version numbering restarts at 0.1.0 for the renamed project.
+
+### Added
+
+- The built-in browser can run on [moli](https://github.com/lexmount/moli) instead of Chrome: `features.browser.backend` (`auto`, `chrome`, `moli`), `moliPath` / `MU_MOLI`, `moliUrl` / `MU_MOLI_URL`. moli is started with `serve --layout` on a free port; Chrome remains the fallback. `docs/moli.md`.
+- `page_fetch`: one page as Markdown or as a semantic tree through `moli fetch`, with no browser session and no judge call. `/fetch <url> [markdown|semantic_tree]` does the same from the command line.
+- `Emulation.setFocusEmulationEnabled` is now optional: an engine that does not implement it still browses.
+
 ## [0.1.10] - 2026-10-21
 
 ### Changed

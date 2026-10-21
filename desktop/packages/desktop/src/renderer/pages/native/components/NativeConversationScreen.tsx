@@ -2,7 +2,7 @@
  * A native conversation on screen: its header, its transcript in the message list every conversation uses (its view
  * as the list's rows, the latest ones of a long conversation and the earlier ones once the reader scrolls up to them),
  * and its send box. The route follows a draft's id once its session gives it its own. The work panel beside it shows
- * this conversation, its Jev tabs fed from the view. With no transcript yet, the screen says where mu will work; a
+ * this conversation, its Jev tabs fed from the view. With no transcript yet, the screen says where spec.jev will work; a
  * conversation that cannot be opened says why, and can be tried again.
  */
 import { Button, Message } from '@arco-design/web-react';
@@ -67,7 +67,7 @@ const OpenFailure: React.FC<{ failure: NativeFailure; onRetry: () => void }> = (
   );
 };
 
-/** A conversation with nothing in it yet: where mu will work, and what to do. */
+/** A conversation with nothing in it yet: where spec.jev will work, and what to do. */
 const Empty: React.FC<{ cwd?: string }> = ({ cwd }) => {
   const { t } = useTranslation();
   return (
@@ -218,7 +218,7 @@ const NativeConversationScreen: React.FC<{ id: string }> = ({ id }) => {
         </MessageListRunProvider>
         <NativeComposer key={conversation.key} conversation={conversation} />
       </div>
-      {/* mu's browse loop opens its tabs in this conversation's browser panel and asks its questions here. */}
+      {/* spec.jev's browse loop opens its tabs in this conversation's browser panel and asks its questions here. */}
       <MuBrowserHost conversationId={conversation.id} />
     </div>
   );

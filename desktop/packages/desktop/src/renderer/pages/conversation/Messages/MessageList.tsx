@@ -276,7 +276,7 @@ const highlightStyle: React.CSSProperties = {
 const getUnhandledMessageType = (_message: never): string => 'unknown';
 
 /**
- * A row's test id. A native conversation's list names the person's and mu's messages as its end-to-end tests read
+ * A row's test id. A native conversation's list names the person's and spec.jev's messages as its end-to-end tests read
  * them; every other list keeps the generic ids.
  */
 const rowTestId = (message: TMessage, native: boolean): string => {
@@ -579,7 +579,7 @@ const MessageList: React.FC<{
       }
     }
   }, [hydrated, isProcessing, list]);
-  // Calls still marked running while the conversation was known to be idle: their turn ended without their end (mu's
+  // Calls still marked running while the conversation was known to be idle: their turn ended without their end (spec.jev's
   // process closed mid-call). Like those thoughts, they read as over, and the next turn does not revive them.
   const staleCallIdsRef = useRef<Set<string>>(new Set());
   useEffect(() => {
@@ -679,7 +679,7 @@ const MessageList: React.FC<{
     };
     // A conversation without a judge says so once, not under every message.
     let saidNoJudge = false;
-    // mu's questions read before what came of the calls they ask about.
+    // spec.jev's questions read before what came of the calls they ask about.
     const ordered = questionsBeforeCalls(list);
 
     for (let i = 0, len = ordered.length; i < len; i++) {

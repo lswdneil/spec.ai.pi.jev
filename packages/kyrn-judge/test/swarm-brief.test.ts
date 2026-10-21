@@ -323,7 +323,7 @@ describe("a chain of sub-agents", () => {
 			);
 			expect(result).toContain("## 1. scout");
 			expect(result).toContain("## 2. plan");
-			// The title mu wrote, as a code for a client that translates.
+			// The title spec.jev wrote, as a code for a client that translates.
 			const details = (
 				harness.session.messages.filter((message) => message.role === "toolResult").at(-1) as {
 					details?: { snapshot?: { title?: string; titleCode?: unknown } };

@@ -16,7 +16,7 @@ describe('writeAppLanguageFile', () => {
     vi.restoreAllMocks();
   });
 
-  it('creates ~/.mu and writes the language code and a newline', async () => {
+  it('creates ~/.spec.jev and writes the language code and a newline', async () => {
     await writeAppLanguageFile('en-US', home);
 
     expect(readFileSync(join(home, '.mu', 'app-language'), 'utf8')).toBe('en-US\n');
@@ -35,15 +35,15 @@ describe('writeAppLanguageFile', () => {
   it('writes into ~/.kyrn on a machine whose home has not moved yet', async () => {
     mkdirSync(join(home, '.kyrn'));
 
-    await writeAppLanguageFile('fr-FR', home);
+    await writeAppLanguageFile('ja-JP', home);
 
-    expect(readFileSync(join(home, '.kyrn', 'app-language'), 'utf8')).toBe('fr-FR\n');
+    expect(readFileSync(join(home, '.kyrn', 'app-language'), 'utf8')).toBe('ja-JP\n');
     expect(existsSync(join(home, '.mu'))).toBe(false);
   });
 
   it('logs and returns instead of throwing when the file cannot be written', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    // A file where the mu home directory should be: mkdir and the write both fail.
+    // A file where the spec.jev home directory should be: mkdir and the write both fail.
     writeFileSync(join(home, '.mu'), 'not a directory');
 
     await expect(writeAppLanguageFile('en-US', home)).resolves.toBeUndefined();
@@ -59,14 +59,14 @@ describe('resolveStartupLanguage', () => {
   it('starts in the saved app language', async () => {
     const language = await resolveStartupLanguage({
       readSaved: async () => 'zh-TW',
-      readLocalHint: async () => 'de-DE',
+      readLocalHint: async () => 'ko-KR',
       systemLocale: () => 'en-US',
     });
     expect(language).toBe('zh-TW');
   });
 
   it('follows the system language when no language is saved, like the renderer', async () => {
-    const readLocalHint = vi.fn(async () => 'de-DE');
+    const readLocalHint = vi.fn(async () => 'ko-KR');
     const language = await resolveStartupLanguage({
       readSaved: async () => undefined,
       readLocalHint,

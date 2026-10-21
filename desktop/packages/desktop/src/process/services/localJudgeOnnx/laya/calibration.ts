@@ -1,5 +1,5 @@
 // Vendored from mizchi/laya-mlx, web/packages/laya-web/src/calibration.ts at dc3aa6b (Apache-2.0).
-// See ./NOTICE.md. Local changes are marked "mu:".
+// See ./NOTICE.md. Local changes are marked "spec.jev:".
 
 import type { AgentConfig, Answer, InternalQuestion, PredictResult, PreparedItem } from './types.ts';
 import { QTYPE_NAMES } from './types.ts';

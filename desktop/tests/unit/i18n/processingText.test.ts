@@ -13,8 +13,8 @@ const localeRoot = join(repoRoot, 'packages/desktop/src/renderer/services/i18n/l
 const languages = readdirSync(localeRoot).filter((name) => !name.startsWith('.'));
 
 describe('the processing line', () => {
-  it('is there in all 13 languages', () => {
-    expect(languages).toHaveLength(13);
+  it('is there in all 5 languages', () => {
+    expect(languages).toHaveLength(5);
   });
 
   it.each(languages)('ends with one ellipsis in %s', (language) => {

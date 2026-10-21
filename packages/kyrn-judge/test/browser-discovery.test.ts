@@ -140,7 +140,7 @@ describe("finding a browser on Linux", () => {
 			profileDir: "/home/bai/.mu/browser-profile",
 			headless: false,
 		});
-		// A snap cannot see ~/.mu (hidden) nor the machine's /tmp.
+		// A snap cannot see ~/.spec.jev (hidden) nor the machine's /tmp.
 		expect(plan.profileDir).toBe("/home/bai/snap/chromium/common/mu-browser-profile");
 		expect(plan.args[0]).toBe("--user-data-dir=/home/bai/snap/chromium/common/mu-browser-profile");
 		expect(plan.args).not.toContain("--headless=new");

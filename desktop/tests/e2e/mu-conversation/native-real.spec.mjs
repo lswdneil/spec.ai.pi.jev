@@ -1,13 +1,13 @@
 // @ts-check
 /* oxlint-disable no-await-in-loop -- each session is opened, and each step up taken, after the one before */
-// The real app on a copy of real sessions. MU_E2E_REAL_SESSIONS names a folder of pi session files (a mu home's
+// The real app on a copy of real sessions. MU_E2E_REAL_SESSIONS names a folder of pi session files (a spec.jev home's
 // `agent/sessions`); it is COPIED into the throwaway profile, so the app never opens the originals. The sessions a
 // person really has hold what the fakes do not: months of tool calls with huge outputs, images, thinking, compactions,
 // sessions imported from other tools. The steps: the sidebar lists every session; each of a spread of them (the biggest,
 // the longest, the ones with images, tool calls, thinking, a compaction, the newest, the oldest, and a few more) opens
 // and draws rows without an error; the longest reads back to its first message; the palette finds a session by its
 // title; and a message is sent to one session of each kind (imported from Codex, imported from Claude Code, made by
-// AionCore, made by mu, the biggest file), which must reach the fake model with the session's history and be answered
+// AionCore, made by spec.jev, the biggest file), which must reach the fake model with the session's history and be answered
 // in the same file. Those are pointed, in the COPY, at the test's own project folder first, so that continuing one never
 // touches a folder of the person's. Prints how long each takes. Off when the variable is not set (nobody else has these
 // files); keep the profile with MU_E2E_KEEP=1 to look at the screenshots, and remove it afterwards: it holds a copy of
@@ -61,7 +61,7 @@ function look(file) {
     images: 0,
     thinking: 0,
     compactions: 0,
-    /** Which tool the session was imported from (mu's import notice), '' for a session made here. */
+    /** Which tool the session was imported from (spec.jev's import notice), '' for a session made here. */
     imported: '',
     firstUser: '',
   };
@@ -149,7 +149,7 @@ function continuePicks(all) {
     'made by AionCore',
     biggest(usable.filter((one) => one.firstUser.trimStart().startsWith('[Assistant Rules]') && modest(one)))
   );
-  add('made by mu, with tool calls', biggest(usable.filter((one) => !one.imported && one.tools > 0 && modest(one))));
+  add('made by spec.jev, with tool calls', biggest(usable.filter((one) => !one.imported && one.tools > 0 && modest(one))));
   add('with images', biggest(usable.filter((one) => one.images > 0 && modest(one))));
   add('the biggest file', biggest(usable));
   return [...chosen.values()];
@@ -366,7 +366,7 @@ test('a session whose project folder is gone opens, and a message to it says wha
     timeout: 60_000,
   });
   await expect(rowsInDom().first()).toBeVisible({ timeout: 30_000 });
-  // The message is not sent (no row of the person's comes of it): mu cannot start in a folder that is gone.
+  // The message is not sent (no row of the person's comes of it): spec.jev cannot start in a folder that is gone.
   const box = p.getByTestId('native-send-input');
   await box.click();
   await box.fill('E2E:ECHO FOLDER-GONE');

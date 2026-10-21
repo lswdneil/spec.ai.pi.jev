@@ -39,7 +39,7 @@ export type ConversationEvents = {
 /** What the bridge asks of the native conversations (NativeConversations). Failures are thrown, never returned. */
 export type NativeConversationsApi = {
   list(): Promise<NativeConversation[]>;
-  /** `permissions`: the permission mode its mu starts in (MU_PERMISSIONS), mu's default when left out. */
+  /** `permissions`: the permission mode its spec.jev starts in (MU_PERMISSIONS), spec.jev's default when left out. */
   create(input: { cwd: string; permissions?: string }): Promise<NativeConversation>;
   open(id: string): Promise<NativeSnapshot>;
   request(id: string, command: PiCommand): Promise<unknown>;

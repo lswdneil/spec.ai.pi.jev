@@ -85,7 +85,7 @@ describe('where a new run gets its tab', () => {
     expect(decideOpen([file('f'), browser('b1')], {}, 'c1', 10)).toEqual({ kind: 'new' });
   });
 
-  it('hands out the conversation’s own finished mu tab again, oldest first, never one that is running', () => {
+  it('hands out the conversation’s own finished spec.jev tab again, oldest first, never one that is running', () => {
     const runs = {
       m1: run({ tabId: 'm1', phase: 'finished', status: 'done', startedAt: 5 }),
       m2: run({ tabId: 'm2', phase: 'finished', status: 'ended', startedAt: 2 }),
@@ -104,7 +104,7 @@ describe('where a new run gets its tab', () => {
     const decision = decideOpen(full, {}, 'c1', 10);
     expect(decision.kind).toBe('refuse');
     expect(decision.kind === 'refuse' && decision.error).toContain('full');
-    // Full, but one of them is this conversation's finished mu tab: that one is used.
+    // Full, but one of them is this conversation's finished spec.jev tab: that one is used.
     const runs = { b3: run({ tabId: 'b3', phase: 'finished', status: 'done' }) };
     const withMu = full.map((tab) => browser(tab.id, tab.id === 'b3'));
     expect(decideOpen(withMu, runs, 'c1', 10)).toEqual({ kind: 'reuse', tabId: 'b3' });

@@ -1,41 +1,41 @@
 ---
 title: The command line
-summary: mu's commands, the slash commands inside a session and what comes from pi unchanged.
+summary: spec.jev's commands, the slash commands inside a session and what comes from pi unchanged.
 ---
 
-The `mu` command is pi, the coding agent, with mu's judgment kernel loaded. Everything pi does works as before; mu adds its own commands and the decision points.
+The `spec.jev` command is pi, the coding agent, with spec.jev's judgment kernel loaded. Everything pi does works as before; spec.jev adds its own commands and the decision points.
 
 ```bash
-npm i -g mu-agent      # needs Node.js 22.19 or newer
-mu                     # an interactive session in the current directory
+npm i -g spec.jev      # needs Node.js 22.19 or newer
+spec.jev                     # an interactive session in the current directory
 ```
 
-## Starting mu {#starting}
+## Starting spec.jev {#starting}
 
 | Command | What it does |
 | --- | --- |
-| `mu` | An interactive session in the current directory |
-| `mu "prompt"` | Interactive, starting with this prompt |
-| `mu -p "prompt"` | One shot: print the answer and exit |
-| `mu -c` | Continue the last session |
-| `mu -r` | Pick a session to resume |
-| `mu --help` | Every flag of the agent |
+| `spec.jev` | An interactive session in the current directory |
+| `spec.jev "prompt"` | Interactive, starting with this prompt |
+| `spec.jev -p "prompt"` | One shot: print the answer and exit |
+| `spec.jev -c` | Continue the last session |
+| `spec.jev -r` | Pick a session to resume |
+| `spec.jev --help` | Every flag of the agent |
 
-`mu install`, `remove`, `update`, `list` and `config` manage pi packages, as in pi.
+`spec.jev install`, `remove`, `update`, `list` and `config` manage pi packages, as in pi.
 
-## mu's own commands {#commands}
+## spec.jev's own commands {#commands}
 
 | Command | What it does |
 | --- | --- |
-| `mu setup` | Connect a model (an API key, or a service from a list) and choose the judge. `mu setup --help` shows the forms for scripts. |
-| `mu doctor` | Check the installation, the model, the judges and the connections, and say what to fix |
-| `mu ledger [n] [--json]` | What the judge decided in the last n sessions. `--json` gives every record with its probabilities and timings. |
-| `mu import --list` | Find your Claude Code and Codex conversations |
-| `mu import <file>…` | Bring them into mu, to continue there |
-| `mu judge setup \| start \| stop \| status` | The local judge, Laya. `setup` asks before downloading the model. |
-| `mu link` / `mu unlink` | Put the `mu` command on your PATH (`~/.local/bin`), or remove it |
-| `mu auth status \| login <provider> \| logout <provider>` | Subscription sign-in, as used by the desktop app |
-| `mu migrate [--dry-run]` | One-time: move the old `~/.kyrn` folder to `~/.mu` |
+| `spec.jev setup` | Connect a model (an API key, or a service from a list) and choose the judge. `spec.jev setup --help` shows the forms for scripts. |
+| `spec.jev doctor` | Check the installation, the model, the judges and the connections, and say what to fix |
+| `spec.jev ledger [n] [--json]` | What the judge decided in the last n sessions. `--json` gives every record with its probabilities and timings. |
+| `spec.jev import --list` | Find your Claude Code and Codex conversations |
+| `spec.jev import <file>…` | Bring them into spec.jev, to continue there |
+| `spec.jev judge setup \| start \| stop \| status` | The local judge, Laya. `setup` asks before downloading the model. |
+| `spec.jev link` / `spec.jev unlink` | Put the `spec.jev` command on your PATH (`~/.local/bin`), or remove it |
+| `spec.jev auth status \| login <provider> \| logout <provider>` | Subscription sign-in, as used by the desktop app |
+| `spec.jev migrate [--dry-run]` | One-time: move the old `~/.kyrn` folder to `~/.spec.jev` |
 
 ## Commands inside a session {#slash-commands}
 
@@ -64,15 +64,15 @@ pi's own commands stay as they are: `/model`, `/thinking`, `/login`, `/resume`, 
 
 ## The verdict line {#verdict-line}
 
-Before a turn starts, mu waits briefly for the judge's reading of your message and shows it above the editor, for example *◆ jev-1.13-free  multi-step task · full effort · 699 ms*. Press <kbd>Esc</kbd> to start without waiting. The status line shows the permission mode and, while one runs, the goal.
+Before a turn starts, spec.jev waits briefly for the judge's reading of your message and shows it above the editor, for example *◆ jev-1.13-free  multi-step task · full effort · 699 ms*. Press <kbd>Esc</kbd> to start without waiting. The status line shows the permission mode and, while one runs, the goal.
 
 ## Environment variables for one run {#env}
 
 | Variable | Effect |
 | --- | --- |
-| `MU_JUDGE=laya,jev mu` | Judges for this run only. `MU_JUDGE=off` turns the kernel off. |
-| `MU_JUDGE_MODE=shadow mu` | Every decision point in shadow for this run |
-| `MU_PERMISSIONS=ask mu` | The permission mode for this run: `full`, `jev` or `ask` |
-| `MU_LANG=zh-CN mu` | mu's own messages in Chinese (`zh`) or English (anything else) |
+| `MU_JUDGE=laya,jev spec.jev` | Judges for this run only. `MU_JUDGE=off` turns the kernel off. |
+| `MU_JUDGE_MODE=shadow spec.jev` | Every decision point in shadow for this run |
+| `MU_PERMISSIONS=ask spec.jev` | The permission mode for this run: `full`, `jev` or `ask` |
+| `MU_LANG=zh-CN spec.jev` | spec.jev's own messages in Chinese (`zh`) or English (anything else) |
 
 The full list is under [Configuration](@docs/configuration#env).

@@ -10,7 +10,7 @@ import OneLine from '@/renderer/components/settings/OneLine';
 type Nameable = { 'aria-label'?: string; 'aria-labelledby'?: string; children?: React.ReactNode };
 
 /**
- * One row of a settings panel: its title in the body text colour and weight of every settings row (mu's own pages
+ * One row of a settings panel: its title in the body text colour and weight of every settings row (spec.jev's own pages
  * draw theirs the same way), the sentence under it on one line, and its control on the right.
  *
  * A control with nothing to read of its own (a switch) is named by the row's title, so a screen reader says

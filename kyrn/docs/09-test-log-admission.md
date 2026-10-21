@@ -1,6 +1,6 @@
 # 测试日志准入实验：开源调研、设计、Jev 验证与真实会话回放
 
-> 已于 2026-09-21 更名为 mu（命令 `mu`，标识 μ）。本文是更名前的记录，正文保持原样；新旧名对照见 [10-rename-to-mu.md](10-rename-to-mu.md)。
+> 已于 2026-09-21 更名为 spec.jev（命令 `spec.jev`，标识 μ）。本文是更名前的记录，正文保持原样；新旧名对照见 [10-rename-to-spec.jev.md](10-rename-to-spec.jev.md)。
 
 日期：2026-09-21。状态：**已接入为可选策略，默认关闭**（`features.admission.testLog`，取值 `off` / `rules` / `jev`）。
 

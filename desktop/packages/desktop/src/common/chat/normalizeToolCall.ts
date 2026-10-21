@@ -19,7 +19,7 @@ export interface NormalizedToolCall {
   /** Delegate/hive: `output` said as a code before the first snapshot, so it can be shown in the app language. */
   swarmProgress?: Coded;
   /**
-   * mu never ran the call because the person said no to it. Its output is mu's refusal, which is written for the model:
+   * spec.jev never ran the call because the person said no to it. Its output is spec.jev's refusal, which is written for the model:
    * the row says in the app's language that the call did not run, and shows no output.
    */
   denied?: true;
@@ -146,12 +146,12 @@ type AcpToolCallUpdateCompat = IMessageAcpToolCall['content']['update'] & {
 };
 
 /**
- * mu's refusal of a call the person said no to, as the model reads it (the harness's permissions feature). The mu
+ * spec.jev's refusal of a call the person said no to, as the model reads it (the harness's permissions feature). The spec.jev
  * bridge marks such a call (`rawOutput.mu.answer: "deny"`); a conversation from before the mark has only these words.
  */
 const REFUSAL = 'The user did not allow this (';
 
-/** Whether mu said the person refused this call: the bridge's mark, or mu's refusal as the call's whole result. */
+/** Whether spec.jev said the person refused this call: the bridge's mark, or spec.jev's refusal as the call's whole result. */
 function isDenied(status: NormalizedToolStatus, rawOutput: unknown, output: string | undefined): boolean {
   const mu =
     rawOutput !== null && typeof rawOutput === 'object' ? (rawOutput as { mu?: { answer?: unknown } }).mu : undefined;

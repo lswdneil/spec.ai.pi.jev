@@ -365,10 +365,10 @@ function permissionsLine(t: TFunction, payload: Record<string, unknown>): string
 
 // ── permissions.request / resolved / approved ───────────────────────────────
 
-/** mu's answers by id, as `permissions.resolved` reports them. */
+/** spec.jev's answers by id, as `permissions.resolved` reports them. */
 const PERMISSION_ANSWERS: ReadonlySet<string> = new Set(['once', 'session', 'deny']);
 
-/** mu waits for the person's permission; the call it names is data, shown as it is. */
+/** spec.jev waits for the person's permission; the call it names is data, shown as it is. */
 function permissionRequestLine(t: TFunction, payload: Record<string, unknown>): string[] {
   const summary = str(payload.summary);
   return lines(summary ? t(`${KEY}.permissions.request`, { summary }) : t(`${KEY}.permissions.waiting`));
@@ -393,7 +393,7 @@ function permissionApprovedLine(t: TFunction, payload: Record<string, unknown>):
 
 // ── checkpoint.off ──────────────────────────────────────────────────────────
 
-/** Why the session goes without checkpoints, in the words the conversation's notice uses; mu's own line otherwise. */
+/** Why the session goes without checkpoints, in the words the conversation's notice uses; spec.jev's own line otherwise. */
 function checkpointLine(t: TFunction, payload: Record<string, unknown>, language: string | null | undefined): string[] {
   const words = checkpointOffWords({
     title: '',

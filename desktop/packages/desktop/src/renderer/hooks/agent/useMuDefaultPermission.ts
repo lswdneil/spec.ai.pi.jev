@@ -10,7 +10,7 @@ async function readMode(): Promise<string> {
 }
 
 /**
- * The permission mode mu starts a conversation in that has none of its own: mu's last pick, else the settings'
+ * The permission mode spec.jev starts a conversation in that has none of its own: spec.jev's last pick, else the settings'
  * default. Undefined until it is read, and when it cannot be. Every send box shares one read.
  */
 export function useMuDefaultPermission(): string | undefined {

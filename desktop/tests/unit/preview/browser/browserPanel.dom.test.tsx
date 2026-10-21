@@ -267,7 +267,7 @@ describe('the browser’s pages', () => {
     expect(screen.queryByTitle(preview.browser.agentActiveTooltip)).not.toBeInTheDocument();
   });
 
-  it('gives a page mu opened for a run the agent’s own session, and a person’s page the shared one', () => {
+  it('gives a page spec.jev opened for a run the agent’s own session, and a person’s page the shared one', () => {
     act(() => {
       openBrowserPage('https://person.test/');
       openBrowserPage('https://run.test/', { by: 'agent', muRun: 'r1' });

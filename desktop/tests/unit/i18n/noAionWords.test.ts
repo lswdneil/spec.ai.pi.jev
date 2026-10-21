@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { SUPPORTED_LANGUAGES } from '@/common/config/i18n';
 
 /**
- * mu is its own app: no text it shows names AionUi, AionCore, Aionrs or Aion CLI. Text that arrives at run time
+ * spec.jev is its own app: no text it shows names AionUi, AionCore, Aionrs or Aion CLI. Text that arrives at run time
  * from the bundled backend is rewritten by `showAsMu` (tests/unit/kyrn/displayName.test.ts); these tests keep the
  * app's own copy clean, so the rewriter has nothing to do for it.
  */
@@ -54,7 +54,7 @@ const MAIN_PROCESS_FILES = [
  */
 const COMPATIBILITY_IDS = new Map<string, string>([['bundled-aioncore/', 'the folder the local service ships in']]);
 
-/** Log lines go to the log file, not to the screen: what they say is not checked here (they are tagged `[mu]`). */
+/** Log lines go to the log file, not to the screen: what they say is not checked here (they are tagged `[spec.jev]`). */
 function isLogCall(node: ts.Node): boolean {
   if (!ts.isCallExpression(node)) return false;
   const callee = node.expression.getText();
@@ -93,14 +93,14 @@ function aionLiterals(file: string): Array<{ line: number; text: string }> {
   return found;
 }
 
-describe('no Aion words in what mu shows', () => {
-  it('has none in any locale value, in each of the 13 languages', () => {
+describe('no Aion words in what spec.jev shows', () => {
+  it('has none in any locale value, in each of the 5 languages', () => {
     const languages = readdirSync(localeRoot, { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
       .toSorted();
     expect(languages).toEqual([...SUPPORTED_LANGUAGES].toSorted());
-    expect(languages).toHaveLength(13);
+    expect(languages).toHaveLength(5);
 
     const offenders: string[] = [];
     let checked = 0;

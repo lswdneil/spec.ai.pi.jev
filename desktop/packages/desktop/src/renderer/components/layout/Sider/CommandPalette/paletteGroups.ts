@@ -71,7 +71,7 @@ export type PaletteSources = {
   commands: readonly SlashCommandItem[];
   /** The conversations on the native host, while it is on: found by their title and by their folder's name. */
   nativeConversations?: readonly NativeConversation[];
-  /** Whether mu runs inside the app: the settings pages of the classic mode's own storage are then not offered. */
+  /** Whether spec.jev runs inside the app: the settings pages of the classic mode's own storage are then not offered. */
   native?: boolean;
   t: Translate;
   language: string;

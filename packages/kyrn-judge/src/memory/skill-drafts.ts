@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { redactSecrets } from "../redact.ts";
 
 /**
- * Skills mu drafted from runs, waiting for the user (kyrn/docs/features/procedures.md). Each draft is a folder
+ * Skills spec.jev drafted from runs, waiting for the user (kyrn/docs/features/procedures.md). Each draft is a folder
  * `<dir>/<name>/` with the `SKILL.md` that would be installed and a `draft.json` that says where it came from. A draft
  * is never loaded as a skill: only `accept` moves it where pi looks for skills.
  */

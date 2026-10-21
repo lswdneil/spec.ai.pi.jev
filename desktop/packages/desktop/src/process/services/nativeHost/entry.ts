@@ -1,5 +1,5 @@
 /**
- * The native host: one process per mu session that runs pi in-process, speaking pi's own RPC protocol with the app's
+ * The native host: one process per spec.jev session that runs pi in-process, speaking pi's own RPC protocol with the app's
  * main process (docs/native-host.md). The app starts it as an Electron utility process (`out/main/nativeHost.js`);
  * tests and scripts start the same file with Node's `child_process.fork`.
  *
@@ -83,7 +83,7 @@ function channel(): Channel {
   const port = (process as unknown as { parentPort?: ParentPort }).parentPort;
   if (port) return electronChannel(port);
   if (process.send) return nodeChannel();
-  process.stderr.write('The mu host needs a parent: an Electron utility process or child_process.fork\n');
+  process.stderr.write('The spec.jev host needs a parent: an Electron utility process or child_process.fork\n');
   process.exit(1);
 }
 
@@ -208,7 +208,7 @@ parent.onMessage((raw) => {
     if (deliver) deliver(message.json);
     else early.push(message.json);
   } else if (message.type === 'end') end();
-  else if (initialized) process.stderr.write('mu host: a second init is ignored\n');
+  else if (initialized) process.stderr.write('spec.jev host: a second init is ignored\n');
   else {
     initialized = true;
     void start(message);

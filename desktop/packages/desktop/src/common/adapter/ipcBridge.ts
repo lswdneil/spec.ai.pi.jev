@@ -158,7 +158,7 @@ export const shell = {
 
 /**
  * The backend's built-in assistants still name the upstream products in their names, descriptions, suggested prompts
- * and status texts; those are shown as mu (`withTextsAsMu`). Ids, rules and every other field stay as they came.
+ * and status texts; those are shown as spec.jev (`withTextsAsMu`). Ids, rules and every other field stay as they came.
  */
 const ASSISTANT_TEXTS = [
   'name',
@@ -886,7 +886,7 @@ export const fs = {
   deleteAssistantRule: httpDelete<boolean, { assistant_id: string }>(
     (p) => `/api/skills/assistant-rule/${p.assistant_id}`
   ),
-  /** The built-in skills' descriptions name the upstream products; they are shown as mu. Names are ids and stay. */
+  /** The built-in skills' descriptions name the upstream products; they are shown as spec.jev. Names are ids and stay. */
   listAvailableSkills: withResponseMap(
     httpGet<
       Array<{
@@ -1097,7 +1097,7 @@ export const mode = {
 export const acpConversation = {
   sendMessage: conversation.sendMessage,
   responseStream: conversation.responseStream,
-  /** Management view used by Agent settings. The built-in agent's name and status texts are shown as mu. */
+  /** Management view used by Agent settings. The built-in agent's name and status texts are shown as spec.jev. */
   getManagedAgents: withResponseMap(
     httpGet<import('@/renderer/utils/model/agentTypes').ManagedAgent[], void>('/api/agents/management'),
     (agents) =>
@@ -1497,7 +1497,7 @@ export const theme = {
 // ---------------------------------------------------------------------------
 
 /**
- * The main process shows text too (application menu, tray, update errors) and tells the mu harness the
+ * The main process shows text too (application menu, tray, update errors) and tells the spec.jev harness the
  * language, so it must follow the app language. Electron-only: a WebUI browser has no main process of its own, and an
  * invoke there would wait forever for a provider that does not exist.
  */

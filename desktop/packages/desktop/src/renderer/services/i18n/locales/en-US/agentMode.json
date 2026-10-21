@@ -23,8 +23,8 @@
   "switchPendingNextTurn": "Takes effect on the next turn",
   "switchFailed": "Couldn't switch mode",
   "descriptions": {
-    "full": "Runs everything without asking. Anything you've told mu not to do is still blocked.",
+    "full": "Runs everything without asking. Anything you've told spec.jev not to do is still blocked.",
     "jev": "Reads and edits inside the project go ahead. Jev decides on commands, changes outside the project and actions outside this computer, and asks you only when it's unsure.",
-    "ask": "Only reads go ahead. mu asks you before every edit, command and action outside this computer."
+    "ask": "Only reads go ahead. spec.jev asks you before every edit, command and action outside this computer."
   }
 }

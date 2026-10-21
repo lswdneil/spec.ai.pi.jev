@@ -145,14 +145,14 @@ describe('ipcBridge conversation adapter', () => {
   });
 });
 
-// The bundled backend still names the upstream products in the texts it serves; the app shows them as mu.
-describe('ipcBridge backend texts shown as mu', () => {
+// The bundled backend still names the upstream products in the texts it serves; the app shows them as spec.jev.
+describe('ipcBridge backend texts shown as spec.jev', () => {
   beforeEach(() => {
     httpBridgeMocks.calls.length = 0;
     httpBridgeMocks.responses.clear();
   });
 
-  it('shows the built-in assistants’ names, descriptions and prompts as mu, and keeps ids and rules', async () => {
+  it('shows the built-in assistants’ names, descriptions and prompts as spec.jev, and keeps ids and rules', async () => {
     httpBridgeMocks.responses.set('/api/assistants', [
       {
         id: 'aionui-assistant',
@@ -169,17 +169,17 @@ describe('ipcBridge backend texts shown as mu', () => {
     expect(await assistants.list.invoke()).toEqual([
       {
         id: 'aionui-assistant',
-        name: 'mu Butler',
-        name_i18n: { 'en-US': 'mu Butler', 'zh-CN': 'mu 管家' },
-        description: 'Helps you manage mu itself',
-        prompts: ['Open mu from my phone'],
+        name: 'spec.jev Butler',
+        name_i18n: { 'en-US': 'spec.jev Butler', 'zh-CN': 'spec.jev 管家' },
+        description: 'Helps you manage spec.jev itself',
+        prompts: ['Open spec.jev from my phone'],
         agent_id: '632f31d2',
         context: 'You are AionUi’s built-in butler.',
       },
     ]);
   });
 
-  it('shows an assistant’s profile and suggested prompts as mu and leaves its settings alone', async () => {
+  it('shows an assistant’s profile and suggested prompts as spec.jev and leaves its settings alone', async () => {
     const defaults = { model: { mode: 'auto' } };
     httpBridgeMocks.responses.set('/api/assistants/aionui-assistant?locale=zh-CN', {
       id: 'aionui-assistant',
@@ -193,13 +193,13 @@ describe('ipcBridge backend texts shown as mu', () => {
 
     expect(detail).toMatchObject({
       id: 'aionui-assistant',
-      profile: { name: 'mu 管家', description: '管理 mu 本身', avatar: 'aion.svg' },
-      prompts: { recommended: ['把 mu 的日志给我看看'] },
+      profile: { name: 'spec.jev 管家', description: '管理 spec.jev 本身', avatar: 'aion.svg' },
+      prompts: { recommended: ['把 spec.jev 的日志给我看看'] },
     });
     expect((detail as unknown as { defaults: unknown }).defaults).toBe(defaults);
   });
 
-  it('shows the built-in agent and its check messages as mu, and keeps its backend id', async () => {
+  it('shows the built-in agent and its check messages as spec.jev, and keeps its backend id', async () => {
     httpBridgeMocks.responses.set('/api/agents/management', [
       {
         id: '632f31d2',
@@ -217,19 +217,19 @@ describe('ipcBridge backend texts shown as mu', () => {
         name: 'mu',
         backend: 'aionrs',
         agent_source: 'internal',
-        last_check_error_message: 'Internal mu does not support overrides',
+        last_check_error_message: 'Internal spec.jev does not support overrides',
       },
     ]);
   });
 
-  it('shows skill descriptions as mu and keeps skill names, which are ids', async () => {
+  it('shows skill descriptions as spec.jev and keeps skill names, which are ids', async () => {
     httpBridgeMocks.responses.set('/api/skills', [
       { name: 'aionui-config', description: 'Manage AionUi configuration', source: 'builtin' },
     ]);
     const { fs } = await import('@/common/adapter/ipcBridge');
 
     expect(await fs.listAvailableSkills.invoke()).toEqual([
-      { name: 'aionui-config', description: 'Manage mu configuration', source: 'builtin' },
+      { name: 'aionui-config', description: 'Manage spec.jev configuration', source: 'builtin' },
     ]);
   });
 });

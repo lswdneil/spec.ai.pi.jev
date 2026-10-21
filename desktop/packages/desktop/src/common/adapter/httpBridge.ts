@@ -94,7 +94,7 @@ export class BackendHttpError extends Error {
   readonly code: string;
   /**
    * Backend-provided human message from `ErrorResponse.error`, or the raw body when parse failed. It is shown as it
-   * came, so the upstream product names in it are shown as mu (`showAsMu`), as they are in `message`; the raw body
+   * came, so the upstream product names in it are shown as spec.jev (`showAsMu`), as they are in `message`; the raw body
    * stays in `body`.
    */
   readonly backendMessage: string;

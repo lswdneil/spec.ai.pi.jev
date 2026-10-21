@@ -153,7 +153,7 @@ describe('reconcileGeneratingFromRuntime', () => {
     expect(result.current.isConversationGenerating('conv-d')).toBe(false);
   });
 
-  // The board switch sends `/board on` as a message and mu answers it in a few milliseconds: the turn's frames and
+  // The board switch sends `/board on` as a message and spec.jev answers it in a few milliseconds: the turn's frames and
   // turn.completed came before the send response, whose summary (taken at acceptance) still said `is_processing`. The
   // row then kept spinning until the next turn ended (the live log of 2026-09-23 10:23:42, 335 s).
   it('keeps the spinner out when the send response of a turn that already ended comes last', async () => {

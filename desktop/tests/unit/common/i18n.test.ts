@@ -12,14 +12,14 @@ describe('i18n', () => {
     it('passes through exact supported tags', () => {
       expect(normalizeLanguageCode('en-US')).toBe('en-US');
       expect(normalizeLanguageCode('zh-CN')).toBe('zh-CN');
-      expect(normalizeLanguageCode('de-DE')).toBe('de-DE');
-      expect(normalizeLanguageCode('fa-IR')).toBe('fa-IR');
+      expect(normalizeLanguageCode('ja-JP')).toBe('ja-JP');
+      expect(normalizeLanguageCode('ko-KR')).toBe('ko-KR');
     });
 
     it('normalizes underscores to hyphens', () => {
-      expect(normalizeLanguageCode('de_DE')).toBe('de-DE');
-      expect(normalizeLanguageCode('fa_IR')).toBe('fa-IR');
-      expect(normalizeLanguageCode('pt_BR')).toBe('pt-BR');
+      expect(normalizeLanguageCode('zh_CN')).toBe('zh-CN');
+      expect(normalizeLanguageCode('ja_JP')).toBe('ja-JP');
+      expect(normalizeLanguageCode('ko_KR')).toBe('ko-KR');
     });
 
     it('resolves base language codes to their supported region', () => {
@@ -36,19 +36,12 @@ describe('i18n', () => {
       expect(normalizeLanguageCode('zh-SG')).toBe('zh-CN');
       expect(normalizeLanguageCode('ja')).toBe('ja-JP');
       expect(normalizeLanguageCode('ko')).toBe('ko-KR');
-      expect(normalizeLanguageCode('tr')).toBe('tr-TR');
-      expect(normalizeLanguageCode('ru')).toBe('ru-RU');
-      expect(normalizeLanguageCode('uk')).toBe('uk-UA');
-      expect(normalizeLanguageCode('pt')).toBe('pt-BR');
-      expect(normalizeLanguageCode('de')).toBe('de-DE');
-      expect(normalizeLanguageCode('es')).toBe('es-ES');
-      expect(normalizeLanguageCode('fr')).toBe('fr-FR');
-      expect(normalizeLanguageCode('fa')).toBe('fa-IR');
     });
 
-    it('resolves German regional variants to de-DE', () => {
-      expect(normalizeLanguageCode('de-AT')).toBe('de-DE');
-      expect(normalizeLanguageCode('de-CH')).toBe('de-DE');
+    it('falls back to the default language for a language the app no longer ships', () => {
+      expect(normalizeLanguageCode('de-DE')).toBe(DEFAULT_LANGUAGE);
+      expect(normalizeLanguageCode('fr')).toBe(DEFAULT_LANGUAGE);
+      expect(normalizeLanguageCode('fa-IR')).toBe(DEFAULT_LANGUAGE);
     });
 
     it('falls back to the default language for unsupported codes', () => {

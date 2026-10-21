@@ -1,12 +1,12 @@
 /**
- * mu's permission question in the reader's language. mu writes the card in Chinese or English only; beside it the
- * bridge puts mu's codes (`rawInput.mu`: what kind of call, why mu asks, what makes a command risky) and names the
- * answers by id (`mu:once`, `mu:session`, `mu:deny`). A code this app does not know keeps mu's own sentence.
+ * spec.jev's permission question in the reader's language. spec.jev writes the card in Chinese or English only; beside it the
+ * bridge puts spec.jev's codes (`rawInput.spec.jev`: what kind of call, why spec.jev asks, what makes a command risky) and names the
+ * answers by id (`mu:once`, `mu:session`, `mu:deny`). A code this app does not know keeps spec.jev's own sentence.
  * The contract is the harness's kyrn/docs/features/presentation-codes.md (permissions.request).
  */
 
 type Translate = (key: string, options?: Record<string, unknown>) => string;
-/** Whether the app has a wording for a key; without one the card keeps mu's own sentence. */
+/** Whether the app has a wording for a key; without one the card keeps spec.jev's own sentence. */
 type Has = (key: string) => boolean;
 
 type MuPermissionCodes = { kind?: string; reason?: string; flagCode?: string; grantLabel?: string };
@@ -57,20 +57,20 @@ function readCodes(rawInput: unknown): MuPermissionCodes | undefined {
 }
 
 export type MuPermissionWording = {
-  /** What mu wants to do, or undefined to keep mu's title. */
+  /** What spec.jev wants to do, or undefined to keep spec.jev's title. */
   title?: string;
-  /** Why it asks, or undefined to keep mu's reason. */
+  /** Why it asks, or undefined to keep spec.jev's reason. */
   description?: string;
-  /** An answer's name by its option id, or undefined for an option that is not one of mu's answers. */
+  /** An answer's name by its option id, or undefined for an option that is not one of spec.jev's answers. */
   answer: (optionId: string) => string | undefined;
   /**
    * What an answer decided about the call (`summary`, the command or path it names), said on the card once the answer
-   * went through; undefined for an option that is not one of mu's answers.
+   * went through; undefined for an option that is not one of spec.jev's answers.
    */
   decided: (optionId: string, summary: string | undefined) => string | undefined;
 };
 
-/** The card's wording from mu's codes, or undefined when the card has none (another agent, or an older mu). */
+/** The card's wording from spec.jev's codes, or undefined when the card has none (another agent, or an older spec.jev). */
 export function muPermissionWording(rawInput: unknown, t: Translate, has: Has): MuPermissionWording | undefined {
   const codes = readCodes(rawInput);
   if (!codes) return undefined;

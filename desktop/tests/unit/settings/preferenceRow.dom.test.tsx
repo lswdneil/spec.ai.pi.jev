@@ -22,11 +22,11 @@ describe('a settings row', () => {
           <Button size='small'>Clear</Button>
         </PreferenceRow>
         <PreferenceRow label='Start on boot'>
-          <Switch aria-label='Open mu at login' />
+          <Switch aria-label='Open spec.jev at login' />
         </PreferenceRow>
       </>
     );
     expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
-    expect(screen.getByRole('switch', { name: 'Open mu at login' })).toBeInTheDocument();
+    expect(screen.getByRole('switch', { name: 'Open spec.jev at login' })).toBeInTheDocument();
   });
 });

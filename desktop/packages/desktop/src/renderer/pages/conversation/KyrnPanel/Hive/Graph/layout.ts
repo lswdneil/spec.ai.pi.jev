@@ -1,5 +1,5 @@
 /**
- * Where the map puts things, in pixels of the stage it is drawn on. The bees stand on a ring around the centre (mu,
+ * Where the map puts things, in pixels of the stage it is drawn on. The bees stand on a ring around the centre (spec.jev,
  * for a delegate run): one or two of them face each other across it, three or more are spread at equal distances
  * along it, from the top, clockwise. The ring is as wide as the stage allows and as tall as the bees need: it grows
  * downwards until no two of their boxes (avatar, name, status, counts) touch, so eight fit a 360px stage and twelve
@@ -16,9 +16,9 @@ const MARGIN = 28;
 const NODE_GAP = 8;
 const MIN_STAGE = 200;
 const SAMPLES = 720;
-/** The radius of mu's own node at the centre of a delegate run's map. */
+/** The radius of spec.jev's own node at the centre of a delegate run's map. */
 export const HOME_RADIUS = 18;
-/** Between the words under the top bee and mu's node: room for the line between them. */
+/** Between the words under the top bee and spec.jev's node: room for the line between them. */
 const HOME_CLEARANCE = 40;
 
 export type RingLayout = {
@@ -73,7 +73,7 @@ function crowded(points: readonly Point[]): boolean {
 }
 
 /**
- * `home`: mu's node stands at the centre (a delegate run), so the ring is tall enough for the words under the top bee
+ * `home`: spec.jev's node stands at the centre (a delegate run), so the ring is tall enough for the words under the top bee
  * to end above it, with room for the line between them.
  */
 export function ringLayout(names: readonly string[], stageWidth: number, home = false): RingLayout {
@@ -99,7 +99,7 @@ export function ringLayout(names: readonly string[], stageWidth: number, home = 
 /**
  * Where a line leaves a node, on the ray from the avatar's centre towards the other end: at the avatar's edge, or,
  * when the ray would run down through the words under the avatar, at the edge of the node's box instead, so that a
- * line never crosses its own node's words. mu's node at the centre is a circle.
+ * line never crosses its own node's words. spec.jev's node at the centre is a circle.
  */
 function edge(from: Point, toward: Point, home: boolean, gap: number): Point {
   const dx = toward.x - from.x;

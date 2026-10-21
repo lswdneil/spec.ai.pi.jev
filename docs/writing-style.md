@@ -1,6 +1,6 @@
 # Writing style
 
-How mu talks in English: the README, the docs, the command line, the desktop app and the kernel's messages. The goal is
+How spec.jev talks in English: the README, the docs, the command line, the desktop app and the kernel's messages. The goal is
 text a native-speaking engineer reads without noticing it, and a Hacker News reader trusts.
 
 ## Voice
@@ -20,9 +20,9 @@ text a native-speaking engineer reads without noticing it, and a Hacker News rea
 - Sentence case for every label, button, heading and menu item: "Default model", not "Default Model".
 - Buttons are verbs: "Sign in", "Add provider", "Turn on". Not "OK" when a verb fits.
 - Prefer common phrasal verbs: set up, turn on/off, sign in/out, look up, roll back.
-- Address the reader as "you". mu is "mu" (lowercase, even at the start of a sentence), never "we" in the product.
+- Address the reader as "you". spec.jev is "spec.jev" (lowercase, even at the start of a sentence), never "we" in the product.
   The docs may say "we" for the authors.
-- Avoid noun stacks and "the X of the Y of the Z". Avoid cleft sentences ("What mu does is..."). Avoid starting with
+- Avoid noun stacks and "the X of the Y of the Z". Avoid cleft sentences ("What spec.jev does is..."). Avoid starting with
   "Left to...", "Each one...", "Everything that...". Avoid "one" as a pronoun.
 - One idea per sentence; one sentence per hint or tooltip where possible.
 - Errors say what happened and what to do next: "Couldn't reach OpenRouter. Check your network or proxy, then try
@@ -32,7 +32,7 @@ text a native-speaking engineer reads without noticing it, and a Hacker News rea
 - Lists: parallel grammar. No serial (Oxford) comma unless a list would be ambiguous without it.
 - American spelling: "behavior", "color", "canceled", "license" (noun and verb).
 - Keep code, commands, paths, keys and identifiers in backticks in docs and as-is in the UI: `/permissions`,
-  `~/.mu/agent/mu.json`, `tool.risk`.
+  `~/.spec.jev/agent/spec.jev.json`, `tool.risk`.
 
 ## Words
 
@@ -40,17 +40,17 @@ Product terms. Use these spellings and meanings everywhere; don't invent synonym
 
 | Term | Meaning | Notes |
 | --- | --- | --- |
-| mu | The product: the CLI and the desktop app. | Lowercase. "μ" only as the logo. |
+| spec.jev | The product: the CLI and the desktop app. | Lowercase. "μ" only as the logo. |
 | judge | A small, fast model that answers one bounded question. | Not "judger", "arbiter", "classifier" (a classifier is one kind of judge). |
 | Jev | The hosted judge. | A name; never "the Jev". |
 | Laya | The local judge. | |
-| decision point | A place in the agent loop where mu asks the judge. | Written as an id in code font: `tool.risk`. Not "judgment point", "hook". |
+| decision point | A place in the agent loop where spec.jev asks the judge. | Written as an id in code font: `tool.risk`. Not "judgment point", "hook". |
 | verdict | The judge's answer at a decision point. | Not "judgment", "ruling", "result". |
 | ledger | The local log of every verdict. | |
-| kernel | mu's judgment layer as a whole. | "judgment kernel" on first mention. |
+| kernel | spec.jev's judgment layer as a whole. | "judgment kernel" on first mention. |
 | active / shadow / off | A decision point's mode. | Shadow: asked and logged, changes nothing. |
 | lesson | A remembered rule or correction. | Not "memory", "experience". |
-| task frame | The goal, your constraints and the acceptance criteria mu keeps for a task. | |
+| task frame | The goal, your constraints and the acceptance criteria spec.jev keeps for a task. | |
 | board | The plain-language progress board. | "the board" after first mention. |
 | hive, bee | A group of read-only investigator subagents and one member. | Keep the metaphor light. |
 | subagent | A helper agent the main agent starts. | One word. Not "sub-agent", "helper". |
@@ -67,10 +67,10 @@ Product terms. Use these spellings and meanings everywhere; don't invent synonym
 | There is nothing to show. | Nothing here yet. |
 | Line 3 is not in the right form. | Line 3 isn't valid. Expected `NAME=value`. |
 | is everything wired up: judge, model, browser, sub-agents | check that the judge, model, browser and subagents are set up |
-| the task as mu holds it | the current task: goal, constraints and checklist |
+| the task as spec.jev holds it | the current task: goal, constraints and checklist |
 | /swarm stop [name] has it report now | /swarm stop [name] asks it to report now |
 | Left to the big model, they cost tokens, latency and attention. | Handing these to the main model costs tokens, time and focus. |
-| mu stopped in the middle of the turn. | mu stopped mid-turn. Send your message again to retry. |
+| spec.jev stopped in the middle of the turn. | spec.jev stopped mid-turn. Send your message again to retry. |
 
 ## Where the strings live
 

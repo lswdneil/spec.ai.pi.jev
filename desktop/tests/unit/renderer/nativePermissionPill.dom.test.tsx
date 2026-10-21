@@ -44,7 +44,7 @@ const pill = (mode?: string) =>
   );
 
 describe('the permission pill of a native conversation', () => {
-  it('names mu’s default mode while the conversation has none of its own', async () => {
+  it('names spec.jev’s default mode while the conversation has none of its own', async () => {
     bridge.settings.mockResolvedValue({ ok: true, data: { permissions: { mode: 'full', from: 'picked' } } });
     pill();
     await waitFor(() => expect(shown()).toHaveTextContent(`Permission · ${enAgentMode.full}`));
@@ -59,7 +59,7 @@ describe('the permission pill of a native conversation', () => {
     expect(shown()).toHaveTextContent(`Permission · ${enAgentMode.ask}`);
   });
 
-  it('says mu’s default when the default cannot be read', async () => {
+  it('says spec.jev’s default when the default cannot be read', async () => {
     bridge.settings.mockResolvedValue({ ok: false, error: 'no' });
     pill();
     await waitFor(() => expect(bridge.settings).toHaveBeenCalled());

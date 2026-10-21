@@ -645,7 +645,7 @@ describe("Codex rollouts", () => {
 	});
 });
 
-describe("importing into mu's sessions", () => {
+describe("importing into spec.jev's sessions", () => {
 	function stores() {
 		const dir = temp();
 		const claudeProjects = join(dir, "claude", "projects");
@@ -797,7 +797,7 @@ describe("importing into mu's sessions", () => {
 	});
 });
 
-describe("mu import on the command line", () => {
+describe("spec.jev import on the command line", () => {
 	it("runs on a bare Node: lists as JSON, imports, and refuses a second import", () => {
 		const dir = temp();
 		const claudeHome = join(dir, "claude");

@@ -1,5 +1,5 @@
 // @ts-check
-// A first start on the native host (on by default): mu has no provider and no default model, as on a computer that
+// A first start on the native host (on by default): spec.jev has no provider and no default model, as on a computer that
 // has never signed in. A conversation can be made and opened; its message is not answered, and the screen says why and
 // leads to the page where a model is set up (the guide's job): the host is `needs-model`, not a failure, and it stays
 // so. Run with `bun run e2e:conversation --native` (every native*.spec.mjs).
@@ -27,8 +27,8 @@ const {
   newConversation,
 } = createNativeWorld({ desktopRoot });
 
-test('with no model, mu starts, says it has none, and the card leads to where one is set up', async () => {
-  // The world gives mu the fake model: a first start has none.
+test('with no model, spec.jev starts, says it has none, and the card leads to where one is set up', async () => {
+  // The world gives spec.jev the fake model: a first start has none.
   rmSync(join(paths().agentDir, 'models.json'), { force: true });
   rmSync(join(paths().agentDir, 'settings.json'), { force: true });
   await start();
@@ -40,7 +40,7 @@ test('with no model, mu starts, says it has none, and the card leads to where on
   await box.click();
   await box.fill('E2E:PLAIN hello');
   await p.getByTestId('native-send').click();
-  // Sending starts mu, which finds no model.
+  // Sending starts spec.jev, which finds no model.
   await expect(p.getByTestId('native-needs-model')).toBeVisible({ timeout: 60_000 });
   await expect(p.getByTestId('native-header-phase')).toHaveAttribute('data-phase', 'needs-model');
   await expect(p.getByTestId('native-model-chip')).toHaveAttribute('data-model', '');

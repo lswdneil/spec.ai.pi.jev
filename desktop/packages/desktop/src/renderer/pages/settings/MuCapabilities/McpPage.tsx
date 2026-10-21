@@ -16,10 +16,10 @@ import Count from './Count';
 import { useMuList } from './useMuList';
 
 /**
- * The MCP page while mu runs inside the app (the tools page of the rail): the servers mu uses in every conversation, a
- * group for each place they are defined (mu's own configuration, Claude Code, Cursor, Codex), each with its switch.
- * A server is added to mu's `mcp.json` as `mu mcp add` adds it; one of mu's own can be removed. A server taken over is
- * switched off in mu.json, never in the other tool's file; one switched off in that file, or one mu cannot speak to,
+ * The MCP page while spec.jev runs inside the app (the tools page of the rail): the servers spec.jev uses in every conversation, a
+ * group for each place they are defined (spec.jev's own configuration, Claude Code, Cursor, Codex), each with its switch.
+ * A server is added to spec.jev's `mcp.json` as `spec.jev mcp add` adds it; one of spec.jev's own can be removed. A server taken over is
+ * switched off in mu.json, never in the other tool's file; one switched off in that file, or one spec.jev cannot speak to,
  * says so instead of offering a switch. Nothing is started from here: a change applies to the next conversation.
  */
 export default function MuMcpPage() {

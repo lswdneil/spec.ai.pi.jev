@@ -65,13 +65,13 @@
   "more": "More",
   "refresh": "Refresh",
   "readOnly": "Read-only",
-  "tray.showWindow": "Show mu",
+  "tray.showWindow": "Show spec.jev",
   "tray.newChat": "New conversation",
   "tray.closeToTray": "Minimize to tray",
-  "tray.hideToMenuBar": "Hide mu",
-  "tray.about": "About mu",
-  "tray.restart": "Restart mu",
-  "tray.quit": "Quit mu",
+  "tray.hideToMenuBar": "Hide spec.jev",
+  "tray.about": "About spec.jev",
+  "tray.restart": "Restart spec.jev",
+  "tray.quit": "Quit spec.jev",
   "tray.pauseAll": "Pause all tasks",
   "tray.checkUpdate": "Check for updates…",
   "tray.recentChats": "Recent conversations",
@@ -79,39 +79,39 @@
   "backendStartup": {
     "incompatibleRuntime": {
       "title": "This system isn't supported",
-      "description": "mu opened, but its local service can't run on this Linux version. Upgrade to a supported Linux distribution, then restart mu.",
+      "description": "spec.jev opened, but its local service can't run on this Linux version. Upgrade to a supported Linux distribution, then restart spec.jev.",
       "requiredVersions": "Required runtime symbols: {{versions}}"
     },
     "incompleteInstallation": {
-      "title": "The mu installation is incomplete",
-      "description": "This installation is missing required files, so mu's local service can't start. Download and reinstall the latest version of mu. If the problem returns after reinstalling, check whether security or antivirus software quarantined mu's files.",
+      "title": "The spec.jev installation is incomplete",
+      "description": "This installation is missing required files, so spec.jev's local service can't start. Download and reinstall the latest version of spec.jev. If the problem returns after reinstalling, check whether security or antivirus software quarantined spec.jev's files.",
       "downloadLatest": "Download latest version",
-      "runtimeComponentDescription": "This installation is missing required runtime components, so {{resource}} can't start. Reinstall the latest version of mu. If it still happens after reinstalling, check whether security or antivirus software quarantined mu's components."
+      "runtimeComponentDescription": "This installation is missing required runtime components, so {{resource}} can't start. Reinstall the latest version of spec.jev. If it still happens after reinstalling, check whether security or antivirus software quarantined spec.jev's components."
     },
     "packageArchitectureMismatch": {
-      "title": "Wrong mu package for this Mac",
-      "description": "This mu package is for {{packageArch}}, but this Mac is {{deviceArch}}. Download and install the {{expectedArch}} package instead."
+      "title": "Wrong spec.jev package for this Mac",
+      "description": "This spec.jev package is for {{packageArch}}, but this Mac is {{deviceArch}}. Download and install the {{expectedArch}} package instead."
     },
     "dataMigration": {
       "title": "Couldn't migrate local data",
-      "description": "mu opened, but its local service stopped while setting up local data. Reinstalling mu probably won't fix this. The app log shows where the database migration stopped."
+      "description": "spec.jev opened, but its local service stopped while setting up local data. Reinstalling spec.jev probably won't fix this. The app log shows where the database migration stopped."
     },
     "databaseNewerThanApp": {
-      "title": "A newer version of mu is required",
-      "description": "Your local data was created by a newer version of mu, and this version can't open it. Update mu to the latest version to continue — your data is intact, and no reinstall or data reset is needed.",
-      "descriptionWithVersion": "Your local data was created by a version of mu newer than the one installed now (v{{currentVersion}}), so this version can't open it. Update mu to the latest version to continue — your data is intact, and no reinstall or data reset is needed."
+      "title": "A newer version of spec.jev is required",
+      "description": "Your local data was created by a newer version of spec.jev, and this version can't open it. Update spec.jev to the latest version to continue — your data is intact, and no reinstall or data reset is needed.",
+      "descriptionWithVersion": "Your local data was created by a version of spec.jev newer than the one installed now (v{{currentVersion}}), so this version can't open it. Update spec.jev to the latest version to continue — your data is intact, and no reinstall or data reset is needed."
     },
     "localDataRepair": {
       "title": "Couldn't repair local data",
-      "description": "mu opened, but its local service stopped while preparing local data such as assistant and agent records. Reinstalling mu probably won't fix this. The app log shows which data couldn't be prepared."
+      "description": "spec.jev opened, but its local service stopped while preparing local data such as assistant and agent records. Reinstalling spec.jev probably won't fix this. The app log shows which data couldn't be prepared."
     },
     "startupDirectory": {
       "title": "Startup folder unavailable",
-      "description": "mu opened, but its local service couldn't start because the configured work or log folder is missing, unavailable or blocked by permissions. Check that these folders exist and are writable, then restart mu."
+      "description": "spec.jev opened, but its local service couldn't start because the configured work or log folder is missing, unavailable or blocked by permissions. Check that these folders exist and are writable, then restart spec.jev."
     },
     "recoverableDatabaseCorruption": {
       "title": "Local data is corrupted",
-      "description": "mu's local database is corrupted, so startup can't continue. mu can back up the old database and create a new one to finish starting. Past conversations won't be shown, but the old database is kept as a backup file.",
+      "description": "spec.jev's local database is corrupted, so startup can't continue. spec.jev can back up the old database and create a new one to finish starting. Past conversations won't be shown, but the old database is kept as a backup file.",
       "confirmRebuild": "Back up and rebuild database",
       "rebuildFailed": "Couldn't back up and rebuild the database",
       "confirmDialog": {
@@ -122,8 +122,8 @@
       }
     },
     "transientConcurrentStartup": {
-      "title": "mu is starting up",
-      "description": "Another instance of mu was still using the local data when this window opened. This is temporary and your data is safe — no reinstall is needed. Wait a moment and try again, or restart mu."
+      "title": "spec.jev is starting up",
+      "description": "Another instance of spec.jev was still using the local data when this window opened. This is temporary and your data is safe — no reinstall is needed. Wait a moment and try again, or restart spec.jev."
     },
     "pendingSlow": {
       "title": "Starting up",
@@ -164,12 +164,12 @@
   "selectedSkills": "Selected skills",
   "aiAssistant": "AI assistant",
   "kyrn": {
-    "settings": "mu settings",
+    "settings": "spec.jev settings",
     "judge": "Judge configuration",
     "reload": "Reload",
-    "starting": "Starting mu…",
+    "starting": "Starting spec.jev…",
     "startingHint": "Connecting to the local service and loading your model and judge settings.",
-    "startupError": "mu couldn't start",
+    "startupError": "spec.jev couldn't start",
     "hiveView": {
       "title": "Hive",
       "agents": "Subagents",
@@ -200,7 +200,7 @@
       "lineDelivery_other": "{{from}} → {{to}}: {{count}} deliveries",
       "lineCorrection": "{{from}} corrected a finding from {{to}}",
       "lineConflict": "{{from}} and {{to}} disagree",
-      "lineReport": "{{from}} reported back to mu",
+      "lineReport": "{{from}} reported back to spec.jev",
       "deliveries": "Information flow",
       "noDeliveries": "No confirmed deliveries yet.",
       "board": "Shared findings",
@@ -218,7 +218,7 @@
       "assistant": "Bee message",
       "thinking": "Thinking",
       "user": "Task input",
-      "custom": "Message from mu",
+      "custom": "Message from spec.jev",
       "tool": "Tool",
       "waitingOutput": "Waiting for the tool to finish.",
       "noText": "No text output.",
@@ -310,7 +310,7 @@
         "unknown": "Outcome unknown"
       },
       "actions": {
-        "toRuntime": "Verdict passed to mu. This doesn't confirm the action finished.",
+        "toRuntime": "Verdict passed to spec.jev. This doesn't confirm the action finished.",
         "observeOnly": "Shadow mode: logged for comparison. This verdict changes nothing.",
         "useDefault": "Fell back to this decision point's default. A fallback isn't permission to proceed: risk checks and hive gates default to the cautious side.",
         "lateIgnored": "The turn had already started; this late verdict didn't change it.",
@@ -1089,7 +1089,7 @@
       "switch": "Plain-language board for this project",
       "switching": "Switching…",
       "afterTurn": "Switches when the agent finishes this step",
-      "unknown": "No board in this conversation yet. Conversations with mu get one while the plain-language board is on in Settings → Core features.",
+      "unknown": "No board in this conversation yet. Conversations with spec.jev get one while the plain-language board is on in Settings → Core features.",
       "off": "When it's on, this shows in plain words how the work is going, what the agent is doing now and what needs you.",
       "cost": "For this project only. Each update costs one model call.",
       "empty": "Give the agent a moment; this will show in plain words how it's going.",
@@ -1164,11 +1164,11 @@
         "helpers_back_other": "{{count, number}} subagents reported back",
         "permission_allowed": "You allowed: {{summary}}",
         "permission_denied": "You didn't allow: {{summary}}",
-        "goal_round": "The goal isn't met yet; mu sent it back to work (round {{round, number}}){{reason}}",
+        "goal_round": "The goal isn't met yet; spec.jev sent it back to work (round {{round, number}}){{reason}}",
         "goal_met": "Goal met: {{text}}",
         "goal_paused": "The goal is paused{{reason}}",
-        "trouble_loop": "mu noticed it repeating the same step: {{detail}}",
-        "trouble": "mu noticed: {{detail}}",
+        "trouble_loop": "spec.jev noticed it repeating the same step: {{detail}}",
+        "trouble": "spec.jev noticed: {{detail}}",
         "did": "Used {{tool}}: {{what}}",
         "said_quote": "It said: {{text}}",
         "ended": "Stopped.",
@@ -1209,7 +1209,7 @@
       "retireConfirm": "Retire this lesson? It won't be recalled again.",
       "loadFailed": "Couldn't load lessons",
       "saveFailed": "Couldn't save the lesson",
-      "empty": "No lessons for this project yet. mu learns them from your corrections, from workarounds it finds and from /remember.",
+      "empty": "No lessons for this project yet. spec.jev learns them from your corrections, from workarounds it finds and from /remember.",
       "noneActive": "No lessons in use. Choose All to see retired and replaced ones.",
       "noMatch": "No matching lessons.",
       "noProject": "This conversation has no project folder, so only lessons for all projects are shown.",
@@ -1273,12 +1273,12 @@
       "setUp": "Set up a judge",
       "skipped": "Classification skipped",
       "off": "Classification is off",
-      "firstHint": "This line is the judge's verdict: the judge sorts each message first, then mu decides what to do. Every verdict is listed under Judge on the right."
+      "firstHint": "This line is the judge's verdict: the judge sorts each message first, then spec.jev decides what to do. Every verdict is listed under Judge on the right."
     },
     "eventLine": {
       "judgeNotice": {
-        "freeJev": "No Jev key is set, so mu is using Jev's free tier on OpenCode Zen",
-        "freeJevUnavailable": "Jev's free tier stopped answering, so mu's default rules decide until you add a Jev key"
+        "freeJev": "No Jev key is set, so spec.jev is using Jev's free tier on OpenCode Zen",
+        "freeJevUnavailable": "Jev's free tier stopped answering, so spec.jev's default rules decide until you add a Jev key"
       },
       "detail": "Details: {{detail}}",
       "progress": {
@@ -1300,12 +1300,12 @@
           "idle": "the agent ended {{count}} runs in a row without doing anything",
           "idle_one": "the agent ended {{count}} run without doing anything",
           "idle_other": "the agent ended {{count}} runs in a row without doing anything",
-          "noProgress": "no progress in {{count}} runs in a row; tell mu how to continue",
-          "noProgress_one": "no progress in {{count}} run; tell mu how to continue",
-          "noProgress_other": "no progress in {{count}} runs in a row; tell mu how to continue",
-          "noProgressDetail": "no progress in {{count}} runs in a row ({{detail}}); tell mu how to continue",
-          "noProgressDetail_one": "no progress in {{count}} run ({{detail}}); tell mu how to continue",
-          "noProgressDetail_other": "no progress in {{count}} runs in a row ({{detail}}); tell mu how to continue",
+          "noProgress": "no progress in {{count}} runs in a row; tell spec.jev how to continue",
+          "noProgress_one": "no progress in {{count}} run; tell spec.jev how to continue",
+          "noProgress_other": "no progress in {{count}} runs in a row; tell spec.jev how to continue",
+          "noProgressDetail": "no progress in {{count}} runs in a row ({{detail}}); tell spec.jev how to continue",
+          "noProgressDetail_one": "no progress in {{count}} run ({{detail}}); tell spec.jev how to continue",
+          "noProgressDetail_other": "no progress in {{count}} runs in a row ({{detail}}); tell spec.jev how to continue",
           "continuationsUsedUp": "the limit of {{count}} continuations was reached",
           "continuationsUsedUp_one": "the limit of {{count}} continuation was reached",
           "continuationsUsedUp_other": "the limit of {{count}} continuations was reached",
@@ -1327,18 +1327,18 @@
       "mcp": {
         "line": "{{name}}: {{reason}}",
         "projectUntrusted": "this project isn't trusted, and the server is defined by the project",
-        "needsApproval": "it's defined by the project ({{source}}) and hasn't been approved; open this folder in mu and allow it once, or define it in mu.json",
+        "needsApproval": "it's defined by the project ({{source}}) and hasn't been approved; open this folder in spec.jev and allow it once, or define it in spec.jev.json",
         "needsSignIn": "it needs a sign-in first: run /mcp login {{server}}",
         "denied": "you didn't allow this project's server to start",
         "unreachable": "it couldn't be started or reached",
-        "closed": "its connection closed while mu was still waiting for an answer",
+        "closed": "its connection closed while spec.jev was still waiting for an answer",
         "timeout": "it didn't respond in time",
         "aborted": "the start was canceled",
         "rpc": "it returned an error",
         "protocol": "it responded with something other than the MCP protocol",
         "startFailed": "it couldn't be started",
-        "disconnected": "its connection dropped; mu reconnects on the next call",
-        "crashedRestarting": "it crashed while running; mu restarts it once",
+        "disconnected": "its connection dropped; spec.jev reconnects on the next call",
+        "crashedRestarting": "it crashed while running; spec.jev restarts it once",
         "crashedAgain": "it crashed again and won't be restarted",
         "restartFailed": "it crashed, and the restart failed too",
         "restartFailedCause": "it crashed, and the restart failed too: {{cause}}"
@@ -1396,7 +1396,7 @@
       },
       "injection": {
         "withheld": "{{tool}}: withheld {{withheld}} of {{total}} passages because they carried instructions aimed at the agent",
-        "byRules": "the judge didn't answer, so mu's rules decided",
+        "byRules": "the judge didn't answer, so spec.jev's rules decided",
         "excerpt": "begins: {{text}}"
       }
     },
@@ -1405,7 +1405,7 @@
       "contextHint": "The model's next input fills {{percent}} of its context window",
       "cache": "Cache hits",
       "cacheHint": "Cache hits: {{turn}} in the latest turn, {{session}} across the whole conversation",
-      "pending": "Shown after mu's next reply"
+      "pending": "Shown after spec.jev's next reply"
     },
     "roles": {
       "browser": "browser",
@@ -1418,7 +1418,7 @@
     "kernel": {
       "free": "free",
       "local": "local",
-      "judgeHint": "The judge that answers mu's decision points. Click to change it.",
+      "judgeHint": "The judge that answers spec.jev's decision points. Click to change it.",
       "points": "{{active}}/{{total}} decision points active",
       "shadow_one": "· {{count}} in shadow",
       "shadow_other": "· {{count}} in shadow",
@@ -1433,7 +1433,7 @@
       "kernel": "Judgment kernel",
       "judgeReady": "{{judge}} is ready",
       "judgeOff": "Judging is off",
-      "title": "What should mu work on?"
+      "title": "What should spec.jev work on?"
     }
   },
   "menu": {
@@ -1527,12 +1527,12 @@
   },
   "nodeRuntime": {
     "title": "Download Node.js?",
-    "message": "mu runs agents and tools with its own copy of Node.js, which isn't downloaded yet.",
-    "detail": "Node.js {{version}} (about {{size}} MB) will be downloaded from nodejs.org and unpacked into:\n{{folder}}\n\nIf you choose Later, nothing is downloaded. mu opens as usual, tells you where Node.js is needed and asks again the next time it starts.",
+    "message": "spec.jev runs agents and tools with its own copy of Node.js, which isn't downloaded yet.",
+    "detail": "Node.js {{version}} (about {{size}} MB) will be downloaded from nodejs.org and unpacked into:\n{{folder}}\n\nIf you choose Later, nothing is downloaded. spec.jev opens as usual, tells you where Node.js is needed and asks again the next time it starts.",
     "download": "Download",
     "later": "Later",
-    "note": "Node.js isn't downloaded, so this agent can't run. mu will ask again the next time it starts.",
-    "toolNote": "Node.js isn't downloaded, so tools that need it can't run. mu will ask again the next time it starts."
+    "note": "Node.js isn't downloaded, so this agent can't run. spec.jev will ask again the next time it starts.",
+    "toolNote": "Node.js isn't downloaded, so tools that need it can't run. spec.jev will ask again the next time it starts."
   },
   "firstHint": {
     "close": "Got it"

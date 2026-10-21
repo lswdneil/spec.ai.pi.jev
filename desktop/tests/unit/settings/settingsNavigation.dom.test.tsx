@@ -41,7 +41,7 @@ vi.mock('@/common/kyrn/bridge', () => ({
   },
 }));
 
-// Whether mu runs inside the app, as the main process answered: the classic mode unless a test says otherwise.
+// Whether spec.jev runs inside the app, as the main process answered: the classic mode unless a test says otherwise.
 const native = vi.hoisted(() => ({ on: false as boolean | undefined }));
 vi.mock('@/renderer/pages/native/hooks/useNativeConversations', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/renderer/pages/native/hooks/useNativeConversations')>()),
@@ -261,7 +261,7 @@ describe('the settings rail', () => {
     expect(here()).toHaveAttribute('data-path', '/settings/ext/ext-after');
   });
 
-  it('while mu runs inside the app, has no assistants page and names the tools page after the MCP servers', () => {
+  it('while spec.jev runs inside the app, has no assistants page and names the tools page after the MCP servers', () => {
     native.on = true;
     const { container } = renderRail();
     expect(groupRows(container).capabilities).toEqual(['skills', 'tools', 'browser']);
@@ -381,7 +381,7 @@ describe('links to settings pages that no longer exist', () => {
     ]);
   });
 
-  it('sends mu’s old sections, and the pages that were folded into others, to their own page again', () => {
+  it('sends spec.jev’s old sections, and the pages that were folded into others, to their own page again', () => {
     const cases: [string, string][] = [
       ['/settings/kyrn', '/settings/providers'],
       ['/settings/kyrn/models', '/settings/providers'],
@@ -424,7 +424,7 @@ describe('links to settings pages that no longer exist', () => {
     expect(retiredSettingsTarget('/settings/nothing-like-it', '?x=1')).toBe(`${SETTINGS_HOME}?x=1`);
   });
 
-  it('sends a link to the assistants or to one of the app’s skills to mu’s skills while mu runs inside the app', () => {
+  it('sends a link to the assistants or to one of the app’s skills to spec.jev’s skills while spec.jev runs inside the app', () => {
     native.on = true;
     const page = (text: string) => preloadablePage(() => Promise.resolve({ default: () => <p>{text}</p> }));
     const routes = (path: string, state?: unknown) =>
@@ -449,10 +449,10 @@ describe('links to settings pages that no longer exist', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('draws the page of the mode: mu’s own page while mu runs inside the app, the classic page otherwise', async () => {
+  it('draws the page of the mode: spec.jev’s own page while spec.jev runs inside the app, the classic page otherwise', async () => {
     const page = (text: string) => preloadablePage(() => Promise.resolve({ default: () => <p>{text}</p> }));
     const classic = page('classic page');
-    const own = page('mu page');
+    const own = page('spec.jev page');
     const draw = () =>
       render(
         <MemoryRouter>
@@ -461,7 +461,7 @@ describe('links to settings pages that no longer exist', () => {
       );
     native.on = true;
     draw();
-    expect(await screen.findByText('mu page')).toBeInTheDocument();
+    expect(await screen.findByText('spec.jev page')).toBeInTheDocument();
     expect(screen.queryByText('classic page')).not.toBeInTheDocument();
     cleanup();
     native.on = false;
@@ -542,7 +542,7 @@ describe('the rail’s search', () => {
     expect(readSettings).toHaveBeenCalledTimes(1);
   });
 
-  it('finds neither the hidden page nor the image generation while mu runs inside the app, but mu’s MCP servers', () => {
+  it('finds neither the hidden page nor the image generation while spec.jev runs inside the app, but spec.jev’s MCP servers', () => {
     native.on = true;
     const { container } = renderRail();
     fireEvent.change(box(), { target: { value: 'settings.assistants' } });

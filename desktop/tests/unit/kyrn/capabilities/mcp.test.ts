@@ -1,7 +1,7 @@
 /**
- * The MCP page reads the servers mu uses from mu's own configuration and the tools it takes them over from, by the
- * harness's rules, and writes only mu's own files. Nothing is connected. Every home here is a temporary folder: never
- * the real ~/.mu, ~/.claude.json, ~/.cursor or ~/.codex.
+ * The MCP page reads the servers spec.jev uses from spec.jev's own configuration and the tools it takes them over from, by the
+ * harness's rules, and writes only spec.jev's own files. Nothing is connected. Every home here is a temporary folder: never
+ * the real ~/.spec.jev, ~/.claude.json, ~/.cursor or ~/.codex.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -116,14 +116,14 @@ const summary = (h: McpRoots) =>
       `${server.source}:${server.name}:${server.on ? 'on' : 'off'}${server.lock ? `:${server.lock}` : ''}${server.removable ? ':removable' : ''}`
   );
 
-describe('the MCP servers mu uses', () => {
-  it('lists mu’s own, then those taken over, the first of a name winning and mcp.json over all', () => {
+describe('the MCP servers spec.jev uses', () => {
+  it('lists spec.jev’s own, then those taken over, the first of a name winning and mcp.json over all', () => {
     const h = everywhere();
     expect(summary(h)).toEqual([
       'mu:docs:on:removable',
       'mu:files:off:removable',
       'mu:notes:on:removable',
-      // Switched off in mu.json, which is mu's own: it keeps its switch.
+      // Switched off in mu.json, which is spec.jev's own: it keeps its switch.
       'claude:github:off',
       'codex:search:on',
       'mu:paused:off:removable',
@@ -144,7 +144,7 @@ describe('the MCP servers mu uses', () => {
     expect(JSON.stringify(list)).not.toContain('SECRET');
   });
 
-  it('follows mu.json: no MCP feature leaves pi’s servers alone, no inheritance leaves mu’s own', () => {
+  it('follows mu.json: no MCP feature leaves pi’s servers alone, no inheritance leaves spec.jev’s own', () => {
     const h = everywhere();
     h.write(h.muFile, { features: { mcp: false }, mcp: { servers: { notes: { command: 'notes-server' } } } });
     expect(listMcpServers(h)).toMatchObject({ feature: false });
@@ -192,7 +192,7 @@ describe('the MCP servers mu uses', () => {
 });
 
 describe('adding a server', () => {
-  it('writes it to mcp.json as `mu mcp add` does, keeping the rest of the file and its indentation', () => {
+  it('writes it to mcp.json as `spec.jev mcp add` does, keeping the rest of the file and its indentation', () => {
     const h = home();
     h.write(
       h.piFile,
@@ -222,7 +222,7 @@ describe('adding a server', () => {
     );
   });
 
-  it('refuses a name mu has (also with - for _), a name pi cannot take, and a server that cannot work', async () => {
+  it('refuses a name spec.jev has (also with - for _), a name pi cannot take, and a server that cannot work', async () => {
     const h = everywhere();
     expect(await failure(() => addMcpServer(h, { name: 'docs', command: 'x', args: [], env: {} }))).toEqual({
       code: 'mcpExists',
@@ -253,7 +253,7 @@ describe('adding a server', () => {
     expect(
       await failure(() => addMcpServer(h, { name: 'web', url: 'https://x.example.com', headers: { 'X\nY': 'v' } }))
     ).toMatchObject({ params: { field: 'headers' } });
-    // A server taken over may get a definition of mu's own: that one is used instead.
+    // A server taken over may get a definition of spec.jev's own: that one is used instead.
     const after = addMcpServer(h, { name: 'search', command: 'my-search', args: [], env: {} });
     expect(after.servers.filter((server) => server.name === 'search').map((server) => server.source)).toEqual(['mu']);
   });
@@ -270,7 +270,7 @@ describe('adding a server', () => {
 });
 
 describe('removing and switching', () => {
-  it('removes mu’s own servers from the file that defines them, and refuses one taken over', async () => {
+  it('removes spec.jev’s own servers from the file that defines them, and refuses one taken over', async () => {
     const h = everywhere();
     removeMcpServer(h, 'files');
     removeMcpServer(h, 'notes');

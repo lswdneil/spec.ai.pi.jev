@@ -21,7 +21,7 @@ import { openExternalUrl } from '@/renderer/utils/platform';
 import enMu from '@/renderer/services/i18n/locales/en-US/mu.json';
 import zhMu from '@/renderer/services/i18n/locales/zh-CN/mu.json';
 
-// The mu bridge's notices (a `mu:notice:` tool call with the code in its input) are one line in the reader's language.
+// The spec.jev bridge's notices (a `mu:notice:` tool call with the code in its input) are one line in the reader's language.
 
 vi.mock('@/renderer/utils/platform', () => ({ openExternalUrl: vi.fn(async () => {}) }));
 
@@ -60,7 +60,7 @@ describe('the bridge’s notices', () => {
   });
 
   it('has a line in every language for every notice the bridge sends', () => {
-    // `to_model` (what mu told the model) comes from a native conversation's view, not from the bridge.
+    // `to_model` (what spec.jev told the model) comes from a native conversation's view, not from the bridge.
     expect([...MU_NOTICE_CODES].filter((code) => code !== 'to_model').toSorted()).toEqual(
       Object.keys(MU_NOTICES).toSorted()
     );
@@ -102,7 +102,7 @@ describe('the bridge’s notices', () => {
     zh.unmount();
     const en = show('en', lost);
     expect(screen.getByTestId('mu-notice')).toHaveTextContent(
-      "mu didn't receive your answer, so it continued as if you had declined."
+      "spec.jev didn't receive your answer, so it continued as if you had declined."
     );
     en.unmount();
     show('zh', notice({ title: 'Something new', raw_input: { notice: 'newer' } }));
@@ -153,8 +153,8 @@ const showNotice = (lng: 'zh' | 'en', message: IMessageAcpToolCall) => {
   );
 };
 
-/** mu's own line for a session without checkpoints, already in the app's language: the bridge's title. */
-const MU_WORDS = 'mu: checkpoints are off, because this folder has more than 5000 files to snapshot.';
+/** spec.jev's own line for a session without checkpoints, already in the app's language: the bridge's title. */
+const MU_WORDS = 'spec.jev: checkpoints are off, because this folder has more than 5000 files to snapshot.';
 const checkpoint = (input: Record<string, unknown>) =>
   notice({ title: MU_WORDS, raw_input: { notice: 'checkpoint_off', ...input } });
 
@@ -162,7 +162,7 @@ const checkpoint = (input: Record<string, unknown>) =>
 const placeholders = (text: string) => [...text.matchAll(/\{\{(\w+)\}\}/g)].map((match) => match[1]).toSorted();
 
 describe('checkpoints that are off', () => {
-  it('reads mu’s reason and the numbers it names, as the bridge sent them or as the relay passed them on', () => {
+  it('reads spec.jev’s reason and the numbers it names, as the bridge sent them or as the relay passed them on', () => {
     expect(muNotice(checkpoint({ code: 'too_many_files', params: { limit: 5000, folder: '/Users/x' } }))).toEqual({
       code: 'checkpoint_off',
       title: MU_WORDS,
@@ -178,7 +178,7 @@ describe('checkpoints that are off', () => {
     });
   });
 
-  it('words a reason it knows, with its numbers, and leaves the rest to mu’s own line', () => {
+  it('words a reason it knows, with its numbers, and leaves the rest to spec.jev’s own line', () => {
     const words = (input: Record<string, unknown>) => checkpointOffWords(muNotice(checkpoint(input))!);
     expect(words({ code: 'too_slow', params: { seconds: 5 } })).toEqual({
       key: 'mu.notices.checkpointOffWhy.tooSlow',
@@ -188,7 +188,7 @@ describe('checkpoints that are off', () => {
       key: 'mu.notices.checkpointOffWhy.developerToolsMissing',
       values: {},
     });
-    // Its number did not come, or a newer mu has a reason this build has no words for.
+    // Its number did not come, or a newer spec.jev has a reason this build has no words for.
     expect(words({ code: 'too_many_files', params: {} })).toBeUndefined();
     expect(words({ code: 'disk_full', params: {} })).toBeUndefined();
   });
@@ -210,7 +210,7 @@ describe('checkpoints that are off', () => {
     }
   });
 
-  it('says why in the reader’s language, numbers written their way, and mu’s own line for a reason it does not know', () => {
+  it('says why in the reader’s language, numbers written their way, and spec.jev’s own line for a reason it does not know', () => {
     const files = showNotice('zh', checkpoint({ code: 'too_many_files', params: { limit: 5000 } }));
     expect(screen.getByTestId('mu-notice')).toHaveTextContent(
       zhMu.notices.checkpointOffWhy.tooManyFiles.replace('{{limit}}', '5,000')
@@ -223,7 +223,7 @@ describe('checkpoints that are off', () => {
     const unknown = showNotice('en', checkpoint({ code: 'disk_full', params: {} }));
     expect(screen.getByTestId('mu-notice')).toHaveTextContent(MU_WORDS);
     unknown.unmount();
-    // No words of mu's at all: the plain sentence.
+    // No words of spec.jev's at all: the plain sentence.
     showNotice('zh', notice({ title: '', raw_input: { notice: 'checkpoint_off', code: 'disk_full' } }));
     expect(screen.getByTestId('mu-notice')).toHaveTextContent(zhMu.notices.checkpointOff);
   });
@@ -231,15 +231,15 @@ describe('checkpoints that are off', () => {
 
 describe('the free Jev', () => {
   it('says the free Jev answers, and why it stopped, in the reader’s language', () => {
-    const free = showNotice('zh', notice({ title: 'mu: no key', raw_input: { notice: 'free_jev', params: {} } }));
+    const free = showNotice('zh', notice({ title: 'spec.jev: no key', raw_input: { notice: 'free_jev', params: {} } }));
     expect(screen.getByTestId('mu-notice')).toHaveTextContent(zhMu.notices.freeJev);
     expect(screen.getByTestId('mu-notice')).toHaveAttribute('data-code', 'free_jev');
     free.unmount();
     const stopped = (code?: string) =>
-      notice({ title: 'mu: it stopped', raw_input: { notice: 'free_jev_unavailable', ...(code ? { code } : {}) } });
+      notice({ title: 'spec.jev: it stopped', raw_input: { notice: 'free_jev_unavailable', ...(code ? { code } : {}) } });
     expect(muNotice(stopped('gone'))).toEqual({
       code: 'free_jev_unavailable',
-      title: 'mu: it stopped',
+      title: 'spec.jev: it stopped',
       reason: 'gone',
     });
     const gone = showNotice('en', stopped('gone'));
@@ -248,20 +248,20 @@ describe('the free Jev', () => {
     const paid = showNotice('zh', stopped('paid'));
     expect(screen.getByTestId('mu-notice')).toHaveTextContent(zhMu.notices.freeJevUnavailable.paid);
     paid.unmount();
-    // A reason this build has no words for is said in mu's own.
+    // A reason this build has no words for is said in spec.jev's own.
     showNotice('en', stopped('newer'));
-    expect(screen.getByTestId('mu-notice')).toHaveTextContent('mu: it stopped');
+    expect(screen.getByTestId('mu-notice')).toHaveTextContent('spec.jev: it stopped');
   });
 });
 
-describe('a stopped reply, and what mu notified', () => {
+describe('a stopped reply, and what spec.jev notified', () => {
   it('ends a stopped reply with a line that says so', () => {
     showNotice('zh', notice({ title: MU_NOTICES.stopped, raw_input: { notice: 'stopped' } }));
     expect(screen.getByTestId('mu-notice')).toHaveTextContent(zhMu.notices.stopped);
     expect(screen.getByTestId('mu-notice')).toHaveAttribute('data-code', 'stopped');
   });
 
-  it('shows what mu notified as mu wrote it, with its level, and no reply text', () => {
+  it('shows what spec.jev notified as spec.jev wrote it, with its level, and no reply text', () => {
     expect(muNotice(notice({ title: 'Permissions: full access', raw_input: { level: 'info' } }))).toEqual({
       title: 'Permissions: full access',
       level: 'info',
@@ -270,16 +270,16 @@ describe('a stopped reply, and what mu notified', () => {
     expect(muNotice(notice({ title: 'x', raw_input: { level: 'debug' } }))).toEqual({ title: 'x' });
     showNotice(
       'en',
-      notice({ title: 'mu could not save a checkpoint.\nIt goes on without one.', raw_input: { level: 'warning' } })
+      notice({ title: 'spec.jev could not save a checkpoint.\nIt goes on without one.', raw_input: { level: 'warning' } })
     );
     const line = screen.getByTestId('mu-notice');
     expect(line).toHaveAttribute('data-level', 'warning');
     expect(line).toHaveAttribute('data-code', '');
-    expect(line.textContent).toBe('mu could not save a checkpoint.\nIt goes on without one.');
+    expect(line.textContent).toBe('spec.jev could not save a checkpoint.\nIt goes on without one.');
   });
 });
 
-describe('what mu told the model', () => {
+describe('what spec.jev told the model', () => {
   it('is one line in the reader’s language, and the words the model got are a click away', () => {
     const sent = 'You edited a.ts and nothing has run since. Verify the change.';
     showNotice('zh', notice({ title: sent, rawInput: { notice: 'to_model', kind: 'kyrn.nudge', text: sent } }));

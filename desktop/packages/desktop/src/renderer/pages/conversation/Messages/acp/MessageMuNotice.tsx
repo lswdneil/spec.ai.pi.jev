@@ -35,9 +35,9 @@ function Mark({ notice }: { notice: MuNotice }) {
 }
 
 /**
- * A notice of the mu bridge as one line in the reader's language, such as an answer to mu's question that did not reach
- * it. Quiet like Jev's lines, with a mark: it says what mu did in the person's place, or what the person has to do
- * (ending with the page to do it on). What mu notified itself (a command's answer, a warning) is shown as mu wrote it,
+ * A notice of the spec.jev bridge as one line in the reader's language, such as an answer to spec.jev's question that did not reach
+ * it. Quiet like Jev's lines, with a mark: it says what spec.jev did in the person's place, or what the person has to do
+ * (ending with the page to do it on). What spec.jev notified itself (a command's answer, a warning) is shown as spec.jev wrote it,
  * line breaks kept.
  */
 export default function MessageMuNotice({ notice }: { notice: MuNotice }) {
@@ -46,8 +46,8 @@ export default function MessageMuNotice({ notice }: { notice: MuNotice }) {
 }
 
 /**
- * What mu told the model, as one quiet line in the reader's language: the reminder to finish a turn, the errors an edit
- * left, a rule, a rewind. The words the model got are one click away, as mu wrote them; they are not mu's reply.
+ * What spec.jev told the model, as one quiet line in the reader's language: the reminder to finish a turn, the errors an edit
+ * left, a rule, a rewind. The words the model got are one click away, as spec.jev wrote them; they are not spec.jev's reply.
  */
 function ToModelLine({ notice }: { notice: MuNotice }) {
   const { t } = useTranslation();
@@ -94,7 +94,7 @@ function NoticeLine({ notice }: { notice: MuNotice }) {
     );
     text = words ? t(words.key, values) : notice.title || t(MU_NOTICE_KEYS.checkpoint_off);
   } else if (notice.code === 'free_jev_unavailable') {
-    // A reason this build has no words for is said in mu's own.
+    // A reason this build has no words for is said in spec.jev's own.
     const key = notice.reason ? FREE_JEV_UNAVAILABLE_KEYS[notice.reason] : undefined;
     text = key ? t(key) : notice.title || t(MU_NOTICE_KEYS.free_jev_unavailable);
   } else text = notice.code ? t(MU_NOTICE_KEYS[notice.code]) : notice.title;

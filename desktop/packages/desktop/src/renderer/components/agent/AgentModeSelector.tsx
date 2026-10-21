@@ -263,7 +263,7 @@ const AgentModeSelector: React.FC<AgentModeSelectorProps> = ({
                 ) : null}
               </span>
               {mode.description ? (
-                // mu's modes are described in the app's language; the backend's words are for the others.
+                // spec.jev's modes are described in the app's language; the backend's words are for the others.
                 <Tooltip
                   content={t(`agentMode.descriptions.${mode.value}`, { defaultValue: mode.description })}
                   position='right'

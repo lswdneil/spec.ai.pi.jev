@@ -82,7 +82,7 @@ describe('Laya on Windows and Linux, where the app runs the ONNX model itself', 
     bridge.localJudgeState.mockResolvedValue(onnx());
     const view = await panel();
     await waitFor(() => expect(view).toHaveTextContent('about 681 MB'));
-    expect(view).toHaveTextContent("mu doesn't download it for you");
+    expect(view).toHaveTextContent("spec.jev doesn't download it for you");
     expect(view).toHaveTextContent(`Model folder: ${FOLDER}`);
     // Every file is missing: no list of five names, the folder says it.
     expect(view).not.toHaveTextContent('Still missing');
@@ -133,7 +133,7 @@ describe('Laya on Windows and Linux, where the app runs the ONNX model itself', 
       onnx({ installed: true, model: { folder: FOLDER, missing: [], wrong: [] } })
     );
     const view = await panel();
-    await waitFor(() => expect(view).toHaveTextContent('mu starts it automatically when the app opens'));
+    await waitFor(() => expect(view).toHaveTextContent('spec.jev starts it automatically when the app opens'));
     expect(within(view).getByTestId('mu-laya-start')).toBeInTheDocument();
     expect(within(view).queryByTestId('mu-laya-model')).not.toBeInTheDocument();
   });

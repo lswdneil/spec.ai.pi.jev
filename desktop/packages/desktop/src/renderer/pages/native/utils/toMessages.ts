@@ -1,14 +1,14 @@
 /**
  * A native conversation's view (common/utils/nativeHost/view.ts) as the rows the conversation's message list shows
  * (`TMessage`, the rows AionCore stores for a conversation), so the list and its row components are the ones every
- * conversation uses. Each row is shaped as the mu bridge's rows are (process/agent/kyrn/events.ts, KyrnAgent.ts):
+ * conversation uses. Each row is shaped as the spec.jev bridge's rows are (process/agent/kyrn/events.ts, KyrnAgent.ts):
  *
- * - the person's messages and mu's text as `text` rows (with the images the person sent as themselves), mu's thinking
+ * - the person's messages and spec.jev's text as `text` rows (with the images the person sent as themselves), spec.jev's thinking
  *   as `thinking` rows;
  * - a tool call as the `acp_tool_call` the bridge sends, its result or latest output as its content;
  * - Jev's verdict on a message as the `jev:` line under it, and Jev at work on the next one as a pending `jev:` line;
- * - what mu notified, a stopped reply, a reply that came after failed attempts, a place where the conversation was
- *   compacted, and what mu told the model (its `kyrn.*` messages) as `mu:notice:` lines;
+ * - what spec.jev notified, a stopped reply, a reply that came after failed attempts, a place where the conversation was
+ *   compacted, and what spec.jev told the model (its `kyrn.*` messages) as `mu:notice:` lines;
  * - a failed request as the `tips` error the bridge's turn error becomes, in the bridge's fixed English, which the
  *   tips row words in the reader's language.
  *
@@ -61,11 +61,11 @@ export const MODEL_FAILED = 'Model request failed';
 const STOPPED_TITLE = 'You stopped this reply.';
 /** pi's words when a command needs bash on Windows and finds none (the bridge's `bashMissing`). */
 const NO_BASH = /No bash shell found/;
-const BASH_MISSING_TITLE = 'mu needs Git for Windows to run commands.';
+const BASH_MISSING_TITLE = 'spec.jev needs Git for Windows to run commands.';
 
 /**
- * mu's own messages to the model (`kyrn.nudge`, `kyrn.goal`, …) and the note at the top of an imported conversation
- * (`mu.import`): a line that says what mu did, not a reply.
+ * spec.jev's own messages to the model (`kyrn.nudge`, `kyrn.goal`, …) and the note at the top of an imported conversation
+ * (`mu.import`): a line that says what spec.jev did, not a reply.
  */
 const TO_MODEL = /^(kyrn\.|mu\.import$)/;
 
@@ -279,7 +279,7 @@ function assistantRows(message: ViewAssistantMessage, context: Context): TMessag
   return rows;
 }
 
-/** What mu notified, as the bridge shows it: its own words, or a notice of its own by code (checkpoints, the free Jev). */
+/** What spec.jev notified, as the bridge shows it: its own words, or a notice of its own by code (checkpoints, the free Jev). */
 function noticeOf(conversationId: string, notice: ViewNotice, at: number): IMessageAcpToolCall {
   const input: Record<string, unknown> = notice.code
     ? { notice: notice.code, ...(notice.reason ? { code: notice.reason } : {}), params: notice.params ?? {} }

@@ -15,15 +15,15 @@ The native host is what a new conversation runs on. `MU_NATIVE_HOST` has three s
 | Setting                                     | The native host                                                                                             |
 | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `0`, `false`, `off`, `no` (the kill switch) | Off. Every provider of the bridge but `enabled` answers `off`; every conversation is AionCore's.            |
-| unset (`auto`)                              | On when the mu found on this machine can run inside the app (`nativeHostReady`), else off, with a log line. |
-| `1`, `true`, `on`, `yes`                    | On whatever mu is found. A mu too old for it fails where it is used, with its own error (`old-harness`).    |
+| unset (`auto`)                              | On when the spec.jev found on this machine can run inside the app (`nativeHostReady`), else off, with a log line. |
+| `1`, `true`, `on`, `yes`                    | On whatever spec.jev is found. A spec.jev too old for it fails where it is used, with its own error (`old-harness`).    |
 
-Problem: the packaged app carries its own mu (`<resources>/harness/mu-agent`), and until a mu with the native seam
+Problem: the packaged app carries its own spec.jev (`<resources>/harness/spec.jev`), and until a spec.jev with the native seam
 (`planHost`, `prepareLaunch`, `entryId` on messages) is released and bundled, that copy cannot run a host. With the
 host on by default, every conversation of such an app would have started, then failed with `old-harness`. Solution: in
 `auto`, the main process asks once at start-up whether a host could start (`checkHost`: the launcher loads, has both
-functions, and accepts a plan; nothing is written and no judge starts), and answers `enabled` from that. An older mu
-leaves the sidebar without the native group and the home page on AionCore, with `[mu] the native host stays off: …` in
+functions, and accepts a plan; nothing is written and no judge starts), and answers `enabled` from that. An older spec.jev
+leaves the sidebar without the native group and the home page on AionCore, with `[spec.jev] the native host stays off: …` in
 the log. This is not optional complexity: without it the default would break every packaged app that is not rebuilt in
 step with the harness.
 
@@ -40,7 +40,7 @@ The app should run the agent itself, the way the Claude and Codex apps do, inste
 one message crosses four processes and three protocols:
 
 ```text
-renderer ⇄ AionCore (Rust, owns conversations) ⇄ ACP adapter (process/agent/kyrn) ⇄ mu --mode rpc (pi + Jev)
+renderer ⇄ AionCore (Rust, owns conversations) ⇄ ACP adapter (process/agent/kyrn) ⇄ spec.jev --mode rpc (pi + Jev)
                                                                      events.jsonl ⇠ status piggyback (Jev)
 ```
 
@@ -82,10 +82,10 @@ behavior is unchanged.
 ### How a host starts
 
 1. `startNativeHost({ cwd, session? })` checks the flag, finds the harness as the rest of the app does
-   (`KYRN_ROOT` / `MU_ROOT` / `../KYRN` in dev, `resources/harness/mu-agent` packaged), and runs `prepareHost`. The
+   (`KYRN_ROOT` / `MU_ROOT` / `../KYRN` in dev, `resources/harness/spec.jev` packaged), and runs `prepareHost`. The
    launcher plans `{ module, execArgv, args, env }` exactly as for the command line: same files, settings, sign-ins,
    `.env` keys. `argv` is `--mode rpc` plus `--session <file or id>` to resume.
-2. `utilityProcess.fork(entry, [], { env: { ...systemProxyEnv(), ...plan.env }, cwd, stdio: 'pipe', serviceName: 'mu' })`.
+2. `utilityProcess.fork(entry, [], { env: { ...systemProxyEnv(), ...plan.env }, cwd, stdio: 'pipe', serviceName: 'spec.jev' })`.
 3. The manager posts `init { module, args, execArgv }`, then a `get_state` (id `h1`). Records that arrive before pi
    listens wait in the host.
 4. The host applies `execArgv` itself (see below), imports pi's module, calls `setupCli()`, posts `ready { importMs }`
@@ -116,7 +116,7 @@ package's plan has no options.
 - `respondToDialog(id, { value } | { confirmed } | { cancelled: true })`.
 - `state`: `idle → starting → running | needs-model → stopped`, or `failed` with a `NativeHostError` whose `kind` says
   why: `no-models`, `failed` (stopped before pi wrote anything) or `crashed` (stopped after). Its exit code and the last
-  8 KB of the host's output come with it; pi's `[mu] …` log lines go to the app's log as they come. Commands reject
+  8 KB of the host's output come with it; pi's `[spec.jev] …` log lines go to the app's log as they come. Commands reject
   with `closed`, `timeout` or `command`; `startNativeHost` throws `off`, `no-harness`, `old-harness` (a launcher
   without `planHost`) or `plan` before there is a host.
 - `timings`: fork, pi imported (and the host's own `importMs`), first record, first `get_state` answer.
@@ -163,7 +163,7 @@ type NativeView = {
 | Test                                                          | What it covers                                                                                                                                                                                                                                                                                |
 | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `tests/unit/process/services/nativeHost/reducer.test.ts` (27) | The recorded conversation, plus hand-written records for what the fake model cannot produce (thinking, redacted thinking, errors, retries, compaction, late judgments, dialogs outside a run, custom messages, branches).                                                                     |
-| `…/fixtures/record.mjs`                                       | Records the fixtures from a real host (Node fork, mu checkout, E2E fake model, mock judge in shadow mode): `E2E:PLAIN`, `E2E:WRITE`, `E2E:BASH`, a bash command mu asks about (answered "Allow once"), and `E2E:SLOW` aborted mid-stream. 211 records, a 46-entry session file, 20 judgments. |
+| `…/fixtures/record.mjs`                                       | Records the fixtures from a real host (Node fork, spec.jev checkout, E2E fake model, mock judge in shadow mode): `E2E:PLAIN`, `E2E:WRITE`, `E2E:BASH`, a bash command spec.jev asks about (answered "Allow once"), and `E2E:SLOW` aborted mid-stream. 211 records, a 46-entry session file, 20 judgments. |
 | `…/nativeHost.test.ts` (25), `…/launch.test.ts` (8)           | The manager against a child the test plays: pairing, order, deadlines, crash and early-exit errors with the output's tail, `needs-model`, dispose and kill; the launcher calls and the utility-process fork.                                                                                  |
 | `tests/integration/nativeHost/nativeHost.test.ts` (3)         | A real host under Node: a turn whose live view equals its session file's view, a host without a model, dispose mid-turn. Skips without a harness that plans hosts, on Windows, and without Node ≥ 22.19.                                                                                      |
 | `scripts/kyrn/host-spike/measure-host.mjs`                    | Real Electron utility processes, below.                                                                                                                                                                                                                                                       |
@@ -195,8 +195,8 @@ three hosts per entry. Times in ms from `startNativeHost`; "cold" is the first h
 - **Dock:** LaunchServices listed 271 apps before, 272 with Electron's main process (listed as `Foreground`, the
   control), still 272 while each host ran, 271 after. The host (`Electron Helper --type=utility`, a helper app with
   `LSUIElement`) was never listed. Earlier runs the same day gave the same +1 / +0 pattern.
-- **Package layout** (`dist/bundle/index.js`): not checked. No staged mu-agent package with the new pi exists on this
-  machine: the checkout has no bundle, there is no `resources/harness`, and the installed app's mu-agent 0.1.5 has no
+- **Package layout** (`dist/bundle/index.js`): not checked. No staged spec.jev package with the new pi exists on this
+  machine: the checkout has no bundle, there is no `resources/harness`, and the installed app's spec.jev 0.1.5 has no
   `planHost`.
 
 ## Milestone 2, the main process's side: native conversations
@@ -213,7 +213,7 @@ and what the main process pushes (`records`, `status`, `replaced`, `changed`).
 | `packages/desktop/src/process/bridge/nativeBridge.ts`        | `initNativeBridge` (in `initAllBridges`): the providers, what they refuse (`invalid`), failures as `{ ok: false, kind, message, stderr? }`, the quit.     |
 | `…/services/nativeHost/conversations/NativeConversations.ts` | The registry: ids and drafts, the list, the idle policy and the host cap, removal, the quit.                                                              |
 | `…/conversations/Conversation.ts`                            | One conversation: its host, the held view and `seq`, session changes, dialogs that time out, the model search, the locked-store retry.                    |
-| `…/conversations/branch.ts`, `modelSearch.ts`, `hostEnv.ts`  | Whether pi's branch went on in a straight line; the CLI bridge's model search; mu's environment for a conversation.                                       |
+| `…/conversations/branch.ts`, `modelSearch.ts`, `hostEnv.ts`  | Whether pi's branch went on in a straight line; the CLI bridge's model search; spec.jev's environment for a conversation.                                       |
 | `…/services/nativeHost/sessions/`                            | Without pi: where the sessions are (`folders.ts`), the list from the files (`SessionStore.ts`, `summary.ts`), a file read into a view (`readSession.ts`). |
 
 ### Conversations and their ids
@@ -248,13 +248,13 @@ are kept by size and time, so an open followed by a start reads the file once.
   when pi resumed it, fold the records that came meanwhile, then send the whole view (`replaced`) and the status
   (`running`, or `needs-model` and the model search). An `open` while a host starts waits for that view.
 - The environment, as the CLI bridge gives it (`KyrnAgent.ts`): `MU_DESKTOP_SESSION` (an `n-<uuid>` per conversation,
-  which never changes; mu's browser bridge looks the conversation up by it), `MU_LANG` (read at each start), and
-  `MU_PERMISSIONS`: the mode `create` named, then the mode mu last announced (`permissions.mode`), for a restart. The
+  which never changes; spec.jev's browser bridge looks the conversation up by it), `MU_LANG` (read at each start), and
+  `MU_PERMISSIONS`: the mode `create` named, then the mode spec.jev last announced (`permissions.mode`), for a restart. The
   system proxy is added by the utility-process fork, as in M1.
 - **Lifetime.** A host ends after 10 minutes without a record or a call (`IDLE_MS`), never during a run, a dialog, a
   compaction, a command or a check. At most 4 run (`MAX_LIVE_HOSTS`); a start ends the least recently used idle ones
   first and never a busy one, so more run while more are busy. `close` ends one, `remove` ends it and moves the session
-  file to the bin (only a file in mu's session folders; `invalid` otherwise), the app's quit ends all (it waits up to
+  file to the bin (only a file in spec.jev's session folders; `invalid` otherwise), the app's quit ends all (it waits up to
   5 s). The next command starts it again with `--session <file>`.
 - A host that stops unasked gives `status { failed, error: { kind: crashed | failed | no-models, message, stderr } }`,
   `changed` (`live: false`) and the saved session's view (`replaced`). A start that fails before there is a host
@@ -267,18 +267,18 @@ are kept by size and time, so an open followed by a start reads the file once.
   `seq`; the renderer folds only records above it.
 - Left out: the answers of commands that only read (`get_entries`, `get_tree`, `get_messages`, `get_fork_messages`,
   `get_available_models`, `get_available_thinking_levels`, `get_commands`, `get_last_assistant_text`, `export_html`),
-  whose data is the call's answer; and a prompt pi refused because another mu held the model store (proper-lockfile's
+  whose data is the call's answer; and a prompt pi refused because another spec.jev held the model store (proper-lockfile's
   `ELOCKED`), which is sent again after 1.5 s and 3 s. `get_state` answers do go out: the view reads the session's
   model and context from them.
 - A dialog's answer goes to pi and out as an `extension_ui_response`, so every window closes it. pi stops waiting on a
   dialog when its `timeout` passes, takes the default and says nothing; the conversation then sends the same record
   with `cancelled: true`.
-- mu's notices are pi's own records (`notify` requests, the `checkpoint.off` frame); the view folds them. The main
+- spec.jev's notices are pi's own records (`notify` requests, the `checkpoint.off` frame); the view folds them. The main
   process adds none (it did at first; the view's fold would have shown each twice).
 
 ### Session changes
 
-pi can move to another session, or move the leaf of its branch, without a command from the app: mu's `/clear`, an
+pi can move to another session, or move the leaf of its branch, without a command from the app: spec.jev's `/clear`, an
 import, a checkpoint rewind. So after each run (`agent_settled`) and each prompt that starts with `/`, the conversation
 asks `get_state` and `get_entries { since: <the leaf the view shows> }`:
 
@@ -292,14 +292,14 @@ first reply), takes `fromEntries` of pi's branch, keeps the dialogs pi waits on 
 as `replaced` with the current `seq`. A check waits while a run goes on.
 
 `switch_session` into a session another conversation runs is refused (`invalid`): two pis would write one file. If a
-mu command switches into one anyway, the other conversation's host ends.
+spec.jev command switches into one anyway, the other conversation's host ends.
 
 ### Left out, compared with the CLI bridge
 
 - `bash_missing`: the view shows pi's tool error ("No bash shell found…"); the CLI bridge added a line with the Git for
   Windows link. The view can derive it from that `tool_execution_end`.
 - `stopped` and `answer_lost`: a stopped run ends `aborted` (harness `e4285a9c5`), and the app answers dialogs itself.
-- The app's own permission switch (`/permissions <mode> --here` sent as a prompt): mu's "switched" notice now shows; the
+- The app's own permission switch (`/permissions <mode> --here` sent as a prompt): spec.jev's "switched" notice now shows; the
   CLI bridge hid it while the app switched.
 
 ### Limits
@@ -317,7 +317,7 @@ mu command switches into one anyway, the other conversation's host ends.
 | `tests/unit/process/services/nativeHost/sessions/` (22)            | Folders (the launcher's order, `sessionDir`, links), the list (titles, times, the cache, grown files, a corrupt last line, the recorded fixture), a file's view, a 20 MB read that stops the loop less than 150 ms.                                                                                                                                                              |
 | `…/conversations/NativeConversations.test.ts` (21), `fakePi.ts`    | The registry on a stand-in pi: drafts and ids, one host for two calls, numbered records and the file's view, history without a host, restart with history, idle and cap (fake timers), `/clear`, a rewind, switch refused, locked store, crash, start failure, model search, dialogs and their timeout, permission mode, remove, quit.                                           |
 | `…/conversations/nativeBridge.test.ts` (9), `parts.test.ts` (6)    | The providers over a JSON loopback, failure mapping, refusals, `initNativeBridge` with and without the flag, the size guard; `followsBranch`, the model search, the environment.                                                                                                                                                                                                 |
-| `tests/integration/nativeHost/nativeConversations.test.ts` (1, +1) | The registry on a real host (Node fork, mu checkout, fake model, mock judge): create, `E2E:PLAIN`, numbered records, the held view equal to the file's, close (process gone), open from the file with no host, prompt again (resumed with history), mu's `/clear` (the conversation follows the new session, the old one is listed apart). `MU_MEASURE=1` adds the measurements. |
+| `tests/integration/nativeHost/nativeConversations.test.ts` (1, +1) | The registry on a real host (Node fork, spec.jev checkout, fake model, mock judge): create, `E2E:PLAIN`, numbered records, the held view equal to the file's, close (process gone), open from the file with no host, prompt again (resumed with history), spec.jev's `/clear` (the conversation follows the new session, the old one is listed apart). `MU_MEASURE=1` adds the measurements. |
 
 ### Measured
 
@@ -355,7 +355,7 @@ just read, and for every rebuild.
   size, with the rest fetched when shown.
 - pi writes a new session's file only with its first reply. A conversation that never got one has no file; after its
   host ends, its next start makes a new session (and a new id, announced like a draft's).
-- Session changes that mu makes itself are found by asking after each run and each slash command (one `get_state` and
+- Session changes that spec.jev makes itself are found by asking after each run and each slash command (one `get_state` and
   one `get_entries` since the known leaf, a few ms). An event from pi would be exact and cheaper (below).
 - Hosts under Node use more memory than in a utility process; four hosts are 0.8–1.8 GB. The cap may need to follow
   the machine's memory.
@@ -381,7 +381,7 @@ it; the renderer's part is in `docs/native-host-ui.md`.
   classifying and progress; the other frame kinds the adapter reads (`permissions.*`, `board.*`, memory, goal) are
   still to add.
 - Carry over what the adapter does for each session today (`KyrnAgent.ts`): the environment (`MU_DESKTOP_SESSION` for
-  the browser bridge, `MU_LANG`, `MU_PERMISSIONS`), the model search when pi starts without one because another mu held
+  the browser bridge, `MU_LANG`, `MU_PERMISSIONS`), the model search when pi starts without one because another spec.jev held
   the model store (`lookForModel`, waits of 0.5–3 s), the prompt retry on a locked store (`STORE_LOCKED`), and its
   notices (bash missing, harness notices, checkpoints).
 - Session changes (`new_session`, `switch_session`, `fork`, `clone`, tree navigation): rebuild the view from
@@ -395,21 +395,21 @@ it; the renderer's part is in `docs/native-host-ui.md`.
   `listAll` read them (name, first message, message count, times, the session it was forked from). The list comes from
   there, not from AionCore's database. Done in M2 without pi (`sessions/SessionStore.ts`); the message count and the
   fork parent since (below); left: a name set in the middle of a large file (read only when the file is read afresh).
-- mu conversations in AionCore already have pi session files: the adapter's record
-  `<mu home>/acp-sessions/<ACP session id>.json` holds `{ cwd, file, permissions }`. Following AionCore conversation →
+- spec.jev conversations in AionCore already have pi session files: the adapter's record
+  `<spec.jev home>/acp-sessions/<ACP session id>.json` holds `{ cwd, file, permissions }`. Following AionCore conversation →
   its ACP session id → that record gives the file, which a native host opens with `--session`. Imported Claude Code and
-  Codex chats are pi session files as well (`mu import` writes them; `importChats.ts` keeps its records in
+  Codex chats are pi session files as well (`spec.jev import` writes them; `importChats.ts` keeps its records in
   `acp-sessions/imports/`).
-- What happens to AionCore's rows needs a decision: hide the mu ones once the native list shows them, keep them read
+- What happens to AionCore's rows needs a decision: hide the spec.jev ones once the native list shows them, keep them read
   only for a release, or leave them. Conversations with other agents (Claude Code, Codex, Gemini over ACP) stay in
   AionCore until M4 decides.
 
 Done since (2026-09-29, branch `claude/mu-native-home`):
 
-- **A session AionCore uses is not listed twice.** Problem: an AionCore mu conversation runs on a pi session file, so
+- **A session AionCore uses is not listed twice.** Problem: an AionCore spec.jev conversation runs on a pi session file, so
   the native list would show it a second time. Example: `acp-sessions/0b5b…-1a01.json` holds
   `{ "cwd": "/work/app", "file": "…/sessions/--work-app--/2026…_0b5b….jsonl" }`; that file is AionCore's row already.
-  Solution: `sessions/acpBindings.ts` reads the adapter's records (`<mu home>/acp-sessions/<uuid>.json`) and the
+  Solution: `sessions/acpBindings.ts` reads the adapter's records (`<spec.jev home>/acp-sessions/<uuid>.json`) and the
   imports' (`acp-sessions/imports/<id>.json`), each again only when its time or size changed, and the list leaves out
   the files they name (as listed or through a linked folder) unless their conversation runs here. Only the list:
   nothing is written, `open` by id still works, and a record that goes lets its file back in at the next list.
@@ -442,8 +442,8 @@ Done since (2026-09-30, branch `claude/mu-native-polish`):
   conversation path.
 - Packaging: pi then runs on Electron's Node, and pi needs Node ≥ 22.19. The app builds with `electron ^37.10.3` while
   dev runs 44.4.3; the shipped Electron's Node has to be checked or raised. The package layout has to be exercised in a
-  utility process (bundle imported from `resources/harness/mu-agent`, outside `app.asar`).
-- Windows: projects inside WSL run mu inside WSL today (`windows/wsl.ts`); a utility process cannot, so they keep the
+  utility process (bundle imported from `resources/harness/spec.jev`, outside `app.asar`).
+- Windows: projects inside WSL run spec.jev inside WSL today (`windows/wsl.ts`); a utility process cannot, so they keep the
   bridge or need a host inside WSL.
 
 ## Open questions
@@ -467,7 +467,7 @@ when its `timeout` passes; a dialog without a timeout that pi stops waiting on (
 3. **A dialog that ends without an answer.** On its timeout or on abort pi takes the default and says nothing
    (`createDialogPromise` in `rpc-mode.ts`). The view drops a run's dialogs when it settles, but a dialog opened
    outside a run stays until answered. Ask: a record when pi stops waiting on a dialog.
-4. **Abort during a tool reads as an error.** Aborting while mu asked about a bash command gave a tool result
+4. **Abort during a tool reads as an error.** Aborting while spec.jev asked about a bash command gave a tool result
    "Operation aborted", then an assistant message with stop reason `error` and "This operation was aborted". The view
    reports what pi says, so the run shows as failed, not stopped. Ask: stop reason `aborted` there.
 5. **`prepareLaunch` blocks the main process when it starts the local judge** (`spawnSync kyrn-judge-local start`).
@@ -480,7 +480,7 @@ when its `timeout` passes; a dialog without a timeout that pi stops waiting on (
    handles both; `needs-model` is the friendlier one (the guide can set a model without a new host), so the harness
    should keep it deliberately rather than by accident.
 
-9. **An event when the session or the leaf changes.** mu's `/clear`, an import and a checkpoint rewind change pi's
+9. **An event when the session or the leaf changes.** spec.jev's `/clear`, an import and a checkpoint rewind change pi's
    session without an RPC command; the main process finds out by asking after every run and slash command
    (`get_state` + `get_entries`). A record such as `session_changed { sessionId, sessionFile, leafId }` would be
    exact, and would also cover a change during a run.
@@ -491,8 +491,8 @@ when its `timeout` passes; a dialog without a timeout that pi stops waiting on (
 
 - M2 decisions to confirm: 10 idle minutes and 4 hosts (`IDLE_MS`, `MAX_LIVE_HOSTS`); a removed conversation's file
   goes to the bin, not deleted; after `/clear` the conversation window follows the new session and the old one is
-  listed apart; the app's own permission switch now shows mu's "switched" notice; `bash_missing` is left to the view.
-- The session store sees the sessions of this computer's mu home only; a project whose sessions pi keeps elsewhere
+  listed apart; the app's own permission switch now shows spec.jev's "switched" notice; `bash_missing` is left to the view.
+- The session store sees the sessions of this computer's spec.jev home only; a project whose sessions pi keeps elsewhere
   (`--session-dir` on the command line) is not listed.
 
 - One host per session or several sessions per host: pi keeps process-wide state (`process.env`, the working

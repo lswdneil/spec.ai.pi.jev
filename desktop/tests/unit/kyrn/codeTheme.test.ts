@@ -9,8 +9,8 @@ const scheme = readFileSync(
   'utf8'
 );
 
-describe('mu code theme', () => {
-  it('wraps every upstream colour in a mu token that falls back to it', () => {
+describe('spec.jev code theme', () => {
+  it('wraps every upstream colour in a spec.jev token that falls back to it', () => {
     const light = muCodeTheme('light');
     const dark = muCodeTheme('dark');
     expect(light['hljs-keyword'].color).toBe('var(--mu-code-keyword, #00f)');

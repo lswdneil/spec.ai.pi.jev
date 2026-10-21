@@ -83,7 +83,7 @@ describe('the images in a person’s row', () => {
     expect(screen.queryByTestId('message-text-content')).toBeNull();
   });
 
-  it('draws a classic row as before: files by path, nothing for an empty row, no images on mu’s side', () => {
+  it('draws a classic row as before: files by path, nothing for an empty row, no images on spec.jev’s side', () => {
     show(row({ content: 'look\n\n[[AION_FILES]]\n/work/shot.png' }));
     expect(screen.getByTestId('file-preview')).toHaveTextContent('/work/shot.png');
     expect(screen.queryByTestId('native-message-image')).toBeNull();

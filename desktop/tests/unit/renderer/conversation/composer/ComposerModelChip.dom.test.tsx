@@ -23,7 +23,7 @@ const {
   messageErrorMock: vi.fn(),
 }));
 
-// The bridge the chip reads and writes through: the session's config options, and mu's record of the levels each
+// The bridge the chip reads and writes through: the session's config options, and spec.jev's record of the levels each
 // model takes.
 vi.mock('@/common', () => ({
   ipcBridge: {
@@ -150,7 +150,7 @@ const MODELS = [
   { value: 'openai/gpt-4o', name: 'GPT-4o' },
 ];
 
-/** The session's options as mu reports them through the app's backend: a model, and the levels it takes now. */
+/** The session's options as spec.jev reports them through the app's backend: a model, and the levels it takes now. */
 const optionsFor = (model: string, level: string, levels = ['off', 'low', 'medium', 'high']): AcpConfigOptionDto[] => [
   { id: 'model', category: 'model', option_type: 'select', current_value: model, options: MODELS },
   {
@@ -228,9 +228,9 @@ describe('ComposerModelChip', () => {
     expect(modelLevelsInvokeMock).toHaveBeenCalledWith({ conversationId });
   });
 
-  // mu without a model reports none; conversations from before that report pi's placeholder.
+  // spec.jev without a model reports none; conversations from before that report pi's placeholder.
   it.each(['', 'unknown/unknown'])(
-    'asks to choose a model, with no thinking level, when mu runs on "%s"',
+    'asks to choose a model, with no thinking level, when spec.jev runs on "%s"',
     async (value) => {
       server = optionsFor(value, 'off');
       renderChip();
@@ -257,7 +257,7 @@ describe('ComposerModelChip', () => {
       expect(within(modelRow('openai/gpt-5')).getAllByTestId('composer-level-option')).toHaveLength(5)
     );
 
-    // The model in use takes the levels the session reports now; the others what mu recorded for them.
+    // The model in use takes the levels the session reports now; the others what spec.jev recorded for them.
     expect(
       within(modelRow('anthropic/claude-sonnet-4-5'))
         .getAllByTestId('composer-level-option')
@@ -365,7 +365,7 @@ describe('ComposerModelChip', () => {
     server = [
       {
         ...optionsFor('anthropic/claude-sonnet-4-5', 'medium')[0],
-        // mu describes each model by its provider's id.
+        // spec.jev describes each model by its provider's id.
         options: [...MODELS, { value: 'relay/large', name: 'Large', description: 'relay' }],
       },
       optionsFor('anthropic/claude-sonnet-4-5', 'medium')[1],

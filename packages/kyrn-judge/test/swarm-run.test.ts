@@ -604,7 +604,7 @@ describe("swarm run", () => {
 				},
 				code: async (observer) => {
 					observer?.event({ type: "agent_start" });
-					// mu's own source quotes the note's prefix: reading it is not reading text aimed at an AI.
+					// spec.jev's own source quotes the note's prefix: reading it is not reading text aimed at an AI.
 					observer?.event(toolResult(`export const WITHHELD_NOTE = "${WITHHELD_NOTE}";`));
 					observer?.event(toolResult("src/parser.ts:41  if (!input) throw"));
 					observer?.event(assistant("FOUND: src/parser.ts:41 throws on empty input."));

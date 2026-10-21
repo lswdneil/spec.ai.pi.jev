@@ -1,7 +1,7 @@
 /**
  * A native conversation's view as the Jev panel's activity (`Activity`, what the panel's board, judge and hive tabs
- * read), shaped as the mu bridge's telemetry writes it (process/agent/kyrn/telemetry.ts) so the tabs read it as they
- * read any mu conversation:
+ * read), shaped as the spec.jev bridge's telemetry writes it (process/agent/kyrn/telemetry.ts) so the tabs read it as they
+ * read any spec.jev conversation:
  *
  * - every presentation frame and the run's edges, as the view keeps them (`host.activity`), a decision frame with its
  *   ledger record (the view files the record under `judgments`); a judgment no frame carries, as a decision at the time

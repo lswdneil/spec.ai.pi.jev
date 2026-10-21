@@ -376,7 +376,7 @@ const makeMessageState = (): UseAcpMessageReturn => ({
   fetchSlashCommands: vi.fn(),
 });
 
-/** mu's commands: the goal command is what brings goal mode. */
+/** spec.jev's commands: the goal command is what brings goal mode. */
 const withGoal = (): UseAcpMessageReturn => ({
   ...makeMessageState(),
   slashCommands: [{ name: 'goal', description: 'Work until a condition holds', kind: 'template', source: 'acp' }],

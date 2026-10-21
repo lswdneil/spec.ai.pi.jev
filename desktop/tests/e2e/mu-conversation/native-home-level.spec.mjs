@@ -1,8 +1,8 @@
 // @ts-check
-// The thinking level picked on the home page, end to end, in the real app on the native host (on by default): mu's
+// The thinking level picked on the home page, end to end, in the real app on the native host (on by default): spec.jev's
 // default model reasons, the home page's pill opens it to its levels, and "high" picked there is the level the
 // conversation starts with (its chip says it, and the model is asked with `reasoning_effort: high`). The pill shows a
-// level whether or not one was picked: a start without a pick leaves mu's own (checked in the DOM tests, not here).
+// level whether or not one was picked: a start without a pick leaves spec.jev's own (checked in the DOM tests, not here).
 // Run with `bun run e2e:conversation --native` (every native*.spec.mjs).
 import { expect, test } from '@playwright/test';
 import { writeFileSync } from 'node:fs';
@@ -29,8 +29,8 @@ const {
 } = createNativeWorld({ desktopRoot });
 
 test('the level picked on the home page is the one the conversation starts with', async () => {
-  // The model that reasons is mu's default here: the pill of the home page offers its levels (the levels it lists are the
-  // ones mu's default model reported, as in the classic home page).
+  // The model that reasons is spec.jev's default here: the pill of the home page offers its levels (the levels it lists are the
+  // ones spec.jev's default model reported, as in the classic home page).
   writeFileSync(
     join(paths().agentDir, 'settings.json'),
     JSON.stringify({ defaultProvider: 'e2e', defaultModel: THINKING_MODEL_ID })

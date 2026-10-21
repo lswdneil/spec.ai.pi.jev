@@ -16,7 +16,7 @@ import { SEARCH_UNTRUSTED } from "./web.ts";
 /** What one batched request may carry in passages, so even text in Chinese stays well inside the judge's window. */
 const BATCH_STATE_CHARS = 16_000;
 
-/** mu's own lines in front of outside text: they are mu speaking, and never screened. */
+/** spec.jev's own lines in front of outside text: they are spec.jev speaking, and never screened. */
 const LABELS: readonly string[] = [UNTRUSTED, SEARCH_UNTRUSTED];
 
 /** The note that stands where a passage was, in its place between the blank lines around it. */

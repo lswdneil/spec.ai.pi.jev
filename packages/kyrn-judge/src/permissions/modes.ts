@@ -27,7 +27,7 @@ export const MODE_TEXT: Readonly<
 		zh: "完全访问",
 		en: "Full access",
 		zhDescription: "什么都不问，直接执行。你明确说过不许做的事仍然会被拦下。",
-		enDescription: "Runs everything without asking. Anything you told mu not to do is still blocked.",
+		enDescription: "Runs everything without asking. Anything you told spec.jev not to do is still blocked.",
 	},
 	jev: {
 		zh: "Jev 审批",
@@ -40,7 +40,7 @@ export const MODE_TEXT: Readonly<
 		zh: "最小权限",
 		en: "Ask first",
 		zhDescription: "只读操作直接做；改文件、跑命令、对外操作都先问你。",
-		enDescription: "Only reads go ahead. mu asks you before every edit, command and external action.",
+		enDescription: "Only reads go ahead. spec.jev asks you before every edit, command and external action.",
 	},
 };
 
@@ -207,9 +207,9 @@ function projectFile(cwd: string, target: string | undefined): boolean {
 }
 
 /**
- * Where mu keeps its own settings, as a command may spell it: a call touching it is the user's to allow. From the home
+ * Where spec.jev keeps its own settings, as a command may spell it: a call touching it is the user's to allow. From the home
  * it is `~`, `$HOME`; on Windows also `%USERPROFILE%` or `$env:USERPROFILE`, with either slash, and `/c/...` as Git
- * Bash (the shell mu's commands run in there) spells a drive.
+ * Bash (the shell spec.jev's commands run in there) spells a drive.
  */
 export function protectedSpellings(agentDir: string, home: string, platform: NodeJS.Platform): string[] {
 	if (platform !== "win32") {
@@ -277,7 +277,7 @@ export function permissionNeed(
 		const paths = [...(path ? [path] : []), ...listed];
 		const targets = paths.map((each) => ({ said: each, target: toolPath(cwd, each) }));
 		const summary = clip(`${toolName} ${path || listed.join(" ") || text(input.id) || text(input.pattern)}`, 300);
-		// As written and as it really is: a spelling of mu's folder, or a link into it.
+		// As written and as it really is: a spelling of spec.jev's folder, or a link into it.
 		const guarded = targets
 			.flatMap(({ said, target }) => [resolve(cwd, said), ...(target ? [target] : [])])
 			.map(touches)

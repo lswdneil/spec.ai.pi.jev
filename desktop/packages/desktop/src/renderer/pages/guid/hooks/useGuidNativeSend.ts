@@ -1,7 +1,7 @@
 /**
  * The home page's send while the native host is on (docs/native-host-ui.md): the message starts a conversation on the
- * native host, with no AionCore in its path, and the page opens it once pi took the message. The home page lists mu's
- * assistants only (initializeKyrn keeps mu's), so every send is mu's; the folder, the permission mode picked on the
+ * native host, with no AionCore in its path, and the page opens it once pi took the message. The home page lists spec.jev's
+ * assistants only (initializeKyrn keeps spec.jev's), so every send is spec.jev's; the folder, the permission mode picked on the
  * page, the model the pill picked and the thinking level, when one was picked, go with it. A send that cannot start
  * one says why, in the native screens' words, and keeps what was typed. GuidPage uses useGuidSend instead while the
  * host is off.
@@ -18,7 +18,7 @@ import { nativeConversationPath } from '@/renderer/pages/native/utils/paths';
 import { startNativeConversation, type ReadImage } from '../utils/nativeStart';
 import type { GuidSendResult } from './useGuidSend';
 
-/** Permission modes are words (`full`, `jev`, `ask`), as mu names them; anything else is not sent. */
+/** Permission modes are words (`full`, `jev`, `ask`), as spec.jev names them; anything else is not sent. */
 const MODE_ID = /^[a-z][a-z0-9-]{0,31}$/;
 /** Thinking levels are words too (`off`, `low`, `high`, ...); pi refuses one it does not know. */
 const LEVEL_ID = /^[a-z][a-z0-9-]{0,15}$/;
@@ -28,14 +28,14 @@ export type GuidNativeSendDeps = {
   setInput: React.Dispatch<React.SetStateAction<string>>;
   files: ChatFileRef[];
   setFiles: React.Dispatch<React.SetStateAction<ChatFileRef[]>>;
-  /** The folder mu works in; '' when none was chosen. */
+  /** The folder spec.jev works in; '' when none was chosen. */
   dir: string;
   setDir: React.Dispatch<React.SetStateAction<string>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  /** The permission mode picked on the page; '' leaves mu's own default. */
+  /** The permission mode picked on the page; '' leaves spec.jev's own default. */
   selectedMode: string;
-  /** The model the pill picked, `<provider>/<model id>`; null leaves mu's default. */
+  /** The model the pill picked, `<provider>/<model id>`; null leaves spec.jev's default. */
   selectedAcpModel: string | null;
   /** The thinking level the person picked with it; '' when none was picked (the pill's shown level is not a pick). */
   pickedThoughtLevel?: string;
@@ -119,6 +119,6 @@ export const useGuidNativeSend = (deps: GuidNativeSendDeps): GuidSendResult => {
       });
   }, [loading, setDir, setFiles, setInput, setLoading, start, t]);
 
-  // No assistant needed: the native host runs mu itself. Empty input is allowed, as on the classic page ("start chat").
+  // No assistant needed: the native host runs spec.jev itself. Empty input is allowed, as on the classic page ("start chat").
   return { handleSend, sendMessageHandler, isButtonDisabled: loading };
 };

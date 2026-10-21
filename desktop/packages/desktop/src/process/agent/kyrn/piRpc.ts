@@ -24,7 +24,7 @@ export interface RpcPort {
  * How the launcher is started. A Node launcher (`kyrn/bin/mu.mjs`, what Windows, the npm package and the copy inside
  * the packaged app use) runs with this process's own Node, or `MU_NODE`: no shell and no `.cmd`, which Node refuses to
  * spawn without one. In the app this process is Electron, whose binary runs a script as Node only with
- * ELECTRON_RUN_AS_NODE: that is how the packaged app runs mu without a Node on the machine. Anything else is an
+ * ELECTRON_RUN_AS_NODE: that is how the packaged app runs spec.jev without a Node on the machine. Anything else is an
  * executable (the bash forwarder of a checkout).
  */
 export function launchCommand(
@@ -56,18 +56,18 @@ export function endTree(
   run.group(pid, signal);
 }
 
-/** How much of the end of mu's error output is kept, for the log when it stops unasked: where a crash says why. */
+/** How much of the end of spec.jev's error output is kept, for the log when it stops unasked: where a crash says why. */
 const STDERR_TAIL = 8 * 1024;
 
-/** How mu marks a line of its error output that is meant for the log (see PiRpc.forward). */
-const MU_LINE = '[mu] ';
+/** How spec.jev marks a line of its error output that is meant for the log (see PiRpc.forward). */
+const MU_LINE = '[spec.jev] ';
 
 /**
  * How long a control command (anything but a prompt) may wait for its answer, in milliseconds. `command` counts from
- * the moment mu is up (its first line of output); a command sent before that waits for mu to come up as well, up to
+ * the moment spec.jev is up (its first line of output); a command sent before that waits for spec.jev to come up as well, up to
  * `start` in all. A first start can take far longer than an answer: a virus scanner reading every file of a fresh
  * install, a busy disk, a machine under load. Counted from the write, 30 seconds failed a conversation's first message
- * while mu was still starting, and the next attempt then worked.
+ * while spec.jev was still starting, and the next attempt then worked.
  */
 export interface RpcDeadlines {
   command: number;
@@ -76,8 +76,8 @@ export interface RpcDeadlines {
 const DEADLINES: RpcDeadlines = { command: 30_000, start: 180_000 };
 
 /**
- * What the adapter logs when mu stopped without being asked to: the exit, then the end of mu's error output. The adapter's
- * error output is AionCore's to log (each line under "CLI process stderr" in the app's log folder); mu's own never
+ * What the adapter logs when spec.jev stopped without being asked to: the exit, then the end of spec.jev's error output. The adapter's
+ * error output is AionCore's to log (each line under "CLI process stderr" in the app's log folder); spec.jev's own never
  * reaches the client.
  */
 export function stoppedReport(
@@ -90,7 +90,7 @@ export function stoppedReport(
   const exit = `exit code ${code ?? 'none'}${signal ? `, signal ${signal}` : ''}`;
   const tail = stderr
     .split(/\r?\n/)
-    // mu's own log lines are in the log already (see PiRpc.forward).
+    // spec.jev's own log lines are in the log already (see PiRpc.forward).
     .filter((line) => line.trim() && !line.startsWith(MU_LINE))
     .slice(-40)
     .map((line) => `[mu harness] ${line}`);
@@ -108,17 +108,17 @@ export class PiRpc implements RpcPort {
     { resolve(value: JsonRecord): void; reject(error: Error): void; timer?: NodeJS.Timeout }
   >();
   private closed = false;
-  /** mu has written its first line: it reads commands (see started()). */
+  /** spec.jev has written its first line: it reads commands (see started()). */
   private up = false;
   private deadlines: RpcDeadlines;
-  /** close() was called: mu stopping is expected, not news for the log. */
+  /** close() was called: spec.jev stopping is expected, not news for the log. */
   private ending = false;
   private exited = false;
   private killing = false;
-  /** A write to mu failed: it stopped reading, and was ended for it. */
+  /** A write to spec.jev failed: it stopped reading, and was ended for it. */
   private unreadable = false;
   private stderr = '';
-  /** The unfinished last line of mu's error output, for forward(). */
+  /** The unfinished last line of spec.jev's error output, for forward(). */
   private partial = '';
   /** Runs inside WSL, through wsl.exe (see windows/wsl.ts). */
   private wsl: boolean;
@@ -163,7 +163,7 @@ export class PiRpc implements RpcPort {
       this.stderr = `${this.stderr}${chunk}`.slice(-STDERR_TAIL);
       this.forward(chunk);
     });
-    // A write to mu after it stopped reading (it crashed, or is on its way out) fails on this stream with EPIPE. Unheard,
+    // A write to spec.jev after it stopped reading (it crashed, or is on its way out) fails on this stream with EPIPE. Unheard,
     // that error would end the adapter, and with it every conversation it serves.
     this.child.stdin.on('error', () => this.broken());
     createInterface({ input: this.child.stdout }).on('line', (line) => {
@@ -179,20 +179,20 @@ export class PiRpc implements RpcPort {
         this.pending.delete(text(event.id));
         clearTimeout(request.timer);
         if (event.success) request.resolve(asRecord(event.data));
-        else request.reject(new Error(text(event.error) || 'mu RPC command failed'));
+        else request.reject(new Error(text(event.error) || 'spec.jev RPC command failed'));
       }
       this.emit(event);
     });
-    this.child.on('error', () => this.finish(new Error('mu failed to start')));
+    this.child.on('error', () => this.finish(new Error('spec.jev failed to start')));
     this.child.on('exit', (code, signal) => {
       this.exited = true;
-      this.finish(new Error('mu process exited'));
+      this.finish(new Error('spec.jev process exited'));
       if (!this.ending) this.report(code, signal);
     });
   }
   /**
-   * Passes mu's own log lines (marked `[mu] `, such as a promise nothing handled) on to the app's log as they come. The
-   * rest of mu's error output is logged only when mu stops unasked (see report).
+   * Passes spec.jev's own log lines (marked `[spec.jev] `, such as a promise nothing handled) on to the app's log as they come. The
+   * rest of spec.jev's error output is logged only when spec.jev stops unasked (see report).
    */
   private forward(chunk: string): void {
     const lines = `${this.partial}${chunk}`.split(/\r?\n/);
@@ -200,7 +200,7 @@ export class PiRpc implements RpcPort {
     this.partial = (lines.pop() ?? '').slice(0, STDERR_TAIL);
     for (const line of lines) if (line.startsWith(MU_LINE)) log(`[mu harness] ${line.slice(MU_LINE.length)}\n`);
   }
-  /** Logs why mu stopped, once the last of its error output is in (a crash writes it just before the exit). */
+  /** Logs why spec.jev stopped, once the last of its error output is in (a crash writes it just before the exit). */
   private report(code: number | null, signal: NodeJS.Signals | null): void {
     let written = false;
     const write = () => {
@@ -209,7 +209,7 @@ export class PiRpc implements RpcPort {
       log(stoppedReport(code, signal, this.stderr, this.unreadable));
     };
     if (this.child.stderr.closed) return write();
-    // A process mu started can hold the stream open after mu is gone: the report does not wait for it.
+    // A process spec.jev started can hold the stream open after spec.jev is gone: the report does not wait for it.
     const timer = setTimeout(write, 500);
     timer.unref();
     this.child.stderr.once('close', () => {
@@ -236,7 +236,7 @@ export class PiRpc implements RpcPort {
     }
   }
   send(command: JsonRecord): Promise<JsonRecord> {
-    if (this.closed) return Promise.reject(new Error('mu process is closed'));
+    if (this.closed) return Promise.reject(new Error('spec.jev process is closed'));
     const id = randomUUID();
     return new Promise((resolve, reject) => {
       // A difficult prompt can run for hours. Only control commands have a deadline (see RpcDeadlines).
@@ -254,10 +254,10 @@ export class PiRpc implements RpcPort {
       const request = this.pending.get(id);
       if (!request) return;
       this.pending.delete(id);
-      request.reject(new Error('mu control command timed out'));
+      request.reject(new Error('spec.jev control command timed out'));
     }, ms);
   }
-  /** mu is up: the control commands that waited for it have the usual deadline from now. */
+  /** spec.jev is up: the control commands that waited for it have the usual deadline from now. */
   private started(): void {
     this.up = true;
     for (const [id, request] of this.pending) {
@@ -266,11 +266,11 @@ export class PiRpc implements RpcPort {
       request.timer = this.expire(id, this.deadlines.command);
     }
   }
-  /** An answer to one of mu's questions. Never throws: a mu that cannot take it any more has stopped, and says so. */
+  /** An answer to one of spec.jev's questions. Never throws: a spec.jev that cannot take it any more has stopped, and says so. */
   respond(response: JsonRecord): void {
     if (!this.closed) this.write(`${JSON.stringify({ ...response, type: 'extension_ui_response' })}\n`);
   }
-  /** Writes a line to mu. A write that fails means mu stopped reading: it counts as stopped, and nothing throws. */
+  /** Writes a line to spec.jev. A write that fails means spec.jev stopped reading: it counts as stopped, and nothing throws. */
   private write(line: string): void {
     try {
       this.child.stdin.write(line, (error) => {
@@ -280,19 +280,19 @@ export class PiRpc implements RpcPort {
       this.broken();
     }
   }
-  /** mu cannot be written to any more (it crashed, or is on its way out): its requests fail and it is ended. */
+  /** spec.jev cannot be written to any more (it crashed, or is on its way out): its requests fail and it is ended. */
   private broken(): void {
     if (!this.ending) this.unreadable = true;
-    this.finish(new Error('mu process exited'));
+    this.finish(new Error('spec.jev process exited'));
     this.end();
   }
   close(): void {
     if (this.ending) return;
     this.ending = true;
     this.end();
-    this.finish(new Error('mu session closed'));
+    this.finish(new Error('spec.jev session closed'));
   }
-  /** Ends mu and everything it started, unless it has already exited. */
+  /** Ends spec.jev and everything it started, unless it has already exited. */
   private end(): void {
     if (this.exited || this.killing) return;
     this.killing = true;
@@ -315,7 +315,7 @@ export class PiRpc implements RpcPort {
       this.child.once('exit', () => clearTimeout(timer));
     };
     if (this.wsl) {
-      // Ending wsl.exe does not reach everything it started inside Linux. mu ends itself when its input ends; the
+      // Ending wsl.exe does not reach everything it started inside Linux. spec.jev ends itself when its input ends; the
       // tree is ended only if it has not by then.
       this.child.stdin.end();
       const timer = setTimeout(end, 2000);

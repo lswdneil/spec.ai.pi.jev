@@ -190,11 +190,11 @@ describe('updates that install on a restart (electron-updater)', () => {
     });
     const restarted = await service.run('restart');
     expect(restarted.phase).toBe('installing');
-    // Not silent: the installer shows its progress and starts mu again.
+    // Not silent: the installer shows its progress and starts spec.jev again.
     expect(updater.quitAndInstall).toHaveBeenCalledWith(false, true);
     expect(app.exit).not.toHaveBeenCalled();
     vi.advanceTimersByTime(1_000);
-    // mu may keep running with its windows closed; it exits so the installer can replace it.
+    // spec.jev may keep running with its windows closed; it exits so the installer can replace it.
     expect(app.exit).toHaveBeenCalledWith(0);
   });
 
@@ -430,7 +430,7 @@ describe('falling back to the installer', () => {
     expect(deps.openExternal).toHaveBeenCalledWith('https://github.com/qybaihe/mu/releases/tag/v0.1.3');
   });
 
-  it('starts mu again when the installer does not take over after the backend stopped', async () => {
+  it('starts spec.jev again when the installer does not take over after the backend stopped', async () => {
     setPlatform('win32', 'x64');
     updater.checkForUpdates.mockResolvedValue(offer('0.1.3'));
     const { service } = makeService();

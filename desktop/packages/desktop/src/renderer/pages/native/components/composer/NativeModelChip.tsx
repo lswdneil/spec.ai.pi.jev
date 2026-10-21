@@ -1,8 +1,8 @@
 /**
  * The model a native conversation answers with and how hard it thinks, in one chip at the right of the send box
- * (`model · level`), with the look and the menu of the chip in mu's other conversations (Composer/ComposerModelChip):
+ * (`model · level`), with the look and the menu of the chip in spec.jev's other conversations (Composer/ComposerModelChip):
  * every model pi offers by provider, and a model that takes more than one level opens to its levels, so one pick sets
- * both. Opening it asks pi what it offers (which starts mu when it is not running); showing it starts nothing. A
+ * both. Opening it asks pi what it offers (which starts spec.jev when it is not running); showing it starts nothing. A
  * switch waits for the run to end, as elsewhere, and is for this conversation only: the menu's "make default" is how
  * it becomes the model new conversations start on.
  */
@@ -54,9 +54,9 @@ const NativeModelChip: React.FC<{
     [model, names, offer, query, t]
   );
 
-  // mu runs without a model: the chip says so and opens the list to pick one.
+  // spec.jev runs without a model: the chip says so and opens the list to pick one.
   const noModel = source === 'host' && !model;
-  // By name before the menu was ever opened too: what mu last reported names it.
+  // By name before the menu was ever opened too: what spec.jev last reported names it.
   const modelLabel = model
     ? offer?.options.find((option) => option.value === model)?.label || modelDisplayName(model, modelNames)
     : t('common.defaultModel');

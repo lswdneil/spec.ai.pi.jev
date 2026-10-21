@@ -1,7 +1,7 @@
 /**
  * The files and images the person attaches to a native conversation's next message: picked, dropped or pasted. An
  * image travels to pi as itself (`prompt.images`: base64 and its type), read here, so nothing is uploaded anywhere;
- * any other file travels as its full path in the message (`withFiles`), as mu reads files in its other conversations.
+ * any other file travels as its full path in the message (`withFiles`), as spec.jev reads files in its other conversations.
  * A file without a path on this computer (text pasted as a file) cannot be attached, and says so.
  */
 import { Message } from '@arco-design/web-react';

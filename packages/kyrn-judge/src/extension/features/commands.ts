@@ -148,7 +148,7 @@ function describeRecord(record: LedgerRecord): string[] {
 }
 
 /**
- * The slash commands that make mu a CLI of its own rather than a bag of
+ * The slash commands that make spec.jev a CLI of its own rather than a bag of
  * hooks: help, status, a self-check, and the switches of the judgment layer.
  */
 export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): void {
@@ -215,8 +215,8 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 
 	pi.registerCommand("mu", {
 		description: say({
-			zh: "mu 的状态。另外：/mu judge <判定器> | /mu route <判定点> <判定器|default> | /mu mode <判定点|default> <off|shadow|active>",
-			en: "Show mu's status. Also: /mu judge <judges> | /mu route <point> <judge|default> | /mu mode <point|default> <off|shadow|active>",
+			zh: "spec.jev 的状态。另外：/mu judge <判定器> | /mu route <判定点> <判定器|default> | /mu mode <判定点|default> <off|shadow|active>",
+			en: "Show spec.jev's status. Also: /mu judge <judges> | /mu route <point> <judge|default> | /mu mode <point|default> <off|shadow|active>",
 		}),
 		getArgumentCompletions: (prefix) => {
 			const options = ["judge laya", "judge jev", "judge laya,jev", "mode default active", "mode default shadow"];
@@ -236,8 +236,8 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 
 	pi.registerCommand("help", {
 		description: say({
-			zh: "mu 能做什么，以及常用命令一览",
-			en: "Show what mu can do and the commands worth knowing",
+			zh: "spec.jev 能做什么，以及常用命令一览",
+			en: "Show what spec.jev can do and the commands worth knowing",
 		}),
 		handler: async (_args, ctx) => ctx.ui.notify(help(), "info"),
 	});
@@ -262,7 +262,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 			const records = runtime.memory.records.slice(-count);
 			ctx.ui.notify(
 				records.length === 0
-					? "No verdicts in this session yet. For all sessions, run mu ledger"
+					? "No verdicts in this session yet. For all sessions, run spec.jev ledger"
 					: records.flatMap(describeRecord).join("\n"),
 				"info",
 			);
@@ -293,7 +293,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 				`${ok(Boolean(ctx.model))}model      ${ctx.model ? `${ctx.model.provider}/${ctx.model.id}` : "none selected: run /login, then /model"}`,
 				`${ok(providers.length > 0)}login      ${providers.length > 0 ? providers.join(", ") : "no provider is signed in: run /login"}`,
 				probe
-					? `${ok(probe.ok)}judge      ${engine.providerId} ${probe.ok ? `answers in ${probe.latencyMs} ms` : `isn't answering (${probe.error}). For laya, run mu judge start`}`
+					? `${ok(probe.ok)}judge      ${engine.providerId} ${probe.ok ? `answers in ${probe.latencyMs} ms` : `isn't answering (${probe.error}). For laya, run spec.jev judge start`}`
 					: "--  judge      off (MU_JUDGE=off)",
 				`--  decisions  default mode ${engine.getMode("*")}. Change it with /mu mode default <off|shadow|active>`,
 				`${ok(Boolean(chrome))}browser    ${chrome ?? browserAdvice(browserHost)}`,
@@ -317,9 +317,9 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 			existsSync(PROMPTS_DIR)
 				? {
 						promptPaths: [
-							// In mu's own folder, which is the user's alone: a template is text the model follows.
+							// In spec.jev's own folder, which is the user's alone: a template is text the model follows.
 							roots
-								? promptsFor(PROMPTS_DIR, appLanguage()?.wording, join(roots.agentDir, "mu", "prompts"))
+								? promptsFor(PROMPTS_DIR, appLanguage()?.wording, join(roots.agentDir, "spec.jev", "prompts"))
 								: PROMPTS_DIR,
 						],
 					}

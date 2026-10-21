@@ -3,11 +3,11 @@ title: 判定器
 summary: 由誰回答判定點，怎樣選擇、串接和比較判定器，以及每個判定器的成本。
 ---
 
-判定器回答 mu 的[判定點](@decisions)提出的範圍明確的問題：是或否、幾個固定答案裡選一個，或者評分，每個答案都附帶機率。判定點從來不知道是哪個判定器回答的。由你來選，可以整個安裝統一選，也可以每個判定點單獨選；切換之前，還可以在你自己的工作階段上比較判定器。
+判定器回答 spec.jev 的[判定點](@decisions)提出的範圍明確的問題：是或否、幾個固定答案裡選一個，或者評分，每個答案都附帶機率。判定點從來不知道是哪個判定器回答的。由你來選，可以整個安裝統一選，也可以每個判定點單獨選；切換之前，還可以在你自己的工作階段上比較判定器。
 
 ## 由哪個判定器回答 {#tiers}
 
-`~/.mu/agent/mu.json` 裡的 `tiers` 依序列出判定器。後一個判定器只看到前面幾個拿不準的問題，所以可以讓便宜的本機判定器先答，雲端的判定器接住剩下的：
+`~/.spec.jev/agent/spec.jev.json` 裡的 `tiers` 依序列出判定器。後一個判定器只看到前面幾個拿不準的問題，所以可以讓便宜的本機判定器先答，雲端的判定器接住剩下的：
 
 ```json
 { "tiers": ["laya", "jev"] }
@@ -19,7 +19,7 @@ summary: 由誰回答判定點，怎樣選擇、串接和比較判定器，以�
 { "routes": { "browser.step": ["jev"], "memory.capture": ["llm:anthropic/claude-haiku-4-5"] } }
 ```
 
-在工作階段裡，`/mu judge <judges>` 和 `/mu route <point> <judges|default>` 做同樣的事；`MU_JUDGE=laya,jev mu` 只為一次執行指定判定器。`/status` 顯示哪個判定器回答什麼，桌面版的「判定器」頁也能設定這些。
+在工作階段裡，`/mu judge <judges>` 和 `/mu route <point> <judges|default>` 做同樣的事；`MU_JUDGE=laya,jev spec.jev` 只為一次執行指定判定器。`/status` 顯示哪個判定器回答什麼，桌面版的「判定器」頁也能設定這些。
 
 沒有判定器按時回答時，每個判定點就照沒有判定時那樣做（通常是什麼都不變），帳本裡記下原因。不會等太久：每個判定點都有時限。
 
@@ -36,9 +36,9 @@ Jev 是 TypeSafe 做的判定模型，專門回答這類問題。內建的 `jev`
 | 5 | Cloudflare Workers AI | `CLOUDFLARE_API_KEY` 和 `CLOUDFLARE_ACCOUNT_ID` | `jev-cloudflare` |
 | 都沒設定 | OpenCode Zen，限時免費 | 不需要金鑰 | `jev-opencode-free` |
 
-金鑰只會送給它所屬的服務。直接指定一條線路，例如 `"tiers": ["jev-openrouter"]`，就會跳過這個順序。`mu setup` 或桌面版的「判定器」頁會替你寫好金鑰。
+金鑰只會送給它所屬的服務。直接指定一條線路，例如 `"tiers": ["jev-openrouter"]`，就會跳過這個順序。`spec.jev setup` 或桌面版的「判定器」頁會替你寫好金鑰。
 
-**免費的 Jev。** 一組金鑰都沒有時，由 OpenCode Zen 上的 Jev 1.13 回答。它判定的內容會送給 OpenCode，OpenCode 不拿這些內容訓練模型；mu 每天提示一次。這是 OpenCode 的限時活動：活動結束時 mu 會告訴你，各判定點退回沒有判定器時的做法，直到你設定一組金鑰。`mu setup --judge free` 明確選用它。
+**免費的 Jev。** 一組金鑰都沒有時，由 OpenCode Zen 上的 Jev 1.13 回答。它判定的內容會送給 OpenCode，OpenCode 不拿這些內容訓練模型；spec.jev 每天提示一次。這是 OpenCode 的限時活動：活動結束時 spec.jev 會告訴你，各判定點退回沒有判定器時的做法，直到你設定一組金鑰。`spec.jev setup --judge free` 明確選用它。
 
 **速度和成本。** 在作者自己的工作階段裡實測：熱連線上一個問題約 0.3 秒；16 塊工具輸出在一個請求裡判完用 0.44 秒，狀態只計費一次。工作階段使用中時，每 50 秒問一個很小的問題讓連線保持熱的，所以一輪開始前的提問能省掉 1 到 3 秒的連線建立時間。
 
@@ -47,22 +47,22 @@ Jev 是 TypeSafe 做的判定模型，專門回答這類問題。內建的 `jev`
 一個 3.22 億參數的判定器，在你的機器上執行，從不連網。
 
 ```bash
-mu judge setup     # 下載模型前會先問你
-mu judge start     # 啟動它
-mu judge status
+spec.jev judge setup     # 下載模型前會先問你
+spec.jev judge start     # 啟動它
+spec.jev judge status
 ```
 
-桌面版一步就能裝好它，同樣會先問你。Laya 在簡單的述詞上可靠（這段文字是不是在描述一個錯誤？），在關於關係或關於請求本身的問題上偏弱。mu 知道這一點，從不把它答不好的問題交給它，所以在 `["laya", "jev"]` 這樣的鏈裡，這些問題直接交給下一個判定器。在「Jev 審批」模式下，審批不交給 Laya。先讓它以影子模式和 Jev 平行執行，看過帳本，再把某個判定點單獨交給它。
+桌面版一步就能裝好它，同樣會先問你。Laya 在簡單的述詞上可靠（這段文字是不是在描述一個錯誤？），在關於關係或關於請求本身的問題上偏弱。spec.jev 知道這一點，從不把它答不好的問題交給它，所以在 `["laya", "jev"]` 這樣的鏈裡，這些問題直接交給下一個判定器。在「Jev 審批」模式下，審批不交給 Laya。先讓它以影子模式和 Jev 平行執行，看過帳本，再把某個判定點單獨交給它。
 
 ## 分類模型和大模型 {#other-judges}
 
 - **`classifier:<provider>/<model>`**：pi 模型目錄裡的任何分類模型，用你已有的該供應商的登入或金鑰存取。Cloudflare 的 Clef 內建為 `clef` 和 `clef-flash`；OpenRouter 和 Vercel AI Gateway 上的 System One 模型，以及 llama.cpp 的分類模型，也都能用。
-- **`llm:<provider>/<model>`**：任何聊天模型，要求它以 JSON 回答。比較慢，每次判定都花 token，但除了你已經在用的模型之外什麼都不需要。`mu setup --judge model` 把工作階段的模型設為判定器。
-- **`clm`**：跑在 `clm-serve` 後面的 CLM-8B（預設 `http://127.0.0.1:8700`）。還沒有在 mu 的問題上測過。
+- **`llm:<provider>/<model>`**：任何聊天模型，要求它以 JSON 回答。比較慢，每次判定都花 token，但除了你已經在用的模型之外什麼都不需要。`spec.jev setup --judge model` 把工作階段的模型設為判定器。
+- **`clm`**：跑在 `clm-serve` 後面的 CLM-8B（預設 `http://127.0.0.1:8700`）。還沒有在 spec.jev 的問題上測過。
 
 ## 你自己的判定器 {#custom}
 
-在 `mu.json` 的 `judges` 下，給一個名稱和一個類型：
+在 `spec.jev.json` 的 `judges` 下，給一個名稱和一個類型：
 
 ```json
 {
@@ -84,7 +84,7 @@ mu judge status
 | `local` | 一個相容 Laya 的本機伺服器 |
 | `clm` | 一個 `clm-serve` |
 
-金鑰從不寫進檔案：`apiKeyEnv` 寫的是存放金鑰的環境變數名稱，這個變數設在你的環境裡，或 mu 的 `.env` 裡。
+金鑰從不寫進檔案：`apiKeyEnv` 寫的是存放金鑰的環境變數名稱，這個變數設在你的環境裡，或 spec.jev 的 `.env` 裡。
 
 ## 模式：生效、影子、關閉 {#modes}
 
@@ -94,13 +94,13 @@ mu judge status
 - **shadow**（影子）：照常問判定器並記錄判定，但不改變任何東西。
 - **off**（關閉）：不問這個判定點。
 
-可以在 `mu.json` 的 `modes` 下設定（一個 `default`，加上每個判定點一項），用 `/mu mode` 只對一個工作階段設定，或者在桌面版的設定裡設定，那裡處於影子模式的判定點顯示為關閉。有兩樣東西不管模式如何都起作用：你選的權限模式（選「Jev 審批」本身就是對 `tool.approval` 的同意），以及模型主動呼叫的 `judge_items` 工具。
+可以在 `spec.jev.json` 的 `modes` 下設定（一個 `default`，加上每個判定點一項），用 `/mu mode` 只對一個工作階段設定，或者在桌面版的設定裡設定，那裡處於影子模式的判定點顯示為關閉。有兩樣東西不管模式如何都起作用：你選的權限模式（選「Jev 審批」本身就是對 `tool.approval` 的同意），以及模型主動呼叫的 `judge_items` 工具。
 
 ## 比較判定器 {#compare}
 
 1. 把判定點設成影子模式，並把它路由到你想試的判定器；或者讓所有判定點都以影子模式執行。
 2. 照常工作一段時間。
-3. 讀判定結果：`mu ledger [n]` 印出最近 n 個工作階段，`mu ledger --json` 給出每筆紀錄及其機率和耗時，桌面版的「判定」頁顯示每次判定和它的問題。
+3. 讀判定結果：`spec.jev ledger [n]` 印出最近 n 個工作階段，`spec.jev ledger --json` 給出每筆紀錄及其機率和耗時，桌面版的「判定」頁顯示每次判定和它的問題。
 4. 判定結果看起來對了，就把這個判定點切回生效。
 
 `"recordState": true` 還會把被判定的狀態存進帳本，訓練或蒸餾你自己的判定器時需要它。預設關閉，因為這些狀態裡有你的內容。

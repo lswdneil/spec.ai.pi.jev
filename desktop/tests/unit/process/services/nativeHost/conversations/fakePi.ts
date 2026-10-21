@@ -19,7 +19,7 @@ import {
 /**
  * A stand-in for pi behind a native host, for the native conversation tests: sessions as pi keeps them (a tree of
  * entries, a leaf, a file written from the first reply on), the RPC commands the conversations send, turns that stream
- * records the way pi's RPC mode does, and what mu's slash commands do to the session (`/clear`, a rewind, a
+ * records the way pi's RPC mode does, and what spec.jev's slash commands do to the session (`/clear`, a rewind, a
  * permission switch, a command that asks).
  */
 
@@ -106,7 +106,7 @@ export class FakeHost implements ConversationHost {
 
   boot(): void {
     this.session = this.input.session ? this.load(this.input.session) : this.fresh();
-    // mu says its permission mode as it starts, before it answers anything.
+    // spec.jev says its permission mode as it starts, before it answers anything.
     this.emit(frame('permissions.mode', { mode: this.input.env.MU_PERMISSIONS || 'full', modes: MODES }));
     queueMicrotask(() => {
       if (!this.disposed) this.setState({ phase: this.model ? 'running' : 'needs-model' });
@@ -125,9 +125,9 @@ export class FakeHost implements ConversationHost {
 
   async request<C extends PiCommand>(command: C): Promise<never> {
     this.sent.push(command);
-    if (this.disposed) throw new NativeHostError('closed', 'The mu host was closed');
+    if (this.disposed) throw new NativeHostError('closed', 'The spec.jev host was closed');
     await tick();
-    if (this.disposed) throw new NativeHostError('closed', 'The mu host was closed');
+    if (this.disposed) throw new NativeHostError('closed', 'The spec.jev host was closed');
     let data: unknown;
     try {
       data = await this.answer(command);
@@ -141,7 +141,7 @@ export class FakeHost implements ConversationHost {
   }
 
   respondToDialog(id: string, answer: DialogAnswer): void {
-    if (this.disposed) throw new NativeHostError('closed', 'The mu host was closed');
+    if (this.disposed) throw new NativeHostError('closed', 'The spec.jev host was closed');
     this.emit({ type: 'extension_ui_response', id, ...answer });
     this.dialogs.get(id)?.(answer);
     this.dialogs.delete(id);
@@ -158,7 +158,7 @@ export class FakeHost implements ConversationHost {
     this.disposed = true;
     this.setState({
       phase: 'failed',
-      error: new NativeHostError('crashed', 'The mu host stopped by itself (exit code 1)', { code: 1, stderr: 'boom' }),
+      error: new NativeHostError('crashed', 'The spec.jev host stopped by itself (exit code 1)', { code: 1, stderr: 'boom' }),
     });
   }
 
@@ -275,7 +275,7 @@ export class FakeHost implements ConversationHost {
         this.session = this.fresh();
         return undefined;
       case '/rewind':
-        // mu's checkpoint rewind moves the leaf back; nothing is written until the next entry.
+        // spec.jev's checkpoint rewind moves the leaf back; nothing is written until the next entry.
         this.session.leafId = argument;
         return undefined;
       case '/permissions':

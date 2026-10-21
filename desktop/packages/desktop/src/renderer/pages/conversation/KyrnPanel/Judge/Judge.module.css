@@ -273,7 +273,7 @@
   min-width: 0;
 }
 
-/* The state is told by the tag's text (the mu colour scheme keeps every tag colour readable). */
+/* The state is told by the tag's text (the spec.jev colour scheme keeps every tag colour readable). */
 .cardHead :global(.arco-tag) {
   font-weight: 500;
 }

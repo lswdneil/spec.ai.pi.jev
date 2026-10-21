@@ -4,11 +4,11 @@ import type { KyrnRuntime } from "../runtime.ts";
 /**
  * Signing in with a Google account under /login: through Gemini CLI's login
  * (the Gemini models) or Antigravity's (Gemini, Claude, GPT-OSS). pi dropped
- * both upstream; mu keeps them as experimental. Before the browser opens, the
+ * both upstream; spec.jev keeps them as experimental. Before the browser opens, the
  * sign-in says what the risk is (these are Google's logins for its own tools)
  * and goes on only when the person agrees.
  *
- * The official routes need nothing from mu: a Gemini API key (provider
+ * The official routes need nothing from spec.jev: a Gemini API key (provider
  * "google") and Vertex AI with gcloud's application default credentials
  * (provider "google-vertex"). Grok's sign-in (provider "xai") is pi's own.
  */

@@ -2,7 +2,7 @@
  * Building only some members of a large JSON object.
  *
  * Claude Code keeps every project it has seen in `~/.claude.json`, with that project's prompt history, and the file
- * grows to tens of MB. mu needs two of its members. `JSON.parse` of the whole file costs several times its size in
+ * grows to tens of MB. spec.jev needs two of its members. `JSON.parse` of the whole file costs several times its size in
  * heap, and it ran twice at every start: a 30 MB file took the heap from about 40 MB to about 180 MB. Here the bytes
  * are only scanned, and a member is parsed when it is asked for.
  */

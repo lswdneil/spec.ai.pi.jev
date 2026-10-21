@@ -34,7 +34,7 @@ export const BUILTIN_TAB_IDS = SETTINGS_PAGES.map((page) => page.id);
  */
 export const LEGACY_ANCHOR_REMAP: Record<string, string> = SETTINGS_ANCHOR_REMAP;
 
-/** Where an extension that names no anchor goes: at the end of the capabilities, the things mu can reach for. */
+/** Where an extension that names no anchor goes: at the end of the capabilities, the things spec.jev can reach for. */
 const UNANCHORED_GROUP: SettingsGroupId = 'capabilities';
 
 export type SettingsNavItem = {
@@ -55,7 +55,7 @@ export type SettingsNavGroup = { id: SettingsGroupId; label: string; items: Sett
 /**
  * The settings navigation as groups of entries: the built-in pages of `settingsNav.ts`, with extension tabs placed
  * before or after the page they anchor to, and unanchored ones at the end of the capabilities. The rail and the
- * mobile top navigation both draw this list. While mu runs inside the app, the pages of the classic mode's own
+ * mobile top navigation both draw this list. While spec.jev runs inside the app, the pages of the classic mode's own
  * storage are left out, and a page that then shows something else has that name.
  */
 export function useSettingsNav(): SettingsNavGroup[] {

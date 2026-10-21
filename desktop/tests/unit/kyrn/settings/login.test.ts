@@ -304,7 +304,7 @@ describe('who is signed in', () => {
 });
 
 describe('one runner at a time', () => {
-  // Two `mu auth status` runners 0.7 s apart at the app's start: the first exited holding mu's model store lock, and
+  // Two `spec.jev auth status` runners 0.7 s apart at the app's start: the first exited holding spec.jev's model store lock, and
   // the second (and the first conversation after it) waited half a minute for it.
   it('gives a look asked for while one runs that one’s answer, and starts a new runner only after it', async () => {
     const { manager, runners } = setup();
@@ -382,7 +382,7 @@ describe('when the app quits', () => {
     const dir = mkdtempSync(join(tmpdir(), 'mu-auth-'));
     let started: number | undefined;
     try {
-      // As a checkout runs `mu auth`: tsx, which starts a second Node for pi.
+      // As a checkout runs `spec.jev auth`: tsx, which starts a second Node for pi.
       const launcher = join(dir, 'mu.mjs');
       writeFileSync(
         launcher,
@@ -441,10 +441,10 @@ describe('what the sign-in may open and run', () => {
     expect(openable(undefined)).toBe(false);
   });
 
-  it('runs `mu auth` through the harness’s launcher, signed in to mu’s agent dir', async () => {
+  it('runs `spec.jev auth` through the harness’s launcher, signed in to spec.jev’s agent dir', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'mu-auth-'));
     try {
-      // A launcher that answers as `mu auth status` does, and says what it was started with.
+      // A launcher that answers as `spec.jev auth status` does, and says what it was started with.
       const launcher = join(dir, 'mu.mjs');
       writeFileSync(
         launcher,

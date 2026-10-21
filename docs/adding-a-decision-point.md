@@ -6,8 +6,8 @@ A decision point is one bounded question that a small judge answers about a smal
 
 - **It comes up often**, and today it either costs the main model tokens or attention, or a fixed rule gets it wrong.
 - **A small state is enough to answer it.** The judge has a 32K window and answers fastest from a few short fields. If the question needs the whole conversation, it isn't a question for a judge.
-- **The answer changes what mu does.** Admit or archive, run or ask, nudge or not. A verdict shouldn't make the model ask the user a question; only the permission checks (`tool.risk` and `tool.approval`) decide whether mu asks the user.
-- **Doing nothing is safe.** When no judge answers, mu behaves as it would without the point.
+- **The answer changes what spec.jev does.** Admit or archive, run or ask, nudge or not. A verdict shouldn't make the model ask the user a question; only the permission checks (`tool.risk` and `tool.approval`) decide whether spec.jev asks the user.
+- **Doing nothing is safe.** When no judge answers, spec.jev behaves as it would without the point.
 
 ## 1. Define the decision
 

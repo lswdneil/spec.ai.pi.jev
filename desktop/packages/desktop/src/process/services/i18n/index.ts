@@ -25,14 +25,6 @@ import zhCN from '@renderer/services/i18n/locales/zh-CN/index';
 import jaJP from '@renderer/services/i18n/locales/ja-JP/index';
 import zhTW from '@renderer/services/i18n/locales/zh-TW/index';
 import koKR from '@renderer/services/i18n/locales/ko-KR/index';
-import trTR from '@renderer/services/i18n/locales/tr-TR/index';
-import ruRU from '@renderer/services/i18n/locales/ru-RU/index';
-import ukUA from '@renderer/services/i18n/locales/uk-UA/index';
-import ptBR from '@renderer/services/i18n/locales/pt-BR/index';
-import deDE from '@renderer/services/i18n/locales/de-DE/index';
-import esES from '@renderer/services/i18n/locales/es-ES/index';
-import frFR from '@renderer/services/i18n/locales/fr-FR/index';
-import faIR from '@renderer/services/i18n/locales/fa-IR/index';
 
 // All locale data keyed by language code.
 // NOTE: When adding a new language, add a static import above and an entry here.
@@ -44,14 +36,6 @@ const localeData: LocaleData = {
   'ja-JP': jaJP,
   'zh-TW': zhTW,
   'ko-KR': koKR,
-  'tr-TR': trTR,
-  'ru-RU': ruRU,
-  'uk-UA': ukUA,
-  'pt-BR': ptBR,
-  'de-DE': deDE,
-  'es-ES': esES,
-  'fr-FR': frFR,
-  'fa-IR': faIR,
 };
 
 const fallbackData = localeData[DEFAULT_LANGUAGE] ?? {};
@@ -72,7 +56,7 @@ export const i18nReady = (async (): Promise<void> => {
     fallbackLng: DEFAULT_LANGUAGE,
     debug: false,
     interpolation: { escapeValue: false },
-    // Tray and dialog strings name the product AionUi upstream: shown as mu (see common/kyrn/displayName.ts).
+    // Tray and dialog strings name the product AionUi upstream: shown as spec.jev (see common/kyrn/displayName.ts).
     postProcess: [MU_NAME_POST_PROCESSOR],
   });
 
@@ -125,7 +109,7 @@ let applyRequests = 0;
 /**
  * Make the main process follow the app language: switch its i18next, remember the language as the startup hint
  * (the legacy config key the renderer is also handed as its first-paint hint), tell the harness through
- * `~/.mu/app-language`, then let the listeners rebuild what they show.
+ * `~/.spec.jev/app-language`, then let the listeners rebuild what they show.
  */
 export function applyAppLanguage(language: string): Promise<SupportedLanguage> {
   // One at a time, in the order asked: two quick switches must not finish the wrong way round.

@@ -7,7 +7,7 @@ import { BROWSER_BLANK_URL, MAX_BROWSER_TABS, isAppAddress } from './constants';
  * The in-app browser's pages: what the work panel's 浏览器 tab shows.
  *
  * Every web page opens here: a link the person follows, the browser's plus, a page the agent opens, and the tabs
- * mu's judge-driven browsing works in. The preview keeps files, HTML and other previews.
+ * spec.jev's judge-driven browsing works in. The preview keeps files, HTML and other previews.
  *
  * The pages are kept per project (the preview's scope, see `previewScope.ts`), in memory and in one localStorage
  * entry per project, so switching projects and restarting the app both bring each project's pages back with the one
@@ -25,7 +25,7 @@ export type BrowserTab = {
   /** The page's own title; '' (or the stored "New Tab" of an older build) until it reports one. */
   title: string;
   favicon?: string;
-  /** Opened by mu's browsing for this request: the agent's own session, and the step bar above the page. */
+  /** Opened by spec.jev's browsing for this request: the agent's own session, and the step bar above the page. */
   muRun?: string;
   /** The built-in browser tool is driving the pages right now. Never stored. */
   agentActive?: boolean;
@@ -202,7 +202,7 @@ export function switchBrowserScope(next: string | null): void {
 export type OpenBrowserPageOptions = {
   /** Who opened it, the person unless said otherwise: the panel comes up for the person, and marks it for the agent. */
   by?: PreviewOpener;
-  /** A run of mu's (its request id): the page gets the agent's own session and the step bar. */
+  /** A run of spec.jev's (its request id): the page gets the agent's own session and the step bar. */
   muRun?: string;
   /**
    * The address, when already open in a page of the person's session, brings that page to the front instead of
@@ -214,8 +214,8 @@ export type OpenBrowserPageOptions = {
 /**
  * Open a web page in a new tab (a blank one without an address) and bring it to the front. The app itself is never
  * opened (see `isAppAddress`), and a full browser takes over its oldest page, saying so through `limitHitAt`: the
- * oldest the person browses, since taking over a page of mu's would end its run there (the oldest of all only when
- * every page is mu's). A run of mu's is refused instead, since its policy asks first (`muBrowser/panelPolicy.ts`).
+ * oldest the person browses, since taking over a page of spec.jev's would end its run there (the oldest of all only when
+ * every page is spec.jev's). A run of spec.jev's is refused instead, since its policy asks first (`muBrowser/panelPolicy.ts`).
  * Returns the tab's id, or null when nothing was opened.
  */
 export function openBrowserPage(url?: string, options: OpenBrowserPageOptions = {}): string | null {
@@ -321,7 +321,7 @@ export const useBrowserMaximized = (): boolean => useSyncExternalStore(subscribe
 /** Only whether there is a hand-over to take (see `takeBrowserHandOver`): the work panel follows nothing else here. */
 export const useBrowserHandOver = (): boolean => useSyncExternalStore(subscribe, handOverSnapshot, handOverSnapshot);
 
-/** For code outside React (mu's browser answering the main process). */
+/** For code outside React (spec.jev's browser answering the main process). */
 export const browserNow = (): BrowserState => state;
 
 /** Forget everything, storage aside: tests start from a clean module. */

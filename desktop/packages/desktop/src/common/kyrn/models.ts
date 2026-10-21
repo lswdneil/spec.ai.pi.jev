@@ -145,7 +145,7 @@ export type ModelsSettings = {
  */
 export type ModelThinkingLevels = Record<string, ThinkingLevel[]>;
 
-/** What a running mu last reported as usable: built-in logins and custom providers alike. A snapshot, not live. */
+/** What a running spec.jev last reported as usable: built-in logins and custom providers alike. A snapshot, not live. */
 export type AvailableModels = {
   providers: { id: string; models: { id: string; name: string }[] }[];
   thinkingLevels: string[];
@@ -202,7 +202,7 @@ export const PROVIDER_ID = /^[a-z0-9][a-z0-9-]{0,39}$/;
 /**
  * pi's built-in providers (its `packages/ai/src/providers`, 2026-09). A models.json entry under one of these ids
  * is not a new provider: it reroutes the built-in one and merges into its models. So a new provider may not take
- * such an id. The list can lag behind pi; the screen also refuses ids the running mu reports.
+ * such an id. The list can lag behind pi; the screen also refuses ids the running spec.jev reports.
  */
 export const RESERVED_PROVIDER_IDS: ReadonlySet<string> = new Set(
   (

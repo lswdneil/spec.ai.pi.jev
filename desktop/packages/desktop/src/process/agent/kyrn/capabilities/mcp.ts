@@ -16,8 +16,8 @@ import { asRecord, type JsonRecord } from '../piRpc';
 import { INHERIT_DEFAULTS, featureOptions, readMuConfig, readName, readSmall } from './files';
 
 /*
- * The MCP servers mu uses in every conversation, where each is defined, and the changes the settings page makes. pi
- * connects the servers of its `mcp.json` (what `mu mcp add` writes); mu's MCP feature adds those of mu.json and those
+ * The MCP servers spec.jev uses in every conversation, where each is defined, and the changes the settings page makes. pi
+ * connects the servers of its `mcp.json` (what `spec.jev mcp add` writes); spec.jev's MCP feature adds those of mu.json and those
  * it takes over from the other tools, the first definition of a name winning, and any of them yields to a server of
  * the same name in `mcp.json`:
  *
@@ -27,9 +27,9 @@ import { INHERIT_DEFAULTS, featureOptions, readMuConfig, readName, readSmall } f
  *   ~/.cursor/mcp.json          `mcpServers`
  *   ~/.codex/config.toml        `[mcp_servers.<name>]`
  *
- * The rules are pi's (`extensions/mcp/config.ts`) and mu's (`inherit/mcp-config.ts`, `extension/features/mcp.ts`).
+ * The rules are pi's (`extensions/mcp/config.ts`) and spec.jev's (`inherit/mcp-config.ts`, `extension/features/mcp.ts`).
  * A project's servers (`.mu/mcp.json`, `.mcp.json`, `.cursor/mcp.json`, Claude Code's per-project ones) are not read:
- * they depend on the project and on mu's trust in it. Nothing here connects to a server or starts one, and no value of
+ * they depend on the project and on spec.jev's trust in it. Nothing here connects to a server or starts one, and no value of
  * a variable or a header leaves this file.
  */
 
@@ -39,7 +39,7 @@ export type McpRoots = {
   home: string;
 };
 
-/** Claude Code keeps every project's history in its file, which can grow large; mu reads up to this much of it. */
+/** Claude Code keeps every project's history in its file, which can grow large; spec.jev reads up to this much of it. */
 const CLAUDE_FILE_BYTES = 32 * 1024 * 1024;
 
 /** pi's `mcp.json`, where an added server goes. */
@@ -86,7 +86,7 @@ function targetOf(raw: JsonRecord, transport: 'stdio' | 'http'): string {
 type Definition = { transport: 'stdio' | 'http'; lock?: McpLock; off: boolean };
 
 /**
- * A definition in any of the spellings mu reads (`normalizeServer`): a command, or an address that is not the old SSE
+ * A definition in any of the spellings spec.jev reads (`normalizeServer`): a command, or an address that is not the old SSE
  * transport. Undefined when it has neither.
  */
 function definitionOf(raw: unknown): Definition | undefined {
@@ -219,7 +219,7 @@ export function listMcpServers(roots: McpRoots): MuMcpServers {
       if (used.has(name)) continue;
       const definition = definitionOf(raw);
       if (!definition || !isRecord(raw)) continue;
-      // Switched off in mu.json, mu's own file, a server keeps its switch here; in another tool's file, it is locked.
+      // Switched off in mu.json, spec.jev's own file, a server keeps its switch here; in another tool's file, it is locked.
       const lock = definition.lock ?? (definition.off && source !== 'mu' ? 'offInSource' : undefined);
       const server: MuMcpServer = {
         name,
@@ -255,7 +255,7 @@ function find(roots: McpRoots, name: string): MuMcpServer {
   return server;
 }
 
-/** Reads a JSON file of mu's own configuration, changes it and writes it back with its indentation. */
+/** Reads a JSON file of spec.jev's own configuration, changes it and writes it back with its indentation. */
 function edit(file: string, change: (document: JsonRecord) => void): void {
   const raw = readOptional(file);
   const document = parseObject(raw, file);
@@ -297,8 +297,8 @@ function readPairs(value: unknown, pattern: RegExp, field: string): Record<strin
 }
 
 /**
- * The definition `mu mcp add` writes for a server: its command, arguments and variables, or its address and headers,
- * then `"exposure": "deferred"`, the exposure mu gives every server it adds (`mcpAddDefaults` of mu's launcher).
+ * The definition `spec.jev mcp add` writes for a server: its command, arguments and variables, or its address and headers,
+ * then `"exposure": "deferred"`, the exposure spec.jev gives every server it adds (`mcpAddDefaults` of spec.jev's launcher).
  */
 function definitionFor(input: McpServerInput): JsonRecord {
   if ('url' in input) {
@@ -323,7 +323,7 @@ function definitionFor(input: McpServerInput): JsonRecord {
 }
 
 /**
- * Adds a server to pi's `mcp.json`, as `mu mcp add` would. A name that one of mu's own servers already has (or one
+ * Adds a server to pi's `mcp.json`, as `spec.jev mcp add` would. A name that one of spec.jev's own servers already has (or one
  * that differs from it only in `-` and `_`) is refused; one taken over is not: the new server is used instead.
  */
 export function addMcpServer(roots: McpRoots, input: McpServerInput): MuMcpServers {
@@ -345,7 +345,7 @@ export function addMcpServer(roots: McpRoots, input: McpServerInput): MuMcpServe
   return listMcpServers(roots);
 }
 
-/** Removes one of mu's own servers from the file that defines it. A server taken over can only be switched off. */
+/** Removes one of spec.jev's own servers from the file that defines it. A server taken over can only be switched off. */
 export function removeMcpServer(roots: McpRoots, name: unknown): MuMcpServers {
   const server = find(roots, readName(name));
   if (server.source !== 'mu')
@@ -360,7 +360,7 @@ export function removeMcpServer(roots: McpRoots, name: unknown): MuMcpServers {
 }
 
 /**
- * Switches a server on or off in mu's own configuration: pi's servers by their `enabled`, those of mu.json by theirs,
+ * Switches a server on or off in spec.jev's own configuration: pi's servers by their `enabled`, those of mu.json by theirs,
  * and a server taken over by a switch of its name in mu.json; the other tool's file is never written. On is the
  * default, so switching on takes the switch away.
  */

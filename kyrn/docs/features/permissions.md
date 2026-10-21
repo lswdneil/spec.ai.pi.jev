@@ -1,6 +1,6 @@
 # Permission modes
 
-How much mu may do without asking. There are three modes, and you can switch between them at any time with `/permissions`.
+How much spec.jev may do without asking. There are three modes, and you can switch between them at any time with `/permissions`.
 
 | mode | id | what runs without asking | what asks |
 | --- | --- | --- | --- |
@@ -12,8 +12,8 @@ Some things hold in every mode:
 
 - **Hard constraints still apply.** What you said not to do is stopped by the constraint gate, even in full access. That gate is about your words, not about permission.
 - **Reading is never asked about.** This covers `read`, `grep`, `find`, `ls`, `todo`, `web_search`, `web_fetch`, background output, `sg_search`, the debugger's inspect/step/stop, and shell commands made only of read-only programs (`git status`, `cat … | grep … | head`).
-- **Unlisted tools are asked about.** A tool mu does not know (an MCP tool, for example) needs permission. A command counts as read-only only when every part of it is on the short read-only list.
-- **mu's own settings are always yours to decide.** Any call that touches the agent folder (`~/.mu/agent`, spelled as a path, with `~` or with `$HOME`) is asked every time. Jev cannot approve it, and "allow for this conversation" is not offered.
+- **Unlisted tools are asked about.** A tool spec.jev does not know (an MCP tool, for example) needs permission. A command counts as read-only only when every part of it is on the short read-only list.
+- **spec.jev's own settings are always yours to decide.** Any call that touches the agent folder (`~/.spec.jev/agent`, spelled as a path, with `~` or with `$HOME`) is asked every time. Jev cannot approve it, and "allow for this conversation" is not offered.
 
 ## What Jev is asked
 
@@ -22,12 +22,12 @@ Jev mode puts one choice question, `tool.approval`, to Jev: what is `tool_call` 
 - Only `needed` at probability 0.8 or higher runs without you.
 - Anything else asks you, and the prompt says why ("Jev thinks this goes beyond what you asked for").
 - If there is no verdict at all, you are asked, and the prompt says why:
-  - `nojudge`: no judge will answer the next step either. "No judge is available yet, so mu asks about each step." / "还没有可用的判定器，所以每一步都先问你。" This covers four cases:
+  - `nojudge`: no judge will answer the next step either. "No judge is available yet, so spec.jev asks about each step." / "还没有可用的判定器，所以每一步都先问你。" This covers four cases:
     - no usable key (`error:auth`);
     - no credit on the judge's account (`error:payment_required`);
     - no judge that could be built at all, which also fails as `error:auth`;
     - only judges not trusted with approvals, such as a local judge alone. Their answer is the neutral one, marked `untrusted`.
-  - `judgedown`: the judge failed this time. "The judge did not answer this time, so mu asks you." / "判定器这次没有回答，所以先问你。" This covers any other `error:*` (down, too slow, a broken answer), and an answer marked `unavailable`, where the tier that should have answered failed while another answered.
+  - `judgedown`: the judge failed this time. "The judge did not answer this time, so spec.jev asks you." / "判定器这次没有回答，所以先问你。" This covers any other `error:*` (down, too slow, a broken answer), and an answer marked `unavailable`, where the tier that should have answered failed while another answered.
   - When several judges are configured and every one fails, the failure that may pass is reported over one that lasts, whatever their order. So a local judge that is down, plus Jev without a key, gives `judgedown`.
   - When the decision's mode is `off`, Jev is never asked, and the prompt still says `unsure`, as before.
 
@@ -37,7 +37,7 @@ Jev's verdict counts even when the decision's own mode is `shadow`, because choo
 
 Commands that the risk rules flag work differently: `rm -rf`, force push, `sudo`, running a downloaded script and the rest of the guard's rules. In Jev mode they use the guard's `tool.risk` question and run only when Jev is sure you asked for them. In minimal mode the flag is shown in the question. A flagged command can only be allowed once, never for the whole conversation.
 
-With permission modes on (the default), they take over the old guard. With `features.permissions: false` in mu.json, the guard works on its own as before.
+With permission modes on (the default), they take over the old guard. With `features.permissions: false` in spec.jev.json, the guard works on its own as before.
 
 ## Asking
 
@@ -47,7 +47,7 @@ A call that needs you shows one picker with fixed answers:
 - `Allow for this conversation（<scope>）` / 这次对话都允许（<scope>）. This is offered only when the call has a safe scope.
 - `Don't allow` / 不允许
 
-While the picker waits, the status line `mu.permissions.pending` says "Waiting for your permission: <summary>" / "等你授权：<summary>". It is cleared once you answer. The mode itself is always shown in the status line `mu.permissions` ("Permissions: Jev approves" / "权限：Jev 审批").
+While the picker waits, the status line `spec.jev.permissions.pending` says "Waiting for your permission: <summary>" / "等你授权：<summary>". It is cleared once you answer. The mode itself is always shown in the status line `spec.jev.permissions` ("Permissions: Jev approves" / "权限：Jev 审批").
 
 "For this conversation" covers:
 
@@ -69,10 +69,10 @@ When nobody can be asked (print mode, a sub-agent), a call that would ask is ref
 
 When a conversation starts:
 
-1. If the conversation was switched before, it keeps that mode (from a `mu.permissions` session entry), including when it is reopened.
+1. If the conversation was switched before, it keeps that mode (from a `spec.jev.permissions` session entry), including when it is reopened.
 2. Otherwise `MU_PERMISSIONS` (or `KYRN_PERMISSIONS`) applies. Sub-agents get their parent's current mode this way.
 3. Otherwise the mode last chosen with `/permissions` applies, read from `<agentDir>/mu/permissions.json` (`{"version":1,"mode":"ask"}`, mode 600).
-4. Otherwise `features.permissions.mode` in mu.json applies, which defaults to `jev`.
+4. Otherwise `features.permissions.mode` in spec.jev.json applies, which defaults to `jev`.
 
 `/permissions <mode>` switches this conversation, writes the session entry, saves the new default for later conversations, and forgets allowances. Other running conversations keep their own mode.
 
@@ -81,9 +81,9 @@ When a conversation starts:
 **`permissions.json` is a contract with the desktop app.** The app's settings page writes it (2026-09-22, KYRN-desktop `4e26995`), and `PermissionDefaults` reads it back:
 
 - The format is `{"version": 1, "mode": "full" | "jev" | "ask"}`, mode 600.
-- mu reads only these three ids. Aliases such as `yolo` are for typing, not for the file.
+- spec.jev reads only these three ids. Aliases such as `yolo` are for typing, not for the file.
 - Any other version, a missing file or a broken file counts as "not set".
-- mu writes the file only when the person switches with `/permissions <mode>` (never with `--here`), and it writes the whole file.
+- spec.jev writes the file only when the person switches with `/permissions <mode>` (never with `--here`), and it writes the whole file.
 
 Tell the desktop session before changing the version, the location or the accepted values.
 

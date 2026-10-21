@@ -54,7 +54,7 @@ describe('resolveConversationLeadingMark', () => {
     });
   });
 
-  it('labels an assistant the conversation stored from the backend as mu', () => {
+  it('labels an assistant the conversation stored from the backend as spec.jev', () => {
     const result = resolveConversationLeadingMark(
       makeConversation({
         assistant: { id: 'aionui-assistant', name: 'AionUi Butler', avatar: '🤵' },
@@ -63,7 +63,7 @@ describe('resolveConversationLeadingMark', () => {
       TEST_LOGOS
     );
 
-    expect(result).toEqual({ kind: 'emoji', value: '🤵', label: 'mu Butler' });
+    expect(result).toEqual({ kind: 'emoji', value: '🤵', label: 'spec.jev Butler' });
   });
 
   it('falls back to the backend logo when there is no assistant info', () => {

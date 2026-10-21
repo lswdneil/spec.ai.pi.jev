@@ -6,7 +6,7 @@ import type { JsonObject } from '../../../../common/utils/nativeHost/records.ts'
  * built live record by record, is still the view of pi's branch.
  *
  * It is not when the session changed under the conversation: another session (`/clear`, an import switching to its
- * session), or the same session's leaf moved (mu's checkpoint rewind navigates the tree): the leaf then is not reached
+ * session), or the same session's leaf moved (spec.jev's checkpoint rewind navigates the tree): the leaf then is not reached
  * from `from`, or entries appeared off the way to it.
  */
 export function followsBranch(entries: readonly JsonObject[], from: string | null, leaf: string | null): boolean {

@@ -59,7 +59,7 @@ test('a fresh start: the native group is in the sidebar, empty, and a conversati
   await test.step('the popover offers a folder and the permission modes, and makes the conversation', async () => {
     await p.getByTestId('native-new').click();
     await expect(p.getByTestId('native-new-panel')).toBeVisible();
-    // 最小权限: mu asks before it writes or runs anything.
+    // 最小权限: spec.jev asks before it writes or runs anything.
     await p.getByTestId('native-permissions').click();
     await p.locator('.arco-select-popup:visible .arco-select-option', { hasText: '最小权限' }).click();
     await shot('new-conversation');
@@ -244,10 +244,10 @@ test('the test stayed in its profile, and left nothing running', async () => {
 
   const { project, home, agentDir } = paths();
   const slug = `--${project.replace(/^[/\\]/, '').replace(/[/\\:]/g, '-')}--`;
-  expect(existsSync(join(agentDir, 'sessions', slug)), "mu kept the conversation's session in MU_AGENT_DIR").toBe(true);
-  expect(existsSync(join(home, '.mu', 'agent')), 'nothing in the profile home ~/.mu/agent').toBe(false);
+  expect(existsSync(join(agentDir, 'sessions', slug)), "spec.jev kept the conversation's session in MU_AGENT_DIR").toBe(true);
+  expect(existsSync(join(home, '.mu', 'agent')), 'nothing in the profile home ~/.spec.jev/agent').toBe(false);
   const realMu = join(homedir(), '.mu');
-  expect(existsSync(join(realMu, 'agent', 'sessions', slug)), "nothing in the person's ~/.mu/agent").toBe(false);
+  expect(existsSync(join(realMu, 'agent', 'sessions', slug)), "nothing in the person's ~/.spec.jev/agent").toBe(false);
   // A native conversation has no ACP record: AionCore never heard of it. (Its start-up health checks leave records of
   // their own, in the temporary folder; none of them names the conversation's project.)
   const records = join(home, '.mu', 'acp-sessions');

@@ -171,7 +171,7 @@ export class DapClient {
 				this.received.push({ event, body: body ?? {} });
 				for (const wake of [...this.waiters]) wake();
 			} else if (type === "request") {
-				// A reverse request (runInTerminal, startDebugging): mu has no terminal to lend. Saying so keeps the adapter going.
+				// A reverse request (runInTerminal, startDebugging): spec.jev has no terminal to lend. Saying so keeps the adapter going.
 				const { seq, command } = message as { seq?: number; command?: string };
 				this.write({
 					seq: this.seq++,

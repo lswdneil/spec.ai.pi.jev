@@ -21,8 +21,8 @@ const ROOT = join(__dirname, '../../..');
 const PI_RPC = join(ROOT, 'packages/desktop/src/process/agent/kyrn/piRpc.ts');
 
 /**
- * PiRpc against small Node scripts standing in for mu (a `.mjs` launcher runs on this Node, as mu.mjs does on
- * Windows): what the adapter does when mu stops reading, stops by itself, or writes the way Windows does.
+ * PiRpc against small Node scripts standing in for spec.jev (a `.mjs` launcher runs on this Node, as mu.mjs does on
+ * Windows): what the adapter does when spec.jev stops reading, stops by itself, or writes the way Windows does.
  */
 const dirs: string[] = [];
 const ports: PiRpc[] = [];
@@ -30,11 +30,11 @@ const ports: PiRpc[] = [];
 afterEach(() => {
   vi.restoreAllMocks();
   for (const port of ports.splice(0)) port.close();
-  // On Windows mu is ended through taskkill, which takes a moment: until then its folder cannot be removed.
+  // On Windows spec.jev is ended through taskkill, which takes a moment: until then its folder cannot be removed.
   for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
 });
 
-/** Starts `script` as mu and collects what it sends. */
+/** Starts `script` as spec.jev and collects what it sends. */
 function start(script: string, deadlines?: RpcDeadlines) {
   const dir = mkdtempSync(join(tmpdir(), 'kyrn-rpc-'));
   dirs.push(dir);
@@ -46,7 +46,7 @@ function start(script: string, deadlines?: RpcDeadlines) {
   return { port, events };
 }
 
-/** A mu that answers every command with `data`, lines ended as `eol`. */
+/** A spec.jev that answers every command with `data`, lines ended as `eol`. */
 const answering = (eol: string, data: JsonRecord) => `
 import { createInterface } from 'node:readline';
 createInterface({ input: process.stdin }).on('line', (line) => {
@@ -55,16 +55,16 @@ createInterface({ input: process.stdin }).on('line', (line) => {
 });
 `;
 
-describe('PiRpc, the adapter’s line to mu', () => {
-  // Node cannot close its own input on Windows (libuv keeps descriptors 0 to 2 open): this mu cannot be played there.
+describe('PiRpc, the adapter’s line to spec.jev', () => {
+  // Node cannot close its own input on Windows (libuv keeps descriptors 0 to 2 open): this spec.jev cannot be played there.
   const windows = process.platform === 'win32';
-  it.skipIf(windows)('survives a mu that stopped reading: an answer to it ends nothing but that mu', async () => {
+  it.skipIf(windows)('survives a spec.jev that stopped reading: an answer to it ends nothing but that spec.jev', async () => {
     const logged: string[] = [];
     vi.spyOn(process.stderr, 'write').mockImplementation((chunk: string | Uint8Array) => {
       logged.push(String(chunk));
       return true;
     });
-    // Closing its input and lingering is what a crashing mu looks like from here, for a moment.
+    // Closing its input and lingering is what a crashing spec.jev looks like from here, for a moment.
     const { port, events } = start(`
 import { closeSync } from 'node:fs';
 closeSync(0);
@@ -77,20 +77,20 @@ setTimeout(() => {}, 5000);
     await vi.waitFor(() => expect(events.some((event) => event.type === 'kyrn_rpc_closed')).toBe(true), {
       timeout: 5000,
     });
-    await expect(port.send({ type: 'get_state' })).rejects.toThrow('mu process is closed');
+    await expect(port.send({ type: 'get_state' })).rejects.toThrow('spec.jev process is closed');
     // The closed port takes further answers without a word.
     expect(() => port.respond({ id: 'ui-3', cancelled: true })).not.toThrow();
     expect(events.filter((event) => event.type === 'kyrn_rpc_closed')).toHaveLength(1);
-    // A mu that cannot be written to is ended, and the log says so.
+    // A spec.jev that cannot be written to is ended, and the log says so.
     await vi.waitFor(
-      () => expect(logged.join('')).toContain('[mu] the harness stopped reading its input and was ended'),
+      () => expect(logged.join('')).toContain('[spec.jev] the harness stopped reading its input and was ended'),
       {
         timeout: 5000,
       }
     );
   });
 
-  it('fails the requests in flight when mu stops by itself, and logs why with the end of its error output', async () => {
+  it('fails the requests in flight when spec.jev stops by itself, and logs why with the end of its error output', async () => {
     const logged: string[] = [];
     vi.spyOn(process.stderr, 'write').mockImplementation((chunk: string | Uint8Array) => {
       logged.push(String(chunk));
@@ -103,17 +103,17 @@ createInterface({ input: process.stdin }).on('line', () => {
   process.exit(3);
 });
 `);
-    await expect(port.send({ type: 'get_state' })).rejects.toThrow('mu process exited');
+    await expect(port.send({ type: 'get_state' })).rejects.toThrow('spec.jev process exited');
     expect(events.at(-1)).toEqual({ type: 'kyrn_rpc_closed' });
     await vi.waitFor(() => expect(logged.join('')).toContain('stopped by itself'), { timeout: 5000 });
     expect(logged.join('')).toBe(
-      '[mu] the harness stopped by itself (exit code 3); the end of its error output:\n' +
-        '[mu harness] Error: something broke\n' +
-        '[mu harness]     at crash (mu.js:1:1)\n'
+      '[spec.jev] the harness stopped by itself (exit code 3); the end of its error output:\n' +
+        '[spec.jev harness] Error: something broke\n' +
+        '[spec.jev harness]     at crash (mu.js:1:1)\n'
     );
   });
 
-  it('logs nothing when the adapter ended mu itself', async () => {
+  it('logs nothing when the adapter ended spec.jev itself', async () => {
     const logged: string[] = [];
     vi.spyOn(process.stderr, 'write').mockImplementation((chunk: string | Uint8Array) => {
       logged.push(String(chunk));
@@ -160,10 +160,10 @@ createInterface({ input: process.stdin }).on('line', (line) => {
     ports.push(port);
     await expect(port.send({ type: 'get_state' })).resolves.toEqual({ ok: true });
     await expect(port.send({ type: 'get_state' })).resolves.toEqual({ ok: true });
-    expect(logged.join('')).toContain('[mu] handling a response event failed: Error: listener bug');
+    expect(logged.join('')).toContain('[spec.jev] handling a response event failed: Error: listener bug');
   });
 
-  it('passes mu’s own log lines on to the app’s log as they come, and nothing else of its error output', async () => {
+  it('passes spec.jev’s own log lines on to the app’s log as they come, and nothing else of its error output', async () => {
     const logged: string[] = [];
     vi.spyOn(process.stderr, 'write').mockImplementation((chunk: string | Uint8Array) => {
       logged.push(String(chunk));
@@ -177,9 +177,9 @@ setTimeout(() => {}, 5000);
 `);
     await vi.waitFor(() => expect(logged.join('')).toContain('across writes'), { timeout: 5000 });
     expect(logged.join('')).toBe(
-      '[mu harness] a promise failed and nothing handled it; mu goes on: Error: x\n' +
-        '[mu harness]     at y (b.ts:1:1)\n' +
-        '[mu harness] cut across writes\n'
+      '[spec.jev harness] a promise failed and nothing handled it; spec.jev goes on: Error: x\n' +
+        '[spec.jev harness]     at y (b.ts:1:1)\n' +
+        '[spec.jev harness] cut across writes\n'
     );
   });
 
@@ -220,8 +220,8 @@ new PiRpc(${JSON.stringify(join(dir, 'mu.mjs'))}, ${JSON.stringify(dir)}, undefi
 });
 
 describe('PiRpc deadlines', () => {
-  it('counts a control command’s deadline from the moment mu is up, not from the write', async () => {
-    // A slow first start: the command is written at once, mu reads it 1.5 s later. Counted from the write, the 0.5 s
+  it('counts a control command’s deadline from the moment spec.jev is up, not from the write', async () => {
+    // A slow first start: the command is written at once, spec.jev reads it 1.5 s later. Counted from the write, the 0.5 s
     // deadline would have failed it; the conversation's first message used to fail this way.
     const { port } = start(
       `
@@ -239,7 +239,7 @@ setTimeout(() => {
     await expect(port.send({ type: 'get_state' })).resolves.toEqual({ up: true });
   });
 
-  it('fails a control command mu does not answer once it is up', async () => {
+  it('fails a control command spec.jev does not answer once it is up', async () => {
     const { port } = start(
       `
 process.stdout.write(JSON.stringify({ type: 'extension_ui_request', method: 'setStatus' }) + '\\n');
@@ -247,14 +247,14 @@ setTimeout(() => {}, 20_000);
 `,
       { command: 300, start: 20_000 }
     );
-    await expect(port.send({ type: 'get_state' })).rejects.toThrow('mu control command timed out');
+    await expect(port.send({ type: 'get_state' })).rejects.toThrow('spec.jev control command timed out');
   });
 
-  it('fails a control command when mu does not come up within the start deadline', async () => {
+  it('fails a control command when spec.jev does not come up within the start deadline', async () => {
     const { port } = start('setTimeout(() => {}, 20_000);\n', { command: 100, start: 800 });
     const sent = Date.now();
-    await expect(port.send({ type: 'get_state' })).rejects.toThrow('mu control command timed out');
-    // The start deadline, not the command's: mu never said a word.
+    await expect(port.send({ type: 'get_state' })).rejects.toThrow('spec.jev control command timed out');
+    // The start deadline, not the command's: spec.jev never said a word.
     expect(Date.now() - sent).toBeGreaterThanOrEqual(750);
   });
 
@@ -277,22 +277,22 @@ createInterface({ input: process.stdin }).on('line', (line) => {
 });
 
 describe('stoppedReport', () => {
-  it('names the exit and at most the last 40 lines, each marked as mu’s', () => {
+  it('names the exit and at most the last 40 lines, each marked as spec.jev’s', () => {
     expect(stoppedReport(null, 'SIGKILL', '')).toBe(
-      '[mu] the harness stopped by itself (exit code none, signal SIGKILL)\n'
+      '[spec.jev] the harness stopped by itself (exit code none, signal SIGKILL)\n'
     );
     expect(stoppedReport(null, 'SIGTERM', '', true)).toBe(
-      '[mu] the harness stopped reading its input and was ended (exit code none, signal SIGTERM)\n'
+      '[spec.jev] the harness stopped reading its input and was ended (exit code none, signal SIGTERM)\n'
     );
-    // mu's own log lines are in the log already.
-    expect(stoppedReport(1, null, '[mu] a promise failed\nError: boom\n')).toBe(
-      '[mu] the harness stopped by itself (exit code 1); the end of its error output:\n[mu harness] Error: boom\n'
+    // spec.jev's own log lines are in the log already.
+    expect(stoppedReport(1, null, '[spec.jev] a promise failed\nError: boom\n')).toBe(
+      '[spec.jev] the harness stopped by itself (exit code 1); the end of its error output:\n[spec.jev harness] Error: boom\n'
     );
     const lines = Array.from({ length: 50 }, (_, i) => `line ${i}`).join('\r\n');
     const report = stoppedReport(1, null, `${lines}\r\n\r\n`).trimEnd().split('\n');
     expect(report).toHaveLength(41);
-    expect(report[1]).toBe('[mu harness] line 10');
-    expect(report.at(-1)).toBe('[mu harness] line 49');
+    expect(report[1]).toBe('[spec.jev harness] line 10');
+    expect(report.at(-1)).toBe('[spec.jev harness] line 49');
   });
 });
 
@@ -300,8 +300,8 @@ describe('stoppedReport', () => {
 const registry = (lines: string[]) =>
   ['', 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings', ...lines, ''].join('\r\n');
 
-/** The system's proxy handed to mu (config/systemProxy.ts): an app opened from the Dock has no HTTPS_PROXY. */
-describe('system proxy for mu', () => {
+/** The system's proxy handed to spec.jev (config/systemProxy.ts): an app opened from the Dock has no HTTPS_PROXY. */
+describe('system proxy for spec.jev', () => {
   const scutil = [
     '<dictionary> {',
     '  ExceptionsList : <array> {',

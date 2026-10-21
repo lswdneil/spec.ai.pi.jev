@@ -20,7 +20,7 @@ const noSettings = (): string => {
 };
 
 describe('sessionFolders', () => {
-  it('is <mu home>/agent/sessions by default', () => {
+  it('is <spec.jev home>/agent/sessions by default', () => {
     const home = join(root, 'plain');
     mkdirSync(home);
     expect(sessionFolders({ env: {}, home, readFile: noSettings })).toEqual({

@@ -14,7 +14,7 @@
     "error": "Error",
     "unread": "New run",
     "unconfigured": "No scheduled task",
-    "defaultPrompt": "Every day at 10 AM, search for the latest AI news and write a short report with the key insights. (Use the /cron skill to create a scheduled task in mu.)"
+    "defaultPrompt": "Every day at 10 AM, search for the latest AI news and write a short report with the key insights. (Use the /cron skill to create a scheduled task in spec.jev.)"
   },
   "actions": {
     "goTo": "Open conversation",
@@ -55,7 +55,7 @@
     "newTask": "New task",
     "createViaChat": "Create in a conversation",
     "createManually": "Create manually",
-    "description": "Run tasks on a schedule. You can also ask mu in any conversation to create one for you.",
+    "description": "Run tasks on a schedule. You can also ask spec.jev in any conversation to create one for you.",
     "awakeBanner": "Scheduled tasks only run while your computer is awake.",
     "keepAwake": "Keep awake",
     "keepAwakeTooltip": "Keeps your computer from sleeping so scheduled tasks can run",

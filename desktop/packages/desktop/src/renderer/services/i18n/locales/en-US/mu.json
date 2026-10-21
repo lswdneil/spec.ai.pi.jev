@@ -1,6 +1,6 @@
 {
-  "title": "mu settings",
-  "description": "Judges, decision points, features, models and context. The mu command line uses the same settings.",
+  "title": "spec.jev settings",
+  "description": "Judges, decision points, features, models and context. The spec.jev command line uses the same settings.",
   "reload": "Reload",
   "modified": "Changed",
   "applyNote": "Changes apply to new conversations. A running conversation keeps the settings it started with until you reconnect it.",
@@ -38,8 +38,8 @@
     "off": "Off"
   },
   "harness": {
-    "tooOld": "This version of mu is too old to list its decision points and features. Update mu to see them here. Basic settings still work.",
-    "unsupported": "mu describes its settings in a format this app doesn't recognize (version {{version}}). Update the app to edit decision points and features."
+    "tooOld": "This version of spec.jev is too old to list its decision points and features. Update spec.jev to see them here. Basic settings still work.",
+    "unsupported": "spec.jev describes its settings in a format this app doesn't recognize (version {{version}}). Update the app to edit decision points and features."
   },
   "load": {
     "failed": "Couldn't load the settings"
@@ -50,7 +50,7 @@
     "nothing": "No unsaved changes",
     "unsavedDot": "Unsaved changes",
     "discard": "Discard",
-    "stale": "The settings changed after this page loaded them (from the mu command line or a running conversation), so nothing was saved. Reload to see the current settings. Your unsaved edits will be lost.",
+    "stale": "The settings changed after this page loaded them (from the spec.jev command line or a running conversation), so nothing was saved. Reload to see the current settings. Your unsaved edits will be lost.",
     "failed": "Couldn't save: {{reason}}"
   },
   "units": {
@@ -73,13 +73,13 @@
     "useDefault": "Use the default ({{mode}})"
   },
   "features": {
-    "lead": "What mu does for you in the background. Turn a feature off and mu stops doing it.",
+    "lead": "What spec.jev does for you in the background. Turn a feature off and spec.jev stops doing it.",
     "beta": "Beta",
     "reset": "Restore defaults",
     "boardModelElsewhere": "Choose the model that writes the board under Board model.",
     "options": "Options",
     "noOptions": "This feature has no other settings.",
-    "noSuchFeature": "This version of mu doesn't have this feature.",
+    "noSuchFeature": "This version of spec.jev doesn't have this feature.",
     "none": "No features here yet.",
     "part": "Options, page {{part}} of {{parts}}",
     "previousPart": "Previous page",
@@ -87,7 +87,7 @@
     "details": "Details"
   },
   "judges": {
-    "tiersHelp": "mu asks the judges in order. A judge only sees the questions earlier judges weren't sure about.",
+    "tiersHelp": "spec.jev asks the judges in order. A judge only sees the questions earlier judges weren't sure about.",
     "order": "Order",
     "orderHelp": "The first judge is the one you chose on the Judges page.",
     "firstTier": "The judge you chose on the Judges page. Set its service, address and key there.",
@@ -120,7 +120,7 @@
       },
       "opencode": {
         "name": "OpenCode Zen",
-        "help": "Jev 1.13 on OpenCode Zen, billed per call to your OpenCode account. The same key also unlocks OpenCode Zen's chat models in mu.",
+        "help": "Jev 1.13 on OpenCode Zen, billed per call to your OpenCode account. The same key also unlocks OpenCode Zen's chat models in spec.jev.",
         "key": "OpenCode API key"
       },
       "cloudflare": {
@@ -142,14 +142,14 @@
     "baseUrlHelp": "Leave empty to use TypeSafe's default address.",
     "customUrlHelp": "The service's System One address. Its key is sent only to this address.",
     "baseUrlNeeded": "Enter the custom service's address.",
-    "customTier": "A judge you added yourself. Change it in mu's settings file.",
+    "customTier": "A judge you added yourself. Change it in spec.jev's settings file.",
     "endpointDefault": "The service's default address",
     "types": {
       "localHelp": "Runs on this computer.",
       "clmHelp": "Runs on your own CLM server.",
-      "classifierHelp": "A classifier model from mu's model catalog: {{model}}. mu calls it with that provider's key."
+      "classifierHelp": "A classifier model from spec.jev's model catalog: {{model}}. spec.jev calls it with that provider's key."
     },
-    "intro": "While it works, mu has many small questions to settle: how to handle a message, or whether a step breaks a rule you set. The judge answers them. Choose one.",
+    "intro": "While it works, spec.jev has many small questions to settle: how to handle a message, or whether a step breaks a rule you set. The judge answers them. Choose one.",
     "mode": "Verdicts take effect",
     "modeHelp": "On: the judge's verdicts take effect. Off: every step runs as usual. Decision points without their own setting follow this one.",
     "choose": "Choose a judge",
@@ -175,7 +175,7 @@
     "localAddress": "Address: {{address}}",
     "laya": {
       "running": "Running on this computer",
-      "stopped": "Installed but not running. mu starts it when needed.",
+      "stopped": "Installed but not running. spec.jev starts it when needed.",
       "missing": "Not installed.",
       "platform": "Laya can't run on this computer. It needs Windows or Linux (x64 or arm64), or a Mac with Apple silicon.",
       "needsUv": "Installing Laya requires uv, a Python package manager. Install uv, then come back here.",
@@ -184,7 +184,7 @@
       "start": "Start",
       "stop": "Stop",
       "confirmTitle": "Download and install Laya?",
-      "confirmText": "This downloads about {{size}} MB of Python packages and model weights from PyPI and Hugging Face into mu's folder, and takes a few minutes. Laya starts once it's installed.",
+      "confirmText": "This downloads about {{size}} MB of Python packages and model weights from PyPI and Hugging Face into spec.jev's folder, and takes a few minutes. Laya starts once it's installed.",
       "confirmOk": "Download and install",
       "working": {
         "setup": "Installing Laya…",
@@ -197,11 +197,11 @@
         "stop": "Laya didn't stop."
       },
       "onnx": {
-        "missing": "Laya's model isn't on this computer yet (about {{size}} MB). mu doesn't download it for you: get the files from Hugging Face, put them in the model folder, then click Check and start.",
-        "stopped": "The model is in place, but Laya isn't running. When Laya is your judge, mu starts it automatically when the app opens.",
+        "missing": "Laya's model isn't on this computer yet (about {{size}} MB). spec.jev doesn't download it for you: get the files from Hugging Face, put them in the model folder, then click Check and start.",
+        "stopped": "The model is in place, but Laya isn't running. When Laya is your judge, spec.jev starts it automatically when the app opens.",
         "starting": "Checking the model and starting Laya. The first check reads the whole model, so it takes a moment.",
         "missingFiles": "Still missing: {{files}}",
-        "wrongFiles": "These files don't match the version mu was tested with. Download them again: {{files}}",
+        "wrongFiles": "These files don't match the version spec.jev was tested with. Download them again: {{files}}",
         "folder": "Model folder: {{folder}}",
         "command": "With the Hugging Face CLI (hf), this command downloads everything:",
         "page": "Get it on Hugging Face",
@@ -209,11 +209,11 @@
         "check": "Check and start",
         "problem": {
           "missing": "Some model files are missing.",
-          "wrong": "Some model files don't match the version mu was tested with. Download them again.",
+          "wrong": "Some model files don't match the version spec.jev was tested with. Download them again.",
           "runtime": "This computer couldn't run the model.",
           "port": "Another program is already using Laya's port ({{port}}).",
           "stopped": "Laya stopped before it was ready.",
-          "foreign": "A copy of Laya that mu didn't start is already running. Stop it from wherever it was started."
+          "foreign": "A copy of Laya that spec.jev didn't start is already running. Stop it from wherever it was started."
         }
       }
     },
@@ -224,7 +224,7 @@
       "keyPlaceholder": "Only if the server requires one",
       "keyHelp": "Only needed if the server was started with CLM_API_KEY. Enter the same value. After you save the key, it isn't shown again.",
       "check": "Check server",
-      "unmeasured": "CLM's accuracy on mu's decisions hasn't been measured yet.",
+      "unmeasured": "CLM's accuracy on spec.jev's decisions hasn't been measured yet.",
       "status": {
         "checking": "Contacting the server…",
         "ready": "Online · {{models}} · {{ms}} ms",
@@ -258,7 +258,7 @@
     "modes": {
       "full": {
         "title": "Full access",
-        "description": "Runs everything without asking. Anything you've told mu not to do is still blocked."
+        "description": "Runs everything without asking. Anything you've told spec.jev not to do is still blocked."
       },
       "jev": {
         "title": "Jev approves",
@@ -266,27 +266,27 @@
       },
       "ask": {
         "title": "Ask first",
-        "description": "Only reads go ahead. mu asks you before every edit, command and action outside this computer."
+        "description": "Only reads go ahead. spec.jev asks you before every edit, command and action outside this computer."
       }
     }
   },
   "permissionsCard": {
     "kind": {
-      "edit": "mu wants to edit a file",
-      "shell": "mu wants to run a command",
-      "run": "mu wants to run a program",
-      "outside": "mu wants to change a file outside the project",
-      "delegate": "mu wants to start subagents",
-      "other": "mu wants to take an action outside this computer"
+      "edit": "spec.jev wants to edit a file",
+      "shell": "spec.jev wants to run a command",
+      "run": "spec.jev wants to run a program",
+      "outside": "spec.jev wants to change a file outside the project",
+      "delegate": "spec.jev wants to start subagents",
+      "other": "spec.jev wants to take an action outside this computer"
     },
     "reason": {
-      "ask": "Ask first: mu asks you before every edit, command and action outside this computer.",
+      "ask": "Ask first: spec.jev asks you before every edit, command and action outside this computer.",
       "unsure": "Jev isn't sure this step is what you want.",
       "beyond": "Jev thinks this goes beyond what you asked for.",
       "unrelated": "Jev thinks this isn't part of the task.",
-      "protected": "This touches mu's own settings; only you can allow it.",
-      "nojudge": "No judge is available yet, so mu asks you about each step.",
-      "judgedown": "The judge didn't answer this time, so mu is asking you."
+      "protected": "This touches spec.jev's own settings; only you can allow it.",
+      "nojudge": "No judge is available yet, so spec.jev asks you about each step.",
+      "judgedown": "The judge didn't answer this time, so spec.jev is asking you."
     },
     "flagged": "Risky: {{flag}}.",
     "flag": {
@@ -342,7 +342,7 @@
     "foreignHelp": "This entry reroutes a built-in provider or uses an API format this page can't edit. You can remove it here; to change it, edit models.json.",
     "modelCount": "{{count, number}} models",
     "usable": "Available",
-    "builtinHelp": "mu reported this provider as available the last time it connected, usually because its API key is set in your environment. To remove it, delete that key from the environment; it disappears the next time mu connects.",
+    "builtinHelp": "spec.jev reported this provider as available the last time it connected, usually because its API key is set in your environment. To remove it, delete that key from the environment; it disappears the next time spec.jev connects.",
     "noneYet": "None yet",
     "unreadable": "Couldn't read models.json, so providers can't be shown or saved. Fix the file by hand, then reload.",
     "commented": "models.json contains comments, and saving from here would remove them, so providers are read-only. Remove the comments by hand to edit providers here.",
@@ -367,7 +367,7 @@
     "level": "Thinking level",
     "levelUnset": "Not set",
     "levelHelp": "Levels this model doesn't support are disabled.",
-    "levelClamped": "Not set means Medium. If the model doesn't support a level, mu uses the nearest one it does.",
+    "levelClamped": "Not set means Medium. If the model doesn't support a level, spec.jev uses the nearest one it does.",
     "noReasoning": "This model doesn't support thinking, so conversations with it always start with thinking off.",
     "notSet": "Not set",
     "pickProvider": "Choose a provider first."
@@ -381,7 +381,7 @@
     "instant": "Signing in or out takes effect immediately. No need to save.",
     "models": "Available models",
     "byKey": "Available (API key)",
-    "byKeyHelp": "You're not signed in to a subscription, but mu reported this provider as available the last time it connected, usually because its API key is set in your environment. Signing in switches it to the subscription.",
+    "byKeyHelp": "You're not signed in to a subscription, but spec.jev reported this provider as available the last time it connected, usually because its API key is set in your environment. Signing in switches it to the subscription.",
     "otherRunning": "{{name}} sign-in is in progress. Only one sign-in can run at a time.",
     "showRunning": "Show"
   },
@@ -401,7 +401,7 @@
     "anthropicMessages": {
       "name": "Anthropic-compatible (Messages)",
       "hint": "For Claude and services that support the Anthropic Messages format.",
-      "url": "Without /v1, e.g. https://api.example.com. mu adds /v1/messages itself.",
+      "url": "Without /v1, e.g. https://api.example.com. spec.jev adds /v1/messages itself.",
       "short": "Anthropic-compatible"
     },
     "googleGenerativeAi": {
@@ -467,10 +467,10 @@
     "model": "Model",
     "notSet": "Not set",
     "pickProvider": "Choose a provider first.",
-    "unset": "None yet. mu asks the first time you turn on the board.",
+    "unset": "None yet. spec.jev asks the first time you turn on the board.",
     "session": "Same model as the conversation",
     "sessionHelp": "If the conversation switches models, the board switches too.",
-    "update": "This version of mu doesn't let you choose the board's model here. Update mu first."
+    "update": "This version of spec.jev doesn't let you choose the board's model here. Update spec.jev first."
   },
   "levels": {
     "off": "Thinking off",
@@ -497,7 +497,7 @@
     "start": "Get started",
     "model": {
       "title": "Connect a model",
-      "subtitle": "mu uses it to write code and answer you. You can change any of this in Settings later.",
+      "subtitle": "spec.jev uses it to write code and answer you. You can change any of this in Settings later.",
       "model": "Model",
       "baseUrl": "Base URL",
       "key": "API key",
@@ -537,27 +537,27 @@
     "apiKey": {
       "title": "Paste an API key",
       "tag": "Easiest",
-      "description": "DeepSeek, Kimi, Qwen, GLM, OpenAI, Claude, Gemini and more. mu detects the service from the key and sets up the rest.",
+      "description": "DeepSeek, Kimi, Qwen, GLM, OpenAI, Claude, Gemini and more. spec.jev detects the service from the key and sets up the rest.",
       "placeholder": "Paste the key here",
       "service": "Service",
       "servicePlaceholder": "Detected from the key",
-      "serviceHint": "mu detects the service from the key. If it can't, choose it here.",
+      "serviceHint": "spec.jev detects the service from the key. If it can't, choose it here.",
       "recognized": "Detected from the key.",
       "ambiguous": "Several services use keys that look like this. Which one is it from?",
-      "unknown": "mu doesn't recognize this kind of key. Which service is it from?",
+      "unknown": "spec.jev doesn't recognize this kind of key. Which service is it from?",
       "keyPage": "Where do I get a key?",
       "checking": "Checking the key with {{service}}…",
       "lookingLocal": "Looking for {{service}} on this computer…",
       "recheck": "Check again",
-      "startsWith": "mu will start with",
+      "startsWith": "spec.jev will start with",
       "modelHint": "You can switch models anytime.",
       "outcome": {
         "ok": "The key works.",
         "okLocal": "{{service}} is running on this computer.",
-        "openList": "{{service}} responded. Its model list is public, so the key is checked when mu first uses it.",
+        "openList": "{{service}} responded. Its model list is public, so the key is checked when spec.jev first uses it.",
         "empty": "The key works, but {{service}} doesn't list any models for it.",
         "emptyLocal": "{{service}} has no models yet. Download one first (for example, ollama pull qwen3), then check again.",
-        "unlisted": "{{service}} responded but doesn't list its models, so the key is checked when mu first uses it.",
+        "unlisted": "{{service}} responded but doesn't list its models, so the key is checked when spec.jev first uses it.",
         "wrongKey": "{{service}} rejected this key. Check that you copied all of it and that it's still valid.",
         "quota": "{{service}} says the account is out of credit or quota. Top it up, then check again.",
         "unreachable": "Couldn't reach {{service}}. Check your network. If the service is blocked where you are, turn on a proxy and check again.",
@@ -626,7 +626,7 @@
     },
     "judge": {
       "title": "Choose a judge",
-      "subtitle": "The judge answers the small questions mu has while it works. mu runs without one, just without these checks.",
+      "subtitle": "The judge answers the small questions spec.jev has while it works. spec.jev runs without one, just without these checks.",
       "readyFree": "Jev is ready, free for now. Nothing to set up here.",
       "readyKey": "Jev is ready with your key.",
       "more": "Change the service or use your own key",
@@ -638,7 +638,7 @@
       "model": "Model",
       "judge": "Judge",
       "none": "Not set",
-      "noKey": "No key yet. Until you add one, mu uses its default rules instead of a judge.",
+      "noKey": "No key yet. Until you add one, spec.jev uses its default rules instead of a judge.",
       "freeJev": "No key yet. Jev answers for free on OpenCode Zen for a limited time.",
       "saveFailed": "Couldn't save: {{reason}}",
       "modelValue": "{{provider}} / {{model}}",
@@ -655,16 +655,16 @@
         "approval": "npm test runs without asking",
         "completion": "Tests pass, so the work is done"
       },
-      "title": "Welcome to mu",
-      "lead": "mu is a coding agent that does the work: it reads your project, edits code, runs commands and tests, and keeps going until the job is done.",
+      "title": "Welcome to spec.jev",
+      "lead": "spec.jev is a coding agent that does the work: it reads your project, edits code, runs commands and tests, and keeps going until the job is done.",
       "points": {
         "judge": {
           "title": "A check at every step",
-          "text": "A built-in judge watches the key moments, so mu thinks before it acts, follows your rules and checks its work before calling a job done."
+          "text": "A built-in judge watches the key moments, so spec.jev thinks before it acts, follows your rules and checks its work before calling a job done."
         },
         "control": {
           "title": "You see it, you steer it",
-          "text": "Checkpoints let you roll back changes. When mu uses the in-app browser, you can watch each step and pause or take over."
+          "text": "Checkpoints let you roll back changes. When spec.jev uses the in-app browser, you can watch each step and pause or take over."
         },
         "ready": {
           "title": "Works out of the box",
@@ -714,7 +714,7 @@
       "waitingDevice": "The {{name}} verification page is open in your browser. Check that its code matches this one (type it in if it isn't filled in), then approve. This page continues automatically.",
       "risk": {
         "title": "Know the risk before you sign in",
-        "text": "This signs in through the login Google built for {{tool}}, not one Google offers for mu. Google may consider this a violation of its terms and limit or suspend your account.",
+        "text": "This signs in through the login Google built for {{tool}}, not one Google offers for spec.jev. Google may consider this a violation of its terms and limit or suspend your account.",
         "instead": "Use an account you can afford to lose access to. The official options are a Gemini API key, or Vertex AI with a gcloud sign-in.",
         "continue": "Sign in anyway",
         "cancel": "Don't sign in"
@@ -722,32 +722,32 @@
       "readingModels": "Signed in to {{name}}. Loading the models this account can use…"
     },
     "permissions": {
-      "title": "How much mu can do on its own",
+      "title": "How much spec.jev can do on its own",
       "subtitle": "New conversations start in the mode you choose here. Switch anytime from the message box or with /permissions.",
       "recommended": "Recommended"
     }
   },
   "turnErrors": {
-    "processExited": "mu stopped mid-turn. Send your message again to retry.",
-    "regionBlocked": "The model's service isn't available in your network's region. Turn on a proxy (mu uses the system proxy) or choose another model.",
+    "processExited": "spec.jev stopped mid-turn. Send your message again to retry.",
+    "regionBlocked": "The model's service isn't available in your network's region. Turn on a proxy (spec.jev uses the system proxy) or choose another model.",
     "unreachable": "Couldn't reach the model's service. Check your network or proxy, or choose another model.",
     "modelFailed": "The model request failed.",
-    "turnRunning": "mu is still working on your previous message. Wait for it to finish, or stop it first.",
+    "turnRunning": "spec.jev is still working on your previous message. Wait for it to finish, or stop it first.",
     "busyConfig": "Wait for the current turn to finish before changing the model or thinking level.",
-    "unsupportedValue": "mu doesn't support this model, thinking level or permission mode.",
-    "permissionsNotSwitched": "mu couldn't switch the permission mode. Try again, or type /permissions in the conversation.",
+    "unsupportedValue": "spec.jev doesn't support this model, thinking level or permission mode.",
+    "permissionsNotSwitched": "spec.jev couldn't switch the permission mode. Try again, or type /permissions in the conversation.",
     "imageUnsupported": "You can only send PNG, JPEG, WebP or GIF images up to 12 MB.",
-    "contentUnsupported": "mu only accepts text, images and text files.",
+    "contentUnsupported": "spec.jev only accepts text, images and text files.",
     "wrongProject": "This conversation belongs to another project folder.",
-    "notPersisted": "mu couldn't save this conversation.",
-    "startFailed": "mu couldn't start.",
-    "timeout": "mu didn't respond in time.",
-    "processClosed": "mu has stopped. Send your message again to restart it.",
-    "noModel": "mu has no model to answer with."
+    "notPersisted": "spec.jev couldn't save this conversation.",
+    "startFailed": "spec.jev couldn't start.",
+    "timeout": "spec.jev didn't respond in time.",
+    "processClosed": "spec.jev has stopped. Send your message again to restart it.",
+    "noModel": "spec.jev has no model to answer with."
   },
   "noModel": {
     "title": "No model to answer with",
-    "body": "mu needs a model it can use. Sign in or add a key under {{place}}, then send your message again.",
+    "body": "spec.jev needs a model it can use. Sign in or add a key under {{place}}, then send your message again.",
     "open": "Open {{page}}",
     "chip": "Choose a model"
   },
@@ -755,32 +755,32 @@
     "checkpointOff": "Checkpoints are off in this conversation.",
     "freeJev": "No Jev key is set, so the judge is Jev 1.13 on OpenCode Zen, free for a limited time. OpenCode receives what Jev judges and doesn't train on it. To use your own key, add it under Settings → Judges.",
     "freeJevUnavailable": {
-      "paid": "Jev on OpenCode Zen now requires a key or payment, so mu is using its default rules for now. Add a Jev key under Settings → Judges to turn the judge back on.",
-      "gone": "OpenCode Zen no longer offers Jev for free, so mu is using its default rules for now. Add a Jev key under Settings → Judges to turn the judge back on."
+      "paid": "Jev on OpenCode Zen now requires a key or payment, so spec.jev is using its default rules for now. Add a Jev key under Settings → Judges to turn the judge back on.",
+      "gone": "OpenCode Zen no longer offers Jev for free, so spec.jev is using its default rules for now. Add a Jev key under Settings → Judges to turn the judge back on."
     },
     "checkpointOffWhy": {
       "gitMissing": "Checkpoints are off in this conversation: Git wasn't found on this computer. Install Git, then start a new conversation to use them.",
       "xcodeLicense": "Checkpoints are off in this conversation: Git can't run on this Mac until you accept the Xcode license. Run sudo xcodebuild -license in Terminal to accept it, then start a new conversation.",
       "developerToolsMissing": "Checkpoints are off in this conversation: Git needs the command line developer tools, which aren't installed on this Mac. Run xcode-select --install in Terminal, then start a new conversation.",
       "homeFolder": "Checkpoints are off in this conversation: its folder is your home folder or contains it. Start a conversation in a project folder to use them.",
-      "muFolder": "Checkpoints are off in this conversation: its folder is inside mu's own folder. Start a conversation in a project folder to use them.",
+      "muFolder": "Checkpoints are off in this conversation: its folder is inside spec.jev's own folder. Start a conversation in a project folder to use them.",
       "tooManyFiles": "Checkpoints are off in this conversation: its folder has more than {{limit}} files. Start a conversation in a project folder to use them.",
       "tooManyBytes": "Checkpoints are off in this conversation: its folder contains more than {{limitMb}} MB of files. Start a conversation in a project folder to use them.",
       "tooSlow": "Checkpoints are off in this conversation: listing its folder's files took longer than {{seconds}} seconds. Start a conversation in a project folder to use them."
     },
     "stopped": "You stopped this reply.",
-    "answerLost": "mu didn't receive your answer, so it continued as if you had declined.",
-    "bashMissing": "mu needs Git for Windows to run commands. Install it, then send your message again. Download it here:",
+    "answerLost": "spec.jev didn't receive your answer, so it continued as if you had declined.",
+    "bashMissing": "spec.jev needs Git for Windows to run commands. Install it, then send your message again. Download it here:",
     "toModel": {
-      "nudge": "mu reminded the model that this turn isn't finished yet",
-      "goal": "The goal isn't met yet, so mu told the model to keep going",
-      "diagnostics": "mu told the model about errors its edits introduced",
-      "steer": "mu told the model to change course",
-      "rewind": "mu rolled the files back and told the model why",
-      "hive": "mu passed the model new findings from the hive",
-      "swarm": "mu asked the subagent to wrap up and report",
-      "ttsr": "mu reminded the model of one of your rules",
-      "other": "mu sent the model a reminder",
+      "nudge": "spec.jev reminded the model that this turn isn't finished yet",
+      "goal": "The goal isn't met yet, so spec.jev told the model to keep going",
+      "diagnostics": "spec.jev told the model about errors its edits introduced",
+      "steer": "spec.jev told the model to change course",
+      "rewind": "spec.jev rolled the files back and told the model why",
+      "hive": "spec.jev passed the model new findings from the hive",
+      "swarm": "spec.jev asked the subagent to wrap up and report",
+      "ttsr": "spec.jev reminded the model of one of your rules",
+      "other": "spec.jev sent the model a reminder",
       "show": "Show what was sent",
       "hide": "Hide",
       "imported": "This conversation was imported from Claude Code or Codex and continues here; thinking and images weren't imported"
@@ -802,24 +802,24 @@
     },
     "invalidJson": "{{file}} isn't valid JSON. Fix it by hand, then reload.",
     "unreadable": "Couldn't read {{file}}.",
-    "runtimeOffline": "mu's agent isn't responding. Restart mu, then try again.",
-    "otherRegistration": "Another mu command is already registered in the app.",
-    "installPath": "mu can't start because the path of its install folder contains spaces. Reinstall mu in a folder whose path has no spaces, such as C:\\mu.",
+    "runtimeOffline": "spec.jev's agent isn't responding. Restart spec.jev, then try again.",
+    "otherRegistration": "Another spec.jev command is already registered in the app.",
+    "installPath": "spec.jev can't start because the path of its install folder contains spaces. Reinstall spec.jev in a folder whose path has no spaces, such as C:\\spec.jev.",
     "backend": "The local service returned an unexpected response (HTTP {{status}}).",
     "invalid": "One of the values isn't valid.",
-    "unknown": "Something went wrong in mu.",
+    "unknown": "Something went wrong in spec.jev.",
     "unwritable": "Couldn't write {{file}}.",
     "contextLimit": "The context limit must be 0 or a whole number from {{min}} to {{max}}.",
-    "importMissing": "This version of mu can't import conversations. Update mu first.",
-    "importFailed": "mu couldn't import the conversations.",
+    "importMissing": "This version of spec.jev can't import conversations. Update spec.jev first.",
+    "importFailed": "spec.jev couldn't import the conversations.",
     "skillInvalid": "This folder isn't a skill: it has no SKILL.md with a description.",
     "skillName": "\"{{name}}\" isn't a valid skill folder name. Use lowercase letters, digits and hyphens.",
-    "skillExists": "mu already has a skill named {{name}}.",
+    "skillExists": "spec.jev already has a skill named {{name}}.",
     "skillTooLarge": "This folder is too large to be a skill (over 2,000 files or 50 MB).",
     "notFound": "Couldn't find {{name}}. It may have been moved.",
-    "notMine": "{{name}} comes from {{source}}. mu doesn't change those files.",
+    "notMine": "{{name}} comes from {{source}}. spec.jev doesn't change those files.",
     "mcpName": "\"{{name}}\" isn't a valid server name. Use letters, digits, _ and -.",
-    "mcpExists": "mu already has a server named {{name}}.",
+    "mcpExists": "spec.jev already has a server named {{name}}.",
     "mcpInvalid": {
       "command": "This command isn't valid. Check it and try again.",
       "url": "The URL must start with http:// or https://.",
@@ -829,11 +829,11 @@
   },
   "importChats": {
     "title": "Import conversations",
-    "description": "Bring your Claude Code or Codex conversations from this computer into mu and continue them here.",
+    "description": "Bring your Claude Code or Codex conversations from this computer into spec.jev and continue them here.",
     "open": "Choose…",
     "dialog": {
       "title": "Import conversations",
-      "hint": "Each conversation you choose becomes a mu conversation in its project folder. mu reads the full transcript; thinking and images aren't imported.",
+      "hint": "Each conversation you choose becomes a spec.jev conversation in its project folder. spec.jev reads the full transcript; thinking and images aren't imported.",
       "search": "Search by text or folder",
       "loading": "Looking for conversations…",
       "empty": "No Claude Code or Codex conversations found on this computer.",
@@ -864,7 +864,7 @@
     "notice": {
       "title": "Imported from {{tool}}",
       "counts": "Your messages: {{user}} · Replies: {{assistant}} · Tool calls: {{toolCalls}}",
-      "goOn": "mu has read the conversation, so just keep going below. Thinking and images weren't imported.",
+      "goOn": "spec.jev has read the conversation, so just keep going below. Thinking and images weren't imported.",
       "read": "Read the earlier conversation"
     },
     "history": {
@@ -885,7 +885,7 @@
     "lessons": "This project's lessons: /lessons lists id · kind · recalled/followed · lesson; /lessons all adds global and retired lessons",
     "forget": "Retire a lesson so it's no longer recalled: /forget <id prefix> (find ids with /lessons)",
     "capabilities": "What's installed and what's turned on: /capabilities lists them, /capabilities open <id> turns one on",
-    "permissions": "How much mu can do without asking: /permissions full | jev | ask, or no argument for a picker. /permissions reset clears what you allowed for this conversation",
+    "permissions": "How much spec.jev can do without asking: /permissions full | jev | ask, or no argument for a picker. /permissions reset clears what you allowed for this conversation",
     "lsp": "Language servers: what's installed, what's running and the last error",
     "goal": "Keep the agent working until a condition holds: /goal <condition> sets it, /goal shows it (or asks for one), /goal clear ends it",
     "board": "The plain-language board: /board shows it, /board on or /board off for this project, /board model picks the model that writes it",
@@ -895,14 +895,14 @@
     "agents": "List the subagent roles the delegate tool can use, and where to add your own",
     "hive": "Have several investigators work on one question at once: /hive <question>. Without a question, same as /swarm",
     "browse": "Have the built-in browser open a page and do what you ask: /browse <url> [goal]",
-    "inherit": "What mu inherited from Claude Code, Cursor and Codex, and from which files",
+    "inherit": "What spec.jev inherited from Claude Code, Cursor and Codex, and from which files",
     "mcp": "Manage MCP servers: sign in, reconnect, enable or disable, and change exposure",
     "jobs": "Background jobs: /jobs lists them, /jobs stop <id|all> stops them",
     "commit": "Split uncommitted changes into commits: shows the plan, commits only when you approve, and never pushes",
     "review": "Have the reviewer subagent review uncommitted changes, or whatever you name; the judge ranks findings from P0 to P3",
-    "mu": "Show mu's status. Also: /mu judge <tiers> | /mu route <decision> <tiers|default> | /mu mode <decision|default> <off|shadow|active>",
+    "mu": "Show spec.jev's status. Also: /mu judge <tiers> | /mu route <decision> <tiers|default> | /mu mode <decision|default> <off|shadow|active>",
     "status": "Model, judge, decision point modes, context savings and recent verdicts",
-    "help": "What mu can do, and the commands worth knowing",
+    "help": "What spec.jev can do, and the commands worth knowing",
     "ledger": "Recent verdicts, with timing: /ledger [n]",
     "doctor": "Check that the judge, model, browser and subagents are set up",
     "import-chat": "Import a Claude Code or Codex conversation from this project and continue it here: /import-chat [file]",
@@ -925,7 +925,7 @@
       "failed": "Stopped"
     },
     "status": {
-      "starting": "Starting mu…",
+      "starting": "Starting spec.jev…",
       "classifying": "The judge is reading your message…",
       "compacting": "Compacting the conversation…",
       "retrying": "Model request failed. Retrying ({{attempt}} of {{max}})…",
@@ -934,10 +934,10 @@
       "sending": "Sending…"
     },
     "send": {
-      "placeholder": "Message mu…",
-      "placeholderWorking": "Steer mu now, or queue a message for when it's done…",
+      "placeholder": "Message spec.jev…",
+      "placeholderWorking": "Steer spec.jev now, or queue a message for when it's done…",
       "steer": "Now",
-      "steerHint": "Reaches mu at its next step",
+      "steerHint": "Reaches spec.jev at its next step",
       "followUp": "After",
       "followUpHint": "Sent when this run ends"
     },
@@ -954,27 +954,27 @@
       "cancel": "Cancel",
       "submit": "Send",
       "save": "Save",
-      "countdown": "Closes in {{seconds}}s, then mu continues without your answer.",
+      "countdown": "Closes in {{seconds}}s, then spec.jev continues without your answer.",
       "more": "{{count}} more waiting"
     },
     "host": {
-      "output": "mu's last output",
-      "restartHint": "Send a message to start mu again."
+      "output": "spec.jev's last output",
+      "restartHint": "Send a message to start spec.jev again."
     },
     "error": {
       "off": "The native host is off (MU_NATIVE_HOST=0). Restart the app without that setting to use it.",
-      "noHarness": "The app can't find mu to run.",
-      "oldHarness": "This version of mu is too old to run in the app. Update mu, then try again.",
-      "plan": "The app couldn't work out how to start mu.",
-      "noModels": "mu stopped: it has no model to use.",
-      "failed": "mu stopped before it could start.",
-      "crashed": "mu stopped unexpectedly.",
-      "closed": "mu was closed for this conversation.",
-      "timeout": "mu didn't respond in time.",
-      "command": "mu rejected the request.",
-      "noFolder": "The project folder no longer exists, so mu can't start there.",
+      "noHarness": "The app can't find spec.jev to run.",
+      "oldHarness": "This version of spec.jev is too old to run in the app. Update spec.jev, then try again.",
+      "plan": "The app couldn't work out how to start spec.jev.",
+      "noModels": "spec.jev stopped: it has no model to use.",
+      "failed": "spec.jev stopped before it could start.",
+      "crashed": "spec.jev stopped unexpectedly.",
+      "closed": "spec.jev was closed for this conversation.",
+      "timeout": "spec.jev didn't respond in time.",
+      "command": "spec.jev rejected the request.",
+      "noFolder": "The project folder no longer exists, so spec.jev can't start there.",
       "unknownConversation": "This conversation no longer exists.",
-      "invalid": "The app sent a request mu couldn't read."
+      "invalid": "The app sent a request spec.jev couldn't read."
     },
     "open": {
       "home": "Home",
@@ -982,7 +982,7 @@
     },
     "empty": {
       "title": "New conversation in {{folder}}",
-      "body": "mu works in this folder. Tell it what you want done."
+      "body": "spec.jev works in this folder. Tell it what you want done."
     },
     "sider": {
       "title": "Recent",
@@ -1004,7 +1004,7 @@
       "recent": "Recent folders",
       "pick": "Choose a folder…",
       "permissions": "Permissions",
-      "defaultPermissions": "mu's default"
+      "defaultPermissions": "spec.jev's default"
     },
     "panel": {
       "noLessons": "Lessons appear once the conversation opens.",
@@ -1025,7 +1025,7 @@
       }
     },
     "home": {
-      "noFolder": "Choose a folder for mu to work in first."
+      "noFolder": "Choose a folder for spec.jev to work in first."
     },
     "attach": {
       "failed": "Couldn't attach {{name}}."
@@ -1052,15 +1052,15 @@
     "toolsClassic": "MCP and images",
     "remove": "Remove",
     "from": {
-      "mu": "mu's skills folder",
+      "mu": "spec.jev's skills folder",
       "agents": "the shared .agents folder",
-      "builtin": "mu itself",
+      "builtin": "spec.jev itself",
       "claude": "Claude Code",
       "codex": "Codex",
       "cursor": "Cursor"
     },
     "skills": {
-      "lead": "The skills mu can use in every conversation, and where each comes from.",
+      "lead": "The skills spec.jev can use in every conversation, and where each comes from.",
       "search": "Search skills",
       "open": "Open folder",
       "add": "Add skill",
@@ -1068,36 +1068,36 @@
       "removed": "Moved {{name}} to the trash.",
       "removeTitle": "Remove skill {{name}}?",
       "removeContent": "Its folder moves to the trash, and new conversations won't load it.",
-      "empty": "mu has no skills yet.",
+      "empty": "spec.jev has no skills yet.",
       "noMatch": "No matching skills.",
-      "failed": "Couldn't read mu's skills.",
+      "failed": "Couldn't read spec.jev's skills.",
       "project": "Project skills (.mu/skills, .agents/skills, .claude/skills) load only in that project's conversations and aren't listed here.",
       "groups": {
         "mu": {
-          "title": "mu's skills",
+          "title": "spec.jev's skills",
           "help": "In {{folder}}. Skills you add go here, and only these can be removed."
         },
         "agents": {
           "title": "Shared skills",
-          "help": "In ~/.agents/skills, shared by several agents. mu reads them but never changes them."
+          "help": "In ~/.agents/skills, shared by several agents. spec.jev reads them but never changes them."
         },
         "builtin": {
           "title": "Built-in",
-          "help": "Shipped with mu. Each one is available while the feature it belongs to is on."
+          "help": "Shipped with spec.jev. Each one is available while the feature it belongs to is on."
         },
         "claude": {
           "title": "From Claude Code",
-          "help": "From ~/.claude/skills. mu only reads them; turn off features.inherit in mu.json to stop using them."
+          "help": "From ~/.claude/skills. spec.jev only reads them; turn off features.inherit in spec.jev.json to stop using them."
         },
         "codex": {
           "title": "From Codex",
-          "help": "From ~/.codex/skills. mu only reads them; turn off features.inherit in mu.json to stop using them."
+          "help": "From ~/.codex/skills. spec.jev only reads them; turn off features.inherit in spec.jev.json to stop using them."
         }
       }
     },
     "mcp": {
       "title": "MCP servers",
-      "lead": "The MCP servers mu can use in every conversation, and where each is set up.",
+      "lead": "The MCP servers spec.jev can use in every conversation, and where each is set up.",
       "open": "Open config file",
       "add": "Add server",
       "added": "Added {{name}}. New conversations can use it.",
@@ -1105,37 +1105,37 @@
       "removeTitle": "Remove server {{name}}?",
       "removeContent": "This deletes its entry from {{file}}.",
       "use": "Use {{name}}",
-      "empty": "mu isn't using any MCP servers yet.",
-      "failed": "Couldn't read mu's MCP servers.",
-      "featureOff": "The MCP feature is off in mu.json: only the servers in mcp.json are used.",
+      "empty": "spec.jev isn't using any MCP servers yet.",
+      "failed": "Couldn't read spec.jev's MCP servers.",
+      "featureOff": "The MCP feature is off in spec.jev.json: only the servers in mcp.json are used.",
       "unreadable": "Couldn't read these files, so their servers are missing: {{files}}",
       "project": "Project servers (.mu/mcp.json, .mcp.json, .cursor/mcp.json) are used only in that project's conversations and aren't listed here.",
       "locked": {
         "offInSource": {
           "label": "Off in its source",
-          "help": "It's turned off in its own tool's settings. mu doesn't change other tools' files, so turn it on there."
+          "help": "It's turned off in its own tool's settings. spec.jev doesn't change other tools' files, so turn it on there."
         },
         "unsupported": {
           "label": "Not supported",
-          "help": "It uses the legacy HTTP+SSE transport, which mu doesn't support."
+          "help": "It uses the legacy HTTP+SSE transport, which spec.jev doesn't support."
         }
       },
       "groups": {
         "mu": {
-          "title": "mu's servers",
-          "help": "In mcp.json and mu.json. Servers you add go into {{file}}, the same as with mu mcp add."
+          "title": "spec.jev's servers",
+          "help": "In mcp.json and spec.jev.json. Servers you add go into {{file}}, the same as with spec.jev mcp add."
         },
         "claude": {
           "title": "From Claude Code",
-          "help": "From ~/.claude.json. Turning one off here only writes to mu.json, never to Claude Code's file."
+          "help": "From ~/.claude.json. Turning one off here only writes to spec.jev.json, never to Claude Code's file."
         },
         "cursor": {
           "title": "From Cursor",
-          "help": "From ~/.cursor/mcp.json. Turning one off here only writes to mu.json, never to Cursor's file."
+          "help": "From ~/.cursor/mcp.json. Turning one off here only writes to spec.jev.json, never to Cursor's file."
         },
         "codex": {
           "title": "From Codex",
-          "help": "From ~/.codex/config.toml. Turning one off here only writes to mu.json, never to Codex's file."
+          "help": "From ~/.codex/config.toml. Turning one off here only writes to spec.jev.json, never to Codex's file."
         }
       },
       "form": {
@@ -1145,7 +1145,7 @@
         "nameHelp": "Letters, digits, _ and -",
         "kind": "Connection",
         "command": "Command",
-        "commandHelp": "The program mu starts and its arguments, as you'd type them in a terminal.",
+        "commandHelp": "The program spec.jev starts and its arguments, as you'd type them in a terminal.",
         "env": "Environment variables",
         "envPlaceholder": "KEY=value, one per line (optional)",
         "url": "URL",

@@ -23,7 +23,7 @@ const REREAD_MS = 1000;
 const REREAD_EVENT = 'mu-native-reread';
 
 /**
- * Reads the list again: sessions something other than the host wrote (`mu import`, run from the import dialog) have
+ * Reads the list again: sessions something other than the host wrote (`spec.jev import`, run from the import dialog) have
  * no `changed`, and the window did not leave the front for them.
  */
 export function rereadNativeConversations(): void {

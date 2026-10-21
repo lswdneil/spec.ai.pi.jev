@@ -1,5 +1,5 @@
 /**
- * The Jev preflight row the mu bridge adds at the top of every turn (`process/agent/kyrn/events.ts`): a tool call whose
+ * The Jev preflight row the spec.jev bridge adds at the top of every turn (`process/agent/kyrn/events.ts`): a tool call whose
  * id starts with `jev:`. The bridge has no i18n and its title is stored with the conversation, so the row is read from
  * stable data, `rawOutput.preflight` and the verdict's turn type, and named in the reader's language where it is shown
  * (`Messages/acp/jevLine.ts`). Conversations recorded before the bridge sent that data carry only the English title

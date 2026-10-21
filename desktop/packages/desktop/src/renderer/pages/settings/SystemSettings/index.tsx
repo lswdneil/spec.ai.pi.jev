@@ -11,7 +11,7 @@ import { SettingsPage } from '../components/SettingsPageHeader';
 
 /**
  * The machine underneath: starting with the computer, running on after the window closes (in the tray, or the menu bar
- * on a Mac), graphics acceleration, notifications, and the folders mu works and logs in.
+ * on a Mac), graphics acceleration, notifications, and the folders spec.jev works and logs in.
  */
 const SystemSettings: React.FC = () => {
   const { t } = useTranslation();

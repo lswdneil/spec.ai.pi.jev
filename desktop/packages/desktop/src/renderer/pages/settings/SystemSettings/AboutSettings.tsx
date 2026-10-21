@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import AboutModalContent from '@/renderer/components/settings/SettingsModal/contents/AboutModalContent';
 import { SettingsPage } from '../components/SettingsPageHeader';
 
-/** Which mu this is, its updates, and the way to its log folder. */
+/** Which spec.jev this is, its updates, and the way to its log folder. */
 const AboutSettings: React.FC = () => {
   const { t } = useTranslation();
   return (

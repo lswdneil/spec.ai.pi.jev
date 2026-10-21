@@ -1,5 +1,5 @@
 /*
- * mu colour scheme, part three: the shell's own touches. Upstream layout stays as it is; these rules
+ * spec.jev colour scheme, part three: the shell's own touches. Upstream layout stays as it is; these rules
  * only re-dress elements that already exist (the selected sidebar row, the send button).
  */
 
@@ -7,8 +7,8 @@
 
 /* The selected row keeps upstream's grey block; a thin bar of light purple is the only colour on it. The settings
    rail marks its page shown by weight alone (SettingsSider). */
-[data-color-scheme='mu'] .chat-history__item[aria-current='page']::before,
-[data-color-scheme='mu'] .sider-item[aria-current='page']::before {
+[data-color-scheme='spec.jev'] .chat-history__item[aria-current='page']::before,
+[data-color-scheme='spec.jev'] .sider-item[aria-current='page']::before {
   content: '';
   position: absolute;
   inset-inline-start: 0;
@@ -22,7 +22,7 @@
 }
 
 /* A hairline between the sidebar and the content: the two surfaces are only a shade apart. */
-[data-color-scheme='mu'] .layout-sider {
+[data-color-scheme='spec.jev'] .layout-sider {
   border-inline-end: 1px solid var(--border-base);
 }
 
@@ -39,8 +39,8 @@
 
 /* ---- Send button: one flat light lavender, with a dark arrow in both appearances ---- */
 
-[data-color-scheme='mu'] .send-button-custom--enabled,
-[data-color-scheme='mu'] .send-button-custom--enabled.arco-btn {
+[data-color-scheme='spec.jev'] .send-button-custom--enabled,
+[data-color-scheme='spec.jev'] .send-button-custom--enabled.arco-btn {
   border-color: transparent !important;
   background-color: var(--mu-accent-fill) !important;
   background-image: none !important;
@@ -48,30 +48,30 @@
   transition: background-color var(--mu-duration) var(--mu-ease);
 }
 
-[data-color-scheme='mu'] .send-button-custom--enabled:not(:disabled):hover,
-[data-color-scheme='mu'] .send-button-custom--enabled.arco-btn:not(:disabled):hover,
-[data-color-scheme='mu'] .send-button-custom--enabled:not(:disabled):focus-visible,
-[data-color-scheme='mu'] .send-button-custom--enabled.arco-btn:not(:disabled):focus-visible {
+[data-color-scheme='spec.jev'] .send-button-custom--enabled:not(:disabled):hover,
+[data-color-scheme='spec.jev'] .send-button-custom--enabled.arco-btn:not(:disabled):hover,
+[data-color-scheme='spec.jev'] .send-button-custom--enabled:not(:disabled):focus-visible,
+[data-color-scheme='spec.jev'] .send-button-custom--enabled.arco-btn:not(:disabled):focus-visible {
   border-color: transparent !important;
   background-color: var(--mu-accent-fill-hover) !important;
   color: var(--mu-accent-on) !important;
 }
 
-[data-color-scheme='mu'] .send-button-custom--enabled:not(:disabled):active,
-[data-color-scheme='mu'] .send-button-custom--enabled.arco-btn:not(:disabled):active {
+[data-color-scheme='spec.jev'] .send-button-custom--enabled:not(:disabled):active,
+[data-color-scheme='spec.jev'] .send-button-custom--enabled.arco-btn:not(:disabled):active {
   border-color: transparent !important;
   background-color: var(--mu-accent-fill-active) !important;
   color: var(--mu-accent-on) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-color-scheme='mu'] .chat-history__item[aria-current='page']::before,
-  [data-color-scheme='mu'] .sider-item[aria-current='page']::before {
+  [data-color-scheme='spec.jev'] .chat-history__item[aria-current='page']::before,
+  [data-color-scheme='spec.jev'] .sider-item[aria-current='page']::before {
     animation: none;
   }
 
-  [data-color-scheme='mu'] .send-button-custom--enabled,
-  [data-color-scheme='mu'] .send-button-custom--enabled.arco-btn {
+  [data-color-scheme='spec.jev'] .send-button-custom--enabled,
+  [data-color-scheme='spec.jev'] .send-button-custom--enabled.arco-btn {
     transition: none;
   }
 }
@@ -79,8 +79,8 @@
 /* ---- The instrument look: mono micro-labels, hairlines, quiet surfaces ---- */
 
 /* Section labels in the sidebars read as instrument labels: small mono capitals. */
-[data-color-scheme='mu'] .settings-sider__group-header,
-[data-color-scheme='mu'] .sider-section-title {
+[data-color-scheme='spec.jev'] .settings-sider__group-header,
+[data-color-scheme='spec.jev'] .sider-section-title {
   font-family: var(--font-mono);
   font-size: 10.5px;
   font-weight: 500;
@@ -89,12 +89,12 @@
 }
 
 /* The person's message: a hairline card on the page's quietest tint, the corner nearest the author squared. */
-[data-color-scheme='mu'] .message-user-bubble {
+[data-color-scheme='spec.jev'] .message-user-bubble {
   border: 1px solid var(--border-base);
 }
 
 /* The titlebar and the sidebar are one surface; the content sits a shade apart in dark. */
-[data-color-scheme='mu'] .app-titlebar--desktop {
+[data-color-scheme='spec.jev'] .app-titlebar--desktop {
   background: var(--bg-2);
   border-bottom: 1px solid var(--border-base);
 }

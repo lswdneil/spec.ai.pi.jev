@@ -2,7 +2,7 @@
 // What round 2 of the native parity added to the conversation page, end to end in the real app on the native host
 // (native is the default): the image the person sent in their row (live, and after a quit and a new start, from the session
 // file), the context ring beside the send button after a run, the title renamed in the header (the sidebar row and pi's
-// session file take the name), and mu's goal line: `/goal <condition>` shows it, a stop pauses it, a reopened
+// session file take the name), and spec.jev's goal line: `/goal <condition>` shows it, a stop pauses it, a reopened
 // conversation shows it paused from the file with no host, and ending it from the line clears it. Pictures, light and
 // dark, go to the profile's logs. Run with `node scripts/kyrn/e2e-conversation.mjs --native -- native-goal.spec`.
 //
@@ -61,7 +61,7 @@ async function shots(name) {
   await sleep(400);
 }
 
-/** The session file of `id` under mu's session folders. */
+/** The session file of `id` under spec.jev's session folders. */
 function sessionFile(id) {
   const root = join(paths().agentDir, 'sessions');
   for (const folder of readdirSync(root)) {
@@ -160,7 +160,7 @@ test('the header renames the conversation: the sidebar row and pi’s session fi
   expectNoProblems();
 });
 
-test('/goal shows the goal line while mu works on it; a stop pauses it', async () => {
+test('/goal shows the goal line while spec.jev works on it; a stop pauses it', async () => {
   const p = page();
   const box = p.getByTestId('native-send-input');
   await box.click();
@@ -176,7 +176,7 @@ test('/goal shows the goal line while mu works on it; a stop pauses it', async (
 
   await p.getByTestId('native-abort').click();
   await expect(status()).toHaveAttribute('data-status', 'aborted', { timeout: 30_000 });
-  // mu pauses a goal whose run the person stopped.
+  // spec.jev pauses a goal whose run the person stopped.
   await expect(line()).toHaveAttribute('data-status', 'paused', { timeout: 30_000 });
   await shot('goal-paused');
   await expect
@@ -208,7 +208,7 @@ test('after a quit and a new start, the conversation read from its file shows th
 test('ending the goal from its line clears it', async () => {
   const p = page();
   await p.getByTestId('composer-goal-end').click();
-  // The command starts mu, which resumes the session and clears the goal.
+  // The command starts spec.jev, which resumes the session and clears the goal.
   await expect(line()).toHaveCount(0, { timeout: 60_000 });
   await expect
     .poll(() => entries().findLast((entry) => entry.customType === 'kyrn.goal')?.data?.status, { timeout: 15_000 })

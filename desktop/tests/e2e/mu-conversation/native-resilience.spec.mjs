@@ -78,7 +78,7 @@ test('quitting the app in the middle of a run leaves nothing running, and the co
   expectNoProblems();
 });
 
-test('a host that is killed in the middle of a run: the screen says mu stopped, nothing hangs, the next message starts it again', async () => {
+test('a host that is killed in the middle of a run: the screen says spec.jev stopped, nothing hangs, the next message starts it again', async () => {
   const p = page();
   await send('E2E:SLOW 请慢慢说。');
   await expect(replies().filter({ hasText: 'SLOW-001' }).last()).toContainText('SLOW-004', { timeout: 60_000 });

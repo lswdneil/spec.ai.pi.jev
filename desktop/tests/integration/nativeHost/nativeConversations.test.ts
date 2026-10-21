@@ -19,9 +19,9 @@ import { PLAIN_TEXT, startFakeModel } from '../../e2e/mu-conversation/fakeModel.
 import { createHostWorld, hostEnvironment, launcherFs } from './hostWorld.mjs';
 
 /**
- * The native conversations on a real mu (docs/native-host.md, M2): the registry the bridge answers from, its hosts
+ * The native conversations on a real spec.jev (docs/native-host.md, M2): the registry the bridge answers from, its hosts
  * forked with Node from entry.ts (the app forks the same file as an Electron utility process), pi and the judgment
- * layer of a mu checkout, the E2E fake model and the offline mock judge, in a throwaway home (hostWorld.mjs).
+ * layer of a spec.jev checkout, the E2E fake model and the offline mock judge, in a throwaway home (hostWorld.mjs).
  *
  * With MU_MEASURE=1 it also times the list of many sessions and the opening of a large one, and prints what it
  * measured (`[measure]` lines) for the document.
@@ -234,7 +234,7 @@ describe.skipIf(skip !== undefined)(`native conversations on a mu checkout${skip
       expect(resumed.view.messages).toHaveLength(6);
       expect(durable(resumed.view)).toEqual(durable(fromEntries(entriesOf(file))));
 
-      // mu's /clear: pi goes on in a new session. The conversation follows it; the old session is listed on its own.
+      // spec.jev's /clear: pi goes on in a new session. The conversation follows it; the old session is listed on its own.
       await native.request(id, { type: 'prompt', message: '/clear' });
       await vi.waitFor(
         () =>

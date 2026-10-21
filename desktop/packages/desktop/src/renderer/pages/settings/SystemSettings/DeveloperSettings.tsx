@@ -10,7 +10,7 @@ import DevSettings from '@/renderer/components/settings/SettingsModal/contents/S
 import { SettingsPage } from '../components/SettingsPageHeader';
 
 /**
- * For the people who build mu: the developer tools, and the in-app browser's debugging port with the MCP
+ * For the people who build spec.jev: the developer tools, and the in-app browser's debugging port with the MCP
  * configurations that reach it. They used to sit at the bottom of the system page.
  */
 const DeveloperSettings: React.FC = () => {

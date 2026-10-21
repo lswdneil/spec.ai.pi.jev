@@ -355,7 +355,7 @@ describe('permission message adapters', () => {
   it('names generic allow and reject answers in the reader language and keeps specific wording', () => {
     const message = makeAcpMessage();
     message.content.options = [
-      // The mu bridge's confirmation: stable ids, English fallback names.
+      // The spec.jev bridge's confirmation: stable ids, English fallback names.
       { option_id: 'allow', name: 'Allow', kind: 'allow_once' },
       { option_id: 'reject', name: 'Reject', kind: 'reject_once' },
       { option_id: 'always', name: 'Always Allow', kind: 'allow_always' },

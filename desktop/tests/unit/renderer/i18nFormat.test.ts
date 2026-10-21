@@ -24,15 +24,15 @@ const INSTANT = Date.UTC(2025, 7, 17, 11, 6, 40);
 
 describe('resolveFormatLocale', () => {
   it('passes through a supported language tag', () => {
-    expect(resolveFormatLocale('de-DE')).toBe('de-DE');
+    expect(resolveFormatLocale('zh-CN')).toBe('zh-CN');
     expect(resolveFormatLocale('zh-CN')).toBe('zh-CN');
   });
 
   it('narrows an unsupported regional tag to the supported base language', () => {
-    // The host OS locale is routinely something mu does not ship.
+    // The host OS locale is routinely something spec.jev does not ship.
     // Traditional-script regions go to zh-TW, not Simplified.
     expect(resolveFormatLocale('zh-HK')).toBe('zh-TW');
-    expect(resolveFormatLocale('de_AT')).toBe('de-DE');
+    expect(resolveFormatLocale('ja_JP')).toBe('ja-JP');
   });
 
   it('falls back to the default language for unknown or empty input', () => {
@@ -46,21 +46,21 @@ describe('resolveFormatLocale', () => {
 describe('formatNumber', () => {
   it('uses the decimal separator of the app language, not the host locale', () => {
     expect(formatNumber(12.6, 'en-US', { minimumFractionDigits: 1 })).toBe('12.6');
-    expect(formatNumber(12.6, 'de-DE', { minimumFractionDigits: 1 })).toBe('12,6');
-    expect(formatNumber(12.6, 'fr-FR', { minimumFractionDigits: 1 })).toBe('12,6');
+    expect(formatNumber(12.6, 'zh-TW', { minimumFractionDigits: 1 })).toBe('12.6');
+    expect(formatNumber(12.6, 'ja-JP', { minimumFractionDigits: 1 })).toBe('12.6');
   });
 
   it('groups thousands per language', () => {
     expect(formatNumber(1234567, 'en-US')).toBe('1,234,567');
-    expect(formatNumber(1234567, 'de-DE')).toBe('1.234.567');
+    expect(formatNumber(1234567, 'zh-TW')).toBe('1,234,567');
   });
 });
 
 describe('formatCurrency', () => {
   it('renders the amount in the app language', () => {
     expect(formatCurrency(0.42, 'USD', 'en-US', { maximumFractionDigits: 4 })).toBe('$0.42');
-    // de-DE separates the amount from the symbol with a non-breaking space.
-    expect(formatCurrency(0.42, 'USD', 'de-DE', { maximumFractionDigits: 4 })).toBe('0,42\u00a0$');
+    // zh-TW puts the currency code before the amount.
+    expect(formatCurrency(0.42, 'USD', 'zh-TW', { maximumFractionDigits: 4 })).toBe('US$0.42');
   });
 
   it('keeps sub-cent precision up to four fraction digits', () => {
@@ -71,23 +71,23 @@ describe('formatCurrency', () => {
     // A two-letter code is not a well-formed ISO 4217 currency, so
     // Intl.NumberFormat throws rather than rendering it.
     expect(formatCurrency(0.42, 'US', 'en-US', { maximumFractionDigits: 4 })).toBe('0.4200 US');
-    expect(formatCurrency(0.42, 'US', 'de-DE', { maximumFractionDigits: 4 })).toBe('0,4200 US');
+    expect(formatCurrency(0.42, 'US', 'zh-TW', { maximumFractionDigits: 4 })).toBe('0.4200 US');
   });
 });
 
 describe('formatDateTime / formatDate / formatTime', () => {
   it('formats a timestamp in the app language', () => {
     const en = formatDateTime(INSTANT, 'en-US', { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' });
-    const de = formatDateTime(INSTANT, 'de-DE', { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' });
+    const zhTW = formatDateTime(INSTANT, 'zh-TW', { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' });
     expect(en).toBe('8/17/2025');
-    expect(de).toBe('17.8.2025');
+    expect(zhTW).toBe('2025/8/17');
   });
 
   it('reproduces toLocaleString() defaults when no options are given', () => {
     const date = new Date(INSTANT);
-    expect(formatDateTime(INSTANT, 'de-DE')).toBe(date.toLocaleString('de-DE'));
-    expect(formatDate(INSTANT, 'de-DE')).toBe(date.toLocaleDateString('de-DE'));
-    expect(formatTime(INSTANT, 'de-DE')).toBe(date.toLocaleTimeString('de-DE'));
+    expect(formatDateTime(INSTANT, 'zh-TW')).toBe(date.toLocaleString('zh-TW'));
+    expect(formatDate(INSTANT, 'zh-TW')).toBe(date.toLocaleDateString('zh-TW'));
+    expect(formatTime(INSTANT, 'zh-TW')).toBe(date.toLocaleTimeString('zh-TW'));
   });
 
   it('ignores the host locale entirely', () => {
@@ -107,8 +107,8 @@ describe('formatByteSize / formatByteRate', () => {
   });
 
   it('localises the decimal separator', () => {
-    expect(formatByteSize(12_800, 'de-DE')).toBe('12,5 KB');
-    expect(formatByteRate(12_800, 'de-DE')).toBe('12,5 KB/s');
+    expect(formatByteSize(12_800, 'zh-TW')).toBe('12.5 KB');
+    expect(formatByteRate(12_800, 'zh-TW')).toBe('12.5 KB/s');
   });
 
   it('honours the requested precision', () => {
@@ -122,7 +122,7 @@ describe('formatDuration', () => {
     expect(formatDuration(95_000, 'en-US')).toBe('1 min, 35 sec');
     expect(formatDuration(95_000, 'zh-CN')).toBe('1分钟35秒');
     expect(formatDuration(95_000, 'en-US', 'narrow')).toBe('1m 35s');
-    expect(formatDuration(7_205_000, 'de-DE')).toBe('2 Std., 5 Sek.');
+    expect(formatDuration(7_205_000, 'zh-TW')).toBe('2 小時 5 秒');
   });
 
   it('rounds to whole seconds and reads a zero span as zero seconds', () => {

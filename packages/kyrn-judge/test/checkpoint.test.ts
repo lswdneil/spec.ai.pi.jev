@@ -474,7 +474,7 @@ describe("checkpoints and the judged rewind", () => {
 	}
 
 	// QA on macOS, 2026-09-25: with the Xcode license not accepted, git exits 69, and every turn that wrote a file said
-	// "mu: no checkpoint for this turn (git init exited with 69: You have not agreed to the Xcode license…)", in English.
+	// "spec.jev: no checkpoint for this turn (git init exited with 69: You have not agreed to the Xcode license…)", in English.
 	it.skipIf(process.platform === "win32")(
 		"an Xcode whose license nobody accepted yet: the tools run as ever, and the session says why once",
 		async () => {
@@ -489,7 +489,7 @@ describe("checkpoints and the judged rewind", () => {
 			const ui = scriptedUi({});
 			const off = await twoTurnsAndRewind(await start({ ui, navigation: true, git }));
 			const line =
-				"mu: checkpoints are off because git can't run on this Mac until you accept the Xcode license. Run sudo xcodebuild -license in Terminal to accept it, then start a new session.";
+				"spec.jev: checkpoints are off because git can't run on this Mac until you accept the Xcode license. Run sudo xcodebuild -license in Terminal to accept it, then start a new session.";
 			// Once for the session's first change; /rewind says it again because it was asked.
 			expect(ui.notes).toEqual([line, line]);
 			expect(off).toEqual([{ code: "xcode_license", params: {}, message: line }]);
@@ -503,13 +503,13 @@ describe("checkpoints and the judged rewind", () => {
 		const run = spawnGit("mu-test-no-such-git-binary", 30_000, probe);
 		const off = await twoTurnsAndRewind(await start({ ui, navigation: true, run }));
 		const line =
-			"mu: checkpoints are off because git needs the command line developer tools, which aren't installed on this Mac. Install them with xcode-select --install, then start a new session.";
+			"spec.jev: checkpoints are off because git needs the command line developer tools, which aren't installed on this Mac. Install them with xcode-select --install, then start a new session.";
 		expect(ui.notes).toEqual([line, line]);
 		expect(off).toEqual([{ code: "developer_tools_missing", params: {}, message: line }]);
 	});
 
-	// mu 0.1.3 started in a home folder on a small server: the first change of every turn snapshotted the whole
-	// home into ~/.mu, mu's own snapshots included, so the copy grew with every turn.
+	// spec.jev 0.1.3 started in a home folder on a small server: the first change of every turn snapshotted the whole
+	// home into ~/.spec.jev, spec.jev's own snapshots included, so the copy grew with every turn.
 	it("takes no checkpoint in the home folder, copies nothing, and says why once, in one line", async () => {
 		const ui = scriptedUi({});
 		const { harness, root, shadow, file, entries, events } = await start({ ui, navigation: true });
@@ -534,7 +534,7 @@ describe("checkpoints and the judged rewind", () => {
 		expect(entries(CHECKPOINT_ENTRY)).toEqual([]);
 		expect(readdirSync(shadow)).toEqual([]);
 		const line =
-			"mu: checkpoints are off for this session because this folder is, or contains, your home folder. Start mu in a project folder to use checkpoints.";
+			"spec.jev: checkpoints are off for this session because this folder is, or contains, your home folder. Start spec.jev in a project folder to use checkpoints.";
 		// Once for the session's first change; /checkpoints and /rewind say it again because they were asked.
 		expect(ui.notes).toEqual([line, line, line]);
 		expect(events.filter((event) => event.kind === "checkpoint.off").map((event) => event.payload)).toEqual([
@@ -567,21 +567,21 @@ describe("checkpoints and the judged rewind", () => {
 		process.env.MU_LANG = "zh-CN";
 		try {
 			expect(offNotice("too_many_bytes", limits)).toEqual({
-				line: "mu：本次会话不拍检查点，因为这个文件夹要拍的文件加起来超过 200 MB。在项目文件夹里启动 mu 就有检查点，或者调高 features.checkpoint.maxTotalMb。",
+				line: "spec.jev：本次会话不拍检查点，因为这个文件夹要拍的文件加起来超过 200 MB。在项目文件夹里启动 spec.jev 就有检查点，或者调高 features.checkpoint.maxTotalMb。",
 				params: { limitMb: 200 },
 			});
 			expect(offNotice("xcode_license", limits).line).toBe(
-				"mu：检查点已关闭，因为这台 Mac 还没有同意 Xcode 许可协议，git 无法运行。在终端里用 sudo xcodebuild -license 同意后，新开一个会话就有检查点。",
+				"spec.jev：检查点已关闭，因为这台 Mac 还没有同意 Xcode 许可协议，git 无法运行。在终端里用 sudo xcodebuild -license 同意后，新开一个会话就有检查点。",
 			);
 			expect(offNotice("developer_tools_missing", limits).line).toBe(
-				"mu：检查点已关闭，因为这台 Mac 没有安装 git 所需的命令行开发者工具。用 xcode-select --install 安装后，新开一个会话就有检查点。",
+				"spec.jev：检查点已关闭，因为这台 Mac 没有安装 git 所需的命令行开发者工具。用 xcode-select --install 安装后，新开一个会话就有检查点。",
 			);
 		} finally {
 			if (saved === undefined) delete process.env.MU_LANG;
 			else process.env.MU_LANG = saved;
 		}
 		expect(offNotice("too_slow", limits).line).toBe(
-			"mu: checkpoints are off for this session because listing this folder's files took more than 30 s. Start mu in a project folder to use checkpoints.",
+			"spec.jev: checkpoints are off for this session because listing this folder's files took more than 30 s. Start spec.jev in a project folder to use checkpoints.",
 		);
 	});
 });

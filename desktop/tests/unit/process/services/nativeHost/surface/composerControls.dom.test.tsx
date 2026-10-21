@@ -23,7 +23,7 @@ import { ended, frame, reply, text, user } from './records';
 
 /**
  * The native send box's controls against an in-memory host: the model and thinking level (shown without starting a
- * host, switched through pi's own commands), mu's permission mode (switched with mu's `/permissions <mode> --here`),
+ * host, switched through pi's own commands), spec.jev's permission mode (switched with spec.jev's `/permissions <mode> --here`),
  * pi's slash commands for the `/` menu, `@` mentions of the project's files, and attachments (images as themselves,
  * files by their path). The shared send box is stood in for by its contract; Arco's menus render their lists inline.
  */
@@ -202,7 +202,7 @@ const state = (provider: string, id: string, thinkingLevel: string): PiRecord =>
   data: { model: { provider, id }, thinkingLevel },
 });
 
-/** mu's `permissions.mode` frame, as its permissions feature sends it. */
+/** spec.jev's `permissions.mode` frame, as its permissions feature sends it. */
 const modes = (mode: string) =>
   frame('permissions.mode', {
     mode,
@@ -228,7 +228,7 @@ describe('the native send box’s model, thinking level and permission mode', ()
     expect(pill()).toHaveTextContent('Permission · Ask first');
     expect(commands(host)).toEqual([]);
 
-    // A running host says what it runs with, and mu what mode it is in: they count from then on.
+    // A running host says what it runs with, and spec.jev what mode it is in: they count from then on.
     act(() => {
       host.play('c1', [state('e2e', 'one', 'off'), modes('full')]);
     });
@@ -239,15 +239,15 @@ describe('the native send box’s model, thinking level and permission mode', ()
     expect(pill()).toHaveTextContent('Permission · Full access');
   });
 
-  it('falls back to the model of the last reply, and says when mu has no model', async () => {
+  it('falls back to the model of the last reply, and says when spec.jev has no model', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1' }, reduceAll([ended(user('hi')), ended(reply([text('hello')]))]));
     await mount(host);
     expect(chip()).toHaveAttribute('data-model', 'p/m');
     expect(chip()).toHaveAttribute('data-source', 'reply');
-    // mu's default mode: the conversation has not said one.
+    // spec.jev's default mode: the conversation has not said one.
     expect(pill()).toHaveAttribute('data-mode', '');
-    expect(pill()).toHaveTextContent("Permission · mu's default");
+    expect(pill()).toHaveTextContent("Permission · spec.jev's default");
     act(() => {
       host.push('c1', { type: 'response', command: 'get_state', success: true, data: { thinkingLevel: 'off' } });
     });
@@ -318,7 +318,7 @@ describe('the native send box’s model, thinking level and permission mode', ()
     expect(screen.getByTestId('native-model-pill')).not.toBeDisabled();
   });
 
-  it('switches mu’s permission mode with mu’s own command, for this conversation only', async () => {
+  it('switches spec.jev’s permission mode with spec.jev’s own command, for this conversation only', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1' }, emptyView(), { permissions: 'ask' });
     await mount(host);

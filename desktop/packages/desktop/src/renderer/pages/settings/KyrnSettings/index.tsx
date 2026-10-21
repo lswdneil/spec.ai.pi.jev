@@ -34,7 +34,7 @@ export function routeOf({ page, feature, part, focus }: AreaView): string {
 }
 
 /**
- * mu's own settings pages — the providers, the models, the kernel's and the details — are one area on as many routes.
+ * spec.jev's own settings pages — the providers, the models, the kernel's and the details — are one area on as many routes.
  * They share the draft of {@link MuSettingsProvider} around the settings routes: moving between them keeps whatever was
  * typed and not yet saved.
  */

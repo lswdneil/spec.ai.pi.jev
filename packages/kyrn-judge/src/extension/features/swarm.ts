@@ -424,7 +424,7 @@ function describeAgent(agent: AgentDefinition): string {
 }
 
 /**
- * C1-C4, the swarm. pi has no sub-agents by design; mu adds one tool. Each
+ * C1-C4, the swarm. pi has no sub-agents by design; spec.jev adds one tool. Each
  * task runs in its own context window, and because that context starts empty,
  * the judge can give every task the role, the cheapest model and the thinking
  * level that fit it without costing the main session any prompt cache.

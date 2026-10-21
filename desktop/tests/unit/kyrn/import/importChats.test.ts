@@ -50,8 +50,8 @@ const message = (role: string, content: unknown, id: string): Line => ({
 });
 
 /**
- * A session as `mu import` writes it, made up: the header, the marker, the name, the conversation; then, when
- * `later` is given, lines mu appended after the import.
+ * A session as `spec.jev import` writes it, made up: the header, the marker, the name, the conversation; then, when
+ * `later` is given, lines spec.jev appended after the import.
  */
 function session(dir: string, cwd: string, body: Line[], later: Line[] = [], tool = 'claude-code'): string {
   const file = join(dir, 'session.jsonl');
@@ -158,7 +158,7 @@ describe('the shared helpers', () => {
   });
 });
 
-describe('running mu import', () => {
+describe('running spec.jev import', () => {
   const ran: { command: string; args: string[]; env: NodeJS.ProcessEnv }[] = [];
   const run = async (
     command: string,
@@ -174,7 +174,7 @@ describe('running mu import', () => {
     vi.unstubAllEnvs();
   });
 
-  it('says so when this mu has no import command, instead of handing `import` to the model', async () => {
+  it('says so when this spec.jev has no import command, instead of handing `import` to the model', async () => {
     const cli = importCli({ root: '/mu', layout: 'repo' }, { platform: 'darwin', exists: () => false, run });
     expect(await code(() => cli(['--list', '--json'], 1000))).toBe('importMissing');
     expect(ran).toEqual([]);
@@ -190,7 +190,7 @@ describe('running mu import', () => {
     ]);
   });
 
-  it('runs the Node launcher of a package the way the adapter runs mu: on MU_NODE, else on the app itself', async () => {
+  it('runs the Node launcher of a package the way the adapter runs spec.jev: on MU_NODE, else on the app itself', async () => {
     const cli = importCli({ root: '/mu', layout: 'package' }, { platform: 'linux', exists: () => true, run });
     vi.stubEnv('MU_NODE', '/opt/node24/bin/node');
     await cli(['--json', '/t/a.jsonl'], 1000);
@@ -236,7 +236,7 @@ describe('the import records the adapter reads', () => {
 describe('reading an imported session back', () => {
   it('names its folder and origin, and shows only what the import wrote, answers joined up to the next message', () => {
     const dir = temp('session');
-    const file = session(dir, '/work/app', conversationBody, [message('user', 'Asked later, in mu', 'later')]);
+    const file = session(dir, '/work/app', conversationBody, [message('user', 'Asked later, in spec.jev', 'later')]);
     expect(readImportedSession(file)).toMatchObject({
       cwd: '/work/app',
       name: 'Fix the login form',
@@ -305,7 +305,7 @@ describe('the import service', () => {
     return { asked, cli };
   };
 
-  it('lists what mu import found and which of it the app already holds', async () => {
+  it('lists what spec.jev import found and which of it the app already holds', async () => {
     const store = temp('store');
     writeImportRecord(store, 'held', {
       version: 1,
@@ -358,8 +358,8 @@ describe('the import service', () => {
     expect(await code(() => service.list('relative/dir'))).toBe('invalid');
   });
 
-  it('shows what mu import said when it answers with anything but its JSON', async () => {
-    const { cli } = cliAnswering('Usage: mu [options]', 'unknown command import', 2);
+  it('shows what spec.jev import said when it answers with anything but its JSON', async () => {
+    const { cli } = cliAnswering('Usage: spec.jev [options]', 'unknown command import', 2);
     const service = importService({
       cli,
       request: backend().request,
@@ -510,7 +510,7 @@ describe('the import service', () => {
     expect(listImportRecords(store)).toEqual([]);
   });
 
-  it('with the app running mu itself, makes no app conversation: the session is the conversation', async () => {
+  it('with the app running spec.jev itself, makes no app conversation: the session is the conversation', async () => {
     const store = temp('store');
     const project = temp('project');
     const gone = join(temp('parent'), 'moved-away');

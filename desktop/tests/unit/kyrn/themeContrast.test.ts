@@ -37,7 +37,7 @@ describe('contrast maths', () => {
   });
 });
 
-describe('mu colour scheme', () => {
+describe('spec.jev colour scheme', () => {
   it('keeps every text pair at or above its WCAG floor, in light and dark', () => {
     const rows = table(scheme);
     expect(rows).toHaveLength(PAIRS.length * 2);
@@ -96,8 +96,8 @@ describe('mu colour scheme', () => {
 
   it("repeats the violet scale exactly in Arco's triplets", () => {
     for (const [mode, selector] of [
-      ['light', "[data-color-scheme='mu'] body"],
-      ['dark', "[data-color-scheme='mu'] body[arco-theme='dark']"],
+      ['light', "[data-color-scheme='spec.jev'] body"],
+      ['dark', "[data-color-scheme='spec.jev'] body[arco-theme='dark']"],
     ] as const) {
       const vars = tokens(scheme, mode);
       const scale = triplets(arco, selector, 'arcoblue');

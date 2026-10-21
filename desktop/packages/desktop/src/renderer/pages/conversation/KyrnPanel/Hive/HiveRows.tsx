@@ -154,7 +154,7 @@ export default function HiveRows({ events, focus }: { events: Activity[]; focus?
       {focus && !focusedRun ? <p className={styles.empty}>{t('common.kyrn.hiveView.waitingRun')}</p> : null}
       {!runs.length && !focus ? <p className={styles.empty}>{t('common.kyrn.hiveView.none')}</p> : null}
       {runs.map((listed, index) => {
-        // Once its turn is over, no bee of a run is still at work: a run mu's death cut short says so.
+        // Once its turn is over, no bee of a run is still at work: a run spec.jev's death cut short says so.
         const over = ended.has(listed.id);
         const bees = listed.bees.map((bee) => settledBee(bee, !over));
         const cutShort = bees.some((bee, at) => bee !== listed.bees[at]);

@@ -335,7 +335,7 @@ export function registerFrame(runtime: KyrnRuntime): void {
 	pi.on(
 		"session_compact",
 		failOpen(() => {
-			// mu's own notes do not survive compaction, and the constraints must: the next turn gets the note again.
+			// spec.jev's own notes do not survive compaction, and the constraints must: the next turn gets the note again.
 			notedVersion = undefined;
 			return undefined;
 		}),
@@ -480,7 +480,7 @@ export function registerFrame(runtime: KyrnRuntime): void {
 		name: "todo",
 		label: "To-do",
 		description:
-			"The checklist of what has to be true before the task is finished, kept in mu's task frame. list shows it. done ticks one item and needs one line of evidence (the command that passed, the file that changed). add records an item you discovered. Tick items as you finish them; do not say the task is done while one is open.",
+			"The checklist of what has to be true before the task is finished, kept in spec.jev's task frame. list shows it. done ticks one item and needs one line of evidence (the command that passed, the file that changed). add records an item you discovered. Tick items as you finish them; do not say the task is done while one is open.",
 		parameters: Type.Object({
 			action: Type.Unsafe<"list" | "done" | "add">({
 				type: "string",

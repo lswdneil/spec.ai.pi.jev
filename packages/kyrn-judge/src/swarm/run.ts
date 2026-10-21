@@ -105,7 +105,7 @@ export interface BoardSummary {
 export interface SwarmSnapshot {
 	kind: "hive" | "delegate";
 	title: string;
-	/** The title as a code, when mu wrote it (`delegate_tasks` / `delegate_chain` {count}); a hive's is the goal. */
+	/** The title as a code, when spec.jev wrote it (`delegate_tasks` / `delegate_chain` {count}); a hive's is the goal. */
 	titleCode?: Coded;
 	startedAt: number;
 	now: number;

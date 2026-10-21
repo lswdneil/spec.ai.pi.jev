@@ -184,7 +184,7 @@ function askedAt(settings: KyrnSettings, index: number, profile: string): KyrnSe
 
 /**
  * What a classifier model of OpenCode Zen or Cloudflare needs set, Jev or not (Clef): the provider's key, with
- * Cloudflare the account too. Nothing for the free Jev, nor for a model mu reaches another way (a sign-in in mu, the
+ * Cloudflare the account too. Nothing for the free Jev, nor for a model spec.jev reaches another way (a sign-in in spec.jev, the
  * provider's variable set elsewhere).
  */
 export function classifierVariables(judge: JudgeSettings): string[] {
@@ -209,7 +209,7 @@ const AUTO_KEYS: readonly (readonly string[])[] = [
 ];
 
 /**
- * Whether the automatic Jev answers with the free Jev on OpenCode Zen: none of its keys is saved or typed. (mu also
+ * Whether the automatic Jev answers with the free Jev on OpenCode Zen: none of its keys is saved or typed. (spec.jev also
  * takes a Vercel AI Gateway key kept with /login first, which this page does not see.)
  */
 export function answersFree(

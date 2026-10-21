@@ -525,7 +525,7 @@ describe('a judgment’s answers, in words', () => {
   });
 });
 
-/** A lesson as mu's file keeps it. */
+/** A lesson as spec.jev's file keeps it. */
 const stored = (id: string, text: string): StoredLesson => ({
   id,
   kind: 'correction',

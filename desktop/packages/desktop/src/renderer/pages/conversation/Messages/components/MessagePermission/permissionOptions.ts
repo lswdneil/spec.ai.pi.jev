@@ -56,7 +56,7 @@ export const classifyAcpPermission = (kind: string): PermissionIntent => {
 type AcpPermissionKind = 'allow_once' | 'allow_always' | 'reject_once' | 'reject_always';
 
 /**
- * The generic English names agents give the four standard ACP answers (the mu bridge sends "Allow" and "Reject" as
+ * The generic English names agents give the four standard ACP answers (the spec.jev bridge sends "Allow" and "Reject" as
  * the English fallback of a harness confirmation, the Claude adapter "Allow", "Always Allow" and "Reject").
  */
 const GENERIC_OPTION_NAMES: Record<AcpPermissionKind, readonly string[]> = {

@@ -1,6 +1,6 @@
 /**
  * Reading JSON-lines transcripts that can be very large: a Codex rollout reaches gigabytes (screenshots inline as
- * base64), a single line tens of megabytes. Only node: built-ins here, so that `mu import` runs on a bare Node.
+ * base64), a single line tens of megabytes. Only node: built-ins here, so that `spec.jev import` runs on a bare Node.
  */
 import { closeSync, createReadStream, openSync, readSync } from "node:fs";
 

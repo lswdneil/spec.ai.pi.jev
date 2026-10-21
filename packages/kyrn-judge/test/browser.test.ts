@@ -207,7 +207,7 @@ describe.skipIf(!findChrome())("runBrowserTask (real Chrome, local fixture)", ()
 		await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
 		const address = server.address();
 		url = `http://127.0.0.1:${typeof address === "object" && address ? address.port : 0}/`;
-		// A throwaway profile: the test never touches ~/.mu/browser-profile, let alone a personal one.
+		// A throwaway profile: the test never touches ~/.spec.jev/browser-profile, let alone a personal one.
 		// A loaded CI runner can keep Chrome past the 15 s port deadline while the other test files run; a fresh
 		// profile gets two more tries before that counts as a failure.
 		for (let attempt = 1; ; attempt++) {

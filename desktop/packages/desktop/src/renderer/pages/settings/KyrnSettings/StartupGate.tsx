@@ -11,7 +11,7 @@ import styles from '@renderer/components/brand/Brand.module.css';
 import { muErrorText, toMuError } from './fields/muError';
 
 /**
- * Holds the app back until mu's catalog has loaded, and says why when it cannot. `open` lets the app through without
+ * Holds the app back until spec.jev's catalog has loaded, and says why when it cannot. `open` lets the app through without
  * asking. It is a prop, not a gate left out of the tree, so the element around the app is the same on every page and
  * what it holds stays mounted when the gate opens or closes.
  */

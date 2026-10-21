@@ -140,7 +140,7 @@ export function useSubscriptionLogin(
       void call(provider, async () => unwrap(await kyrnBridge.loginStart.invoke({ provider })));
     },
     cancel: () => {
-      // Cancelled after the credential was stored (a slow model list): who is signed in is read again, and mu checked.
+      // Cancelled after the credential was stored (a slow model list): who is signed in is read again, and spec.jev checked.
       void call(login?.provider, async () => unwrap(await kyrnBridge.loginCancel.invoke())).then(() =>
         kyrnBridge.loginStatus
           .invoke()

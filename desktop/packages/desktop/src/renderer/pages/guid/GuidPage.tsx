@@ -151,9 +151,9 @@ const GuidPage: React.FC = () => {
 
   const selectedAssistantId = agentSelection.selectedAssistantId;
   const hasSelectedAssistant = selectedAssistantId !== null;
-  // The picker's first value is the catalog's memory of the last session, not a choice: mu starts a new
+  // The picker's first value is the catalog's memory of the last session, not a choice: spec.jev starts a new
   // conversation in the mode the settings set. So a mode is sent only once the person picked one here, or the
-  // assistant has its own; until then the picker shows the mode mu will start in.
+  // assistant has its own; until then the picker shows the mode spec.jev will start in.
   const muStartMode = useMuStartMode();
   const [modePicked, setModePicked] = useState(false);
   useEffect(() => {
@@ -398,7 +398,7 @@ const GuidPage: React.FC = () => {
     appliedAssistantDefaultsKeyRef.current = signature;
 
     const applyAssistantDefaults = async () => {
-      // "The last one used" is whatever model the last conversation ended on. Once mu has a default model, a new
+      // "The last one used" is whatever model the last conversation ended on. Once spec.jev has a default model, a new
       // conversation starts on that instead (and at its level), and a pick in a send box stays with its conversation.
       const resolved = resolveGuidAssistantDefaults(selectedAssistantDetail);
       const hasMuDefault = Boolean(muDefault.model);
@@ -608,7 +608,7 @@ const GuidPage: React.FC = () => {
   const isGeminiMode = PROVIDER_BASED_AGENTS.has(agentSelection.selectedAssistantBackend);
 
   // Build the mention dropdown node
-  // Build the model selector node. A send with no model picked starts on mu's default model, at its default level when
+  // Build the model selector node. A send with no model picked starts on spec.jev's default model, at its default level when
   // no level was picked either: that is what the chip shows until the person picks.
   const shownThoughtLevelOption = useMemo(() => {
     const option = agentSelection.currentThoughtLevelOption;

@@ -1,5 +1,5 @@
 /**
- * What the screen says about mu itself, above the send box: that it has no model to answer with (and the way to the
+ * What the screen says about spec.jev itself, above the send box: that it has no model to answer with (and the way to the
  * page where one is set up), that it stopped (why, and its last output), or that the last thing asked of it failed
  * for a reason the transcript cannot show. The failure's own message, plain English, goes under the sentence.
  */
@@ -24,7 +24,7 @@ const Detail: React.FC<{ text?: string; testId?: string }> = ({ text, testId }) 
     </div>
   ) : null;
 
-/** mu runs without a model: the guide's job, said as the transcript says it. */
+/** spec.jev runs without a model: the guide's job, said as the transcript says it. */
 const NoModel: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const NoModel: React.FC = () => {
   );
 };
 
-/** mu stopped unasked: why, its last output, and that the next message starts it again. */
+/** spec.jev stopped unasked: why, its last output, and that the next message starts it again. */
 const Stopped: React.FC<{ error: { kind: NativeFailure['kind']; message: string; stderr: string } }> = ({ error }) => {
   const { t } = useTranslation();
   return (

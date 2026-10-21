@@ -98,7 +98,7 @@ describe('modelMenu', () => {
       {
         currentValue: null,
         options: [
-          // mu describes each model by its provider's id.
+          // spec.jev describes each model by its provider's id.
           { value: 'relay/large', label: 'Large', description: 'relay' },
           { value: 'anthropic/claude-sonnet-4-5', label: 'Claude Sonnet 4.5', description: 'anthropic' },
           { value: 'custom-2/small', label: 'Small', description: 'custom-2' },
@@ -129,14 +129,14 @@ describe('providerDisplayName', () => {
 });
 
 describe('modelDisplayName', () => {
-  it('names a model as the picker does: by the name mu reported for it, else by its id without the provider', () => {
+  it('names a model as the picker does: by the name spec.jev reported for it, else by its id without the provider', () => {
     const names = new Map([
       ['openai-codex/gpt-5.6-terra', 'GPT-5.6 Terra'],
       ['openrouter/anthropic/claude-sonnet-4.5', 'Claude Sonnet 4.5'],
     ]);
     expect(modelDisplayName('openai-codex/gpt-5.6-terra', names)).toBe('GPT-5.6 Terra');
     expect(modelDisplayName('openrouter/anthropic/claude-sonnet-4.5', names)).toBe('Claude Sonnet 4.5');
-    // A model mu did not report: the provider is what the picker groups by, not part of the model's name.
+    // A model spec.jev did not report: the provider is what the picker groups by, not part of the model's name.
     expect(modelDisplayName('openai-codex/gpt-6-astra', names)).toBe('gpt-6-astra');
     expect(modelDisplayName('openrouter/meta/llama-5')).toBe('meta/llama-5');
     // An id that names no provider stays as it is.

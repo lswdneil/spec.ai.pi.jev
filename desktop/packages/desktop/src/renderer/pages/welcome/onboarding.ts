@@ -36,7 +36,7 @@ export function markOnboardingSeen(storage: Pick<Storage, 'setItem'> | undefined
   }
 }
 
-/** Someone new: nothing tells mu which model to start with. */
+/** Someone new: nothing tells spec.jev which model to start with. */
 export const needsOnboarding = (settings: KyrnSettings): boolean => !settings.models.defaults.provider;
 
 /**
@@ -159,7 +159,7 @@ export function withApiModel(
   };
 }
 
-/** The draft with a model of an account mu is already signed in to as the startup model. */
+/** The draft with a model of an account spec.jev is already signed in to as the startup model. */
 export function withSignedInModel(draft: Draft, provider: string, model: string, previous?: string): Draft {
   const models = draft.settings.models;
   const kept = models.providers.filter((entry) => !(entry.isNew && entry.id === previous));
@@ -191,7 +191,7 @@ export function permissionModesOf(settings: KyrnSettings): GuidePermissionMode[]
 
 /**
  * The settings with `mode` as the permission mode new conversations start in: the permission modes feature's own
- * option, where the settings set it. mu's last pick (from /permissions or a send box) wins over that option, so when
+ * option, where the settings set it. spec.jev's last pick (from /permissions or a send box) wins over that option, so when
  * there is one it moves along with it; `toSave` writes it then.
  */
 export function withPermissionMode(settings: KyrnSettings, mode: string): KyrnSettings {

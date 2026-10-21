@@ -173,7 +173,7 @@ describe('useNativeConversation', () => {
     expect(result.current.commandFailure).toBeUndefined();
     expect(result.current.view).toMatchObject({ status: 'error', error: 'No API key found for p.' });
 
-    host.answer(() => ({ ok: false, kind: 'no-harness', message: 'mu is not installed' }));
+    host.answer(() => ({ ok: false, kind: 'no-harness', message: 'spec.jev is not installed' }));
     await act(async () => {
       await result.current.send('hi');
     });

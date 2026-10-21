@@ -18,7 +18,7 @@ const COPY: Record<string, string> = {
   'common.backendStartup.exited.description':
     'The local service could not finish starting and has exited. Please restart the app; if this keeps happening, check the log directory in Settings → System.',
   'common.backendStartup.incompleteInstallation.description':
-    'Your installation is missing required local resources. Please download and reinstall the latest mu; if it persists after reinstalling, check whether antivirus quarantined its files.',
+    'Your installation is missing required local resources. Please download and reinstall the latest spec.jev; if it persists after reinstalling, check whether antivirus quarantined its files.',
 };
 
 vi.mock('react-i18next', () => ({

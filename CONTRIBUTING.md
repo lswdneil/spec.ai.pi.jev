@@ -1,4 +1,4 @@
-# Contributing to mu
+# Contributing to spec.jev
 
 Thanks for helping. Bug reports, fixes, new decision points, judge measurements, translations and documentation are all welcome, from anyone, in English or Chinese.
 
@@ -23,7 +23,7 @@ Thanks for helping. Bug reports, fixes, new decision points, judge measurements,
 - **Report a bug** with the [bug report form](https://github.com/qybaihe/mu/issues/new?template=bug_report.yml). A short report with the version, the platform and the steps to reproduce is worth more than a long one.
 - **Propose a feature** with the [feature request form](https://github.com/qybaihe/mu/issues/new?template=feature_request.yml), or a **new decision point** with the [decision point form](https://github.com/qybaihe/mu/issues/new?template=decision_point.yml).
 - **Fix something.** Issues labeled [`good first issue`](https://github.com/qybaihe/mu/labels/good%20first%20issue) and [`help wanted`](https://github.com/qybaihe/mu/labels/help%20wanted) are a good place to start. Say in the issue that you're working on it, so two people don't do the same work.
-- **Measure a judge.** Run a decision point in `shadow` mode with another judge and compare the ledgers (`mu ledger --json`). Numbers from real sessions are the most useful thing to include with a judge change.
+- **Measure a judge.** Run a decision point in `shadow` mode with another judge and compare the ledgers (`spec.jev ledger --json`). Numbers from real sessions are the most useful thing to include with a judge change.
 - **Translate.** The desktop app is available in 13 languages and the README in five; see [docs/translations.md](docs/translations.md).
 - **Improve the documentation** in [docs/](docs/README.md). Small fixes can go straight to a pull request.
 - **Ask and answer questions** in [Discussions](https://github.com/qybaihe/mu/discussions).
@@ -32,27 +32,27 @@ Don't report security problems in public issues; see [SECURITY.md](SECURITY.md).
 
 ## Ground rules
 
-- **Understand your change.** If you can't explain what your change does and how it interacts with the rest of mu, it won't be merged. Using AI to write code or text is fine; submitting something you haven't read and understood isn't. If an AI wrote most of an issue or a pull request description, say so in one line.
+- **Understand your change.** If you can't explain what your change does and how it interacts with the rest of spec.jev, it won't be merged. Using AI to write code or text is fine; submitting something you haven't read and understood isn't. If an AI wrote most of an issue or a pull request description, say so in one line.
 - **Keep it small and focused.** One fix or one feature per pull request. If a fix needs a refactor, put the refactor in its own commit.
 - **Behavior changes come with tests.** A fix comes with a test that fails without it, and a feature with tests of what it does. Reference the issue next to a regression test (`// https://github.com/qybaihe/mu/issues/7`).
 - **Be kind.** Everyone here follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## The repository
 
-mu is a fork of [pi](https://github.com/earendil-works/pi)'s monorepo with a judgment kernel added, plus a desktop app built on [AionUi](https://github.com/iOfficeAI/AionUi).
+spec.jev is a fork of [pi](https://github.com/earendil-works/pi)'s monorepo with a judgment kernel added, plus a desktop app built on [AionUi](https://github.com/iOfficeAI/AionUi).
 
 | Path | What's there |
 | --- | --- |
 | `packages/kyrn-judge/` | The judgment kernel: decision points (`src/decisions/`), the features that ask them (`src/extension/features/`), judges (`src/providers/`), the ledger, and the settings manifest (`src/manifest.ts`, `i18n/manifest.json`, and the generated `manifest.json`) |
-| `packages/coding-agent/`, `packages/ai/`, `packages/agent/`, `packages/tui/`, … | pi's packages: the agent, providers and models, and the terminal UI. mu keeps its changes here small and marked, so pi's releases can be merged in |
-| `kyrn/bin/mu.mjs` | The `mu` launcher: `mu setup`, `mu doctor`, `mu import`, and starting pi with the kernel |
-| `kyrn/npm/` | The `mu-agent` npm package and its [changelog](kyrn/npm/CHANGELOG.md) |
+| `packages/coding-agent/`, `packages/ai/`, `packages/agent/`, `packages/tui/`, … | pi's packages: the agent, providers and models, and the terminal UI. spec.jev keeps its changes here small and marked, so pi's releases can be merged in |
+| `kyrn/bin/mu.mjs` | The `spec.jev` launcher: `spec.jev setup`, `spec.jev doctor`, `spec.jev import`, and starting pi with the kernel |
+| `kyrn/npm/` | The `spec.jev` npm package and its [changelog](kyrn/npm/CHANGELOG.md) |
 | `kyrn/local-judge/` | The sidecar for Laya, the local judge |
 | `kyrn/docs/` | Design notes and measurements, mostly in Chinese |
-| `desktop/` | The desktop app (Electron); mu's parts are under `desktop/packages/desktop/src/**/kyrn/` and `KyrnPanel/` |
+| `desktop/` | The desktop app (Electron); spec.jev's parts are under `desktop/packages/desktop/src/**/kyrn/` and `KyrnPanel/` |
 | `docs/` | Documentation for users and contributors |
 
-You'll see both "kyrn" and "mu" in names: the project was called KYRN until 2026-09-21. New code uses "mu" wherever a name is visible to users.
+You'll see both "kyrn" and "spec.jev" in names: the project was called KYRN until 2026-09-21. New code uses "spec.jev" wherever a name is visible to users.
 
 ## Setting up
 
@@ -60,14 +60,14 @@ You need Node.js 22.19 or newer (CI uses Node 24) and, for the desktop app, [Bun
 
 ```bash
 git clone https://github.com/qybaihe/mu.git
-cd mu
+cd spec.jev
 npm install --ignore-scripts
-node kyrn/bin/mu.mjs          # run mu from this checkout; Node runs the TypeScript directly
+node kyrn/bin/mu.mjs          # run spec.jev from this checkout; Node runs the TypeScript directly
 ```
 
-To use your build as `mu` everywhere, run `node kyrn/bin/mu.mjs link`. It puts a `mu` command on your PATH that runs this checkout (`mu unlink` removes it).
+To use your build as `spec.jev` everywhere, run `node kyrn/bin/mu.mjs link`. It puts a `spec.jev` command on your PATH that runs this checkout (`spec.jev unlink` removes it).
 
-The desktop app runs against the mu in the same checkout:
+The desktop app runs against the spec.jev in the same checkout:
 
 ```bash
 cd desktop
@@ -75,7 +75,7 @@ bun install
 KYRN_ROOT="$(cd .. && pwd)" bun run start
 ```
 
-On first start without a model, mu asks you to set one up (`mu setup`). With no Jev key set, the free Jev on OpenCode Zen answers the judge's questions; see [docs/judges.md](docs/judges.md).
+On first start without a model, spec.jev asks you to set one up (`spec.jev setup`). With no Jev key set, the free Jev on OpenCode Zen answers the judge's questions; see [docs/judges.md](docs/judges.md).
 
 ## Checks and tests
 
@@ -146,7 +146,7 @@ Don't edit the changelogs: maintainers write them when they prepare a release.
 
 ## Larger changes
 
-Open an issue before you start on anything that adds a feature, a setting, a decision point or a dependency, or that changes how mu talks to models or stores data. A short description of the problem and your approach saves rework on both sides.
+Open an issue before you start on anything that adds a feature, a setting, a decision point or a dependency, or that changes how spec.jev talks to models or stores data. A short description of the problem and your approach saves rework on both sides.
 
 A new decision point needs a question a small judge can answer from a small state, a safe fallback for when no judge answers, tests with the mock judge, settings text and desktop labels. [docs/adding-a-decision-point.md](docs/adding-a-decision-point.md) walks through all of it.
 
@@ -158,7 +158,7 @@ A new decision point needs a question a small judge can answer from a small stat
 
 ## Upstream: pi and AionUi
 
-mu merges pi's releases regularly. A bug that's also in pi is best fixed in [pi](https://github.com/earendil-works/pi) first (mention it in your mu issue). A bug in the desktop shell that mu shares with AionUi can go to [AionUi](https://github.com/iOfficeAI/AionUi). These issues get the `upstream` label.
+spec.jev merges pi's releases regularly. A bug that's also in pi is best fixed in [pi](https://github.com/earendil-works/pi) first (mention it in your spec.jev issue). A bug in the desktop shell that spec.jev shares with AionUi can go to [AionUi](https://github.com/iOfficeAI/AionUi). These issues get the `upstream` label.
 
 ## License of contributions
 

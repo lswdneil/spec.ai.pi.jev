@@ -1,6 +1,6 @@
 /**
  * The Jev panel's record of the native conversation on screen. The native page publishes what its view holds here
- * (`toActivity`), and the work panel reads it for that conversation instead of asking the main process for the mu
+ * (`toActivity`), and the work panel reads it for that conversation instead of asking the main process for the spec.jev
  * bridge's telemetry, which a native conversation does not have. One conversation at a time: the one on screen. With
  * it, the folder the conversation works in (`cwd`), once known: the panel's lessons and files are read by it.
  */

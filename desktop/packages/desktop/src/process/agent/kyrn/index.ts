@@ -23,7 +23,7 @@ if (!nodeVersionOk(process.versions.node)) {
   process.exit(1);
 }
 // No harness found: the launcher of the place it should be (in the packaged app its own copy), whose failure to
-// start the app reports as mu offline.
+// start the app reports as spec.jev offline.
 const harness =
   findHarness(desktopRoot) ?? expectedHarness(desktopRoot, (process as { resourcesPath?: string }).resourcesPath);
 let agent: KyrnAgent;

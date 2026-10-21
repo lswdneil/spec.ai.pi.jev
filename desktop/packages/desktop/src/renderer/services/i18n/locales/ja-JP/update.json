@@ -20,11 +20,11 @@
   },
   "readyTitle": "新しいバージョン {{version}} の準備ができました",
   "restartToUpdate": "再起動して更新",
-  "lastInstallFailed": "前回の更新はインストールされませんでした。mu を終了できなかったためです。",
+  "lastInstallFailed": "前回の更新はインストールされませんでした。spec.jev を終了できなかったためです。",
   "availableVersion": "新しいバージョン {{version}} をダウンロードできます",
   "installerReason": {
-    "linux": "Linux では mu は自分で更新をインストールできません。インストーラーをダウンロードして開いてください。",
-    "unpackaged": "この mu は自分で更新をインストールできません。インストーラーをダウンロードして開いてください。",
+    "linux": "Linux では spec.jev は自分で更新をインストールできません。インストーラーをダウンロードして開いてください。",
+    "unpackaged": "この spec.jev は自分で更新をインストールできません。インストーラーをダウンロードして開いてください。",
     "autoUpdateFailed": "インストーラーをダウンロードして更新できます。"
   },
   "downloadInstaller": "インストーラーをダウンロード",

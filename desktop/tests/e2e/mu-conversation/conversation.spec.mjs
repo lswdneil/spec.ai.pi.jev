@@ -1,5 +1,5 @@
 // @ts-check
-// One conversation in the mu desktop app, end to end, against a local fake model (fakeModel.mjs), in a throwaway
+// One conversation in the spec.jev desktop app, end to end, against a local fake model (fakeModel.mjs), in a throwaway
 // profile (profile.mjs). Run it with `bun run e2e:conversation` (scripts/kyrn/e2e-conversation.mjs builds the app
 // first); tests/e2e/README.md says more.
 //
@@ -112,7 +112,7 @@ const stamp = (path) => {
 };
 
 /**
- * Remembers the processes the app runs now (the backend, the adapter, mu), so a quit can show that none of them stayed.
+ * Remembers the processes the app runs now (the backend, the adapter, spec.jev), so a quit can show that none of them stayed.
  * The app's own process is followed by `quitApp`.
  */
 async function noteProcesses() {
@@ -254,7 +254,7 @@ test.beforeAll(async () => {
   // The conversation on AionCore is the kill switch's path: the native host is on by default, and this test is of the
   // other one.
   run.profile.env.MU_NATIVE_HOST = '0';
-  // The harness's keys (a checkout's own .env; none beside the mu a packaged app carries): stamped (never read)
+  // The harness's keys (a checkout's own .env; none beside the spec.jev a packaged app carries): stamped (never read)
   // before, compared after.
   run.untouched = [join(harness.root, '.env')].map((path) => ({ path, before: stamp(path) }));
   console.log(`[mu e2e] app: ${app ? app.executable : join(desktopRoot, 'out')}`);
@@ -357,7 +357,7 @@ test('first start: the guide opens, and a custom endpoint added in the settings 
       .toMatchObject({ defaultProvider: PROVIDER_ID, defaultModel: FAKE_MODEL_ID });
   });
 
-  expect(existsSync(join(paths().home, '.mu', 'agent')), 'mu used MU_AGENT_DIR, not ~/.mu/agent').toBe(false);
+  expect(existsSync(join(paths().home, '.mu', 'agent')), 'spec.jev used MU_AGENT_DIR, not ~/.spec.jev/agent').toBe(false);
   expectNoProblems();
 });
 
@@ -631,7 +631,7 @@ test('关于 shows the version, and 检查更新 downloads nothing', async () =>
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">',
         '  <id>tag:github.com,2008:https://github.com/qybaihe/mu/releases</id>',
-        '  <title>Release notes from mu</title>',
+        '  <title>Release notes from spec.jev</title>',
         '  <updated>2026-09-25T00:00:00Z</updated>',
         '  <entry>',
         `    <id>tag:github.com,2008:Repository/1/v${newer}</id>`,
@@ -679,10 +679,10 @@ test('the test stayed in its profile, and left nothing running', async () => {
 
   const { project, home, agentDir } = paths();
   const slug = `--${project.replace(/^[/\\]/, '').replace(/[/\\:]/g, '-')}--`;
-  expect(existsSync(join(agentDir, 'sessions', slug)), "mu kept the conversation's session in MU_AGENT_DIR").toBe(true);
-  expect(existsSync(join(home, '.mu', 'agent')), 'nothing in the profile home ~/.mu/agent').toBe(false);
+  expect(existsSync(join(agentDir, 'sessions', slug)), "spec.jev kept the conversation's session in MU_AGENT_DIR").toBe(true);
+  expect(existsSync(join(home, '.mu', 'agent')), 'nothing in the profile home ~/.spec.jev/agent').toBe(false);
   const realMu = join(homedir(), '.mu');
-  expect(existsSync(join(realMu, 'agent', 'sessions', slug)), "nothing in the person's ~/.mu/agent").toBe(false);
+  expect(existsSync(join(realMu, 'agent', 'sessions', slug)), "nothing in the person's ~/.spec.jev/agent").toBe(false);
   for (const name of existsSync(join(home, '.mu', 'acp-sessions'))
     ? readdirSync(join(home, '.mu', 'acp-sessions'))
     : []) {
@@ -690,7 +690,7 @@ test('the test stayed in its profile, and left nothing running', async () => {
       false
     );
   }
-  // The person's board settings may change while the test runs (their own mu), but never name the test's project.
+  // The person's board settings may change while the test runs (their own spec.jev), but never name the test's project.
   const realBoard = join(realMu, 'agent', 'mu', 'board.json');
   if (existsSync(realBoard)) expect(readFileSync(realBoard, 'utf8'), "the person's board.json").not.toContain(project);
   for (const { path, before } of run.untouched) expect(stamp(path), `${path} left alone`).toBe(before);

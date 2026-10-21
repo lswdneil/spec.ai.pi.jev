@@ -26,7 +26,7 @@ const MODES = [
   { id: 'jev', label: 'Jev approves', description: 'Jev approves what the task needs.' },
   { id: 'ask', label: 'Minimal permissions', description: 'Reading only; the rest asks.' },
 ];
-/** A presentation event the way mu sends it: JSON on its status channel. */
+/** A presentation event the way spec.jev sends it: JSON on its status channel. */
 const shown = (kind: string, payload: JsonRecord): JsonRecord => ({
   type: 'extension_ui_request',
   id: `status-${kind}`,
@@ -47,37 +47,37 @@ type FixtureOptions = {
   /** The user's home the bridge reads the app language from; a temporary one. */
   home?: string;
   permission?: (request: RequestPermissionRequest) => RequestPermissionResponse | Promise<RequestPermissionResponse>;
-  /** The permission mode mu starts in, announced before its first answer as mu does; unset: mu reports none. */
+  /** The permission mode spec.jev starts in, announced before its first answer as spec.jev does; unset: spec.jev reports none. */
   mode?: string;
-  /** mu understands `/permissions <id> --here` and says so (`conversationSwitch`). */
+  /** spec.jev understands `/permissions <id> --here` and says so (`conversationSwitch`). */
   here?: boolean;
   /** What pi's `get_commands` answers. */
   commands?: JsonRecord[];
   /** What pi's `get_available_models` answers; unset: a fixture model and the judge's gateway model. */
   models?: JsonRecord[];
-  /** The model mu runs on until `set_model`; unset: the fixture model. pi says `unknown/unknown` while it has none. */
+  /** The model spec.jev runs on until `set_model`; unset: the fixture model. pi says `unknown/unknown` while it has none. */
   model?: JsonRecord;
   /** pi refuses the next messages with these errors, one each, before it takes one. */
   promptErrors?: string[];
 };
 
-/** Error text of a fixture mu that has stopped, as PiRpc's. */
-const CLOSED = 'mu process is closed';
+/** Error text of a fixture spec.jev that has stopped, as PiRpc's. */
+const CLOSED = 'spec.jev process is closed';
 
 function fixture(options: FixtureOptions = {}) {
   const store = mkdtempSync(join(tmpdir(), 'kyrn-acp-'));
-  // Never the real home: the bridge reads the app language from `<home>/.mu`.
+  // Never the real home: the bridge reads the app language from `<home>/.spec.jev`.
   const ownHome = options.home ? undefined : mkdtempSync(join(tmpdir(), 'kyrn-home-'));
   const updates: SessionNotification[] = [];
   const commands: JsonRecord[] = [];
   const permissions: RequestPermissionRequest[] = [];
   const responses: JsonRecord[] = [];
   const envs: (Readonly<Record<string, string>> | undefined)[] = [];
-  /** The session file each mu process was started on. */
+  /** The session file each spec.jev process was started on. */
   const files: (string | undefined)[] = [];
-  /** How many of the next mu processes fail to start. */
+  /** How many of the next spec.jev processes fail to start. */
   let failStarts = 0;
-  /** Stops the current mu process, as a crash does. */
+  /** Stops the current spec.jev process, as a crash does. */
   let stop: () => void = noop;
   let emit: (event: JsonRecord) => void = noop;
   let finish: () => void = noop;
@@ -89,7 +89,7 @@ function fixture(options: FixtureOptions = {}) {
   let mode = options.mode;
   let model = options.model ?? { provider: 'fixture', id: 'model' };
   const promptErrors = [...(options.promptErrors ?? [])];
-  /** The mode each mu process was handed (MU_PERMISSIONS). */
+  /** The mode each spec.jev process was handed (MU_PERMISSIONS). */
   const launched: (string | undefined)[] = [];
   let announced = false;
   const agent = new KyrnAgent(
@@ -118,12 +118,12 @@ function fixture(options: FixtureOptions = {}) {
       };
       const handed = env?.MU_PERMISSIONS;
       launched.push(handed);
-      // A new mu process announces its mode again; one handed a mode starts in it (no session entry here).
+      // A new spec.jev process announces its mode again; one handed a mode starts in it (no session entry here).
       announced = false;
       if (handed) mode = handed;
       return {
         send: async (command) => {
-          if (failing) throw new Error('mu failed to start');
+          if (failing) throw new Error('spec.jev failed to start');
           if (down) throw new Error(CLOSED);
           commands.push(command);
           switch (command.type) {
@@ -161,7 +161,7 @@ function fixture(options: FixtureOptions = {}) {
             case 'get_messages':
               return { messages: [{ role: 'user', content: 'Saved message' }] };
             case 'prompt':
-              // mu's command: it announces the new mode, says so, then answers; no turn starts.
+              // spec.jev's command: it announces the new mode, says so, then answers; no turn starts.
               if (mode && String(command.message).startsWith('/permissions ')) {
                 const [next, flag] = String(command.message).slice('/permissions '.length).split(' ');
                 mode = next;
@@ -210,13 +210,13 @@ function fixture(options: FixtureOptions = {}) {
     store,
     launched,
     files,
-    /** mu's process stops, as a crash does: kyrn_rpc_closed, and every command fails from then on. */
+    /** spec.jev's process stops, as a crash does: kyrn_rpc_closed, and every command fails from then on. */
     stop: () => stop(),
-    /** The next `count` mu processes fail to start. */
+    /** The next `count` spec.jev processes fail to start. */
     failStarts: (count: number) => {
       failStarts = count;
     },
-    /** mu's default changed elsewhere, e.g. in another conversation. */
+    /** spec.jev's default changed elsewhere, e.g. in another conversation. */
     setMode: (value: string) => {
       mode = value;
     },
@@ -476,7 +476,7 @@ describe('KYRN ACP bridge', () => {
       f.cleanup();
     }
   });
-  it('offers no permission picker while mu reports no modes', async () => {
+  it('offers no permission picker while spec.jev reports no modes', async () => {
     const f = fixture();
     try {
       const session = await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -488,7 +488,7 @@ describe('KYRN ACP bridge', () => {
       f.cleanup();
     }
   });
-  it('puts mu’s permission modes in the send box and switches them with mu’s own command', async () => {
+  it('puts spec.jev’s permission modes in the send box and switches them with spec.jev’s own command', async () => {
     const f = fixture({ mode: 'jev' });
     try {
       const { sessionId, configOptions } = await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -506,7 +506,7 @@ describe('KYRN ACP bridge', () => {
       ]);
       expect(changed.configOptions?.find((option) => option.id === 'mode')).toMatchObject({ currentValue: 'ask' });
       await tick();
-      // The picker hears of it; mu's "switched" note is not shown as a reply.
+      // The picker hears of it; spec.jev's "switched" note is not shown as a reply.
       expect(f.updates.map((each) => each.update)).toContainEqual(
         expect.objectContaining({ sessionUpdate: 'config_option_update' })
       );
@@ -521,7 +521,7 @@ describe('KYRN ACP bridge', () => {
       f.cleanup();
     }
   });
-  it('switches this conversation only when mu can, so the default for new ones stays the settings’', async () => {
+  it('switches this conversation only when spec.jev can, so the default for new ones stays the settings’', async () => {
     const f = fixture({ mode: 'jev', here: true });
     try {
       const { sessionId } = await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -550,7 +550,7 @@ describe('KYRN ACP bridge', () => {
       );
       f.finish();
       await running;
-      // `/permissions ask` typed by the user: mu announces the mode, and the picker follows.
+      // `/permissions ask` typed by the user: spec.jev announces the mode, and the picker follows.
       f.emit(modeShown('ask'));
       await tick();
       await tick();
@@ -583,7 +583,7 @@ describe('KYRN ACP bridge', () => {
       f.cleanup();
     }
   });
-  it('shows mu’s permission question as a card whose buttons say what each answer does', async () => {
+  it('shows spec.jev’s permission question as a card whose buttons say what each answer does', async () => {
     const f = fixture({ mode: 'jev' });
     try {
       await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -605,13 +605,13 @@ describe('KYRN ACP bridge', () => {
         type: 'extension_ui_request',
         id: 'ui-1',
         method: 'select',
-        title: 'mu wants to run a command\nnpm test\n  -- --watch=false\nJev is not sure this step is what you want.',
+        title: 'spec.jev wants to run a command\nnpm test\n  -- --watch=false\nJev is not sure this step is what you want.',
         options: answers,
       });
       await tick();
       expect(f.permissions[0].toolCall).toMatchObject({
         toolCallId: 'permission:ui-1',
-        title: 'mu wants to run a command',
+        title: 'spec.jev wants to run a command',
         kind: 'execute',
         rawInput: {
           command: 'npm test\n  -- --watch=false',
@@ -624,7 +624,7 @@ describe('KYRN ACP bridge', () => {
         'reject_once',
       ]);
       expect(f.responses).toEqual([{ id: 'ui-1', value: answers[1] }]);
-      // Any other picker (here, mu's own list of modes) keeps the plain shape.
+      // Any other picker (here, spec.jev's own list of modes) keeps the plain shape.
       f.emit({
         type: 'extension_ui_request',
         id: 'ui-2',
@@ -639,7 +639,7 @@ describe('KYRN ACP bridge', () => {
       f.cleanup();
     }
   });
-  it('gives the card mu’s codes and its answers by id, so the desktop words them in any language', async () => {
+  it('gives the card spec.jev’s codes and its answers by id, so the desktop words them in any language', async () => {
     const f = fixture({ mode: 'jev' });
     try {
       await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -665,7 +665,7 @@ describe('KYRN ACP bridge', () => {
           type: 'extension_ui_request',
           id,
           method: 'select',
-          title: 'mu 想运行命令，需要你授权\ngit push --force\n危险操作：强制推送。',
+          title: 'spec.jev 想运行命令，需要你授权\ngit push --force\n危险操作：强制推送。',
           options: answers,
         });
       };
@@ -681,7 +681,7 @@ describe('KYRN ACP bridge', () => {
         { optionId: 'mu:session', name: answers[1], kind: 'allow_always' },
         { optionId: 'mu:deny', name: answers[2], kind: 'reject_once' },
       ]);
-      // The answer goes back to mu as its own text; a position or an unknown id is no answer.
+      // The answer goes back to spec.jev as its own text; a position or an unknown id is no answer.
       ask('ui-2', '1');
       await tick();
       ask('ui-3', 'mu:always');
@@ -695,10 +695,10 @@ describe('KYRN ACP bridge', () => {
       f.cleanup();
     }
   });
-  it('offers mu’s slash commands to the send box once the session is answered, and again when it is reopened', async () => {
+  it('offers spec.jev’s slash commands to the send box once the session is answered, and again when it is reopened', async () => {
     const f = fixture({
       commands: [
-        { name: 'permissions', description: 'How much mu may do without asking\nmore', source: 'extension' },
+        { name: 'permissions', description: 'How much spec.jev may do without asking\nmore', source: 'extension' },
         { name: 'skill:review', description: '', source: 'skill' },
         { name: 'two words', description: 'not a command name' },
         { name: 'clear', description: 'Start a fresh conversation (same as /new)', source: 'extension' },
@@ -713,7 +713,7 @@ describe('KYRN ACP bridge', () => {
         sessionId,
         update: {
           availableCommands: [
-            { name: 'permissions', description: 'How much mu may do without asking' },
+            { name: 'permissions', description: 'How much spec.jev may do without asking' },
             { name: 'skill:review', description: 'skill:review' },
           ],
         },
@@ -818,13 +818,13 @@ describe('KYRN ACP bridge', () => {
         type: 'extension_ui_request',
         id: 'c1',
         method: 'confirm',
-        title: 'mu: rm',
+        title: 'spec.jev: rm',
         message: 'Run rm -rf build?',
       });
       await new Promise((resolve) => setImmediate(resolve));
       expect(f.permissions[0]).toMatchObject({
         sessionId,
-        toolCall: { toolCallId: 'permission:c1', title: 'mu: rm', rawInput: { description: 'Run rm -rf build?' } },
+        toolCall: { toolCallId: 'permission:c1', title: 'spec.jev: rm', rawInput: { description: 'Run rm -rf build?' } },
         options: [
           { optionId: 'allow', name: 'Allow', kind: 'allow_once' },
           { optionId: 'reject', name: 'Reject', kind: 'reject_once' },
@@ -861,7 +861,7 @@ describe('KYRN ACP bridge', () => {
     }
   });
 
-  it('fails a turn whose mu stopped with the error the desktop explains, and starts mu again for the next message', async () => {
+  it('fails a turn whose spec.jev stopped with the error the desktop explains, and starts spec.jev again for the next message', async () => {
     const f = fixture({ mode: 'ask' });
     try {
       const { sessionId } = await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -871,7 +871,7 @@ describe('KYRN ACP bridge', () => {
       await expect(running).rejects.toThrow(MU_TURN_ERRORS.processExited);
       // Stopping what no longer runs is no error.
       await expect(f.agent.cancel({ sessionId })).resolves.toBeUndefined();
-      // The next message: a new mu on the same session file, in the mode the conversation was in.
+      // The next message: a new spec.jev on the same session file, in the mode the conversation was in.
       const next = f.agent.prompt({ sessionId, prompt: [{ type: 'text', text: 'Again' }] });
       await vi.waitFor(() => expect(f.commands.filter((command) => command.type === 'prompt')).toHaveLength(2));
       f.finish();
@@ -883,7 +883,7 @@ describe('KYRN ACP bridge', () => {
     }
   });
 
-  it('ends a call mu started and never ended as failed when mu stops mid-call, so no row stays running', async () => {
+  it('ends a call spec.jev started and never ended as failed when spec.jev stops mid-call, so no row stays running', async () => {
     const f = fixture();
     try {
       const { sessionId } = await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -891,7 +891,7 @@ describe('KYRN ACP bridge', () => {
       await vi.waitFor(() => expect(f.commands.filter((command) => command.type === 'prompt')).toHaveLength(1));
       f.emit({ type: 'tool_execution_start', toolCallId: 'read-1', toolName: 'read', args: { path: 'a.ts' } });
       f.emit({ type: 'tool_execution_end', toolCallId: 'read-1', result: { content: [] }, isError: false });
-      // A hive at work when mu's process closes: its call never ends.
+      // A hive at work when spec.jev's process closes: its call never ends.
       f.emit({ type: 'tool_execution_start', toolCallId: 'hive-1', toolName: 'hive', args: { question: 'Why?' } });
       f.stop();
       await expect(running).rejects.toThrow(MU_TURN_ERRORS.processExited);
@@ -924,7 +924,7 @@ describe('KYRN ACP bridge', () => {
     }
   });
 
-  it('goes on after mu stopped between turns: a setting or a message starts it again, with no error', async () => {
+  it('goes on after spec.jev stopped between turns: a setting or a message starts it again, with no error', async () => {
     const f = fixture();
     try {
       const { sessionId } = await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -941,14 +941,14 @@ describe('KYRN ACP bridge', () => {
     }
   });
 
-  it('keeps a conversation whose new mu did not start, and tries again on the next call', async () => {
+  it('keeps a conversation whose new spec.jev did not start, and tries again on the next call', async () => {
     const f = fixture();
     try {
       const { sessionId } = await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
       f.stop();
       f.failStarts(1);
       await expect(f.agent.prompt({ sessionId, prompt: [{ type: 'text', text: 'Test' }] })).rejects.toThrow(
-        'mu failed to start'
+        'spec.jev failed to start'
       );
       const next = f.agent.prompt({ sessionId, prompt: [{ type: 'text', text: 'Again' }] });
       await vi.waitFor(() => expect(f.commands.filter((command) => command.type === 'prompt')).toHaveLength(1));
@@ -960,7 +960,7 @@ describe('KYRN ACP bridge', () => {
     }
   });
 
-  it('answers mu exactly once, and says so in the conversation when the app could not ask or no choice came back', async () => {
+  it('answers spec.jev exactly once, and says so in the conversation when the app could not ask or no choice came back', async () => {
     const f = fixture({ mode: 'jev' });
     try {
       const { sessionId } = await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -980,13 +980,13 @@ describe('KYRN ACP bridge', () => {
             answerIds: ['once', 'deny'],
           })
         );
-        f.emit({ type: 'extension_ui_request', id, method: 'select', title: 'mu 想运行命令', options: answers });
+        f.emit({ type: 'extension_ui_request', id, method: 'select', title: 'spec.jev 想运行命令', options: answers });
       };
       const notices = () =>
         f.updates.filter(
           (each) => each.update.sessionUpdate === 'tool_call' && each.update.toolCallId.startsWith('mu:notice:')
         );
-      // The app could not ask: mu hears "no" and the conversation says why.
+      // The app could not ask: spec.jev hears "no" and the conversation says why.
       f.failAsking();
       ask('ui-1');
       // An answer that is none of the choices.
@@ -1022,7 +1022,7 @@ describe('KYRN ACP bridge', () => {
     }
   });
 
-  it('lets an answer to a mu that stopped meanwhile go nowhere, with nothing else to say', async () => {
+  it('lets an answer to a spec.jev that stopped meanwhile go nowhere, with nothing else to say', async () => {
     const f = fixture({ mode: 'jev' });
     try {
       await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
@@ -1095,7 +1095,7 @@ describe('a conversation without a model', () => {
   });
 
   it('takes the model new sessions start on once pi lists it, and the send box hears of it', async () => {
-    // Started while another mu held the model store, pi found no model and runs on its placeholder.
+    // Started while another spec.jev held the model store, pi found no model and runs on its placeholder.
     vi.stubEnv('MU_AGENT_DIR', '');
     vi.stubEnv('KYRN_AGENT_DIR', '');
     const home = mkdtempSync(join(tmpdir(), 'kyrn-home-'));
@@ -1128,7 +1128,7 @@ describe('a conversation without a model', () => {
           ]),
         })
       );
-      // A message goes to mu at once now, and looks for no model.
+      // A message goes to spec.jev at once now, and looks for no model.
       const looks = f.commands.filter((command) => command.type === 'get_available_models').length;
       const running = f.agent.prompt({ sessionId, prompt: [{ type: 'text', text: 'Test' }] });
       await tick();
@@ -1179,7 +1179,7 @@ describe('a conversation without a model', () => {
     }
   });
 
-  it('sends a message again when another mu held the model store, and fails it when that goes on', async () => {
+  it('sends a message again when another spec.jev held the model store, and fails it when that goes on', async () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     const locked = 'Lock file is already being held';
     const f = fixture({ promptErrors: [locked, locked, locked, locked] });
@@ -1209,11 +1209,11 @@ const noticesOf = (updates: SessionNotification[]) =>
   updates
     .map((each) => each.update)
     .filter((update) => update.sessionUpdate === 'tool_call' && update.toolCallId.startsWith('mu:notice:'));
-/** mu notifies something, as its RPC event does. */
+/** spec.jev notifies something, as its RPC event does. */
 const notify = (f: ReturnType<typeof fixture>, message: string, notifyType: string) =>
   f.emit({ type: 'extension_ui_request', id: `notify-${message}`, method: 'notify', message, notifyType });
 
-describe('what mu notifies', () => {
+describe('what spec.jev notifies', () => {
   it('is a line of its own, never reply text: an answer each time, a warning or an error once', async () => {
     const f = fixture();
     try {
@@ -1221,9 +1221,9 @@ describe('what mu notifies', () => {
       const running = f.agent.prompt({ sessionId, prompt: [{ type: 'text', text: 'Test' }] });
       notify(f, 'Permissions: full access', 'info');
       notify(f, 'Permissions: full access', 'info');
-      notify(f, 'mu could not save a checkpoint.', 'warning');
+      notify(f, 'spec.jev could not save a checkpoint.', 'warning');
       f.emit({ type: 'message_update', assistantMessageEvent: { type: 'text_delta', delta: 'Answer' } });
-      notify(f, 'mu could not save a checkpoint.', 'warning');
+      notify(f, 'spec.jev could not save a checkpoint.', 'warning');
       notify(f, 'The judge is not reachable.', 'error');
       f.finish();
       await running;
@@ -1231,7 +1231,7 @@ describe('what mu notifies', () => {
       expect(noticesOf(f.updates).map((update) => [update.title, update.rawInput])).toEqual([
         ['Permissions: full access', { level: 'info' }],
         ['Permissions: full access', { level: 'info' }],
-        ['mu could not save a checkpoint.', { level: 'warning' }],
+        ['spec.jev could not save a checkpoint.', { level: 'warning' }],
         ['The judge is not reachable.', { level: 'error' }],
       ]);
       // The reply is only the model's own text, after the warning that came before it.
@@ -1245,12 +1245,12 @@ describe('what mu notifies', () => {
     }
   });
 
-  it('says once that checkpoints are off, by mu’s code and the numbers it names, and not again in mu’s words', async () => {
+  it('says once that checkpoints are off, by spec.jev’s code and the numbers it names, and not again in spec.jev’s words', async () => {
     const f = fixture();
     try {
       await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
-      const words = 'mu: checkpoints are off, because this folder has more than 5000 files to snapshot.';
-      // mu's plain warning comes first, and its coded event right after says the same.
+      const words = 'spec.jev: checkpoints are off, because this folder has more than 5000 files to snapshot.';
+      // spec.jev's plain warning comes first, and its coded event right after says the same.
       notify(f, words, 'warning');
       f.emit(
         shown('checkpoint.off', { code: 'too_many_files', params: { limit: 5000, folder: '/Users/x' }, message: words })
@@ -1275,9 +1275,9 @@ describe('what mu notifies', () => {
     const f = fixture();
     try {
       await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
-      const words = 'mu: checkpoints are off, because git cannot run on this Mac until the Xcode license is accepted.';
+      const words = 'spec.jev: checkpoints are off, because git cannot run on this Mac until the Xcode license is accepted.';
       f.emit(shown('checkpoint.off', { code: 'xcode_license', params: {}, message: words }));
-      notify(f, 'mu could not reach the judge.', 'warning');
+      notify(f, 'spec.jev could not reach the judge.', 'warning');
       await vi.waitFor(() => expect(noticesOf(f.updates)).toHaveLength(2));
       expect(noticesOf(f.updates).map((update) => update.rawInput)).toEqual([
         { notice: 'checkpoint_off', code: 'xcode_license', params: {} },
@@ -1288,19 +1288,19 @@ describe('what mu notifies', () => {
     }
   });
 
-  it('says the free Jev’s notices by code, once each, and not again in mu’s words', async () => {
+  it('says the free Jev’s notices by code, once each, and not again in spec.jev’s words', async () => {
     const f = fixture();
     try {
       await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
-      const free = 'mu: no Jev key is set, so the judge uses Jev 1.13 on OpenCode Zen, free for a limited time.';
-      const paid = 'mu: the free Jev on OpenCode Zen now asks for a key or payment, so plain rules decide for now.';
-      // mu's coded event comes first, its own line right after.
+      const free = 'spec.jev: no Jev key is set, so the judge uses Jev 1.13 on OpenCode Zen, free for a limited time.';
+      const paid = 'spec.jev: the free Jev on OpenCode Zen now asks for a key or payment, so plain rules decide for now.';
+      // spec.jev's coded event comes first, its own line right after.
       f.emit(shown('judge.notice', { code: 'free_jev', message: free }));
       notify(f, free, 'info');
       f.emit(shown('judge.notice', { code: 'free_jev_unavailable', reason: 'paid', message: paid }));
       notify(f, paid, 'warning');
       f.emit(shown('judge.notice', { code: 'free_jev_unavailable', reason: 'gone', message: 'again' }));
-      // A code this build does not know leaves mu's line to say it.
+      // A code this build does not know leaves spec.jev's line to say it.
       f.emit(shown('judge.notice', { code: 'newer', message: 'Something newer.' }));
       notify(f, 'Something newer.', 'info');
       await vi.waitFor(() => expect(noticesOf(f.updates)).toHaveLength(3));
@@ -1318,7 +1318,7 @@ describe('what mu notifies', () => {
 const asRecordOf = (value: unknown): Record<string, unknown> =>
   value !== null && typeof value === 'object' ? (value as Record<string, unknown>) : {};
 
-/** mu asks about a call, as it does before its picker opens. */
+/** spec.jev asks about a call, as it does before its picker opens. */
 const ask = (f: ReturnType<typeof fixture>, toolCallId: string, reason: string) => {
   const answers = ['Allow once', 'Don’t allow'];
   f.emit(
@@ -1338,11 +1338,11 @@ const ask = (f: ReturnType<typeof fixture>, toolCallId: string, reason: string) 
     type: 'extension_ui_request',
     id: `ui-${toolCallId}`,
     method: 'select',
-    title: 'mu wants to run a command\nrm -rf build',
+    title: 'spec.jev wants to run a command\nrm -rf build',
     options: answers,
   });
 };
-/** mu runs a call that fails with these words. */
+/** spec.jev runs a call that fails with these words. */
 const run = (f: ReturnType<typeof fixture>, toolCallId: string, text: string) => {
   f.emit({ type: 'tool_execution_start', toolCallId, toolName: 'bash', args: { command: 'rm -rf build' } });
   f.emit({
@@ -1359,7 +1359,7 @@ const ended = (f: ReturnType<typeof fixture>, toolCallId: string) =>
     .map((each) => each.update)
     .find((update) => update.sessionUpdate === 'tool_call_update' && update.toolCallId === toolCallId);
 
-describe('answers to mu’s permission questions', () => {
+describe('answers to spec.jev’s permission questions', () => {
   it('gives the card the call it asks about, and a reason the judge left open', async () => {
     const f = fixture({ mode: 'jev' });
     try {

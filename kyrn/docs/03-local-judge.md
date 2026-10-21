@@ -1,6 +1,6 @@
 # 本地判断后端：Laya on Core ML
 
-> 已于 2026-09-21 更名为 mu（命令 `mu`，标识 μ）。本文是更名前的记录，正文保持原样；新旧名对照见 [10-rename-to-mu.md](10-rename-to-mu.md)。
+> 已于 2026-09-21 更名为 spec.jev（命令 `spec.jev`，标识 μ）。本文是更名前的记录，正文保持原样；新旧名对照见 [10-rename-to-spec.jev.md](10-rename-to-spec.jev.md)。
 
 > 2026-09-20 · 实测记录。机器：M3 Max / macOS 27.0 / Python 3.12.11（uv）。
 > 目的：Vercel 账号绑卡之前 Jev 调不通（HTTP 403），先用一个本地开放权重的判断模型把整条链路跑真。

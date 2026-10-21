@@ -96,7 +96,7 @@ const ensureCliSafeSymlink = (targetPath: string, symlinkName: string): string =
 };
 
 /**
- * The names of the home-folder shortcuts: a packaged build's are mu's, a development build keeps those its data was
+ * The names of the home-folder shortcuts: a packaged build's are spec.jev's, a development build keeps those its data was
  * written through (`DEV_SHORTCUT_BASES`).
  */
 const MU_SHORTCUT_NAMES = { data: '.mu-desktop', config: '.mu-desktop-config' } as const;
@@ -107,7 +107,7 @@ const shortcutName = (folder: keyof typeof MU_SHORTCUT_NAMES): string =>
 
 /**
  * Get data path, using CLI-safe symlink on macOS.
- * Release builds use ~/.mu-desktop; dev builds keep their own (`DEV_SHORTCUT_BASES`).
+ * Release builds use ~/.spec.jev-desktop; dev builds keep their own (`DEV_SHORTCUT_BASES`).
  * 获取数据目录路径，macOS 上使用符号链接。
  */
 export const getDataPath = (): string => {
@@ -118,7 +118,7 @@ export const getDataPath = (): string => {
 
 /**
  * Get config path, using CLI-safe symlink on macOS.
- * Release builds use ~/.mu-desktop-config; dev builds keep their own (`DEV_SHORTCUT_BASES`).
+ * Release builds use ~/.spec.jev-desktop-config; dev builds keep their own (`DEV_SHORTCUT_BASES`).
  * 获取配置目录路径，macOS 上使用符号链接。
  */
 export const getConfigPath = (): string => {
@@ -376,7 +376,7 @@ export async function verifyDirectoryFiles(dir1: string, dir2: string): Promise<
 
     return true;
   } catch (error) {
-    console.warn('[mu] Error verifying directory files:', error);
+    console.warn('[spec.jev] Error verifying directory files:', error);
     return false;
   }
 }

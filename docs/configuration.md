@@ -1,10 +1,10 @@
 # Configuration
 
-mu reads pi's settings (models, sign-ins and preferences; see [pi's documentation](https://github.com/earendil-works/pi/tree/main/packages/coding-agent#readme)) and its own, in `~/.mu/agent/mu.json`. The desktop app's settings write to the same file, so anything you change there you can also change by hand, and vice versa.
+spec.jev reads pi's settings (models, sign-ins and preferences; see [pi's documentation](https://github.com/earendil-works/pi/tree/main/packages/coding-agent#readme)) and its own, in `~/.spec.jev/agent/spec.jev.json`. The desktop app's settings write to the same file, so anything you change there you can also change by hand, and vice versa.
 
-mu reads only your own `mu.json`. A project can't change the judge, its endpoint or its modes, because the judge reads your messages.
+spec.jev reads only your own `spec.jev.json`. A project can't change the judge, its endpoint or its modes, because the judge reads your messages.
 
-## mu.json
+## spec.jev.json
 
 ```json
 {
@@ -44,15 +44,15 @@ mu reads only your own `mu.json`. A project can't change the judge, its endpoint
 | `features` | Per-feature switches and options: `false` turns a feature off, and an object overrides its options. Every feature and option is listed in [reference/features.md](reference/features.md). | Each feature's defaults |
 | `writer` | `provider/model-id` of a small generative model for the things a judge can't do: writing the task frame and lessons. If empty, the session's model is used. | none |
 | `recordState` | Keep the judged state in the ledger, not just the verdict. You need this to train a local judge on your sessions. Off by default because the states contain your content. | `false` |
-| `mcp` | mu's own MCP servers: `{ "servers": { "<name>": { "command": … } } }`. Servers configured for Claude Code, Cursor and Codex are picked up too (`features.inherit`). | none |
+| `mcp` | spec.jev's own MCP servers: `{ "servers": { "<name>": { "command": … } } }`. Servers configured for Claude Code, Cursor and Codex are picked up too (`features.inherit`). | none |
 
-If mu doesn't understand part of the file, that part falls back to its default and mu keeps running. If the file can't be parsed at all, mu reports it when a session starts and uses the defaults. An older `kyrn.json` is read only when there's no `mu.json`.
+If spec.jev doesn't understand part of the file, that part falls back to its default and spec.jev keeps running. If the file can't be parsed at all, spec.jev reports it when a session starts and uses the defaults. An older `kyrn.json` is read only when there's no `spec.jev.json`.
 
 ## Modes in practice
 
-- All but two points act from the start (`context.compact` and `output.drift` are off until you turn them on). To try out a judge, or a point you're unsure of, put it in shadow mode, read the ledger (`mu ledger`, `/status` or the app's Judge tab), then set it back to active once its verdicts look right.
-- `/mu mode <point> <off|shadow|active>` switches one point for the current session, and `/mu mode default shadow` switches all of them. To make a mode stick, put it in `mu.json`; the app's settings turn points on or off.
-- `MU_JUDGE_MODE=shadow mu` sets the default mode for one run.
+- All but two points act from the start (`context.compact` and `output.drift` are off until you turn them on). To try out a judge, or a point you're unsure of, put it in shadow mode, read the ledger (`spec.jev ledger`, `/status` or the app's Judge tab), then set it back to active once its verdicts look right.
+- `/mu mode <point> <off|shadow|active>` switches one point for the current session, and `/mu mode default shadow` switches all of them. To make a mode stick, put it in `spec.jev.json`; the app's settings turn points on or off.
+- `MU_JUDGE_MODE=shadow spec.jev` sets the default mode for one run.
 
 Every decision point, with what it decides: [reference/decision-points.md](reference/decision-points.md).
 
@@ -66,7 +66,7 @@ Judges and modes:
 | `MU_JUDGE_MODE` | Default mode for this run: `off`, `shadow` or `active`. |
 | `MU_WRITER` | `provider/model-id` for the writer model. |
 | `MU_PERMISSIONS` | Permission mode for this run: `full`, `jev` or `ask`. |
-| `MU_LOCAL_JUDGE_URL` | Address of a local judge server, if it isn't the one `mu judge start` runs. |
+| `MU_LOCAL_JUDGE_URL` | Address of a local judge server, if it isn't the one `spec.jev judge start` runs. |
 
 Keys for Jev, each sent only to the service it belongs to (see [Judges](judges.md#hosted-jev)): `TYPESAFE_API_KEY`, `MU_JUDGE_OPENROUTER_API_KEY`, `AI_GATEWAY_API_KEY`, `OPENCODE_API_KEY`, `CLOUDFLARE_API_KEY` with `CLOUDFLARE_ACCOUNT_ID`, and `MU_JUDGE_CLM_API_KEY`.
 
@@ -74,19 +74,19 @@ The launcher:
 
 | Variable | Effect |
 | --- | --- |
-| `MU_AGENT_DIR` | The agent folder, in place of `~/.mu/agent`. |
+| `MU_AGENT_DIR` | The agent folder, in place of `~/.spec.jev/agent`. |
 | `MU_NO_SETUP=1` | Never offer to set up a model on first launch. |
-| `MU_LANG` | A language tag (`zh-CN`, `en`, `ja`…) for mu's own messages in a session: Chinese for `zh`, English for anything else. If it's unset, sessions use English, and `mu setup` follows your locale. The desktop app sets it to the app's language. |
-| `MU_LINK_DIR` | Where `mu link` puts the `mu` command, in place of `~/.local/bin`. |
+| `MU_LANG` | A language tag (`zh-CN`, `en`, `ja`…) for spec.jev's own messages in a session: Chinese for `zh`, English for anything else. If it's unset, sessions use English, and `spec.jev setup` follows your locale. The desktop app sets it to the app's language. |
+| `MU_LINK_DIR` | Where `spec.jev link` puts the `spec.jev` command, in place of `~/.local/bin`. |
 | `MU_CHROME` | The Chrome or Chromium binary the built-in browser uses on the command line. |
 
 Every `MU_` variable is also read under its old `KYRN_` name.
 
-mu also reads a `.env` file: `~/.mu/.env` for the npm package, or the repository's `.env` in a checkout. Lines are `KEY=VALUE`, and nothing in the file is executed. `mu setup` writes the Jev key there. Variables already set in your environment take precedence.
+spec.jev also reads a `.env` file: `~/.spec.jev/.env` for the npm package, or the repository's `.env` in a checkout. Lines are `KEY=VALUE`, and nothing in the file is executed. `spec.jev setup` writes the Jev key there. Variables already set in your environment take precedence.
 
 ## Proxies
 
-mu follows `HTTPS_PROXY`, `HTTP_PROXY` and `NO_PROXY`. When `HTTPS_PROXY` isn't set, the desktop app also follows the system proxy (macOS network settings, Windows Internet settings). pi's `httpProxy` setting works as well.
+spec.jev follows `HTTPS_PROXY`, `HTTP_PROXY` and `NO_PROXY`. When `HTTPS_PROXY` isn't set, the desktop app also follows the system proxy (macOS network settings, Windows Internet settings). pi's `httpProxy` setting works as well.
 
 ## Per-feature options
 

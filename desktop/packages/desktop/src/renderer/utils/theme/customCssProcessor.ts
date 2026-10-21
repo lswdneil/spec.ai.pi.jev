@@ -21,7 +21,7 @@ import { LEGACY_CLASS_NAMES } from '@/common/platform/legacyNames';
  * 也能覆盖块内最后一条没有结尾分号的声明。已带 !important 的声明保持不变。
  *
  * A selector that names a component class by its old name (`.aionui-modal`, `.aion-select`, see `LEGACY_CLASS_NAMES`) is given the
- * class's mu name, so a theme written before the rename still applies.
+ * class's spec.jev name, so a theme written before the rename still applies.
  *
  * @param css - 原始 CSS 字符串
  * @returns 处理后的 CSS 字符串（所有声明都带 !important）

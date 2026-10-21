@@ -70,7 +70,7 @@ const run = (patch: Partial<BrowserRunState> = {}): BrowserRunState => ({
 });
 const show = (ui: React.ReactElement) => render(<I18nextProvider i18n={i18n}>{ui}</I18nextProvider>);
 
-describe('the step bar above a page mu is driving', () => {
+describe('the step bar above a page spec.jev is driving', () => {
   it('says the current step the way a person reads it: 第 2 步 · 点击「搜索」· 把握 92%', () => {
     show(<StepBar run={run({ steps: run().steps.slice(0, 2) })} />);
     const bar = screen.getByTestId('mu-step-bar');
@@ -161,12 +161,12 @@ describe('the step bar above a page mu is driving', () => {
     expect(screen.getByText('Something new from Chromium')).toBeTruthy();
   });
 
-  it('keeps the harness’s own verdict as mu’s words', () => {
+  it('keeps the harness’s own verdict as spec.jev’s words', () => {
     show(
       <StepBar run={run({ phase: 'finished', status: 'blocked', finishedAt: Date.now(), reason: 'No search box' })} />
     );
     fireEvent.click(screen.getByText('步骤 3'));
-    expect(screen.getByText('mu 的说明')).toBeTruthy();
+    expect(screen.getByText('spec.jev 的说明')).toBeTruthy();
     expect(screen.getByText('No search box')).toBeTruthy();
   });
 });
@@ -186,7 +186,7 @@ describe('the step bar after the harness said how the run ended', () => {
       />
     );
     fireEvent.click(screen.getByText('步骤 3'));
-    expect(screen.getByText('mu 的说明')).toBeTruthy();
+    expect(screen.getByText('spec.jev 的说明')).toBeTruthy();
     expect(screen.getByText('没有判定器能选出下一步操作（判定器请求过于频繁）。')).toBeTruthy();
     expect(screen.queryByText(/no judge could choose/)).toBeNull();
   });
@@ -210,7 +210,7 @@ describe('the step bar after the harness said how the run ended', () => {
   it('falls back to the harness’s English for a code it does not know, and calls an exception a technical detail', () => {
     const view = show(<StepBar run={ended({ code: 'brand_new', reason: 'the judge went fishing' })} />);
     fireEvent.click(screen.getByText('步骤 3'));
-    expect(screen.getByText('mu 的说明')).toBeTruthy();
+    expect(screen.getByText('spec.jev 的说明')).toBeTruthy();
     expect(screen.getByText('the judge went fishing')).toBeTruthy();
     view.unmount();
 
@@ -235,7 +235,7 @@ describe('the confirmation dialog', () => {
 
   it('shows the label and the address as plain text, with a countdown that ends in a refusal', () => {
     show(<ConfirmDialog run={asking(120)} />);
-    expect(screen.getByText('mu 想执行一个可能无法撤销的操作')).toBeTruthy();
+    expect(screen.getByText('spec.jev 想执行一个可能无法撤销的操作')).toBeTruthy();
     expect(screen.getByText('<b>删除账号</b> [链接](javascript:alert(1))')).toBeTruthy();
     expect(screen.getByText('https://shop.test/account')).toBeTruthy();
     const body = screen.getByTestId('mu-confirm');

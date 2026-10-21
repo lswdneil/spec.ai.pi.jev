@@ -13,8 +13,8 @@ export type MuList<T> = {
 };
 
 /**
- * A list the main process reads from mu's files: read when the page opens, and again whenever the window comes back to
- * the front, since a file may have changed meanwhile (a skill folder copied in by hand, `mu mcp add` in a terminal).
+ * A list the main process reads from spec.jev's files: read when the page opens, and again whenever the window comes back to
+ * the front, since a file may have changed meanwhile (a skill folder copied in by hand, `spec.jev mcp add` in a terminal).
  */
 export function useMuList<T>(read: () => Promise<KyrnResult<T>>): MuList<T> {
   const [data, setData] = useState<T>();

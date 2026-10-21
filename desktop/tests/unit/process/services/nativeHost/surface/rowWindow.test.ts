@@ -12,7 +12,7 @@ const row = (id: string, position: 'left' | 'right'): TMessage =>
     content: { content: id },
   }) as TMessage;
 
-/** A step of mu's work: the list folds consecutive ones into one row. */
+/** A step of spec.jev's work: the list folds consecutive ones into one row. */
 const step = (
   id: string,
   type: 'tool_group' | 'acp_tool_call' | 'tool_call' | 'thinking' = 'acp_tool_call'

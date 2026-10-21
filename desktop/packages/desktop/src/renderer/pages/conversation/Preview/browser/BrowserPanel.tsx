@@ -31,8 +31,8 @@ const sameNavigation = (a: WebviewNavigationState, b: WebviewNavigationState): b
 
 /**
  * The work panel's 浏览器 tab: the in-app browser. Its pages (`browserStore.ts`) stay mounted under one chrome, their
- * tabs and one address bar for the page in front (`BrowserChrome.tsx`); a page mu is driving shows its step bar above
- * it, and mu's questions come up over the app (`muBrowser/`). With no page open, the address bar opens one.
+ * tabs and one address bar for the page in front (`BrowserChrome.tsx`); a page spec.jev is driving shows its step bar above
+ * it, and spec.jev's questions come up over the app (`muBrowser/`). With no page open, the address bar opens one.
  *
  * Cmd/Ctrl+W inside the browser closes the page in front, as it closes the preview's tab inside the preview; the
  * pages' own keys stay theirs.

@@ -22,13 +22,13 @@ const IMAGE_LIMIT = 16 * 1024 * 1024;
 
 export type NativeStart = {
   cwd: string;
-  /** A permission mode as mu names them (`full`, `jev`, `ask`); mu's own default when left out. */
+  /** A permission mode as spec.jev names them (`full`, `jev`, `ask`); spec.jev's own default when left out. */
   permissions?: string;
-  /** The model the pill picked, as mu names its models to the pickers: `<provider>/<model id>`. */
+  /** The model the pill picked, as spec.jev names its models to the pickers: `<provider>/<model id>`. */
   model?: string;
   /**
    * The thinking level the person picked (`high`, `low`, ...), for the model picked or the one shown. Only a level
-   * picked is sent: the one the pill shows without a pick is not, mu keeps its own.
+   * picked is sent: the one the pill shows without a pick is not, spec.jev keeps its own.
    */
   level?: string;
   input: string;

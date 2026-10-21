@@ -17,7 +17,7 @@ import { findRecord, recorded } from './records';
 /**
  * The native page, mounted in jsdom against an in-memory host that plays the conversation recorded from a real one
  * (../fixtures/record.mjs), record by record as the main process would push them: six turns, a file written, a
- * command run, mu asking about a command and being answered, mu asking again and the run stopped instead, and a
+ * command run, spec.jev asking about a command and being answered, spec.jev asking again and the run stopped instead, and a
  * reply stopped mid-way. The list, its rows and the tool box run for real; text rows and the send box are stood in
  * for. What is looked up is what the end-to-end tests look up (the `native-*` test ids).
  */
@@ -44,7 +44,7 @@ const isDialog = (record: PiRecord): boolean =>
   record.type === 'extension_ui_request' && (record as { method?: unknown }).method === 'select';
 
 describe('the native page, playing a recorded conversation', () => {
-  it('shows every turn, asks mu’s questions while they wait, and ends where the host ended', async () => {
+  it('shows every turn, asks spec.jev’s questions while they wait, and ends where the host ended', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1', cwd: '/work/e2e' });
     render(
@@ -67,7 +67,7 @@ describe('the native page, playing a recorded conversation', () => {
         for (const record of recorded.slice(from, to)) host.push('c1', record);
       });
 
-    // Up to mu's first question: a run is on, and the line above the box says so.
+    // Up to spec.jev's first question: a run is on, and the line above the box says so.
     const status = () => screen.getByTestId('native-status');
     expect(status()).toHaveAttribute('data-status', 'idle');
     play(0, firstAsk);
@@ -77,7 +77,7 @@ describe('the native page, playing a recorded conversation', () => {
     play(firstAsk, firstAsk + 1);
     const dialog = screen.getByTestId('native-dialog');
     expect(dialog).toHaveAttribute('data-method', 'select');
-    expect(dialog).toHaveTextContent('mu wants to run a command');
+    expect(dialog).toHaveTextContent('spec.jev wants to run a command');
     expect(dialog).toHaveTextContent('sleep 0.2; echo asked-ok');
     const options = screen.getAllByTestId('native-dialog-option').map((option) => option.textContent);
     expect(options[0]).toBe('Allow once');
@@ -86,7 +86,7 @@ describe('the native page, playing a recorded conversation', () => {
     play(firstAsk + 1, firstAsk + 2);
     expect(screen.queryByTestId('native-dialog')).toBeNull();
 
-    // Asked again, and the run stopped instead of an answer: mu says it resolved, and the question goes too.
+    // Asked again, and the run stopped instead of an answer: spec.jev says it resolved, and the question goes too.
     play(firstAsk + 2, secondAsk + 1);
     expect(screen.getByTestId('native-dialog')).toBeInTheDocument();
     const resolved = findRecord(
@@ -112,14 +112,14 @@ describe('the native page, playing a recorded conversation', () => {
       'E2E:BASH sleep 0.2; echo asked-ok',
       'E2E:SLOW',
     ]);
-    // mu's replies, the calls it made, Jev's class for each message, and mu's notices.
+    // spec.jev's replies, the calls it made, Jev's class for each message, and spec.jev's notices.
     const view = host.viewOf('c1');
     const replies = view.messages.filter(
       (message) => message.role === 'assistant' && message.blocks.some((block) => block.type === 'text' && block.text)
     );
     expect(screen.getAllByTestId('native-message-assistant')).toHaveLength(replies.length);
     expect(screen.getAllByTestId('row-text-left')).toHaveLength(replies.length);
-    // Each call by pi's tool name and how it ended: the one mu asked about while the run was stopped, pi ended as
+    // Each call by pi's tool name and how it ended: the one spec.jev asked about while the run was stopped, pi ended as
     // failed ("Operation aborted").
     expect(screen.getAllByTestId('native-tool-call').map((call) => [call.dataset.tool, call.dataset.status])).toEqual([
       ['write', 'completed'],

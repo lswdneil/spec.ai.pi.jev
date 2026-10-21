@@ -467,7 +467,7 @@ export interface SweepOptions {
 
 /**
  * Removes what dead sessions left behind: every marker under `area` whose owner is gone. It reads markers,
- * not `git worktree list`, so it only ever touches checkouts mu made, in whichever repository they are.
+ * not `git worktree list`, so it only ever touches checkouts spec.jev made, in whichever repository they are.
  */
 export async function sweepStaleWorktrees(run: GitRun, options: SweepOptions): Promise<Marker[]> {
 	const alive = options.isAlive ?? isAlive;

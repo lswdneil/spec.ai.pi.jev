@@ -42,8 +42,8 @@ const defaults: Record<string, Partial<JudgeSettings>> = {
   laya: { type: 'local', baseUrl: 'http://127.0.0.1:47823' },
   // CLM on a server of one's own; no address is clm-serve's default on this machine (common/kyrn/clm.ts).
   clm: { type: 'clm', model: CLM_DEFAULT_MODEL, apiKeyEnv: CLM_KEY_VARIABLE },
-  // Classifier models of mu's catalog, reached with the provider's own key (OPENCODE_API_KEY, CLOUDFLARE_API_KEY and
-  // CLOUDFLARE_ACCOUNT_ID, or a sign-in in mu). Jev 1.13 free on OpenCode Zen needs no key, for a limited time.
+  // Classifier models of spec.jev's catalog, reached with the provider's own key (OPENCODE_API_KEY, CLOUDFLARE_API_KEY and
+  // CLOUDFLARE_ACCOUNT_ID, or a sign-in in spec.jev). Jev 1.13 free on OpenCode Zen needs no key, for a limited time.
   'jev-opencode': { type: 'classifier', model: 'opencode/jev-1.13' },
   'jev-opencode-free': { type: 'classifier', model: 'opencode/jev-1.13-free' },
   'jev-cloudflare': { type: 'classifier', model: 'cloudflare-workers-ai/typesafe/jev' },
@@ -57,7 +57,7 @@ const modes = new Set<string>(DECISION_MODES);
 const variable = /^(?:TYPESAFE_API_KEY|AI_GATEWAY_API_KEY|(?:MU|KYRN)_JUDGE_[A-Z0-9_]+)$/;
 /**
  * The provider variables a classifier judge of this page is reached with. They are saved and reported like a judge's
- * key, but never named as one (`apiKeyEnv`): mu gives them to their own provider only.
+ * key, but never named as one (`apiKeyEnv`): spec.jev gives them to their own provider only.
  */
 const classifierVariables = ['OPENCODE_API_KEY', 'CLOUDFLARE_API_KEY', 'CLOUDFLARE_ACCOUNT_ID'];
 const saved = (name: string): boolean => variable.test(name) || classifierVariables.includes(name);
@@ -85,7 +85,7 @@ const sameJudge = (a: JudgeSettings | undefined, b: JudgeSettings): boolean =>
 
 /**
  * Shares the CLI configuration: the harness config (mu.json), pi's settings.json and pi's models.json, plus two
- * settings mu keeps in `<agentDir>/mu/` (the permission default and the board's model, see config/muState.ts).
+ * settings spec.jev keeps in `<agentDir>/spec.jev/` (the permission default and the board's model, see config/muState.ts).
  * Keys are write-only and remain in the harness .env. A save only rewrites what it changes, so hand-written
  * parts keep their form and defaults that nobody overrode keep following upstream.
  */
@@ -305,7 +305,7 @@ export class SettingsStore {
       changed.pi = true;
     }
 
-    // The permission default and the board's model: mu's own files, written only when they change.
+    // The permission default and the board's model: spec.jev's own files, written only when they change.
     const own: [string, string][] = [];
     if (input.permissions && input.permissions.mode !== current.permissions.mode) {
       const manifest = harness.status === 'ok' ? harness.manifest : undefined;
@@ -320,7 +320,7 @@ export class SettingsStore {
       if (typeof boardModel !== 'string' || !isBoardModel(boardModel))
         throw new KyrnError('invalid', 'Invalid board model');
       own.push([this.boardPath, withBoardModel(files.boardRaw, boardModel)]);
-      // mu reads mu.json's `features.board.model` first: left there, it would win over the model picked here.
+      // spec.jev reads mu.json's `features.board.model` first: left there, it would win over the model picked here.
       if (dropConfiguredBoardModel(config)) changed.config = true;
     }
 

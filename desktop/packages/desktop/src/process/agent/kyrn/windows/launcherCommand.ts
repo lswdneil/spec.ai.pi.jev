@@ -5,15 +5,15 @@ import { KyrnError } from '../../../../common/kyrn/errors.ts';
 import type { OwnCommand } from '../product.ts';
 
 /**
- * What mu's registration carries as its command on this machine, and which other commands are the same launcher.
+ * What spec.jev's registration carries as its command on this machine, and which other commands are the same launcher.
  *
  * AionCore starts a registration's `command` up to its first whitespace: quotes are kept as they are, the rest is
  * dropped (arguments have a field of their own). The launcher of an app installed where the installer puts it by
- * default, `C:\Program Files\mu\resources\mu\acp.cmd`, started as `C:\Program` and failed at every start (issue #4). So
+ * default, `C:\Program Files\spec.jev\resources\spec.jev\acp.cmd`, started as `C:\Program` and failed at every start (issue #4). So
  * on Windows a launcher whose path has whitespace is registered by a spelling without it:
  *
  * - its real path, when that has none (the spaced path is a link to it);
- * - its 8.3 short path (`C:\PROGRA~1\mu\resources\mu\acp.cmd`), which Windows keeps for every folder made while short
+ * - its 8.3 short path (`C:\PROGRA~1\spec.jev\resources\spec.jev\acp.cmd`), which Windows keeps for every folder made while short
  *   names are on (they are on the system drive by default);
  * - else a forwarder: a batch file in a folder without whitespace that hands over to the launcher (forwarderContent).
  *   A volume can have short names switched off, and then a folder made there has none.
@@ -76,8 +76,8 @@ export function forwarderFolders(env: NodeJS.ProcessEnv): string[] {
 export function forwarderContent(target: string): string {
   return [
     '@echo off',
-    'rem mu: hands over to the launcher below, whose path has spaces, which a command AionCore runs cannot have.',
-    'rem Written by the mu app at each start, from resources\\mu\\acp.cmd of the app. Edits here are replaced.',
+    'rem spec.jev: hands over to the launcher below, whose path has spaces, which a command AionCore runs cannot have.',
+    'rem Written by the spec.jev app at each start, from resources\\spec.jev\\acp.cmd of the app. Edits here are replaced.',
     'setlocal DisableDelayedExpansion',
     `"${target.replaceAll('%', '%%')}" %*`,
     '',
@@ -208,7 +208,7 @@ const defaults = (): LauncherDeps => ({
  * The command to register for `launcher` (the full path of acp.cmd, or of the bash `acp` elsewhere), and how to tell
  * a registered command that is this launcher by another spelling. A forwarder the plan asks for is written into the
  * first folder that takes it, at every start: the app may have moved since the last. Throws `installPath` when no
- * spelling can be registered: the person can then only install mu into a folder whose path has no spaces.
+ * spelling can be registered: the person can then only install spec.jev into a folder whose path has no spaces.
  */
 export async function ownLauncher(launcher: string, patch: Partial<LauncherDeps> = {}): Promise<OwnCommand> {
   const deps = { ...defaults(), ...patch };

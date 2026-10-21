@@ -1,6 +1,6 @@
 /**
  * What the native composer's controls read, from the view and pi's answers alone: the model and thinking level in
- * force, mu's permission mode and the modes it offers, the models on offer with the levels each takes, pi's slash
+ * force, spec.jev's permission mode and the modes it offers, the models on offer with the levels each takes, pi's slash
  * commands for the send box's menu, a message with the files the person attached, and the conversation's text as the
  * shared send box reads it. Pure.
  */
@@ -47,18 +47,18 @@ export function modelInForce(view: NativeView, settings?: SessionSettings): Mode
   return { source: 'none' };
 }
 
-/** One of mu's permission modes, as its `permissions.mode` frame lists it. */
+/** One of spec.jev's permission modes, as its `permissions.mode` frame lists it. */
 export type PermissionModeOption = { id: string; label: string; description: string };
 
-/** mu's permission modes, in its order: what a conversation offers before mu has said anything. */
+/** spec.jev's permission modes, in its order: what a conversation offers before spec.jev has said anything. */
 export const PERMISSION_MODES = ['full', 'jev', 'ask'] as const;
 
-/** The mode a conversation is in and the modes it offers, from mu's latest `permissions.mode` frame. */
+/** The mode a conversation is in and the modes it offers, from spec.jev's latest `permissions.mode` frame. */
 export type PermissionState = { mode?: string; modes: PermissionModeOption[] };
 
 /**
- * The permission mode in force: mu's latest `permissions.mode` frame while a host runs, else the one the session file
- * (or the mode the conversation was made with) says; the modes offered are the frame's, else mu's three.
+ * The permission mode in force: spec.jev's latest `permissions.mode` frame while a host runs, else the one the session file
+ * (or the mode the conversation was made with) says; the modes offered are the frame's, else spec.jev's three.
  */
 export function permissionState(view: NativeView, settings?: SessionSettings): PermissionState {
   for (let index = view.host.activity.length - 1; index >= 0; index--) {
@@ -117,13 +117,13 @@ export function splitModel(value: string): { provider: string; modelId: string }
 /** A name the send box can offer: one word, `skill:<name>` included. */
 const COMMAND_NAME = /^[\w:.-]{1,64}$/;
 /**
- * Not offered in the menu (still run when typed), as for mu's other conversations (process/agent/kyrn/commands.ts):
+ * Not offered in the menu (still run when typed), as for spec.jev's other conversations (process/agent/kyrn/commands.ts):
  * `/clear` and `/new` start another session; the app has its own button for a new conversation.
  */
 const NOT_OFFERED: ReadonlySet<string> = new Set(['clear', 'new']);
 
 /**
- * pi's slash commands (`get_commands`: mu's and its extensions' own, prompt templates, skills) for the send box's
+ * pi's slash commands (`get_commands`: spec.jev's and its extensions' own, prompt templates, skills) for the send box's
  * `/` menu, each once, with the first line of what it does. Picking one puts `/<name> ` in the message.
  */
 export function slashItems(data: unknown): SlashCommandItem[] {
@@ -144,7 +144,7 @@ export function slashItems(data: unknown): SlashCommandItem[] {
 }
 
 /**
- * The names of pi's commands an extension answers itself (`source: 'extension'`, such as mu's `/goal`): a prompt that
+ * The names of pi's commands an extension answers itself (`source: 'extension'`, such as spec.jev's `/goal`): a prompt that
  * runs one adds no message of the person's to the conversation, even when it starts a run.
  */
 export function extensionCommandNames(data: unknown): Set<string> {
@@ -161,7 +161,7 @@ export function runsCommand(text: string, names: ReadonlySet<string>): boolean {
 }
 
 /**
- * The message with the files the person attached or mentioned, as mu reads them in its other conversations: their
+ * The message with the files the person attached or mentioned, as spec.jev reads them in its other conversations: their
  * full paths after the files marker, one per line (the app's message rows show them as files).
  */
 export function withFiles(text: string, paths: readonly string[]): string {
@@ -182,11 +182,11 @@ export function mentionPath(item: FileSelectionItem, cwd?: string): string | und
   return cwd && relative ? `${cwd.replace(/[\\/]+$/, '')}/${relative.replace(/^\.?[\\/]+/, '')}` : undefined;
 }
 
-/** The permission mode switch mu understands for this conversation only (kyrn/docs/features/permissions.md). */
+/** The permission mode switch spec.jev understands for this conversation only (kyrn/docs/features/permissions.md). */
 export const permissionCommand = (mode: string): string => `/permissions ${mode} --here`;
 
 /**
- * The conversation as the shared send box reads it (the text rows of mu's other conversations): the person's messages
+ * The conversation as the shared send box reads it (the text rows of spec.jev's other conversations): the person's messages
  * without their files, for ↑/↓ history, and the replies' text, for `/copy`. A failed attempt pi retried is left out.
  */
 export function sendBoxMessages(messages: readonly ViewMessage[], conversationId: string): IMessageText[] {

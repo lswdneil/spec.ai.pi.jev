@@ -19,7 +19,7 @@ import DirInputItem from './DirInputItem';
 import PreferenceRow from './PreferenceRow';
 
 /**
- * The machine underneath mu: whether it starts with the computer and where it goes when closed, the graphics
+ * The machine underneath spec.jev: whether it starts with the computer and where it goes when closed, the graphics
  * acceleration, notifications, and the folders it works and logs in. What a conversation waits for and may keep is the
  * conversations page; the language is on the appearance page; the developer tools are a page of their own. Two quiet
  * lists: the switches, then the folders.

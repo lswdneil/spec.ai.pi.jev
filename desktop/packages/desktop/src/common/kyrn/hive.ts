@@ -107,7 +107,7 @@ export type HiveBee = BeeErrorState & {
   recent: BeeActivity[];
 };
 export type SwarmKind = 'hive' | 'delegate';
-/** A run's title. A delegate run's is mu's own words and has `titleCode`; a hive's is its goal, shown as it is. */
+/** A run's title. A delegate run's is spec.jev's own words and has `titleCode`; a hive's is its goal, shown as it is. */
 export type SwarmTitle = { title: string; titleCode?: Coded };
 /** One of the board's latest notes as the harness sums them up: who posted it, whom the judge handed it to. */
 export type HiveBoardLine = { bee: string; to: string[]; text: string; state?: 'superseded' | 'contested' };

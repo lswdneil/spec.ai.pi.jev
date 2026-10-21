@@ -209,7 +209,7 @@ describe("checkpoint store", () => {
 		expect(result.leftAlone.find((entry) => entry.path === "small-then.txt")?.why).toContain("ignored or too large");
 	});
 
-	it("keeps secret files out of snapshots, also ones an older mu took in, and keeps the snapshots private", async () => {
+	it("keeps secret files out of snapshots, also ones an older spec.jev took in, and keeps the snapshots private", async () => {
 		const root = temp("mu-secrets-");
 		write(root, "src/app.ts", "v1\n");
 		write(root, ".env", "API_KEY=sk-live-1\n");
@@ -223,7 +223,7 @@ describe("checkpoint store", () => {
 		const files = async (store: Awaited<ReturnType<typeof openStore>>, commit: string) =>
 			userGit(root, "--git-dir", store.gitDir, "ls-tree", "-r", "--name-only", commit).split("\n").filter(Boolean);
 
-		// An older mu, without the secret rules, took everything in.
+		// An older spec.jev, without the secret rules, took everything in.
 		const older = await openStore({ baseDir: base, root, run: spawnGit(), ignore: [] });
 		expect(await files(older, (await snapshot(older, "s/1")).commit)).toContain(".env");
 
@@ -329,7 +329,7 @@ describe("checkpoint store", () => {
 		expect(existsSync(store.gitDir)).toBe(false);
 		expect(existsSync(join(base, "not-ours", "data.txt"))).toBe(true);
 
-		// A folder that may not be snapshotted any more (a home folder an older mu took in) goes at once.
+		// A folder that may not be snapshotted any more (a home folder an older spec.jev took in) goes at once.
 		const again = await openStore({ baseDir: base, root, run: spawnGit() });
 		expect(sweepProjects(base, 30, Date.now(), (project) => project !== root)).toEqual([]);
 		expect(sweepProjects(base, 30, Date.now(), (project) => project === root)).toEqual([projectKey(root)]);
@@ -361,9 +361,9 @@ describe("checkpoint store", () => {
 		).rejects.toBeInstanceOf(GitMissing);
 	});
 
-	// mu 0.1.3 run in a home folder: the first snapshot took in ~/.mu, the snapshots themselves among it, so every
+	// spec.jev 0.1.3 run in a home folder: the first snapshot took in ~/.spec.jev, the snapshots themselves among it, so every
 	// later snapshot copied the store's own new objects again, and the store grew with every turn that changed a file.
-	it("never snapshots mu's own folders, the snapshots among them, and reads their names literally", async () => {
+	it("never snapshots spec.jev's own folders, the snapshots among them, and reads their names literally", async () => {
 		const root = temp("mu-own-");
 		write(root, "src/app.ts", "v1\n");
 		write(root, ".mu/agent/sessions/one.jsonl", '{"type":"session"}\n');

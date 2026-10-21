@@ -439,7 +439,7 @@ describe("MCP server definitions", () => {
 		expect(JSON.stringify([scan.problems, scan.skipped])).not.toContain(SECRET);
 	});
 
-	it("only reads mu's own section when inheriting MCP servers is switched off", () => {
+	it("only reads spec.jev's own section when inheriting MCP servers is switched off", () => {
 		const { home, project } = fixture({
 			"~/.cursor/mcp.json": JSON.stringify({ mcpServers: { figma: { url: "http://127.0.0.1:3845/mcp" } } }),
 		});

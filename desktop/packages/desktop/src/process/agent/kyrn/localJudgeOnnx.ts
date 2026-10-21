@@ -111,7 +111,7 @@ export class OnnxLocalJudge {
     return env.MU_LOCAL_JUDGE_PORT || env.KYRN_LOCAL_JUDGE_PORT || '47823';
   }
 
-  /** `MU_LOCAL_JUDGE_ONNX_DIR`, else `<mu home>/local-judge/laya-multilingual-onnx`. */
+  /** `MU_LOCAL_JUDGE_ONNX_DIR`, else `<spec.jev home>/local-judge/laya-multilingual-onnx`. */
   get folder(): string {
     const { env, home } = this.deps;
     return env.MU_LOCAL_JUDGE_ONNX_DIR || join(muHome(home), ...LAYA_ONNX_FOLDER);

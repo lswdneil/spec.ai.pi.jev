@@ -13,21 +13,21 @@ import { failOpen, type KyrnRuntime } from "../runtime.ts";
 const WORDMARK = ["█  █  ", "█▄▄█▄ ", "█     "];
 
 export interface Versions {
-	/** mu's own: what `npm i -g mu-agent` installed, or what this source tree is released as. */
+	/** spec.jev's own: what `npm i -g spec.jev` installed, or what this source tree is released as. */
 	readonly mu: string;
-	/** The pi mu is built on. */
+	/** The pi spec.jev is built on. */
 	readonly pi: string;
 }
 
 /**
- * mu's version and pi's, from where each is written down. `judgeRoot` is the judgment layer's own folder:
+ * spec.jev's version and pi's, from where each is written down. `judgeRoot` is the judgment layer's own folder:
  *
- *   npm package (mu-agent)   <package>/package.json: `version` is mu's, `muBuild.pi` is pi's (kyrn/npm/build.mjs)
- *   source checkout          kyrn/npm/package.template.json is mu's, packages/coding-agent/package.json is pi's
+ *   npm package (spec.jev)   <package>/package.json: `version` is spec.jev's, `muBuild.pi` is pi's (kyrn/npm/build.mjs)
+ *   source checkout          kyrn/npm/package.template.json is spec.jev's, packages/coding-agent/package.json is pi's
  *
  * Two places that look right are not. The judgment layer's own package.json says 0.1.0, a number never released.
- * pi's `VERSION` is read from PI_PACKAGE_DIR, which the launcher points at mu-agent's folder in the package, so
- * there it is mu's version: mu 0.1.3 greeted with "v0.1.0 · built on pi 0.1.3".
+ * pi's `VERSION` is read from PI_PACKAGE_DIR, which the launcher points at spec.jev's folder in the package, so
+ * there it is spec.jev's version: spec.jev 0.1.3 greeted with "v0.1.0 · built on pi 0.1.3".
  */
 export function readVersions(judgeRoot: URL, fallbackPi = PI_VERSION): Versions {
 	const read = (path: string): Record<string, unknown> => {
@@ -78,7 +78,7 @@ export type Paint = Pick<Theme, "fg" | "bold">;
 /** Failures the user can act on, said as what to fix rather than as the error's name. */
 const HEALTH_ERROR: Readonly<Record<string, string>> = {
 	unreachable: "unreachable",
-	auth: "no usable key (run mu setup)",
+	auth: "no usable key (run spec.jev setup)",
 	payment_required: "out of credit",
 };
 
@@ -113,7 +113,7 @@ function healthText(view: WelcomeView, paint: Paint): string {
 const MAX_RULE_WIDTH = 76;
 
 /**
- * The welcome screen as lines no wider than `width`: the μ beside what mu is, then the readout (the judge and how it
+ * The welcome screen as lines no wider than `width`: the μ beside what spec.jev is, then the readout (the judge and how it
  * answers, the model, the folder) and the keys worth knowing, over a hairline. No frame: it reads as the top of the
  * session, not as a dialog. Values are read at render time, so switching the judge or the model shows up without any
  * bookkeeping.
@@ -123,7 +123,7 @@ export function renderWelcome(view: WelcomeView, width: number, paint: Paint): s
 	const cwd = view.cwd.startsWith(home) ? `~${view.cwd.slice(home.length)}` : view.cwd;
 	const model = view.model
 		? `${view.model}${view.thinking ? paint.fg("dim", ` · thinking ${view.thinking}`) : ""}`
-		: paint.fg("warning", "none yet · run /login, or mu setup in a terminal");
+		: paint.fg("warning", "none yet · run /login, or spec.jev setup in a terminal");
 	const beside = [
 		`${paint.bold(paint.fg("text", "mu"))}  ${paint.fg("dim", `v${view.version}`)}`,
 		paint.fg("text", "judgment-first coding agent"),
@@ -185,7 +185,7 @@ Work like a careful colleague. When a request is loosely worded, look at the wor
 Commands the user can type: /help, /status, /doctor.`;
 
 /**
- * The first thing the user sees: what mu is, which judge is answering and
+ * The first thing the user sees: what spec.jev is, which judge is answering and
  * how fast, which model is thinking, and the handful of commands worth knowing.
  */
 export function registerWelcome(runtime: KyrnRuntime): void {

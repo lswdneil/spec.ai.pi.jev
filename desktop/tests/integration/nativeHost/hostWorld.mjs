@@ -1,4 +1,4 @@
-// The throwaway world a native host runs in for tests and for recording fixtures: a home whose mu agent folder is set
+// The throwaway world a native host runs in for tests and for recording fixtures: a home whose spec.jev agent folder is set
 // up for the E2E fake model (tests/e2e/mu-conversation/fakeModel.mjs) and the offline `mock` judge, a project folder
 // and a temp folder, all under one temporary folder, and what the launcher plans from.
 //
@@ -23,7 +23,7 @@ import { findHarnessSource, findNode } from '../../e2e/mu-conversation/profile.m
 const SYSTEM_PATH = ['/usr/local/bin', '/usr/bin', '/bin', '/usr/sbin', '/sbin'];
 
 /**
- * A new world. `baseUrl` is the fake model's; without it mu has no model at all. `judgeMode` is mu's default decision
+ * A new world. `baseUrl` is the fake model's; without it spec.jev has no model at all. `judgeMode` is spec.jev's default decision
  * mode for the mock judge (`off` or `shadow`: nothing it says changes what pi does). `nodeDir` goes first on PATH,
  * for the commands the agent runs.
  */
@@ -72,7 +72,7 @@ export function launcherFs(harnessRoot) {
   };
 }
 
-/** Whether the harness's launcher can plan a host: a mu from before the native host cannot. */
+/** Whether the harness's launcher can plan a host: a spec.jev from before the native host cannot. */
 export function launcherPlansHosts(harnessRoot) {
   try {
     return /export function planHost\b/.test(readFileSync(join(harnessRoot, 'kyrn', 'bin', 'mu.mjs'), 'utf8'));
@@ -91,7 +91,7 @@ export function hostEnvironment(desktopRoot) {
   try {
     harness = findHarnessSource(desktopRoot);
   } catch {
-    return { skip: 'no mu harness (MU_ROOT, or ../KYRN beside this checkout)' };
+    return { skip: 'no spec.jev harness (MU_ROOT, or ../KYRN beside this checkout)' };
   }
   if (!launcherPlansHosts(harness.root)) return { skip: `${harness.root} is a mu from before the native host` };
   try {

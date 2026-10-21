@@ -1,6 +1,6 @@
 /**
  * Starts a native conversation: in one of the folders recent conversations worked in, or in a folder picked from the
- * disk, with the permission mode its mu starts in (mu's own default unless one is chosen). The new conversation opens,
+ * disk, with the permission mode its spec.jev starts in (spec.jev's own default unless one is chosen). The new conversation opens,
  * ready for its first message; one that cannot be made says why.
  */
 import { Button, Popover, Select } from '@arco-design/web-react';
@@ -13,7 +13,7 @@ import { errorKey } from '../utils/errorWords';
 import { useNativeClient } from '../utils/nativeClient';
 import { folderName } from '../utils/paths';
 
-/** mu's permission modes (MU_PERMISSIONS), named as the settings name them; '' is mu's own default. */
+/** spec.jev's permission modes (MU_PERMISSIONS), named as the settings name them; '' is spec.jev's own default. */
 const MODES = ['full', 'jev', 'ask'] as const;
 
 const NativeNewConversation: React.FC<{ recent: string[]; onCreated: (conversation: NativeConversation) => void }> = ({

@@ -18,8 +18,8 @@ import { readAll, terminalPrompter } from "./terminal.ts";
 import { runSetup } from "./wizard.ts";
 
 /**
- * The entry of `mu setup` (wizard.ts), which kyrn/bin/mu.mjs starts: from its sources in a checkout, as
- * judge/dist/setup.js in the npm package. The launcher names the folders: MU_AGENT_DIR, MU_SETUP_HOME (mu's home, for
+ * The entry of `spec.jev setup` (wizard.ts), which kyrn/bin/mu.mjs starts: from its sources in a checkout, as
+ * judge/dist/setup.js in the npm package. The launcher names the folders: MU_AGENT_DIR, MU_SETUP_HOME (spec.jev's home, for
  * the backups) and MU_SETUP_ENV_FILE (the .env it reads for a session).
  */
 

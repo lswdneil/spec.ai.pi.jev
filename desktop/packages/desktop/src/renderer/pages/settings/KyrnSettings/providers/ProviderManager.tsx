@@ -50,7 +50,7 @@ type ProviderManagerProps = {
   onModels: (patch: Partial<KyrnSettings['models']>) => void;
   /** A key typed for a provider, and the id change of a provider that is not saved yet. */
   onKeys: (keys: Record<string, string>) => void;
-  /** Reported providers removed on this screen, which the snapshot of mu's last connection still lists. */
+  /** Reported providers removed on this screen, which the snapshot of spec.jev's last connection still lists. */
   hidden: ReadonlySet<string>;
   /** Between the heading and the list: why models.json cannot be edited, when it cannot. */
   children?: React.ReactNode;
@@ -61,7 +61,7 @@ const comparable = ({ key: _key, keySet: _set, headerNames: _names, ...rest }: P
 
 /**
  * Every provider in one place: the subscriptions to sign in to on top, the endpoints set up here below them, then
- * hand-written models.json entries and whatever else the running mu reported. The list is on the left, the chosen
+ * hand-written models.json entries and whatever else the running spec.jev reported. The list is on the left, the chosen
  * one on the right. Signing in and out take effect at once; everything else is a change to the draft, saved by the
  * save bar, and a provider is removed from its more-actions menu after a question.
  */
@@ -84,7 +84,7 @@ export default function ProviderManager(props: ProviderManagerProps) {
   ];
   const offered = new Set<string>(flow.offered);
   const shown = available.providers.filter((provider) => !hidden.has(provider.id));
-  // Whatever the running mu reported that is neither a subscription listed above nor an entry of models.json:
+  // Whatever the running spec.jev reported that is neither a subscription listed above nor an entry of models.json:
   // mostly providers whose API key is in the environment. A subscription id reported that way (Claude or Grok with
   // an API key) is shown on its subscription row.
   const builtin = shown.filter((provider) => !own.has(provider.id) && !offered.has(provider.id));
@@ -303,7 +303,7 @@ export default function ProviderManager(props: ProviderManagerProps) {
         <div className={styles.fields}>
           <div className={styles.hint}>{t('mu.providers.foreignHelp')}</div>
           <div className={styles.hint}>
-            {/* Separate facts side by side, not a sentence: an API format mu knows by its name, one it does not
+            {/* Separate facts side by side, not a sentence: an API format spec.jev knows by its name, one it does not
                 as models.json spells it. The count is written the app language's way by its text. */}
             {[
               entry?.api && (ENDPOINT_TYPES as readonly string[]).includes(entry.api)

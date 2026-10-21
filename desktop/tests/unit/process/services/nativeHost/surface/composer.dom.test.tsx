@@ -19,7 +19,7 @@ import { delta, ended, frame, reply, text, user } from './records';
 
 /**
  * The bottom of a native conversation against an in-memory host: the send box in each state (idle, a message Jev
- * reads, a run going), the queue, the status line, the notices about mu, and a panel's command. The shared send box
+ * reads, a run going), the queue, the status line, the notices about spec.jev, and a panel's command. The shared send box
  * is stood in for by its contract (value, send, stop, loading, sending while loading, tools, test ids), so the ids
  * found here are the ones the native screen gives the real box.
  */
@@ -143,7 +143,7 @@ describe('the native send box', () => {
       });
     });
     await mount(host);
-    expect(input()).toHaveAttribute('placeholder', 'Message mu…');
+    expect(input()).toHaveAttribute('placeholder', 'Message spec.jev…');
     expect(screen.queryByTestId('native-abort')).toBeNull();
     expect(box()).toHaveAttribute('data-loading', 'false');
     expect(status()).toHaveAttribute('data-sending', 'false');
@@ -177,7 +177,7 @@ describe('the native send box', () => {
     expect(screen.getByTestId('native-send-mode')).toBeInTheDocument();
     expect(box()).toHaveAttribute('data-loading', 'true');
     expect(box()).toHaveAttribute('data-send', 'true');
-    expect(input()).toHaveAttribute('placeholder', "Steer mu now, or queue a message for when it's done…");
+    expect(input()).toHaveAttribute('placeholder', "Steer spec.jev now, or queue a message for when it's done…");
     type('also check the tests');
     await send();
     fireEvent.click(screen.getByText('After'));
@@ -226,7 +226,7 @@ describe('the native send box', () => {
     expect(heard).toHaveBeenCalledWith('sent');
   });
 
-  it('says when mu has no model, when it stopped, and why a command failed', async () => {
+  it('says when spec.jev has no model, when it stopped, and why a command failed', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1' });
     host.answer(() => ({ ok: false, kind: 'timeout', message: 'pi did not answer prompt in 30 s' }));
@@ -236,26 +236,26 @@ describe('the native send box', () => {
     act(() =>
       host.setStatus('c1', {
         phase: 'failed',
-        error: { kind: 'crashed', message: 'mu exited with code 1', stderr: 'TypeError: boom' },
+        error: { kind: 'crashed', message: 'spec.jev exited with code 1', stderr: 'TypeError: boom' },
       })
     );
     expect(screen.queryByTestId('native-needs-model')).toBeNull();
     const stopped = screen.getByTestId('native-failed');
     expect(stopped).toHaveAttribute('data-kind', 'crashed');
-    expect(stopped).toHaveTextContent('mu stopped unexpectedly.');
-    expect(stopped).toHaveTextContent('mu exited with code 1');
+    expect(stopped).toHaveTextContent('spec.jev stopped unexpectedly.');
+    expect(stopped).toHaveTextContent('spec.jev exited with code 1');
     expect(stopped).toHaveTextContent('TypeError: boom');
-    expect(stopped).toHaveTextContent('Send a message to start mu again.');
+    expect(stopped).toHaveTextContent('Send a message to start spec.jev again.');
     type('hello');
     await send();
-    expect(screen.getByTestId('native-command-failed')).toHaveTextContent("mu didn't respond in time.");
+    expect(screen.getByTestId('native-command-failed')).toHaveTextContent("spec.jev didn't respond in time.");
     // What did not reach pi is back in the box.
     expect(input()).toHaveValue('hello');
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(screen.queryByTestId('native-command-failed')).toBeNull();
   });
 
-  it('says that the project folder is gone when a message cannot start mu in it, with the folder named, and keeps the message', async () => {
+  it('says that the project folder is gone when a message cannot start spec.jev in it, with the folder named, and keeps the message', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1' });
     host.answer(() => ({ ok: false, kind: 'no-folder', message: 'The project folder no longer exists: /work/gone' }));
@@ -264,15 +264,15 @@ describe('the native send box', () => {
     await send();
     const card = screen.getByTestId('native-command-failed');
     expect(card).toHaveAttribute('data-kind', 'no-folder');
-    expect(card).toHaveTextContent("The project folder no longer exists, so mu can't start there.");
+    expect(card).toHaveTextContent("The project folder no longer exists, so spec.jev can't start there.");
     expect(card).toHaveTextContent('/work/gone');
     expect(input()).toHaveValue('go on');
   });
 
-  it('says once why mu stopped when the message that found out fails with the same words', async () => {
+  it('says once why spec.jev stopped when the message that found out fails with the same words', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1' });
-    const error = { kind: 'failed' as const, message: 'The mu host stopped before pi started (exit code 1)' };
+    const error = { kind: 'failed' as const, message: 'The spec.jev host stopped before pi started (exit code 1)' };
     host.answer(() => ({ ok: false, ...error, stderr: 'boom' }));
     await mount(host);
     act(() => host.setStatus('c1', { phase: 'failed', error: { ...error, stderr: 'boom' } }));
@@ -292,7 +292,7 @@ describe('the native send box', () => {
     expect(status()).toHaveAttribute('data-status', 'idle');
     expect(status()).toBeEmptyDOMElement();
     act(() => host.setStatus('c1', { phase: 'starting' }));
-    expect(status()).toHaveTextContent('Starting mu…');
+    expect(status()).toHaveTextContent('Starting spec.jev…');
     act(() => host.setStatus('c1', { phase: 'running' }));
     await running(host);
     expect(status()).toHaveAttribute('data-status', 'working');

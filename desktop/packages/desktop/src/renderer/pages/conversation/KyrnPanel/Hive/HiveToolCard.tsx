@@ -49,7 +49,7 @@ export function beeModel(t: TFunction, bee: HiveBee, names?: ModelNames): string
     .join(' · ');
 }
 
-/** The roles that ship with mu (the harness's `packages/kyrn-judge/agents`): said in the reader's language. */
+/** The roles that ship with spec.jev (the harness's `packages/kyrn-judge/agents`): said in the reader's language. */
 const BUILT_IN_ROLES: ReadonlySet<string> = new Set([
   'browser',
   'investigator',
@@ -71,7 +71,7 @@ export function beeWho(t: TFunction, bee: HiveBee, names?: ModelNames): string {
 
 /**
  * A sub-agent as the call left it. While the call runs its snapshot says what it is doing. Once the call is over, no
- * sub-agent is still at work: when mu's process closed mid-run, the last snapshot still has some working or waiting to
+ * sub-agent is still at work: when spec.jev's process closed mid-run, the last snapshot still has some working or waiting to
  * start. Those stopped where they were, with nothing still running.
  */
 export function settledBee(bee: HiveBee, callRunning: boolean): HiveBee {
@@ -112,7 +112,7 @@ export default function HiveToolCard({
   };
   const title = t(data.kind === 'delegate' ? 'common.kyrn.hiveView.agents' : 'common.kyrn.hiveView.title');
   const runTitle = data.snapshot ? swarmTitleText(t, data.snapshot) : data.goal;
-  // A call with no snapshot that is over did not get as far as one: mu stopped mid-call, or the call failed at once.
+  // A call with no snapshot that is over did not get as far as one: spec.jev stopped mid-call, or the call failed at once.
   const cutShort = !running && status === 'error';
   const summary = bees
     ? swarmSummary(t, bees, running)

@@ -22,7 +22,7 @@ type UseAttachEntryResult = {
 };
 
 /**
- * Builds the "Attach" entry for the mobile action sheet. mu runs in Electron only,
+ * Builds the "Attach" entry for the mobile action sheet. spec.jev runs in Electron only,
  * so there is one way to attach: the host's own file dialog.
  */
 export const useAttachEntry = ({ openFileSelector, dividerBefore }: UseAttachEntryOptions): UseAttachEntryResult => {

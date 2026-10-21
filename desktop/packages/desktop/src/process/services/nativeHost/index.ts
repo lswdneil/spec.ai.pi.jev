@@ -1,6 +1,6 @@
 /**
  * The native host in the app: pi running in an Electron utility process of its own, one per session, speaking pi's
- * RPC protocol with the main process (docs/native-host.md). On by default; MU_NATIVE_HOST=0 turns it off, and a mu too
+ * RPC protocol with the main process (docs/native-host.md). On by default; MU_NATIVE_HOST=0 turns it off, and a spec.jev too
  * old to run inside the app keeps the app on AionCore and the ACP adapter (`nativeHostReady`).
  */
 import { homedir } from 'node:os';
@@ -16,8 +16,8 @@ export type { HostLaunch, NativeHostErrorKind, NativeHostState } from './NativeH
 
 /**
  * What MU_NATIVE_HOST says. `off` (0, false, off, no) is the kill switch: conversations run on AionCore as before.
- * `on` (1, true, on, yes) forces the native host, whatever mu is found: a mu too old for it then fails where it is
- * used, which is what a developer wants to see. Anything else (unset) is `auto`: native when this machine's mu can run
+ * `on` (1, true, on, yes) forces the native host, whatever spec.jev is found: a spec.jev too old for it then fails where it is
+ * used, which is what a developer wants to see. Anything else (unset) is `auto`: native when this machine's spec.jev can run
  * inside the app, else the classic path without a word.
  */
 export type NativeHostSetting = 'off' | 'on' | 'auto';
@@ -29,7 +29,7 @@ export function nativeHostSetting(env: NodeJS.ProcessEnv = process.env): NativeH
   return 'auto';
 }
 
-/** Whether MU_NATIVE_HOST leaves the native host on. `auto` still needs a mu that can run inside the app. */
+/** Whether MU_NATIVE_HOST leaves the native host on. `auto` still needs a spec.jev that can run inside the app. */
 export const isNativeHostEnabled = (env: NodeJS.ProcessEnv = process.env): boolean => nativeHostSetting(env) !== 'off';
 
 /** Where the harness is, as the rest of the app looks for it (kyrnBridge.ts). */
@@ -76,8 +76,8 @@ export type NativeHostReadyOptions = {
 
 /**
  * Whether the app runs conversations on the native host: not when MU_NATIVE_HOST=0, always when it is 1, and when it
- * is left alone only if the mu found on this machine can run inside the app (`checkHost`: its launcher has the
- * native host's functions and accepts a plan). An app whose mu is older keeps every conversation on AionCore, with
+ * is left alone only if the spec.jev found on this machine can run inside the app (`checkHost`: its launcher has the
+ * native host's functions and accepts a plan). An app whose spec.jev is older keeps every conversation on AionCore, with
  * a line in the log saying why, instead of failing each one.
  */
 export async function nativeHostReady(options: NativeHostReadyOptions = {}): Promise<boolean> {
@@ -88,7 +88,7 @@ export async function nativeHostReady(options: NativeHostReadyOptions = {}): Pro
   try {
     const harness = harnessOf(env);
     if (!harness) {
-      note('the native host stays off: no mu harness was found');
+      note('the native host stays off: no spec.jev harness was found');
       return false;
     }
     const problem = await checkHost({
@@ -132,7 +132,7 @@ export async function startNativeHost(options: StartNativeHostOptions): Promise<
   if (!isNativeHostEnabled(env))
     throw new NativeHostError('off', 'The native host is off: MU_NATIVE_HOST=0 turned it off');
   const harness = harnessOf(env);
-  if (!harness) throw new NativeHostError('no-harness', 'No mu harness was found');
+  if (!harness) throw new NativeHostError('no-harness', 'No spec.jev harness was found');
   const launch = await prepareHost({
     harness,
     cwd: options.cwd,

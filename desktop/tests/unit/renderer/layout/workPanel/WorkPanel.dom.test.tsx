@@ -13,7 +13,7 @@ type StreamMessage = { type: string; data: unknown; conversation_id?: string };
 const wires = vi.hoisted(() => ({
   /** Each conversation's kernel record, as the bridge hands it out page by page. */
   records: {} as Record<string, unknown[]>,
-  /** Each conversation's lessons, as the main process folds them from mu's file; and which conversations read them. */
+  /** Each conversation's lessons, as the main process folds them from spec.jev's file; and which conversations read them. */
   lessons: {} as Record<string, unknown>,
   lessonReads: [] as string[],
   /** A native conversation's folder: its lessons, the changes asked for, its directories, which ones were read. */
@@ -549,7 +549,7 @@ describe('the work panel', () => {
     expect(selected()).toHaveTextContent('Preview');
     expect(dots()).toEqual(['browser']);
 
-    // mu about to type into its page, or asking the person to confirm a step, brings the browser into view.
+    // spec.jev about to type into its page, or asking the person to confirm a step, brings the browser into view.
     fireEvent.click(tab('Board'));
     act(() => announcePreviewOpened('agent-watched', 'browser'));
     expect(selected()).toHaveTextContent('Browser');

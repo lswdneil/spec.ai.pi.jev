@@ -171,7 +171,7 @@ function resolvePackagedApp(): { executablePath: string; cwd: string } | null {
       }
     }
   } else {
-    // Linux: out/linux-unpacked/mu-desktop  (linux.executableName; `mu` on the PATH is the command line)
+    // Linux: out/linux-unpacked/mu-desktop  (linux.executableName; `spec.jev` on the PATH is the command line)
     for (const dir of ['linux-unpacked', 'linux-x64-unpacked', 'linux-arm64-unpacked']) {
       const dirPath = path.join(outDir, dir);
       if (!fs.existsSync(dirPath)) continue;

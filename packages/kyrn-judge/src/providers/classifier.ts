@@ -90,7 +90,7 @@ function kindOf(message: string): JudgeErrorKind {
 /**
  * A classifier model from the host's catalog as a judge: Jev on OpenCode Zen or Cloudflare Workers AI, Cloudflare's
  * Clef, the System One models on OpenRouter and the Vercel AI Gateway, a llama.cpp server's classifier, one of the
- * user's models.json. The host reaches it with its own credentials (`mu auth`, /login, the provider's variable).
+ * user's models.json. The host reaches it with its own credentials (`spec.jev auth`, /login, the provider's variable).
  */
 export class ClassifierJudgeProvider implements JudgeProvider {
 	readonly id: string;

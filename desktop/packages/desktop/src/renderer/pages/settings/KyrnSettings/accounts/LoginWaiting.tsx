@@ -95,7 +95,7 @@ export default function LoginWaiting({
 
 /**
  * The question a Google sign-in asks before anything opens: these are Google's logins for its own tools, and Google
- * may limit or suspend an account that signs in to them from another program. Said in mu's words; going on takes
+ * may limit or suspend an account that signs in to them from another program. Said in spec.jev's words; going on takes
  * the person's own click, never a default.
  */
 function RiskConsent({
@@ -152,7 +152,7 @@ export function LoginProblem({ failure }: { failure: LoginFailure | undefined })
 }
 
 /**
- * What a flow asks while it runs. The code to paste is mu's own wording. The rarer questions of other flows come with
+ * What a flow asks while it runs. The code to paste is spec.jev's own wording. The rarer questions of other flows come with
  * pi's text, which is English: a line in the app language says whose question it is.
  */
 function PromptField({

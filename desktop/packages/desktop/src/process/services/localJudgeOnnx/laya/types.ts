@@ -1,5 +1,5 @@
 // Vendored from mizchi/laya-mlx, web/packages/laya-web/src/types.ts at dc3aa6b (Apache-2.0).
-// See ./NOTICE.md. Local changes are marked "mu:".
+// See ./NOTICE.md. Local changes are marked "spec.jev:".
 
 export type QuestionType = 'choice' | 'score' | 'noul';
 export const QTYPES: Record<QuestionType, number> = { choice: 0, score: 1, noul: 2 };

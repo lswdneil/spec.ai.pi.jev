@@ -3,7 +3,7 @@ title: Goal mode and finishing
 summary: The task frame, /goal and the checks that keep a run from stopping early, drifting or going in circles.
 ---
 
-The most common way a long task fails isn't a wrong answer but stopping early: the model says *mostly done*, and the tests never ran. mu has several safeguards against that, all built on one record of what you actually want: the task frame.
+The most common way a long task fails isn't a wrong answer but stopping early: the model says *mostly done*, and the tests never ran. spec.jev has several safeguards against that, all built on one record of what you actually want: the task frame.
 
 ## The task frame {#frame}
 
@@ -38,12 +38,12 @@ After a pause, your next message picks the goal up again. A reopened session bri
 
 Without a goal, each turn still gets these:
 
-- **Completion check** (`turn.completion`). When the model says it is done, mu asks whether anything verified that. If not, one nudge to check, for example to run the tests.
-- **Stopped short** (`turn.continue`). A run that ends on *next, I'll run the tests* without doing it, or asks for a go-ahead on work you already asked for, is sent back to it, at most twice per message. mu never nudges it toward a step that's hard to undo or reaches beyond this machine, such as a push, a publish, a delete or a payment.
+- **Completion check** (`turn.completion`). When the model says it is done, spec.jev asks whether anything verified that. If not, one nudge to check, for example to run the tests.
+- **Stopped short** (`turn.continue`). A run that ends on *next, I'll run the tests* without doing it, or asks for a go-ahead on work you already asked for, is sent back to it, at most twice per message. spec.jev never nudges it toward a step that's hard to undo or reaches beyond this machine, such as a push, a publish, a delete or a payment.
 
 ## Drift and dead ends {#drift}
 
-- **Drift monitor** (`turn.drift`). Every six tool calls, mu checks that the work still serves the goal. Rules catch the other failure, going in circles: the same call three times within the last eight.
+- **Drift monitor** (`turn.drift`). Every six tool calls, spec.jev checks that the work still serves the goal. Rules catch the other failure, going in circles: the same call three times within the last eight.
 - **Judged rewind** (`turn.rewind`). When the agent goes in circles, or one command keeps failing, the judge asks whether the approach is a dead end. Only a confident dead end with no progress proposes going back to the turn's checkpoint, with a note of what was tried and why it was dropped. The proposal waits two minutes for you; unanswered, the run carries on. It never rewinds by itself.
 
 ## Rewinding by hand {#rewind}

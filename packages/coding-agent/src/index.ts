@@ -218,13 +218,13 @@ export {
 } from "./core/extensions/index.ts";
 // Footer data provider (git branch + extension statuses - data not otherwise available to extensions)
 export type { ReadonlyFooterDataProvider } from "./core/footer-data-provider.ts";
-// mu: `mu setup` checks a key with one request, through the proxy pi itself would use, also from pi's bundle.
+// spec.jev: `spec.jev setup` checks a key with one request, through the proxy pi itself would use, also from pi's bundle.
 export { applyHttpProxySettings, configureHttpDispatcher } from "./core/http-dispatcher.ts";
 export type { RegisteredMcpServer } from "./core/mcp-servers.ts";
 export { convertToLlm } from "./core/messages.ts";
 export { ModelRegistry } from "./core/model-registry.ts";
 export {
-	// mu: `mu auth` lists an account's models with the one pi starts that provider on first, also from pi's bundle.
+	// spec.jev: `spec.jev auth` lists an account's models with the one pi starts that provider on first, also from pi's bundle.
 	defaultModelPerProvider,
 	type ModelScopeDiagnostic,
 	type ResolveCliModelResult,
@@ -415,7 +415,7 @@ export {
 export { type CodemodeExtensionOptions, createCodemodeExtension } from "./extensions/codemode/index.ts";
 export type { CodemodeStoreEntryData, CodemodeToolDetails } from "./extensions/codemode/tool.ts";
 export type { LoadedMcpConfig, McpExposure, McpServerConfig, McpServerEntry } from "./extensions/mcp/config.ts";
-// mu: mu's catalog reads which servers mcp.json defines, and follows the ones it registers.
+// spec.jev: spec.jev's catalog reads which servers mcp.json defines, and follows the ones it registers.
 export { loadMcpConfig } from "./extensions/mcp/config.ts";
 export {
 	createMcpExtension,

@@ -1,41 +1,41 @@
 ---
 title: コマンドライン
-summary: mu のコマンド、セッション内のスラッシュコマンド、そして pi からそのまま引き継いだもの。
+summary: spec.jev のコマンド、セッション内のスラッシュコマンド、そして pi からそのまま引き継いだもの。
 ---
 
-`mu` コマンドは、コーディングエージェント pi に mu の判定カーネルを読み込んだものです。pi にできることはすべてこれまでどおり動き、mu は独自のコマンドと判定ポイントを加えます。
+`spec.jev` コマンドは、コーディングエージェント pi に spec.jev の判定カーネルを読み込んだものです。pi にできることはすべてこれまでどおり動き、spec.jev は独自のコマンドと判定ポイントを加えます。
 
 ```bash
-npm i -g mu-agent      # Node.js 22.19 以降が必要
-mu                     # 現在のディレクトリで対話セッションを始める
+npm i -g spec.jev      # Node.js 22.19 以降が必要
+spec.jev                     # 現在のディレクトリで対話セッションを始める
 ```
 
-## mu を起動する {#starting}
+## spec.jev を起動する {#starting}
 
 | コマンド | 内容 |
 | --- | --- |
-| `mu` | 現在のディレクトリで対話セッションを始める |
-| `mu "prompt"` | このプロンプトから始まる対話セッション |
-| `mu -p "prompt"` | 1 回だけ実行：答えを出力して終了する |
-| `mu -c` | 前回のセッションを続ける |
-| `mu -r` | 再開するセッションを選ぶ |
-| `mu --help` | エージェントのすべてのフラグ |
+| `spec.jev` | 現在のディレクトリで対話セッションを始める |
+| `spec.jev "prompt"` | このプロンプトから始まる対話セッション |
+| `spec.jev -p "prompt"` | 1 回だけ実行：答えを出力して終了する |
+| `spec.jev -c` | 前回のセッションを続ける |
+| `spec.jev -r` | 再開するセッションを選ぶ |
+| `spec.jev --help` | エージェントのすべてのフラグ |
 
-`mu install`、`remove`、`update`、`list`、`config` は、pi と同じく pi のパッケージを管理します。
+`spec.jev install`、`remove`、`update`、`list`、`config` は、pi と同じく pi のパッケージを管理します。
 
-## mu 独自のコマンド {#commands}
+## spec.jev 独自のコマンド {#commands}
 
 | コマンド | 内容 |
 | --- | --- |
-| `mu setup` | モデルを接続し（API キー、または一覧からサービスを選ぶ）、判定器を選ぶ。`mu setup --help` でスクリプト向けの書き方を表示する。 |
-| `mu doctor` | インストール、モデル、判定器、各接続を確認し、何を直せばよいかを示す |
-| `mu ledger [n] [--json]` | 直近 n 回のセッションで判定器が下した判定。`--json` で、すべての記録を確率と所要時間付きで出力する。 |
-| `mu import --list` | Claude Code と Codex の会話を探す |
-| `mu import <file>…` | それらを mu に取り込み、そこで続ける |
-| `mu judge setup \| start \| stop \| status` | ローカルの判定器 Laya。`setup` はモデルをダウンロードする前に確認する。 |
-| `mu link` / `mu unlink` | `mu` コマンドを PATH（`~/.local/bin`）に置く、または取り除く |
-| `mu auth status \| login <provider> \| logout <provider>` | デスクトップアプリが使うサブスクリプションのサインイン |
-| `mu migrate [--dry-run]` | 一度だけ実行：名前変更前のホーム `~/.kyrn` を `~/.mu` に移す |
+| `spec.jev setup` | モデルを接続し（API キー、または一覧からサービスを選ぶ）、判定器を選ぶ。`spec.jev setup --help` でスクリプト向けの書き方を表示する。 |
+| `spec.jev doctor` | インストール、モデル、判定器、各接続を確認し、何を直せばよいかを示す |
+| `spec.jev ledger [n] [--json]` | 直近 n 回のセッションで判定器が下した判定。`--json` で、すべての記録を確率と所要時間付きで出力する。 |
+| `spec.jev import --list` | Claude Code と Codex の会話を探す |
+| `spec.jev import <file>…` | それらを spec.jev に取り込み、そこで続ける |
+| `spec.jev judge setup \| start \| stop \| status` | ローカルの判定器 Laya。`setup` はモデルをダウンロードする前に確認する。 |
+| `spec.jev link` / `spec.jev unlink` | `spec.jev` コマンドを PATH（`~/.local/bin`）に置く、または取り除く |
+| `spec.jev auth status \| login <provider> \| logout <provider>` | デスクトップアプリが使うサブスクリプションのサインイン |
+| `spec.jev migrate [--dry-run]` | 一度だけ実行：名前変更前のホーム `~/.kyrn` を `~/.spec.jev` に移す |
 
 ## セッション内のコマンド {#slash-commands}
 
@@ -64,15 +64,15 @@ pi 自身のコマンド（`/model`、`/thinking`、`/login`、`/resume`、`/tre
 
 ## 判定の行 {#verdict-line}
 
-ターンが始まる前に、mu はあなたのメッセージに対する判定器の読みを少しだけ待ち、エディタの上に表示します。たとえば *◆ jev-1.13-free  multi-step task · full effort · 699 ms* です。<kbd>Esc</kbd> を押すと、待たずに始めます。ステータスラインには権限モードが表示され、目標の実行中はその目標も表示されます。
+ターンが始まる前に、spec.jev はあなたのメッセージに対する判定器の読みを少しだけ待ち、エディタの上に表示します。たとえば *◆ jev-1.13-free  multi-step task · full effort · 699 ms* です。<kbd>Esc</kbd> を押すと、待たずに始めます。ステータスラインには権限モードが表示され、目標の実行中はその目標も表示されます。
 
 ## 1 回の実行だけに効く環境変数 {#env}
 
 | 変数 | 効果 |
 | --- | --- |
-| `MU_JUDGE=laya,jev mu` | この実行だけの判定器。`MU_JUDGE=off` でカーネルをオフにする。 |
-| `MU_JUDGE_MODE=shadow mu` | この実行では、すべての判定ポイントをシャドーにする |
-| `MU_PERMISSIONS=ask mu` | この実行の権限モード：`full`、`jev`、`ask` |
-| `MU_LANG=zh-CN mu` | mu 自身のメッセージを中国語（`zh`）か英語（それ以外）にする |
+| `MU_JUDGE=laya,jev spec.jev` | この実行だけの判定器。`MU_JUDGE=off` でカーネルをオフにする。 |
+| `MU_JUDGE_MODE=shadow spec.jev` | この実行では、すべての判定ポイントをシャドーにする |
+| `MU_PERMISSIONS=ask spec.jev` | この実行の権限モード：`full`、`jev`、`ask` |
+| `MU_LANG=zh-CN spec.jev` | spec.jev 自身のメッセージを中国語（`zh`）か英語（それ以外）にする |
 
 完全な一覧は[設定](@docs/configuration#env)にあります。

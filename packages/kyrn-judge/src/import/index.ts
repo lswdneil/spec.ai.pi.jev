@@ -1,11 +1,11 @@
 /**
- * Bringing Claude Code and Codex conversations into mu: finding them on this machine, and turning one transcript into
- * one pi session in mu's session folder, where `/resume`, `mu --session` and the desktop app find it like any other.
+ * Bringing Claude Code and Codex conversations into spec.jev: finding them on this machine, and turning one transcript into
+ * one pi session in spec.jev's session folder, where `/resume`, `spec.jev --session` and the desktop app find it like any other.
  *
  * An imported session starts with a marker entry (IMPORT_MARKER) that names the tool, the transcript and the tool's
  * own id for the conversation; a transcript whose conversation is already in the folder is not imported again.
  *
- * Only node: built-ins at run time, so that `mu import` runs on a bare Node (cli.ts).
+ * Only node: built-ins at run time, so that `spec.jev import` runs on a bare Node (cli.ts).
  */
 import { mkdirSync, readdirSync, realpathSync, statSync } from "node:fs";
 import { homedir } from "node:os";
@@ -109,7 +109,7 @@ export interface FoundConversation {
 	size: number;
 	/** A thread a sub-agent ran, not a conversation someone had. */
 	subAgent: boolean;
-	/** The mu session it was already imported as. */
+	/** The spec.jev session it was already imported as. */
 	importedAs?: string;
 }
 
@@ -272,7 +272,7 @@ export interface ListOptions {
 	claudeProjects?: string;
 	/** Codex's `sessions` folder. Default: codexSessionsDir(). */
 	codexSessions?: string;
-	/** mu's sessions, to mark what was imported already. */
+	/** spec.jev's sessions, to mark what was imported already. */
 	store?: SessionStore;
 	/** Also list the threads sub-agents ran. */
 	subAgents?: boolean;

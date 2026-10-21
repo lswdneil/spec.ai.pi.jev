@@ -7,7 +7,7 @@ export type FreeJevOutcome = "answered" | JudgeErrorKind;
 
 /**
  * The `jev` judge when none of Jev's keys is set: the Vercel AI Gateway when the host keeps a key for it (a sign-in in
- * mu), else Jev 1.13 on OpenCode Zen, free for a limited time and with no key. Decided per call, so a key stored during
+ * spec.jev), else Jev 1.13 on OpenCode Zen, free for a limited time and with no key. Decided per call, so a key stored during
  * the session is used from the next call on. `onFree` hears how each call to the free Jev went, for the notice.
  */
 export class FreeJevFallback implements JudgeProvider {

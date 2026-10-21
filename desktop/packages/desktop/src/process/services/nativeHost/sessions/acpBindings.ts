@@ -3,8 +3,8 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
 /**
- * The pi session files AionCore's mu conversations already use (docs/native-host.md, M3), so the native list does not
- * show them a second time. The ACP adapter keeps a record per conversation, `<mu home>/acp-sessions/<ACP session
+ * The pi session files AionCore's spec.jev conversations already use (docs/native-host.md, M3), so the native list does not
+ * show them a second time. The ACP adapter keeps a record per conversation, `<spec.jev home>/acp-sessions/<ACP session
  * id>.json` = `{ cwd, file, permissions }` (KyrnAgent.ts), and an imported chat has one in
  * `acp-sessions/imports/<conversation>.json` (importChats.ts). Nothing is changed: a record that goes away brings its
  * session back into the native list. A record is read again only when its size or time changed.
@@ -38,7 +38,7 @@ export class AcpBindings {
   private readonly store: () => string | undefined;
   private readonly kept = new Map<string, Kept>();
 
-  /** `store`: the adapter's record folder (`<mu home>/acp-sessions`), asked at each use. */
+  /** `store`: the adapter's record folder (`<spec.jev home>/acp-sessions`), asked at each use. */
   constructor(store: () => string | undefined) {
     this.store = store;
   }

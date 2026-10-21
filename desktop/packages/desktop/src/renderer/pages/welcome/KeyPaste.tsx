@@ -54,7 +54,7 @@ function useCheckWords(service: ModelService | undefined, check: KeyCheck, works
 }
 
 /**
- * The key tile: paste a key, and mu tells the service from its shape (or asks, when it fits several or none), checks
+ * The key tile: paste a key, and spec.jev tells the service from its shape (or asks, when it fits several or none), checks
  * the key with that service alone, and starts on a model the service lists. No address, no wire format.
  */
 export default function KeyPaste({ setup, tried }: KeyPasteProps) {

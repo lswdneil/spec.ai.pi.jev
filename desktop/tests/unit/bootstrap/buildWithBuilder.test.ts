@@ -142,7 +142,7 @@ childProcess.execSync = function mockedExecSync(command) {
     expect(queryScript).toContain("'installer-self-lock'");
     expect(queryScript).toContain('outerInstallerPid');
     expect(queryScript).toContain('currentOutDir');
-    expect(queryScript).toContain("name = 'mu installer'");
+    expect(queryScript).toContain("name = 'spec.jev installer'");
   });
 
   it('continues with the bundled uninstaller when installed-uninstaller repair remains locked', () => {
@@ -268,7 +268,7 @@ childProcess.execSync = function mockedExecSync(command) {
       expectedArch: 'x64',
       expectedPlatform: 'darwin',
     },
-  ])('prepares AionCore and mu for $expectedArch with args $args', ({ args, expectedArch, expectedPlatform }) => {
+  ])('prepares AionCore and spec.jev for $expectedArch with args $args', ({ args, expectedArch, expectedPlatform }) => {
     const tempDir = mkdtempSync(join(tmpdir(), 'mu-build-test-'));
     const hookPath = join(tempDir, 'hook.cjs');
     const callsPath = join(tempDir, 'prepare-calls.json');

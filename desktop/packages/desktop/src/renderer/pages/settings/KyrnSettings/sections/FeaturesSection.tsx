@@ -58,7 +58,7 @@ type CoreFeaturesSectionProps = {
 };
 
 /**
- * The switches that say what mu is, one row each: its name, one sentence, its switch, and the way to its row among the
+ * The switches that say what spec.jev is, one row each: its name, one sentence, its switch, and the way to its row among the
  * details, where its options and the decision points it asks are. The switch is the feature's one switch, shown here
  * too, not a second one.
  */

@@ -23,7 +23,7 @@ interface KyrnCompactionDetails {
 }
 
 /**
- * mu's own per-turn notes (hints, lessons, nudges) reach the model as user-role text, but nobody said
+ * spec.jev's own per-turn notes (hints, lessons, nudges) reach the model as user-role text, but nobody said
  * them: they were advice for one turn. In a word-for-word history they would read as the user's words.
  */
 function spoken<T extends { role: string }>(messages: readonly T[]): T[] {
@@ -42,7 +42,7 @@ function previousItems(details: unknown): HistoryItem[] | undefined {
 
 /**
  * E1, compaction without a summary (beta). When pi is about to summarize the
- * old part of the conversation, mu hands it that part word for word instead,
+ * old part of the conversation, spec.jev hands it that part word for word instead,
  * with only the tool output pruned that is no longer worth its tokens:
  *
  *   1. rules: a file read again or changed since, a command run again since;

@@ -20,7 +20,7 @@ export function piAccess(runtime: ModelRuntime, agentDir: string): PiAccess {
 			return found.type === "oauth" ? "oauth" : "api_key";
 		},
 		storeKey: async (provider, key) => {
-			// A provider of mu's was just written into models.json: pi reads the file again before it knows the provider.
+			// A provider of spec.jev's was just written into models.json: pi reads the file again before it knows the provider.
 			await runtime.refresh({ allowNetwork: false, providers: [provider] });
 			if (!runtime.getProvider(provider)) {
 				throw new Error(`pi has no provider ${provider}${runtime.getError() ? `: ${runtime.getError()}` : ""}`);

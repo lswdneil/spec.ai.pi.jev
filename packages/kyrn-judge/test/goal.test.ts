@@ -170,7 +170,7 @@ describe("goal mode", () => {
 		expect(states(harness).at(-1)).toMatchObject({
 			status: "paused",
 			reason: "代理连续 2 次什么都没做就停下了",
-			// The same, for a client in a language mu has no words for.
+			// The same, for a client in a language spec.jev has no words for.
 			reasonCode: "idle",
 			reasonParams: { runs: 2 },
 		});

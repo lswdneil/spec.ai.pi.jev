@@ -11,7 +11,7 @@ type RestartableApp = Pick<App, 'isPackaged' | 'relaunch' | 'exit'>;
 
 export function restartApplication(app: RestartableApp): IAppRestartResult {
   if (!app.isPackaged) {
-    console.info('[mu] Restart skipped in development mode; manual restart required');
+    console.info('[spec.jev] Restart skipped in development mode; manual restart required');
     return {
       restarted: false,
       manualRestartRequired: true,
@@ -19,7 +19,7 @@ export function restartApplication(app: RestartableApp): IAppRestartResult {
     };
   }
 
-  console.info('[mu] Relaunching application to apply changes');
+  console.info('[spec.jev] Relaunching application to apply changes');
   app.relaunch();
   app.exit(0);
   return {

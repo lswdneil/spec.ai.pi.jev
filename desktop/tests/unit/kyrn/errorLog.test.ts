@@ -51,7 +51,7 @@ setTimeout(() => {
     expect(code).toBe(0);
     expect(out).toBe('alive\n');
     expect(err).toContain(
-      '[mu] a promise failed and nothing handled it; the adapter goes on: Error: the answer went nowhere\n    at '
+      '[spec.jev] a promise failed and nothing handled it; the adapter goes on: Error: the answer went nowhere\n    at '
     );
   }, 20000);
 
@@ -67,7 +67,7 @@ setTimeout(() => {
 `);
     expect(code).toBe(1);
     expect(out).toBe('before\n');
-    expect(err).toContain('[mu] the adapter stops on an error nothing handled: Error: broken state\n    at ');
+    expect(err).toContain('[spec.jev] the adapter stops on an error nothing handled: Error: broken state\n    at ');
   }, 20000);
 
   it('describes what is not an error, too', () => {

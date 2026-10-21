@@ -24,9 +24,9 @@ type DefaultModelCardProps = {
   settings: KyrnSettings;
   base: KyrnSettings;
   available: AvailableModels;
-  /** Subscriptions signed in to from the app, which a running mu may not have reported yet. */
+  /** Subscriptions signed in to from the app, which a running spec.jev may not have reported yet. */
   accounts?: LoginStatus['signedIn'];
-  /** Providers removed on this screen that the snapshot of mu's last connection still lists. */
+  /** Providers removed on this screen that the snapshot of spec.jev's last connection still lists. */
   hidden?: ReadonlySet<string>;
   onChange: (defaults: ModelDefaults) => void;
 };
@@ -39,7 +39,7 @@ function modelThinkingLevels(model: ProviderModel): ThinkingLevel[] {
 }
 
 /**
- * The model and thinking level a new session starts with (pi's settings.json, which the mu command line reads too).
+ * The model and thinking level a new session starts with (pi's settings.json, which the spec.jev command line reads too).
  * A conversation can still switch in its send box.
  */
 export default function DefaultModelCard({

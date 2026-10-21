@@ -13,7 +13,7 @@ const THOUGHT_LEVEL_IDS = ['thought_level', 'reasoning_effort'];
 export type MenuLevel = { value: string; label?: string };
 
 export type MenuModel = {
-  /** The model option's value: `provider/model-id` for mu. */
+  /** The model option's value: `provider/model-id` for spec.jev. */
   value: string;
   label: string;
   /** What the agent says the model is, when it says: shown on hover. */
@@ -39,7 +39,7 @@ const providerOf = (value: string): string => {
 /**
  * The picker's rows: every model on offer, by provider, each with the thinking levels it takes. The model in use takes
  * the levels reported right now; any other takes what the adapter recorded for it. A provider is titled by
- * `providerName` (its name, where the id is all the value says). mu describes each model by its provider's id, which
+ * `providerName` (its name, where the id is all the value says). spec.jev describes each model by its provider's id, which
  * the title already says in words: such a description is left out.
  */
 export function modelMenu(

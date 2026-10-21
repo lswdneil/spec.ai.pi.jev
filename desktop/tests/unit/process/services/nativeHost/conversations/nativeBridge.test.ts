@@ -109,7 +109,7 @@ describe('the native conversation bridge in the main process', () => {
     await expect(nativeBridge.rename.invoke({ id: 'session-1', name: 'Build fix' })).resolves.toEqual(off);
   });
 
-  it('answers `enabled` when the mu on this machine is known to run inside the app, or not', async () => {
+  it('answers `enabled` when the spec.jev on this machine is known to run inside the app, or not', async () => {
     registerNativeBridge(conversations(), () => Promise.resolve(false));
     await expect(nativeBridge.enabled.invoke()).resolves.toBe(false);
     registerNativeBridge(conversations(), () => Promise.resolve(true));
@@ -169,7 +169,7 @@ describe('the native conversation bridge in the main process', () => {
     registerNativeBridge(
       conversations({
         request: vi.fn(async () => {
-          throw new NativeHostError('crashed', 'The mu host stopped by itself (exit code 1)', {
+          throw new NativeHostError('crashed', 'The spec.jev host stopped by itself (exit code 1)', {
             code: 1,
             stderr: 'TypeError: boom',
           });
@@ -181,14 +181,14 @@ describe('the native conversation bridge in the main process', () => {
           throw new Error("EACCES: permission denied, scandir '/home/me/.mu/agent/sessions'");
         }),
         close: vi.fn(async () => {
-          throw new NativeHostError('timeout', 'mu did not answer get_state in 30000 ms');
+          throw new NativeHostError('timeout', 'spec.jev did not answer get_state in 30000 ms');
         }),
       })
     );
     await expect(nativeBridge.request.invoke({ id: 'session-1', command: { type: 'get_state' } })).resolves.toEqual({
       ok: false,
       kind: 'crashed',
-      message: 'The mu host stopped by itself (exit code 1)',
+      message: 'The spec.jev host stopped by itself (exit code 1)',
       stderr: 'TypeError: boom',
     });
     await expect(nativeBridge.open.invoke({ id: 'session-9' })).resolves.toEqual({
@@ -205,7 +205,7 @@ describe('the native conversation bridge in the main process', () => {
     await expect(nativeBridge.close.invoke({ id: 'session-1' })).resolves.toEqual({
       ok: false,
       kind: 'timeout',
-      message: 'mu did not answer get_state in 30000 ms',
+      message: 'spec.jev did not answer get_state in 30000 ms',
     });
   });
 
@@ -287,7 +287,7 @@ describe('the native conversation bridge in the main process', () => {
       expect(nativeFailure(new NativeHostError(kind, 'why'))).toEqual({ ok: false, kind, message: 'why' });
   });
 
-  it('is set up in the app unless MU_NATIVE_HOST=0: off with it, the sessions of mu without', async () => {
+  it('is set up in the app unless MU_NATIVE_HOST=0: off with it, the sessions of spec.jev without', async () => {
     vi.stubEnv('MU_NATIVE_HOST', '0');
     initNativeBridge();
     await expect(nativeBridge.enabled.invoke()).resolves.toBe(false);
@@ -299,7 +299,7 @@ describe('the native conversation bridge in the main process', () => {
       user('u1', null, 'Hello there', 1),
       assistant('a1', 'u1', 'Hi', 2),
     ]);
-    // 1 forces it on (no mu is looked for), which is what a developer testing an older mu wants.
+    // 1 forces it on (no spec.jev is looked for), which is what a developer testing an older spec.jev wants.
     vi.stubEnv('MU_NATIVE_HOST', '1');
     vi.stubEnv('MU_AGENT_DIR', agentDir);
     vi.stubEnv('MU_CODING_AGENT_SESSION_DIR', '');
@@ -326,14 +326,14 @@ describe('the native conversation bridge in the main process', () => {
     }
   });
 
-  it('left alone, it follows the mu found: on for one that can run inside the app, off for an older one', async () => {
+  it('left alone, it follows the spec.jev found: on for one that can run inside the app, off for an older one', async () => {
     const harnessWith = (name: string, source: string): string => {
       const folder = join(root, name);
       mkdirSync(join(folder, 'kyrn', 'bin'), { recursive: true });
       writeFileSync(join(folder, 'kyrn', 'bin', 'mu.mjs'), source);
       return folder;
     };
-    // A mu of today, and the mu a packaged app carried before the native host: a launcher without planHost.
+    // A spec.jev of today, and the spec.jev a packaged app carried before the native host: a launcher without planHost.
     const current = harnessWith(
       'mu-current',
       `export function planHost() { return { module: '/mu/pi.js', execArgv: [], args: [], env: {}, layout: 'package', muDir: '/m', appDir: '/m/app', agentDir: '/m/agent', startJudge: false, notes: [] }; }
@@ -354,7 +354,7 @@ export function prepareLaunch() {}
       initNativeBridge();
       await expect(nativeBridge.enabled.invoke()).resolves.toBe(false);
       // The reason is in the log, and nothing else says a word: the app just keeps the classic path.
-      expect(warn).toHaveBeenCalledWith(expect.stringContaining('the native host stays off: This mu cannot run'));
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('the native host stays off: This spec.jev cannot run'));
     } finally {
       warn.mockRestore();
       vi.unstubAllEnvs();

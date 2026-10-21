@@ -17,7 +17,7 @@ export type LessonsRead = {
 export const messageOf = (error: unknown): string => (error instanceof Error ? error.message : String(error));
 
 /**
- * One conversation's lessons, read from mu's file while the tab is in view: when it comes into view, and again after
+ * One conversation's lessons, read from spec.jev's file while the tab is in view: when it comes into view, and again after
  * every lesson event of the session (a new `signature`), since the harness wrote the file then. A change answers with
  * the file as it is after it. An answer that a newer one has overtaken is dropped: a read that left before a change
  * carries the file as it was. Give the tab `key={conversationId}`.

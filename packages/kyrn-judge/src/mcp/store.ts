@@ -4,7 +4,7 @@ import { join, resolve } from "node:path";
 import type { McpServerDefinition } from "../inherit/types.ts";
 
 /**
- * What mu remembers about MCP servers between sessions, in `<agentDir>/mu`:
+ * What spec.jev remembers about MCP servers between sessions, in `<agentDir>/mu`:
  *
  * `mcp-cache.json`: each server's tool names and descriptions from the last
  * time it ran. A server is only started when a task needs it, so without this

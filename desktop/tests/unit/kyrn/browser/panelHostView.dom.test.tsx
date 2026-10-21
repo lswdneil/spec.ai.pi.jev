@@ -40,7 +40,7 @@ vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => k
 const ask = (request: BrowserPanelRequest) => act(async () => wires.request?.(request));
 const tell = (event: BrowserRunEvent) => act(async () => wires.events?.(event));
 
-/** A page mu's run opened earlier, and (optionally) another page the person has in front. */
+/** A page spec.jev's run opened earlier, and (optionally) another page the person has in front. */
 function seedRunPage(options: { personInFront?: boolean } = {}): string {
   const runPage = openBrowserPage('https://a.test/done', { by: 'agent', muRun: 'r1' }) as string;
   if (options.personInFront) openBrowserPage('https://person.test/', { by: 'user' });
@@ -94,7 +94,7 @@ describe('the browser, as it answers the main process', () => {
     });
   });
 
-  it('hands out the conversation’s finished mu page again instead of piling up pages', async () => {
+  it('hands out the conversation’s finished spec.jev page again instead of piling up pages', async () => {
     const runPage = seedRunPage({ personInFront: true });
     render(<MuBrowserHost conversationId='c1' />);
     await tell({ type: 'started', tabId: runPage, conversationId: 'c1', url: 'about:blank', at: 1 });
@@ -103,7 +103,7 @@ describe('the browser, as it answers the main process', () => {
     await ask({ kind: 'open', requestId: 'r2', url: 'about:blank' });
     expect(browserNow().tabs).toHaveLength(2);
     expect(browserNow().activeTabId).toBe(runPage);
-    // Blanking the page is the main process's job alone: a second navigation from here could undo mu's first.
+    // Blanking the page is the main process's job alone: a second navigation from here could undo spec.jev's first.
     expect(browserNow().tabs[0].url).toBe('https://a.test/done');
     expect(heard).toEqual([['agent', 'browser']]);
     expect(wires.answer).toHaveBeenCalledWith({ kind: 'open', requestId: 'r2', tabId: runPage, conversationId: 'c1' });
@@ -133,7 +133,7 @@ describe('the browser, as it answers the main process', () => {
 
     await ask({ kind: 'keyboard', requestId: 'k1', tabId: runPage });
     await waitFor(() => expect(wires.answer).toHaveBeenCalledWith({ kind: 'keyboard', requestId: 'k1', held: true }));
-    // mu types where the person can see it: the page comes to the front, and the work panel comes up on 浏览器.
+    // spec.jev types where the person can see it: the page comes to the front, and the work panel comes up on 浏览器.
     expect(browserNow().activeTabId).toBe(runPage);
     expect(heard).toEqual([['agent-watched', 'browser']]);
     expect(document.activeElement).toBe(view);
@@ -158,7 +158,7 @@ describe('the browser, as it answers the main process', () => {
     (view as unknown as HTMLElement).remove();
   });
 
-  it('brings the page forward and shows the question when mu asks for a confirmation', async () => {
+  it('brings the page forward and shows the question when spec.jev asks for a confirmation', async () => {
     const runPage = seedRunPage({ personInFront: true });
     const view = render(<MuBrowserHost conversationId='c1' />);
     await ask({ kind: 'attention', tabId: runPage, waiting: true });
@@ -177,7 +177,7 @@ describe('the browser, as it answers the main process', () => {
     await tell({ type: 'closed', tabId: runPage });
   });
 
-  it('only asks for attention when mu is waiting on the person', async () => {
+  it('only asks for attention when spec.jev is waiting on the person', async () => {
     const runPage = seedRunPage({ personInFront: true });
     const inFront = browserNow().activeTabId;
     render(<MuBrowserHost conversationId='c1' />);

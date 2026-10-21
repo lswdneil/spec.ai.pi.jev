@@ -166,30 +166,30 @@ export function offNotice(
 	code: CheckpointsOff,
 	limits: { readonly maxFiles: number; readonly maxTotalMb: number; readonly timeoutMs: number },
 ): { line: string; params: Record<string, number> } {
-	const start = { zh: "在项目文件夹里启动 mu 就有检查点", en: "Start mu in a project folder to use checkpoints" };
+	const start = { zh: "在项目文件夹里启动 spec.jev 就有检查点", en: "Start spec.jev in a project folder to use checkpoints" };
 	const seconds = Math.round(limits.timeoutMs / 1000);
 	switch (code) {
 		case "git_missing":
 			return {
 				line: say({
-					zh: "mu：检查点已关闭，因为这台机器上找不到 git。",
-					en: "mu: checkpoints are off because git wasn't found on this machine.",
+					zh: "spec.jev：检查点已关闭，因为这台机器上找不到 git。",
+					en: "spec.jev: checkpoints are off because git wasn't found on this machine.",
 				}),
 				params: {},
 			};
 		case "xcode_license":
 			return {
 				line: say({
-					zh: "mu：检查点已关闭，因为这台 Mac 还没有同意 Xcode 许可协议，git 无法运行。在终端里用 sudo xcodebuild -license 同意后，新开一个会话就有检查点。",
-					en: "mu: checkpoints are off because git can't run on this Mac until you accept the Xcode license. Run sudo xcodebuild -license in Terminal to accept it, then start a new session.",
+					zh: "spec.jev：检查点已关闭，因为这台 Mac 还没有同意 Xcode 许可协议，git 无法运行。在终端里用 sudo xcodebuild -license 同意后，新开一个会话就有检查点。",
+					en: "spec.jev: checkpoints are off because git can't run on this Mac until you accept the Xcode license. Run sudo xcodebuild -license in Terminal to accept it, then start a new session.",
 				}),
 				params: {},
 			};
 		case "developer_tools_missing":
 			return {
 				line: say({
-					zh: "mu：检查点已关闭，因为这台 Mac 没有安装 git 所需的命令行开发者工具。用 xcode-select --install 安装后，新开一个会话就有检查点。",
-					en: "mu: checkpoints are off because git needs the command line developer tools, which aren't installed on this Mac. Install them with xcode-select --install, then start a new session.",
+					zh: "spec.jev：检查点已关闭，因为这台 Mac 没有安装 git 所需的命令行开发者工具。用 xcode-select --install 安装后，新开一个会话就有检查点。",
+					en: "spec.jev: checkpoints are off because git needs the command line developer tools, which aren't installed on this Mac. Install them with xcode-select --install, then start a new session.",
 				}),
 				params: {},
 			};
@@ -204,8 +204,8 @@ export function offNotice(
 		case "mu_folder":
 			return {
 				line: say({
-					zh: "mu：本次会话不拍检查点，因为这个文件夹在 mu 自己的目录里。",
-					en: "mu: checkpoints are off for this session because this folder is inside mu's own folder.",
+					zh: "spec.jev：本次会话不拍检查点，因为这个文件夹在 spec.jev 自己的目录里。",
+					en: "spec.jev: checkpoints are off for this session because this folder is inside spec.jev's own folder.",
 				}),
 				params: {},
 			};
@@ -252,7 +252,7 @@ Abandoned because: <why it did not work>`;
  * rewind to the user. Nothing here rewinds on its own, and any failure leaves pi's plain behaviour.
  *
  * A session goes without checkpoints, and says so once in one line, where a snapshot would copy what is
- * no project: the home folder (or one that holds it), mu's own folders, or a first snapshot past
+ * no project: the home folder (or one that holds it), spec.jev's own folders, or a first snapshot past
  * `maxFiles` / `maxTotalMb`. Copying only the files a turn touches is no way out: a checkpoint is taken
  * before the turn's first change, when nobody knows which files the turn will change (a shell command
  * names none), and a rewind would then claim to restore a state it never saw.
@@ -293,11 +293,11 @@ export function registerCheckpoint(
 	if (!baseDir) return;
 	const { pi } = runtime;
 	const home = (): string => roots?.home ?? homedir();
-	/** mu's own folders hold the snapshots, the sessions and the credentials: never in a snapshot, and no place to take one. */
+	/** spec.jev's own folders hold the snapshots, the sessions and the credentials: never in a snapshot, and no place to take one. */
 	const muFolders = (): string[] => [baseDir, muHome(home()), ...(roots ? [roots.agentDir] : [])];
 	const limits: ScanLimits = { maxFiles: options.maxFiles, maxBytes: options.maxTotalMb * 1024 * 1024 };
 
-	/** Why no snapshot of this folder may be taken at all: it holds everything the user has, or it is mu's own. */
+	/** Why no snapshot of this folder may be taken at all: it holds everything the user has, or it is spec.jev's own. */
 	const placeOff = (cwd: string): CheckpointsOff | undefined => {
 		if (isWithin(cwd, home())) return "home_folder";
 		return muFolders().some((folder) => isWithin(folder, cwd)) ? "mu_folder" : undefined;
@@ -416,7 +416,7 @@ export function registerCheckpoint(
 	pi.on(
 		"session_start",
 		failOpen(() => {
-			// A home folder snapshotted by an older mu is never used again: its copy goes now, not in two weeks.
+			// A home folder snapshotted by an older spec.jev is never used again: its copy goes now, not in two weeks.
 			sweepProjects(baseDir, options.maxAgeDays, Date.now(), (root) => placeOff(root) !== undefined);
 			return undefined;
 		}),
@@ -441,7 +441,7 @@ export function registerCheckpoint(
 			if (pending && Date.now() - pending.at < 60_000) {
 				return {
 					block: true,
-					reason: "mu is going back to the checkpoint; this attempt has ended.",
+					reason: "spec.jev is going back to the checkpoint; this attempt has ended.",
 					terminate: true,
 				};
 			}
@@ -687,7 +687,7 @@ export function registerCheckpoint(
 		if (last.undo) {
 			const commit = last.undo;
 			const plan = await exclusive(async () => planRestore(opened, commit, (await scan(opened)).tree));
-			if (!(await ctx.ui.confirm("mu: undo the last rewind?", describePlan(plan))))
+			if (!(await ctx.ui.confirm("spec.jev: undo the last rewind?", describePlan(plan))))
 				return ctx.ui.notify("Nothing was changed.", "info");
 			files = await exclusive(() => restoreFiles(ctx, opened, plan, new Set()));
 		}
@@ -845,7 +845,7 @@ export function registerCheckpoint(
 			const refused = refusal(ctx.cwd);
 			if (entries.length === 0 || refused) {
 				return ctx.ui.notify(
-					refused ?? off?.line ?? "No checkpoints yet. mu takes one before the first file change in each turn.",
+					refused ?? off?.line ?? "No checkpoints yet. spec.jev takes one before the first file change in each turn.",
 					"info",
 				);
 			}

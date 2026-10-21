@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { sessionSettings } from '../../../../../../packages/desktop/src/common/utils/nativeHost/settings.ts';
 
-/** What a session file says its session runs with, the way pi and mu read it when they resume it. */
+/** What a session file says its session runs with, the way pi and spec.jev read it when they resume it. */
 
 const entry = (id: string, parentId: string | null, fields: Record<string, unknown>) => ({
   id,

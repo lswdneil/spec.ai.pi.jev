@@ -163,7 +163,7 @@ const Layout: React.FC<{
     return () => setGlobalNavigate(null);
   }, [navigate]);
   const { t } = useTranslation();
-  // The mu wordmark acts as Home / Back-to-Chat, but only from settings routes.
+  // The spec.jev wordmark acts as Home / Back-to-Chat, but only from settings routes.
   // In non-settings routes the user is already "home", so it is a no-op (and not actionable).
   const isSettingsRoute = location.pathname.startsWith('/settings');
   // The page the menu's commands arrive on, without re-subscribing to them on every navigation.

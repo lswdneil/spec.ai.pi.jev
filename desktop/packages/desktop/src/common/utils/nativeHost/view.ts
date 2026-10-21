@@ -106,14 +106,14 @@ export type ViewMessage = ViewUserMessage | ViewAssistantMessage | ViewCustomMes
 
 /**
  * One of Jev's judgments: a decision ledger record, without the state the judge was shown, filed under the turn that
- * asked (the ledger's `origin.turn`, which a late verdict keeps). `turn` is missing only for records of a mu from
+ * asked (the ledger's `origin.turn`, which a late verdict keeps). `turn` is missing only for records of a spec.jev from
  * before `origin`.
  */
 export type ViewJudgment = { id: string; turn?: number; record: JsonObject };
 
 /**
- * What mu said about the permission question a select dialog asks (its `permissions.request` frame), for a card in
- * the reader's language: what kind of call, the call itself, why mu asks, and its answers by id (`once`, `session`,
+ * What spec.jev said about the permission question a select dialog asks (its `permissions.request` frame), for a card in
+ * the reader's language: what kind of call, the call itself, why spec.jev asks, and its answers by id (`once`, `session`,
  * `deny`), in the order of the dialog's options.
  */
 export type ViewPermission = {
@@ -121,7 +121,7 @@ export type ViewPermission = {
   kind: string;
   /** The call: a command, `edit <path>`, `<tool> <target>`. */
   summary: string;
-  /** The answers as mu words them, which the dialog offers as its options. */
+  /** The answers as spec.jev words them, which the dialog offers as its options. */
   answers: string[];
   answerIds?: string[];
   /** ask, unsure, beyond, unrelated, flagged, protected, nojudge, judgedown. */
@@ -130,7 +130,7 @@ export type ViewPermission = {
   flagCode?: string;
   /** What "for this conversation" would cover. Data, not words. */
   grantLabel?: string;
-  /** The tool call mu asks about. */
+  /** The tool call spec.jev asks about. */
   toolCallId?: string;
 };
 
@@ -154,7 +154,7 @@ export type ViewDialog = {
   timeout?: number;
   /** Opened while a run was going: pi no longer waits for it once the run has settled. */
   inRun: boolean;
-  /** A select that is mu's permission question: what mu said about it. */
+  /** A select that is spec.jev's permission question: what spec.jev said about it. */
   permission?: ViewPermission;
 };
 
@@ -170,7 +170,7 @@ export type ViewLive = {
   progress?: { turn?: number; step: string; code?: string; params?: JsonObject };
   /** pi retries a failed request: which attempt of how many, after what error. */
   retry?: { attempt: number; maxAttempts: number; delayMs: number; error: string };
-  /** The permission question mu announced (`permissions.request`), until its select dialog opens or it is resolved. */
+  /** The permission question spec.jev announced (`permissions.request`), until its select dialog opens or it is resolved. */
   permission?: ViewPermission;
   compacting: boolean;
 };
@@ -196,9 +196,9 @@ export type ViewActivity = {
 
 /**
  * What an extension said with `notify` (the answer to a command, a warning), as a line of the conversation after the
- * message it followed. A warning or an error is said once. `checkpoint_off` is mu's own notice that the session goes
+ * message it followed. A warning or an error is said once. `checkpoint_off` is spec.jev's own notice that the session goes
  * without checkpoints, with its reason code and the numbers it names, for the app to word; `free_jev` and
- * `free_jev_unavailable` say that the judge answers with the free Jev on OpenCode Zen, or that it stopped (mu's
+ * `free_jev_unavailable` say that the judge answers with the free Jev on OpenCode Zen, or that it stopped (spec.jev's
  * `judge.notice`).
  */
 export type ViewNotice = {
@@ -243,9 +243,9 @@ export type ViewHost = {
 };
 
 /**
- * The goal mu works towards (`/goal <condition>`: the agent keeps going until the condition holds), as mu last said
+ * The goal spec.jev works towards (`/goal <condition>`: the agent keeps going until the condition holds), as spec.jev last said
  * it: its latest `kyrn.goal` entry on the branch (live from `entry_appended`, in a file as it is), or a later
- * `goal.state` frame. The two say the same, except that a mu resuming a session whose goal was running says it
+ * `goal.state` frame. The two say the same, except that a spec.jev resuming a session whose goal was running says it
  * paused (a frame, no entry): a file read with no host says `active` there.
  */
 export type ViewGoal = { status: 'active' | 'paused' | 'met' | 'cleared'; text: string };
@@ -259,7 +259,7 @@ export type NativeView = {
   dialogs: ViewDialog[];
   live: ViewLive;
   host: ViewHost;
-  /** The goal mu works towards, once one was set in the session. */
+  /** The goal spec.jev works towards, once one was set in the session. */
   goal?: ViewGoal;
 };
 

@@ -61,7 +61,7 @@ describe('where the lessons are', () => {
     expect(readLessonsFile(join(temp(), 'mu', 'lessons.jsonl'))).toEqual([]);
   });
 
-  it('is the folder the conversation’s mu session runs in, else its workspace as given and as its real path', () => {
+  it('is the folder the conversation’s spec.jev session runs in, else its workspace as given and as its real path', () => {
     const sessions = temp();
     const real = temp();
     const link = join(temp(), 'link');

@@ -15,7 +15,7 @@ type SectionShellProps = {
 };
 
 /**
- * One page of mu's settings: the page title, as on every settings page, then the content. The section is a size
+ * One page of spec.jev's settings: the page title, as on every settings page, then the content. The section is a size
  * container: see sections.module.css.
  */
 export default function SectionShell({ id, title, description, actions, back, children }: SectionShellProps) {

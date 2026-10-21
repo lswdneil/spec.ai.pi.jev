@@ -10,7 +10,7 @@ import {
   wslLocation,
 } from '../../../../packages/desktop/src/process/agent/kyrn/windows/wsl.ts';
 
-describe('a project inside WSL runs mu inside WSL', () => {
+describe('a project inside WSL runs spec.jev inside WSL', () => {
   it('knows a folder Windows shows from inside a WSL distribution', () => {
     expect(wslLocation('\\\\wsl.localhost\\Ubuntu-24.04\\home\\me\\proj')).toEqual({
       distro: 'Ubuntu-24.04',
@@ -89,11 +89,11 @@ describe('the start script inside the distribution', () => {
     });
   }
 
-  it.runIf(posix)('finds mu where nvm installed it, and starts it for RPC with the session when there is one', () => {
+  it.runIf(posix)('finds spec.jev where nvm installed it, and starts it for RPC with the session when there is one', () => {
     home = mkdtempSync(join(tmpdir(), 'mu-wsl-'));
     const bin = join(home, '.nvm', 'versions', 'node', 'v24.16.0', 'bin');
     mkdirSync(bin, { recursive: true });
-    // A stand-in mu that says how it was called and which node folder leads PATH.
+    // A stand-in spec.jev that says how it was called and which node folder leads PATH.
     writeFileSync(join(bin, 'mu'), '#!/bin/sh\necho "args:$*"\necho "path:${PATH%%:*}"\n');
     chmodSync(join(bin, 'mu'), 0o755);
     const withSession = start({ MU_ACP_SESSION: '/mnt/c/Users/me/.mu/acp-sessions/a b.jsonl' });
@@ -103,11 +103,11 @@ describe('the start script inside the distribution', () => {
     expect(start().stdout).toContain('args:--mode rpc\n');
   });
 
-  it.runIf(posix)('says what to install when mu is not in the distribution', () => {
+  it.runIf(posix)('says what to install when spec.jev is not in the distribution', () => {
     home = mkdtempSync(join(tmpdir(), 'mu-wsl-'));
     const missing = start();
     expect(missing.status).toBe(127);
-    expect(missing.stderr).toContain('npm i -g mu-agent');
+    expect(missing.stderr).toContain('npm i -g spec.jev');
   });
 
   it('is valid bash', () => {

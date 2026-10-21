@@ -192,7 +192,7 @@ Failed tests automatically get screenshots attached to the HTML report.
 
 ---
 
-## The mu conversation test
+## The spec.jev conversation test
 
 `tests/e2e/mu-conversation/` runs one whole conversation through the app against a local fake model, with no
 account, no key and no network:
@@ -225,7 +225,7 @@ process's and the adapter's reports):
 How it stays apart from your own setup: everything lives in one temporary folder (`$TMPDIR/mu-e2e-*`, or
 `MU_E2E_ROOT`): a home folder (`HOME`; on Windows `USERPROFILE` too, with `APPDATA` and `LOCALAPPDATA` inside it, and
 the user's own folders, Documents, Downloads and the rest, which Windows looks for there and must find),
-Electron's user data (`MU_E2E_USER_DATA_DIR`), mu's agent folder (`MU_AGENT_DIR`, with the offline mock judge and
+Electron's user data (`MU_E2E_USER_DATA_DIR`), spec.jev's agent folder (`MU_AGENT_DIR`, with the offline mock judge and
 every decision point off), the project, and for the checkout's build a linked view of the harness checkout with its own
 `.env` (symlinks; on Windows junctions and copies). The environment is built from a short list, so no key of yours
 reaches the app; PATH is the system's own folders. The backend's Node.js runtime is declined (`MU_NODE_RUNTIME=later`),
@@ -234,7 +234,7 @@ update checks.
 
 A packaged app (`--app`, or `MU_E2E_APP`) is the app electron-builder made: `--app` takes its executable, the app (a
 `.app`, or the unpacked folder on Windows and Linux) or the builder's output folder, where the app for this system and
-`--arch` is taken. It runs the mu and the backend it carries, on its own binary: no harness checkout, AionCore binary or
+`--arch` is taken. It runs the spec.jev and the backend it carries, on its own binary: no harness checkout, AionCore binary or
 Node is named to it, and it starts from the profile's home, not the checkout. It checks for updates through
 electron-updater on macOS and Windows, whose GitHub feed the test answers in the app's own session for it. The public
 repository's `desktop.yml` runs it this way after every build, on Windows x64 and arm64, macOS arm64 and Linux x64 and
@@ -261,7 +261,7 @@ window). A run takes about four minutes (a minute of it the build); the whole ru
 failure the profile is kept and its path printed: `logs/main-*.log` (main process output), `logs/renderer-*.log`
 (renderer console), `userData/logs/` (backend, with the adapter's errors, and on Windows and Linux the main process's
 log), `home/Library/Logs/` (the main process's log on macOS, the only one a packaged app writes), `agent/sessions/`
-(mu's sessions). The HTML report is in `tests/e2e/report/mu-conversation`.
+(spec.jev's sessions). The HTML report is in `tests/e2e/report/mu-conversation`.
 
 ---
 

@@ -6,7 +6,7 @@
 /* Color Schemes */
 @import './default-color-scheme.css';
 
-/* mu: the default scheme (html[data-color-scheme='mu']); the upstream one above stays available */
+/* spec.jev: the default scheme (html[data-color-scheme='spec.jev']); the upstream one above stays available */
 @import './mu-color-scheme.css';
 @import './mu-arco.css';
 @import './mu-shell.css';

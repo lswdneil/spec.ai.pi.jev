@@ -5,7 +5,7 @@ import { MAX_ERROR_MESSAGE_LENGTH, messageFromErrorBody, readWarnings } from "./
 export const DEFAULT_LOCAL_JUDGE_URL = "http://127.0.0.1:47823";
 
 export interface LocalJudgeProviderOptions {
-	/** Base URL of the sidecar started by `mu judge start`. */
+	/** Base URL of the sidecar started by `spec.jev judge start`. */
 	baseUrl?: string;
 	/** Request path, default "/evaluate". */
 	path?: string;

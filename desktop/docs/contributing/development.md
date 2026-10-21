@@ -4,11 +4,11 @@
 
 - Node.js 22.19 or newer, for the repository root (CI uses Node 24)
 - [Bun](https://bun.sh), for `desktop/`
-- On Windows, Git for Windows: mu runs commands through its bash
+- On Windows, Git for Windows: spec.jev runs commands through its bash
 
 ## Run the app from this checkout
 
-The app runs the mu of the same repository, so install the root first:
+The app runs the spec.jev of the same repository, so install the root first:
 
 ```bash
 npm install --ignore-scripts               # at the repository root
@@ -29,7 +29,7 @@ The app also starts AionCore, a separate program it inherited from AionUi. `node
 ```bash
 bun run lint
 bun run format:check
-node scripts/check-i18n.js     # after changing text: every key in all 13 languages
+node scripts/check-i18n.js     # after changing text: every key in all 5 languages
 bun run i18n:types             # after adding or removing keys
 bunx tsc --noEmit
 bunx vitest run                # or one file: bunx vitest run tests/unit/<path>

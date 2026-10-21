@@ -2,7 +2,7 @@
  * Source control by a project folder, for the 源码 tab beside a native conversation (docs/native-host-ui.md). Such a
  * conversation has no AionCore project, so the classic source control (the backend's, by project entry, over the
  * `scm` lane) has nothing to read. The main process runs git itself in the conversation's folder instead
- * (process/services/folderGit/), read only, with `KyrnResult` like every mu channel.
+ * (process/services/folderGit/), read only, with `KyrnResult` like every spec.jev channel.
  *
  * A folder is a full path. A file is named by its path in the repository: relative to the repository's root, `/`
  * between names, never leaving it.

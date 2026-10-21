@@ -45,7 +45,7 @@ const PLAN: HostPlan = {
   appDir: '/home/someone/.mu/app',
   agentDir: '/home/someone/.mu/agent',
   startJudge: false,
-  notes: ['mu: .env: skipped line 3 (not KEY=VALUE)'],
+  notes: ['spec.jev: .env: skipped line 3 (not KEY=VALUE)'],
 };
 
 const fsWith = (files: string[]): LauncherFs => ({
@@ -110,7 +110,7 @@ describe('prepareHost', () => {
     const prepareLaunchAsync = vi.fn(
       (input: { err(line: string): void }) =>
         new Promise<void>((resolve) => {
-          input.err('mu: the local judge did not start (mu judge status); decisions fall back to pi’s behaviour');
+          input.err('spec.jev: the local judge did not start (spec.jev judge status); decisions fall back to pi’s behaviour');
           finish = resolve;
         })
     );
@@ -133,7 +133,7 @@ describe('prepareHost', () => {
     finish?.();
     await expect(preparing).resolves.toMatchObject({
       module: PLAN.module,
-      notes: ['mu: the local judge did not start (mu judge status); decisions fall back to pi’s behaviour'],
+      notes: ['spec.jev: the local judge did not start (spec.jev judge status); decisions fall back to pi’s behaviour'],
     });
     expect(prepareLaunch).not.toHaveBeenCalled();
   });
@@ -147,7 +147,7 @@ describe('prepareHost', () => {
     }));
     await expect(prepareHost(options({ importLauncher }))).rejects.toMatchObject({
       kind: 'plan',
-      message: "mu could not prepare the launch: EACCES: permission denied, mkdir '/home/someone/.mu/agent'",
+      message: "spec.jev could not prepare the launch: EACCES: permission denied, mkdir '/home/someone/.mu/agent'",
     });
   });
 
@@ -168,13 +168,13 @@ describe('prepareHost', () => {
   it('says what is wrong with a harness it cannot start', async () => {
     await expect(prepareHost(options({ fs: fsWith([]) }))).rejects.toMatchObject({
       kind: 'no-harness',
-      message: 'No mu launcher at /mu/kyrn/bin/mu.mjs',
+      message: 'No spec.jev launcher at /mu/kyrn/bin/mu.mjs',
     });
     await expect(
       prepareHost(options({ importLauncher: () => Promise.reject(new Error('SyntaxError: bad')) }))
     ).rejects.toMatchObject({
       kind: 'no-harness',
-      message: "mu's launcher did not load (/mu/kyrn/bin/mu.mjs): SyntaxError: bad",
+      message: "spec.jev's launcher did not load (/mu/kyrn/bin/mu.mjs): SyntaxError: bad",
     });
     await expect(
       prepareHost(options({ importLauncher: async () => ({ planLaunch: () => ({}) }) }))
@@ -268,7 +268,7 @@ export function prepareLaunch() {}
       expect(isNativeHostEnabled({ MU_NATIVE_HOST: value })).toBe(true);
     for (const value of ['0', 'false', 'off', 'no', ' OFF '])
       expect(isNativeHostEnabled({ MU_NATIVE_HOST: value })).toBe(false);
-    // Left alone it is `auto` (native where mu can run inside the app); 1 forces it; 0 is the kill switch.
+    // Left alone it is `auto` (native where spec.jev can run inside the app); 1 forces it; 0 is the kill switch.
     expect(nativeHostSetting({})).toBe('auto');
     expect(nativeHostSetting({ MU_NATIVE_HOST: '1' })).toBe('on');
     expect(nativeHostSetting({ MU_NATIVE_HOST: '0' })).toBe('off');
@@ -330,7 +330,7 @@ export function prepareLaunch() {}
 
 describe('nativeHostReady', () => {
   const roots: string[] = [];
-  /** A harness folder whose launcher is `source`, as mu's is at kyrn/bin/mu.mjs. */
+  /** A harness folder whose launcher is `source`, as spec.jev's is at kyrn/bin/mu.mjs. */
   const harnessWith = (source: string): string => {
     const folder = mkdtempSync(join(tmpdir(), 'mu-native-ready-'));
     roots.push(folder);
@@ -351,19 +351,19 @@ export function prepareLaunch() { throw new Error('a check does not prepare a la
     for (const folder of roots) rmSync(folder, { recursive: true, force: true });
   });
 
-  it('is off with MU_NATIVE_HOST=0, and looks for no mu', async () => {
+  it('is off with MU_NATIVE_HOST=0, and looks for no spec.jev', async () => {
     const note = vi.fn();
     await expect(nativeHostReady({ env: { MU_NATIVE_HOST: '0' }, note })).resolves.toBe(false);
     expect(findHarness).not.toHaveBeenCalled();
     expect(note).not.toHaveBeenCalled();
   });
 
-  it('is on with MU_NATIVE_HOST=1 whatever mu is found: the person asked, and sees what fails', async () => {
+  it('is on with MU_NATIVE_HOST=1 whatever spec.jev is found: the person asked, and sees what fails', async () => {
     await expect(nativeHostReady({ env: { MU_NATIVE_HOST: '1' } })).resolves.toBe(true);
     expect(findHarness).not.toHaveBeenCalled();
   });
 
-  it('is on, left alone, when the mu found can run inside the app', async () => {
+  it('is on, left alone, when the spec.jev found can run inside the app', async () => {
     findHarness.mockReturnValue({ root: harnessWith(CAPABLE), layout: 'repo', source: 'env' });
     const env = { KYRN_DESKTOP_ROOT: '/desktop' };
     const note = vi.fn();
@@ -372,13 +372,13 @@ export function prepareLaunch() { throw new Error('a check does not prepare a la
     expect(note).not.toHaveBeenCalled();
   });
 
-  it('stays off, and says why in a note, when there is no mu or it is too old', async () => {
+  it('stays off, and says why in a note, when there is no spec.jev or it is too old', async () => {
     const note = vi.fn();
     findHarness.mockReturnValue(undefined);
     await expect(nativeHostReady({ env: {}, note })).resolves.toBe(false);
-    expect(note).toHaveBeenLastCalledWith('the native host stays off: no mu harness was found');
+    expect(note).toHaveBeenLastCalledWith('the native host stays off: no spec.jev harness was found');
 
-    // The mu a packaged app carried before the native host: a launcher, without the functions to plan a host.
+    // The spec.jev a packaged app carried before the native host: a launcher, without the functions to plan a host.
     findHarness.mockReturnValue({
       root: harnessWith('export function planLaunch() { return {}; }\n'),
       layout: 'package',

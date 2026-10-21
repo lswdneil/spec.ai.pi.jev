@@ -281,7 +281,7 @@ describe('Layout sider brand Home button', () => {
     sessionStorage.setItem('mu:last-non-settings-path', '/conversation/abc');
     renderLayout();
 
-    // The icon is the div wrapping the mu mark, separate from the wordmark.
+    // The icon is the div wrapping the spec.jev mark, separate from the wordmark.
     const icon = screen.getByTestId('sider-brand-mark');
     expect(icon.querySelector('svg')).toBeTruthy();
     for (let i = 0; i < 4; i++) fireEvent.click(icon);

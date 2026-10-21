@@ -72,7 +72,7 @@ describe('managed node runtime settings copy', () => {
   });
 
   it('localizes the installation-integrity runtime guidance for supported non-English languages', () => {
-    for (const language of ['ja-JP', 'ko-KR', 'pt-BR', 'ru-RU', 'tr-TR', 'uk-UA', 'zh-CN', 'zh-TW']) {
+    for (const language of ['ja-JP', 'ko-KR', 'zh-CN', 'zh-TW']) {
       const common = loadCommonLocale(language);
       const backendStartup = common.backendStartup as Record<string, unknown>;
       const incompleteInstallation = backendStartup.incompleteInstallation as Record<string, string>;
@@ -83,7 +83,7 @@ describe('managed node runtime settings copy', () => {
   });
 
   it('defines local data repair startup copy in every common locale', () => {
-    for (const language of ['de-DE', 'en-US', 'ja-JP', 'ko-KR', 'pt-BR', 'ru-RU', 'tr-TR', 'uk-UA', 'zh-CN', 'zh-TW']) {
+    for (const language of ['en-US', 'ja-JP', 'ko-KR', 'zh-CN', 'zh-TW']) {
       const common = loadCommonLocale(language);
       const backendStartup = common.backendStartup as Record<string, unknown>;
       const localDataRepair = backendStartup.localDataRepair as Record<string, string>;

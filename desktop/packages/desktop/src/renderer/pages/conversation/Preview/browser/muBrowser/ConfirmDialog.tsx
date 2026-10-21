@@ -7,7 +7,7 @@ import { secondsLeft } from './format';
 import styles from './ConfirmDialog.module.css';
 
 /**
- * mu wants to press something that looks irreversible (pay, delete, send) and asks the person who is watching.
+ * spec.jev wants to press something that looks irreversible (pay, delete, send) and asks the person who is watching.
  *
  * The label and the address come from a web page. They are rendered as React text nodes and nothing else: no HTML,
  * no markdown, no links. Silence is a refusal: the main process counts the 120 seconds and decides; the countdown

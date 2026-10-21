@@ -25,8 +25,8 @@ import {
 import { MU, removeHome, runScriptAsync } from "./fixtures/launcher.ts";
 
 /**
- * `mu setup` in the launcher (kyrn/bin/mu.mjs): how the wizard is started in a checkout and in the npm package, on
- * Windows and elsewhere, with a key on the command line kept out of the child's argv; and when a first `mu` asks to
+ * `spec.jev setup` in the launcher (kyrn/bin/mu.mjs): how the wizard is started in a checkout and in the npm package, on
+ * Windows and elsewhere, with a key on the command line kept out of the child's argv; and when a first `spec.jev` asks to
  * set up a model. The decisions are called with an in-memory file system; one run goes through the real launcher,
  * against a server of the test's own.
  */
@@ -74,7 +74,7 @@ const winPackage = {
 
 const setupArgs = { env: {}, home: "/home/bai", execPath: "/usr/bin/node" };
 
-describe("mu setup, as the launcher starts it", () => {
+describe("spec.jev setup, as the launcher starts it", () => {
 	it("runs the wizard's sources in a checkout, with a key from the command line in the environment only", () => {
 		const plan = planSetup({
 			...setupArgs,
@@ -124,10 +124,10 @@ describe("mu setup, as the launcher starts it", () => {
 		// The word after --model is its value, not a key.
 		const named = plan(["--model", "deepseek-chat", KEY]);
 		expect(named.error === undefined && named.env.MU_SETUP_KEY).toBe(KEY);
-		expect(plan([KEY, "another"])).toEqual({ error: "mu setup takes one key at most (mu setup --help)", code: 2 });
+		expect(plan([KEY, "another"])).toEqual({ error: "spec.jev setup takes one key at most (spec.jev setup --help)", code: 2 });
 	});
 
-	it("runs the package's built wizard on Windows, and the .env of mu's home", () => {
+	it("runs the package's built wizard on Windows, and the .env of spec.jev's home", () => {
 		const built = `${WIN_PACKAGE}\\judge\\dist\\setup.js`;
 		const plan = planSetup({
 			platform: "win32",
@@ -146,7 +146,7 @@ describe("mu setup, as the launcher starts it", () => {
 			MU_SETUP_HOME: "C:\\Users\\bai\\.mu",
 			MU_SETUP_ENV_FILE: "C:\\Users\\bai\\.mu\\.env",
 		});
-		// A package built before mu setup says to update, instead of passing `setup` to pi as a message.
+		// A package built before spec.jev setup says to update, instead of passing `setup` to pi as a message.
 		const old = planSetup({
 			platform: "win32",
 			env: {},
@@ -156,7 +156,7 @@ describe("mu setup, as the launcher starts it", () => {
 			execPath: "node.exe",
 			fs: disk(winPackage),
 		});
-		expect(old.error).toContain("npm i -g mu-agent");
+		expect(old.error).toContain("npm i -g spec.jev");
 	});
 
 	it("says so where Node does not strip types, and follows the agent folder and old homes", () => {
@@ -190,12 +190,12 @@ describe("mu setup, as the launcher starts it", () => {
 		expect(bare.error).toContain("npm ci --ignore-scripts");
 	});
 
-	it("keeps the same names and codes as the wizard, and is in mu's usage", () => {
+	it("keeps the same names and codes as the wizard, and is in spec.jev's usage", () => {
 		expect(SETUP_DECLINED_FILE).toBe(WIZARD_DECLINED_FILE);
 		expect(SETUP_EXIT_START).toBe(SETUP_EXIT.start);
 		expect(SETUP_EXIT_CANCELLED).toBe(SETUP_EXIT.cancelled);
 		expect([...SETUP_VALUE_FLAGS]).toEqual([...WIZARD_VALUE_FLAGS]);
-		expect(usage("linux")).toContain("mu setup                 connect a model");
+		expect(usage("linux")).toContain("spec.jev setup                 connect a model");
 	});
 });
 
@@ -212,7 +212,7 @@ describe("the first start", () => {
 			...overrides,
 		});
 
-	it("asks a person at a terminal whose mu has nothing to work with", () => {
+	it("asks a person at a terminal whose spec.jev has nothing to work with", () => {
 		expect(first()).toBe(true);
 		expect(first({ argv: ["-c"] })).toBe(true);
 		expect(first({ argv: ["fix the tests"] })).toBe(true);
@@ -256,7 +256,7 @@ describe("the first start", () => {
 		}
 	});
 
-	it("makes a server added with mu mcp add deferred, unless the command says otherwise", () => {
+	it("makes a server added with spec.jev mcp add deferred, unless the command says otherwise", () => {
 		expect(mcpAddDefaults(["mcp", "add", "docs", "--url", "https://x/mcp"])).toEqual([
 			"mcp",
 			"add",
@@ -291,7 +291,7 @@ describe("the first start", () => {
 		expect(first({ env: { KYRN_NO_SETUP: "yes" } })).toBe(false);
 	});
 
-	it("never asks when something gives mu a model, or when a file cannot be read", () => {
+	it("never asks when something gives spec.jev a model, or when a file cannot be read", () => {
 		expect(first({}, { [`${agentDir}/auth.json`]: '{"deepseek":{"type":"api_key","key":"k"}}' })).toBe(false);
 		expect(first({}, { [`${agentDir}/models.json`]: '{"providers":{"ollama":{}}}' })).toBe(false);
 		expect(first({}, { [`${agentDir}/settings.json`]: '{"defaultProvider":"anthropic"}' })).toBe(false);
@@ -319,7 +319,7 @@ describe("the first start", () => {
 			source.indexOf("function getApiKeyEnvVars"),
 			source.indexOf("export function findEnvKeys"),
 		);
-		// Federation's organization, service account, workspace and token file go with its rule id, which mu counts.
+		// Federation's organization, service account, workspace and token file go with its rule id, which spec.jev counts.
 		const federationParts = [
 			"ANTHROPIC_ORGANIZATION_ID",
 			"ANTHROPIC_SERVICE_ACCOUNT_ID",
@@ -339,7 +339,7 @@ describe("the first start", () => {
 	});
 });
 
-describe("mu setup, run for real on this machine", () => {
+describe("spec.jev setup, run for real on this machine", () => {
 	const runnable = dependenciesInstalled({ root: repo, platform: process.platform, exists: existsSync });
 
 	it.skipIf(!runnable)(

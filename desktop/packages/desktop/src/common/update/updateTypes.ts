@@ -15,7 +15,7 @@ export interface GitHubReleaseAsset {
   contentType?: string;
 }
 
-/** A release of github.com/qybaihe/mu. */
+/** A release of github.com/qybaihe/spec.jev. */
 export interface UpdateReleaseInfo {
   tagName: string;
   version: string;
@@ -32,7 +32,7 @@ export interface UpdateReleaseInfo {
 export type InstallerLastFailureKind = 'app-cannot-be-closed';
 export type InstallerLastFailurePhase = 'customCheckAppRunning';
 
-/** What the Windows installer leaves behind when a silent update could not close mu (installer-process-control.nsh). */
+/** What the Windows installer leaves behind when a silent update could not close spec.jev (installer-process-control.nsh). */
 export interface InstallerLastFailureMarker {
   schemaVersion: 1;
   kind: InstallerLastFailureKind;
@@ -47,8 +47,8 @@ export interface InstallerLastFailureMarker {
 }
 
 /**
- * How this mu takes an update. `restart`: once the person chooses 下载 (download), electron-updater downloads it and
- * installs it when mu restarts (macOS, Windows). `installer`: the person downloads the new installer and opens it
+ * How this spec.jev takes an update. `restart`: once the person chooses 下载 (download), electron-updater downloads it and
+ * installs it when spec.jev restarts (macOS, Windows). `installer`: the person downloads the new installer and opens it
  * (Linux, where installing a .deb needs an administrator's password in a terminal, and a build that is not
  * installed). Nothing downloads before the person asks for it.
  */
@@ -56,7 +56,7 @@ export type UpdateMethod = 'restart' | 'installer';
 
 /** Why an update comes as an installer to open: the notice says so under it. */
 export type InstallerReason =
-  /** Linux: mu cannot install a .deb by itself. */
+  /** Linux: spec.jev cannot install a .deb by itself. */
   | 'linux'
   /** A build run from its sources, not installed. */
   | 'unpackaged'
@@ -74,7 +74,7 @@ export type UpdatePhase =
   | 'downloading'
   /** The update is downloaded: it installs on 重启并更新 (restart and update), or on the next quit. */
   | 'ready'
-  /** 重启并更新 was chosen: mu is about to quit and install. */
+  /** 重启并更新 was chosen: spec.jev is about to quit and install. */
   | 'installing'
   /** A newer release whose installer can be downloaded (`installer`, or after the restart way failed). */
   | 'available'
@@ -112,7 +112,7 @@ export interface UpdateState {
    * until the next check; for a downloaded one until a newer version, while it still installs on the next quit.
    */
   dismissed: boolean;
-  /** Windows: the last update could not be installed on quit, because mu could not be closed. */
+  /** Windows: the last update could not be installed on quit, because spec.jev could not be closed. */
   lastInstallFailed: boolean;
 }
 

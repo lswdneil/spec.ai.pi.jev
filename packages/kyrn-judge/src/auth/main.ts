@@ -11,9 +11,9 @@ import { exitWhenUnlocked } from "./exit.ts";
 import { runAuth } from "./runner.ts";
 
 /**
- * The entry of `mu auth` (see runner.ts), which kyrn/bin/mu.mjs starts: from its sources in a checkout, as
- * judge/dist/auth.js in the npm package. The agent directory is the one every part of mu uses: MU_AGENT_DIR,
- * which the launcher sets, else ~/.mu/agent.
+ * The entry of `spec.jev auth` (see runner.ts), which kyrn/bin/mu.mjs starts: from its sources in a checkout, as
+ * judge/dist/auth.js in the npm package. The agent directory is the one every part of spec.jev uses: MU_AGENT_DIR,
+ * which the launcher sets, else ~/.spec.jev/agent.
  */
 const agentDir = muEnv("AGENT_DIR") || join(muHome(), "agent");
 /** The files pi keeps under a lock, named once so the exit waits for the same ones pi opens (exit.ts). */
@@ -22,7 +22,7 @@ const modelsStorePath = join(agentDir, "models-store.json");
 const say = (message: Readonly<Record<string, unknown>>) => process.stdout.write(`${JSON.stringify(message)}\n`);
 
 /**
- * The Google sign-ins are mu's, offered while its googleLogin feature is on, which is read from the user's mu.json
+ * The Google sign-ins are spec.jev's, offered while its googleLogin feature is on, which is read from the user's mu.json
  * the way a session reads it. Should they fail to load, pi's own sign-ins still work.
  */
 function googleProviders(): Provider[] {

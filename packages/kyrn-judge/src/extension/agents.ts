@@ -89,7 +89,7 @@ function loadDir(dir: string, source: AgentDefinition["source"]): AgentDefinitio
 	return agents;
 }
 
-/** The roles that ship with mu. Resolves to `<package>/agents` from both `src/` and `dist/`. */
+/** The roles that ship with spec.jev. Resolves to `<package>/agents` from both `src/` and `dist/`. */
 export const BUILT_IN_AGENTS_DIR = fileURLToPath(new URL("../../agents", import.meta.url));
 
 /**

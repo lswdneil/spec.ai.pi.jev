@@ -4,7 +4,7 @@
 
 ## 1. 后台命令
 
-pi 故意不做后台 shell，mu 补上。三个工具：
+pi 故意不做后台 shell，spec.jev 补上。三个工具：
 
 | 工具 | 参数 | 作用 |
 | --- | --- | --- |
@@ -17,7 +17,7 @@ pi 故意不做后台 shell，mu 补上。三个工具：
 做法和理由：
 
 - **同一个 shell。** 复用 pi 的 `getShellConfig` / `getPowerShellConfig`（`/bin/bash`、Windows 上的 Git Bash、从 stdin 取命令的旧版 WSL 启动器），并读取 `settings.json` 的 `shellPath`、`shellCommandPrefix`（项目级设置只在项目受信任时生效：仓库不能指定要运行的二进制）。Windows 上只有当 `powershell` 是唯一启用的 shell 工具时才用 PowerShell，并带上 pi 的 UTF-8 前缀。环境变量与前台一致（agent 的 `bin` 目录排在 PATH 最前）。
-- **输出两份。** 环形缓冲（默认 262144 字符，只留最新，去掉颜色码，回车换成换行）给模型读；日志文件留全部原始字节，默认在 `~/.mu/jobs/<会话 id>/bg-N.log`，单个日志 50 MB 封顶，7 天前的会话目录在下次启动任务时清掉。`since` 早于缓冲起点时，结果里写明丢了多少字符、日志在哪。
+- **输出两份。** 环形缓冲（默认 262144 字符，只留最新，去掉颜色码，回车换成换行）给模型读；日志文件留全部原始字节，默认在 `~/.spec.jev/jobs/<会话 id>/bg-N.log`，单个日志 50 MB 封顶，7 天前的会话目录在下次启动任务时清掉。`since` 早于缓冲起点时，结果里写明丢了多少字符、日志在哪。
 - **杀的是进程树。** POSIX 上 shell 以 `detached` 启动，自成进程组：先向整组发 SIGTERM，`killGraceMs`（默认 3 秒）后还活着就 SIGKILL。Windows 上是 `taskkill /T /PID`，之后 `taskkill /T /F /PID`，用 `System32` 下的绝对路径。命令里自己写了 `&` 的情况（`server & echo ok`：shell 退出了，子进程还在组里）会标成 `lingering`，`bg_stop` 和会话结束时照样清理。
 - **不会悄悄活过会话。** `session_shutdown`（退出、reload、新建、恢复、分叉）时全部终止；不是退出的情况下会告诉用户停了几个。进程不经 `session_shutdown` 直接退出时，`process.on("exit")` 里同步 SIGKILL 兜底。
 - **风险闸门一视同仁。** `guard.ts` 现在检查 `bash` 和 `bg_start` 两个工具的 `command`：危险命令不会因为放到后台就变安全。约束闸门（`constraints.ts`）的 `MUTATING` 里本来就有 `bg_start`，工具名保持不变。
@@ -111,4 +111,4 @@ pi 故意不做后台 shell，mu 补上。三个工具：
 1. **默认搜索源用 360 而不是必应中国。** 依据是上面的实测。如果你在不开隧道的网络上确认必应正常，把 `features.web.search` 改成 `bing-cn` 即可（相关性检查会在它再次返回诱饵时自动换源）。长期看，质量最好的方案是自建 SearXNG（`searxng:http://localhost:8888`）或者让 `browse` 用真实浏览器去搜。
 2. **localhost 默认允许。** 协调者后来的指示是“回环地址默认拒绝、用选项放开”，原始需求是“localhost 默认允许并说明理由”。现在的实现取了更严的中间方案（必须指名 localhost，外部重定向一律拒绝）。要改成默认拒绝，只需把 `web.ts` 里的 `allowLoopback: true` 改成 `false`（同时改 `manifest.ts` 的默认值）。
 3. **`wakeWhenIdle` 默认关。** 打开后，后台任务结束可以唤醒空闲的代理继续工作。
-4. 日志放在 `~/.mu/jobs`（协调者的指示），不是系统临时目录（原始需求）。7 天清理。
+4. 日志放在 `~/.spec.jev/jobs`（协调者的指示），不是系统临时目录（原始需求）。7 天清理。

@@ -329,10 +329,10 @@ describe('MessageToolGroupSummary', () => {
   });
 });
 
-/** mu's refusal of a call the person said no to, as the model reads it. */
+/** spec.jev's refusal of a call the person said no to, as the model reads it. */
 const REFUSAL =
   'The user did not allow this (rm -rf build). Do not try another way around it: ask them, or carry on without it.';
-/** A bash call of mu's that ended with this output, marked by the bridge when the person said no to it. */
+/** A bash call of spec.jev's that ended with this output, marked by the bridge when the person said no to it. */
 const muCall = (id: string, command: string, output: string, denied: boolean): ToolMessage =>
   ({
     id,
@@ -353,7 +353,7 @@ const muCall = (id: string, command: string, output: string, denied: boolean): T
   }) as unknown as ToolMessage;
 
 describe('a call the person did not allow', () => {
-  it('says quietly that it did not run, and never shows mu’s refusal to the model as its output', () => {
+  it('says quietly that it did not run, and never shows spec.jev’s refusal to the model as its output', () => {
     const { container } = render(
       <MessageToolGroupSummary messages={[muCall('call-9', 'rm -rf build', REFUSAL, true)]} />
     );
@@ -387,7 +387,7 @@ describe('a call the person did not allow', () => {
   });
 });
 
-/** A call of mu's still marked running, as the conversation stored it. */
+/** A call of spec.jev's still marked running, as the conversation stored it. */
 const runningCall = (id: string, command: string): ToolMessage =>
   ({
     id,
@@ -405,7 +405,7 @@ const runningCall = (id: string, command: string): ToolMessage =>
     },
   }) as unknown as ToolMessage;
 
-// QA on macOS, 2026-09-25: mu's process closed mid-call, and the row kept breathing for good.
+// QA on macOS, 2026-09-25: spec.jev's process closed mid-call, and the row kept breathing for good.
 describe('a call still marked running', () => {
   it('runs while the conversation is processing', () => {
     const { container } = render(<MessageToolGroupSummary messages={[runningCall('call-1', 'npm test')]} live />);

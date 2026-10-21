@@ -5,7 +5,7 @@ export type PanelTab = { id: string; isBrowser: boolean; isMu: boolean };
 export type OpenDecision = { kind: 'new' } | { kind: 'reuse'; tabId: string } | { kind: 'refuse'; error: string };
 
 /**
- * Where a new run gets its tab. A finished mu tab of the same conversation is handed out again (one mu tab per
+ * Where a new run gets its tab. A finished spec.jev tab of the same conversation is handed out again (one spec.jev tab per
  * conversation instead of a pile of them; the oldest first); otherwise a new tab, unless the panel is full. The
  * panel's own rule for a full panel is to take over the first browser tab, which could be one the person is
  * using, or one that is being driven right now: so a full panel is a refusal here, in words the model can act on.

@@ -8,8 +8,8 @@ import type { BrowserWindow } from 'electron';
 import { ipcBridge } from '@/common';
 
 /**
- * mu's own link scheme (electron-builder.yml `protocols`). mu answers no other: the scheme of the app it was forked
- * from belongs to that app, which may be installed beside mu.
+ * spec.jev's own link scheme (electron-builder.yml `protocols`). spec.jev answers no other: the scheme of the app it was forked
+ * from belongs to that app, which may be installed beside spec.jev.
  */
 export const PROTOCOL_SCHEME = 'mu';
 

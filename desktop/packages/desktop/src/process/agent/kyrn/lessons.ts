@@ -24,7 +24,7 @@ import { configPath } from './naming';
 import { asRecord, text } from './piRpc';
 
 /*
- * The lessons tab's side of mu's experience library (common/kyrn/lessons.ts). The harness appends to the same file
+ * The lessons tab's side of spec.jev's experience library (common/kyrn/lessons.ts). The harness appends to the same file
  * from every session it runs, so this side never rewrites it either: an edit or a retirement is one more line, and the
  * file is read afresh for every answer.
  */
@@ -32,7 +32,7 @@ import { asRecord, text } from './piRpc';
 const SESSION_ID = /^[a-f\d-]{36}$/;
 
 /**
- * Where mu keeps its lessons: `features.memory.path` in mu.json when it names a file by its full path (the harness's
+ * Where spec.jev keeps its lessons: `features.memory.path` in mu.json when it names a file by its full path (the harness's
  * `memory.path` option), else `<agentDir>/mu/lessons.jsonl`. A relative path is read by each session from the folder
  * it runs in, which is no one file the app could show, so it is left to the harness.
  */

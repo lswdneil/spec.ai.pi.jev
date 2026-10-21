@@ -5,8 +5,8 @@ The TypeScript files in this folder come from [mizchi/laya-mlx](https://github.c
 (<https://www.apache.org/licenses/LICENSE-2.0>). They turn a state and typed questions into Laya's token sequences and
 turn the model's logits into calibrated answers, byte for byte like Python `Agent.predict`.
 
-Not vendored: `session.ts` (browser fetch and onnxruntime-web). mu runs the graph with onnxruntime-node instead, in
-`../runner.ts`. Local changes are marked `mu:` in the files.
+Not vendored: `session.ts` (browser fetch and onnxruntime-web). spec.jev runs the graph with onnxruntime-node instead, in
+`../runner.ts`. Local changes are marked `spec.jev:` in the files.
 
 The upstream NOTICE:
 
@@ -28,4 +28,4 @@ they are not included in this repository.
 ```
 
 The model itself (`mizchi/laya-multilingual-onnx` on Hugging Face, Apache-2.0, an export of
-`convaiinnovations/laya-multilingual`) is not part of mu: the person downloads it.
+`convaiinnovations/laya-multilingual`) is not part of spec.jev: the person downloads it.

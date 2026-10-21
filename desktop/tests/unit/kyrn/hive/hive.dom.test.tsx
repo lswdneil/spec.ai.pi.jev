@@ -194,7 +194,7 @@ const cardRow = (card: HTMLElement, name: string) => within(card).getByRole('but
 const avatarStatus = (element: HTMLElement) => element.querySelector('[data-status]')?.getAttribute('data-status');
 
 describe('a sub-agent card whose call is over', () => {
-  // A hive whose mu closed mid-run keeps its last snapshot, with two bees caught at work in it: the card said
+  // A hive whose spec.jev closed mid-run keeps its last snapshot, with two bees caught at work in it: the card said
   // "2 active" for good.
   const caughtMidRun = (status: 'in_progress' | 'failed') => {
     const message = hiveMessage();

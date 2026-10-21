@@ -9,7 +9,7 @@ import type {
 import { classifyUpdateError, updateErrorDetail, type UpdateErrorInfo } from '@/common/update/updateErrors';
 import { isNewerVersion, MU_RELEASES_URL } from './githubReleases';
 
-/** A check a little after the start, once mu has settled... */
+/** A check a little after the start, once spec.jev has settled... */
 export const FIRST_CHECK_DELAY_MS = 30_000;
 /** ...and then every 6 hours. */
 export const CHECK_INTERVAL_MS = 6 * 60 * 60_000;
@@ -25,7 +25,7 @@ export interface RestartUpdater {
   download(onProgress: (percent: number) => void): Promise<void>;
   /** Throws when the downloaded update cannot be installed now. */
   prepareInstall(): Promise<void>;
-  /** Quits mu and installs the update; resolves once the installer has taken over. */
+  /** Quits spec.jev and installs the update; resolves once the installer has taken over. */
   quitAndInstall(): Promise<void>;
 }
 
@@ -58,9 +58,9 @@ export interface UpdateServiceDeps {
 }
 
 type InstallHooks = {
-  /** Runs before the installer takes over: mu's backend must not hold the files the installer replaces. */
+  /** Runs before the installer takes over: spec.jev's backend must not hold the files the installer replaces. */
   beforeInstall?: () => Promise<void>;
-  /** Starts mu again, when the installer did not take over after beforeInstall ran. */
+  /** Starts spec.jev again, when the installer did not take over after beforeInstall ran. */
   relaunch?: () => void;
 };
 
@@ -77,7 +77,7 @@ const EMPTY_PHASES: ReadonlySet<UpdatePhase> = new Set(['idle', 'upToDate', 'fai
  * With a restart updater (macOS, Windows): a check that finds a newer version offers it (`found`, with its size);
  * 下载 downloads it, and once it is `ready`, 重启并更新 installs it, and so does the next quit (稍后 only hides the
  * notice). 稍后 on a `found` version hides the notice until the next check and downloads nothing. When a check, the
- * download or the install fails, mu falls back to the release's installer (`available`, reason `autoUpdateFailed`),
+ * download or the install fails, spec.jev falls back to the release's installer (`available`, reason `autoUpdateFailed`),
  * which the person downloads and opens, as on Linux, where every update comes that way.
  */
 export class UpdateService {
@@ -367,7 +367,7 @@ export class UpdateService {
     } catch (error) {
       this.deps.log.warn('[update] The installer did not take over', updateErrorDetail(error));
       if (this.hooks.relaunch) {
-        // mu's backend has stopped for the installer: start mu again rather than leave it without one. The update
+        // spec.jev's backend has stopped for the installer: start spec.jev again rather than leave it without one. The update
         // is still downloaded, so the next check offers it again, and a quit installs it.
         this.hooks.relaunch();
       } else {

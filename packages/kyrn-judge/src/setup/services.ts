@@ -1,7 +1,7 @@
 /**
- * The services `mu setup` knows and the shape of their keys. The desktop app keeps the same table for its first-run
+ * The services `spec.jev setup` knows and the shape of their keys. The desktop app keeps the same table for its first-run
  * guide (KYRN-desktop: packages/desktop/src/renderer/pages/welcome/services.ts): the fields both have mean the same
- * and hold the same values, so that the two can be compared line by line. What only mu needs (pi's provider for each
+ * and hold the same values, so that the two can be compared line by line. What only spec.jev needs (pi's provider for each
  * address, the check) comes after them. Plain data and pure functions: nothing here imports pi.
  *
  * A key is only ever sent to the service it belongs to. When its shape fits more than one service (DeepSeek and Qwen
@@ -51,10 +51,10 @@ export interface SetupService {
 	/** A service on this machine, which needs no key. */
 	readonly keyless?: boolean;
 
-	// mu's own.
+	// spec.jev's own.
 	/**
 	 * pi's provider at each address of `baseUrls`. `builtIn`: one of pi's own (packages/ai/src/providers), whose base
-	 * URL, models and defaults apply; only the key is stored. Otherwise a provider mu writes into models.json.
+	 * URL, models and defaults apply; only the key is stored. Otherwise a provider spec.jev writes into models.json.
 	 */
 	readonly providers: readonly string[];
 	readonly builtIn: boolean;
@@ -63,7 +63,7 @@ export interface SetupService {
 	/** A service of one's own may take no key (`other`). */
 	readonly keyOptional?: boolean;
 	/**
-	 * For a provider of mu's: how its endpoint differs from OpenAI's, as models.json's `compat` says it. Only what pi
+	 * For a provider of spec.jev's: how its endpoint differs from OpenAI's, as models.json's `compat` says it. Only what pi
 	 * itself knows of the endpoint, since pi asks that compat describe verified differences only (docs/models.md).
 	 */
 	readonly compat?: Readonly<Record<string, boolean | string>>;
@@ -118,7 +118,7 @@ export const SETUP_SERVICES: readonly SetupService[] = [
 		id: "glm",
 		name: "GLM",
 		// pi's provider on open.bigmodel.cn (zai-coding-cn) is the Coding Plan's address, below. A pay-as-you-go key
-		// goes here, to a provider of mu's.
+		// goes here, to a provider of spec.jev's.
 		baseUrls: ["https://open.bigmodel.cn/api/paas/v4"],
 		api: "openai-completions",
 		models: ["glm-*"],

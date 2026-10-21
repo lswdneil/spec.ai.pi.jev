@@ -35,7 +35,7 @@ describe("the app's language (MU_LANG)", () => {
 		expect([count(1, "commit"), count(3, "commit")]).toEqual(["1 commit", "3 commits"]);
 	});
 
-	it("tells the board's writer to write in the app's language when mu has no wording of its own for it", () => {
+	it("tells the board's writer to write in the app's language when spec.jev has no wording of its own for it", () => {
 		expect(narratorSystem("en", "Japanese")).toContain("Write in Japanese.");
 		expect(narratorSystem("zh")).toContain("Write in Simplified Chinese.");
 		expect(narratorSystem("en")).toContain("Write in English.");

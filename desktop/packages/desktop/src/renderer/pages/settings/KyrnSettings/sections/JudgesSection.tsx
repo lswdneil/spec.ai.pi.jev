@@ -44,7 +44,7 @@ type JudgesSectionProps = {
 
 /**
  * The judges page. First whether the judge's verdicts take effect at all (the mode every decision point without one
- * of its own follows), then the choice most people make once: which judge answers the small questions mu asks while
+ * of its own follows), then the choice most people make once: which judge answers the small questions spec.jev asks while
  * it works, and under it what that choice needs (Jev a service and its key, Laya the one-click panel, CLM its server's
  * address). The order of several judges is the next page.
  */
@@ -110,7 +110,7 @@ export function JudgeChoices({ draft, onChange, onKey }: JudgeChoicesProps) {
 
 type TileProps = { choice: JudgeChoice; active: boolean; onPick: () => void; children?: React.ReactNode };
 
-/** One of the three judge choices, worded from the mu i18n module. */
+/** One of the three judge choices, worded from the spec.jev i18n module. */
 export function JudgeChoiceTile({ choice, active, onPick, children }: TileProps) {
   const { t } = useTranslation();
   return (
@@ -438,7 +438,7 @@ const withProfile = (settings: KyrnSettings, name: string, patch: Partial<JudgeS
 });
 
 /**
- * What is wrong with a CLM server's address, if anything: the rule for every address mu sends a judge's questions
+ * What is wrong with a CLM server's address, if anything: the rule for every address spec.jev sends a judge's questions
  * to, since they hold what the person wrote. Empty is clm-serve's default on this machine. The store refuses the same.
  */
 const clmAddressProblem = (t: TFunction, baseUrl: string): string | undefined =>

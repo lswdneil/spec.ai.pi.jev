@@ -1,5 +1,5 @@
 /**
- * What the kernel bar and the home page say about the judgment kernel, read from mu's settings: which judge answers,
+ * What the kernel bar and the home page say about the judgment kernel, read from spec.jev's settings: which judge answers,
  * through which service, and how many decision points act on its verdicts.
  */
 import type { DecisionMode } from '@/common/kyrn/manifest';
@@ -24,7 +24,7 @@ export type KernelSummary = {
   total: number;
 };
 
-/** The Jev services in the order mu tries them when a tier is plain `jev`, each with the keys it needs. */
+/** The Jev services in the order spec.jev tries them when a tier is plain `jev`, each with the keys it needs. */
 const JEV_SERVICES: ReadonlyArray<{ via: string; keys: readonly string[] }> = [
   { via: 'TypeSafe', keys: ['TYPESAFE_API_KEY'] },
   { via: 'OpenRouter', keys: ['MU_JUDGE_OPENROUTER_API_KEY'] },

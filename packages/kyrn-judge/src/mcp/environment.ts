@@ -1,5 +1,5 @@
 /**
- * What a server inherits from mu's own environment. Not everything: mu's
+ * What a server inherits from spec.jev's own environment. Not everything: spec.jev's
  * environment holds model keys, and a server has no business reading them.
  * This is the list the reference SDK uses, plus what `npx`-style servers need
  * behind a proxy or a mirror. Anything else a server needs is named in its

@@ -117,7 +117,7 @@ export type ToolActivityKind = 'read' | 'look' | 'edit' | 'run' | 'web' | 'other
 /** The order the folded line names the kinds in. */
 export const TOOL_ACTIVITY_KINDS: readonly ToolActivityKind[] = ['read', 'look', 'edit', 'run', 'web', 'other'];
 
-/** Tool names by kind, as mu, pi and the agents the app imports from name them (case does not matter). */
+/** Tool names by kind, as spec.jev, pi and the agents the app imports from name them (case does not matter). */
 const KIND_OF: Readonly<Record<string, ToolActivityKind>> = {
   read: 'read',
   read_file: 'read',

@@ -105,7 +105,7 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
   const displayItem = fullItem ?? item;
   const label = toolLabel(displayItem);
   const statusKey = statusLabelKey(item.status, item.denied);
-  // A refused call's output is mu's refusal, written for the model: the row says what happened instead.
+  // A refused call's output is spec.jev's refusal, written for the model: the row says what happened instead.
   const output = item.denied ? undefined : displayItem.output;
   const hasDetail = Boolean(displayItem.input || output || item.truncated || item.imagePath);
   const [messageApi, messageContext] = Message.useMessage();
@@ -341,7 +341,7 @@ const ToolActivityGroup: React.FC<{ tools: NormalizedToolCall[]; language?: stri
  *
  * A stored "running" is not proof of activity: only a conversation that is processing runs anything (`live`), and a
  * call already seen running while it was idle (`stale`, by message id) belongs to a turn that ended without it, as
- * when mu's process closed mid-call. Those read as over, a sub-agent card with them.
+ * when spec.jev's process closed mid-call. Those read as over, a sub-agent card with them.
  */
 const MessageToolGroupSummary: React.FC<{
   messages: ToolMessage[];

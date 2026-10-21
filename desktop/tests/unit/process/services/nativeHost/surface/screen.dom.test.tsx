@@ -59,7 +59,7 @@ vi.mock('@/renderer/pages/conversation/Messages/components/MessageToolGroupSumma
   ),
 }));
 
-// The browser's side of mu's browse loop has tests of its own (tests/unit/kyrn/browser/); here: which conversation it
+// The browser's side of spec.jev's browse loop has tests of its own (tests/unit/kyrn/browser/); here: which conversation it
 // serves.
 vi.mock('@/renderer/pages/conversation/Preview/browser/muBrowser/MuBrowserHost', () => ({
   default: ({ conversationId }: { conversationId?: string }) => (
@@ -123,7 +123,7 @@ const opened = async () => {
 const phase = () => screen.getByTestId('native-header-phase');
 
 describe('the native conversation page', () => {
-  it('shows a new conversation where mu will work, and the host as it goes from idle to running', async () => {
+  it('shows a new conversation where spec.jev will work, and the host as it goes from idle to running', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1', cwd: '/work/alpha', title: '' });
     page(host.client);
@@ -144,7 +144,7 @@ describe('the native conversation page', () => {
       act(() => host.setStatus('c1', status));
       expect(phase()).toHaveTextContent(words);
     }
-    expect(screen.getByTestId('native-failed')).toHaveTextContent('mu stopped before it could start.');
+    expect(screen.getByTestId('native-failed')).toHaveTextContent('spec.jev stopped before it could start.');
   });
 
   it('says Working only while a turn runs, and nothing once it has ended', async () => {
@@ -215,7 +215,7 @@ describe('the native conversation page', () => {
     host.add({ id: 'draft-1', cwd: '/work/app' });
     page(host.client, 'draft-1');
     await opened();
-    // mu's browser tool opens its tabs beside this conversation, by the id it has now.
+    // spec.jev's browser tool opens its tabs beside this conversation, by the id it has now.
     expect(screen.getByTestId('browser-host')).toHaveAttribute('data-conversation', 'draft-1');
     fireEvent.change(screen.getByTestId('native-send-input'), { target: { value: 'half typed' } });
     const session: NativeConversation = {
@@ -415,7 +415,7 @@ describe('the sidebar’s native group', () => {
     expect(host.calls).toEqual([]);
   });
 
-  it('lists mu’s conversations newest first, and opens one', async () => {
+  it('lists spec.jev’s conversations newest first, and opens one', async () => {
     const host = createFakeHost();
     host.add({ id: 'a', cwd: '/work/alpha', title: '', updatedAt: 1 });
     host.add({ id: 'b', cwd: '/work/beta', title: 'Fix the build', updatedAt: 3, live: true });
@@ -458,10 +458,10 @@ describe('the sidebar’s native group', () => {
     await waitFor(() => expect(shownIds()).toContain('draft-4'));
     expect(items().find((item) => item.dataset.id === 'draft-4')).toHaveTextContent('gamma');
 
-    // Again, in a recent folder, with Jev approving what mu does.
+    // Again, in a recent folder, with Jev approving what spec.jev does.
     await openNew();
     const mode = screen.getByTestId('native-permissions');
-    expect(mode).toHaveTextContent("mu's default");
+    expect(mode).toHaveTextContent("spec.jev's default");
     await act(async () => {
       fireEvent.click(mode);
     });
@@ -479,14 +479,14 @@ describe('the sidebar’s native group', () => {
   it('says why a conversation could not be made', async () => {
     const host = createFakeHost();
     host.pick('/work/app');
-    sider({ ...host.client, create: async () => ({ ok: false, kind: 'no-harness', message: 'no mu at /opt/mu' }) });
+    sider({ ...host.client, create: async () => ({ ok: false, kind: 'no-harness', message: 'no spec.jev at /opt/mu' }) });
     await waitFor(() => expect(screen.getByTestId('native-sidebar-empty')).toHaveTextContent('No conversations yet'));
     await openNew();
     await act(async () => {
       fireEvent.click(screen.getByTestId('native-project'));
     });
     expect(screen.getByTestId('native-create-failed')).toHaveTextContent(
-      "The app can't find mu to run. no mu at /opt/mu"
+      "The app can't find spec.jev to run. no spec.jev at /opt/mu"
     );
     expect(screen.getByTestId('where')).toHaveTextContent('/guid');
   });
@@ -827,7 +827,7 @@ describe('the sidebar’s native group', () => {
     await act(async () => {
       fireEvent.click(screen.getByTestId('native-rename-save'));
     });
-    expect(error).toHaveBeenCalledWith('mu rejected the request. Session name cannot be empty');
+    expect(error).toHaveBeenCalledWith('spec.jev rejected the request. Session name cannot be empty');
     expect(screen.getByTestId('native-rename-input')).toHaveValue('New');
     error.mockRestore();
   });

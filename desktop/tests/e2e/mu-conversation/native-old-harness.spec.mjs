@@ -1,6 +1,6 @@
 // @ts-check
-// A mu too old to run inside the app, end to end in the real app. The native host is on by default, but only where the
-// mu the app finds can run inside it: the packaged app carries the mu it was built with, and a launcher from before the
+// A spec.jev too old to run inside the app, end to end in the real app. The native host is on by default, but only where the
+// spec.jev the app finds can run inside it: the packaged app carries the spec.jev it was built with, and a launcher from before the
 // native host has no `planHost`. Here the profile's copy of the launcher is made so. The app must carry on as it did
 // before the native host: quietly on AionCore, with one line in the app's log saying why, no native group in
 // the sidebar, and a message sent from the home page starting a conversation that the model answers. Run with
@@ -15,22 +15,22 @@ import { createNativeWorld } from './nativeWorld.mjs';
 
 const desktopRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 
-// A packaged app runs the mu it carries, which is not the test's to change: this spec edits the profile's copy of a
+// A packaged app runs the spec.jev it carries, which is not the test's to change: this spec edits the profile's copy of a
 // harness checkout's launcher.
-test.skip(Boolean(process.env.MU_E2E_APP), 'needs a harness checkout, not the mu a packaged app carries');
+test.skip(Boolean(process.env.MU_E2E_APP), 'needs a harness checkout, not the spec.jev a packaged app carries');
 
 const { run, page, sleep, start, stop, expectNoProblems, expectNothingLeft, noteProcesses, requests } =
   createNativeWorld({
     desktopRoot,
     prepare: (profile) => {
       const launcher = join(profile.harness.view, 'kyrn', 'bin', 'mu.mjs');
-      // Only the profile's own copy of the launcher is changed: a harness that the profile links, or the mu a packaged
+      // Only the profile's own copy of the launcher is changed: a harness that the profile links, or the spec.jev a packaged
       // app carries, is not the test's to edit.
       if (!launcher.startsWith(profile.paths.root))
         throw new Error(`This spec needs the profile's copy of the launcher, not ${launcher}`);
       const text = readFileSync(launcher, 'utf8');
       expect(text).toContain('export function planHost(');
-      // Kept for the classic path: the command line and the ACP adapter start mu through the same file, and still can.
+      // Kept for the classic path: the command line and the ACP adapter start spec.jev through the same file, and still can.
       writeFileSync(launcher, text.replace('export function planHost(', 'function planHost('));
     },
   });
@@ -58,7 +58,7 @@ test('the app starts on AionCore and says in its log why the native host stays o
     await p.waitForURL(/#\/guid/);
   }
   await expect(box).toBeVisible();
-  await expect.poll(appLog, { timeout: 30_000 }).toContain('[mu] the native host stays off: ');
+  await expect.poll(appLog, { timeout: 30_000 }).toContain('[spec.jev] the native host stays off: ');
   expect(appLog()).toMatch(
     /the native host stays off: This mu cannot run inside the app yet \(.*mu\.mjs has no planHost\)/
   );
@@ -77,7 +77,7 @@ test('a message sent from the home page starts a conversation on AionCore, and t
   await expect(p.getByText('project', { exact: true }).first()).toBeVisible({ timeout: 15_000 });
   const box = p.getByTestId('guid-input');
   await box.click();
-  await box.fill('E2E:PLAIN a mu older than the native host');
+  await box.fill('E2E:PLAIN a spec.jev older than the native host');
   await box.press('Enter');
   await p.waitForURL(/#\/conversation\//, { timeout: 60_000 });
   expect(p.url()).not.toContain('/conversation/native/');

@@ -81,7 +81,7 @@ describe("LocalJudgeProvider", () => {
 		const error = await provider.evaluate({ state: "x", questions }).catch((caught: unknown) => caught);
 
 		expect(isJudgeError(error) && error.kind).toBe("unreachable");
-		expect((error as Error).message).toContain("mu judge start");
+		expect((error as Error).message).toContain("spec.jev judge start");
 	});
 
 	it("maps a rejected request and a sidecar crash to different error kinds", async () => {

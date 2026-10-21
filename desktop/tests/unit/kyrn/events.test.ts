@@ -73,7 +73,7 @@ describe("KYRN events in the app's native cards", () => {
       { sessionUpdate: 'agent_thought_chunk', content: { type: 'text', text: 'Provider reasoning summary' } },
     ]);
   });
-  it('makes no reply text of what mu notifies: the bridge shows it as a line of its own', () => {
+  it('makes no reply text of what spec.jev notifies: the bridge shows it as a line of its own', () => {
     for (const notifyType of ['info', 'warning', 'error'])
       expect(
         mapEvent({

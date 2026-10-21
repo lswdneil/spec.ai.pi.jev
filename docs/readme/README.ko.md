@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="../../desktop/resources/app.png" width="96" alt="mu">
+  <img src="../../desktop/resources/app.png" width="96" alt="spec.jev">
 </p>
-<h1 align="center">mu</h1>
+<h1 align="center">spec.jev</h1>
 <p align="center">μ · Only what's needed.</p>
 <p align="center">판정 커널을 갖춘 코딩 에이전트. <a href="https://github.com/earendil-works/pi">pi</a> 기반.</p>
 
@@ -21,16 +21,16 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="run-dark.gif">
-    <img src="run-light.gif" alt="데스크톱 앱에서의 실행. 요청은 "main에서 테스트가 실패한다, 원인을 찾아 고쳐 달라". Jev가 메시지를 여러 단계 작업으로 판정하고(input.preflight), 모델은 테스트를 돌리고 파서를 읽은 뒤 분을 60,000으로 바꾸고 테스트를 다시 돌리겠다고 말하고는 멈춘다. Jev가 실행이 중간에 멈췄다고 판정하고(turn.continue), mu가 이번 턴이 끝나지 않았다고 모델에게 알리자 모델은 단위를 고치고 테스트를 통과시킨다. 오른쪽 판정 패널에 판정, 판정 지점, 걸린 시간이 하나씩 쌓인다.">
+    <img src="run-light.gif" alt="데스크톱 앱에서의 실행. 요청은 "main에서 테스트가 실패한다, 원인을 찾아 고쳐 달라". Jev가 메시지를 여러 단계 작업으로 판정하고(input.preflight), 모델은 테스트를 돌리고 파서를 읽은 뒤 분을 60,000으로 바꾸고 테스트를 다시 돌리겠다고 말하고는 멈춘다. Jev가 실행이 중간에 멈췄다고 판정하고(turn.continue), spec.jev가 이번 턴이 끝나지 않았다고 모델에게 알리자 모델은 단위를 고치고 테스트를 통과시킨다. 오른쪽 판정 패널에 판정, 판정 지점, 걸린 시간이 하나씩 쌓인다.">
   </picture>
   <br>
-  <sub>데스크톱 앱에서 녹화한 실행입니다. 코딩 모델의 답변은 녹화를 위해 미리 쓴 대본입니다(화면에는 GPT-6.1 Sol로 표시). 판정기의 판정, 걸린 시간, 그리고 복구는 실제입니다. 모델이 하겠다고 말만 하고 멈췄고, <code>turn.continue</code>가 이를 잡아냈고, mu가 끝까지 하도록 되돌려 보냈습니다.</sub>
+  <sub>데스크톱 앱에서 녹화한 실행입니다. 코딩 모델의 답변은 녹화를 위해 미리 쓴 대본입니다(화면에는 GPT-6.1 Sol로 표시). 판정기의 판정, 걸린 시간, 그리고 복구는 실제입니다. 모델이 하겠다고 말만 하고 멈췄고, <code>turn.continue</code>가 이를 잡아냈고, spec.jev가 끝까지 하도록 되돌려 보냈습니다.</sub>
 </p>
 
-코딩 에이전트는 세션 하나에서 코드와 상관없는 결정을 수백 번 내려요. 무엇을 컨텍스트에 남길지, 이 명령이 안전한지, 이 발견을 다른 에이전트에게 알릴 만한지, 일이 끝났는지. 큰 모델에 맡기면 토큰과 지연 시간, 주의력이 들어요. 고정된 규칙에 맡기면 너무 자주 틀려요. mu는 이런 결정을 **판정기**에 맡겨요. 판정기는 작고 빠른 모델로, 답의 범위가 정해진 질문에 한 번에 하나씩 답해요. 판정 지점은 턴마다 40개예요. 큰 모델은 주의력을 본래의 일에 쓸 수 있어요.
+코딩 에이전트는 세션 하나에서 코드와 상관없는 결정을 수백 번 내려요. 무엇을 컨텍스트에 남길지, 이 명령이 안전한지, 이 발견을 다른 에이전트에게 알릴 만한지, 일이 끝났는지. 큰 모델에 맡기면 토큰과 지연 시간, 주의력이 들어요. 고정된 규칙에 맡기면 너무 자주 틀려요. spec.jev는 이런 결정을 **판정기**에 맡겨요. 판정기는 작고 빠른 모델로, 답의 범위가 정해진 질문에 한 번에 하나씩 답해요. 판정 지점은 턴마다 40개예요. 큰 모델은 주의력을 본래의 일에 쓸 수 있어요.
 
-- **mu**: 명령줄 버전이에요. pi가 하는 모든 것에 판정 커널을 더했어요.
-- **mu 데스크톱**: mu와 런타임이 들어 있는 데스크톱 앱이에요. 내려받고, 모델을 연결하고, 시작하면 돼요.
+- **spec.jev**: 명령줄 버전이에요. pi가 하는 모든 것에 판정 커널을 더했어요.
+- **spec.jev 데스크톱**: spec.jev와 런타임이 들어 있는 데스크톱 앱이에요. 내려받고, 모델을 연결하고, 시작하면 돼요.
 - **Jev**: 판정기예요. 예/아니요, 선택, 점수 질문에 답하고, 답마다 확률을 붙이고, 모든 판정을 판정 장부에 남겨요. 승인은 Jev만 결정하지만, 나머지 판정 지점은 로컬 판정기(Laya)나 어떤 LLM에든 맡길 수 있어요.
 
 > 아직 초기 개발 단계예요. 프리릴리스(0.1.x)를 npm과 [Releases](https://github.com/qybaihe/mu/releases)에 올려 두었고, 만든 사람들은 매일 쓰고 있어요. 이름, 설정, 형식은 앞으로 바뀔 수 있어요.
@@ -44,12 +44,12 @@
 **명령줄.**
 
 ```bash
-npm i -g mu-agent   # Node.js 22.19 이상
-mu setup            # 모델 연결
-mu                  # 현재 디렉터리에서 세션 시작
+npm i -g spec.jev   # Node.js 22.19 이상
+spec.jev setup            # 모델 연결
+spec.jev                  # 현재 디렉터리에서 세션 시작
 ```
 
-시작할 때 판정기 키는 필요 없어요. 키를 설정하기 전까지는 OpenCode Zen의 무료 Jev가 답해요. 모든 판정 지점은 처음부터 판정을 반영하고, 판정은 모두 기록돼요(`/status`, `mu ledger`, 데스크톱 앱의 판정 탭). 판정기가 어떻게 할지 기록만 하고 싶다면 `~/.mu/agent/mu.json`에 `{"modes": {"default": "shadow"}}`를 적으세요. 자세한 내용은 [Getting started](../getting-started.md)(영어).
+시작할 때 판정기 키는 필요 없어요. 키를 설정하기 전까지는 OpenCode Zen의 무료 Jev가 답해요. 모든 판정 지점은 처음부터 판정을 반영하고, 판정은 모두 기록돼요(`/status`, `spec.jev ledger`, 데스크톱 앱의 판정 탭). 판정기가 어떻게 할지 기록만 하고 싶다면 `~/.spec.jev/agent/spec.jev.json`에 `{"modes": {"default": "shadow"}}`를 적으세요. 자세한 내용은 [Getting started](../getting-started.md)(영어).
 
 ## 한 턴의 흐름
 
@@ -142,7 +142,7 @@ mu                  # 현재 디렉터리에서 세션 시작
 
 ## 판정기
 
-- **Jev**(클라우드). 답의 범위가 정해진 질문에 확률과 함께 답해요. TypeSafe, OpenRouter, Vercel AI Gateway, OpenCode Zen, Cloudflare Workers AI, 또는 같은 프로토콜을 쓰는 어떤 서비스로든 부를 수 있고, 서비스마다 키가 따로 있어요(`TYPESAFE_API_KEY`, `MU_JUDGE_OPENROUTER_API_KEY`, `AI_GATEWAY_API_KEY`, `OPENCODE_API_KEY`, `CLOUDFLARE_API_KEY`와 `CLOUDFLARE_ACCOUNT_ID`). 데스크톱 앱의 '판정기' 페이지에서 고를 수 있고, 기본값은 키가 설정된 첫 번째 서비스예요. 키가 하나도 없으면 OpenCode Zen의 기간 한정 무료 Jev 1.13이 답해요. 판정에 필요한 내용은 OpenCode로 가지만 모델 학습에는 쓰이지 않고, mu가 하루에 한 번 알려 줘요. 키를 설정하면(`mu setup`이나 '판정기' 페이지) 다음 질문부터 그 키를 써요. 만든 사람들의 실제 세션에서 잰 값으로, HTTP/2 웜 연결에서 질문 하나에 약 0.3초, 도구 출력 16청크를 요청 하나로 판정하는 데 0.44초가 걸렸고, 상태는 한 번만 과금됐어요. 판정, 확률, 소요 시간은 판정 장부에 남아요. `mu ledger`나 데스크톱 앱의 '판정' 탭에서 볼 수 있어요.
+- **Jev**(클라우드). 답의 범위가 정해진 질문에 확률과 함께 답해요. TypeSafe, OpenRouter, Vercel AI Gateway, OpenCode Zen, Cloudflare Workers AI, 또는 같은 프로토콜을 쓰는 어떤 서비스로든 부를 수 있고, 서비스마다 키가 따로 있어요(`TYPESAFE_API_KEY`, `MU_JUDGE_OPENROUTER_API_KEY`, `AI_GATEWAY_API_KEY`, `OPENCODE_API_KEY`, `CLOUDFLARE_API_KEY`와 `CLOUDFLARE_ACCOUNT_ID`). 데스크톱 앱의 '판정기' 페이지에서 고를 수 있고, 기본값은 키가 설정된 첫 번째 서비스예요. 키가 하나도 없으면 OpenCode Zen의 기간 한정 무료 Jev 1.13이 답해요. 판정에 필요한 내용은 OpenCode로 가지만 모델 학습에는 쓰이지 않고, spec.jev가 하루에 한 번 알려 줘요. 키를 설정하면(`spec.jev setup`이나 '판정기' 페이지) 다음 질문부터 그 키를 써요. 만든 사람들의 실제 세션에서 잰 값으로, HTTP/2 웜 연결에서 질문 하나에 약 0.3초, 도구 출력 16청크를 요청 하나로 판정하는 데 0.44초가 걸렸고, 상태는 한 번만 과금됐어요. 판정, 확률, 소요 시간은 판정 장부에 남아요. `spec.jev ledger`나 데스크톱 앱의 '판정' 탭에서 볼 수 있어요.
 - **Laya**(로컬). 여러분의 컴퓨터에서 돌아가고 네트워크에는 전혀 닿지 않는 322M 파라미터 판정기예요. 여러분이 동의하지 않으면 아무것도 내려받지 않아요. 단순한 술어에는 믿을 만하지만 메타 판단에는 약한 편이에요. 판정 지점을 맡기기 전에 섀도 모드로 Jev와 나란히 돌려 보고 판정 장부를 읽어 보세요.
 - **pi 모델 카탈로그의 어떤 분류 모델이든** 계층 하나로 쓸 수 있어요: `classifier:<provider>/<model>`. Cloudflare의 Clef(`clef`, `clef-flash`), OpenRouter와 Vercel AI Gateway의 System One 모델, llama.cpp 분류 모델 등.
 - **어떤 LLM이든** 계층 하나로 쓸 수 있어요: `llm:<provider>/<model>`.
@@ -153,7 +153,7 @@ mu                  # 현재 디렉터리에서 세션 시작
 
 아래 숫자는 저장소에 들어 있는 리플레이 [`kyrn/spikes/judge-bench/test-log-replay.ts`](../../kyrn/spikes/judge-bench/test-log-replay.ts)에서 나왔어요. 방법과 전체 표는 [kyrn/docs/09-test-log-admission.md](../../kyrn/docs/09-test-log-admission.md)(중국어)에 있어요.
 
-**완전히 같은 반복.** 실패한 실행은 실패한 테스트마다 같은 diff, DOM 덤프, 스택을 한 번씩 출력하곤 해요. mu는 첫 번째 것을 남기고, 그 뒤의 반복은 어느 줄을 반복하는지 적은 한 줄로 바꿔요. 모델은 부르지 않아요. 표시를 펼치면 원래 로그와 바이트 단위로 같고, 전체 로그는 디스크에 남아 있으며 출력 끝에 그 위치가 적혀요.
+**완전히 같은 반복.** 실패한 실행은 실패한 테스트마다 같은 diff, DOM 덤프, 스택을 한 번씩 출력하곤 해요. spec.jev는 첫 번째 것을 남기고, 그 뒤의 반복은 어느 줄을 반복하는지 적은 한 줄로 바꿔요. 모델은 부르지 않아요. 표시를 펼치면 원래 로그와 바이트 단위로 같고, 전체 로그는 디스크에 남아 있으며 출력 끝에 그 위치가 적혀요.
 
 <p align="center">
   <picture>
@@ -175,7 +175,7 @@ mu                  # 현재 디렉터리에서 세션 시작
 
 *Perfect judge*(완벽한 판정기)는 레이블을 직접 읽어요. 올바른 판정기가 줄일 수 있는 최대치예요. *Keep failures only*(실패만 남기기)는 늘 "빼라"고 답하는 판정기로, 목표를 보지 않는 필터가 하는 일과 같아요. 이 조사에서 실제로 보낸 Jev 요청은 모두 282건이고, 정가로 약 $0.017이었어요. 기본 질문 방식에서 요청 하나의 소요 시간 중앙값은 345ms예요.
 
-둘 다 기본값은 꺼짐이에요. `~/.mu/agent/mu.json`에 `"features": { "admission": { "testLog": "rules" } }`를 쓰거나 데스크톱 앱 설정에서 '테스트 로그 정리'를 켜면 반복이 접혀요. `"jev"`로 하면 남은 부분 중 지금 목표에 필요한 것을 판정기가 골라요. `/mu mode tool.admission.test-log shadow`를 실행하면 선별 결과는 기록만 돼요.
+둘 다 기본값은 꺼짐이에요. `~/.spec.jev/agent/spec.jev.json`에 `"features": { "admission": { "testLog": "rules" } }`를 쓰거나 데스크톱 앱 설정에서 '테스트 로그 정리'를 켜면 반복이 접혀요. `"jev"`로 하면 남은 부분 중 지금 목표에 필요한 것을 판정기가 골라요. `/mu mode tool.admission.test-log shadow`를 실행하면 선별 결과는 기록만 돼요.
 
 이 숫자가 말해 주지 않는 것:
 
@@ -191,7 +191,7 @@ mu                  # 현재 디렉터리에서 세션 시작
 
 | 목표에 따른 선별 | 조정에 쓴 목표(29): 줄인 비율 | 잃은 필요한 줄 | 조정에 쓰지 않은 목표(9): 줄인 비율 | 잃은 필요한 줄 |
 | --- | --- | --- | --- | --- |
-| mu · Jev | 40.2% | 72개 중 0개 | 46.4% | 19개 중 0개 |
+| spec.jev · Jev | 40.2% | 72개 중 0개 | 46.4% | 19개 중 0개 |
 | 완벽한 판정기 | 52.5% | 72개 중 0개 | 46.5% | 19개 중 0개 |
 | 실패만 남기기 | 61.9% | 72개 중 9개 | 59.4% | 19개 중 6개 |
 
@@ -210,7 +210,7 @@ mu                  # 현재 디렉터리에서 세션 시작
 
 ## 하이브
 
-멀티 에이전트 시스템은 모두 같은 질문에 답해요. 한 에이전트가 아는 것을 다른 에이전트에게 알려야 할까요? 흔한 답은 아무것도 넘기지 않기(메인 에이전트에게만 보고), 전부 넘기기(그룹 채팅이나 인수인계 때 전체 기록을 통째로), 각 에이전트의 큰 모델에 맡기기, 아니면 고정된 규칙과 환경에 기대기예요. mu의 답은 판정기를 문지기로 세우는 거예요.
+멀티 에이전트 시스템은 모두 같은 질문에 답해요. 한 에이전트가 아는 것을 다른 에이전트에게 알려야 할까요? 흔한 답은 아무것도 넘기지 않기(메인 에이전트에게만 보고), 전부 넘기기(그룹 채팅이나 인수인계 때 전체 기록을 통째로), 각 에이전트의 큰 모델에 맡기기, 아니면 고정된 규칙과 환경에 기대기예요. spec.jev의 답은 판정기를 문지기로 세우는 거예요.
 
 하이브는 비 2마리에서 6마리로 이루어지고, 비마다 자기 관심사가 있어요. 비는 코드를 읽고, 명령을 실행하고, 브라우저를 쓰지만, 코드를 고치지는 않아요. 변경은 메인 모델이 해요. 비가 말을 한 차례 마칠 때마다 `hive.publish`가 한 번 물어요. 여기에 공유할 만한 발견, 막다른 길, 결정, 블로커가 있는가? 공유할 만한 것은 추가만 되는 공유 보드에 올라가요. 새 메모가 올라올 때마다 `hive.deliver`가 다른 비 하나하나에 대해 한 번씩 물어요. 이것이 그 비의 관심사와 닿아 있는가? 그렇다면 메모에 "지시가 아니라 발견"이라고 표시해서 전달해요.
 
@@ -226,7 +226,7 @@ mu                  # 현재 디렉터리에서 세션 시작
 
 ## 쉬운 말 보드
 
-프런티어 모델은 일은 더 잘하게 되는데, 그 일에 대해 말하는 건 더 서툴러져요. 세대가 바뀔수록 진행 보고는 다른 기계가 읽을 출력에 가까워지고, 더 빽빽하고 더 불투명해져서 사람이 하는 말과는 멀어져요. mu는 일하는 모델에게 스스로 보고하게 하지 않아요. 보드를 켜 두면(`/board`, 또는 데스크톱 앱 보드 탭의 스위치), 에이전트가 한 걸음 뗄 때마다 보드에 쉬운 말 한 줄이 바로 붙어요. 어떤 파일을 바꿨는지, 검증이 통과했는지 실패했는지, 어떤 명령을 실행했는지요. 파일을 연달아 읽으면 「파일 N개를 봤어요」 한 줄로 접히고 숫자만 올라가요. 일하는 도중에 에이전트가 무언가 말할 때마다 `board.read`가 판정기에게 그게 새 소식인지 물어요. 새 소식이면, 쉽게 말한다는 한 가지 이유만으로 고른 모델(`/board model`)이 그 자리에서 사람에게 다시 말해 주고, 보드의 현재 상태도 함께 갱신해요. 지금 무엇을 하고 있는지, 체크리스트 항목 중 몇 개가 끝났는지, 여러분을 기다리는 것이 무엇인지요. 실행이 끝났을 때의 요약은 기록의 마지막 줄이 되고, 과정은 그 위에 남아요. 그래서 「끝났다」만이 아니라, 무엇을 했는지가 늘 보여요.
+프런티어 모델은 일은 더 잘하게 되는데, 그 일에 대해 말하는 건 더 서툴러져요. 세대가 바뀔수록 진행 보고는 다른 기계가 읽을 출력에 가까워지고, 더 빽빽하고 더 불투명해져서 사람이 하는 말과는 멀어져요. spec.jev는 일하는 모델에게 스스로 보고하게 하지 않아요. 보드를 켜 두면(`/board`, 또는 데스크톱 앱 보드 탭의 스위치), 에이전트가 한 걸음 뗄 때마다 보드에 쉬운 말 한 줄이 바로 붙어요. 어떤 파일을 바꿨는지, 검증이 통과했는지 실패했는지, 어떤 명령을 실행했는지요. 파일을 연달아 읽으면 「파일 N개를 봤어요」 한 줄로 접히고 숫자만 올라가요. 일하는 도중에 에이전트가 무언가 말할 때마다 `board.read`가 판정기에게 그게 새 소식인지 물어요. 새 소식이면, 쉽게 말한다는 한 가지 이유만으로 고른 모델(`/board model`)이 그 자리에서 사람에게 다시 말해 주고, 보드의 현재 상태도 함께 갱신해요. 지금 무엇을 하고 있는지, 체크리스트 항목 중 몇 개가 끝났는지, 여러분을 기다리는 것이 무엇인지요. 실행이 끝났을 때의 요약은 기록의 마지막 줄이 되고, 과정은 그 위에 남아요. 그래서 「끝났다」만이 아니라, 무엇을 했는지가 늘 보여요.
 
 <p align="center"><img src="board.png" width="960" alt="데스크톱 앱의 쉬운 말 보드: 일이 어디까지 진행됐는지, 지금 무엇을 하는지, 그전에 무슨 일이 있었는지. 맨 위에는 컨텍스트 사용량과 캐시 적중률"></p>
 
@@ -234,14 +234,14 @@ mu                  # 현재 디렉터리에서 세션 시작
 
 ## 데스크톱 앱
 
-mu와 런타임이 들어 있는 데스크톱 앱이에요. Node를 설치할 필요가 없고, 처음 실행할 때도 아무것도 내려받지 않아요. 명령줄에 있는 것은 모두 있고, 여기에 대화 옆 작업 패널이 더해져요.
+spec.jev와 런타임이 들어 있는 데스크톱 앱이에요. Node를 설치할 필요가 없고, 처음 실행할 때도 아무것도 내려받지 않아요. 명령줄에 있는 것은 모두 있고, 여기에 대화 옆 작업 패널이 더해져요.
 
 **보드** · **판정**(실시간 판정 장부: 모든 판정과 그 질문) · **하이브** · **교훈** · **파일** · **미리보기** · **소스** · **브라우저**(에이전트가 한 단계씩 조작하는 내장 브라우저. 목표, 일시 정지, 중지 포함)
 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="app-dark.png">
-    <img src="app-light.png" width="880" alt="작은 프로젝트에서 실패하던 테스트를 고친 뒤의 mu 데스크톱 앱. Jev가 메시지를 여러 단계 작업으로 판정했고(input.preflight), 에이전트는 테스트를 돌리고 파서를 읽고 분 단위를 고친 다음 테스트를 다시 돌렸다. 오른쪽 판정 패널에는 판정마다 판정 지점과 걸린 시간(약 200~400 ms)이 나온다. 아래쪽 막대에는 판정기, 판정 지점 40개 중 켜진 38개, 판정 5건, 사용 중인 컨텍스트가 나온다.">
+    <img src="app-light.png" width="880" alt="작은 프로젝트에서 실패하던 테스트를 고친 뒤의 spec.jev 데스크톱 앱. Jev가 메시지를 여러 단계 작업으로 판정했고(input.preflight), 에이전트는 테스트를 돌리고 파서를 읽고 분 단위를 고친 다음 테스트를 다시 돌렸다. 오른쪽 판정 패널에는 판정마다 판정 지점과 걸린 시간(약 200~400 ms)이 나온다. 아래쪽 막대에는 판정기, 판정 지점 40개 중 켜진 38개, 판정 5건, 사용 중인 컨텍스트가 나온다.">
   </picture>
 </p>
 
@@ -252,19 +252,19 @@ macOS(Apple 실리콘 / Intel), Windows(x64 / Arm), Linux(x64 / Arm)용 빌드�
 ## 명령줄
 
 ```bash
-npm i -g mu-agent
-mu            # 현재 디렉터리에서 대화형 세션 시작
-mu doctor     # 설치, 판정기, 연결 상태 점검
+npm i -g spec.jev
+spec.jev            # 현재 디렉터리에서 대화형 세션 시작
+spec.jev doctor     # 설치, 판정기, 연결 상태 점검
 ```
 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="cli-dark.png">
-    <img src="cli-light.png" width="720" alt="터미널에서 본 mu의 환영 화면: μ 마크, &quot;mu v0.1.9, judgment-first coding agent, built on pi 1.3.0&quot;, 이어서 판정기(Jev 1.13, 무료, 428 ms에 응답, 판정 지점 켜짐), 모델과 작업 디렉터리, 알아 두면 좋은 키.">
+    <img src="cli-light.png" width="720" alt="터미널에서 본 spec.jev의 환영 화면: μ 마크, &quot;spec.jev v0.1.9, judgment-first coding agent, built on pi 1.3.0&quot;, 이어서 판정기(Jev 1.13, 무료, 428 ms에 응답, 판정 지점 켜짐), 모델과 작업 디렉터리, 알아 두면 좋은 키.">
   </picture>
 </p>
 
-Node 22.19 이상이 필요해요. `mu -p "prompt"`는 한 번 실행하고 결과를 출력하고, `mu -c`는 마지막 세션을 이어 가요. `mu import --list`는 Claude Code와 Codex 대화를 찾아 주고, `mu import <file>`은 그 대화를 가져와요. `mu ledger [n]`은 최근 n개 세션에서 판정기가 내린 판정을 출력해요. 명령줄과 데스크톱 앱은 계정, 설정, 교훈을 함께 써요. 터미널에서는 `/settings`에서 테마를 고르기 전까지 mu 전용 `mu-dark`와 `mu-light` 테마를 써요(`system`은 터미널 색 구성을 따라가요).
+Node 22.19 이상이 필요해요. `spec.jev -p "prompt"`는 한 번 실행하고 결과를 출력하고, `spec.jev -c`는 마지막 세션을 이어 가요. `spec.jev import --list`는 Claude Code와 Codex 대화를 찾아 주고, `spec.jev import <file>`은 그 대화를 가져와요. `spec.jev ledger [n]`은 최근 n개 세션에서 판정기가 내린 판정을 출력해요. 명령줄과 데스크톱 앱은 계정, 설정, 교훈을 함께 써요. 터미널에서는 `/settings`에서 테마를 고르기 전까지 spec.jev 전용 `mu-dark`와 `mu-light` 테마를 써요(`system`은 터미널 색 구성을 따라가요).
 
 | 명령어 | 하는 일 |
 | --- | --- |
@@ -277,7 +277,7 @@ Node 22.19 이상이 필요해요. `mu -p "prompt"`는 한 번 실행하고 결�
 | `/permissions` | 전체 접근 / Jev 승인 / 최소 권한 |
 | `/board` | 쉬운 말 보드 켜고 끄기 |
 | `/remember`, `/lessons`, `/forget` | 교훈 하나 남기기, 목록 보기, 하나 사용 중지하기 |
-| `/skills` | mu가 실행에서 초안을 쓴 스킬: 읽기, 설치, 버리기 |
+| `/skills` | spec.jev가 실행에서 초안을 쓴 스킬: 읽기, 설치, 버리기 |
 | `/review`, `/commit` | 변경 사항을 리뷰하고 지적 사항을 P0부터 P3까지 나누기, 커밋 작성하기 |
 | `/checkpoints`, `/rewind` | 체크포인트 목록 보기, 그중 하나로 되돌아가기 |
 | `/agents`, `/swarm` | 서브 에이전트 보내기, 일하는 비를 하나하나 지켜보기 |
@@ -286,17 +286,17 @@ Node 22.19 이상이 필요해요. `mu -p "prompt"`는 한 번 실행하고 결�
 | `/import-chat` | Claude Code 또는 Codex 대화 가져오기 |
 | `/doctor` | 설정과 연결 점검하기 |
 
-pi의 자체 명령(`/model`, `/thinking`, `/login`, `/resume`, `/tree`, `/fork`, `/compact`, `/export` 등)은 그대로예요. `MU_JUDGE=laya,jev mu`로 실행하면 그 실행에서만 판정기를 바꿀 수 있어요.
+pi의 자체 명령(`/model`, `/thinking`, `/login`, `/resume`, `/tree`, `/fork`, `/compact`, `/export` 등)은 그대로예요. `MU_JUDGE=laya,jev spec.jev`로 실행하면 그 실행에서만 판정기를 바꿀 수 있어요.
 
 ## 프라이버시
 
-키는 이 컴퓨터를 떠나지 않아요. mu는 모델이나 런타임을 스스로 내려받지 않고, 내려받아야 하는 것은 모두 먼저 물어봐요. 판정기는 질문에 필요한 필드만 봐요(키가 없으면 그 필드는 OpenCode Zen의 무료 Jev로 가요. `MU_JUDGE=off`나 Laya를 쓰면 전부 이 컴퓨터에 남아요). 모든 판정은 로컬에 기록되고, 전부 읽어 볼 수 있어요.
+키는 이 컴퓨터를 떠나지 않아요. spec.jev는 모델이나 런타임을 스스로 내려받지 않고, 내려받아야 하는 것은 모두 먼저 물어봐요. 판정기는 질문에 필요한 필드만 봐요(키가 없으면 그 필드는 OpenCode Zen의 무료 Jev로 가요. `MU_JUDGE=off`나 Laya를 쓰면 전부 이 컴퓨터에 남아요). 모든 판정은 로컬에 기록되고, 전부 읽어 볼 수 있어요.
 
 ## 문서
 
 - [Getting started](../getting-started.md) · [설정](../configuration.md) · [판정기](../judges.md) · [문제 해결](../troubleshooting.md)(영어)
 - 참고: [모든 판정 지점](../reference/decision-points.md) · [모든 기능과 옵션](../reference/features.md) · [변경 기록](../../CHANGELOG.md)
-- 기여자용: [mu의 동작 방식](../architecture.md) · [판정 지점 추가하기](../adding-a-decision-point.md) · [번역](../translations.md)
+- 기여자용: [spec.jev의 동작 방식](../architecture.md) · [판정 지점 추가하기](../adding-a-decision-point.md) · [번역](../translations.md)
 
 ## 기여하기
 
@@ -304,18 +304,18 @@ pi의 자체 명령(`/model`, `/thinking`, `/login`, `/resume`, `/tree`, `/fork`
 
 ```bash
 npm install --ignore-scripts   # 의존성 설치, 라이프사이클 스크립트는 실행하지 않음
-node kyrn/bin/mu.mjs           # 이 체크아웃에서 mu 실행
+node kyrn/bin/mu.mjs           # 이 체크아웃에서 spec.jev 실행
 npm run check                  # 포맷, 린트, 타입 검사
 ./test.sh                      # 테스트 (모델이 필요한 테스트는 키가 없으면 건너뜀)
 ```
 
-데스크톱 앱은 `desktop/`에 있어요. `bun install` 다음에 `KYRN_ROOT="$(cd .. && pwd)" bun run start`를 실행하면 이 저장소의 mu를 쓰는 개발 빌드가 시작돼요(먼저 루트에서 `npm install`을 실행하세요).
+데스크톱 앱은 `desktop/`에 있어요. `bun install` 다음에 `KYRN_ROOT="$(cd .. && pwd)" bun run start`를 실행하면 이 저장소의 spec.jev를 쓰는 개발 빌드가 시작돼요(먼저 루트에서 `npm install`을 실행하세요).
 
 참여하는 모든 사람은 [행동 강령](../../CODE_OF_CONDUCT.md)을 따라요. 보안 문제는 [SECURITY.md](../../SECURITY.md)에 적힌 대로 비공개로 제보해 주세요.
 
 ## 출처와 라이선스
 
-mu는 MIT 라이선스예요([LICENSE](../../LICENSE), 데스크톱 앱은 [desktop/LICENSE](../../desktop/LICENSE)). [pi](https://github.com/earendil-works/pi)(코딩 에이전트, MIT)와 [AionUi](https://github.com/iOfficeAI/AionUi)를 바탕으로 만들었어요. 두 프로젝트에 감사드려요. 데스크톱 앱은 AionUi의 포크에서 시작했고, AionUi에서 온 파일은 [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt)에 정리되어 있으며 계속 Apache 2.0을 따라요([desktop/NOTICE](../../desktop/NOTICE)). 몇몇 판정 지점은 다른 프로젝트의 아이디어를 바탕으로 해요. 프롬프트 인젝션 검사의 질문 방식은 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)에서, 이어서 하기 검사와 일괄 판정 도구는 [oh-my-pi](https://github.com/can1357/oh-my-pi)를 따랐어요. 판정 커널에 쓰인 서드파티 코드는 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)에 정리되어 있어요.
+spec.jev는 MIT 라이선스예요([LICENSE](../../LICENSE), 데스크톱 앱은 [desktop/LICENSE](../../desktop/LICENSE)). [pi](https://github.com/earendil-works/pi)(코딩 에이전트, MIT)와 [AionUi](https://github.com/iOfficeAI/AionUi)를 바탕으로 만들었어요. 두 프로젝트에 감사드려요. 데스크톱 앱은 AionUi의 포크에서 시작했고, AionUi에서 온 파일은 [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt)에 정리되어 있으며 계속 Apache 2.0을 따라요([desktop/NOTICE](../../desktop/NOTICE)). 몇몇 판정 지점은 다른 프로젝트의 아이디어를 바탕으로 해요. 프롬프트 인젝션 검사의 질문 방식은 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)에서, 이어서 하기 검사와 일괄 판정 도구는 [oh-my-pi](https://github.com/can1357/oh-my-pi)를 따랐어요. 판정 커널에 쓰인 서드파티 코드는 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)에 정리되어 있어요.
 
 ## 커뮤니티
 
@@ -323,4 +323,4 @@ mu는 MIT 라이선스예요([LICENSE](../../LICENSE), 데스크톱 앱은 [desk
 - 버그 제보와 요청: [Issues](https://github.com/qybaihe/mu/issues/new/choose).
 - 그 밖에: [SUPPORT.md](../../SUPPORT.md).
 
-mu가 쓸모 있었다면 스타를 눌러 주세요. 다른 사람들이 찾기 쉬워져요.
+spec.jev가 쓸모 있었다면 스타를 눌러 주세요. 다른 사람들이 찾기 쉬워져요.

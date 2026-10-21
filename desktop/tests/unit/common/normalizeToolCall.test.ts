@@ -119,7 +119,7 @@ describe('normalizeToolCall', () => {
       expect(call('failed', REFUSAL, { content: [], mu: { answer: 'deny' } })?.denied).toBe(true);
     });
 
-    it('is known by mu’s refusal in a conversation from before the mark', () => {
+    it('is known by spec.jev’s refusal in a conversation from before the mark', () => {
       expect(call('failed', REFUSAL)?.denied).toBe(true);
     });
 

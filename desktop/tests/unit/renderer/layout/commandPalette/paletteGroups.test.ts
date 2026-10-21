@@ -245,7 +245,7 @@ describe('buildPaletteGroups', () => {
     expect(group(groups, 'commands')?.items[0]).toMatchObject({ conversationId: 'c7', detail: 'board help' });
   });
 
-  it("describes one of mu's own commands in the reader's language", () => {
+  it("describes one of spec.jev's own commands in the reader's language", () => {
     const board = { ...command('board'), description: MU_COMMAND_WORDS.get('board')![0] };
     const groups = buildPaletteGroups(sources({ query: 'board', commands: [board] }));
 

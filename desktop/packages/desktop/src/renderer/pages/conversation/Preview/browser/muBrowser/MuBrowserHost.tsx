@@ -11,8 +11,8 @@ import { giveKeyboard } from './webviews';
 const nextFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 
 /**
- * The browser's side of the bridge: opens (or hands out again) a page when mu starts a run, puts the keyboard on a
- * page before mu types, brings a page forward when mu asks a question, and shows that question. Mounted with the
+ * The browser's side of the bridge: opens (or hands out again) a page when spec.jev starts a run, puts the keyboard on a
+ * page before spec.jev types, brings a page forward when spec.jev asks a question, and shows that question. Mounted with the
  * conversation page, so the main process knows the browser can be shown exactly while it can.
  *
  * Everything here is the agent's doing, and announced as such: a run's page opening only marks the work panel's
@@ -44,7 +44,7 @@ const MuBrowserHost: React.FC<{ conversationId?: string }> = ({ conversationId }
         return;
       }
       if (request.kind === 'keyboard') {
-        // mu types where the person can see it: a page out of view is brought into view first.
+        // spec.jev types where the person can see it: a page out of view is brought into view first.
         let held = browserNow().activeTabId === request.tabId && giveKeyboard(request.tabId);
         if (!held) {
           bringIntoView(request.tabId);
@@ -69,7 +69,7 @@ const MuBrowserHost: React.FC<{ conversationId?: string }> = ({ conversationId }
       let tabId: string | null;
       if (decision.kind === 'reuse') {
         // The main process blanks the page before the run starts. Doing it from here as well would be a second
-        // navigation that can land after mu's own and wipe the page it had just opened.
+        // navigation that can land after spec.jev's own and wipe the page it had just opened.
         tabId = decision.tabId;
         switchBrowserTab(tabId);
         announcePreviewOpened('agent', 'browser');

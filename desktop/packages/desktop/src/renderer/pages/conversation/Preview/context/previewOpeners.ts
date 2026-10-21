@@ -3,9 +3,9 @@
  *
  * - `user`: the person opened it (a file link, the explorer, a diff, a web link, the browser's plus). The panel comes
  *   up on the tab that shows it.
- * - `agent`: the agent opened it (mu's browser starting a run, a page a tool opened). That tab only gets its dot: the
+ * - `agent`: the agent opened it (spec.jev's browser starting a run, a page a tool opened). That tab only gets its dot: the
  *   agent does not open the panel.
- * - `agent-watched`: mu's browser is about to type into its page, or asks the person to confirm a step on it. That
+ * - `agent-watched`: spec.jev's browser is about to type into its page, or asks the person to confirm a step on it. That
  *   work is done where the person can see it (a page out of view cannot even take the keyboard), so this one agent
  *   action brings the panel up on the browser.
  */
@@ -24,7 +24,7 @@ export function onPreviewOpened(listener: (by: PreviewOpener, where: OpenedIn) =
 
 /**
  * Say that something was opened. `openPreview` says it for every preview, the browser's store for every page it
- * opens; mu's browser also says it when it brings an existing page forward, which changes what the browser shows
+ * opens; spec.jev's browser also says it when it brings an existing page forward, which changes what the browser shows
  * without opening anything.
  */
 export function announcePreviewOpened(by: PreviewOpener, where: OpenedIn = 'preview'): void {

@@ -48,7 +48,7 @@ interface EventTypes {
   'sendbox.reply': [ReplyQuote]; // reply/quote a message
   'sendbox.reply.clear': void; // clear reply quote
   /**
-   * A command the app sends into a conversation for the person, as if typed: mu's board switch sends `/board on`.
+   * A command the app sends into a conversation for the person, as if typed: spec.jev's board switch sends `/board on`.
    * Sent at once when the agent is idle; while it works, the latest one waits and goes out as soon as it is idle
    * (not through the message queue, whose default is to hold). The 2nd arg is the target conversation id; only that
    * conversation's send box reacts. The 3rd hears what became of it.

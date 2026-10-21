@@ -4,7 +4,7 @@
 
 ## 1. 要解决什么
 
-mu 的 `browse` 工具移植自 browser-use/jev-ultrafast：主模型只说一次目标，之后每一步都是“观察页面 → 判定器一次判断（选操作 + 选目标）→ 执行 → 再观察”，中间过程不经过主模型的上下文。原来的 Skill 和 mu 在终端里的做法，都是另起一个无界面 Chrome，用户看不见过程。
+spec.jev 的 `browse` 工具移植自 browser-use/jev-ultrafast：主模型只说一次目标，之后每一步都是“观察页面 → 判定器一次判断（选操作 + 选目标）→ 执行 → 再观察”，中间过程不经过主模型的上下文。原来的 Skill 和 spec.jev 在终端里的做法，都是另起一个无界面 Chrome，用户看不见过程。
 
 桌面端里要做得更好：**同一个循环，直接驱动应用内对话旁边的浏览器面板**。比原 Skill 多出来的：
 
@@ -12,13 +12,13 @@ mu 的 `browse` 工具移植自 browser-use/jev-ultrafast：主模型只说一�
 - 管得住：随时暂停、继续、停止；暂停时可以自己操作页面（接管），继续后循环会重新观察页面再判断。
 - 不可逆操作（付款、删除、发送）用应用内的确认框问正在看页面的人，而不是被桥接层直接取消。
 - 登录态留在应用自己的浏览器分区里，既不碰用户的浏览器，也不用每次重新登录。
-- 应用没开（纯终端）时一切照旧：mu 启动自己的 Chrome。
+- 应用没开（纯终端）时一切照旧：spec.jev 启动自己的 Chrome。
 
 ## 2. harness 一侧（已完成）
 
 - `packages/kyrn-judge/src/browser/embedded.ts`：发现端点、握手、控制、确认、逐步通知。
 - 发现顺序：环境变量 `MU_BROWSER_ENDPOINT`（旧名 `KYRN_BROWSER_ENDPOINT` 也认）→ 数据目录里的 `desktop-browser.json`（内容 `{ "url": "ws://127.0.0.1:<端口>/<令牌>", "pid": <应用主进程号> }`）。只接受回环地址的 `ws://`；`pid` 对应的进程不在了就当没有。
-- 连上后先发 `Mu.hello`，带上 `session`：应用的适配器启动 harness 时设置的 `MU_DESKTOP_SESSION`（应用里这个对话的标识），桥据此把标签页开在对应对话旁边。终端里直接运行的 mu 没有这个变量，就不带。对方不认识这个方法（普通 Chrome）、版本不符、或回答 `embedded: false`（应用开着但没有可以放页面的对话），都退回 mu 自己的浏览器。
+- 连上后先发 `Mu.hello`，带上 `session`：应用的适配器启动 harness 时设置的 `MU_DESKTOP_SESSION`（应用里这个对话的标识），桥据此把标签页开在对应对话旁边。终端里直接运行的 spec.jev 没有这个变量，就不带。对方不认识这个方法（普通 Chrome）、版本不符、或回答 `embedded: false`（应用开着但没有可以放页面的对话），都退回 spec.jev 自己的浏览器。
 - 一次运行里所有 `Mu.` 调用都带上该标签页的 DevTools `sessionId`：同一条连接上可以有多次运行，桥靠它区分。
 - 运行开始和结束各发一次 `Mu.run`，应用因此能显示目标，结束时能显示真实的结局与原因，而不只是“已结束”。
 - 键盘类命令（`Input.dispatchKeyEvent`、`Input.insertText`）被桥以“页面没有拿到键盘”拒绝时，当作页面已变（`StalePage`）：重新观察、重新判断，而不是让整次运行失败。次数受判断预算约束。
@@ -56,7 +56,7 @@ harness 实际用到的方法以 `packages/kyrn-judge/src/browser/session.ts` �
 | `Mu.hello { version, session? }` | `{ embedded: boolean, version: 1 }` | 握手。`session` 是应用里的对话标识（只含字母、数字、`_`、`-`，最长 80）。没有可放页面的对话时 `embedded: false` |
 | `Mu.run { state: "started", goal, url }` / `{ state: "finished", status, reason? }` | `{}` | 目标与结局。`status` 取 `done` / `blocked` / `budget` / `needs_confirmation` / `aborted` / `read` / `failed`。可选：不发的话桥只能如实显示“已结束”（用户按了停止或拒绝了确认这两种它自己看得见） |
 | `Mu.control {}` | `{ paused: boolean, stop: boolean }` | harness 每一步之前都会问。`paused` 期间 harness 每 400 ms 再问一次；`stop` 为真则本次运行以“已中止”结束。新一次运行开始时（下一个 `Target.createTarget`）两者复位 |
-| `Mu.confirm { label, url }` | `{ allowed: boolean }` | 弹出应用内确认框：“mu 想执行：<label>”，显示页面地址。120 秒内没人回答视为拒绝；harness 等 125 秒，好让这个“拒绝”先到。`label` 是网页文本，只能当纯文本显示 |
+| `Mu.confirm { label, url }` | `{ allowed: boolean }` | 弹出应用内确认框：“spec.jev 想执行：<label>”，显示页面地址。120 秒内没人回答视为拒绝；harness 等 125 秒，好让这个“拒绝”先到。`label` 是网页文本，只能当纯文本显示 |
 | `Mu.step { step, kind, action, url, probability, pageChanged }` | `{}` | 给页面上方的实时步骤条用，不需要等待 |
 
 ### 3.4 安全要求

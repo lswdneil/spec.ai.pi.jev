@@ -3,7 +3,7 @@ import type { EndpointType } from '@/common/kyrn/models';
 /**
  * The services someone connects with nothing but an API key. The first-run guide recognises the service by the shape
  * of the key, checks the key with one model-list request to that service alone, and starts on a model from what the
- * service lists. The same table as the CLI's `mu setup`: keep the two alike.
+ * service lists. The same table as the CLI's `spec.jev setup`: keep the two alike.
  */
 export const SERVICE_IDS = [
   'deepseek',

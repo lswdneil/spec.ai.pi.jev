@@ -10,7 +10,7 @@ import type { Credential, KyrnSettings, SaveSettings } from '@/common/kyrn/types
 import type { DetailArea } from '../settingsNav';
 
 /**
- * The parts of mu's settings the save bar names when they have unsaved changes: the providers, the models, the judges
+ * The parts of spec.jev's settings the save bar names when they have unsaved changes: the providers, the models, the judges
  * (with whether their verdicts take effect and their order), the decision points, the features and the context
  * settings. Every settings page edits one draft of all of them, saved at once.
  */
@@ -29,7 +29,7 @@ export type SectionId = (typeof SECTIONS)[number];
 export const PAGE_ROWS = 12;
 
 /**
- * The switches that say what mu is, in the order a person meets them: the board it writes in plain language, the goal
+ * The switches that say what spec.jev is, in the order a person meets them: the board it writes in plain language, the goal
  * it keeps to, the agents it may spawn, what it remembers and what it forgets. They are the core features page, each
  * with the way to its row among the details, where every feature is.
  */
@@ -38,7 +38,7 @@ export const FEATURED_FEATURES = ['board', 'goal', 'swarm', 'hive', 'memory', 'f
 export const isFeatured = (name: string): boolean => (FEATURED_FEATURES as readonly string[]).includes(name);
 
 /**
- * Features that only change the terminal (the welcome box drawn when mu starts there): nothing in the app shows what
+ * Features that only change the terminal (the welcome box drawn when spec.jev starts there): nothing in the app shows what
  * they do, so the app's feature lists leave them out. The harness's manifest does not say where a feature acts; once it
  * does, that flag replaces this list.
  */
@@ -155,8 +155,8 @@ export const newDraft = (settings: KyrnSettings): Draft => ({ settings, judgeKey
 
 /**
  * The settings as the page reads them. A main process older than this page sends no permission default and no board
- * model: without them the whole area would fail to draw; with these it shows that mu cannot be told. The settings set
- * the permission default through the permission modes feature's option; only the guide moves mu's last pick (see
+ * model: without them the whole area would fail to draw; with these it shows that spec.jev cannot be told. The settings set
+ * the permission default through the permission modes feature's option; only the guide moves spec.jev's last pick (see
  * `toSave`).
  */
 export const completeSettings = (settings: KyrnSettings): KyrnSettings => ({
@@ -227,7 +227,7 @@ export function removedEntries(base: KyrnSettings, draft: Draft): string[] {
  */
 export function toSave(draft: Draft, base?: KyrnSettings): SaveSettings {
   const { keys: _keys, harness, decisionModes, features, models, permissions, boardModel, ...rest } = draft.settings;
-  // mu's last pick wins over the feature's option: a mode picked in the guide moves it along when there is one.
+  // spec.jev's last pick wins over the feature's option: a mode picked in the guide moves it along when there is one.
   const pick =
     base?.permissions.from === 'picked' && permissions.mode && permissions.mode !== base.permissions.mode
       ? { permissions: { mode: permissions.mode } }

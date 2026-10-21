@@ -65,11 +65,11 @@
   "more": "更多",
   "refresh": "重新整理",
   "readOnly": "唯讀",
-  "tray.showWindow": "顯示 mu",
+  "tray.showWindow": "顯示 spec.jev",
   "tray.newChat": "新建對話",
   "tray.closeToTray": "隱藏到托盤",
   "tray.hideToMenuBar": "隱藏到選單列",
-  "tray.about": "關於 mu",
+  "tray.about": "關於 spec.jev",
   "tray.restart": "重啟應用",
   "tray.quit": "結束",
   "tray.pauseAll": "暫停所有任務",
@@ -79,39 +79,39 @@
   "backendStartup": {
     "incompatibleRuntime": {
       "title": "目前系統不支援內建後端",
-      "description": "mu 已開啟，但本機服務無法在目前 Linux 版本上執行。請升級到受支援的 Linux 發行版後重新啟動 mu。",
+      "description": "spec.jev 已開啟，但本機服務無法在目前 Linux 版本上執行。請升級到受支援的 Linux 發行版後重新啟動 spec.jev。",
       "requiredVersions": "需要的執行階段符號：{{versions}}"
     },
     "incompleteInstallation": {
-      "title": "mu 安裝不完整",
-      "description": "目前安裝缺少必要的本機資源，mu 的本機服務無法啟動。請下載並重新安裝最新版 mu；如果重新安裝後仍然出現，請檢查系統安全軟體或防毒軟體是否隔離了 mu 的檔案。",
+      "title": "spec.jev 安裝不完整",
+      "description": "目前安裝缺少必要的本機資源，spec.jev 的本機服務無法啟動。請下載並重新安裝最新版 spec.jev；如果重新安裝後仍然出現，請檢查系統安全軟體或防毒軟體是否隔離了 spec.jev 的檔案。",
       "downloadLatest": "下載最新版",
-      "runtimeComponentDescription": "目前安裝缺少必要的內建執行元件，{{resource}} 無法啟動。請重新安裝最新版 mu；如果重新安裝後仍然出現，請檢查系統安全軟體或防毒軟體是否隔離了 mu 元件。"
+      "runtimeComponentDescription": "目前安裝缺少必要的內建執行元件，{{resource}} 無法啟動。請重新安裝最新版 spec.jev；如果重新安裝後仍然出現，請檢查系統安全軟體或防毒軟體是否隔離了 spec.jev 元件。"
     },
     "packageArchitectureMismatch": {
-      "title": "mu 安裝包架構不相符",
-      "description": "目前 mu 安裝包是 {{packageArch}}，但這台 Mac 是 {{deviceArch}}。你可能下載了錯誤的安裝包，請重新下載並安裝 {{expectedArch}} 版本。"
+      "title": "spec.jev 安裝包架構不相符",
+      "description": "目前 spec.jev 安裝包是 {{packageArch}}，但這台 Mac 是 {{deviceArch}}。你可能下載了錯誤的安裝包，請重新下載並安裝 {{expectedArch}} 版本。"
     },
     "dataMigration": {
       "title": "本地資料遷移失敗",
-      "description": "mu 已開啟，但本機服務在初始化本地資料時停止。重新安裝 mu 未必能解決此問題。應用程式日誌記錄了本地資料庫遷移停在哪一步。"
+      "description": "spec.jev 已開啟，但本機服務在初始化本地資料時停止。重新安裝 spec.jev 未必能解決此問題。應用程式日誌記錄了本地資料庫遷移停在哪一步。"
     },
     "databaseNewerThanApp": {
-      "title": "需要更新 mu",
-      "description": "本機資料由較新版本的 mu 建立，目前版本無法開啟。請將 mu 更新至最新版本即可繼續使用，資料完好無損，無需重新安裝或重設資料。",
-      "descriptionWithVersion": "本機資料由比目前版本 v{{currentVersion}} 更新的 mu 建立，目前版本無法開啟。請將 mu 更新至最新版本即可繼續使用，資料完好無損，無需重新安裝或重設資料。"
+      "title": "需要更新 spec.jev",
+      "description": "本機資料由較新版本的 spec.jev 建立，目前版本無法開啟。請將 spec.jev 更新至最新版本即可繼續使用，資料完好無損，無需重新安裝或重設資料。",
+      "descriptionWithVersion": "本機資料由比目前版本 v{{currentVersion}} 更新的 spec.jev 建立，目前版本無法開啟。請將 spec.jev 更新至最新版本即可繼續使用，資料完好無損，無需重新安裝或重設資料。"
     },
     "localDataRepair": {
       "title": "本機資料修復失敗",
-      "description": "mu 已開啟，但本機服務在準備本機啟動資料時停止，例如 assistant 或代理記錄。重新安裝 mu 可能無法解決此問題。應用程式日誌記錄了哪些本機資料未能準備好。"
+      "description": "spec.jev 已開啟，但本機服務在準備本機啟動資料時停止，例如 assistant 或代理記錄。重新安裝 spec.jev 可能無法解決此問題。應用程式日誌記錄了哪些本機資料未能準備好。"
     },
     "startupDirectory": {
       "title": "啟動目錄無法使用",
-      "description": "mu 已開啟，但因為設定的工作目錄或日誌目錄不存在、無法存取或權限受限，本機服務無法啟動。請確認這些目錄存在且可寫入，然後重新啟動 mu。"
+      "description": "spec.jev 已開啟，但因為設定的工作目錄或日誌目錄不存在、無法存取或權限受限，本機服務無法啟動。請確認這些目錄存在且可寫入，然後重新啟動 spec.jev。"
     },
     "recoverableDatabaseCorruption": {
       "title": "本機資料已損壞",
-      "description": "偵測到本機資料庫損壞，mu 無法繼續啟動。確認後將備份舊資料庫，並建立新的本機資料庫繼續啟動。歷史對話將不再顯示，舊資料庫會保留為備份檔案。",
+      "description": "偵測到本機資料庫損壞，spec.jev 無法繼續啟動。確認後將備份舊資料庫，並建立新的本機資料庫繼續啟動。歷史對話將不再顯示，舊資料庫會保留為備份檔案。",
       "confirmRebuild": "備份舊資料庫並重建新資料庫",
       "rebuildFailed": "備份舊資料庫並重建新資料庫失敗",
       "confirmDialog": {
@@ -122,8 +122,8 @@
       }
     },
     "transientConcurrentStartup": {
-      "title": "mu 正在啟動",
-      "description": "此視窗開啟時，另一個 mu 啟動程序仍在使用本機資料。這是暫時的，您的資料是安全的——無需重新安裝。請稍候片刻後重試，或重新啟動 mu。"
+      "title": "spec.jev 正在啟動",
+      "description": "此視窗開啟時，另一個 spec.jev 啟動程序仍在使用本機資料。這是暫時的，您的資料是安全的——無需重新安裝。請稍候片刻後重試，或重新啟動 spec.jev。"
     },
     "pendingSlow": {
       "title": "正在啟動",
@@ -164,12 +164,12 @@
   "selectedSkills": "已選技能",
   "aiAssistant": "AI 助手",
   "kyrn": {
-    "settings": "mu 設定",
+    "settings": "spec.jev 設定",
     "judge": "判定器設定",
     "reload": "重新載入",
-    "starting": "正在啟動 mu…",
-    "startingHint": "正在連線本機的 mu 核心，讀取模型與判定器設定。",
-    "startupError": "mu 啟動失敗",
+    "starting": "正在啟動 spec.jev…",
+    "startingHint": "正在連線本機的 spec.jev 核心，讀取模型與判定器設定。",
+    "startupError": "spec.jev 啟動失敗",
     "hiveView": {
       "title": "蜂群",
       "agents": "子智慧體",
@@ -200,7 +200,7 @@
       "lineDelivery_other": "{{from}} → {{to}}：送達 {{count}} 條",
       "lineCorrection": "{{from}} 糾正了 {{to}} 的發現",
       "lineConflict": "{{from}} 與 {{to}} 的發現有爭議",
-      "lineReport": "{{from}} 已向 mu 回報",
+      "lineReport": "{{from}} 已向 spec.jev 回報",
       "deliveries": "資訊流",
       "noDeliveries": "尚無已確認的送達。",
       "board": "共享看板",
@@ -954,7 +954,7 @@
       "progress": "進度",
       "agent_start": "任務開始",
       "agent_settled": "任務結束",
-      "kyrn_rpc_closed": "mu 核心已關閉",
+      "kyrn_rpc_closed": "spec.jev 核心已關閉",
       "auto_compaction_start": "正在壓縮上下文",
       "auto_compaction_end": "壓縮結束",
       "hive.note": "共享發現",
@@ -1054,7 +1054,7 @@
     "betaActive": "Beta 已啟用",
     "betaShadow": "Beta 影子模式",
     "betaOff": "Beta 已關閉",
-    "contextWaiting": "等待 mu 核心連線",
+    "contextWaiting": "等待 spec.jev 核心連線",
     "contextTrigger": "{{tokens}} tokens 觸發壓縮",
     "autoOff": "自動壓縮已關閉",
     "compacting": "正在壓縮上下文…",
@@ -1089,7 +1089,7 @@
       "switch": "這個專案的人話看板",
       "switching": "正在切換…",
       "afterTurn": "代理這一步做完就切換",
-      "unknown": "這個對話還沒有人話看板。它只在 mu 的對話裡、而且「設定 → 核心功能」裡開著人話看板時出現。",
+      "unknown": "這個對話還沒有人話看板。它只在 spec.jev 的對話裡、而且「設定 → 核心功能」裡開著人話看板時出現。",
       "off": "開啟後，代理每做一段，這裡就用白話告訴你：進展到哪了、正在做什麼、哪些需要你確認。",
       "cost": "只對這個專案生效。每次更新會呼叫一次模型。",
       "empty": "等代理做一會兒，這裡會用白話告訴你進展",
@@ -1164,11 +1164,11 @@
         "helpers_back_other": "{{count, number}} 個助手回來了",
         "permission_allowed": "你允許了：{{summary}}",
         "permission_denied": "你沒允許：{{summary}}",
-        "goal_round": "目標還沒達成，mu 讓它接著做（第 {{round, number}} 輪）{{reason}}",
+        "goal_round": "目標還沒達成，spec.jev 讓它接著做（第 {{round, number}} 輪）{{reason}}",
         "goal_met": "目標達成了：{{text}}",
         "goal_paused": "目標暫停了{{reason}}",
-        "trouble_loop": "mu 發現它在重複同一步：{{detail}}",
-        "trouble": "mu 發現：{{detail}}",
+        "trouble_loop": "spec.jev 發現它在重複同一步：{{detail}}",
+        "trouble": "spec.jev 發現：{{detail}}",
         "did": "用 {{tool}} 做了：{{what}}",
         "said_quote": "它說：{{text}}",
         "ended": "停下來了。",
@@ -1209,7 +1209,7 @@
       "retireConfirm": "讓這則經驗退役？之後不會再召回它。",
       "loadFailed": "讀不到經驗庫",
       "saveFailed": "這則經驗沒有改成",
-      "empty": "這個專案還沒有經驗。mu 會從你的糾正、它自己脫困的辦法和 /remember 裡學到經驗。",
+      "empty": "這個專案還沒有經驗。spec.jev 會從你的糾正、它自己脫困的辦法和 /remember 裡學到經驗。",
       "noneActive": "沒有使用中的經驗。「全部」裡還有已退役和已被取代的。",
       "noMatch": "沒有符合的經驗。",
       "noProject": "這個對話沒有專案資料夾，只列出到處適用的經驗。",
@@ -1273,7 +1273,7 @@
       "setUp": "設定判定器",
       "skipped": "已略過分類",
       "off": "分類已關閉",
-      "firstHint": "這一行是判定器的判斷：每則訊息先由判定器快速分類，mu 再決定怎麼接。每次判斷都在右側「判定」裡。"
+      "firstHint": "這一行是判定器的判斷：每則訊息先由判定器快速分類，spec.jev 再決定怎麼接。每次判斷都在右側「判定」裡。"
     },
     "eventLine": {
       "judgeNotice": {
@@ -1327,18 +1327,18 @@
       "mcp": {
         "line": "{{name}}：{{reason}}",
         "projectUntrusted": "專案未受信任，而這個伺服器是專案自行定義的",
-        "needsApproval": "它由專案定義（{{source}}），尚未獲得核准；在 mu 中開啟這個資料夾並允許一次，或在 mu.json 中定義它",
+        "needsApproval": "它由專案定義（{{source}}），尚未獲得核准；在 spec.jev 中開啟這個資料夾並允許一次，或在 spec.jev.json 中定義它",
         "needsSignIn": "需要先登入：執行 /mcp login {{server}}",
         "denied": "你沒有允許這個專案的伺服器啟動",
         "unreachable": "無法啟動或連線到它",
-        "closed": "mu 還在等回應時，連線就關閉了",
+        "closed": "spec.jev 還在等回應時，連線就關閉了",
         "timeout": "它沒有及時回應",
         "aborted": "啟動被取消了",
         "rpc": "它回傳了錯誤",
         "protocol": "它的回應不符合 MCP 協定",
         "startFailed": "啟動失敗了",
-        "disconnected": "連線中斷了；下次呼叫時 mu 會重新連線",
-        "crashedRestarting": "執行時當機了，mu 會重新啟動它一次",
+        "disconnected": "連線中斷了；下次呼叫時 spec.jev 會重新連線",
+        "crashedRestarting": "執行時當機了，spec.jev 會重新啟動它一次",
         "crashedAgain": "又當機了，不會再重新啟動",
         "restartFailed": "當機後重新啟動也失敗了",
         "restartFailedCause": "當機後重新啟動也失敗了：{{cause}}"
@@ -1396,7 +1396,7 @@
       },
       "injection": {
         "withheld": "{{tool}}：{{total}} 段中攔下 {{withheld}} 段，裡面有衝著 AI 來的指令",
-        "byRules": "判定器沒有回答：按 mu 的規則判斷",
+        "byRules": "判定器沒有回答：按 spec.jev 的規則判斷",
         "excerpt": "開頭：{{text}}"
       }
     },
@@ -1405,7 +1405,7 @@
       "contextHint": "模型下一次要讀的內容占它上下文的 {{percent}}",
       "cache": "快取命中",
       "cacheHint": "最近一輪快取命中 {{turn}}，整個對話快取命中 {{session}}",
-      "pending": "mu 下一次回覆後顯示"
+      "pending": "spec.jev 下一次回覆後顯示"
     },
     "roles": {
       "browser": "瀏覽器",
@@ -1418,7 +1418,7 @@
     "kernel": {
       "free": "免費",
       "local": "本機",
-      "judgeHint": "回答 mu 各判定點的判定器。點擊可更換。",
+      "judgeHint": "回答 spec.jev 各判定點的判定器。點擊可更換。",
       "points": "{{active}}/{{total}} 個判定點生效",
       "shadow_one": "· {{count}} 個影子模式",
       "shadow_other": "· {{count}} 個影子模式",
@@ -1433,7 +1433,7 @@
       "kernel": "判定核心",
       "judgeReady": "{{judge}} 已就緒",
       "judgeOff": "判定已關閉",
-      "title": "讓 mu 做點什麼？"
+      "title": "讓 spec.jev 做點什麼？"
     }
   },
   "menu": {
@@ -1527,12 +1527,12 @@
   },
   "nodeRuntime": {
     "title": "下載 Node.js？",
-    "message": "mu 使用自帶的 Node.js 執行智慧體和工具，這份 Node.js 尚未下載。",
-    "detail": "將從 nodejs.org 下載 Node.js {{version}}（約 {{size}} MB），解壓縮到：\n{{folder}}\n\n選「稍後」不會下載任何東西：mu 照常開啟，需要 Node.js 的地方會提示，下次啟動時再詢問。",
+    "message": "spec.jev 使用自帶的 Node.js 執行智慧體和工具，這份 Node.js 尚未下載。",
+    "detail": "將從 nodejs.org 下載 Node.js {{version}}（約 {{size}} MB），解壓縮到：\n{{folder}}\n\n選「稍後」不會下載任何東西：spec.jev 照常開啟，需要 Node.js 的地方會提示，下次啟動時再詢問。",
     "download": "下載",
     "later": "稍後",
-    "note": "Node.js 尚未下載，這個智慧體暫時無法執行。下次啟動 mu 時會再詢問。",
-    "toolNote": "Node.js 尚未下載，需要它的工具暫時無法執行。下次啟動 mu 時會再詢問。"
+    "note": "Node.js 尚未下載，這個智慧體暫時無法執行。下次啟動 spec.jev 時會再詢問。",
+    "toolNote": "Node.js 尚未下載，需要它的工具暫時無法執行。下次啟動 spec.jev 時會再詢問。"
   },
   "firstHint": {
     "close": "知道了"

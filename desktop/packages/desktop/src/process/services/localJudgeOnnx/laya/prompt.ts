@@ -1,5 +1,5 @@
 // Vendored from mizchi/laya-mlx, web/packages/laya-web/src/prompt.ts at dc3aa6b (Apache-2.0).
-// See ./NOTICE.md. Local changes are marked "mu:".
+// See ./NOTICE.md. Local changes are marked "spec.jev:".
 
 import { pyJson } from './pyjson.ts';
 import { renderOptions } from './questions.ts';
@@ -98,7 +98,7 @@ export function collate(items: PreparedItem[], padId: number): Batch {
   items.forEach((item, row) => {
     item.ids.forEach((id, i) => {
       batch.inputIds[row * length + i] = BigInt(id);
-      batch.attentionMask[row * length + i] = BigInt(1); // mu: no bigint literal, the desktop targets ES6
+      batch.attentionMask[row * length + i] = BigInt(1); // spec.jev: no bigint literal, the desktop targets ES6
     });
     item.markers.forEach((position, i) => {
       batch.markerPos[row * markers + i] = BigInt(position);

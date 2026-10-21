@@ -44,7 +44,7 @@ export type Runner = (command: string, args: readonly string[], options?: RunOpt
 const STDERR_LIMIT = 64 * 1024;
 /** How long a stopped program has to end before it is ended outright. */
 const KILL_GRACE_MS = 2000;
-/** How long after the program exits its output may stay open (held by something it started) before mu stops waiting. */
+/** How long after the program exits its output may stay open (held by something it started) before spec.jev stops waiting. */
 const PIPE_GRACE_MS = 500;
 
 export const run: Runner = (command, args, options = {}) =>
@@ -224,7 +224,7 @@ export function invocationFor(command: string, args: readonly string[], lookup: 
 export type Binary = "ast-grep" | "git" | "gh";
 
 /**
- * What to tell someone whose machine lacks a program a pack needs. mu installs
+ * What to tell someone whose machine lacks a program a pack needs. spec.jev installs
  * nothing itself. The commands are the ones each project documents.
  */
 export function installHint(binary: Binary, platform: NodeJS.Platform): string {

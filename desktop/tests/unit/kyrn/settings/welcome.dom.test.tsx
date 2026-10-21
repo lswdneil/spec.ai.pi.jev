@@ -76,7 +76,7 @@ vi.mock('@/renderer/components/settings/LanguageSwitcher', () => ({
   default: () => <div data-testid='language-switcher' />,
 }));
 
-/** Someone who just installed mu: the built-in judges, no provider, no startup model, no key. */
+/** Someone who just installed spec.jev: the built-in judges, no provider, no startup model, no key. */
 function newUser(patch: Partial<KyrnSettings> = {}): KyrnSettings {
   return {
     revision: 'r1',
@@ -254,9 +254,9 @@ describe('the first-run guide', () => {
     expect(within(anthropic).queryByText('Claude')).not.toBeInTheDocument();
   });
 
-  it('says what mu is, connects an API model, takes a judge key, saves once at the end, and is not shown again', async () => {
+  it('says what spec.jev is, connects an API model, takes a judge key, saves once at the end, and is not shown again', async () => {
     at('/welcome', <Welcome />);
-    expect(await screen.findByText('Welcome to mu')).toBeInTheDocument();
+    expect(await screen.findByText('Welcome to spec.jev')).toBeInTheDocument();
     expect(screen.getByText('A check at every step')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('mu-welcome-begin'));
     fireEvent.click(await screen.findByTestId('mu-welcome-way-openai'));
@@ -605,7 +605,7 @@ describe('the first-run guide', () => {
 });
 
 describe('the permission step', () => {
-  /** Someone new on a mu with permission modes, in `permissions`, the feature on or off. */
+  /** Someone new on a spec.jev with permission modes, in `permissions`, the feature on or off. */
   function withModes(permissions: KyrnSettings['permissions'] = { mode: 'jev', from: 'default' }, enabled = true) {
     const parsed = parseManifest(withOwnPlaces(manifestJson));
     if (parsed.status !== 'ok') throw new Error('manifest with permission modes is not readable');
@@ -676,7 +676,7 @@ describe('the permission step', () => {
     expect(bridge.save).not.toHaveBeenCalled();
   });
 
-  it('is not there when mu has no permission modes, or they are switched off', async () => {
+  it('is not there when spec.jev has no permission modes, or they are switched off', async () => {
     bridge.settings.mockResolvedValue({ ok: true, data: withModes(undefined, false) });
     at('/welcome', <Welcome />);
     fireEvent.click(await screen.findByTestId('mu-welcome-begin'));
@@ -1097,7 +1097,7 @@ describe('pasting an API key', () => {
     await said("The key works, but Kimi doesn't list any models for it.");
     // Asked once: a key .cn took is not tried at .ai.
     expect(hosts()).toEqual(['api.moonshot.cn']);
-    expect(screen.getByLabelText('mu will start with')).toHaveValue('kimi-k2.6');
+    expect(screen.getByLabelText('spec.jev will start with')).toHaveValue('kimi-k2.6');
     await toSummary();
     expect(screen.getByText('Kimi / kimi-k2.6')).toBeInTheDocument();
   });

@@ -4,7 +4,7 @@ import { isPreflightHintId, type PreflightHintId } from '@/renderer/pages/conver
 import { readJevPreflightRow } from '@/renderer/utils/chat/jevPreflight';
 
 /**
- * How Jev's classification of a message shows in the conversation: one line, not a tool call. The mu adapter
+ * How Jev's classification of a message shows in the conversation: one line, not a tool call. The spec.jev adapter
  * (`process/agent/kyrn/events.ts`) sends it as a tool call with the id `jev:<runtime>:<turn>` and marks its stage in
  * `rawOutput.preflight` (pending, verdict with the verdict's fields, fallback). Conversations recorded before that
  * carry only the English title ("Jev · Classifying", "Jev · <turn type>", "Jev · Fallback"), which is read instead.

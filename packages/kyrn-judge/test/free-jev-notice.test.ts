@@ -38,7 +38,7 @@ describe("the free Jev notice", () => {
 		expect(first.notified).toHaveLength(1);
 		expect(first.notified[0]).toMatchObject({ type: "info" });
 		expect(first.notified[0].message).toContain("OpenCode Zen");
-		expect(first.notified[0].message).toContain("mu setup");
+		expect(first.notified[0].message).toContain("spec.jev setup");
 		expect(first.presented).toEqual([
 			{ kind: "judge.notice", payload: { code: "free_jev", message: first.notified[0].message } },
 		]);

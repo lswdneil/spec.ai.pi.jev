@@ -1,7 +1,7 @@
 /**
- * Picking Claude Code and Codex conversations to bring into mu (common/kyrn/importChats.ts): every one found on this
- * computer, under its tool, newest first, with its project folder, date and first message. The chosen ones become mu
- * conversations in the conversation list (with the native host on, the mu sessions themselves); one alone opens right
+ * Picking Claude Code and Codex conversations to bring into spec.jev (common/kyrn/importChats.ts): every one found on this
+ * computer, under its tool, newest first, with its project folder, date and first message. The chosen ones become spec.jev
+ * conversations in the conversation list (with the native host on, the spec.jev sessions themselves); one alone opens right
  * away. The settings dialogs' frame (MuModal's
  * standard variant, as the theme and MCP import dialogs): the title at the start, hairlines between title, body and
  * buttons.
@@ -179,7 +179,7 @@ const ImportChatsModal: React.FC<Props> = ({ visible, onClose, stay = false }) =
       const done = outcomes.filter((outcome): outcome is Done => outcome.status !== 'failed');
       const failed = outcomes.filter((outcome): outcome is Failed => outcome.status === 'failed');
       if (done.length > 0) {
-        // The sessions were written by `mu import`, not by the app: the native list is read again to show them.
+        // The sessions were written by `spec.jev import`, not by the app: the native list is read again to show them.
         if (native) rereadNativeConversations();
         else emitter.emit('chat.history.refresh');
         Message.success(t('mu.importChats.done', { count: done.length }));

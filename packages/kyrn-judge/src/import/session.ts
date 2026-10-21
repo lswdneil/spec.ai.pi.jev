@@ -3,7 +3,7 @@
  * and call the builder in the order things happened; the builder keeps pi's rules: tool results follow the assistant
  * message that asked for them, nothing else comes between a call and its result, and every call ends with a result.
  *
- * Only node: built-ins at run time (the pi imports are types), so that `mu import` runs on a bare Node.
+ * Only node: built-ins at run time (the pi imports are types), so that `spec.jev import` runs on a bare Node.
  */
 import { randomBytes, randomUUID } from "node:crypto";
 import { closeSync, openSync, readdirSync, statSync, writeSync } from "node:fs";
@@ -284,7 +284,7 @@ export function shellText(text: string): { command: string; output: string } | u
 	return { command: command.trim(), output };
 }
 
-/** Setup the other tool gave its model (its instructions, the environment): mu gives its own, so these are left out. */
+/** Setup the other tool gave its model (its instructions, the environment): spec.jev gives its own, so these are left out. */
 const SETUP_TAGS = new Set([
 	"environment_context",
 	"user_instructions",
@@ -706,7 +706,7 @@ export interface ConvertedTranscript {
 	hasConversation: boolean;
 }
 
-/** What the model reads first in an imported session. English, as the rest of what mu tells a model. */
+/** What the model reads first in an imported session. English, as the rest of what spec.jev tells a model. */
 export function importNote(tool: ImportTool, source: string): string {
 	const name = TOOL_NAMES[tool];
 	return [

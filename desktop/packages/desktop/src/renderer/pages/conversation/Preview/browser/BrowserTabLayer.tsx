@@ -65,7 +65,7 @@ const BrowserTabLayer: React.FC<BrowserTabLayerProps> = ({ tabs, activeTabId, on
               zIndex: isActive ? 1 : 0,
             }}
           >
-            {/* A page mu opened gets its own partition and the step bar; everything else is unchanged. */}
+            {/* A page spec.jev opened gets its own partition and the step bar; everything else is unchanged. */}
             {tab.muRun ? <MuBrowserTab {...page} /> : <BrowserViewer {...page} />}
           </div>
         );

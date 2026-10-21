@@ -365,7 +365,7 @@ const ChatLayout: React.FC<{
           />
         )}
       </div>
-      {/* mu's browse loop opens its tabs in this conversation's browser panel and asks its questions here. */}
+      {/* spec.jev's browse loop opens its tabs in this conversation's browser panel and asks its questions here. */}
       <MuBrowserHost conversationId={conversation_id} />
     </ArcoLayout>
   );

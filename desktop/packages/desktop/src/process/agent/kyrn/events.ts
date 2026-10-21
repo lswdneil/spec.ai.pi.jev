@@ -17,7 +17,7 @@ export const messageThinking = (value: unknown): string =>
     .map((block) => text(block.thinking))
     .join('');
 
-/** Maps real mu events onto the app's existing tool cards; no second renderer or synthetic reasoning. */
+/** Maps real spec.jev events onto the app's existing tool cards; no second renderer or synthetic reasoning. */
 export function mapEvent(event: JsonRecord): SessionUpdate[] {
   if (event.type === 'message_update') {
     const delta = asRecord(event.assistantMessageEvent);
@@ -108,7 +108,7 @@ export function mapEvent(event: JsonRecord): SessionUpdate[] {
         },
       ];
   }
-  // What mu notifies (a command's answer, a warning) is no part of the reply: the bridge shows it as a line of its own
+  // What spec.jev notifies (a command's answer, a warning) is no part of the reply: the bridge shows it as a line of its own
   // (`KyrnAgent`'s notices).
   return [];
 }

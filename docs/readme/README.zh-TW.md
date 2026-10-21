@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="../../desktop/resources/app.png" width="96" alt="mu">
+  <img src="../../desktop/resources/app.png" width="96" alt="spec.jev">
 </p>
-<h1 align="center">mu</h1>
+<h1 align="center">spec.jev</h1>
 <p align="center">μ · Only what's needed.</p>
 <p align="center">帶判定核心的程式設計代理。以 <a href="https://github.com/earendil-works/pi">pi</a> 為基礎。</p>
 
@@ -21,16 +21,16 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="run-dark.gif">
-    <img src="run-light.gif" alt="桌面端裡的一次執行：測試在 main 上失敗了，找出原因並修好。Jev 把訊息判為多步驟任務（input.preflight），模型跑測試、讀解析器，說要把分鐘改成 60,000 再跑一次測試，然後停了。Jev 判定這次執行半途而止（turn.continue），mu 提醒模型這一輪還沒完，模型改好單位、測試通過。右側判定面板逐條列出每次裁決、判定點和耗時。">
+    <img src="run-light.gif" alt="桌面端裡的一次執行：測試在 main 上失敗了，找出原因並修好。Jev 把訊息判為多步驟任務（input.preflight），模型跑測試、讀解析器，說要把分鐘改成 60,000 再跑一次測試，然後停了。Jev 判定這次執行半途而止（turn.continue），spec.jev 提醒模型這一輪還沒完，模型改好單位、測試通過。右側判定面板逐條列出每次裁決、判定點和耗時。">
   </picture>
   <br>
-  <sub>在桌面端裡錄下的一次執行。程式設計模型的回覆是為錄製寫好的腳本（介面上顯示為 GPT-6.1 Sol）；判定器的裁決、耗時和那次復原都是真的：模型話說一半就停了，<code>turn.continue</code> 發現了，mu 讓它回去做完。</sub>
+  <sub>在桌面端裡錄下的一次執行。程式設計模型的回覆是為錄製寫好的腳本（介面上顯示為 GPT-6.1 Sol）；判定器的裁決、耗時和那次復原都是真的：模型話說一半就停了，<code>turn.continue</code> 發現了，spec.jev 讓它回去做完。</sub>
 </p>
 
-一個程式設計代理每個工作階段要做幾百個和程式碼無關的決定：什麼留在上下文裡，一條指令安不安全，一個發現值不值得告訴另一個代理，工作做完了沒有。交給大模型，花的是 token、延遲和注意力；交給寫死的規則，錯得太多。mu 把它們交給一個**判定器**：一個小而快的模型，每次只回答一個有邊界的問題，每一輪有 40 個判定點。大模型把注意力留給正事。
+一個程式設計代理每個工作階段要做幾百個和程式碼無關的決定：什麼留在上下文裡，一條指令安不安全，一個發現值不值得告訴另一個代理，工作做完了沒有。交給大模型，花的是 token、延遲和注意力；交給寫死的規則，錯得太多。spec.jev 把它們交給一個**判定器**：一個小而快的模型，每次只回答一個有邊界的問題，每一輪有 40 個判定點。大模型把注意力留給正事。
 
-- **mu**：命令列。pi 的全部能力，加上判定核心。
-- **mu 桌面版**：內建 mu 和執行環境的桌面應用程式。下載，接上一個模型，開始。
+- **spec.jev**：命令列。pi 的全部能力，加上判定核心。
+- **spec.jev 桌面版**：內建 spec.jev 和執行環境的桌面應用程式。下載，接上一個模型，開始。
 - **Jev**：判定器。是非題、選擇題、評分題，每個答案帶機率，每一次判定都記進判定帳本。除了審批只由 Jev 決定，任何判定點都可以交給本機判定器（Laya）或任何一個大模型。
 
 > 還在早期開發。預發布版（0.1.x）在 npm 和 [Releases](https://github.com/qybaihe/mu/releases) 上，作者每天都在用。名稱、設定和格式都可能改變。
@@ -44,12 +44,12 @@
 **命令列。**
 
 ```bash
-npm i -g mu-agent   # Node.js 22.19 或更新版本
-mu setup            # 接上一個模型
-mu                  # 在目前目錄開一個工作階段
+npm i -g spec.jev   # Node.js 22.19 或更新版本
+spec.jev setup            # 接上一個模型
+spec.jev                  # 在目前目錄開一個工作階段
 ```
 
-開始使用不需要判定器的金鑰：設定之前，由 OpenCode Zen 上免費的 Jev 回答。所有判定點一開始就生效，每次判定都會記錄下來（`/status`、`mu ledger`、桌面版的判定分頁）。如果只想記錄判定器會怎麼做、不改變行為，在 `~/.mu/agent/mu.json` 寫入 `{"modes": {"default": "shadow"}}`。更多請見 [Getting started](../getting-started.md)（英文）。
+開始使用不需要判定器的金鑰：設定之前，由 OpenCode Zen 上免費的 Jev 回答。所有判定點一開始就生效，每次判定都會記錄下來（`/status`、`spec.jev ledger`、桌面版的判定分頁）。如果只想記錄判定器會怎麼做、不改變行為，在 `~/.spec.jev/agent/spec.jev.json` 寫入 `{"modes": {"default": "shadow"}}`。更多請見 [Getting started](../getting-started.md)（英文）。
 
 ## 一輪是怎麼走的
 
@@ -142,7 +142,7 @@ mu                  # 在目前目錄開一個工作階段
 
 ## 判定器
 
-- **Jev**（雲端）。有邊界的問題，答案帶機率。可以經 TypeSafe、OpenRouter、Vercel AI Gateway、OpenCode Zen、Cloudflare Workers AI，或任何支援同一協定的服務呼叫，每個服務有自己的金鑰（`TYPESAFE_API_KEY`、`MU_JUDGE_OPENROUTER_API_KEY`、`AI_GATEWAY_API_KEY`、`OPENCODE_API_KEY`、`CLOUDFLARE_API_KEY` 加 `CLOUDFLARE_ACCOUNT_ID`）：在桌面版的「判定器」頁選一個，預設用第一個設定了金鑰的。一把金鑰都沒有時，預設由 OpenCode Zen 上限時免費的 Jev 1.13 回答：判定要讀的內容會送到 OpenCode，它不拿來訓練模型，mu 每天提示一次。設定金鑰（`mu setup`，或「判定器」頁）後，下一個問題起就用你的金鑰。在作者自己的工作階段裡實測：HTTP/2 上一個熱連線的問題約 0.3 秒；16 塊工具輸出併成一個請求判完 0.44 秒，狀態只計費一次。判定、機率和耗時都進判定帳本：`mu ledger`，或桌面版的「判定」頁。
+- **Jev**（雲端）。有邊界的問題，答案帶機率。可以經 TypeSafe、OpenRouter、Vercel AI Gateway、OpenCode Zen、Cloudflare Workers AI，或任何支援同一協定的服務呼叫，每個服務有自己的金鑰（`TYPESAFE_API_KEY`、`MU_JUDGE_OPENROUTER_API_KEY`、`AI_GATEWAY_API_KEY`、`OPENCODE_API_KEY`、`CLOUDFLARE_API_KEY` 加 `CLOUDFLARE_ACCOUNT_ID`）：在桌面版的「判定器」頁選一個，預設用第一個設定了金鑰的。一把金鑰都沒有時，預設由 OpenCode Zen 上限時免費的 Jev 1.13 回答：判定要讀的內容會送到 OpenCode，它不拿來訓練模型，spec.jev 每天提示一次。設定金鑰（`spec.jev setup`，或「判定器」頁）後，下一個問題起就用你的金鑰。在作者自己的工作階段裡實測：HTTP/2 上一個熱連線的問題約 0.3 秒；16 塊工具輸出併成一個請求判完 0.44 秒，狀態只計費一次。判定、機率和耗時都進判定帳本：`spec.jev ledger`，或桌面版的「判定」頁。
 - **Laya**（本機）。一個 3.22 億參數的判定器，在你的機器上執行，不經過網路。未經你同意不下載任何東西。在簡單述詞上可靠，在後設判斷上偏弱：先讓它以影子模式和 Jev 並行執行，看過判定帳本再把判定點交給它。
 - **pi 模型目錄裡的任何分類模型**，作為一個層級：`classifier:<provider>/<model>`。例如 Cloudflare 的 Clef（`clef`、`clef-flash`）、OpenRouter 和 Vercel AI Gateway 上的 System One 模型、llama.cpp 的分類模型。
 - **任何大模型**，作為一個層級：`llm:<provider>/<model>`。
@@ -153,7 +153,7 @@ mu                  # 在目前目錄開一個工作階段
 
 下面的數字來自儲存庫自帶的回放腳本 [`kyrn/spikes/judge-bench/test-log-replay.ts`](../../kyrn/spikes/judge-bench/test-log-replay.ts)。方法和完整表格見 [kyrn/docs/09-test-log-admission.md](../../kyrn/docs/09-test-log-admission.md)（簡體中文）。
 
-**完全重複。** 一次失敗的執行，常常為每個失敗的測試各印一遍同樣的 diff、DOM dump 或堆疊。mu 保留第一份，之後的每一份換成一行，寫明它重複的是哪幾行。不呼叫任何模型。標記展開後逐位元組等於原文；完整記錄留在磁碟上，輸出末尾有一行指向它。
+**完全重複。** 一次失敗的執行，常常為每個失敗的測試各印一遍同樣的 diff、DOM dump 或堆疊。spec.jev 保留第一份，之後的每一份換成一行，寫明它重複的是哪幾行。不呼叫任何模型。標記展開後逐位元組等於原文；完整記錄留在磁碟上，輸出末尾有一行指向它。
 
 <p align="center">
   <picture>
@@ -175,7 +175,7 @@ mu                  # 在目前目錄開一個工作階段
 
 *完美判定器*（Perfect judge）直接讀標註，代表一個全對的判定器最多能省多少。*只留失敗*（Keep failures only）是一個永遠回答「省掉」的判定器，也就是不看目標的過濾器會做的事。這次研究的全部 282 次真實 Jev 請求，依牌價約 $0.017；用預設問法，單次請求的中位耗時 345 毫秒。
 
-兩者預設都關閉。在 `~/.mu/agent/mu.json` 裡寫 `"features": { "admission": { "testLog": "rules" } }`，或在桌面版設定裡打開「測試日誌精簡」，就會折疊重複。`"jev"` 再讓判定器挑出剩下的部分裡目前目標用得上的；執行 `/mu mode tool.admission.test-log shadow` 則只記錄挑選結果。
+兩者預設都關閉。在 `~/.spec.jev/agent/spec.jev.json` 裡寫 `"features": { "admission": { "testLog": "rules" } }`，或在桌面版設定裡打開「測試日誌精簡」，就會折疊重複。`"jev"` 再讓判定器挑出剩下的部分裡目前目標用得上的；執行 `/mu mode tool.admission.test-log shadow` 則只記錄挑選結果。
 
 這些數字不代表什麼：
 
@@ -191,7 +191,7 @@ mu                  # 在目前目錄開一個工作階段
 
 | 依目標挑選 | 調整用目標（29）：省下 | 丟失的必要證據 | 保留目標（9）：省下 | 丟失的必要證據 |
 | --- | --- | --- | --- | --- |
-| mu · Jev | 40.2% | 72 條中 0 條 | 46.4% | 19 條中 0 條 |
+| spec.jev · Jev | 40.2% | 72 條中 0 條 | 46.4% | 19 條中 0 條 |
 | 完美判定器 | 52.5% | 72 條中 0 條 | 46.5% | 19 條中 0 條 |
 | 只留失敗 | 61.9% | 72 條中 9 條 | 59.4% | 19 條中 6 條 |
 
@@ -210,7 +210,7 @@ mu                  # 在目前目錄開一個工作階段
 
 ## 蜂群
 
-多代理系統都要回答同一個問題：一個代理知道的，要不要告訴另一個？常見的答案是什麼都不傳（只向主代理回報）、什麼都傳（群組聊天或交接時帶上全部歷史）、讓每個代理自己的大模型來決定、或者靠固定規則和環境。mu 的答案：判定器當閘門。
+多代理系統都要回答同一個問題：一個代理知道的，要不要告訴另一個？常見的答案是什麼都不傳（只向主代理回報）、什麼都傳（群組聊天或交接時帶上全部歷史）、讓每個代理自己的大模型來決定、或者靠固定規則和環境。spec.jev 的答案：判定器當閘門。
 
 一個蜂群是 2 到 6 隻 bee，各有自己的關注點。bee 讀程式碼、執行指令、開瀏覽器；從不改程式碼，改動由主模型來做。每隻 bee 每說完一段，`hive.publish` 問一次：這裡有沒有值得共享的發現、死路、決定或阻礙？值得的就放上一塊只增不刪的共享板。板上每來一條新筆記，`hive.deliver` 對每一隻別的 bee 各問一次：這和它的關注點有關嗎？有關就投遞過去，標明「這是發現，不是指令」。
 
@@ -226,7 +226,7 @@ mu                  # 在目前目錄開一個工作階段
 
 ## 人話看板
 
-前沿模型一代比一代會做事，卻一代比一代不會講自己做了什麼：回報進度的文字越寫越像給另一台機器讀的輸出，更密、更晦澀，越來越不像人在說話。mu 不讓做事的模型自己回報。開啟看板（`/board`，或桌面版看板頁上的開關）後，代理每做完一步，看板上立刻多一行人話：改了哪個檔案、檢查過沒過、執行了什麼命令，連著讀檔案就折成一行「看了 N 個檔案」。代理做事途中每說一段話，`board.read` 都請判定器判一次這是不是新消息；是，就由一個只因為會講人話而被選中的模型（`/board model` 可換）當場重講給人聽，並同時更新看板的現況：現在在做什麼，清單上幾件事做完了幾件，有什麼在等你。一次執行結束時的總結是流水的最後一行，過程留在上面，所以你看到的不只是「做完了」，還有它到底做了什麼。
+前沿模型一代比一代會做事，卻一代比一代不會講自己做了什麼：回報進度的文字越寫越像給另一台機器讀的輸出，更密、更晦澀，越來越不像人在說話。spec.jev 不讓做事的模型自己回報。開啟看板（`/board`，或桌面版看板頁上的開關）後，代理每做完一步，看板上立刻多一行人話：改了哪個檔案、檢查過沒過、執行了什麼命令，連著讀檔案就折成一行「看了 N 個檔案」。代理做事途中每說一段話，`board.read` 都請判定器判一次這是不是新消息；是，就由一個只因為會講人話而被選中的模型（`/board model` 可換）當場重講給人聽，並同時更新看板的現況：現在在做什麼，清單上幾件事做完了幾件，有什麼在等你。一次執行結束時的總結是流水的最後一行，過程留在上面，所以你看到的不只是「做完了」，還有它到底做了什麼。
 
 <p align="center"><img src="board.png" width="960" alt="桌面版的人話看板：進展到哪、在做什麼、之前發生了什麼；頂端是上下文用量和快取命中率"></p>
 
@@ -234,14 +234,14 @@ mu                  # 在目前目錄開一個工作階段
 
 ## 桌面版
 
-桌面應用程式，內建 mu 和執行環境：不用安裝 Node，第一次啟動不下載任何東西。命令列有的它都有，另外在對話旁邊加了一塊工作面板：
+桌面應用程式，內建 spec.jev 和執行環境：不用安裝 Node，第一次啟動不下載任何東西。命令列有的它都有，另外在對話旁邊加了一塊工作面板：
 
 **看板** · **判定**（即時的判定帳本：每一次判定和它的問題） · **蜂群** · **經驗** · **檔案** · **預覽** · **原始碼** · **瀏覽器**（代理一步步操作的內建瀏覽器，帶目標、暫停和停止）
 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="app-dark.png">
-    <img src="app-light.png" width="880" alt="mu 桌面版修好一個小專案裡失敗的測試之後。Jev 把訊息判為多步驟任務（input.preflight），代理跑了測試、讀了解析器、改好分鐘的單位，再跑了一次測試。右側判定面板列出每次判定的判定點和耗時，約 200 到 400 毫秒。底部的列顯示判定器、40 個判定點裡啟用了 38 個、5 次判定和上下文用量。">
+    <img src="app-light.png" width="880" alt="spec.jev 桌面版修好一個小專案裡失敗的測試之後。Jev 把訊息判為多步驟任務（input.preflight），代理跑了測試、讀了解析器、改好分鐘的單位，再跑了一次測試。右側判定面板列出每次判定的判定點和耗時，約 200 到 400 毫秒。底部的列顯示判定器、40 個判定點裡啟用了 38 個、5 次判定和上下文用量。">
   </picture>
 </p>
 
@@ -252,19 +252,19 @@ macOS（Apple 晶片 / Intel）、Windows（x64 / Arm）、Linux（x64 / Arm）�
 ## 命令列
 
 ```bash
-npm i -g mu-agent
-mu            # 在目前目錄開一個互動式工作階段
-mu doctor     # 檢查安裝、判定器和各項連線
+npm i -g spec.jev
+spec.jev            # 在目前目錄開一個互動式工作階段
+spec.jev doctor     # 檢查安裝、判定器和各項連線
 ```
 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="cli-dark.png">
-    <img src="cli-light.png" width="720" alt="終端機裡 mu 的歡迎畫面：μ 標記，「mu v0.1.9, judgment-first coding agent, built on pi 1.3.0」，接著是判定器（Jev 1.13，免費，428 毫秒回答，判定點已啟用）、模型和工作目錄，以及值得記住的幾個按鍵。">
+    <img src="cli-light.png" width="720" alt="終端機裡 spec.jev 的歡迎畫面：μ 標記，「spec.jev v0.1.9, judgment-first coding agent, built on pi 1.3.0」，接著是判定器（Jev 1.13，免費，428 毫秒回答，判定點已啟用）、模型和工作目錄，以及值得記住的幾個按鍵。">
   </picture>
 </p>
 
-需要 Node 22.19 或更新版本。`mu -p "prompt"` 執行一次並印出結果；`mu -c` 接續上一個工作階段。`mu import --list` 找出你的 Claude Code 和 Codex 對話，`mu import <file>` 把它們匯入。`mu ledger [n]` 印出最近 n 個工作階段裡判定器的決定。命令列和桌面版共用帳號、設定和經驗。在終端機裡，mu 使用自己的 `mu-dark` 和 `mu-light` 主題，直到你在 `/settings` 裡另選一個（`system` 跟隨終端機的配色）。
+需要 Node 22.19 或更新版本。`spec.jev -p "prompt"` 執行一次並印出結果；`spec.jev -c` 接續上一個工作階段。`spec.jev import --list` 找出你的 Claude Code 和 Codex 對話，`spec.jev import <file>` 把它們匯入。`spec.jev ledger [n]` 印出最近 n 個工作階段裡判定器的決定。命令列和桌面版共用帳號、設定和經驗。在終端機裡，spec.jev 使用自己的 `mu-dark` 和 `mu-light` 主題，直到你在 `/settings` 裡另選一個（`system` 跟隨終端機的配色）。
 
 | 指令 | 做什麼 |
 | --- | --- |
@@ -277,7 +277,7 @@ mu doctor     # 檢查安裝、判定器和各項連線
 | `/permissions` | 全部放行 / Jev 審批 / 最小權限 |
 | `/board` | 開啟或關閉人話看板 |
 | `/remember`、`/lessons`、`/forget` | 記一條經驗、列出經驗、讓一條退役 |
-| `/skills` | mu 從執行裡起草的技能：查看、安裝或丟掉 |
+| `/skills` | spec.jev 從執行裡起草的技能：查看、安裝或丟掉 |
 | `/review`、`/commit` | 審查變更，發現按 P0 到 P3 分級；寫提交 |
 | `/checkpoints`、`/rewind` | 列出檢查點；退回到某一個 |
 | `/agents`、`/swarm` | 派子代理；看正在工作的每一隻 |
@@ -286,17 +286,17 @@ mu doctor     # 檢查安裝、判定器和各項連線
 | `/import-chat` | 匯入 Claude Code 或 Codex 的對話 |
 | `/doctor` | 檢查設定和連線 |
 
-pi 自己的指令（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`/fork`、`/compact`、`/export` 等）原樣保留。`MU_JUDGE=laya,jev mu` 只為這一次執行更換判定器。
+pi 自己的指令（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`/fork`、`/compact`、`/export` 等）原樣保留。`MU_JUDGE=laya,jev spec.jev` 只為這一次執行更換判定器。
 
 ## 隱私
 
-金鑰只留在本機。mu 不會自己下載任何模型或執行環境；需要下載的東西都會先問你。判定器只看得到一個問題所需的欄位（沒設金鑰時，這些欄位送到 OpenCode Zen 上免費的 Jev；用 `MU_JUDGE=off` 或 Laya 就全部留在本機）；每一次判定都記錄在本機，你全都看得到。
+金鑰只留在本機。spec.jev 不會自己下載任何模型或執行環境；需要下載的東西都會先問你。判定器只看得到一個問題所需的欄位（沒設金鑰時，這些欄位送到 OpenCode Zen 上免費的 Jev；用 `MU_JUDGE=off` 或 Laya 就全部留在本機）；每一次判定都記錄在本機，你全都看得到。
 
 ## 文件
 
 - [Getting started](../getting-started.md) · [設定](../configuration.md) · [判定器](../judges.md) · [疑難排解](../troubleshooting.md)（英文）
 - 參考：[所有判定點](../reference/decision-points.md) · [所有功能和選項](../reference/features.md) · [更新紀錄](../../CHANGELOG.md)
-- 給貢獻者：[mu 如何運作](../architecture.md) · [新增一個判定點](../adding-a-decision-point.md) · [翻譯](../translations.md)
+- 給貢獻者：[spec.jev 如何運作](../architecture.md) · [新增一個判定點](../adding-a-decision-point.md) · [翻譯](../translations.md)
 
 ## 參與貢獻
 
@@ -304,18 +304,18 @@ pi 自己的指令（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`
 
 ```bash
 npm install --ignore-scripts   # 安裝相依套件，不執行生命週期指令碼
-node kyrn/bin/mu.mjs           # 從這份程式碼啟動 mu
+node kyrn/bin/mu.mjs           # 從這份程式碼啟動 spec.jev
 npm run check                  # 格式、靜態檢查、型別
 ./test.sh                      # 測試（沒有金鑰時跳過需要模型的測試）
 ```
 
-桌面版在 `desktop/`：`bun install`，然後 `KYRN_ROOT="$(cd .. && pwd)" bun run start` 啟動開發版，它會使用儲存庫裡的 mu（先在根目錄執行 `npm install`）。
+桌面版在 `desktop/`：`bun install`，然後 `KYRN_ROOT="$(cd .. && pwd)" bun run start` 啟動開發版，它會使用儲存庫裡的 spec.jev（先在根目錄執行 `npm install`）。
 
 所有參與者都遵守[行為準則](../../CODE_OF_CONDUCT.md)。安全問題請依 [SECURITY.md](../../SECURITY.md) 私下回報。
 
 ## 來源與授權
 
-mu 採用 MIT 授權（[LICENSE](../../LICENSE)；桌面版見 [desktop/LICENSE](../../desktop/LICENSE)）。它以 [pi](https://github.com/earendil-works/pi)（程式設計代理，MIT）和 [AionUi](https://github.com/iOfficeAI/AionUi) 為基礎改造，感謝這兩個專案：桌面版最初從 AionUi fork 而來，來自 AionUi 的檔案列在 [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt)，仍以 Apache 2.0 授權（見 [desktop/NOTICE](../../desktop/NOTICE)）。有幾個判定點參考了其他專案：提示注入篩檢的問法來自 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)，續跑檢查和批次判定工具參考了 [oh-my-pi](https://github.com/can1357/oh-my-pi)。判定核心用到的第三方程式碼列在 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)。
+spec.jev 採用 MIT 授權（[LICENSE](../../LICENSE)；桌面版見 [desktop/LICENSE](../../desktop/LICENSE)）。它以 [pi](https://github.com/earendil-works/pi)（程式設計代理，MIT）和 [AionUi](https://github.com/iOfficeAI/AionUi) 為基礎改造，感謝這兩個專案：桌面版最初從 AionUi fork 而來，來自 AionUi 的檔案列在 [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt)，仍以 Apache 2.0 授權（見 [desktop/NOTICE](../../desktop/NOTICE)）。有幾個判定點參考了其他專案：提示注入篩檢的問法來自 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)，續跑檢查和批次判定工具參考了 [oh-my-pi](https://github.com/can1357/oh-my-pi)。判定核心用到的第三方程式碼列在 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)。
 
 ## 社群支援
 
@@ -323,4 +323,4 @@ mu 採用 MIT 授權（[LICENSE](../../LICENSE)；桌面版見 [desktop/LICENSE]
 - bug 和需求：[Issues](https://github.com/qybaihe/mu/issues/new/choose)。
 - 更多：[SUPPORT.md](../../SUPPORT.md)。
 
-如果 mu 對你有幫助，給個 star 能讓更多人看到它。
+如果 spec.jev 對你有幫助，給個 star 能讓更多人看到它。

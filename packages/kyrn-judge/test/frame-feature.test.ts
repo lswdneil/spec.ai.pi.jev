@@ -172,7 +172,7 @@ describe("task frame feature", () => {
 		expect(JSON.stringify(frame)).not.toContain("不要修改数据库");
 		// The note rides along with the message that caused it, and the model reads it.
 		expect(notes()).toHaveLength(1);
-		expect(notes()[0]).toContain("[mu task frame v2]");
+		expect(notes()[0]).toContain("[spec.jev task frame v2]");
 		expect(agentSaw).toContain(`\\"${CORRECTION}\\" (turn 2)`);
 		// The stored version names the entry of the message the constraint came from.
 		const stored = entries().at(-1);
@@ -277,7 +277,7 @@ describe("task frame feature", () => {
 		expect(shown()?.frame.constraints).toMatchObject([{ text: CORRECTION, source: { turn: 2 } }]);
 	});
 
-	it("tells the model again after a compaction, which drops mu's own notes", async () => {
+	it("tells the model again after a compaction, which drops spec.jev's own notes", async () => {
 		const { harness, notes } = await start(verdicts("correction", "none", "none"));
 		harness.setResponses([
 			fauxAssistantMessage("I will add a cursor column."),

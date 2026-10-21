@@ -9,7 +9,7 @@ import zhTWMu from '@/renderer/services/i18n/locales/zh-TW/mu.json';
 
 const { acpInvoke, words } = vi.hoisted(() => ({
   acpInvoke: vi.fn(),
-  // The app's wording in some language other than mu's two (a stand-in: tagged so it cannot pass for mu's text).
+  // The app's wording in some language other than spec.jev's two (a stand-in: tagged so it cannot pass for spec.jev's text).
   words: {
     value: {
       'mu.permissionsCard.kind.shell': '[ja] run a command',
@@ -38,7 +38,7 @@ import MessageAcpPermission from '@/renderer/pages/conversation/Messages/acp/Mes
 
 const has = (key: string) => key in words.value;
 
-/** mu's question as the bridge hands it on: mu's own sentences, its codes, and its answers by id. */
+/** spec.jev's question as the bridge hands it on: spec.jev's own sentences, its codes, and its answers by id. */
 const card = (codes: Record<string, string>, extra: Record<string, unknown> = {}): IMessageAcpPermission => ({
   id: 'acp-message-1',
   conversation_id: 'conversation-1',
@@ -48,7 +48,7 @@ const card = (codes: Record<string, string>, extra: Record<string, unknown> = {}
     session_id: 'session-1',
     tool_call: {
       tool_call_id: 'permission:ui-1',
-      title: 'mu 想运行命令，需要你授权',
+      title: 'spec.jev 想运行命令，需要你授权',
       kind: 'execute',
       raw_input: { command: 'git push --force', description: '危险操作：强制推送。', mu: codes, ...extra },
     },
@@ -64,8 +64,8 @@ const FLAGGED = { kind: 'shell', reason: 'flagged', flagCode: 'force_push', gran
 
 beforeEach(() => acpInvoke.mockReset().mockResolvedValue(undefined));
 
-describe('mu’s permission card', () => {
-  it('is worded by mu’s codes in the reader’s language, with the call and the grant as sent', async () => {
+describe('spec.jev’s permission card', () => {
+  it('is worded by spec.jev’s codes in the reader’s language, with the call and the grant as sent', async () => {
     render(<MessageAcpPermission message={card(FLAGGED)} />);
     expect(screen.getByText('[ja] run a command')).toBeInTheDocument();
     expect(screen.getByText('[ja] risky: [ja] force push')).toBeInTheDocument();
@@ -75,8 +75,8 @@ describe('mu’s permission card', () => {
       '[ja] this conversation (git push)'
     );
     expect(screen.getByTestId('message-acp-permission-option-mu:deny')).toHaveTextContent('[ja] deny');
-    // No trace of mu's own sentences, nor of the codes as a detail.
-    expect(screen.queryByText('mu 想运行命令，需要你授权')).toBeNull();
+    // No trace of spec.jev's own sentences, nor of the codes as a detail.
+    expect(screen.queryByText('spec.jev 想运行命令，需要你授权')).toBeNull();
     expect(screen.queryByText(/flagCode/)).toBeNull();
 
     fireEvent.click(screen.getByTestId('message-acp-permission-option-mu:session'));
@@ -97,7 +97,7 @@ describe('mu’s permission card', () => {
     expect(status).toHaveAttribute('data-outcome', outcome);
   });
 
-  it('reads mu’s codes as AionCore relays them, with the keys snake-cased', () => {
+  it('reads spec.jev’s codes as AionCore relays them, with the keys snake-cased', () => {
     render(
       <MessageAcpPermission
         message={card({ kind: 'shell', reason: 'flagged', flag_code: 'force_push', grant_label: 'git push' })}
@@ -109,18 +109,18 @@ describe('mu’s permission card', () => {
     );
   });
 
-  it('keeps mu’s own sentence for a code it has no wording for', () => {
+  it('keeps spec.jev’s own sentence for a code it has no wording for', () => {
     render(<MessageAcpPermission message={card({ kind: 'teleport', reason: 'flagged', flagCode: 'melts_cpu' })} />);
-    expect(screen.getByText('mu 想运行命令，需要你授权')).toBeInTheDocument();
+    expect(screen.getByText('spec.jev 想运行命令，需要你授权')).toBeInTheDocument();
     expect(screen.getByText('危险操作：强制推送。')).toBeInTheDocument();
   });
 
-  it('keeps mu’s own sentences where the app has no wording in this language yet', () => {
+  it('keeps spec.jev’s own sentences where the app has no wording in this language yet', () => {
     const saved = words.value;
     words.value = {};
     try {
       render(<MessageAcpPermission message={card(FLAGGED)} />);
-      expect(screen.getByText('mu 想运行命令，需要你授权')).toBeInTheDocument();
+      expect(screen.getByText('spec.jev 想运行命令，需要你授权')).toBeInTheDocument();
       expect(screen.getByText('危险操作：强制推送。')).toBeInTheDocument();
       expect(screen.getByTestId('message-acp-permission-option-mu:session')).toHaveTextContent(
         '这次对话都允许（git push）'
@@ -131,13 +131,13 @@ describe('mu’s permission card', () => {
   });
 });
 
-describe('the wording of mu’s permission card', () => {
-  it('says why mu asks by the reason, or by the flag for a risky command', () => {
+describe('the wording of spec.jev’s permission card', () => {
+  it('says why spec.jev asks by the reason, or by the flag for a risky command', () => {
     expect(muPermissionWording({ mu: { kind: 'shell', reason: 'unsure' } }, translate, has)).toMatchObject({
       title: '[ja] run a command',
       description: '[ja] Jev is not sure',
     });
-    // A flagged call without a known flag keeps mu's reason; so does a reason the app has no word for.
+    // A flagged call without a known flag keeps spec.jev's reason; so does a reason the app has no word for.
     expect(
       muPermissionWording({ mu: { kind: 'shell', reason: 'flagged' } }, translate, has)?.description
     ).toBeUndefined();
@@ -146,7 +146,7 @@ describe('the wording of mu’s permission card', () => {
     ).toBeUndefined();
   });
 
-  it('names only mu’s answers, and the session answer without a grant by its plain key', () => {
+  it('names only spec.jev’s answers, and the session answer without a grant by its plain key', () => {
     const wording = muPermissionWording({ mu: { kind: 'shell' } }, translate, has);
     expect(wording?.answer('mu:once')).toBe('[ja] once');
     expect(wording?.answer('mu:session')).toBeUndefined(); // no plain `answer.session` in this dictionary
@@ -155,12 +155,12 @@ describe('the wording of mu’s permission card', () => {
     expect(wording?.answer('0')).toBeUndefined();
   });
 
-  it('is nothing for a card without mu’s codes', () => {
+  it('is nothing for a card without spec.jev’s codes', () => {
     for (const rawInput of [undefined, null, 'text', { command: 'ls' }, { mu: 'shell' }, { mu: ['shell'] }])
       expect(muPermissionWording(rawInput, translate, has)).toBeUndefined();
   });
 
-  it('says what an answer decided only for mu’s answers, and only about a call it names', () => {
+  it('says what an answer decided only for spec.jev’s answers, and only about a call it names', () => {
     const wording = muPermissionWording({ mu: { kind: 'shell' } }, translate, has);
     expect(wording?.decided('mu:deny', 'rm -rf build')).toBe('[ja] not allowed: rm -rf build');
     expect(wording?.decided('mu:deny', undefined)).toBeUndefined();
@@ -169,9 +169,9 @@ describe('the wording of mu’s permission card', () => {
   });
 });
 
-describe('the wording of mu’s permission card in the app’s own languages', () => {
+describe('the wording of spec.jev’s permission card in the app’s own languages', () => {
   // Every code the harness sends (its presentation-codes.md, permissions.request), in the three languages that must
-  // not lag: the English fallback would otherwise stand in for mu's own Chinese.
+  // not lag: the English fallback would otherwise stand in for spec.jev's own Chinese.
   const KINDS = ['edit', 'shell', 'run', 'outside', 'delegate', 'other'];
   // `nojudge` and `judgedown`: Jev mode without a verdict (no judge could answer, or the judge did not this time).
   const REASONS = ['ask', 'unsure', 'beyond', 'unrelated', 'protected', 'nojudge', 'judgedown'];

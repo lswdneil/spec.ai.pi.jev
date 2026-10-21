@@ -384,7 +384,7 @@ const answer = (body: string, status = 200) =>
 const KEY = JSON.stringify({ token: "tok", projectId: "proj-7" });
 
 const context = (tools = false): Context => ({
-	systemPrompt: "You are mu.",
+	systemPrompt: "You are spec.jev.",
 	messages: [{ role: "user", content: "Read the notes.", timestamp: 1 }],
 	...(tools
 		? {
@@ -472,7 +472,7 @@ describe("Cloud Code Assist stream", () => {
 		expect(call.headers["User-Agent"]).toContain("google-cloud-sdk");
 		expect(call.body).toMatchObject({ project: "proj-7", model: "gemini-3.8-flash", userAgent: "pi-coding-agent" });
 		expect(call.body.requestType).toBeUndefined();
-		expect(call.body.request.systemInstruction).toEqual({ parts: [{ text: "You are mu." }] });
+		expect(call.body.request.systemInstruction).toEqual({ parts: [{ text: "You are spec.jev." }] });
 		expect(call.body.request.tools?.[0].functionDeclarations[0]).toHaveProperty("parametersJsonSchema");
 	});
 
@@ -491,7 +491,7 @@ describe("Cloud Code Assist stream", () => {
 		const system = call.body.request.systemInstruction;
 		expect(system?.role).toBe("user");
 		expect(system?.parts[0].text).toMatch(/^You are Antigravity/);
-		expect(system?.parts.at(-1)?.text).toBe("You are mu.");
+		expect(system?.parts.at(-1)?.text).toBe("You are spec.jev.");
 		const declaration = call.body.request.tools?.[0].functionDeclarations[0];
 		expect(declaration).toHaveProperty("parameters");
 		expect(declaration).not.toHaveProperty("parametersJsonSchema");

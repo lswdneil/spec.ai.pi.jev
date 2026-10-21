@@ -3,7 +3,7 @@
  *
  * - coreml (Apple Silicon Macs): installed from the settings with one click after the person agrees to the download,
  *   started and stopped there. The main process runs the harness's own script,
- *   `kyrn/bin/kyrn-judge-local setup|start|stop`, so the app and `mu judge` in a terminal do the same thing.
+ *   `kyrn/bin/kyrn-judge-local setup|start|stop`, so the app and `spec.jev judge` in a terminal do the same thing.
  * - onnx (Windows, Linux): the app runs Laya itself (see `common/kyrn/layaOnnx.ts`). It never downloads the model:
  *   the person gets it from Hugging Face into the model folder, and the app checks it and starts the judge.
  */

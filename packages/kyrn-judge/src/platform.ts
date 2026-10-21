@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 
 /**
  * What differs between macOS, Linux, WSL and Windows, as functions of facts that are passed in. There is no
- * Windows machine where mu is developed: whatever is decided per platform is decided here or in a function
+ * Windows machine where spec.jev is developed: whatever is decided per platform is decided here or in a function
  * shaped like these, so that it can be tested on a Mac with win32 and WSL parameters.
  */
 type Env = Readonly<Record<string, string | undefined>>;

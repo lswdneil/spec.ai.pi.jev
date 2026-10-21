@@ -1,13 +1,13 @@
 /**
  * Names that earlier versions of the app wrote and that are already on people's machines. The app began as a fork of
- * AionUi and kept its names at first. Some are only read, to move what is stored under them to mu's names. The others
+ * AionUi and kept its names at first. Some are only read, to move what is stored under them to spec.jev's names. The others
  * stay in use, because renaming them would lose or break what people have: a folder that stored paths point into, a
- * file the app still reads and writes, a record other records name. Everything else in the app has mu's names.
+ * file the app still reads and writes, a record other records name. Everything else in the app has spec.jev's names.
  */
 
 /**
  * The app's data folder inside its profile (`<userData>/aionui`). AionCore's database stores absolute paths into it:
- * through the `~/.mu-desktop` shortcut on macOS, as they are on Windows and Linux.
+ * through the `~/.spec.jev-desktop` shortcut on macOS, as they are on Windows and Linux.
  */
 export const DATA_FOLDER = 'aionui';
 
@@ -19,8 +19,8 @@ export const DEV_PROFILE_NAMES = { first: 'AionUi-Dev', second: 'AionUi-Dev-2' }
 
 /**
  * A development build's home-folder shortcuts to its data and config folders (`~/.aionui-dev`, `~/.aionui-config-dev`,
- * and `-dev-2` for the second instance), through which the paths it stored were written. A packaged build has mu's
- * own (`~/.mu-desktop`, `~/.mu-desktop-config`).
+ * and `-dev-2` for the second instance), through which the paths it stored were written. A packaged build has spec.jev's
+ * own (`~/.spec.jev-desktop`, `~/.spec.jev-desktop-config`).
  */
 export const DEV_SHORTCUT_BASES = { data: '.aionui', config: '.aionui-config' } as const;
 
@@ -64,13 +64,13 @@ export const LEGACY_BACKGROUND_BLOCK = {
 } as const;
 
 /**
- * The components' class names before they were mu's (`.aionui-modal`, `.aion-select`): the name after the prefix is
+ * The components' class names before they were spec.jev's (`.aionui-modal`, `.aion-select`): the name after the prefix is
  * in the first group or the second. A custom CSS theme written then may still target them.
  */
 export const LEGACY_CLASS_NAMES = /\.(?:aionui-(modal|steps|markdown)|aion-(select|url-viewer-toolbar|dir-input))\b/g;
 
 /**
- * The image generation server's settings before they were named mu (`IMAGE_GEN_ENV_KEYS`). They are kept in the
+ * The image generation server's settings before they were named spec.jev (`IMAGE_GEN_ENV_KEYS`). They are kept in the
  * server's record in AionCore's database, so a server set up earlier still has them until its settings are written.
  */
 export const LEGACY_IMAGE_GEN_ENV_KEYS = {
@@ -82,7 +82,7 @@ export const LEGACY_IMAGE_GEN_ENV_KEYS = {
   proxy: 'AIONUI_IMG_PROXY',
 } as const;
 
-/** The renderer's local storage keys before they were mu's: each old key, and the key it is now. */
+/** The renderer's local storage keys before they were spec.jev's: each old key, and the key it is now. */
 export const LEGACY_STORAGE_KEYS: ReadonlyArray<readonly [legacy: string, current: string]> = [
   ['__aionui_theme', '__mu_theme'],
   ['__aionui_theme_follows_system', '__mu_theme_follows_system'],

@@ -11,9 +11,9 @@ import type { ModelThinkingLevels } from '@/common/kyrn/models';
 const NONE: ModelThinkingLevels = {};
 
 /**
- * The thinking levels each model of the conversation's session takes, as mu last recorded them. `revision` changes
- * when the session's model list or current model does, which is when mu records them again. Empty for an agent
- * other than mu, and while nothing was recorded: the picker then offers those models without their levels.
+ * The thinking levels each model of the conversation's session takes, as spec.jev last recorded them. `revision` changes
+ * when the session's model list or current model does, which is when spec.jev records them again. Empty for an agent
+ * other than spec.jev, and while nothing was recorded: the picker then offers those models without their levels.
  */
 export function useModelLevels(conversationId: string, enabled: boolean, revision: string): ModelThinkingLevels {
   const { data } = useSWR(

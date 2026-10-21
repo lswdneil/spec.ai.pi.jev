@@ -1,4 +1,4 @@
-/* Rows and markers shared by every section of the mu settings area. Colours are the app's tokens only. */
+/* Rows and markers shared by every section of the spec.jev settings area. Colours are the app's tokens only. */
 .row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

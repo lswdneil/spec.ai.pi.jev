@@ -1,5 +1,5 @@
 /**
- * The mu browser alone, for a stock pi:
+ * The spec.jev browser alone, for a stock pi:
  *
  *   pi -e packages/kyrn-judge/src/extension/kyrn-browser.ts
  *

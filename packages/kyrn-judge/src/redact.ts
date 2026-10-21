@@ -5,7 +5,7 @@
  *
  * Only what is surely a credential goes, so the words around it keep their meaning ("fix the password
  * reset flow" stays as it is): a token in a shape only credentials have, a value assigned to a name
- * that says it is one, and the values of this process's own credential variables (mu hands the
+ * that says it is one, and the values of this process's own credential variables (spec.jev hands the
  * project's `.env` to the agent, so a key of any shape can show up in a tool's output).
  */
 

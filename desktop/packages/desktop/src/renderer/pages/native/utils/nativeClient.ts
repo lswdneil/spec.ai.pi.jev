@@ -21,7 +21,7 @@ import { isElectronDesktop } from '@/renderer/utils/platform';
 export type NativeClient = {
   enabled: () => Promise<boolean>;
   list: () => Promise<NativeResult<NativeConversation[]>>;
-  /** A new conversation in `cwd`; `permissions` is the mode its mu starts in (mu's own default when left out). */
+  /** A new conversation in `cwd`; `permissions` is the mode its spec.jev starts in (spec.jev's own default when left out). */
   create: (cwd: string, permissions?: string) => Promise<NativeResult<NativeConversation>>;
   open: (id: string) => Promise<NativeResult<NativeSnapshot>>;
   request: (id: string, command: PiCommand) => Promise<NativeResult<unknown>>;

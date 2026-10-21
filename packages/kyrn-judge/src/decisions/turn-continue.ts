@@ -6,8 +6,8 @@ import { threeZone } from "../policy.ts";
  * nothing, or "Should I apply the fix?" when applying it was the request. The agent is sent back to it.
  *
  * After can1357/oh-my-pi's unexpected-stop detection (MIT, © 2025-2026 Can Bölük; `session/unexpected-stop-classifier.ts`), whose
- * question and examples these follow. mu splits off asking for a go-ahead: it counts only when the user already asked
- * for the work (mu never makes the model ask what it can decide itself), and a step that is hard to undo or reaches
+ * question and examples these follow. spec.jev splits off asking for a go-ahead: it counts only when the user already asked
+ * for the work (spec.jev never makes the model ask what it can decide itself), and a step that is hard to undo or reaches
  * beyond this machine is never pushed through.
  */
 export interface ContinueInput {

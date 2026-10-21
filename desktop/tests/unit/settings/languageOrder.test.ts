@@ -14,18 +14,10 @@ describe('the language list', () => {
     expect(languageListOrder('en-US')[0]).toBe('en-US');
   });
 
-  it('orders the other languages by their own names, so English sits among the Latin ones', () => {
+  it('orders the other languages by their own names, with English among the Latin ones', () => {
     expect(languageListOrder('zh-CN').map(nativeLanguageName)).toEqual([
       '简体中文',
-      'Deutsch',
       'English',
-      'Español',
-      'Français',
-      'Português (BR)',
-      'Türkçe',
-      'Русский',
-      'Українська',
-      'فارسی',
       '한국어',
       '日本語',
       '繁體中文',

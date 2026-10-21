@@ -1,5 +1,5 @@
 /**
- * mu's experience library as it lies on disk: `<agentDir>/mu/lessons.jsonl`, one JSON object per line, only ever
+ * spec.jev's experience library as it lies on disk: `<agentDir>/mu/lessons.jsonl`, one JSON object per line, only ever
  * appended to. A line is a whole lesson or only the fields that changed (`{ id, status }`, `{ id, uses }`,
  * `{ id, updated }`); reading folds the lines of one id in order, later fields over earlier ones, and keeps the lessons
  * in the order each id first appeared. A line that does not parse is skipped, a malformed field is dropped without the

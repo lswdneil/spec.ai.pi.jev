@@ -50,7 +50,7 @@ const ALL_LEGACY_KEYS: LegacyConfigKey[] = [
 
 /**
  * Copy the legacy config file's settings into the backend. The chat-channel settings of the old app (Telegram, Lark,
- * DingTalk, Weixin, WeCom) are left behind: mu has no channels, and asking the backend about them only produced a
+ * DingTalk, Weixin, WeCom) are left behind: spec.jev has no channels, and asking the backend about them only produced a
  * request per platform on every start, one of which it rejects ("Invalid platform: wecom").
  */
 export async function migrateConfigStorage(configFile: ConfigFile): Promise<void> {

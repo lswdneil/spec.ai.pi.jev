@@ -1,5 +1,5 @@
 /**
- * Replays the frames of a mu turn in 最小权限 (minimal permission) mode, as the conversation E2E test recorded them:
+ * Replays the frames of a spec.jev turn in 最小权限 (minimal permission) mode, as the conversation E2E test recorded them:
  * every frame of the turn shares one msg_id, and the permission card (`acp_permission`) arrives between the tool call
  * it asks about and that call's result.
  *
@@ -47,7 +47,7 @@ const permission = (id: string, command: string): TMessage =>
     session_id: 'session-1',
     tool_call: {
       tool_call_id: id,
-      title: 'mu 想改文件，需要你授权',
+      title: 'spec.jev 想改文件，需要你授权',
       kind: 'edit',
       raw_input: { command, description: '最小权限模式：每一步都先问你。', mu: { kind: 'edit', reason: 'ask' } },
     },

@@ -304,7 +304,7 @@ export function renderFrameNote(state: FrameState): string {
 /** Everything about the frame, for `/frame`. */
 export function describeFrame(state: FrameState): string {
 	const frame = state.frame;
-	if (!frame) return "No task frame yet. mu creates one from the session's first message.";
+	if (!frame) return "No task frame yet. spec.jev creates one from the session's first message.";
 	const by = frame.change ? `${frame.source}, ${frame.change}` : frame.source;
 	const stale = isStale(state)
 		? " · STALE: later messages aren't merged yet, so goal-based filters are holding back"

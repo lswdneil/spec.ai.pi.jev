@@ -52,7 +52,7 @@ describe('Jev preflight row', () => {
   });
 });
 
-describe('mu bridge errors', () => {
+describe('spec.jev bridge errors', () => {
   it('recognises every error text the bridge raises, with a headline in each locale', () => {
     const locales = [enMu, zhMu, twMu] as Array<{ turnErrors?: Record<string, string> }>;
     for (const [code, english] of Object.entries(MU_TURN_ERRORS)) {
@@ -64,14 +64,14 @@ describe('mu bridge errors', () => {
 
   it('keeps the provider text after the model headline and tells the process errors apart', () => {
     expect(findMuTurnError([undefined, 'Model request failed: 429 rate limited'])).toBe('modelFailed');
-    expect(findMuTurnError(['mu process exited during the turn'])).toBe('processExited');
-    expect(findMuTurnError(['mu process exited'])).toBe('processClosed');
-    expect(findMuTurnError(['mu control command timed out'])).toBe('timeout');
+    expect(findMuTurnError(['spec.jev process exited during the turn'])).toBe('processExited');
+    expect(findMuTurnError(['spec.jev process exited'])).toBe('processClosed');
+    expect(findMuTurnError(['spec.jev control command timed out'])).toBe('timeout');
     expect(findMuTurnError(['Rate limit reached', null])).toBeUndefined();
   });
 
   it('says what to do when the provider refused the region or could not be reached', () => {
-    // As the app logged them on 2026-09-26, with a Google model and no proxy reaching mu.
+    // As the app logged them on 2026-09-26, with a Google model and no proxy reaching spec.jev.
     const region =
       'Agent internal error (code -32603) ({"details":"Model request failed: Cloud Code Assist error (400): User location is not supported for the API use."})';
     const timeout =
@@ -86,13 +86,13 @@ describe('mu bridge errors', () => {
     }
   });
 
-  it('translates a mu error headline', () => {
+  it('translates a spec.jev error headline', () => {
     const zh = translator('zh-CN', { mu: zhMu });
-    expect(zh(muTurnErrorKey('turnRunning'))).toBe('mu 还在处理上一条消息，请等待或先停止。');
+    expect(zh(muTurnErrorKey('turnRunning'))).toBe('spec.jev 还在处理上一条消息，请等待或先停止。');
   });
 
   it('reads a missing model as such, in the bridge’s words and in pi’s, and never as a failed request', () => {
-    expect(findMuTurnError(['mu has no model to answer with: No API key found for anthropic.'])).toBe('noModel');
+    expect(findMuTurnError(['spec.jev has no model to answer with: No API key found for anthropic.'])).toBe('noModel');
     // Conversations from before the bridge named it stored pi's own words, some under the request's headline.
     expect(findMuTurnError(['Model request failed: No API key found for openai.'])).toBe('noModel');
     expect(findMuTurnError(['No models available. Use /login to log into a provider'])).toBe('noModel');
@@ -102,7 +102,7 @@ describe('mu bridge errors', () => {
   it('keeps of pi’s words about a missing model only what a desktop user can use', () => {
     expect(
       noModelDetail(
-        'Agent internal error (code -32603): mu has no model to answer with: No API key found for anthropic.\n\n' +
+        'Agent internal error (code -32603): spec.jev has no model to answer with: No API key found for anthropic.\n\n' +
           'Use /login to log into a provider via OAuth or API key. See:\n  /opt/mu/docs/providers.md'
       )
     ).toBe('No API key found for anthropic.');
@@ -110,7 +110,7 @@ describe('mu bridge errors', () => {
       'No API key found for openai.'
     );
     expect(noModelDetail('No models available. See: /opt/mu/docs/models.md')).toBe('No models available.');
-    expect(noModelDetail('mu has no model to answer with')).toBe('');
+    expect(noModelDetail('spec.jev has no model to answer with')).toBe('');
   });
 });
 

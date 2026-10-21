@@ -2,7 +2,7 @@
 // Forking a conversation, end to end, in the real app on the native host (on by default): the button under a
 // message forks pi's session there. Under the person's second message it makes a session of everything before it and
 // brings the message back into the send box, to edit; the conversation goes on in the fork (the route follows its new
-// id) and the old session stays in the sidebar as a conversation of its own, whole, with both turns. Under mu's last
+// id) and the old session stays in the sidebar as a conversation of its own, whole, with both turns. Under spec.jev's last
 // reply it clones the branch. While a run goes there is no button. Each fork is a real session file of pi's, with the
 // file it came from as its `parentSession`. Run with `bun run e2e:conversation --native` (every native*.spec.mjs).
 import { expect, test } from '@playwright/test';

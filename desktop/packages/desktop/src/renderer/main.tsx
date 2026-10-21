@@ -31,12 +31,6 @@ import jaJP from '@arco-design/web-react/es/locale/ja-JP';
 import zhCN from '@arco-design/web-react/es/locale/zh-CN';
 import zhTW from '@arco-design/web-react/es/locale/zh-TW';
 import koKR from '@arco-design/web-react/es/locale/ko-KR';
-import trTR from '@arco-design/web-react/es/locale/tr-TR';
-import ruRU from '@arco-design/web-react/es/locale/ru-RU';
-import ptBR from '@arco-design/web-react/es/locale/pt-BR';
-import deDE from '@arco-design/web-react/es/locale/de-DE';
-import esES from '@arco-design/web-react/es/locale/es-ES';
-import frFR from '@arco-design/web-react/es/locale/fr-FR';
 import { useTranslation } from 'react-i18next';
 
 // Styles
@@ -118,24 +112,18 @@ const completeArcoLocale = (locale: ArcoLocaleInput): typeof enUS => ({
   ColorPicker: locale.ColorPicker ?? enUS.ColorPicker,
 });
 
-// Every language the app ships that Arco publishes a locale for. Arco has no
-// uk-UA or fa-IR locale; those get buildAppArcoLocale below.
+// Every language the app ships that Arco publishes a locale for; a language Arco has
+// no locale for gets buildAppArcoLocale below.
 const arcoLocales: Record<string, typeof enUS> = {
   'zh-CN': zhCN,
   'zh-TW': zhTW,
   'ja-JP': jaJP,
   'ko-KR': completeArcoLocale(koKR),
   'en-US': enUS,
-  'tr-TR': completeArcoLocale(trTR),
-  'ru-RU': completeArcoLocale(ruRU),
-  'pt-BR': completeArcoLocale(ptBR),
-  'de-DE': completeArcoLocale(deDE),
-  'es-ES': completeArcoLocale(esES),
-  'fr-FR': completeArcoLocale(frFR),
 };
 
 /**
- * For a language Arco publishes no locale for (uk-UA, fa-IR): the texts users meet most (dialog buttons, "No data",
+ * For a language Arco publishes no locale for: the texts users meet most (dialog buttons, "No data",
  * upload actions) come from the app's own translations; the rest (date pickers, pagination) stay English.
  */
 const buildAppArcoLocale = (t: TFunction): typeof enUS => {
@@ -263,7 +251,7 @@ const Config: React.FC<PropsWithChildren> = ({ children }) => {
   } = useTranslation();
   const arcoLocale = useMemo(() => arcoLocales[language] ?? buildAppArcoLocale(t), [language, t]);
 
-  // No `theme` here: Arco writes a primaryColor inline on <body>, one value for both appearances. mu's primary,
+  // No `theme` here: Arco writes a primaryColor inline on <body>, one value for both appearances. spec.jev's primary,
   // per appearance, is in styles/themes/mu-arco.css.
   return React.createElement(
     ConfigProvider,

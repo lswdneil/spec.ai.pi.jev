@@ -1,6 +1,6 @@
 /**
- * `/import-chat`: bring one of this project's Claude Code or Codex conversations into mu and go on with it here.
- * pi's own `/import` opens a pi session file, so this command has a name of its own. The terminal (`mu import`) and
+ * `/import-chat`: bring one of this project's Claude Code or Codex conversations into spec.jev and go on with it here.
+ * pi's own `/import` opens a pi session file, so this command has a name of its own. The terminal (`spec.jev import`) and
  * the desktop app do the same through ../../import/cli.ts.
  *
  * Not a feature of the manifest: it asks no judge and changes nothing until someone runs it.
@@ -42,7 +42,7 @@ export interface ImportDeps {
 	sources?: Pick<ListOptions, "claudeProjects" | "codexSessions">;
 }
 
-/** The session folder of this mu: pi's per-project default, or the one custom folder it was told to use. */
+/** The session folder of this spec.jev: pi's per-project default, or the one custom folder it was told to use. */
 export function storeOf(ctx: Pick<ImportContext, "cwd" | "sessionManager">, agentDir: string): SessionStore {
 	const current = ctx.sessionManager.getSessionDir();
 	if (!current || sameFolder(current, defaultSessionDir(ctx.cwd, agentDir))) return { agentDir };
@@ -108,8 +108,8 @@ export async function importChat(args: string, ctx: ImportContext, deps: ImportD
 		if (found.length === 0) {
 			ctx.ui.notify(
 				say({
-					zh: "这个项目里没有找到 Claude Code 或 Codex 的对话。别的项目的对话可以用 /import-chat <文件> 导入，mu import --list 能列出全部。",
-					en: "No Claude Code or Codex conversations found for this project. To import one from another project, use /import-chat <file>; mu import --list shows them all.",
+					zh: "这个项目里没有找到 Claude Code 或 Codex 的对话。别的项目的对话可以用 /import-chat <文件> 导入，spec.jev import --list 能列出全部。",
+					en: "No Claude Code or Codex conversations found for this project. To import one from another project, use /import-chat <file>; spec.jev import --list shows them all.",
 				}),
 				"info",
 			);

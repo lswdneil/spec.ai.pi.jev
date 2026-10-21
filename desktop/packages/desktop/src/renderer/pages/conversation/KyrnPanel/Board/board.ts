@@ -82,7 +82,7 @@ export type BoardUpdate = {
 export type BoardView = {
   /**
    * Whether this conversation's harness has a board at all: it said so (a switch, a board or a note). Another agent's
-   * conversation, or mu with the board feature off, never does, and `/board` would reach its model as a message.
+   * conversation, or spec.jev with the board feature off, never does, and `/board` would reach its model as a message.
    */
   known: boolean;
   /** Whether the board is on for this project; undefined until the session has said. */

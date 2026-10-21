@@ -269,10 +269,10 @@ export function explainProblem(problem: Problem, context: ExplainContext, langua
 		language === "zh"
 			? context.proxy
 				? `这次请求走了代理（${context.proxy}），确认代理正在运行。`
-				: "如果需要代理：设置 HTTPS_PROXY，或在 ~/.mu/agent/settings.json 里写 httpProxy，然后重新运行 mu setup。"
+				: "如果需要代理：设置 HTTPS_PROXY，或在 ~/.spec.jev/agent/settings.json 里写 httpProxy，然后重新运行 spec.jev setup。"
 			: context.proxy
 				? `The request went through your proxy (${context.proxy}). Check that it's running.`
-				: "If you need a proxy, set HTTPS_PROXY (or httpProxy in ~/.mu/agent/settings.json) and run mu setup again.";
+				: "If you need a proxy, set HTTPS_PROXY (or httpProxy in ~/.spec.jev/agent/settings.json) and run spec.jev setup again.";
 	const said = problem.said
 		? language === "zh"
 			? `（服务的原话：${problem.said}）`
@@ -360,7 +360,7 @@ async function opencodeRefuses(
 			headers: { "content-type": "application/json", ...(key ? { authorization: `Bearer ${key}` } : {}) },
 			body: JSON.stringify({
 				model: "jev-1.13-free",
-				state: "mu setup is checking a key.",
+				state: "spec.jev setup is checking a key.",
 				questions: { check: { type: "noul", instructions: "Is this a key check?" } },
 			}),
 			signal: AbortSignal.timeout(timeoutMs),

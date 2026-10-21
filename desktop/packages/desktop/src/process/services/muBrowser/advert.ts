@@ -1,19 +1,19 @@
 import { chmodSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-/** The file name the harness looks for in the mu home (`ADVERT_FILE` in its `browser/embedded.ts`). */
+/** The file name the harness looks for in the spec.jev home (`ADVERT_FILE` in its `browser/embedded.ts`). */
 export const ADVERT_FILE = 'desktop-browser.json';
 
 export type Advert = { url: string; pid: number };
 
 /**
- * Tells a harness on this machine where the app's browser listens: `<mu home>/desktop-browser.json`.
+ * Tells a harness on this machine where the app's browser listens: `<spec.jev home>/desktop-browser.json`.
  *
  * The address carries the token, so the file is for the user alone: mode 0600 in a home of mode 0700. Windows
  * does not honour these mode bits; there the file is protected by the ACL of the user profile it lives in, which
  * other accounts cannot read by default. Nothing here pretends otherwise.
  *
- * `home` comes from `muHome()`, which never names `~/.mu` while only `~/.kyrn` exists, so creating the directory
+ * `home` comes from `muHome()`, which never names `~/.spec.jev` while only `~/.kyrn` exists, so creating the directory
  * here cannot split the data home in two.
  */
 export function writeAdvert(home: string, advert: Advert): string {

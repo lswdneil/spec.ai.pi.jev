@@ -450,7 +450,7 @@ Please check your local CLI tool authentication status`,
   const { enabled: crossSessionEnabled } = useCrossSessionMessageEnabled();
 
   // A goal is one long command the person types, `/goal <condition>`, and runs until the condition holds; a message
-  // always goes out as it was written. Only mu offers the command, so only there is a running goal read (the
+  // always goes out as it was written. Only spec.jev offers the command, so only there is a running goal read (the
   // harness's `goal.state`) and shown in the line above the input.
   const goalOffered = offersGoal(slashCommands);
   const goal = useConversationGoal(conversation_id, goalOffered);
@@ -479,7 +479,7 @@ Please check your local CLI tool authentication status`,
     await executeCommand({ input: message, files: allFiles, sessions });
   };
 
-  // A command the app sends for the person (mu's board switch): now when idle; while busy, the latest one waits
+  // A command the app sends for the person (spec.jev's board switch): now when idle; while busy, the latest one waits
   // here and goes out when the turn ends. Not through the queue: its default mode holds items until sent by hand.
   const waitingCommand = useRef<{ command: string; heard?: (state: SendBoxCommandState) => void }>(undefined);
   const sendCommand = useCallback(
@@ -617,8 +617,8 @@ Please check your local CLI tool authentication status`,
     }
   };
   const effectiveHandleStop = teamRuntime?.onStop ?? handleStop;
-  // Ending a goal is a command the person gives: it travels the lane of mu's own board switch, which holds a
-  // command until the turn ends. A running goal never ends its turn by itself (mu sends the agent back to work
+  // Ending a goal is a command the person gives: it travels the lane of spec.jev's own board switch, which holds a
+  // command until the turn ends. A running goal never ends its turn by itself (spec.jev sends the agent back to work
   // from one continuation to the next), so the run is stopped and the command goes out as it settles.
   const handleEndGoal = useCallback(
     (heard: (state: SendBoxCommandState) => void) => {

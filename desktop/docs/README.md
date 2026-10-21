@@ -1,6 +1,6 @@
-# mu desktop docs
+# spec.jev desktop docs
 
-Notes for working on the desktop app. How to run it and where the code is: [../readme.md](../readme.md). How mu fits together: [../../docs/architecture.md](../../docs/architecture.md).
+Notes for working on the desktop app. How to run it and where the code is: [../readme.md](../readme.md). How spec.jev fits together: [../../docs/architecture.md](../../docs/architecture.md).
 
 | Page                                                             | What                                                                                              |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
@@ -14,4 +14,4 @@ Notes for working on the desktop app. How to run it and where the code is: [../r
 | [guides/cdp.md](guides/cdp.md)                                   | Driving the app over the Chrome DevTools Protocol                                                 |
 | [guides/custom-theme.md](guides/custom-theme.md)                 | Custom CSS themes                                                                                 |
 
-Two pages in `guides/`, `hub-testing.md` and `acp-image-output.zh-CN.md`, were written before the fork and haven't been checked against mu.
+Two pages in `guides/`, `hub-testing.md` and `acp-image-output.zh-CN.md`, were written before the fork and haven't been checked against spec.jev.

@@ -1,5 +1,5 @@
 /*
- * mu colour scheme, part two: Arco Design's own scales and the few component rules the tokens cannot
+ * spec.jev colour scheme, part two: Arco Design's own scales and the few component rules the tokens cannot
  * reach. Arco declares its variables on <body> (and body[arco-theme='dark']), so they are overridden
  * there, scoped by the scheme attribute on <html>.
  *
@@ -14,7 +14,7 @@
  * grey on black, each readable on its page (4.5:1 and more).
  */
 
-[data-color-scheme='mu'] body {
+[data-color-scheme='spec.jev'] body {
   --arcoblue-1: 246, 244, 255;
   --arcoblue-2: 237, 233, 255;
   --arcoblue-3: 221, 213, 255;
@@ -50,7 +50,7 @@
   --aion-overlay-shadow: var(--mu-shadow-2);
 }
 
-[data-color-scheme='mu'] body[arco-theme='dark'] {
+[data-color-scheme='spec.jev'] body[arco-theme='dark'] {
   --arcoblue-1: 23, 20, 42;
   --arcoblue-2: 32, 28, 58;
   --arcoblue-3: 45, 39, 82;
@@ -81,7 +81,7 @@
 
 /* ---- Component rules the tokens cannot reach ---- */
 
-[data-color-scheme='mu'] ::selection {
+[data-color-scheme='spec.jev'] ::selection {
   background: var(--mu-selection);
 }
 
@@ -89,20 +89,20 @@
  * Primary buttons: the light lavender fill with dark text, in both appearances. Status buttons (a red
  * "delete") keep their colour and white text.
  */
-[data-color-scheme='mu'] .arco-btn-primary:not(.arco-btn-disabled):not([class*='arco-btn-status']) {
+[data-color-scheme='spec.jev'] .arco-btn-primary:not(.arco-btn-disabled):not([class*='arco-btn-status']) {
   border-color: transparent;
   background-color: var(--mu-accent-fill);
   color: var(--mu-accent-on);
 }
 
-[data-color-scheme='mu'] .arco-btn-primary:not(.arco-btn-disabled):not([class*='arco-btn-status']):hover,
-[data-color-scheme='mu'] .arco-btn-primary:not(.arco-btn-disabled):not([class*='arco-btn-status']):focus-visible {
+[data-color-scheme='spec.jev'] .arco-btn-primary:not(.arco-btn-disabled):not([class*='arco-btn-status']):hover,
+[data-color-scheme='spec.jev'] .arco-btn-primary:not(.arco-btn-disabled):not([class*='arco-btn-status']):focus-visible {
   border-color: transparent;
   background-color: var(--mu-accent-fill-hover);
   color: var(--mu-accent-on);
 }
 
-[data-color-scheme='mu'] .arco-btn-primary:not(.arco-btn-disabled):not([class*='arco-btn-status']):active {
+[data-color-scheme='spec.jev'] .arco-btn-primary:not(.arco-btn-disabled):not([class*='arco-btn-status']):active {
   border-color: transparent;
   background-color: var(--mu-accent-fill-active);
   color: var(--mu-accent-on);
@@ -112,72 +112,72 @@
  * An icon-park icon paints itself the page's secondary grey, which on the lavender fill all but vanishes in dark. On a
  * primary button the icon follows the button's dark text instead.
  */
-[data-color-scheme='mu'] .arco-btn-primary:not([class*='arco-btn-status']) .i-icon svg [stroke]:not([stroke='none']) {
+[data-color-scheme='spec.jev'] .arco-btn-primary:not([class*='arco-btn-status']) .i-icon svg [stroke]:not([stroke='none']) {
   stroke: currentColor;
 }
 
 /* arco-override.css greys a disabled primary button out with aou-2; Arco's white text would vanish on it. */
-[data-color-scheme='mu'] .arco-btn-primary.arco-btn-disabled:not([class*='arco-btn-status']) {
+[data-color-scheme='spec.jev'] .arco-btn-primary.arco-btn-disabled:not([class*='arco-btn-status']) {
   color: var(--mu-accent-on-disabled);
 }
 
 /* The switch and a checked box take the accent fill too, with a dark check mark. A radio keeps the violet ring. */
-[data-color-scheme='mu'] .arco-switch-checked:not(.arco-switch-disabled) {
+[data-color-scheme='spec.jev'] .arco-switch-checked:not(.arco-switch-disabled) {
   background-color: var(--mu-accent-fill-active);
 }
 
-[data-color-scheme='mu'] .arco-checkbox-checked:not(.arco-checkbox-disabled) .arco-checkbox-mask,
-[data-color-scheme='mu'] .arco-checkbox-indeterminate:not(.arco-checkbox-disabled) .arco-checkbox-mask {
+[data-color-scheme='spec.jev'] .arco-checkbox-checked:not(.arco-checkbox-disabled) .arco-checkbox-mask,
+[data-color-scheme='spec.jev'] .arco-checkbox-indeterminate:not(.arco-checkbox-disabled) .arco-checkbox-mask {
   border-color: var(--mu-accent-fill-active);
   background-color: var(--mu-accent-fill-active);
 }
 
-[data-color-scheme='mu'] .arco-checkbox-checked:not(.arco-checkbox-disabled) .arco-checkbox-mask-icon,
-[data-color-scheme='mu'] .arco-checkbox-indeterminate:not(.arco-checkbox-disabled) .arco-checkbox-mask::after {
+[data-color-scheme='spec.jev'] .arco-checkbox-checked:not(.arco-checkbox-disabled) .arco-checkbox-mask-icon,
+[data-color-scheme='spec.jev'] .arco-checkbox-indeterminate:not(.arco-checkbox-disabled) .arco-checkbox-mask::after {
   color: var(--mu-accent-on);
 }
 
-[data-color-scheme='mu'] .arco-checkbox-indeterminate:not(.arco-checkbox-disabled) .arco-checkbox-mask::after {
+[data-color-scheme='spec.jev'] .arco-checkbox-indeterminate:not(.arco-checkbox-disabled) .arco-checkbox-mask::after {
   background-color: var(--mu-accent-on);
 }
 
-[data-color-scheme='mu'] body[arco-theme='dark'] .arco-btn-primary.arco-btn-status-danger:not(.arco-btn-disabled) {
+[data-color-scheme='spec.jev'] body[arco-theme='dark'] .arco-btn-primary.arco-btn-status-danger:not(.arco-btn-disabled) {
   background-color: #c93358;
 }
 
-[data-color-scheme='mu'] body[arco-theme='dark'] .arco-btn-primary.arco-btn-status-success:not(.arco-btn-disabled) {
+[data-color-scheme='spec.jev'] body[arco-theme='dark'] .arco-btn-primary.arco-btn-status-success:not(.arco-btn-disabled) {
   background-color: #0b7d58;
 }
 
-[data-color-scheme='mu'] body[arco-theme='dark'] .arco-btn-primary.arco-btn-status-warning:not(.arco-btn-disabled) {
+[data-color-scheme='spec.jev'] body[arco-theme='dark'] .arco-btn-primary.arco-btn-status-warning:not(.arco-btn-disabled) {
   background-color: #a85a0a;
 }
 
 /* upstream pins outline buttons to a neutral grey (#86909c). */
-[data-color-scheme='mu'] .arco-btn.arco-btn-outline:not(.arco-btn-disabled) {
+[data-color-scheme='spec.jev'] .arco-btn.arco-btn-outline:not(.arco-btn-disabled) {
   border-color: var(--bg-4);
   color: var(--text-secondary);
 }
 
-[data-color-scheme='mu'] .arco-btn.arco-btn-outline:not(.arco-btn-disabled):hover {
+[data-color-scheme='spec.jev'] .arco-btn.arco-btn-outline:not(.arco-btn-disabled):hover {
   border-color: var(--mu-accent-fill-active);
   color: var(--text-primary);
 }
 
 /* Focus: a light lavender border and a soft ring, instead of Arco's full primary border. */
-[data-color-scheme='mu'] .arco-input-focus,
-[data-color-scheme='mu'] .arco-input-inner-wrapper-focus,
-[data-color-scheme='mu'] .arco-textarea-focus,
-[data-color-scheme='mu'] .arco-select-focused .arco-select-view,
-[data-color-scheme='mu'] .arco-input-tag-focus,
-[data-color-scheme='mu'] .arco-picker-focused {
+[data-color-scheme='spec.jev'] .arco-input-focus,
+[data-color-scheme='spec.jev'] .arco-input-inner-wrapper-focus,
+[data-color-scheme='spec.jev'] .arco-textarea-focus,
+[data-color-scheme='spec.jev'] .arco-select-focused .arco-select-view,
+[data-color-scheme='spec.jev'] .arco-input-tag-focus,
+[data-color-scheme='spec.jev'] .arco-picker-focused {
   border-color: var(--mu-accent-border);
   box-shadow: 0 0 0 3px var(--mu-ring);
 }
 
-[data-color-scheme='mu'] .arco-btn:focus-visible,
-[data-color-scheme='mu'] [role='button']:focus-visible,
-[data-color-scheme='mu'] a:focus-visible {
+[data-color-scheme='spec.jev'] .arco-btn:focus-visible,
+[data-color-scheme='spec.jev'] [role='button']:focus-visible,
+[data-color-scheme='spec.jev'] a:focus-visible {
   outline: 2px solid var(--mu-violet-5);
   outline-offset: 2px;
 }
@@ -189,50 +189,50 @@
  * suffix or a clear button sits in an inner wrapper. Fields drawn without a border (the composer, the
  * palette, the title editor) set border-style: none, which a colour does not bring back.
  */
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev']
   .arco-input-inner-wrapper:not(.arco-input-inner-wrapper-focus):not(.arco-input-inner-wrapper-error):not(
     .arco-input-inner-wrapper-disabled
   ),
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev']
   .arco-select:not(.arco-select-focused):not(.arco-select-error):not(.arco-select-disabled)
   .arco-select-view,
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev']
   .arco-textarea:not(.arco-textarea-focus):not(.arco-textarea-error):not(.arco-textarea-disabled):not(:focus),
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev']
   .arco-input-tag:not(.arco-input-tag-focus):not(.arco-input-tag-error):not(.arco-input-tag-disabled),
-[data-color-scheme='mu'] .arco-picker:not(.arco-picker-focused):not(.arco-picker-error):not(.arco-picker-disabled),
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev'] .arco-picker:not(.arco-picker-focused):not(.arco-picker-error):not(.arco-picker-disabled),
+[data-color-scheme='spec.jev']
   :not(.arco-input-inner-wrapper)
   > input.arco-input:not(:focus):not(.arco-input-focus):not(.arco-input-error):not(.arco-input-disabled) {
   border-color: var(--border-base);
 }
 
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev']
   .arco-input-inner-wrapper:not(.arco-input-inner-wrapper-focus):not(.arco-input-inner-wrapper-error):not(
     .arco-input-inner-wrapper-disabled
   ):hover,
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev']
   .arco-select:not(.arco-select-focused):not(.arco-select-error):not(.arco-select-disabled):hover
   .arco-select-view,
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev']
   .arco-textarea:not(.arco-textarea-focus):not(.arco-textarea-error):not(.arco-textarea-disabled):not(:focus):hover,
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev']
   .arco-input-tag:not(.arco-input-tag-focus):not(.arco-input-tag-error):not(.arco-input-tag-disabled):hover,
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev']
   .arco-picker:not(.arco-picker-focused):not(.arco-picker-error):not(.arco-picker-disabled):hover,
-[data-color-scheme='mu']
+[data-color-scheme='spec.jev']
   :not(.arco-input-inner-wrapper)
   > input.arco-input:not(:focus):not(.arco-input-focus):not(.arco-input-error):not(.arco-input-disabled):hover {
   border-color: var(--bg-4);
 }
 
 /* A field with an error: a red hairline. Arco marks it with a red wash, which layout.css's white fill hides. */
-[data-color-scheme='mu'] .arco-input-inner-wrapper.arco-input-inner-wrapper-error,
-[data-color-scheme='mu'] .arco-select.arco-select-error .arco-select-view,
-[data-color-scheme='mu'] .arco-textarea.arco-textarea-error,
-[data-color-scheme='mu'] .arco-input-tag.arco-input-tag-error,
-[data-color-scheme='mu'] .arco-picker.arco-picker-error,
-[data-color-scheme='mu'] :not(.arco-input-inner-wrapper) > input.arco-input.arco-input-error {
+[data-color-scheme='spec.jev'] .arco-input-inner-wrapper.arco-input-inner-wrapper-error,
+[data-color-scheme='spec.jev'] .arco-select.arco-select-error .arco-select-view,
+[data-color-scheme='spec.jev'] .arco-textarea.arco-textarea-error,
+[data-color-scheme='spec.jev'] .arco-input-tag.arco-input-tag-error,
+[data-color-scheme='spec.jev'] .arco-picker.arco-picker-error,
+[data-color-scheme='spec.jev'] :not(.arco-input-inner-wrapper) > input.arco-input.arco-input-error {
   border-color: rgb(var(--danger-6));
 }
 
@@ -240,11 +240,11 @@
  * The chosen segment of a segmented control: Arco's white chip on the light grey track is faint, so it
  * gets a hairline and a soft shadow, and its label the body text colour in both appearances.
  */
-[data-color-scheme='mu'] .arco-radio-button.arco-radio-checked:not(.arco-radio-disabled) {
+[data-color-scheme='spec.jev'] .arco-radio-button.arco-radio-checked:not(.arco-radio-disabled) {
   color: var(--text-primary);
 }
 
-[data-color-scheme='mu'][data-theme='light'] .arco-radio-button.arco-radio-checked:not(.arco-radio-disabled) {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-radio-button.arco-radio-checked:not(.arco-radio-disabled) {
   box-shadow:
     0 0 0 1px var(--border-base),
     0 1px 2px rgba(0, 0, 0, 0.08);
@@ -256,92 +256,92 @@
  * each colour gets a deeper text colour (4.5:1 or better on its tint). `blue` moves to periwinkle,
  * so that the tool cards' status tag stops being the one upstream-blue thing on the page.
  */
-[data-color-scheme='mu'][data-theme='light'] .arco-tag-cyan.arco-tag-checked {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-tag-cyan.arco-tag-checked {
   color: #0b7a80;
 }
-[data-color-scheme='mu'][data-theme='light'] .arco-tag-green.arco-tag-checked {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-tag-green.arco-tag-checked {
   color: #0a7a4b;
 }
-[data-color-scheme='mu'][data-theme='light'] .arco-tag-lime.arco-tag-checked {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-tag-lime.arco-tag-checked {
   color: #56730a;
 }
-[data-color-scheme='mu'][data-theme='light'] .arco-tag-orange.arco-tag-checked {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-tag-orange.arco-tag-checked {
   color: #b0560a;
 }
-[data-color-scheme='mu'][data-theme='light'] .arco-tag-orangered.arco-tag-checked {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-tag-orangered.arco-tag-checked {
   color: #bc4a12;
 }
-[data-color-scheme='mu'][data-theme='light'] .arco-tag-gold.arco-tag-checked {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-tag-gold.arco-tag-checked {
   color: #8a6a0b;
 }
-[data-color-scheme='mu'][data-theme='light'] .arco-tag-red.arco-tag-checked {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-tag-red.arco-tag-checked {
   color: #c4294f;
 }
-[data-color-scheme='mu'][data-theme='light'] .arco-tag-magenta.arco-tag-checked {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-tag-magenta.arco-tag-checked {
   color: #c2257a;
 }
-[data-color-scheme='mu'][data-theme='light'] .arco-tag-pinkpurple.arco-tag-checked {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-tag-pinkpurple.arco-tag-checked {
   color: #a632b5;
 }
-[data-color-scheme='mu'][data-theme='light'] .arco-tag-blue.arco-tag-checked {
+[data-color-scheme='spec.jev'][data-theme='light'] .arco-tag-blue.arco-tag-checked {
   border-color: transparent;
   background-color: #eceefe;
   color: #4451c4;
 }
 /* !important only because upstream's dark rule for this tag carries it. */
-[data-color-scheme='mu'] body[arco-theme='dark'] .arco-tag-blue.arco-tag-checked {
+[data-color-scheme='spec.jev'] body[arco-theme='dark'] .arco-tag-blue.arco-tag-checked {
   border-color: transparent;
   background-color: rgba(158, 147, 242, 0.2) !important;
   color: #b9c0ff !important;
 }
 
 /* Floating surfaces: soft layered shadow, rounder corners. */
-[data-color-scheme='mu'] .arco-dropdown-menu,
-[data-color-scheme='mu'] .arco-select-popup,
-[data-color-scheme='mu'] .arco-trigger-popup .arco-menu {
+[data-color-scheme='spec.jev'] .arco-dropdown-menu,
+[data-color-scheme='spec.jev'] .arco-select-popup,
+[data-color-scheme='spec.jev'] .arco-trigger-popup .arco-menu {
   border-radius: var(--mu-radius-md);
   box-shadow: var(--mu-shadow-2);
 }
 
-[data-color-scheme='mu'] .arco-modal {
+[data-color-scheme='spec.jev'] .arco-modal {
   box-shadow: var(--mu-shadow-3);
 }
 
 /* The current step of a Steps bar: the accent fill with a dark number; the finished line in the accent. */
-[data-color-scheme='mu'] .arco-steps-item-process .arco-steps-icon {
+[data-color-scheme='spec.jev'] .arco-steps-item-process .arco-steps-icon {
   border-color: var(--mu-accent-fill-active);
   background-color: var(--mu-accent-fill-active);
   color: var(--mu-accent-on);
 }
 
-[data-color-scheme='mu'] .arco-steps-item-finish .arco-steps-item-tail::after {
+[data-color-scheme='spec.jev'] .arco-steps-item-finish .arco-steps-item-tail::after {
   background-color: var(--mu-accent-border);
 }
 
 /* arco-override.css paints these two with upstream's pale blue. */
-[data-color-scheme='mu'] .mu-steps .arco-steps-item-finish .arco-steps-item-icon {
+[data-color-scheme='spec.jev'] .mu-steps .arco-steps-item-finish .arco-steps-item-icon {
   background-color: var(--mu-violet-2) !important;
   border-color: var(--mu-violet-2) !important;
 }
 
 /* A message is a surface, so it is the page's own: white or near-black, with one hairline. */
-[data-color-scheme='mu'] .arco-message-info {
+[data-color-scheme='spec.jev'] .arco-message-info {
   background: var(--bg-base) !important;
   border: 1px solid var(--border-base) !important;
 }
 
-[data-color-scheme='mu'] body[arco-theme='dark'] .arco-message-info {
+[data-color-scheme='spec.jev'] body[arco-theme='dark'] .arco-message-info {
   background: var(--bg-base) !important;
   border: 1px solid var(--border-base) !important;
 }
 
 /* layout.css pins the dark section titles to a neutral grey. */
-[data-color-scheme='mu'][data-theme='dark'] .sider-section-title,
-[data-color-scheme='mu'][data-theme='dark'] .settings-sider__group-header {
+[data-color-scheme='spec.jev'][data-theme='dark'] .sider-section-title,
+[data-color-scheme='spec.jev'][data-theme='dark'] .settings-sider__group-header {
   color: var(--bg-6);
 }
 
 /* The conversation search marks its hits with a hard-coded blue. */
-[data-color-scheme='mu'] .conversation-search-modal {
+[data-color-scheme='spec.jev'] .conversation-search-modal {
   --conversation-search-highlight-fg: var(--primary);
 }

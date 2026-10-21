@@ -6,7 +6,7 @@
 
 模型排查“为什么这个值不对”“为什么卡住”的常用办法是加 print、跑一遍、再删掉，一个问题要来回好几轮。调试器一次就能给出答案：停在哪一行、调用栈、每一层的局部变量，还能在那一刻对表达式求值。
 
-它是能力包：装在 mu 里但默认不露。Jev 看出任务需要调试器（`capability.disclosure`）时才打开，模型也可以用 `find_capability` 自己要。
+它是能力包：装在 spec.jev 里但默认不露。Jev 看出任务需要调试器（`capability.disclosure`）时才打开，模型也可以用 `find_capability` 自己要。
 
 ## 2. 给模型的四个工具
 
@@ -18,7 +18,7 @@
 | `debug_stop` | 结束调试，返回程序最后的输出 |
 
 - 一次只跑一个调试。再调 `debug_start` 会先结束前一个，并在结果里说明。
-- 程序结束，调试也随之结束，适配器进程一起退出。会话结束（退出、重载、切换会话）时结束；mu 进程退出时整个进程树立刻结束。
+- 程序结束，调试也随之结束，适配器进程一起退出。会话结束（退出、重载、切换会话）时结束；spec.jev 进程退出时整个进程树立刻结束。
 - 断点可以带条件（`condition: "x == 2"`）。
 - 到了 `debugWaitMs`（默认 30 秒）程序还没停也没结束，就告诉模型“还在跑”，由它决定 `pause` 或 `wait`。用户按 Esc 时立刻不再等。
 - 变量值、程序输出都来自被调试的程序，结果里标为不可信数据。
@@ -30,18 +30,18 @@
 | id | 调试什么 | 通信 | 需要什么 |
 | --- | --- | --- | --- |
 | `debugpy` | `.py`，也能跑模块（`launch: {"module": "pytest"}`，用来调试一个失败的测试） | stdio | `python3 -m pip install debugpy`（Windows 上是 `python`） |
-| `delve` | `.go`（程序或包目录；`launch: {"mode": "test"}` 调试测试） | TCP，端口由 mu 分配 | `go install github.com/go-delve/delve/cmd/dlv@latest` |
-| `lldb-dap` | 编译好的程序（C、C++、Rust、Swift），也是其它结尾的兜底 | stdio | macOS 自带在命令行工具里（不在 PATH 上，mu 会去 `/Library/Developer/CommandLineTools/usr/bin`、Xcode、Homebrew 的 llvm 下面找）；Windows `winget install LLVM.LLVM`；Linux 装 LLVM 18 以上 |
+| `delve` | `.go`（程序或包目录；`launch: {"mode": "test"}` 调试测试） | TCP，端口由 spec.jev 分配 | `go install github.com/go-delve/delve/cmd/dlv@latest` |
+| `lldb-dap` | 编译好的程序（C、C++、Rust、Swift），也是其它结尾的兜底 | stdio | macOS 自带在命令行工具里（不在 PATH 上，spec.jev 会去 `/Library/Developer/CommandLineTools/usr/bin`、Xcode、Homebrew 的 llvm 下面找）；Windows `winget install LLVM.LLVM`；Linux 装 LLVM 18 以上 |
 
 - 按程序的结尾选适配器，也可以用 `adapter` 指定。
 - **Python 虚拟环境**：工作目录下有 `.venv` 或 `venv` 时，程序用那里的解释器运行（这样才找得到项目装的包），找适配器也先看那里。
 - 装了 debugpy 才算找到：只有 `python3` 不够，打开时会跑一次 `import debugpy` 来确认。
-- 缺哪个就给出这个平台的安装命令；mu 从不自己安装。一个适配器都没装时，包保持关闭。
+- 缺哪个就给出这个平台的安装命令；spec.jev 从不自己安装。一个适配器都没装时，包保持关闭。
 - `launch` 参数是一段 JSON 文本（不是对象），因为有的模型服务商的工具参数格式不接受任意键的对象。
 
 ### 自己加适配器
 
-在 mu.json 的 `features.packs.debugAdapters` 里按 id 添加或修改：
+在 spec.jev.json 的 `features.packs.debugAdapters` 里按 id 添加或修改：
 
 ```json
 {
@@ -66,9 +66,9 @@
 
 ## 4. 协议上的细节
 
-- **启动顺序**：各家适配器回答 `launch` 的时机不同。debugpy 要等 `configurationDone` 之后才回答，lldb-dap 在 `initialized` 事件之前就回答。所以 mu 发出 `launch` 后不等回答，而是等 `initialized` 事件，在那时设断点和异常过滤，再发 `configurationDone`。（测试里把它改成“先等 `launch` 的回答”，debugpy 顺序的用例和真实 debugpy 用例都会卡住失败。）
+- **启动顺序**：各家适配器回答 `launch` 的时机不同。debugpy 要等 `configurationDone` 之后才回答，lldb-dap 在 `initialized` 事件之前就回答。所以 spec.jev 发出 `launch` 后不等回答，而是等 `initialized` 事件，在那时设断点和异常过滤，再发 `configurationDone`。（测试里把它改成“先等 `launch` 的回答”，debugpy 顺序的用例和真实 debugpy 用例都会卡住失败。）
 - **异常处停下**：适配器声明了默认开启的异常过滤（debugpy 的 “uncaught”）就打开它，所以程序崩溃时停在出事的那一行，局部变量都在。支持 `exceptionInfo` 时再取异常的类型和消息，比如 `ZeroDivisionError: division by zero`。
-- **反向请求**（`runInTerminal` 等）：mu 没有终端可借，回答“不支持”，适配器照常工作。
+- **反向请求**（`runInTerminal` 等）：spec.jev 没有终端可借，回答“不支持”，适配器照常工作。
 - 输出里的 `telemetry` 类别不给模型看。
 - 进程：POSIX 上适配器放在自己的进程组里，结束时整组杀掉，被调试的程序一起结束；Windows 用 `taskkill /T /F`。
 

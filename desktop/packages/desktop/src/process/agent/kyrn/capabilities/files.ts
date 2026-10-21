@@ -10,10 +10,10 @@ import { asRecord, type JsonRecord } from '../piRpc';
  * the screen sends. The rules are the harness's (see common/kyrn/capabilities.ts).
  */
 
-/** Config and skill files are small: anything larger is not what it claims to be (mu's `MAX_FILE_BYTES`). */
+/** Config and skill files are small: anything larger is not what it claims to be (spec.jev's `MAX_FILE_BYTES`). */
 const MAX_FILE_BYTES = 2 * 1024 * 1024;
 
-/** A skill's file is read up to this size, as mu reads the skills it takes over. */
+/** A skill's file is read up to this size, as spec.jev reads the skills it takes over. */
 export const MAX_SKILL_BYTES = 512 * 1024;
 
 /** The text of a file without a byte order mark; undefined when it is missing, no file, too large or unreadable. */
@@ -59,7 +59,7 @@ export function featureOptions<T extends { enabled: boolean }>(config: JsonRecor
   return defaults;
 }
 
-/** What mu takes over from Claude Code, Cursor and Codex, and whether it does at all (`INHERIT_DEFAULTS` of mu). */
+/** What spec.jev takes over from Claude Code, Cursor and Codex, and whether it does at all (`INHERIT_DEFAULTS` of spec.jev). */
 export const INHERIT_DEFAULTS = {
   enabled: true,
   claude: true,

@@ -23,7 +23,7 @@ const {
   navigateMock,
   muStartMode,
 } = vi.hoisted(() => ({
-  /** The mode the settings say mu starts a new conversation in. */
+  /** The mode the settings say spec.jev starts a new conversation in. */
   muStartMode: { value: undefined as string | undefined },
   modelSelectionMock: {
     modelList: [],
@@ -277,7 +277,7 @@ vi.mock('swr', async () => {
 import GuidPage from '@/renderer/pages/guid/GuidPage';
 
 const guidInputCardProps = {
-  input: 'Existing Guid draft\nCreate with /cron in mu',
+  input: 'Existing Guid draft\nCreate with /cron in spec.jev',
   onInputChange: vi.fn(),
   onKeyDown: vi.fn(),
   onPaste: vi.fn(),
@@ -364,7 +364,7 @@ describe('GuidPage', () => {
     agentSelectionMock.selectedAcpModel = 'e2e/e2e-fake-model' as never;
     render(<GuidPage />);
     expect(capturedGuidActionRowProps.at(-1)?.onSend).toBe(nativeHost.send.sendMessageHandler);
-    // No mode was picked here: mu starts in the mode its settings name.
+    // No mode was picked here: spec.jev starts in the mode its settings name.
     expect(nativeHost.deps.at(-1)).toMatchObject({
       input: guidInputMock.input,
       dir: guidInputMock.dir,
@@ -424,7 +424,7 @@ describe('GuidPage', () => {
 
   it('appends a draft-preserving prefill without clearing attachments or workspace', () => {
     locationMock.state = {
-      prefillPrompt: 'Create with /cron in mu',
+      prefillPrompt: 'Create with /cron in spec.jev',
       preservePrefillDraft: true,
       focusPrefill: true,
       returnTo: 'conversation-sidebar',
@@ -437,7 +437,7 @@ describe('GuidPage', () => {
 
     const inputUpdater = guidInputMock.setInput.mock.calls[0]?.[0];
     expect(inputUpdater).toBeTypeOf('function');
-    expect(inputUpdater('Existing Guid draft')).toBe('Existing Guid draft\nCreate with /cron in mu');
+    expect(inputUpdater('Existing Guid draft')).toBe('Existing Guid draft\nCreate with /cron in spec.jev');
     expect(guidInputMock.setFiles).not.toHaveBeenCalled();
     expect(guidInputMock.setDir).not.toHaveBeenCalled();
     expect(capturedGuidInputCardProps.at(-1)?.focusRequestKey).toBe('guid-location');
@@ -461,7 +461,7 @@ describe('GuidPage', () => {
 
   it('removes a consumed preserved prefill even when no other navigation state remains', () => {
     locationMock.state = {
-      prefillPrompt: 'Create with /cron in mu',
+      prefillPrompt: 'Create with /cron in spec.jev',
       preservePrefillDraft: true,
       focusPrefill: true,
     };
@@ -471,7 +471,7 @@ describe('GuidPage', () => {
     expect(navigateMock).toHaveBeenCalledWith('/guid', { replace: true, state: null });
   });
 
-  it('sends a permission mode only once the person picked one, and shows the mode mu will start in', async () => {
+  it('sends a permission mode only once the person picked one, and shows the mode spec.jev will start in', async () => {
     const modes = ['full', 'jev', 'ask'].map((value) => ({ value, label: value }));
     agentSelectionMock.currentAgentModeOptions = modes as never;
     // The catalog remembers the last session's mode; the settings say new conversations start in full access.

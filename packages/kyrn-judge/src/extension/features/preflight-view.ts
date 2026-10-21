@@ -156,7 +156,7 @@ function seconds(ms: number): string {
 /** "◆ jev-latest  chat · answer directly · thinking medium → low · 640 ms" */
 export function verdictHeadline(data: VerdictData, paint: Paint): string {
 	const dot = paint.fg("dim", " · ");
-	// The judge's mark, in the color mu gives its own lines (pink in mu's themes, as in the app).
+	// The judge's mark, in the color spec.jev gives its own lines (pink in spec.jev's themes, as in the app).
 	const mark = data.state === "applied" ? paint.fg("customMessageLabel", "◆") : paint.fg("muted", "◇");
 	const by = paint.fg("muted", judgeDisplayName(data.by));
 	if (data.state === "none") {

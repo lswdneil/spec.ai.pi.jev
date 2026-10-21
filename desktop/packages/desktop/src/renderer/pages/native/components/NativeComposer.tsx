@@ -1,13 +1,13 @@
 /**
- * The bottom of a native conversation: what mu has queued, what the screen says about mu, a dialog pi waits on, the
+ * The bottom of a native conversation: what spec.jev has queued, what the screen says about spec.jev, a dialog pi waits on, the
  * status line and the send box. While a run goes, a message either steers it (it reaches the model at its next step)
  * or waits for its end, as the person picks, and the stop button stops the run (or the message Jev is still reading).
  * A command another panel sends to this conversation (the board's switch: `/board on`) goes to pi as it is.
  *
- * The send box carries what mu's other conversations have (docs/native-host-ui.md): files and images attached
- * (picked, dropped or pasted), mu's permission mode, the model and its thinking level, pi's slash commands in the `/`
+ * The send box carries what spec.jev's other conversations have (docs/native-host-ui.md): files and images attached
+ * (picked, dropped or pasted), spec.jev's permission mode, the model and its thinking level, pi's slash commands in the `/`
  * menu, and `@` mentions of the project's files. An image goes to pi as itself; a file as its full path. The box's
- * ↑/↓ history and `/copy` read the conversation's text. Above it, the goal mu works towards (`/goal <condition>`),
+ * ↑/↓ history and `/copy` read the conversation's text. Above it, the goal spec.jev works towards (`/goal <condition>`),
  * which the person can end; beside the send button, how full the model's context is.
  */
 import { Button, Radio } from '@arco-design/web-react';
@@ -148,9 +148,9 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
   const usage = useMemo(() => contextUsageOf(view), [view]);
   useSessionStats(conversation);
 
-  // Ending a goal is a command the person gives, `/goal clear`, as in mu's other conversations. pi runs an extension's
+  // Ending a goal is a command the person gives, `/goal clear`, as in spec.jev's other conversations. pi runs an extension's
   // command at once, a run going or not; a run that goes is stopped as well, as the classic line stops it (a goal's run
-  // does not end by itself: mu sends the agent back to work). Cleared first, so the stop does not pause it on the way.
+  // does not end by itself: spec.jev sends the agent back to work). Cleared first, so the stop does not pause it on the way.
   const endGoal = useCallback(
     (heard: (state: SendBoxCommandState) => void) => {
       const stop = working;
@@ -291,7 +291,7 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
             compactActions={false}
             prefix={<NativeAttachmentList attachments={files.attachments} onRemove={files.remove} />}
             tools={
-              // Left of the input: attachments, then what mu may do; while a run goes, when a message reaches it.
+              // Left of the input: attachments, then what spec.jev may do; while a run goes, when a message reaches it.
               <>
                 <NativeAttachButton onClick={() => picker.current?.click()} />
                 <NativePermissionPill state={permissions} held={held} request={request} />

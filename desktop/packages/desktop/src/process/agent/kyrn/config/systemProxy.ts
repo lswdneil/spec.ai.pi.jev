@@ -1,12 +1,12 @@
 import { execFileSync } from 'node:child_process';
 
 /**
- * The proxy set in the system's network settings, for the mu processes the app starts.
+ * The proxy set in the system's network settings, for the spec.jev processes the app starts.
  *
  * A browser on macOS or Windows follows that proxy; Node reads only HTTP(S)_PROXY, and an app opened from the Dock or
  * the Start menu has neither. With a proxy on (the usual way to reach Google, OpenAI or Anthropic from mainland China),
- * mu in the app then went straight to the provider: Google answered "User location is not supported", or the connection
- * timed out, while the same mu in a terminal that exports HTTPS_PROXY worked. So when the environment names no proxy,
+ * spec.jev in the app then went straight to the provider: Google answered "User location is not supported", or the connection
+ * timed out, while the same spec.jev in a terminal that exports HTTPS_PROXY worked. So when the environment names no proxy,
  * the system's is handed on as HTTP_PROXY / HTTPS_PROXY / NO_PROXY, which pi's HTTP client honours.
  *
  * Only what those variables can say is used: an HTTP proxy per scheme and host exceptions. A proxy auto-config (PAC)
@@ -19,7 +19,7 @@ export interface SystemProxy {
 }
 
 const PROXY_VARIABLES = ['HTTPS_PROXY', 'https_proxy', 'HTTP_PROXY', 'http_proxy', 'ALL_PROXY', 'all_proxy'];
-/** Never through a proxy: the local judge and anything else mu talks to on this machine. */
+/** Never through a proxy: the local judge and anything else spec.jev talks to on this machine. */
 const ALWAYS_DIRECT = ['localhost', '127.0.0.1', '::1'];
 
 const address = (host: string | undefined, port: string | undefined): string | undefined =>
@@ -125,7 +125,7 @@ export function readSystemProxy(platform: NodeJS.Platform, read: Run = run): Sys
 
 let cached: Record<string, string> | undefined;
 
-/** What `proxyEnv` adds for this process's environment, read once per process: every mu started here shares it. */
+/** What `proxyEnv` adds for this process's environment, read once per process: every spec.jev started here shares it. */
 export function systemProxyEnv(): Record<string, string> {
   cached ??= proxyEnv(process.env, readSystemProxy(process.platform));
   return cached;

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { TMessage } from '@/common/chat/chatLib';
 import { questionsBeforeCalls } from '@/renderer/pages/conversation/Messages/permissionOrder';
 
-// mu asks about a call once the call has started, so the card came after the call's row: the refused call's outcome
+// spec.jev asks about a call once the call has started, so the card came after the call's row: the refused call's outcome
 // read above the question that led to it. The card goes right before the call it asks about.
 
 const said = (id: string, created: number): TMessage =>
@@ -17,7 +17,7 @@ const call = (id: string, command: string, created: number): TMessage =>
     content: { update: { tool_call_id: id, title: 'bash', raw_input: { command } } },
   }) as unknown as TMessage;
 
-/** mu's card as AionCore relays it: its codes under `raw_input.mu`, snake-cased or not. */
+/** spec.jev's card as AionCore relays it: its codes under `raw_input.spec.jev`, snake-cased or not. */
 const card = (id: string, command: string, created: number, mu: Record<string, string>): TMessage =>
   ({
     id,
@@ -29,7 +29,7 @@ const card = (id: string, command: string, created: number, mu: Record<string, s
 
 const ids = (list: TMessage[]) => list.map((message) => message.id);
 
-describe('mu’s question in the conversation', () => {
+describe('spec.jev’s question in the conversation', () => {
   it('goes right before the call it names, at the call’s time', () => {
     const list = [
       said('m1', 1),
@@ -45,7 +45,7 @@ describe('mu’s question in the conversation', () => {
   it('finds the call by its snake-cased id, and by the command it ran when the card names no call', () => {
     const snake = [call('call-2', 'rm -rf build', 3), card('q1', 'rm -rf build', 4, { tool_call_id: 'call-2' })];
     expect(ids(questionsBeforeCalls(snake))).toEqual(['q1', 'call-2']);
-    // A card from before mu named the call: the call of the same turn that ran exactly that command.
+    // A card from before spec.jev named the call: the call of the same turn that ran exactly that command.
     const older = [call('call-1', 'ls', 2), call('call-2', 'rm -rf build', 3), card('q1', 'rm -rf build', 4, {})];
     expect(ids(questionsBeforeCalls(older))).toEqual(['call-1', 'q1', 'call-2']);
   });
@@ -60,7 +60,7 @@ describe('mu’s question in the conversation', () => {
     expect(questionsBeforeCalls(list)).toBe(list);
   });
 
-  it('leaves another agent’s card, and a list without mu’s questions, as they were', () => {
+  it('leaves another agent’s card, and a list without spec.jev’s questions, as they were', () => {
     const other = {
       id: 'q1',
       type: 'acp_permission',

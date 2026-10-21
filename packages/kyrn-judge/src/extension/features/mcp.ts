@@ -81,16 +81,16 @@ function literal(value: string): string {
 }
 
 /**
- * MCP servers mu takes over from Claude Code, Cursor, Codex and mu.json, on
+ * MCP servers spec.jev takes over from Claude Code, Cursor, Codex and mu.json, on
  * pi's own MCP client. pi connects, signs in (`/mcp login`), calls and
- * reconnects; mu decides when a server is there at all. Every such server is a
+ * reconnects; spec.jev decides when a server is there at all. Every such server is a
  * `judged` capability in the catalog: until the judge finds a task needs it, or
  * the model asks through `find_capability`, it costs no tool definitions and no
  * process. Opening it registers it with pi (`pi.registerMcpServer`), and its
  * tools are declared to the model as `mcp__<server>__<tool>`.
  *
  * Servers in pi's own mcp.json are pi's: connected with the session, their
- * tools reached as configured there (`mu mcp add` makes them `deferred`, loaded
+ * tools reached as configured there (`spec.jev mcp add` makes them `deferred`, loaded
  * through `tool_search`). An inherited server of the same name yields to them.
  *
  * With `capability.disclosure` off nothing is hidden, so every server is
@@ -120,7 +120,7 @@ export function registerMcp(runtime: KyrnRuntime, roots: HarnessRoots | undefine
 		activate: () => activate(entry),
 	});
 
-	/** The definition in pi's terms, with mu's placeholders filled in and nothing left for pi to expand. */
+	/** The definition in pi's terms, with spec.jev's placeholders filled in and nothing left for pi to expand. */
 	const configOf = (entry: Entry, ctx: ExtensionContext): McpServerConfig => {
 		const { definition } = entry;
 		const context = { env: process.env, projectDir: ctx.cwd, home: roots?.home ?? homedir() };
@@ -199,7 +199,7 @@ export function registerMcp(runtime: KyrnRuntime, roots: HarnessRoots | undefine
 					{ code: "needs_approval", params: { source: definition.source } },
 				);
 			}
-			const allowed = await ctx.ui.confirm("mu MCP", approvalText(definition));
+			const allowed = await ctx.ui.confirm("spec.jev MCP", approvalText(definition));
 			if (!allowed) throw codedError("you did not allow this project's server to start", { code: "denied" });
 			store.approve(ctx.cwd, definition);
 		}
@@ -308,7 +308,7 @@ export function registerMcp(runtime: KyrnRuntime, roots: HarnessRoots | undefine
 	const ensureLoaded = (ctx: ExtensionContext): void => {
 		if (scan) return;
 		scan = inheritedFor(runtime, roots, ctx, runtime.config.mcp);
-		// pi connects the servers of its own mcp.json; a server mu took over yields to one of the same name there.
+		// pi connects the servers of its own mcp.json; a server spec.jev took over yields to one of the same name there.
 		const piOwn = roots
 			? loadMcpConfig({ agentDir: roots.agentDir, cwd: ctx.cwd, projectTrusted: ctx.isProjectTrusted() }).servers
 			: [];

@@ -1,14 +1,14 @@
 import { muEnv } from "./naming.ts";
 
 /**
- * The language the person reads mu in. The desktop app passes its interface
+ * The language the person reads spec.jev in. The desktop app passes its interface
  * language as MU_LANG ("zh-CN", "en-US", "ja-JP", ...); a terminal user can set
  * it too. Unset means nobody said, and every caller keeps its own default.
  */
 export interface AppLanguage {
 	/** The tag as given, e.g. "zh-TW". */
 	readonly code: string;
-	/** mu's own wording exists in Chinese and English; any other language reads the English one. */
+	/** spec.jev's own wording exists in Chinese and English; any other language reads the English one. */
 	readonly wording: "zh" | "en";
 	/** What a model is told to write in: "Traditional Chinese", "Japanese". */
 	readonly name: string;
@@ -45,7 +45,7 @@ export function say(texts: { readonly zh: string; readonly en: string }, languag
 
 /**
  * A line a person reads, as a stable code and what it names, for a client
- * that translates into a language mu has no wording for. The English (or the
+ * that translates into a language spec.jev has no wording for. The English (or the
  * zh/en) text always stays beside it; see docs/features/presentation-codes.md.
  */
 export interface Coded {

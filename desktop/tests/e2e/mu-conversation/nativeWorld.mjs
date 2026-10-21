@@ -1,8 +1,8 @@
 // @ts-check
 // The world a native-host E2E spec runs in: the fake model, a throwaway profile that leaves MU_NATIVE_HOST alone (the
-// native host is on by default) and mu's models.json / settings.json written where it reads them, the app started and
+// native host is on by default) and spec.jev's models.json / settings.json written where it reads them, the app started and
 // stopped the way a person does, and the helpers every native spec needs (send a message, wait for the run's end,
-// answer mu's permission question, pictures).
+// answer spec.jev's permission question, pictures).
 // Every spec file makes its own world: `const world = createNativeWorld({ desktopRoot })` at its top level registers the
 // hooks (start the fake model and the profile before all, quit and clean up after all, a screenshot and the logs on a
 // failure) and puts the file's tests in serial order. The test ids read are the ones docs/native-host-ui.md lists.
@@ -29,7 +29,7 @@ export const THINKING_MODEL_ID = 'e2e-fake-thinker';
 /**
  * Makes the world of one spec file and registers its hooks. Returns the helpers; `run` is the state they share (the
  * fake model, the profile, the running app), `sent` the messages sent so far, in order (what a reopened conversation
- * shows back). `prepare(profile)` changes the profile before the app starts, for a spec whose world differs (a mu too
+ * shows back). `prepare(profile)` changes the profile before the app starts, for a spec whose world differs (a spec.jev too
  * old to run inside the app).
  */
 export function createNativeWorld({ desktopRoot, prepare }) {
@@ -68,20 +68,20 @@ export function createNativeWorld({ desktopRoot, prepare }) {
   const requests = () => run.fake?.requests ?? [];
 
   const userRows = () => page().getByTestId('native-message-user');
-  /** The replies' text: mu's messages render into a shadow root, which Playwright's CSS reaches into. */
+  /** The replies' text: spec.jev's messages render into a shadow root, which Playwright's CSS reaches into. */
   const replies = () => page().locator('[data-testid="native-message-assistant"] .markdown-shadow-body');
   const status = () => page().getByTestId('native-status');
   const dialogs = () => page().getByTestId('native-dialog');
   const toolCalls = () => page().getByTestId('native-tool-call');
 
-  /** Why mu's host stopped, in the words the screen has for it and mu's last output (folded on screen), or undefined. */
+  /** Why spec.jev's host stopped, in the words the screen has for it and spec.jev's last output (folded on screen), or undefined. */
   async function hostFailure() {
     const failed = page().getByTestId('native-failed');
     if ((await failed.count()) === 0) return undefined;
     return failed.first().evaluate((element) => element.textContent ?? '');
   }
 
-  /** Waits for `promise`, and fails at once, saying why, if mu's host stops meanwhile: nothing here waits for that. */
+  /** Waits for `promise`, and fails at once, saying why, if spec.jev's host stops meanwhile: nothing here waits for that. */
   async function orHostFailure(promise) {
     let over = false;
     const watch = (async () => {
@@ -205,7 +205,7 @@ export function createNativeWorld({ desktopRoot, prepare }) {
     await noteProcesses();
   }
 
-  /** Waits until one of mu's messages contains `text` and the run is over. */
+  /** Waits until one of spec.jev's messages contains `text` and the run is over. */
   async function replyWith(text, timeout = 60_000) {
     await orHostFailure(expect(replies().filter({ hasText: text }).first()).toBeVisible({ timeout }));
     await runEnds(/^settled$/, timeout);
@@ -261,9 +261,9 @@ export function createNativeWorld({ desktopRoot, prepare }) {
       throw new Error(`MU_E2E_APP names no packaged app for ${process.platform}-${process.arch}: ${named}`);
     run.profile = createProfile({ desktopRoot, root: process.env.MU_E2E_ROOT, app });
     const { harness, paths: where } = run.profile;
-    // Nothing names MU_NATIVE_HOST: the native host is on by itself, where the app finds a mu that can run inside it,
-    // as it is for a person who never heard of the variable. mu has the fake model and no decision point on (each
-    // takes its fixed fallback): the same world the classic test builds through the settings, written where mu reads it.
+    // Nothing names MU_NATIVE_HOST: the native host is on by itself, where the app finds a spec.jev that can run inside it,
+    // as it is for a person who never heard of the variable. spec.jev has the fake model and no decision point on (each
+    // takes its fixed fallback): the same world the classic test builds through the settings, written where spec.jev reads it.
     expect(run.profile.env.MU_NATIVE_HOST, 'the profile leaves the native host to its default').toBeUndefined();
     mkdirSync(where.agentDir, { recursive: true });
     const provider = {
@@ -278,7 +278,7 @@ export function createNativeWorld({ desktopRoot, prepare }) {
       JSON.stringify({ defaultProvider: 'e2e', defaultModel: FAKE_MODEL_ID })
     );
     prepare?.(run.profile);
-    // The harness's keys (a checkout's own .env; none beside the mu a packaged app carries): stamped (never read)
+    // The harness's keys (a checkout's own .env; none beside the spec.jev a packaged app carries): stamped (never read)
     // before, compared after.
     run.untouched = [join(harness.root, '.env')].map((path) => ({ path, before: stamp(path) }));
     console.log(`[mu e2e] app: ${app ? app.executable : join(desktopRoot, 'out')}`);
@@ -336,7 +336,7 @@ export function createNativeWorld({ desktopRoot, prepare }) {
 
   /**
    * Makes a native conversation the way a person does: the sidebar's "+", the permission mode (`permissions`: the
-   * mode's title as the profile's language shows it, `最小权限`, or none for mu's default), the folder picker (the
+   * mode's title as the profile's language shows it, `最小权限`, or none for spec.jev's default), the folder picker (the
    * test answers it with the profile's project). Returns once the conversation's page is open.
    */
   async function newConversation({ permissions } = {}) {

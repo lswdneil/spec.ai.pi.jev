@@ -1,7 +1,7 @@
 // @ts-check
 // The native send box's controls, end to end, in the real app on the native host (on by default): the model chip
 // (a second model, then a thinking level on the model that reasons, each seen by the fake model), the permission pill
-// (a switch from minimal to full access, and mu stops asking), pi's slash commands in the `/` menu, files and images
+// (a switch from minimal to full access, and spec.jev stops asking), pi's slash commands in the `/` menu, files and images
 // attached (they reach the model's request), ↑ bringing back the last message, and a file mentioned with `@`.
 // Pictures of the composer's states, light and dark, go to the profile's logs. Run with
 // `node scripts/kyrn/e2e-conversation.mjs --native -- native-composer.spec`.
@@ -71,7 +71,7 @@ const opener = (trigger, shown) => async () => {
   await expect(shown()).toBeVisible();
 };
 
-test('a new conversation shows mu’s default model and the mode it was made in, before mu runs', async () => {
+test('a new conversation shows spec.jev’s default model and the mode it was made in, before spec.jev runs', async () => {
   // Every model takes images here, so an attached image reaches the request as itself.
   const provider = {
     baseUrl: run.fake?.baseUrl,
@@ -103,7 +103,7 @@ test('the / menu lists pi’s commands', async () => {
   const box = p.getByTestId('native-send-input');
   await box.click();
   await box.fill('/');
-  // Typing a command starts mu, which lists its commands.
+  // Typing a command starts spec.jev, which lists its commands.
   // By the start of the row: a command's description may name another command.
   const option = p.getByRole('option', { name: /^\/permissions/ });
   await expect(option).toBeVisible({ timeout: 60_000 });
@@ -167,7 +167,7 @@ test('a thinking level set on the model that reasons reaches the request', async
   expectNoProblems();
 });
 
-test('switching the permission mode: mu asked before a write, and no longer does in full access', async () => {
+test('switching the permission mode: spec.jev asked before a write, and no longer does in full access', async () => {
   const p = page();
   const question = await sendAndAnswer('E2E:WRITE notes/asked.txt', 'first', 'WRITE-DONE');
   expect(question).toContain('notes/asked.txt');

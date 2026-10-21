@@ -9,7 +9,7 @@ const name = native ? 'mu-native' : 'mu-conversation';
 export default defineConfig({
   testDir: '.',
   testMatch: native ? 'native*.spec.mjs' : 'conversation.spec.mjs',
-  // A step waits on the app, the backend and mu; the slowest (the first start, a relaunch) take well under a minute.
+  // A step waits on the app, the backend and spec.jev; the slowest (the first start, a relaunch) take well under a minute.
   timeout: 4 * 60_000,
   // The whole run: a stuck app fails the run instead of hanging a CI job.
   globalTimeout: 20 * 60_000,

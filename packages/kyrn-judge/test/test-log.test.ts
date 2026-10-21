@@ -162,7 +162,7 @@ describe("test-log arms", () => {
 		expect(forced.text).toContain("pads minute 17 0ms");
 		expect(forced.text).toContain("stderr | test/cache.test.ts > cache > caches lookup a");
 		expect(forced.text).not.toContain("stderr | test/cache.test.ts > cache > caches lookup b");
-		expect(forced.text).toContain("[mu: omitted 18 lines: stderr repeating an earlier block]");
+		expect(forced.text).toContain("[spec.jev: omitted 18 lines: stderr repeating an earlier block]");
 	});
 
 	it("an always-omit judge cannot remove protected evidence from any case", async () => {
@@ -208,7 +208,7 @@ describe("test-log arms", () => {
 		expect(rendered.text.trimEnd().endsWith(`full output: ${ARCHIVE}]`)).toBe(true);
 		// Neighboring omissions share one marker.
 		expect(rendered.text).toContain(
-			"[mu: omitted 58 lines: passing tests (test/format.test.ts, …); passing tests (test/auth.test.ts)]",
+			"[spec.jev: omitted 58 lines: passing tests (test/format.test.ts, …); passing tests (test/auth.test.ts)]",
 		);
 	});
 
@@ -387,7 +387,7 @@ function expandDuplicates(rendered: string, original: string): string {
 	let text = "";
 	for (const line of rendered.match(/[^\n]*\n|[^\n]+$/g) ?? []) {
 		const list = /^\[mu: omitted \d+ lines: identical to lines (.+) of the full output, kept above\]/.exec(line)?.[1];
-		if (line.startsWith("[mu: ") && line.includes("full output: ")) continue;
+		if (line.startsWith("[spec.jev: ") && line.includes("full output: ")) continue;
 		if (!list) {
 			text += line;
 			continue;
@@ -503,7 +503,7 @@ describe("test-log rendering", () => {
 		);
 		expect(rendered.applied).toBe(true);
 		expect(rendered.text.replace(/\r\n/g, "")).not.toContain("\n");
-		expect(rendered.text).toContain("TAP version 13\r\n[mu: omitted 30 lines: passing tests]\r\n1..30\r\n");
+		expect(rendered.text).toContain("TAP version 13\r\n[spec.jev: omitted 30 lines: passing tests]\r\n1..30\r\n");
 		expect(rendered.text).toContain("\u001b[32m# pass 30\u001b[0m\r\n");
 	});
 
@@ -513,7 +513,7 @@ describe("test-log rendering", () => {
 			const original: string[] = testCase.output.match(/[^\n]*\n|[^\n]+$/g) ?? [];
 			let from = 0;
 			for (const line of rendered.text.match(/[^\n]*\n|[^\n]+$/g) ?? []) {
-				if (line.startsWith("[mu: ")) continue;
+				if (line.startsWith("[spec.jev: ")) continue;
 				const at = original.indexOf(line, from);
 				expect(at, `${testCase.id}: ${line}`).toBeGreaterThanOrEqual(0);
 				from = at + 1;

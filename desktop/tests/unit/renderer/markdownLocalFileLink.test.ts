@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2025 mu (mu.com)
+ * Copyright 2025 spec.jev (mu.com)
  * SPDX-License-Identifier: Apache-2.0
  */
 

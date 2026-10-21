@@ -1,8 +1,8 @@
 /**
- * Conversations people had in Claude Code or Codex, brought into mu to go on with them here.
+ * Conversations people had in Claude Code or Codex, brought into spec.jev to go on with them here.
  *
- * The harness reads the transcripts and writes each one as a mu session (`mu import`, `packages/kyrn-judge/src/import`
- * in the MU repository). With the native host on, that session is the conversation: the sidebar lists mu's sessions.
+ * The harness reads the transcripts and writes each one as a spec.jev session (`spec.jev import`, `packages/kyrn-judge/src/import`
+ * in the MU repository). With the native host on, that session is the conversation: the sidebar lists spec.jev's sessions.
  * Otherwise the main process makes every imported session an app conversation (`process/agent/kyrn/importChats.ts`)
  * and the adapter hands the session to its conversation the first time the conversation starts
  * (`KyrnAgent.newSession`). This module holds what the processes pass each other and the screens show: no Node, no
@@ -16,7 +16,7 @@ export const isImportTool = (value: unknown): value is ImportTool => IMPORT_TOOL
 /** The tools' own names, the same in every language. */
 export const IMPORT_TOOL_NAMES: Record<ImportTool, string> = { 'claude-code': 'Claude Code', codex: 'Codex' };
 
-/** One conversation `mu import --list` found on this computer. */
+/** One conversation `spec.jev import --list` found on this computer. */
 export type FoundChat = {
   tool: ImportTool;
   /** The transcript. */
@@ -29,12 +29,12 @@ export type FoundChat = {
   modified: string;
   /** The transcript's size in bytes. */
   size: number;
-  /** The mu session made from it before, if any. */
+  /** The spec.jev session made from it before, if any. */
   importedAs?: string;
   /** The app conversation that holds that session, if there is one. */
   conversationId?: string;
   /**
-   * `conversationId` is a native conversation's (the session's own id): the app runs mu itself and every mu session
+   * `conversationId` is a native conversation's (the session's own id): the app runs spec.jev itself and every spec.jev session
    * is a conversation of its own, with no app conversation made for it.
    */
   native?: true;

@@ -8,7 +8,7 @@ import { bundleHarness, extractPackage, installArgs, pinnedVersion } from '../..
 
 const { verifyBundledHarness } = require('../../../packages/shared-scripts/src/verify-bundled-harness');
 
-/** What mu-agent's package.json says it depends on. */
+/** What spec.jev's package.json says it depends on. */
 const DEPENDENCIES = { '@earendil-works/chord': '0.86.0', jiti: '2.7.0' };
 const PACKAGE_FILES = [
   'kyrn/bin/mu.mjs',
@@ -99,7 +99,7 @@ describe('verifyBundledHarness', () => {
     rmSync(tmp, { recursive: true, force: true });
   });
 
-  it('passes when mu and its dependencies are there, for this system and processor', () => {
+  it('passes when spec.jev and its dependencies are there, for this system and processor', () => {
     seedHarness(resourcesDir);
     const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'darwin', targetArch: 'arm64' });
     expect(result.missing).toEqual([]);
@@ -108,7 +108,7 @@ describe('verifyBundledHarness', () => {
     expect(result.checked).toContain('harness/mu-agent/node_modules/@earendil-works/chord/package.json');
   });
 
-  it('takes the judgment layer where mu-agent 0.1.8 and earlier put it, and names its current place when it is missing', () => {
+  it('takes the judgment layer where spec.jev 0.1.8 and earlier put it, and names its current place when it is missing', () => {
     const pkg = seedHarness(resourcesDir);
     rmSync(join(pkg, 'judge', 'mu'), { recursive: true });
     writeFile(join(pkg, 'judge', 'dist', 'kyrn-judge.js'));
@@ -132,7 +132,7 @@ describe('verifyBundledHarness', () => {
 
   it('names a launcher the native host cannot run pi with', () => {
     const pkg = seedHarness(resourcesDir);
-    // A mu from before the native host: a launcher without planHost, or with a prepareLaunch that is only a word.
+    // A spec.jev from before the native host: a launcher without planHost, or with a prepareLaunch that is only a word.
     writeFile(
       join(pkg, 'kyrn', 'bin', 'mu.mjs'),
       'export function planLaunch() {}\n// prepareLaunch is not exported\n'
@@ -144,7 +144,7 @@ describe('verifyBundledHarness', () => {
     ]);
   });
 
-  it('fails without mu at all', () => {
+  it('fails without spec.jev at all', () => {
     const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'win32', targetArch: 'x64' });
     expect(result.missing).toContain('harness/mu-agent/package.json');
     expect(result.missing).toContain('harness/mu-agent/kyrn/bin/mu.mjs');
@@ -177,7 +177,7 @@ describe('bundle-harness', () => {
     rmSync(tmp, { recursive: true, force: true });
   });
 
-  it('pins the mu-agent version in one place, the root package.json', () => {
+  it('pins the spec.jev version in one place, the root package.json', () => {
     expect(pinnedVersion()).toMatch(/^\d+\.\d+\.\d+/);
     writeFile(join(tmp, 'package.json'), '{"name":"x"}');
     expect(() => pinnedVersion(tmp)).toThrow('muAgentVersion');

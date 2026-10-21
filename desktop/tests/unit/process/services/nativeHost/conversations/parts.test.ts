@@ -10,7 +10,7 @@ import {
   readDefaultModel,
 } from '../../../../../../packages/desktop/src/process/services/nativeHost/conversations/modelSearch.ts';
 
-/** The small parts of a native conversation: where pi's branch went, the model search, mu's environment. */
+/** The small parts of a native conversation: where pi's branch went, the model search, spec.jev's environment. */
 
 const root = realpathSync.native(mkdtempSync(join(tmpdir(), 'mu-conversation-parts-')));
 afterAll(() => rmSync(root, { recursive: true, force: true }));

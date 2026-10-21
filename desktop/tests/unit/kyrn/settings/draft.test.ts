@@ -148,7 +148,7 @@ describe('the draft of the settings area', () => {
       'judges',
     ]);
   });
-  it('writes the mode a new conversation starts in only when the guide moves mu’s last pick', () => {
+  it('writes the mode a new conversation starts in only when the guide moves spec.jev’s last pick', () => {
     const picked = { ...base, permissions: { mode: 'full', from: 'picked' as const } };
     // As read, the settings never write it: it is the permission feature's option.
     expect(toSave(newDraft(picked), picked)).not.toHaveProperty('permissions');

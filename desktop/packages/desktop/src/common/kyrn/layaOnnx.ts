@@ -8,7 +8,7 @@
 
 export const LAYA_ONNX_REPO = 'mizchi/laya-multilingual-onnx';
 export const LAYA_ONNX_REVISION = 'd9d003d543e63d6d3375c21d44624136bd1e0bad';
-/** The folder under mu's home that holds the model unless `MU_LOCAL_JUDGE_ONNX_DIR` names another one. */
+/** The folder under spec.jev's home that holds the model unless `MU_LOCAL_JUDGE_ONNX_DIR` names another one. */
 export const LAYA_ONNX_FOLDER = ['local-judge', 'laya-multilingual-onnx'] as const;
 
 export type LayaOnnxFile = {

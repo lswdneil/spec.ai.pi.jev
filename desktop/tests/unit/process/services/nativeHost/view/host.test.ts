@@ -16,7 +16,7 @@ import {
 
 /**
  * What only a live host says, in the view's `host` part: the judgment layer's frames and the run's edges for the Jev
- * panel, notices, pi's queue and the session as pi describes it; and mu's permission question, from its announcement
+ * panel, notices, pi's queue and the session as pi describes it; and spec.jev's permission question, from its announcement
  * to its dialog. None of it is in a session file.
  */
 
@@ -49,7 +49,7 @@ const select = (options: string[]): PiRecord => ({
   type: 'extension_ui_request',
   id: 'dialog-1',
   method: 'select',
-  title: 'mu wants to run a command',
+  title: 'spec.jev wants to run a command',
   options,
   timeout: 60000,
 });
@@ -192,7 +192,7 @@ describe('notices', () => {
     expect(view.dialogs).toEqual([]);
   });
 
-  it('turns mu’s checkpoint warning into its coded notice where it stands, once', () => {
+  it('turns spec.jev’s checkpoint warning into its coded notice where it stands, once', () => {
     const recorded = reduceAll(records).host.notices;
     expect(recorded).toEqual([
       {
@@ -225,16 +225,16 @@ describe('notices', () => {
     ]);
   });
 
-  it('says the free Jev’s notices by code, once each, and mu’s line after one not again', () => {
-    const free = 'mu: no Jev key is set, so the judge uses the free Jev.';
-    const paid = 'mu: the free Jev now asks for a key.';
+  it('says the free Jev’s notices by code, once each, and spec.jev’s line after one not again', () => {
+    const free = 'spec.jev: no Jev key is set, so the judge uses the free Jev.';
+    const paid = 'spec.jev: the free Jev now asks for a key.';
     const view = reduceAll([
       frame('judge.notice', { code: 'free_jev', message: free }),
       notify(free, 'info'),
       frame('judge.notice', { code: 'free_jev', message: free }),
       frame('judge.notice', { code: 'free_jev_unavailable', reason: 'paid', message: paid }),
       notify(paid, 'warning'),
-      // A code this build does not know leaves mu's line to say it.
+      // A code this build does not know leaves spec.jev's line to say it.
       frame('judge.notice', { code: 'newer', message: 'Something newer.' }),
       notify('Something newer.', 'info'),
     ]);
@@ -243,7 +243,7 @@ describe('notices', () => {
       { id: 'n2', level: 'warning', text: paid, code: 'free_jev_unavailable', reason: 'paid' },
       { id: 'n3', level: 'info', text: 'Something newer.' },
     ]);
-    // mu's line already said becomes the coded notice where it stands.
+    // spec.jev's line already said becomes the coded notice where it stands.
     expect(
       reduceAll([notify(free, 'info'), frame('judge.notice', { code: 'free_jev', message: free })]).host.notices
     ).toEqual([{ id: 'n1', level: 'info', text: free, code: 'free_jev' }]);
@@ -322,7 +322,7 @@ describe('pi’s queue and the session', () => {
   });
 });
 
-describe('mu’s permission question', () => {
+describe('spec.jev’s permission question', () => {
   const request = (extra: Json = {}): PiRecord =>
     frame('permissions.request', {
       id: 'permission-1',
@@ -356,7 +356,7 @@ describe('mu’s permission question', () => {
       {
         id: 'dialog-1',
         method: 'select',
-        title: 'mu wants to run a command',
+        title: 'spec.jev wants to run a command',
         options: ['Allow once', 'Allow for this conversation', "Don't allow"],
         timeout: 60000,
         inRun: true,

@@ -4,7 +4,7 @@ import type { ModelNames } from '@/renderer/utils/model/providerName';
 
 const NONE: ModelNames = new Map();
 
-/** The names mu last reported for its models, by `provider/model-id`; nothing when they cannot be read. */
+/** The names spec.jev last reported for its models, by `provider/model-id`; nothing when they cannot be read. */
 async function readModelNames(): Promise<ModelNames> {
   try {
     const { providers } = unwrap(await kyrnBridge.availableModels.invoke());
@@ -20,7 +20,7 @@ async function readModelNames(): Promise<ModelNames> {
 
 /**
  * The models' names as the send box's picker shows them, for a view that has only a model's id, such as a sub-agent's
- * (`modelDisplayName`). The backend keeps what mu last reported, so reading it starts nothing. Read when a view first
+ * (`modelDisplayName`). The backend keeps what spec.jev last reported, so reading it starts nothing. Read when a view first
  * mounts, and again on the next mount.
  */
 export function useModelNames(): ModelNames {

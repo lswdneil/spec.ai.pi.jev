@@ -43,7 +43,7 @@ if (!working) console.warn('[git.test] no working git on PATH: the repository te
 const git = (dir: string, ...args: string[]): string =>
   execFileSync(
     'git',
-    ['-c', 'user.name=mu test', '-c', 'user.email=test@mu.invalid', '-c', 'commit.gpgsign=false', ...args],
+    ['-c', 'user.name=spec.jev test', '-c', 'user.email=test@mu.invalid', '-c', 'commit.gpgsign=false', ...args],
     { cwd: dir, env: env(), encoding: 'utf8' }
   );
 

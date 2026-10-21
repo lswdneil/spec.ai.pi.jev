@@ -17,7 +17,7 @@ afterEach(async () => {
 });
 
 describe('installerLastFailure service', () => {
-  it('consumes a valid installer-last-failure marker once from the AppData mu directory', async () => {
+  it('consumes a valid installer-last-failure marker once from the AppData spec.jev directory', async () => {
     const { consumeInstallerLastFailure, getInstallerLastFailureMarkerPath } =
       await import('@/process/services/update/installerLastFailure');
     const appDataDir = makeAppDataDir();

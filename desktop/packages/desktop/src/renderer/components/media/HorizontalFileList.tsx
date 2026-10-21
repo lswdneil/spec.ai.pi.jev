@@ -112,7 +112,7 @@ const HorizontalFileList: React.FC<HorizontalFileListProps> = ({ children }) => 
     });
   };
 
-  // The scroll masks fade into the surface under the list: the composer's, which in mu is also the page's.
+  // The scroll masks fade into the surface under the list: the composer's, which in spec.jev is also the page's.
   return (
     <div className='relative min-w-0 max-w-full'>
       {/* 横向滚动容器，隐藏滚动条 */}

@@ -6,14 +6,14 @@ import type { HiveDelivery, HiveNote, HiveRelation } from '../activity';
  * What the map draws between two bees. A delivery is a note the judge handed from one bee to another (a receipt in
  * `deliveries.jsonl`, never a gate that merely passed). A correction is a later note that supersedes an earlier one
  * of another bee; a dispute is two notes that contradict each other and that nobody has settled. A report is what a
- * delegate's sub-agent handed back to mu when it finished.
+ * delegate's sub-agent handed back to spec.jev when it finished.
  */
 export type HiveLinkKind = 'delivery' | 'correction' | 'conflict' | 'report';
 
 export type HiveLink = {
   kind: HiveLinkKind;
   from: string;
-  /** A bee's name, or `HOME` for mu itself. */
+  /** A bee's name, or `HOME` for spec.jev itself. */
   to: string;
   /** How many notes went this way. */
   count: number;
@@ -23,7 +23,7 @@ export type HiveLink = {
   ids: string[];
 };
 
-/** The centre of a delegate run's map: mu, whom every sub-agent reports back to. No bee can carry this name. */
+/** The centre of a delegate run's map: spec.jev, whom every sub-agent reports back to. No bee can carry this name. */
 export const HOME = '\u0000mu';
 
 export const linkKey = (link: Pick<HiveLink, 'kind' | 'from' | 'to'>): string =>
@@ -79,7 +79,7 @@ export function hiveLinks(
   return fold(rows).toSorted((a, b) => order[a.kind] - order[b.kind]);
 }
 
-/** A delegate run's lines: one from each sub-agent that finished to mu, carrying the first of what it reported. */
+/** A delegate run's lines: one from each sub-agent that finished to spec.jev, carrying the first of what it reported. */
 export function reportLinks(bees: readonly HiveBee[]): HiveLink[] {
   return fold(
     bees

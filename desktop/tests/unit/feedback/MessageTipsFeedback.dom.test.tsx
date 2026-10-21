@@ -504,7 +504,7 @@ describe('agent error locale copy', () => {
       const locale = JSON.parse(readFileSync(path.join(localeDir, localeName, 'conversation.json'), 'utf8'));
       const agentError = locale.agentError;
 
-      expect(agentError.ownership.mu, localeName).not.toMatch(/AionUi/);
+      expect(agentError.ownership.spec.jev, localeName).not.toMatch(/AionUi/);
 
       for (const [code, copy] of Object.entries<Record<string, string>>(agentError.codes)) {
         if (!code.startsWith('MU_')) continue;

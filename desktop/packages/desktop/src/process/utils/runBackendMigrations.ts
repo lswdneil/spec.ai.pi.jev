@@ -185,7 +185,7 @@ function buildBuiltinBrowserServer(): McpImportServer {
   return {
     name: BUILTIN_BROWSER_MCP_NAME,
     description:
-      "Control mu's built-in browser (the side preview panel): open pages, click, type and read content. " +
+      "Control spec.jev's built-in browser (the side preview panel): open pages, click, type and read content. " +
       'Sign-in state is shared across tabs and preserved between sessions.',
     // 默认开启：用户装好即可用，无需任何配置
     // Enabled by default: works out of the box with zero configuration.
@@ -458,7 +458,7 @@ async function syncBuiltinMcpConfig(configFile: ConfigFile): Promise<void> {
   }
 
   await httpRequest<void>('PUT', '/api/settings/client', { 'mcp.config': mergedMcpConfig });
-  console.info('[mu] Synced builtin MCP config to backend settings (%d builtin servers)', localBuiltinServers.length);
+  console.info('[spec.jev] Synced builtin MCP config to backend settings (%d builtin servers)', localBuiltinServers.length);
 }
 
 export async function runBackendMigrations(configFile: ConfigFile): Promise<void> {

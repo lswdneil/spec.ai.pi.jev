@@ -1,14 +1,14 @@
 /**
- * A project inside WSL runs mu inside WSL. On Windows, a conversation whose folder Windows shows as
+ * A project inside WSL runs spec.jev inside WSL. On Windows, a conversation whose folder Windows shows as
  * `\\wsl.localhost\<distribution>\...` (or the older `\\wsl$\...`) gets its harness started in that distribution, next
- * to its files and its Linux tools, instead of the Windows mu reaching into them over the network share.
+ * to its files and its Linux tools, instead of the Windows spec.jev reaching into them over the network share.
  *
- * - mu has to be installed in the distribution (`npm i -g mu-agent` there). The start script looks for it on the login
+ * - spec.jev has to be installed in the distribution (`npm i -g spec.jev` there). The start script looks for it on the login
  *   PATH, then where nvm and npm put it, and says what to install when it is missing.
  * - It shares the Windows side's agent folder (`MU_AGENT_DIR`): one sign-in, one judgment configuration and one set
  *   of settings for both. The session file stays where the app keeps it. WSL translates both paths itself: WSLENV
  *   carries them with the `/p` flag.
- * - Keys the harness reads from its `.env` come from the distribution's own `~/.mu/.env`.
+ * - Keys the harness reads from its `.env` come from the distribution's own `~/.spec.jev/.env`.
  * - The app's local judge and browser bridge listen on Windows' loopback, which WSL reaches in mirrored networking
  *   mode only.
  */
@@ -21,15 +21,15 @@ export function wslLocation(path: string): { distro: string; path: string } | un
 }
 
 /**
- * Runs inside the distribution with bash as a login shell. Finds mu (a non-interactive shell skips the part of
+ * Runs inside the distribution with bash as a login shell. Finds spec.jev (a non-interactive shell skips the part of
  * ~/.bashrc where nvm usually sets itself up), then replaces itself with it.
  */
 export const WSL_START = [
-  'mu_bin=$(command -v mu 2>/dev/null)',
-  'if [ -z "$mu_bin" ] && [ -s "$HOME/.nvm/nvm.sh" ]; then . "$HOME/.nvm/nvm.sh" >/dev/null 2>&1; mu_bin=$(command -v mu 2>/dev/null); fi',
+  'mu_bin=$(command -v spec.jev 2>/dev/null)',
+  'if [ -z "$mu_bin" ] && [ -s "$HOME/.nvm/nvm.sh" ]; then . "$HOME/.nvm/nvm.sh" >/dev/null 2>&1; mu_bin=$(command -v spec.jev 2>/dev/null); fi',
   'if [ -z "$mu_bin" ]; then for candidate in "$HOME"/.nvm/versions/node/*/bin/mu "$HOME/.npm-global/bin/mu" /usr/local/bin/mu; do if [ -x "$candidate" ]; then mu_bin=$candidate; break; fi; done; fi',
-  'if [ -z "$mu_bin" ]; then echo "mu is not installed in this WSL distribution. Install it there: npm i -g mu-agent" >&2; exit 127; fi',
-  // The folder of mu's own Node goes first, so the launcher's `#!/usr/bin/env node` finds the Node mu was installed with.
+  'if [ -z "$mu_bin" ]; then echo "spec.jev is not installed in this WSL distribution. Install it there: npm i -g spec.jev" >&2; exit 127; fi',
+  // The folder of spec.jev's own Node goes first, so the launcher's `#!/usr/bin/env node` finds the Node spec.jev was installed with.
   'PATH="$(dirname "$mu_bin"):$PATH"; export PATH',
   'exec "$mu_bin" --mode rpc ${MU_ACP_SESSION:+--session "$MU_ACP_SESSION"}',
 ].join('\n');

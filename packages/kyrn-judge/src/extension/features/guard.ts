@@ -62,7 +62,7 @@ export const FLAG_ZH: Readonly<Record<string, string>> = {
 	"runs as root": "以 root 身份运行",
 };
 
-/** Each flag as a stable code, for a client that translates it into a language mu has no wording for. */
+/** Each flag as a stable code, for a client that translates it into a language spec.jev has no wording for. */
 export const FLAG_CODES: Readonly<Record<string, string>> = {
 	"recursive or forced delete": "recursive_or_forced_delete",
 	"discards git work": "discards_git_work",

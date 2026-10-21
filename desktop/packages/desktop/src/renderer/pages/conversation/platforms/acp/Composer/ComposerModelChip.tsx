@@ -23,7 +23,7 @@ import { useModelLevels } from './useModelLevels';
  *
  * Opening it lists every model the session offers with the levels each takes; a pick switches both through the
  * session's own options. The chip only ever shows what the runtime reports, the answer to a switch or a pushed
- * update, never the pick itself. No model list, no chip. mu refuses a switch during a turn, so the chip waits too.
+ * update, never the pick itself. No model list, no chip. spec.jev refuses a switch during a turn, so the chip waits too.
  */
 const ComposerModelChip: React.FC<{
   conversation_id: string;
@@ -61,7 +61,7 @@ const ComposerModelChip: React.FC<{
   const setting = setStatus.state === 'setting';
   const disabled = busy || setting || isConfigOptionBlocked(model.id);
   const current = model.options.find((option) => option.value === model.currentValue);
-  // mu without a model reports none (older conversations: pi's placeholder `unknown/unknown`). The chip says so, with
+  // spec.jev without a model reports none (older conversations: pi's placeholder `unknown/unknown`). The chip says so, with
   // no thinking level, and opens the list to pick one.
   const noModel = !model.currentValue || model.currentValue === 'unknown/unknown';
   const modelLabel = noModel ? t('mu.noModel.chip') : current?.label || model.currentValue || t('common.defaultModel');

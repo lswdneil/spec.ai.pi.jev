@@ -27,7 +27,7 @@ function fakeProcess(write: (text: string) => void = () => {}) {
 }
 
 describe("a promise nothing handled, in RPC mode", () => {
-	it("is logged to stderr, marked as mu's line by line, and mu goes on", async () => {
+	it("is logged to stderr, marked as spec.jev's line by line, and spec.jev goes on", async () => {
 		const written: string[] = [];
 		const target = fakeProcess((text) => written.push(text));
 		const { pi, start } = fakePi();
@@ -42,11 +42,11 @@ describe("a promise nothing handled, in RPC mode", () => {
 		error.stack = "Error: the board could not be written\n    at write (board.ts:1:1)\n    at look (board.ts:2:2)";
 		target.emit("unhandledRejection", error);
 		expect(written).toEqual([
-			"[mu] a promise failed and nothing handled it; mu goes on: Error: the board could not be written\n" +
-				"[mu]     at write (board.ts:1:1)\n" +
-				"[mu]     at look (board.ts:2:2)\n",
+			"[spec.jev] a promise failed and nothing handled it; spec.jev goes on: Error: the board could not be written\n" +
+				"[spec.jev]     at write (board.ts:1:1)\n" +
+				"[spec.jev]     at look (board.ts:2:2)\n",
 		]);
-		// A stderr that fails is not a reason to end mu either.
+		// A stderr that fails is not a reason to end spec.jev either.
 		expect(() => target.stderr.emit("error", new Error("write EPIPE"))).not.toThrow();
 	});
 
@@ -72,11 +72,11 @@ describe("a promise nothing handled, in RPC mode", () => {
 
 	it("describes what is not an error, too", () => {
 		expect(rejectionReport({ code: "EPIPE" })).toBe(
-			"[mu] a promise failed and nothing handled it; mu goes on: { code: 'EPIPE' }\n",
+			"[spec.jev] a promise failed and nothing handled it; spec.jev goes on: { code: 'EPIPE' }\n",
 		);
-		expect(rejectionReport(undefined)).toBe("[mu] a promise failed and nothing handled it; mu goes on: undefined\n");
+		expect(rejectionReport(undefined)).toBe("[spec.jev] a promise failed and nothing handled it; spec.jev goes on: undefined\n");
 		const bare = new Error("no stack");
 		bare.stack = undefined;
-		expect(rejectionReport(bare)).toBe("[mu] a promise failed and nothing handled it; mu goes on: Error: no stack\n");
+		expect(rejectionReport(bare)).toBe("[spec.jev] a promise failed and nothing handled it; spec.jev goes on: Error: no stack\n");
 	});
 });

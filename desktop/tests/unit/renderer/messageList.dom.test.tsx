@@ -700,7 +700,7 @@ describe('MessageList', () => {
     });
   });
 
-  // QA on macOS, 2026-09-25: mu's process closed mid-call, and the call kept running on screen for good.
+  // QA on macOS, 2026-09-25: spec.jev's process closed mid-call, and the call kept running on screen for good.
   describe('a call still marked running', () => {
     const renderList = (messages: TMessage[]) =>
       render(

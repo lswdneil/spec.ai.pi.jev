@@ -4,15 +4,15 @@
   "path": "en/",
   "recording": "en",
   "meta": {
-    "title": "mu · Only what's needed.",
-    "description": "mu is a coding agent with a judgment kernel: a small, fast judge called Jev makes dozens of small decisions in every turn, so the task gets only the context it needs. Command line and desktop app, open source.",
+    "title": "spec.jev · Only what's needed.",
+    "description": "spec.jev is a coding agent with a judgment kernel: a small, fast judge called Jev makes dozens of small decisions in every turn, so the task gets only the context it needs. Command line and desktop app, open source.",
     "og_description": "A coding agent that gives the task only the context it needs. Built on pi, with Jev as its judge."
   },
   "ui": {
     "announce_pill": "New",
     "announce": "Desktop {tag}: {headline}",
     "announce_plain": "Desktop {tag} is out",
-    "announce_agent": ", mu-agent {agent} inside",
+    "announce_agent": ", spec.jev {agent} inside",
     "nav_home": "Home",
     "nav_docs": "Docs",
     "nav_decisions": "Decision points",
@@ -21,7 +21,7 @@
     "nav_site": "Site",
     "lang_menu": "Language",
     "star": "Star",
-    "star_title": "Star mu on GitHub",
+    "star_title": "Star spec.jev on GitHub",
     "copy": "Copy",
     "copied": "Copied",
     "theme_group": "Appearance",
@@ -33,9 +33,9 @@
     "footer_license": "License",
     "replay": "↻ Replay",
     "replay_label": "Replay this part",
-    "term_label": "Recording of the mu command line",
+    "term_label": "Recording of the spec.jev command line",
     "source_note": "This page follows the README on GitHub.",
-    "star_cta_h2": "If mu is useful to you, star it on GitHub",
+    "star_cta_h2": "If spec.jev is useful to you, star it on GitHub",
     "star_cta_p": "A star helps more people find it. The code, the discussions and every release live in the repository.",
     "star_cta_button": "Star on GitHub",
     "stars_label": "stars"
@@ -43,19 +43,19 @@
   "home": {
     "kicker": "μ · Only what's needed.",
     "h1": "Only the context<wbr> the task <em>needs</em>",
-    "lead": "mu is a coding agent. A small, fast judge called Jev makes dozens of small decisions for the main model in every turn: what stays in the context, whether a command is safe, whether the work is really done. The main model keeps its attention on the work.",
+    "lead": "spec.jev is a coding agent. A small, fast judge called Jev makes dozens of small decisions for the main model in every turn: what stays in the context, whether a command is safe, whether the work is really done. The main model keeps its attention on the work.",
     "tab_cli": "Command line",
     "tab_app": "Desktop app",
-    "cli_hint": "Needs Node.js 22.19 or newer. Then run <code>mu</code> in a project folder; the first time, <code>mu setup</code> connects a model.",
+    "cli_hint": "Needs Node.js 22.19 or newer. Then run <code>spec.jev</code> in a project folder; the first time, <code>spec.jev setup</code> connects a model.",
     "dl_mac_arm": "Apple silicon",
     "dl_mac_intel": "Intel",
-    "app_hint": "The macOS app is signed and notarized by Apple; the Windows app isn't signed yet, so SmartScreen shows a warning. The app carries mu inside it: no Node.js to install. Windows on Arm, Linux on Arm and every other download are under <a href=\"https://github.com/qybaihe/mu/releases\">Releases</a>.",
+    "app_hint": "The macOS app is signed and notarized by Apple; the Windows app isn't signed yet, so SmartScreen shows a warning. The app carries spec.jev inside it: no Node.js to install. Windows on Arm, Linux on Arm and every other download are under <a href=\"https://github.com/qybaihe/mu/releases\">Releases</a>.",
     "meta": "macOS · Windows · Linux · open source (MIT + Apache-2.0) · built on pi",
     "cue": "Watch a real turn",
     "story_label": "MU · A REAL TURN",
     "story_h2": "Judge first, then act",
-    "story_intro": "Ask for a plan, and most agents send every tool and skill description along with it. Models write better code every month, and their reports get harder to read. mu splits the work: Jev judges, the main model works and a model picked for plain speaking tells you where things stand.",
-    "stage_caption": "A real recording: mu 0.1.8, the free Jev as judge, Claude Sonnet 4.6 as the model.",
+    "story_intro": "Ask for a plan, and most agents send every tool and skill description along with it. Models write better code every month, and their reports get harder to read. spec.jev splits the work: Jev judges, the main model works and a model picked for plain speaking tells you where things stand.",
+    "stage_caption": "A real recording: spec.jev 0.1.8, the free Jev as judge, Claude Sonnet 4.6 as the model.",
     "swarm_alt": "The hive tab in the desktop app: four bees research in parallel; the arrows are findings Jev judged worth delivering",
     "swarm_caption": "The hive tab in the desktop app: each arrow is a finding Jev judged worth delivering.",
     "board_alt": "The plain-language board: what's being done, how far it got and the running account below",
@@ -99,7 +99,7 @@
         "h2": "Done means verified",
         "caption": "It runs the tests again, all 4 pass and it says what it changed.",
         "paras": [
-          "When the model says it's done, mu checks whether anything verified that, whether the turn drifted and whether to go back to a checkpoint.",
+          "When the model says it's done, spec.jev checks whether anything verified that, whether the turn drifted and whether to go back to a checkpoint.",
           "<code>/goal &lt;condition&gt;</code> keeps the agent working until the condition holds. The main model checks whether it does, with Jev as the fallback; when the same error comes back again and again, Jev judges whether the approach is a dead end."
         ]
       },
@@ -109,7 +109,7 @@
         "h2": "Several bees at work, Jev in the middle",
         "paras": [
           "When several agents work on one hard problem, splitting up the work is easy; communication is hard. Say nothing, and each walks into the same dead end. Say everything, and every context fills with the others' chatter.",
-          "In mu's hive, Jev judges every finding: is it worth sharing, and does it matter to this bee? Only then does it reach another bee as context. When a later finding overturns an earlier one, the correction goes to every bee that heard it."
+          "In spec.jev's hive, Jev judges every finding: is it worth sharing, and does it matter to this bee? Only then does it reach another bee as context. When a later finding overturns an earlier one, the correction goes to every bee that heard it."
         ]
       },
       {
@@ -117,41 +117,89 @@
         "label": "The plain-language board",
         "h2": "Working and reporting are different jobs",
         "paras": [
-          "Models get stronger, and their reports read more and more like notes for a machine. In mu the working model keeps working its own way. Every few tool calls Jev checks what happened, picks what's really news and hands it to a model chosen for speaking plainly, which tells you where things stand.",
+          "Models get stronger, and their reports read more and more like notes for a machine. In spec.jev the working model keeps working its own way. Every few tool calls Jev checks what happened, picks what's really news and hands it to a model chosen for speaking plainly, which tells you where things stand.",
           "When a run ends, you see not just \"done\" but what was actually done."
         ]
       }
     ],
     "principles_label": "WHAT WE LEFT OUT",
-    "principles_h2": "What mu doesn't do",
-    "principles_intro": "A model's attention is limited, and so is its context. These are the things mu chose not to do, or chose to do differently.",
+    "principles_h2": "What spec.jev doesn't do",
+    "principles_intro": "A model's attention is limited, and so is its context. These are the things spec.jev chose not to do, or chose to do differently.",
     "principles": [
-      { "h3": "Fewer interruptions", "p": "In Jev approves mode, Jev lets through what the task clearly needs and asks you about the rest." },
-      { "h3": "No toolbox in every prompt", "p": "Each message is judged: small talk, a follow-up or work to do. Skills and MCP servers that aren't needed stay out of the context." },
-      { "h3": "Fewer summaries", "p": "When the context grows, stale tool results are dropped instead of summarized, and summary-free compaction is an option. Before the cache expires, mu judges whether a refresh is worth it." },
-      { "h3": "No locked-in judge", "p": "{points} decision points, each with its own switch and its own judge: the free Jev, the local Laya or any LLM." },
-      { "h3": "No key needed to start", "p": "Without a judge key, the free Jev on OpenCode Zen answers, and mu says so once a day." },
-      { "h3": "No new foundation", "p": "The command line is built on pi, with its models, extensions, skills and session tree; the desktop app is built on AionUi." }
+      {
+        "h3": "Fewer interruptions",
+        "p": "In Jev approves mode, Jev lets through what the task clearly needs and asks you about the rest."
+      },
+      {
+        "h3": "No toolbox in every prompt",
+        "p": "Each message is judged: small talk, a follow-up or work to do. Skills and MCP servers that aren't needed stay out of the context."
+      },
+      {
+        "h3": "Fewer summaries",
+        "p": "When the context grows, stale tool results are dropped instead of summarized, and summary-free compaction is an option. Before the cache expires, spec.jev judges whether a refresh is worth it."
+      },
+      {
+        "h3": "No locked-in judge",
+        "p": "{points} decision points, each with its own switch and its own judge: the free Jev, the local Laya or any LLM."
+      },
+      {
+        "h3": "No key needed to start",
+        "p": "Without a judge key, the free Jev on OpenCode Zen answers, and spec.jev says so once a day."
+      },
+      {
+        "h3": "No new foundation",
+        "p": "The command line is built on pi, with its models, extensions, skills and session tree; the desktop app is built on AionUi."
+      }
     ],
     "principles_more": "What each of the {points} decision points asks and changes",
     "more_label": "ALSO",
     "more_h2": "One set of accounts, settings and lessons for the command line and the app",
     "more": [
-      { "b": "Import conversations", "text": "Bring in your Codex and Claude Code conversations and carry on in mu." },
-      { "b": "Subscription sign-in", "text": "ChatGPT, Claude, Grok and Google, signed in inside the app, no keys to copy around." },
-      { "b": "Lessons", "text": "Your corrections and the traps the agent found a way around are kept; a lesson that is recalled and never followed retires itself." },
-      { "b": "Built-in browser", "text": "Jev drives it step by step: look at the page, judge once, act; it stops to ask before submitting or paying." },
-      { "b": "A ledger of verdicts", "text": "Every verdict and how long it took: <code>/status</code>, <code>mu ledger</code> and the app's Judge tab." },
-      { "b": "13 interface languages", "text": "The desktop app speaks English, 简体中文, 繁體中文, 日本語, 한국어 and 8 more." }
+      {
+        "b": "Import conversations",
+        "text": "Bring in your Codex and Claude Code conversations and carry on in spec.jev."
+      },
+      {
+        "b": "Subscription sign-in",
+        "text": "ChatGPT, Claude, Grok and Google, signed in inside the app, no keys to copy around."
+      },
+      {
+        "b": "Lessons",
+        "text": "Your corrections and the traps the agent found a way around are kept; a lesson that is recalled and never followed retires itself."
+      },
+      {
+        "b": "Built-in browser",
+        "text": "Jev drives it step by step: look at the page, judge once, act; it stops to ask before submitting or paying."
+      },
+      {
+        "b": "A ledger of verdicts",
+        "text": "Every verdict and how long it took: <code>/status</code>, <code>spec.jev ledger</code> and the app's Judge tab."
+      },
+      {
+        "b": "13 interface languages",
+        "text": "The desktop app speaks English, 简体中文, 繁體中文, 日本語, 한국어 and 8 more."
+      }
     ],
     "community_label": "GET INVOLVED",
-    "community_h2": "Help make mu better",
+    "community_h2": "Help make spec.jev better",
     "community": [
-      { "h3": "Issues", "p": "Report a bug or ask for a feature; the forms ask for what is needed.", "href": "https://github.com/qybaihe/mu/issues" },
-      { "h3": "Discussions", "p": "Questions, ideas and what you built with mu.", "href": "https://github.com/qybaihe/mu/discussions" },
-      { "h3": "Contributing", "p": "Fix a bug, propose a decision point, measure a judge or translate; good first issues are labeled.", "href": "https://github.com/qybaihe/mu/blob/main/CONTRIBUTING.md" }
+      {
+        "h3": "Issues",
+        "p": "Report a bug or ask for a feature; the forms ask for what is needed.",
+        "href": "https://github.com/qybaihe/mu/issues"
+      },
+      {
+        "h3": "Discussions",
+        "p": "Questions, ideas and what you built with spec.jev.",
+        "href": "https://github.com/qybaihe/mu/discussions"
+      },
+      {
+        "h3": "Contributing",
+        "p": "Fix a bug, propose a decision point, measure a judge or translate; good first issues are labeled.",
+        "href": "https://github.com/qybaihe/mu/blob/main/CONTRIBUTING.md"
+      }
     ],
-    "key_note": "mu works without a key. To use your own TypeSafe key or another judge, see <a href=\"{decisions}#judges\">Judges</a>."
+    "key_note": "spec.jev works without a key. To use your own TypeSafe key or another judge, see <a href=\"{decisions}#judges\">Judges</a>."
   },
   "decisions": {
     "title": "Decision points",
@@ -163,21 +211,39 @@
     "more_h2": "More reference",
     "more_p": "These reference documents live in the GitHub repository:",
     "more": [
-      { "text": "Getting started", "href": "https://github.com/qybaihe/mu/blob/main/docs/getting-started.md" },
-      { "text": "Configuration", "href": "https://github.com/qybaihe/mu/blob/main/docs/configuration.md" },
-      { "text": "Judges", "href": "https://github.com/qybaihe/mu/blob/main/docs/judges.md" },
-      { "text": "Troubleshooting", "href": "https://github.com/qybaihe/mu/blob/main/docs/troubleshooting.md" },
-      { "text": "Features and options", "href": "https://github.com/qybaihe/mu/blob/main/docs/reference/features.md" },
-      { "text": "How mu works", "href": "https://github.com/qybaihe/mu/blob/main/docs/architecture.md" }
+      {
+        "text": "Getting started",
+        "href": "https://github.com/qybaihe/mu/blob/main/docs/getting-started.md"
+      },
+      {
+        "text": "Configuration",
+        "href": "https://github.com/qybaihe/mu/blob/main/docs/configuration.md"
+      },
+      {
+        "text": "Judges",
+        "href": "https://github.com/qybaihe/mu/blob/main/docs/judges.md"
+      },
+      {
+        "text": "Troubleshooting",
+        "href": "https://github.com/qybaihe/mu/blob/main/docs/troubleshooting.md"
+      },
+      {
+        "text": "Features and options",
+        "href": "https://github.com/qybaihe/mu/blob/main/docs/reference/features.md"
+      },
+      {
+        "text": "How spec.jev works",
+        "href": "https://github.com/qybaihe/mu/blob/main/docs/architecture.md"
+      }
     ]
   },
   "changelog": {
     "title": "Changelog",
-    "lead": "What changed in each release of mu, the desktop app and the command line together. Every desktop release bundles a mu-agent, and all of them are pre-releases while mu is in early development.",
+    "lead": "What changed in each release of spec.jev, the desktop app and the command line together. Every desktop release bundles a spec.jev, and all of them are pre-releases while spec.jev is in early development.",
     "english_note": "",
     "agent_label": "Includes",
     "download": "Download this version",
-    "full_agent": "Full mu-agent changelog",
+    "full_agent": "Full spec.jev changelog",
     "headlines": {
       "v0.1.9": "a new look, providers set up from their model list",
       "v0.1.8": "MCP tool descriptions screened for hidden instructions, long runs saved as draft skills"

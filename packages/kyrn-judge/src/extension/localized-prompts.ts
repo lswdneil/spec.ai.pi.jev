@@ -8,9 +8,9 @@ const LANGUAGE_KEY = /^([A-Za-z]+(?:-[A-Za-z]+)*)-(zh|en):/;
 
 /**
  * pi reads a prompt template's description and argument hint from its
- * frontmatter, in one language. mu's templates carry their Chinese beside
+ * frontmatter, in one language. spec.jev's templates carry their Chinese beside
  * the English (`description-zh`, `argument-hint-zh`). For a person who reads
- * mu in Chinese, pi is given copies with the Chinese in place. The body,
+ * spec.jev in Chinese, pi is given copies with the Chinese in place. The body,
  * which is what the model reads, is the same in both.
  *
  * Only one-line values are swapped. A block value (`|`, `>`, or indented
@@ -57,8 +57,8 @@ const oneLineAt = (lines: readonly string[], index: number) => {
 };
 
 /**
- * The folder to give pi for mu's templates: the folder itself in English, a copy in Chinese kept under
- * `root` (mu's own folder, which is the user's alone, since a template is text the model follows). The copy
+ * The folder to give pi for spec.jev's templates: the folder itself in English, a copy in Chinese kept under
+ * `root` (spec.jev's own folder, which is the user's alone, since a template is text the model follows). The copy
  * is named by what it was made from, so an updated template is copied again and a stale copy is never read.
  * When it cannot be made, the English templates are used.
  */
@@ -81,7 +81,7 @@ export function promptsFor(dir: string, wording: "zh" | "en" | undefined, root: 
 		try {
 			renameSync(temporary, target);
 		} catch {
-			// Another mu made the same copy first.
+			// Another spec.jev made the same copy first.
 			rmSync(temporary, { recursive: true, force: true });
 		}
 		return existsSync(target) ? target : dir;

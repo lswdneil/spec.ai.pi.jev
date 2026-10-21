@@ -156,7 +156,7 @@ describe('native conversations', () => {
       seq: 0,
       session: { model: 'e2e/e2e-fake-model', thinkingLevel: 'high', permissions: 'full' },
     });
-    // A draft has no file yet: the mode it was made with is the one its mu starts in.
+    // A draft has no file yet: the mode it was made with is the one its spec.jev starts in.
     const draft = await w.conversations.create({ cwd: w.project, permissions: 'ask' });
     await expect(w.conversations.open(draft.id)).resolves.toMatchObject({ session: { permissions: 'ask' } });
     expect(w.pi.hosts).toHaveLength(0);
@@ -190,7 +190,7 @@ describe('native conversations', () => {
     });
     expect(w.events.status.map((event) => event.status.phase)).toEqual(['starting', 'running']);
     expect(w.events.replaced).toEqual([expect.objectContaining({ id, seq: 0 })]);
-    // The draft's id still reaches it, and mu names it by the app's name for it.
+    // The draft's id still reaches it, and spec.jev names it by the app's name for it.
     await expect(w.conversations.request(draft.id, { type: 'get_state' })).resolves.toMatchObject({ sessionId: id });
     expect(w.pi.hosts).toHaveLength(1);
     const desktopSession = w.pi.last.input.env.MU_DESKTOP_SESSION;
@@ -370,7 +370,7 @@ describe('native conversations', () => {
     expect(w.pi.running).toHaveLength(2);
   });
 
-  it('follows mu into a new session (`/clear`): the conversation takes its id, the old session stays listed', async () => {
+  it('follows spec.jev into a new session (`/clear`): the conversation takes its id, the old session stays listed', async () => {
     const w = world();
     const draft = await w.conversations.create({ cwd: w.project });
     await turn(w, draft.id, 'hello');
@@ -398,7 +398,7 @@ describe('native conversations', () => {
     expect(snapshot.view.messages).toHaveLength(2);
   });
 
-  it('rebuilds the view when mu moves the branch back (a checkpoint rewind)', async () => {
+  it('rebuilds the view when spec.jev moves the branch back (a checkpoint rewind)', async () => {
     const w = world();
     const draft = await w.conversations.create({ cwd: w.project });
     await turn(w, draft.id, 'one');
@@ -467,7 +467,7 @@ describe('native conversations', () => {
       id,
       status: {
         phase: 'failed',
-        error: { kind: 'crashed', message: 'The mu host stopped by itself (exit code 1)', stderr: 'boom' },
+        error: { kind: 'crashed', message: 'The spec.jev host stopped by itself (exit code 1)', stderr: 'boom' },
       },
     });
     await vi.waitFor(() => expect(w.events.replaced.at(-1)?.view.status).not.toBe('working'));
@@ -503,7 +503,7 @@ describe('native conversations', () => {
 
   it('says why a host did not start, and stays without one', async () => {
     const w = world();
-    w.pi.failStart = new NativeHostError('no-harness', 'No mu harness was found');
+    w.pi.failStart = new NativeHostError('no-harness', 'No spec.jev harness was found');
     const draft = await w.conversations.create({ cwd: w.project });
     await expect(w.conversations.request(draft.id, { type: 'get_state' })).rejects.toMatchObject({
       kind: 'no-harness',
@@ -571,7 +571,7 @@ describe('native conversations', () => {
     await expect(w.conversations.open(id)).resolves.toMatchObject({ view: { dialogs: [] } });
   });
 
-  it('starts mu in the conversation’s permission mode, and again in the one it last switched to', async () => {
+  it('starts spec.jev in the conversation’s permission mode, and again in the one it last switched to', async () => {
     const w = world();
     const draft = await w.conversations.create({ cwd: w.project, permissions: 'jev' });
     await turn(w, draft.id, 'hello');
@@ -583,7 +583,7 @@ describe('native conversations', () => {
     expect(w.pi.last.input.env.MU_PERMISSIONS).toBe('ask');
   });
 
-  it('removes a conversation with its session file, only from mu’s session folders', async () => {
+  it('removes a conversation with its session file, only from spec.jev’s session folders', async () => {
     const w = world();
     const draft = await w.conversations.create({ cwd: w.project });
     await turn(w, draft.id, 'hello');

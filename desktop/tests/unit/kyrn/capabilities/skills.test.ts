@@ -1,6 +1,6 @@
 /**
- * The skills page reads what mu loads from mu's own folders and the tools it takes skills over from, by the harness's
- * rules, and changes only mu's own folder. Every home here is a temporary folder: never the real ~/.mu or ~/.claude.
+ * The skills page reads what spec.jev loads from spec.jev's own folders and the tools it takes skills over from, by the harness's
+ * rules, and changes only spec.jev's own folder. Every home here is a temporary folder: never the real ~/.spec.jev or ~/.claude.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
@@ -29,7 +29,7 @@ function skill(path: string, fields: Record<string, string> = {}, body = 'How to
   writeFileSync(path, `---\n${lines.join('\n')}\n---\n\n${body}\n`);
 }
 
-/** A home with mu's agent folder in it, and a harness's folder of the skills that come with mu. */
+/** A home with spec.jev's agent folder in it, and a harness's folder of the skills that come with spec.jev. */
 function roots(): SkillRoots & { muJson: (value: unknown) => void } {
   const home = temp();
   const agentDir = join(home, '.mu', 'agent');
@@ -59,8 +59,8 @@ async function failure(work: () => unknown): Promise<{ code: string; params: unk
   throw new Error('it did not fail');
 }
 
-describe('the skills mu loads', () => {
-  it('lists every folder in the order mu loads them, and of two with one name only the first', () => {
+describe('the skills spec.jev loads', () => {
+  it('lists every folder in the order spec.jev loads them, and of two with one name only the first', () => {
     const where = roots();
     const own = join(where.agentDir, 'skills');
     skill(join(own, 'review', 'SKILL.md'));
@@ -107,7 +107,7 @@ describe('the skills mu loads', () => {
     expect(names(where).filter((name) => !name.startsWith('builtin:'))).toEqual(['claude:linked']);
   });
 
-  it('follows mu.json: what it takes over, and the features that bring the skills that come with mu', () => {
+  it('follows mu.json: what it takes over, and the features that bring the skills that come with spec.jev', () => {
     const where = roots();
     skill(join(where.home, '.claude', 'skills', 'pdf', 'SKILL.md'));
     skill(join(where.home, '.codex', 'skills', 'slides', 'SKILL.md'));
@@ -117,12 +117,12 @@ describe('the skills mu loads', () => {
     expect(names(where)).toEqual(['builtin:mu-browser']);
     where.muJson({ features: { inherit: { skills: false } } });
     expect(names(where)).toEqual(['builtin:mu-browser', 'builtin:mu-github']);
-    // A mu.json that does not parse is mu's defaults, as the harness takes it.
+    // A mu.json that does not parse is spec.jev's defaults, as the harness takes it.
     writeFileSync(join(where.agentDir, 'mu.json'), '{ not json');
     expect(names(where)).toEqual(['builtin:mu-browser', 'builtin:mu-github', 'claude:pdf', 'codex:slides']);
   });
 
-  it('lets only a skill of its own in mu’s folder be removed', () => {
+  it('lets only a skill of its own in spec.jev’s folder be removed', () => {
     const where = roots();
     skill(join(where.agentDir, 'skills', 'review', 'SKILL.md'));
     skill(join(where.home, '.claude', 'skills', 'pdf', 'SKILL.md'));
@@ -133,7 +133,7 @@ describe('the skills mu loads', () => {
     expect(listSkills(where).skills.find((each) => each.name === 'whole')?.removable).toBe(false);
   });
 
-  it('finds the agent folder as mu’s launcher does', () => {
+  it('finds the agent folder as spec.jev’s launcher does', () => {
     const home = temp();
     expect(muAgentDir({}, home)).toBe(join(home, '.mu', 'agent'));
     expect(muAgentDir({ MU_CODING_AGENT_DIR: '/x/coding' }, home)).toBe('/x/coding');
@@ -161,7 +161,7 @@ describe('adding a skill', () => {
     expect(existsSync(join(source, '.git', 'HEAD'))).toBe(true);
   });
 
-  it('names what is wrong: no description, a name no folder can have, a name mu has, a folder too large', async () => {
+  it('names what is wrong: no description, a name no folder can have, a name spec.jev has, a folder too large', async () => {
     const where = roots();
     const base = temp();
     skill(join(base, 'plain', 'SKILL.md'), { description: '' });
@@ -189,7 +189,7 @@ describe('adding a skill', () => {
     expect(existsSync(join(where.agentDir, 'skills', 'big'))).toBe(false);
   });
 
-  it('adds a skill of a name another tool has: mu’s copy is then the one loaded', async () => {
+  it('adds a skill of a name another tool has: spec.jev’s copy is then the one loaded', async () => {
     const where = roots();
     skill(join(where.home, '.claude', 'skills', 'pdf', 'SKILL.md'));
     const source = join(temp(), 'pdf');
@@ -200,7 +200,7 @@ describe('adding a skill', () => {
 });
 
 describe('removing a skill', () => {
-  it('moves a skill of mu’s folder to the trash, and refuses any other, saying where it comes from', async () => {
+  it('moves a skill of spec.jev’s folder to the trash, and refuses any other, saying where it comes from', async () => {
     const where = roots();
     skill(join(where.agentDir, 'skills', 'review', 'SKILL.md'));
     skill(join(where.agentDir, 'skills', 'notes.md'), { name: 'quick-notes' });

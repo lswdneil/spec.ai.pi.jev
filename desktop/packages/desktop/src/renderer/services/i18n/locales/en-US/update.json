@@ -20,11 +20,11 @@
   },
   "readyTitle": "Version {{version}} is ready to install",
   "restartToUpdate": "Restart to update",
-  "lastInstallFailed": "The last update wasn't installed because mu couldn't quit.",
+  "lastInstallFailed": "The last update wasn't installed because spec.jev couldn't quit.",
   "availableVersion": "Version {{version}} is available",
   "installerReason": {
-    "linux": "On Linux, mu can't install updates by itself. Download the installer and open it.",
-    "unpackaged": "This copy of mu can't install updates by itself. Download the installer and open it.",
+    "linux": "On Linux, spec.jev can't install updates by itself. Download the installer and open it.",
+    "unpackaged": "This copy of spec.jev can't install updates by itself. Download the installer and open it.",
     "autoUpdateFailed": "You can download the installer and update with it."
   },
   "downloadInstaller": "Download installer",

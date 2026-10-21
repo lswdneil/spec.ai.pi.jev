@@ -1,13 +1,13 @@
 /**
  * Snapshots of a project's working tree that never touch the project's own repository.
  *
- * Each project gets a SHADOW git directory under the mu home. Every command runs with `GIT_DIR`,
+ * Each project gets a SHADOW git directory under the spec.jev home. Every command runs with `GIT_DIR`,
  * `GIT_WORK_TREE` and `GIT_INDEX_FILE` pointing into it (see `shadowEnv`), so the user's `.git` (index,
  * HEAD, stash, hooks, refs) is never read for writing, and a folder that is no repository at all works
  * the same way. git never adds a path with a `.git` component, so the real repository is not copied either.
  *
  * What goes into a snapshot: everything the project's `.gitignore` does not ignore, minus a built-in
- * list of heavy folders and secret files, minus mu's own folders (the snapshots themselves among them)
+ * list of heavy folders and secret files, minus spec.jev's own folders (the snapshots themselves among them)
  * and minus files over a size cap. What a restore may touch follows from that: only paths that are in
  * one of the two trees it compares. An ignored or oversized file is in neither, so it is never
  * overwritten and never deleted.
@@ -84,7 +84,7 @@ export const BUILT_IN_IGNORES: readonly string[] = [
 	"id_ed25519",
 ];
 
-const CONFIG_MARKER = "# mu checkpoint settings";
+const CONFIG_MARKER = "# spec.jev checkpoint settings";
 /**
  * Repository-level settings beat the user's global and system ones. Line endings and filters are
  * switched off so a restore is byte for byte what was there; no hook can ever run; nothing collects
@@ -124,7 +124,7 @@ export interface StoreOptions {
 	/** gitignore-style patterns on top of the project's own ignore rules. Default: `BUILT_IN_IGNORES`. */
 	readonly ignore?: readonly string[];
 	/**
-	 * Folders never snapshotted wherever they are, e.g. mu's home and pi's agent folder: they hold the
+	 * Folders never snapshotted wherever they are, e.g. spec.jev's home and pi's agent folder: they hold the
 	 * snapshots, sessions and credentials. `baseDir` is always one of them.
 	 */
 	readonly ownFolders?: readonly string[];
@@ -306,7 +306,7 @@ export async function openStore(options: StoreOptions): Promise<Store> {
 	writeFileSync(join(gitDir, "info", "attributes"), SHADOW_ATTRIBUTES);
 	writeFileSync(join(gitDir, PROJECT_FILE), `${JSON.stringify({ root: options.root, lastUsed: Date.now() })}\n`);
 	releaseLocks(store, STALE_LOCK_MS);
-	// The index keeps what it once took in, ignored or not: a key file an older mu snapshotted, a folder the project
+	// The index keeps what it once took in, ignored or not: a key file an older spec.jev snapshotted, a folder the project
 	// ignores since. Out of the index, it is out of every later snapshot, and a restore leaves it alone.
 	const stale = zList(await git(store, ["ls-files", "-z", "--cached", "--ignored", "--exclude-standard"]));
 	if (stale.length > 0) await git(store, ["update-index", "-z", "--force-remove", "--stdin"], `${stale.join("\0")}\0`);
@@ -393,7 +393,7 @@ export async function scan(store: Store, limits?: ScanLimits): Promise<{ tree: s
 	return { tree: (await git(store, ["write-tree"])).trim(), leftOut };
 }
 
-/** A scan kept as a commit under `refs/mu/<name>`, with a note of what existed but was left out. */
+/** A scan kept as a commit under `refs/spec.jev/<name>`, with a note of what existed but was left out. */
 export async function snapshot(store: Store, name: string, limits?: ScanLimits): Promise<Snapshot> {
 	const { tree, leftOut } = await scan(store, limits);
 	const ignored = zList(
@@ -596,7 +596,7 @@ export async function collectGarbage(store: Store): Promise<void> {
 
 /**
  * Removes the shadow repositories of projects nobody has opened for `maxAgeDays`, and at once those of
- * folders that are `offLimits` now (a home folder snapshotted by an older mu). Only folders mu itself
+ * folders that are `offLimits` now (a home folder snapshotted by an older spec.jev). Only folders spec.jev itself
  * marked are touched.
  */
 export function sweepProjects(

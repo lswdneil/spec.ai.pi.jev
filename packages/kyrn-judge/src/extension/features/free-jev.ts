@@ -66,8 +66,8 @@ export function registerFreeJevNotice(runtime: KyrnRuntime, roots: HarnessRoots 
 			tell(
 				"free_jev",
 				say({
-					zh: "mu：没有配置 Jev 密钥，判定器先用 OpenCode Zen 上限时免费的 Jev 1.13。判定要读的内容会发给 OpenCode，它不拿来训练模型。想用自己的密钥：运行 mu setup，或在桌面端「设置 → 判定器」里填。",
-					en: "mu: no Jev key is set, so the judge is using Jev 1.13 on OpenCode Zen, which is free for a limited time. What the judge reads is sent to OpenCode, which doesn't train on it. To use your own key, run mu setup, or add it in the desktop app under Settings → Judges.",
+					zh: "spec.jev：没有配置 Jev 密钥，判定器先用 OpenCode Zen 上限时免费的 Jev 1.13。判定要读的内容会发给 OpenCode，它不拿来训练模型。想用自己的密钥：运行 spec.jev setup，或在桌面端「设置 → 判定器」里填。",
+					en: "spec.jev: no Jev key is set, so the judge is using Jev 1.13 on OpenCode Zen, which is free for a limited time. What the judge reads is sent to OpenCode, which doesn't train on it. To use your own key, run spec.jev setup, or add it in the desktop app under Settings → Judges.",
 				}),
 			);
 			return;
@@ -79,12 +79,12 @@ export function registerFreeJevNotice(runtime: KyrnRuntime, roots: HarnessRoots 
 			"free_jev_unavailable",
 			reason === "paid"
 				? say({
-						zh: "mu：OpenCode Zen 上的免费 Jev 现在要密钥或付费了，判定暂时交给规则。配置一个 Jev 密钥就能恢复：mu setup，或桌面端「设置 → 判定器」。",
-						en: "mu: the free Jev on OpenCode Zen now needs a key or payment, so mu is using its fallbacks. To bring the judge back, set a Jev key with mu setup, or in the desktop app under Settings → Judges.",
+						zh: "spec.jev：OpenCode Zen 上的免费 Jev 现在要密钥或付费了，判定暂时交给规则。配置一个 Jev 密钥就能恢复：spec.jev setup，或桌面端「设置 → 判定器」。",
+						en: "spec.jev: the free Jev on OpenCode Zen now needs a key or payment, so spec.jev is using its fallbacks. To bring the judge back, set a Jev key with spec.jev setup, or in the desktop app under Settings → Judges.",
 					})
 				: say({
-						zh: "mu：OpenCode Zen 已经不提供免费的 Jev 了，判定暂时交给规则。配置一个 Jev 密钥就能恢复：mu setup，或桌面端「设置 → 判定器」。",
-						en: "mu: OpenCode Zen no longer offers the free Jev, so mu is using its fallbacks. To bring the judge back, set a Jev key with mu setup, or in the desktop app under Settings → Judges.",
+						zh: "spec.jev：OpenCode Zen 已经不提供免费的 Jev 了，判定暂时交给规则。配置一个 Jev 密钥就能恢复：spec.jev setup，或桌面端「设置 → 判定器」。",
+						en: "spec.jev: OpenCode Zen no longer offers the free Jev, so spec.jev is using its fallbacks. To bring the judge back, set a Jev key with spec.jev setup, or in the desktop app under Settings → Judges.",
 					}),
 			reason,
 		);

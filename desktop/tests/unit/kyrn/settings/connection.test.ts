@@ -215,7 +215,7 @@ describe('testing a provider connection from the main process', () => {
 
 const option = (value: string, name: string, description: string) => ({ value, name, description });
 
-describe('models the running mu last reported', () => {
+describe('models the running spec.jev last reported', () => {
   const record = {
     id: 'k',
     config_options: JSON.stringify([

@@ -1,5 +1,5 @@
 // Vendored from mizchi/laya-mlx, web/packages/laya-web/src/questions.ts at dc3aa6b (Apache-2.0).
-// See ./NOTICE.md. Local changes are marked "mu:".
+// See ./NOTICE.md. Local changes are marked "spec.jev:".
 
 import { pyJson } from './pyjson.ts';
 import type { Criterion, InternalQuestion, Json } from './types.ts';
@@ -46,7 +46,7 @@ export function toInternal(question: unknown): InternalQuestion {
       if (new Set(criteria).size !== criteria.length) {
         throw new Error('Choice labels must be unique');
       }
-      criteria = Object.fromEntries(criteria.map((c): [string, null] => [c, null])); // mu: typed for a build without strictNullChecks
+      criteria = Object.fromEntries(criteria.map((c): [string, null] => [c, null])); // spec.jev: typed for a build without strictNullChecks
     } else if (isPlainObject(criteria)) {
       // A dict mixing integer-like keys ("0", "1", ...) with other keys cannot preserve its
       // source order once parsed (see the doc comment on ChoiceQuestion.criteria); an
@@ -74,7 +74,7 @@ export function toInternal(question: unknown): InternalQuestion {
       throw new Error('Noul criteria must be a dictionary with false/true descriptions');
     }
   }
-  // mu: the cast states what the checks above proved; without strictNullChecks TypeScript cannot narrow it.
+  // spec.jev: the cast states what the checks above proved; without strictNullChecks TypeScript cannot narrow it.
   return { t: 'noul', ins: computeIns(), crit: (criteria ?? null) as { false?: Criterion; true?: Criterion } | null };
 }
 

@@ -1,5 +1,5 @@
 /**
- * The language `mu setup` speaks: Chinese when the person's locale is Chinese, English otherwise. MU_LANG (the
+ * The language `spec.jev setup` speaks: Chinese when the person's locale is Chinese, English otherwise. MU_LANG (the
  * desktop app's language, see ../language.ts) decides first; then the POSIX variables in their order of precedence,
  * LC_ALL, LC_MESSAGES and LANG; then what the system tells Node (Intl), which is the only answer on Windows.
  */

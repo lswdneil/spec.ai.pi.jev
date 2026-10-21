@@ -1,6 +1,6 @@
 /**
- * The top of a native conversation: its title, the project folder it works in, and how its mu is (starting, working,
- * without a model, stopped). A mu that has not started yet says nothing: the next message starts it. Nor does a mu that
+ * The top of a native conversation: its title, the project folder it works in, and how its spec.jev is (starting, working,
+ * without a model, stopped). A spec.jev that has not started yet says nothing: the next message starts it. Nor does a spec.jev that
  * is up and waiting for the next message: "Running" there read as if the turn were still going.
  *
  * The title is renamed where it stands, as a classic conversation's is: a click (or Enter) makes it a field, Enter or
@@ -135,7 +135,7 @@ const NativeHeader: React.FC<{
 }> = ({ conversation, host, working = false, onRename }) => {
   const { t } = useTranslation();
   const up = host.phase === 'running';
-  // What there is to report: nothing before mu starts or while it waits for a message; the words stay for screen readers.
+  // What there is to report: nothing before spec.jev starts or while it waits for a message; the words stay for screen readers.
   const quiet = host.phase === 'idle' || (up && !working);
   const words = up ? (working ? 'mu.native.phase.working' : 'mu.native.phase.ready') : PHASE_KEY[host.phase];
   return (

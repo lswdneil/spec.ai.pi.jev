@@ -187,7 +187,7 @@ describe('configMigration', () => {
     });
 
     it('leaves the legacy chat-channel settings behind and asks the backend nothing about channels', async () => {
-      // mu has no channels; the migration used to ask /api/channel/settings/<platform> on every start, and the
+      // spec.jev has no channels; the migration used to ask /api/channel/settings/<platform> on every start, and the
       // backend answers "Invalid platform: wecom" for one of them.
       const configFile: ConfigFile = {
         get: vi.fn((key: string) => {

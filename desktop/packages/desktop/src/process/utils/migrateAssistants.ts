@@ -192,7 +192,7 @@ async function backendSupportsAssistantDefinitions(): Promise<boolean> {
       detail && typeof detail === 'object' && 'profile' in detail && 'defaults' in detail && 'preferences' in detail
     );
   } catch (error) {
-    console.warn('[mu] Failed to probe unified assistant detail support:', error);
+    console.warn('[spec.jev] Failed to probe unified assistant detail support:', error);
     return false;
   }
 }
@@ -208,7 +208,7 @@ async function markAssistantsMigrationDone(configFile: ConfigFile): Promise<void
   try {
     await accessor.set(ASSISTANTS_MIGRATION_FLAG, true);
   } catch (err) {
-    console.warn('[mu] failed to persist assistants migration flag', err);
+    console.warn('[spec.jev] failed to persist assistants migration flag', err);
   }
 }
 
@@ -388,7 +388,7 @@ async function fetchCurrentBuiltinAgentIds(): Promise<Map<string, string>> {
     }
     return map;
   } catch (error) {
-    console.error('[mu] Failed to fetch current builtin agent_id map:', error);
+    console.error('[spec.jev] Failed to fetch current builtin agent_id map:', error);
     return new Map();
   }
 }
@@ -412,7 +412,7 @@ async function fetchAgentIdByRuntimeKey(): Promise<Map<string, string>> {
     }
     return map;
   } catch (error) {
-    console.error('[mu] Failed to fetch agent runtime identity map:', error);
+    console.error('[spec.jev] Failed to fetch agent runtime identity map:', error);
     return new Map();
   }
 }
@@ -457,7 +457,7 @@ async function uploadLegacyAssistantRules(legacyAssistantIds: Set<string>): Prom
       // No legacy assistants dir at all — nothing to upload.
       return 0;
     }
-    console.error('[mu] Failed to read legacy assistant rules dir:', error);
+    console.error('[spec.jev] Failed to read legacy assistant rules dir:', error);
     return 1;
   }
 
@@ -551,7 +551,7 @@ async function uploadLegacyAssistantRules(legacyAssistantIds: Set<string>): Prom
  */
 export async function migrateAssistantsToBackend(configFile: ConfigFile): Promise<boolean> {
   if (process.env.MU_SKIP_ELECTRON_MIGRATION === '1') {
-    console.log('[mu] Assistant migration skipped (env flag set)');
+    console.log('[spec.jev] Assistant migration skipped (env flag set)');
     return false;
   }
 
@@ -626,7 +626,7 @@ export async function migrateAssistantsToBackend(configFile: ConfigFile): Promis
         console.log(`[mu] migrated ${result.imported} assistants (skipped ${result.skipped})`);
       }
     } catch (error) {
-      console.error('[mu] Assistant migration failed:', error);
+      console.error('[spec.jev] Assistant migration failed:', error);
       return false;
     }
   }

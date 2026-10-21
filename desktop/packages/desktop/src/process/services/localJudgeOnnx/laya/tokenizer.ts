@@ -1,5 +1,5 @@
 // Vendored from mizchi/laya-mlx, web/packages/laya-web/src/tokenizer.ts at dc3aa6b (Apache-2.0).
-// See ./NOTICE.md. Local changes are marked "mu:".
+// See ./NOTICE.md. Local changes are marked "spec.jev:".
 
 import { Tokenizer } from '@huggingface/tokenizers';
 

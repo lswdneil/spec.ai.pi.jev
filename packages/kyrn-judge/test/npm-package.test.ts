@@ -17,7 +17,7 @@ import {
 } from "../../../kyrn/npm/build.mjs";
 
 /**
- * The npm package mu-agent (kyrn/npm/build.mjs). Building it needs pi's bundle, so these check the decisions
+ * The npm package spec.jev (kyrn/npm/build.mjs). Building it needs pi's bundle, so these check the decisions
  * the build rests on; the package itself is built, installed and run in CI (.github/workflows/npm.yml).
  */
 const repo = join(dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -40,7 +40,7 @@ function write(path: string, text: string): string {
 }
 
 /**
- * A package laid out like mu-agent, with a stand-in for pi's bundle: one chunk with a pi-tui class and a live
+ * A package laid out like spec.jev, with a stand-in for pi's bundle: one chunk with a pi-tui class and a live
  * binding, and the chunk that hands it to extensions as VIRTUAL_MODULES, written the way esbuild writes it.
  */
 function fakePackage(): { root: string; hostImport: string; source: string } {
@@ -81,7 +81,7 @@ async function bundle(source: string, outfile: string, plugin: Plugin): Promise<
 	);
 }
 
-/** How mu 0.1.3 built it: pi's modules left as bare imports, for jiti to hand over. */
+/** How spec.jev 0.1.3 built it: pi's modules left as bare imports, for jiti to hand over. */
 const leftToJiti: Plugin = {
 	name: "left-to-jiti",
 	setup(builder) {
@@ -105,7 +105,7 @@ function loadLikePi(file: string, transpiled: string[]): Promise<unknown> {
 }
 
 describe("the judgment layer's bundle", () => {
-	// mu 0.1.3 on a 1 GB server: Node could not import the bundle, so jiti transpiled all 3 MB of it with Babel at
+	// spec.jev 0.1.3 on a 1 GB server: Node could not import the bundle, so jiti transpiled all 3 MB of it with Babel at
 	// every start. That took more than 500 MB of heap, and V8 aborted before the first frame.
 	it("is imported by pi's loader as it is, with pi's own modules, and never transpiled", async () => {
 		const { root, hostImport, source } = fakePackage();

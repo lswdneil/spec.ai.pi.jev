@@ -20,7 +20,7 @@ import type { LlmCompletion } from "../../../providers/llm.ts";
 import type { KyrnRuntime } from "../../runtime.ts";
 import type { PackShared } from "./pack.ts";
 
-const TITLE = "mu /commit";
+const TITLE = "spec.jev /commit";
 
 /** What /commit tells the user when git cannot run on this Mac: only they can change that. */
 const CANNOT_RUN: Readonly<Record<GitUnusableReason, { zh: string; en: string }>> = {

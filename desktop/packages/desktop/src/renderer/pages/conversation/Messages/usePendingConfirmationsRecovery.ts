@@ -48,7 +48,7 @@ export function buildPendingConfirmationMessage(
 
 /**
  * Whether the conversation already shows a card for this pending call: a permission, an ACP permission (keyed by its
- * tool call, as the mu bridge's `permission:<id>`), or a question. Without the ACP kind, reopening a conversation while
+ * tool call, as the spec.jev bridge's `permission:<id>`), or a question. Without the ACP kind, reopening a conversation while
  * an agent waits added a second card for the same question, and whichever card was answered second failed.
  */
 export function hasPermissionMessageForCallId(list: TMessage[], callId: string): boolean {

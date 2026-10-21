@@ -109,7 +109,7 @@ describe('opening pages', () => {
     expect(browserNow().limitHitAt).toBeTypeOf('number');
   });
 
-  it('takes over the oldest page the person browses, not one mu works in, unless every page is mu’s', () => {
+  it('takes over the oldest page the person browses, not one spec.jev works in, unless every page is spec.jev’s', () => {
     const runPage = openBrowserPage('about:blank', { by: 'agent', muRun: 'r1' });
     for (let index = 1; index < MAX_BROWSER_TABS; index++) openBrowserPage(`https://site${index}.test/`);
     const oldestOwn = browserNow().tabs[1].id;
@@ -125,7 +125,7 @@ describe('opening pages', () => {
     expect(browserNow().tabs[0]).toEqual({ id: oldest, url: 'https://overflow.test/', title: '' });
   });
 
-  it('refuses a run of mu’s when full: its own policy asks first, and a person’s page is never taken over for it', () => {
+  it('refuses a run of spec.jev’s when full: its own policy asks first, and a person’s page is never taken over for it', () => {
     for (let index = 0; index < MAX_BROWSER_TABS; index++) openBrowserPage(`https://site${index}.test/`);
     heard = [];
     expect(openBrowserPage('about:blank', { by: 'agent', muRun: 'r1' })).toBeNull();
@@ -134,7 +134,7 @@ describe('opening pages', () => {
     expect(heard).toEqual([]);
   });
 
-  it('brings an address already open to the front when asked to reuse it, but never a page of mu’s run', () => {
+  it('brings an address already open to the front when asked to reuse it, but never a page of spec.jev’s run', () => {
     const first = openBrowserPage('https://docs.test/', { by: 'agent', reuse: true });
     openBrowserPage('https://other.test/');
     const run = openBrowserPage('https://run.test/', { by: 'agent', muRun: 'r1' });
@@ -156,7 +156,7 @@ describe('opening pages', () => {
     ]);
   });
 
-  it('keeps which run of mu’s a page was opened for', () => {
+  it('keeps which run of spec.jev’s a page was opened for', () => {
     const id = openBrowserPage('about:blank', { by: 'agent', muRun: 'r1' });
     expect(browserNow().tabs).toEqual([{ id, url: 'about:blank', title: '', muRun: 'r1' }]);
   });

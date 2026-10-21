@@ -12,7 +12,7 @@ import type { Pack, PackShared } from "./packs/pack.ts";
 import { reviewPack } from "./packs/review.ts";
 
 /**
- * Capability packs: installed with mu, out of the model's sight until a task
+ * Capability packs: installed with spec.jev, out of the model's sight until a task
  * needs one. Each is one `judged` entry of the capability catalog, and its
  * tools are only registered when it is opened, so a closed pack costs the
  * model nothing. What a pack needs from the machine (ast-grep, git, gh, a debug adapter) is

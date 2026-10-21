@@ -1,41 +1,41 @@
 ---
 title: 명령줄
-summary: mu의 명령어, 세션 안의 슬래시 명령어, 그리고 pi에서 그대로 가져온 것.
+summary: spec.jev의 명령어, 세션 안의 슬래시 명령어, 그리고 pi에서 그대로 가져온 것.
 ---
 
-`mu` 명령은 코딩 에이전트 pi에 mu의 판정 커널을 얹은 거예요. pi가 하는 모든 것은 전과 같이 동작하고, mu는 자체 명령어와 판정 지점을 더해요.
+`spec.jev` 명령은 코딩 에이전트 pi에 spec.jev의 판정 커널을 얹은 거예요. pi가 하는 모든 것은 전과 같이 동작하고, spec.jev는 자체 명령어와 판정 지점을 더해요.
 
 ```bash
-npm i -g mu-agent      # Node.js 22.19 이상 필요
-mu                     # 현재 디렉터리에서 대화형 세션 시작
+npm i -g spec.jev      # Node.js 22.19 이상 필요
+spec.jev                     # 현재 디렉터리에서 대화형 세션 시작
 ```
 
-## mu 시작하기 {#starting}
+## spec.jev 시작하기 {#starting}
 
 | 명령어 | 하는 일 |
 | --- | --- |
-| `mu` | 현재 디렉터리에서 대화형 세션 |
-| `mu "prompt"` | 이 프롬프트로 시작하는 대화형 세션 |
-| `mu -p "prompt"` | 한 번 실행: 답을 출력하고 종료 |
-| `mu -c` | 마지막 세션 이어 가기 |
-| `mu -r` | 이어 갈 세션 고르기 |
-| `mu --help` | 에이전트의 모든 플래그 |
+| `spec.jev` | 현재 디렉터리에서 대화형 세션 |
+| `spec.jev "prompt"` | 이 프롬프트로 시작하는 대화형 세션 |
+| `spec.jev -p "prompt"` | 한 번 실행: 답을 출력하고 종료 |
+| `spec.jev -c` | 마지막 세션 이어 가기 |
+| `spec.jev -r` | 이어 갈 세션 고르기 |
+| `spec.jev --help` | 에이전트의 모든 플래그 |
 
-`mu install`, `remove`, `update`, `list`, `config`는 pi에서와 같이 pi 패키지를 관리해요.
+`spec.jev install`, `remove`, `update`, `list`, `config`는 pi에서와 같이 pi 패키지를 관리해요.
 
-## mu 자체 명령어 {#commands}
+## spec.jev 자체 명령어 {#commands}
 
 | 명령어 | 하는 일 |
 | --- | --- |
-| `mu setup` | 모델 연결(API 키, 또는 목록에서 고른 서비스)과 판정기 선택. `mu setup --help`는 스크립트용 형식을 보여 줘요. |
-| `mu doctor` | 설치, 모델, 판정기, 연결 상태를 점검하고 무엇을 고칠지 알려 줌 |
-| `mu ledger [n] [--json]` | 최근 n개 세션에서 판정기가 내린 판정. `--json`은 모든 기록을 확률, 소요 시간과 함께 내보내요. |
-| `mu import --list` | Claude Code와 Codex 대화 찾기 |
-| `mu import <file>…` | 그 대화를 mu로 가져와 이어 가기 |
-| `mu judge setup \| start \| stop \| status` | 로컬 판정기 Laya. `setup`은 모델을 내려받기 전에 물어요. |
-| `mu link` / `mu unlink` | `mu` 명령을 PATH(`~/.local/bin`)에 넣거나 빼기 |
-| `mu auth status \| login <provider> \| logout <provider>` | 데스크톱 앱이 쓰는 구독 로그인 |
-| `mu migrate [--dry-run]` | 한 번만: 이름을 바꾸기 전의 홈 `~/.kyrn`을 `~/.mu`로 옮기기 |
+| `spec.jev setup` | 모델 연결(API 키, 또는 목록에서 고른 서비스)과 판정기 선택. `spec.jev setup --help`는 스크립트용 형식을 보여 줘요. |
+| `spec.jev doctor` | 설치, 모델, 판정기, 연결 상태를 점검하고 무엇을 고칠지 알려 줌 |
+| `spec.jev ledger [n] [--json]` | 최근 n개 세션에서 판정기가 내린 판정. `--json`은 모든 기록을 확률, 소요 시간과 함께 내보내요. |
+| `spec.jev import --list` | Claude Code와 Codex 대화 찾기 |
+| `spec.jev import <file>…` | 그 대화를 spec.jev로 가져와 이어 가기 |
+| `spec.jev judge setup \| start \| stop \| status` | 로컬 판정기 Laya. `setup`은 모델을 내려받기 전에 물어요. |
+| `spec.jev link` / `spec.jev unlink` | `spec.jev` 명령을 PATH(`~/.local/bin`)에 넣거나 빼기 |
+| `spec.jev auth status \| login <provider> \| logout <provider>` | 데스크톱 앱이 쓰는 구독 로그인 |
+| `spec.jev migrate [--dry-run]` | 한 번만: 이름을 바꾸기 전의 홈 `~/.kyrn`을 `~/.spec.jev`로 옮기기 |
 
 ## 세션 안의 명령어 {#slash-commands}
 
@@ -64,15 +64,15 @@ pi의 자체 명령어는 그대로예요: `/model`, `/thinking`, `/login`, `/re
 
 ## 판정 줄 {#verdict-line}
 
-턴이 시작되기 전에 mu는 판정기가 여러분의 메시지를 어떻게 읽었는지 잠깐 기다렸다가 입력창 위에 보여 줘요. 예: *◆ jev-1.13-free  multi-step task · full effort · 699 ms*. 기다리지 않고 시작하려면 <kbd>Esc</kbd>를 누르세요. 상태 표시줄에는 권한 모드가 나오고, 목표가 진행 중일 때는 그 목표도 나와요.
+턴이 시작되기 전에 spec.jev는 판정기가 여러분의 메시지를 어떻게 읽었는지 잠깐 기다렸다가 입력창 위에 보여 줘요. 예: *◆ jev-1.13-free  multi-step task · full effort · 699 ms*. 기다리지 않고 시작하려면 <kbd>Esc</kbd>를 누르세요. 상태 표시줄에는 권한 모드가 나오고, 목표가 진행 중일 때는 그 목표도 나와요.
 
 ## 한 번 실행에만 쓰는 환경 변수 {#env}
 
 | 변수 | 효과 |
 | --- | --- |
-| `MU_JUDGE=laya,jev mu` | 이번 실행에서만 쓸 판정기. `MU_JUDGE=off`는 커널을 꺼요. |
-| `MU_JUDGE_MODE=shadow mu` | 이번 실행에서 모든 판정 지점을 섀도로 |
-| `MU_PERMISSIONS=ask mu` | 이번 실행의 권한 모드: `full`, `jev`, `ask` |
-| `MU_LANG=zh-CN mu` | mu 자체 메시지를 중국어(`zh`)나 영어(그 밖의 값)로 |
+| `MU_JUDGE=laya,jev spec.jev` | 이번 실행에서만 쓸 판정기. `MU_JUDGE=off`는 커널을 꺼요. |
+| `MU_JUDGE_MODE=shadow spec.jev` | 이번 실행에서 모든 판정 지점을 섀도로 |
+| `MU_PERMISSIONS=ask spec.jev` | 이번 실행의 권한 모드: `full`, `jev`, `ask` |
+| `MU_LANG=zh-CN spec.jev` | spec.jev 자체 메시지를 중국어(`zh`)나 영어(그 밖의 값)로 |
 
 전체 목록은 [설정](@docs/configuration#env)에 있어요.

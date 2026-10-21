@@ -45,7 +45,7 @@ const slug = (cwd) => `--${cwd.replace(/^[/\\]/, '').replace(/[/\\:]/g, '-')}--`
 
 /**
  * The files this spec made before the start, and the conversation the home page makes: `bound` and `imported` are used
- * by AionCore's conversations (an adapter record, an import record), `free` is mu's own, in a folder of its own.
+ * by AionCore's conversations (an adapter record, an import record), `free` is spec.jev's own, in a folder of its own.
  * @type {{ elsewhere: string, free: { id: string, file: string }, bound: { id: string, file: string }, imported: { id: string, file: string }, records: string[], id: string, file: string, bin: string }}
  */
 const made = {
@@ -124,7 +124,7 @@ test('the native list leaves out the sessions AionCore’s conversations use', a
   made.bound = writeSession(project, BOUND_TITLE, 20);
   made.imported = writeSession(project, IMPORTED_TITLE, 10);
   // The ACP adapter's record (the session's id: its file, folder and permission mode) and an import's record, in
-  // `<mu home>/acp-sessions`: the profile's home is the app's.
+  // `<spec.jev home>/acp-sessions`: the profile's home is the app's.
   const store = join(home, '.mu', 'acp-sessions');
   mkdirSync(join(store, 'imports'), { recursive: true });
   const adapter = join(store, `${made.bound.id}.json`);
@@ -145,7 +145,7 @@ test('the native list leaves out the sessions AionCore’s conversations use', a
   await start();
   const p = page();
   await reachSidebar();
-  // mu's own session is listed; the two AionCore uses are not (they would show twice: here and as its conversations).
+  // spec.jev's own session is listed; the two AionCore uses are not (they would show twice: here and as its conversations).
   await expect(rows()).toHaveCount(1);
   await expect(row(made.free.id)).toContainText(OLD_TITLE);
   // Its tooltip: the title, the folder, how many messages (the profile's language is Chinese).
@@ -294,7 +294,7 @@ test('a row’s menu deletes the conversation after a confirmation: its session 
 
 test('a session the command line made shows in the list when the window comes back to the front', async () => {
   const p = page();
-  // `mu` in a terminal wrote a session while the app was open: nothing in the app made it, so no change comes.
+  // `spec.jev` in a terminal wrote a session while the app was open: nothing in the app made it, so no change comes.
   const cli = writeSession(made.elsewhere, CLI_TITLE, 0);
   await expect(rows()).toHaveCount(1);
   // The window comes to the front (the list is read again at most once a second).
@@ -319,7 +319,7 @@ test('the test stayed in its profile, and left nothing running', async () => {
   await expectNothingLeft();
   expect(
     existsSync(join(homedir(), '.mu', 'agent', 'sessions', slug(made.elsewhere))),
-    "nothing in the person's ~/.mu"
+    "nothing in the person's ~/.spec.jev"
   ).toBe(false);
   for (const { path, before } of run.untouched) expect(stamp(path), `${path} left alone`).toBe(before);
   run.passed = true;

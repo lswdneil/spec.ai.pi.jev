@@ -148,10 +148,10 @@ describe("report", () => {
 			`${join("src", "a.ts")}:3:5 error E1 first (in a file you did not edit)`,
 			`${join("src", "b.ts")}:10:5 error E1 second`,
 		]);
-		expect(text[4]).toBe("[mu diagnostics end: 1 more not shown]");
+		expect(text[4]).toBe("[spec.jev diagnostics end: 1 more not shown]");
 		expect(report).toMatchObject({ shown: 3, omitted: 1, errors: 3, warnings: 1 });
 		expect(formatReport([{ path: join(cwd, "a.ts"), diagnostic: warning(0, "w") }], { cwd, max: 10 }).text).toContain(
-			"[mu diagnostics end]",
+			"[spec.jev diagnostics end]",
 		);
 	});
 });

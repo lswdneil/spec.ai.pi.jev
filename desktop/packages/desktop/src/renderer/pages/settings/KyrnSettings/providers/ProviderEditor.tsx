@@ -23,7 +23,7 @@ type ProviderEditorProps = {
   /** Not saved yet: its id can still be chosen. */
   isNew: boolean;
   modified: boolean;
-  /** Ids no new provider may take: the other providers, hand-written entries, and what the running mu reports. */
+  /** Ids no new provider may take: the other providers, hand-written entries, and what the running spec.jev reports. */
   takenIds: Set<string>;
   typedKey: string;
   /** models.json cannot be written from here (comments, or unreadable). */

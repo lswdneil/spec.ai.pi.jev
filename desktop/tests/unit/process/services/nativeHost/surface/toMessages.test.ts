@@ -23,7 +23,7 @@ import {
 
 /**
  * The rows the message list shows for a native conversation, read the way the list and its rows read them: tool rows
- * through the tool summary's normalizer, Jev's lines and mu's notices through their own readers, errors through the
+ * through the tool summary's normalizer, Jev's lines and spec.jev's notices through their own readers, errors through the
  * tips row's recogniser.
  */
 
@@ -77,22 +77,22 @@ describe('the recorded conversation', () => {
       'jev: fallback',
       'call write completed: Successfully wrote to notes/hello.txt',
       'notice: checkpoint_off',
-      'mu: WRITE-DONE: Successfully wrote to notes/hello.txt',
+      'spec.jev: WRITE-DONE: Successfully wrote to notes/hello.txt',
       'person: E2E:BASH echo native-host-bash-ok',
       'jev: fallback',
       'call bash completed: native-host-bash-ok\n',
-      'mu: BASH-SAW: native-host-bash-ok\n',
+      'spec.jev: BASH-SAW: native-host-bash-ok\n',
       'person: E2E:BASH sleep 0.2; echo asked-ok',
       'jev: fallback',
       'call bash completed: asked-ok\n',
-      'mu: BASH-SAW: asked-ok\n',
+      'spec.jev: BASH-SAW: asked-ok\n',
       'person: E2E:BASH sleep 0.2; echo asked-ok',
       'jev: fallback',
       'call bash error: Operation aborted',
       'notice: stopped',
       'person: E2E:SLOW',
       'jev: fallback',
-      'mu: SLOW-001 SLOW-002 SLOW-003 ',
+      'spec.jev: SLOW-001 SLOW-002 SLOW-003 ',
       'notice: stopped',
     ]);
   });
@@ -106,7 +106,7 @@ describe('the recorded conversation', () => {
 
   it('streams the reply into its row, and runs a call from pending to its result', () => {
     const midway = findRecord((record) => (record.assistantMessageEvent as { delta?: string })?.delta === '好几段');
-    expect(rows(recordedAt(midway)).map(brief).at(-1)).toBe('mu: PLAIN-REPLY-OK: 这是分成好几段');
+    expect(rows(recordedAt(midway)).map(brief).at(-1)).toBe('spec.jev: PLAIN-REPLY-OK: 这是分成好几段');
 
     const written = findRecord(
       (record) => (record.assistantMessageEvent as { type?: string })?.type === 'toolcall_end'
@@ -170,7 +170,7 @@ describe('rows written by hand', () => {
     ];
     const running = reduceAll(calling);
     expect(normalizeAcpToolCall(tool(rows(running)))).toMatchObject({ status: 'running', description: 'sleep 9' });
-    // mu's process closed mid-call: the run is over with no end for the call.
+    // spec.jev's process closed mid-call: the run is over with no end for the call.
     const over = reduce(running, { type: 'agent_settled' });
     expect(normalizeAcpToolCall(tool(rows(over)))?.status).toBe('error');
   });
@@ -205,7 +205,7 @@ describe('rows written by hand', () => {
       ended(reply([text('hello')]), 'a2'),
     ]);
     const list = rows(view);
-    expect(list.map(brief)).toEqual(['person: hi', 'notice: info', 'mu: hello']);
+    expect(list.map(brief)).toEqual(['person: hi', 'notice: info', 'spec.jev: hello']);
     expect(muNotice(list[1])?.title).toBe('Retried 1×');
   });
 
@@ -254,10 +254,10 @@ describe('rows written by hand', () => {
       ended({ role: 'custom', customType: 'note', content: 'Saved a lesson', display: true, timestamp: 9 }),
       ended({ role: 'custom', customType: 'note', content: '  ', display: true, timestamp: 9 }),
     ]);
-    expect(rows(view).map(brief)).toEqual(['mu: Saved a lesson']);
+    expect(rows(view).map(brief)).toEqual(['spec.jev: Saved a lesson']);
   });
 
-  it('shows what mu told the model as a line of its own, never as a reply, with the words it sent', () => {
+  it('shows what spec.jev told the model as a line of its own, never as a reply, with the words it sent', () => {
     const sent = 'You edited a.ts and nothing has run since. Verify the change.';
     const view = reduceAll([
       ended(user('fix it')),
@@ -288,10 +288,10 @@ describe('rows written by hand', () => {
       { type: 'compaction_end', reason: 'threshold', result: { summary: 's', tokensBefore: 182_340 }, aborted: false },
       ended(user('two')),
     ]);
-    // A notice of mu's own reads as the words it was given.
+    // A notice of spec.jev's own reads as the words it was given.
     expect(rows(view).map((row) => muNotice(row)?.title ?? brief(row))).toEqual([
       'person: one',
-      'mu: first',
+      'spec.jev: first',
       'Compacted 182340',
       'person: two',
     ]);
@@ -318,7 +318,7 @@ describe('rows written by hand', () => {
     const second = map(after, options);
     expect(second[0]).toBe(first[0]);
     expect(second.at(-1)).not.toBe(first.at(-1));
-    expect(brief(second.at(-1) as TMessage)).toBe('mu: hello');
+    expect(brief(second.at(-1) as TMessage)).toBe('spec.jev: hello');
     // Other words (another language) give new rows.
     expect(map(after, { ...options, words: { retried: () => '', compacted: () => '' } })[0]).not.toBe(second[0]);
   });

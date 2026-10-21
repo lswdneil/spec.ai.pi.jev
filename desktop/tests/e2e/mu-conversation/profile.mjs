@@ -1,17 +1,17 @@
-// The throwaway world the mu conversation E2E test runs the app in: a home folder, Electron's user data, mu's agent
+// The throwaway world the spec.jev conversation E2E test runs the app in: a home folder, Electron's user data, spec.jev's agent
 // folder, a project folder and, for the checkout's build, a view of the harness, all under one temporary folder.
-// Nothing the app writes can land in the person's own ~/.mu, app data or harness checkout:
+// Nothing the app writes can land in the person's own ~/.spec.jev, app data or harness checkout:
 //
-// - The home folder is a fresh one, under every name the environment gives it (profileEnv), so `~/.mu`, `~/Library`,
+// - The home folder is a fresh one, under every name the environment gives it (profileEnv), so `~/.spec.jev`, `~/Library`,
 //   `%APPDATA%` and every dotfile an agent or tool touches are the test's own. On Windows, Electron's
 //   `app.getPath('home')` still names the account's own folder (Windows answers it, not the environment); the test
 //   prints the app's folders at its first start.
 // - MU_E2E_USER_DATA_DIR moves Electron's user data and logs (configureChromium.ts).
 // - MU_AGENT_DIR is a folder of its own, apart from `<home>/.mu/agent`, so the test also shows that every part of the
-//   app and of mu uses the one the person named.
+//   app and of spec.jev uses the one the person named.
 // - The checkout's build runs the harness through a view of the checkout (links) whose own `.env` is the test's: a
 //   checkout keeps its keys in `<root>/.env`, and the app writes a provider's key there. The checkout's own `.env` is
-//   never opened. A packaged app runs the mu it carries, which keeps its keys in `~/.mu/.env`: the profile's home.
+//   never opened. A packaged app runs the spec.jev it carries, which keeps its keys in `~/.spec.jev/.env`: the profile's home.
 // - The environment is built from a short list, not copied: no key or token of the person running the test reaches the
 //   app.
 import { execFileSync } from 'node:child_process';
@@ -141,7 +141,7 @@ export function findBackend(desktopRoot) {
 }
 
 /**
- * A Node that can run mu (>= 22.19): MU_E2E_NODE, the one running this, one on PATH, or one from nvm. `dir` is the
+ * A Node that can run spec.jev (>= 22.19): MU_E2E_NODE, the one running this, one on PATH, or one from nvm. `dir` is the
  * folder that holds it, the one to put on PATH.
  */
 export function findNode() {
@@ -207,11 +207,11 @@ function harnessView(source, target) {
 /**
  * The environment the app is started with (see the top of this file), for `platform`. `paths` are the profile's;
  * `node` the Node to put first on PATH, if any; `checkout` names, for the checkout's build, the backend binary, the
- * desktop checkout and the harness to run. A packaged app gets none of them: it carries mu and the backend, and runs
- * mu on its own binary, so no Node is needed either.
+ * desktop checkout and the harness to run. A packaged app gets none of them: it carries spec.jev and the backend, and runs
+ * spec.jev on its own binary, so no Node is needed either.
  *
  * The home is the profile's under every name: HOME (and CFFIXED_USER_HOME, which Core Foundation reads on macOS); on
- * Windows USERPROFILE (Node's home, so mu's), HOMEDRIVE and HOMEPATH, and APPDATA and LOCALAPPDATA inside it, where
+ * Windows USERPROFILE (Node's home, so spec.jev's), HOMEDRIVE and HOMEPATH, and APPDATA and LOCALAPPDATA inside it, where
  * npm and most tools keep their data. PATH is the system's own folders, as a fresh account has them.
  */
 export function profileEnv({ platform = process.platform, env = process.env, paths, node, language, checkout }) {
@@ -284,7 +284,7 @@ export function homeFolders(platform, home) {
 
 /**
  * A new, empty folder for the profile: `root` when given (it must be empty or missing), else a new one in the system's
- * temporary folder. Its real path, with every link and, on Windows, every short (8.3) name resolved: the app and mu
+ * temporary folder. Its real path, with every link and, on Windows, every short (8.3) name resolved: the app and spec.jev
  * see a project by its real path, and the test compares theirs with its own.
  */
 function profileRoot(root) {
@@ -297,7 +297,7 @@ function profileRoot(root) {
 
 /**
  * Creates the profile. `root` defaults to a new folder in the system's temporary folder. `app` is a packaged app
- * ({ executable, resources }, see app.mjs) to run instead of the checkout's build: it carries mu and the backend, so
+ * ({ executable, resources }, see app.mjs) to run instead of the checkout's build: it carries spec.jev and the backend, so
  * no harness checkout, backend binary or Node is looked for. Returns every path and the environment the app is started
  * with.
  */
@@ -316,8 +316,8 @@ export function createProfile({ desktopRoot, root, language = 'zh-CN', app } = {
     mkdirSync(dir, { recursive: true });
   }
   for (const dir of homeFolders(process.platform, paths.home)) mkdirSync(dir, { recursive: true });
-  writeFileSync(join(paths.project, 'README.md'), '# E2E project\n\nA folder for the mu conversation test.\n');
-  // mu's judgment configuration: the offline `mock` judge, and every decision point off, so each one takes its fixed
+  writeFileSync(join(paths.project, 'README.md'), '# E2E project\n\nA folder for the spec.jev conversation test.\n');
+  // spec.jev's judgment configuration: the offline `mock` judge, and every decision point off, so each one takes its fixed
   // fallback. The same run every time, and no judge is called. (MU_JUDGE=off would switch the whole judgment layer off,
   // permission modes and the board with it.)
   writeFileSync(join(paths.agentDir, 'mu.json'), `${JSON.stringify(JUDGE_CONFIG, null, 2)}\n`);
@@ -334,7 +334,7 @@ export function createProfile({ desktopRoot, root, language = 'zh-CN', app } = {
 
   const node = findNode();
   // The app replaces PATH with the login shell's (fix-path), which in this home is the system's, then adds every nvm
-  // Node under the home: the chosen Node is linked there, so the adapter and mu find it after that too. Windows has no
+  // Node under the home: the chosen Node is linked there, so the adapter and spec.jev find it after that too. Windows has no
   // login shell to ask: there the PATH given is the one they use.
   if (process.platform !== 'win32') {
     const nvmVersion = join(

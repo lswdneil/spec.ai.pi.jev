@@ -15,7 +15,7 @@ export type BrowserPanelAnswer =
   | { kind: 'open'; requestId: string; error: string }
   | { kind: 'keyboard'; requestId: string; held: boolean };
 
-/** Channel names keep the internal `kyrn.` prefix, like every other mu channel. */
+/** Channel names keep the internal `kyrn.` prefix, like every other spec.jev channel. */
 export const kyrnBrowserBridge = {
   /** Every change of every run, in order. The renderer feeds them to the same reducer the main process uses. */
   events: bridge.buildEmitter<BrowserRunEvent>('kyrn.browser.events'),

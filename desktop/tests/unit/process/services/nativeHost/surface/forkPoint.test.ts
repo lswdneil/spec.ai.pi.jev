@@ -5,7 +5,7 @@ import { delta, ended, reply, text, user } from './records';
 
 /**
  * Where a message's fork button goes (utils/forkPoint.ts): the person's message forks before it and brings its text
- * back; mu's reply forks at the person's next message, or clones the branch when it is the last.
+ * back; spec.jev's reply forks at the person's next message, or clones the branch when it is the last.
  */
 
 const twoTurns = (): NativeView =>

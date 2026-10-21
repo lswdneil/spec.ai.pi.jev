@@ -136,7 +136,7 @@ describe("task frame model", () => {
 		if ("error" in ticked) throw new Error(ticked.error);
 		const frame = ruleUpdate(ticked.frame, { text: PRD_EXAMPLE, turn: 3, entryId: "abc", change: "correction" });
 		const note = renderFrameNote({ frame, unmerged: [] });
-		expect(note).toContain("[mu task frame v2]");
+		expect(note).toContain("[spec.jev task frame v2]");
 		expect(note).toContain(`- "${PRD_EXAMPLE}" (turn 3)`);
 		expect(note).toContain("- [x] a1 tests pass");
 		const text = describeFrame({ frame, unmerged: [] });

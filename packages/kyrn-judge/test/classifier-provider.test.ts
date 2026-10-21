@@ -211,7 +211,7 @@ describe("classifier judges in the registry", () => {
 		const noModel = parseConfig({ tiers: ["c"], judges: { c: { type: "classifier" } } });
 		expect(buildJudge(noModel, host()).problems[0]).toBe('Judge "c" needs a model ("provider/model-id")');
 		expect(buildJudge(parseConfig({ tiers: ["jev-opencode"] }), { env: {} }).problems[0]).toBe(
-			'Judge "jev-opencode": classifier models need a mu session',
+			'Judge "jev-opencode": classifier models need a spec.jev session',
 		);
 	});
 
@@ -223,7 +223,7 @@ describe("classifier judges in the registry", () => {
 		);
 		// Cloudflare needs its account as well; without it, as without any key, the free Jev answers.
 		expect(buildJudge(jev, host({ CLOUDFLARE_API_KEY: "c" })).judge.id).toBe("classifier:opencode/jev-1.13-free");
-		// Outside a mu session there is no catalog to reach it with: the gateway, as before.
+		// Outside a spec.jev session there is no catalog to reach it with: the gateway, as before.
 		expect(buildJudge(jev, { env: {} }).judge.id).toBe("gateway:typesafe-ai/jev");
 		// A key that reaches Jev already keeps doing so.
 		expect(buildJudge(jev, host({ TYPESAFE_API_KEY: "t", OPENCODE_API_KEY: "o" })).judge.id).toBe(

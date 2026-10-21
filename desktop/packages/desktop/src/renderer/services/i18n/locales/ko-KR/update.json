@@ -20,11 +20,11 @@
   },
   "readyTitle": "새 버전 {{version}} 준비 완료",
   "restartToUpdate": "다시 시작하여 업데이트",
-  "lastInstallFailed": "지난 업데이트가 설치되지 않았습니다. mu를 종료할 수 없었습니다.",
+  "lastInstallFailed": "지난 업데이트가 설치되지 않았습니다. spec.jev를 종료할 수 없었습니다.",
   "availableVersion": "새 버전 {{version}}을(를) 다운로드할 수 있습니다",
   "installerReason": {
-    "linux": "Linux에서는 mu가 업데이트를 직접 설치할 수 없습니다. 설치 파일을 다운로드해서 여세요.",
-    "unpackaged": "이 mu는 업데이트를 직접 설치할 수 없습니다. 설치 파일을 다운로드해서 여세요.",
+    "linux": "Linux에서는 spec.jev가 업데이트를 직접 설치할 수 없습니다. 설치 파일을 다운로드해서 여세요.",
+    "unpackaged": "이 spec.jev는 업데이트를 직접 설치할 수 없습니다. 설치 파일을 다운로드해서 여세요.",
     "autoUpdateFailed": "설치 파일을 다운로드해서 업데이트할 수 있습니다."
   },
   "downloadInstaller": "설치 파일 다운로드",

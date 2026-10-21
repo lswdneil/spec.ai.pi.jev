@@ -1,6 +1,6 @@
 // Loaded into the launcher with NODE_OPTIONS=--import by the launcher's tests on Windows. The list of running processes
 // the launcher asks tasklist and PowerShell for comes from two files in the folder MU_TEST_PROCESS_LIST names instead,
-// as pgrep is a stub on the other platforms: the machine running the tests may well have a real mu session open, and
+// as pgrep is a stub on the other platforms: the machine running the tests may well have a real spec.jev session open, and
 // other tests start some.
 import childProcess from "node:child_process";
 import { readFileSync } from "node:fs";

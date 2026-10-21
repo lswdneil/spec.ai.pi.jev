@@ -25,13 +25,13 @@
   root.classList.add('js');
   if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) root.classList.add('motion');
   try {
-    var mode = localStorage.getItem('mu:theme');
+    var mode = localStorage.getItem('spec.jev:theme');
     if (mode === 'light' || mode === 'dark') root.setAttribute('data-theme', mode);
   } catch (e) {}
 {% if L.path == "" %}
   // The Chinese pages live at the root: a visitor whose browser asks for another language we have is sent there once.
   try {
-    var chosen = localStorage.getItem('mu:lang');
+    var chosen = localStorage.getItem('spec.jev:lang');
     var langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
     var want = chosen;
     if (!want) {
@@ -40,8 +40,8 @@
     }
     var paths = {{ lang_paths | tojson }};
     // A language picked on this site always applies; the browser's language only on the first visit of a session.
-    if (want !== 'zh-CN' && paths[want] && (chosen || !sessionStorage.getItem('mu:lang-redirected'))) {
-      sessionStorage.setItem('mu:lang-redirected', '1');
+    if (want !== 'zh-CN' && paths[want] && (chosen || !sessionStorage.getItem('spec.jev:lang-redirected'))) {
+      sessionStorage.setItem('spec.jev:lang-redirected', '1');
       location.replace({{ root | tojson }} + paths[want] + {{ page.path | tojson }} + location.hash);
     }
   } catch (e) {}
@@ -59,7 +59,7 @@
 
 <header class="nav intro" style="--d: 80ms">
   <div class="nav-box">
-    <a class="brand" href="{{ url(L, pages.home) }}"><img src="{{ root }}assets/icon-256.png" alt="">mu</a>
+    <a class="brand" href="{{ url(L, pages.home) }}"><img src="{{ root }}assets/icon-256.png" alt="">spec.jev</a>
     <nav class="links" aria-label="{{ L.ui.nav_site }}">
       <a href="{{ url(L, pages.docs) }}"{% if page.key.startswith("docs") %} aria-current="page"{% endif %}>{{ L.ui.nav_docs }}</a>
       <a href="{{ url(L, pages.decisions) }}"{% if page.key == "decisions" %} aria-current="page"{% endif %}>{{ L.ui.nav_decisions }}</a>
@@ -119,7 +119,7 @@
 <footer>
   <div class="wrap foot">
     <div>
-      <div class="foot-brand"><img src="{{ root }}assets/icon-256.png" alt="">mu</div>
+      <div class="foot-brand"><img src="{{ root }}assets/icon-256.png" alt="">spec.jev</div>
       <p>{{ L.ui.footer_credit }}</p>
       <p class="foot-langs">{% for X in locales %}<a href="{{ url(X, page) }}" hreflang="{{ X.lang }}" lang="{{ X.lang }}" data-lang="{{ X.lang }}"{% if X.lang == L.lang %} aria-current="true"{% endif %}>{{ X.label }}</a>{% endfor %}</p>
     </div>

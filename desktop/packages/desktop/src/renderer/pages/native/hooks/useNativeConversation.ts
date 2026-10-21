@@ -79,7 +79,7 @@ export type NativeConversationApi = {
   retry: () => void;
   /**
    * A prompt, with the images the person attached; while a run goes, a steering or follow-up message. `command`: the
-   * text runs a command an extension answers itself (mu's `/goal …`), which adds no message of the person's: it is no
+   * text runs a command an extension answers itself (spec.jev's `/goal …`), which adds no message of the person's: it is no
    * longer on its way once pi took it, whether or not it starts a run.
    */
   send: (

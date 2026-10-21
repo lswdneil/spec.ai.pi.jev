@@ -1,12 +1,12 @@
 import type { TMessage } from '@/common/chat/chatLib';
 
 /**
- * Where mu's permission question stands in the conversation. mu asks about a call once the call has started, so by
+ * Where spec.jev's permission question stands in the conversation. spec.jev asks about a call once the call has started, so by
  * time the question comes after the call's row, and the outcome of a refused call would read above the question that
  * led to it. A question that names its call goes right before that call's row instead, at the call's time: the page
  * reads the question, then what came of it.
  *
- * The card names the call by mu's `toolCallId` (`rawInput.mu`, beside mu's codes). A card from before mu named it is
+ * The card names the call by spec.jev's `toolCallId` (`rawInput.spec.jev`, beside spec.jev's codes). A card from before spec.jev named it is
  * placed by the command it asks about, when a call of the same turn ran exactly that command.
  */
 
@@ -14,7 +14,7 @@ const record = (value: unknown): Record<string, unknown> =>
   value !== null && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
 const str = (value: unknown): string => (typeof value === 'string' ? value : '');
 
-/** The call a card of mu's asks about, or undefined for any other message (another agent's card has no mu codes). */
+/** The call a card of spec.jev's asks about, or undefined for any other message (another agent's card has no spec.jev codes). */
 function askedAbout(message: TMessage): { id: string; command: string } | undefined {
   if (message.type !== 'acp_permission') return undefined;
   const input = record(message.content?.tool_call?.raw_input);
@@ -33,7 +33,7 @@ function callOf(message: TMessage): { id: string; command: string } | undefined 
 }
 
 /**
- * The list with each question of mu's right before the call it asks about. A list without such a card comes back as
+ * The list with each question of spec.jev's right before the call it asks about. A list without such a card comes back as
  * it was.
  */
 export function questionsBeforeCalls(list: TMessage[]): TMessage[] {

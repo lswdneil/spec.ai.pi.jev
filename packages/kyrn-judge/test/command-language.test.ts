@@ -111,7 +111,7 @@ describe("prompt templates in the app's language", () => {
 		expect(promptsFor(source, "zh", join(source, "notes.txt"))).toBe(source);
 	});
 
-	it("every template mu ships has its Chinese", () => {
+	it("every template spec.jev ships has its Chinese", () => {
 		for (const name of readdirSync(PROMPTS).filter((file) => file.endsWith(".md"))) {
 			const { frontmatter } = parseFrontmatter<Record<string, string>>(readFileSync(join(PROMPTS, name), "utf8"));
 			expect(frontmatter["description-zh"], name).toMatch(CJK);
@@ -141,7 +141,7 @@ describe("commands in the app's language", () => {
 	const commands = (harness: Harness) =>
 		harness.session.extensionRunner.getRegisteredCommands().map((command) => [command.name, command.description]);
 
-	it("describes every mu command in Chinese when the app is in Chinese, and in English otherwise", async () => {
+	it("describes every spec.jev command in Chinese when the app is in Chinese, and in English otherwise", async () => {
 		vi.stubEnv("MU_LANG", "zh-CN");
 		const chinese = commands(await start());
 		expect(chinese.map(([name]) => name)).toEqual(
@@ -171,7 +171,7 @@ describe("commands in the app's language", () => {
 	it("shows the templates' Chinese in the menu, with the same body for the model", async () => {
 		vi.stubEnv("MU_LANG", "zh-CN");
 		const harness = await start();
-		// What pi does with the folders mu hands it, with pi's own loader.
+		// What pi does with the folders spec.jev hands it, with pi's own loader.
 		const { promptPaths } = await harness.session.extensionRunner.emitResourcesDiscover(harness.tempDir, "startup");
 		const templates = Object.fromEntries(
 			loadPromptTemplates({
@@ -187,7 +187,7 @@ describe("commands in the app's language", () => {
 			parseFrontmatter(readFileSync(join(PROMPTS, "implement.md"), "utf8")).body,
 		);
 		expect(templates.init?.description).toMatch(CJK);
-		// The copy lives in mu's own folder, not in a temp folder other users can write to.
+		// The copy lives in spec.jev's own folder, not in a temp folder other users can write to.
 		expect(
 			promptPaths
 				.map((entry) => entry.path)

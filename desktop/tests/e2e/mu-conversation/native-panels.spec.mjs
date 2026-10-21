@@ -1,7 +1,7 @@
 // @ts-check
 // The work panel beside a native conversation, end to end: pi runs inside the app (native is the default), the mock judge
 // judges in shadow mode (what it says changes nothing pi does), the board is on for the project and written by the fake
-// model, and mu's lesson store holds lessons written before the start. Each tab of the panel is opened and pictured,
+// model, and spec.jev's lesson store holds lessons written before the start. Each tab of the panel is opened and pictured,
 // light and dark: the folder's files with the one the model wrote, a file in the preview, the folder's lessons, Jev's
 // judgments, the board, the sub-agents, source control (here: no repository) and the browser. A file the model writes
 // while another tab is in view puts a dot on the files tab (and one the conversation held when it opened does not).
@@ -24,7 +24,7 @@ const OTHER_LESSON = 'E2E-LESSON-OTHER: this one belongs to another project.';
 const { run, page, paths, sleep, start, stop, expectNoProblems, shot, reachSidebar, send, replyWith, newConversation } =
   createNativeWorld({ desktopRoot });
 
-/** One line of mu's lesson store, as the harness writes a whole lesson. */
+/** One line of spec.jev's lesson store, as the harness writes a whole lesson. */
 const lessonLine = (id, text, cwd) => {
   const at = new Date().toISOString();
   return JSON.stringify({
@@ -41,7 +41,7 @@ const lessonLine = (id, text, cwd) => {
   });
 };
 
-// After the world's own set-up (registered first): what this spec adds to mu's folder before the app starts.
+// After the world's own set-up (registered first): what this spec adds to spec.jev's folder before the app starts.
 test.beforeAll(() => {
   const { agentDir, project } = paths();
   // The mock judge in shadow mode: every decision point asks it, and nothing it says changes what pi does.

@@ -13,7 +13,7 @@ import { filterModelOption, modelNamesOf, modelOption } from './modelOptions';
 
 /** The board is written by the conversation's own model. */
 const SESSION = 'session';
-/** The models mu recommends for the board (the harness's src/board/model.ts), whoever provides them. */
+/** The models spec.jev recommends for the board (the harness's src/board/model.ts), whoever provides them. */
 const RECOMMENDED = [/claude-opus-4[.-]6/, /gemini-3\.8-flash/];
 const isRecommended = (id: string): boolean => RECOMMENDED.some((pattern) => pattern.test(id));
 
@@ -26,9 +26,9 @@ export function splitModelRef(ref: string): { provider: string; model: string } 
 type BoardModelCardProps = {
   settings: KyrnSettings;
   available: AvailableModels;
-  /** Subscriptions signed in to from the app, which a running mu may not have reported yet. */
+  /** Subscriptions signed in to from the app, which a running spec.jev may not have reported yet. */
   accounts?: LoginStatus['signedIn'];
-  /** Providers removed on this screen that the snapshot of mu's last connection still lists. */
+  /** Providers removed on this screen that the snapshot of spec.jev's last connection still lists. */
   hidden?: ReadonlySet<string>;
   onChange: (model: string) => void;
 };

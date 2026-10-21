@@ -10,8 +10,8 @@ import { LEGACY_BACKGROUND_BLOCK } from '@/common/platform/legacyNames';
  * Helpers for injecting user-selected background images into theme CSS.
  */
 
-export const BACKGROUND_BLOCK_START = '/* mu Theme Background Start */';
-export const BACKGROUND_BLOCK_END = '/* mu Theme Background End */';
+export const BACKGROUND_BLOCK_START = '/* spec.jev Theme Background Start */';
+export const BACKGROUND_BLOCK_END = '/* spec.jev Theme Background End */';
 
 // Precompiled regex for better performance / 预编译正则以提升性能. A block an earlier version wrote has its markers.
 const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

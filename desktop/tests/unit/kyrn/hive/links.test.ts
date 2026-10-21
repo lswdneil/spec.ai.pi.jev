@@ -63,7 +63,7 @@ describe('the lines of a run', () => {
     ]);
   });
 
-  it('gives a delegate run a line from each sub-agent that finished to mu, and a snapshot its latest pairs', () => {
+  it('gives a delegate run a line from each sub-agent that finished to spec.jev, and a snapshot its latest pairs', () => {
     const snapshot = parseSwarmSnapshot({
       ...hiveSnapshot,
       kind: 'delegate',
@@ -149,9 +149,9 @@ describe('the ring', () => {
     const lower = { x: 100, y: 300 };
     expect(linkPath(upper, lower, 1)).toMatch(/^M100\.0 149\.0 .* 100\.0 271\.0$/);
     expect(linkPath(lower, upper, 1)).toMatch(/^M100\.0 275\.0 .* 100\.0 153\.0$/);
-    // To mu at the centre of a delegate run: the line ends at its circle.
+    // To spec.jev at the centre of a delegate run: the line ends at its circle.
     expect(linkPath(upper, { x: 100, y: 200 }, 1, { toHome: true })).toMatch(/ 100\.0 175\.0$/);
-    // A delegate run's ring is tall enough for the top bee's words to end well above mu's node.
+    // A delegate run's ring is tall enough for the top bee's words to end well above spec.jev's node.
     const delegate = ringLayout(['a', 'b', 'c'], 420, true);
     expect(delegate.centre.y - delegate.nodes.get('a')!.y).toBeGreaterThanOrEqual(96 + 18 + 40);
     expect(ringLayout(['a', 'b', 'c'], 420).centre.y - ringLayout(['a', 'b', 'c'], 420).nodes.get('a')!.y).toBeLessThan(

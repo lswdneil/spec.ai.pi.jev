@@ -9,7 +9,7 @@ import {
 } from '@/common/utils/nativeHost/index.ts';
 
 /**
- * mu's goal in the view: its latest `kyrn.goal` entry on the branch (live from `entry_appended`, in a file as it is),
+ * spec.jev's goal in the view: its latest `kyrn.goal` entry on the branch (live from `entry_appended`, in a file as it is),
  * or a `goal.state` frame after it. Live and read back, the same entries give the same goal.
  */
 
@@ -53,7 +53,7 @@ describe('the goal of a view', () => {
     const live = reduceAll(entries.map((entry) => ({ type: 'entry_appended', entry })));
     expect(live.goal).toEqual({ status: 'met', text: 'tests pass' });
     expect(durable(live)).toEqual(fromEntries(file(entries)));
-    // mu resumed a session whose goal ran: it says it paused, and writes no entry for it.
+    // spec.jev resumed a session whose goal ran: it says it paused, and writes no entry for it.
     const resumed = reduceAll(
       [goalFrame({ status: 'paused', text: 'tests pass', reasonCode: 'session_reopened' })],
       live

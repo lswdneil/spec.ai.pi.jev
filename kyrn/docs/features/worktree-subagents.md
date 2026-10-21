@@ -25,7 +25,7 @@
 
 ## 什么时候不隔离
 
-没装 git、不在仓库里、裸仓库、还没有任何提交、正在 rebase / merge / cherry-pick / revert / bisect、`mu.json` 里关掉了、或者建检出失败：都退回原地修改，并在结果里写明原因（例如 `Not isolated (this directory is not in a git repository)`）。主会话本身在一个 detached 的 linked worktree 里（mu 自己的开发环境就是这样）是支持的，有测试。
+没装 git、不在仓库里、裸仓库、还没有任何提交、正在 rebase / merge / cherry-pick / revert / bisect、`spec.jev.json` 里关掉了、或者建检出失败：都退回原地修改，并在结果里写明原因（例如 `Not isolated (this directory is not in a git repository)`）。主会话本身在一个 detached 的 linked worktree 里（spec.jev 自己的开发环境就是这样）是支持的，有测试。
 
 ## 决策点 `swarm.patch`
 
@@ -36,7 +36,7 @@
 
 只有高置信的“否”才把文件标为无关；拿不准就不说。结果是给主代理看的一句话（`2 files in scope, 1 looks unrelated to the task: package-lock.json`），从不拦截。`shadow` 只记录不显示，`off` 不问，判定器不可用时兜底是什么都不说。能力类别 `relate`。
 
-## 选项（`mu.json` 的 `features.swarm`）
+## 选项（`spec.jev.json` 的 `features.swarm`）
 
 | 键 | 默认 | 含义 |
 | --- | --- | --- |

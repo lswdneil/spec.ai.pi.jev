@@ -1,5 +1,5 @@
 /**
- * pi's slash commands for a native conversation's `/` menu (`get_commands`: mu's and its extensions' own, prompt
+ * pi's slash commands for a native conversation's `/` menu (`get_commands`: spec.jev's and its extensions' own, prompt
  * templates, skills). Asked once each time a host is running, and when the person starts a command in a conversation
  * whose list is not known yet (that starts the host: the command needs it to run anyway).
  */

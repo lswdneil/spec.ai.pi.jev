@@ -1,5 +1,5 @@
 /**
- * What an imported conversation said before it came to mu, read back from mu's session: the person's messages, the
+ * What an imported conversation said before it came to spec.jev, read back from spec.jev's session: the person's messages, the
  * answers with the tools they called, and the summaries compactions left (common/kyrn/importChats.ts). Plain text: the
  * words as they were written. The settings dialogs' frame (MuModal's standard variant, as the import dialog): the
  * title at the start and a close button.

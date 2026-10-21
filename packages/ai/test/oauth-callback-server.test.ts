@@ -69,7 +69,7 @@ describe.sequential("OAuth callback server", () => {
 			await nativeFetch(callbackUrl(server.redirectUri, { code: "the-code", state: "expected-state" })),
 		);
 		expect(success).toMatchObject({ status: 200, contentType: "text/html; charset=utf-8" });
-		// mu: the page is mu's own (src/utils/oauth-page.ts): headed "Signed in", with mu's mark instead of pi's logo.
+		// spec.jev: the page is spec.jev's own (src/utils/oauth-page.ts): headed "Signed in", with spec.jev's mark instead of pi's logo.
 		expect(success.body).toContain("<h1>Signed in</h1>");
 		expect(success.body).toContain("Signed in to Example.");
 		expect(success.body).toContain('id="mu-tile"');

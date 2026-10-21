@@ -5,7 +5,7 @@ import { asList, asObject, asText, hasModel } from '../../../../common/utils/nat
 import type { ConversationHost } from './types.ts';
 
 /**
- * pi chooses a session's model when it starts, from the models it can use then. A host that started while another mu
+ * pi chooses a session's model when it starts, from the models it can use then. A host that started while another spec.jev
  * process held the model store found none and runs without one; the store frees up within seconds. So a conversation
  * keeps looking for a while, takes the model new sessions start on (or the first one offered) as soon as pi lists it,
  * and chooses nothing when a model was set meanwhile. The same as the CLI bridge's (KyrnAgent.ts `lookForModel`).

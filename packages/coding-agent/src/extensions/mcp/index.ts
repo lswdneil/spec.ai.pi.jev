@@ -153,8 +153,8 @@ function hasIndirectTools(entry: McpServerEntry): boolean {
 }
 
 /**
- * mu: emitted on `pi.events` when a server's connection changes, for extensions that register servers
- * and wait for them (mu's catalog connects a server when a task needs it). `tools` are the pi tool
+ * spec.jev: emitted on `pi.events` when a server's connection changes, for extensions that register servers
+ * and wait for them (spec.jev's catalog connects a server when a task needs it). `tools` are the pi tool
  * names the server's tools are registered under.
  */
 export const MCP_CONNECTION_EVENT = "mcp:connection";

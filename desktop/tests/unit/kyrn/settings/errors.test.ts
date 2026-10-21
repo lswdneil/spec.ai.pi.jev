@@ -46,13 +46,13 @@ afterEach(() => {
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
 });
 
-/** A backend where mu is registered, and its health check says it is not online. */
+/** A backend where spec.jev is registered, and its health check says it is not online. */
 const offline: BackendRequest = async <T>(method: string, path: string): Promise<T> => {
   if (path === '/api/agents/management') return [{ id: 'k', name: 'mu', command: '/acp', enabled: true }] as T;
   if (path === '/api/assistants') return [] as T;
   return (method === 'POST' && path.endsWith('/health-check') ? { status: 'offline' } : {}) as T;
 };
-/** A backend where another command is registered as mu. */
+/** A backend where another command is registered as spec.jev. */
 const taken: BackendRequest = async <T>(): Promise<T> => [{ id: 'k', name: 'mu', command: '/other' }] as T;
 
 describe('the store names what went wrong with a stable code', () => {
@@ -164,7 +164,7 @@ describe('the store names what went wrong with a stable code', () => {
     }
   });
 
-  it('for the connection test and the start of mu', async () => {
+  it('for the connection test and the start of spec.jev', async () => {
     const input = {
       id: 'x',
       api: 'openai-completions' as const,
@@ -214,12 +214,12 @@ describe('across the bridge', () => {
     expect(unwrap({ ok: true, data: 3 })).toBe(3);
     let thrown: unknown;
     try {
-      unwrap({ ok: false, error: 'mu runtime is not online.', code: 'runtimeOffline' });
+      unwrap({ ok: false, error: 'spec.jev runtime is not online.', code: 'runtimeOffline' });
     } catch (error) {
       thrown = error;
     }
     expect(thrown).toBeInstanceOf(KyrnError);
-    expect(thrown).toMatchObject({ code: 'runtimeOffline', message: 'mu runtime is not online.', params: {} });
+    expect(thrown).toMatchObject({ code: 'runtimeOffline', message: 'spec.jev runtime is not online.', params: {} });
     // An answer from before the codes, or from a mock, still becomes something the screen can word.
     expect(() => unwrap({ ok: false, error: 'boom' })).toThrow(expect.objectContaining({ code: 'unknown' }));
   });
@@ -301,7 +301,7 @@ describe('the words a screen shows for a code', () => {
     });
     expect(word('stale').text).toMatch(/^The settings changed/);
     expect(word('notMine')).toEqual({
-      text: "review comes from Claude Code. mu doesn't change those files.",
+      text: "review comes from Claude Code. spec.jev doesn't change those files.",
       detail: '',
     });
     expect(word('mcpInvalid').text).toBe('The URL must start with http:// or https://.');
@@ -318,7 +318,7 @@ describe('the words a screen shows for a code', () => {
     ).toBe('「最多等待」超出了允许的范围。');
     expect(
       muErrorText(t, 'zh-CN', { code: 'notMine', params: { name: 'x', source: 'agents' }, message: '' }).text
-    ).toBe('x 来自 共享的 .agents 文件夹，mu 不改动那里的文件。');
+    ).toBe('x 来自 共享的 .agents 文件夹，spec.jev 不改动那里的文件。');
   });
 
   it('reads any caught value, and a code it does not know is unknown', () => {

@@ -24,10 +24,10 @@ const found = (skill: MuSkill, query: string): boolean => {
 };
 
 /**
- * The skills page while mu runs inside the app: the skills mu loads in every conversation, a group for each place they
- * come from (mu's folder, the folder agents share, mu itself, Claude Code, Codex), in the order mu loads them. A skill
- * is added by copying its folder into mu's folder; only one of mu's folder can be removed, to the trash. A skill from
- * anywhere else says where it comes from instead: mu does not change the other tools' files.
+ * The skills page while spec.jev runs inside the app: the skills spec.jev loads in every conversation, a group for each place they
+ * come from (spec.jev's folder, the folder agents share, spec.jev itself, Claude Code, Codex), in the order spec.jev loads them. A skill
+ * is added by copying its folder into spec.jev's folder; only one of spec.jev's folder can be removed, to the trash. A skill from
+ * anywhere else says where it comes from instead: spec.jev does not change the other tools' files.
  */
 export default function MuSkillsPage() {
   const { t, i18n } = useTranslation();

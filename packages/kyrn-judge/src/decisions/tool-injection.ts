@@ -8,7 +8,7 @@ import type { Answer, Question, Questions } from "../types.ts";
  * Ported from kerpopule/hermes-jev-skills (MIT, © 2026 Steve Darlow; `jevkit/webscreen.py`, `jevkit/rerank.py`). The question's wording
  * is theirs and measured there: its clause about links and images took URL-exfiltration passages over 0.5 from 29 of
  * 36 to 35 of 36, and in 80 real web results it caught 70 of 79 planted attacks against 11 for a pattern scan, with 0
- * of 1,520 clean chunks withheld, at their threshold of 0.5 (mu withholds over it, so a judge with no opinion, at
+ * of 1,520 clean chunks withheld, at their threshold of 0.5 (spec.jev withholds over it, so a judge with no opinion, at
  * exactly 0.5, withholds nothing). Relevance is not asked: the model already chose what to
  * fetch.
  */
@@ -29,7 +29,7 @@ export type InjectionOutcome = number | null;
 export const INJECTION_THRESHOLD = 0.5;
 
 /** How the note that stands in a withheld passage's place begins. */
-export const WITHHELD_NOTE = "[mu withheld ";
+export const WITHHELD_NOTE = "[spec.jev withheld ";
 
 /**
  * The note as it stands in a result. The parent of a sub-agent counts it in the child's event stream, and so knows

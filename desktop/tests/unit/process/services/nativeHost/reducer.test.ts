@@ -186,7 +186,7 @@ describe('a conversation recorded from a real host', () => {
     expect(done.result).toEqual({ text: 'native-host-bash-ok\n', images: [], isError: false });
   });
 
-  it('opens mu’s permission question while the run waits, and closes it with the answer', () => {
+  it('opens spec.jev’s permission question while the run waits, and closes it with the answer', () => {
     const asked = find((record) => record.type === 'extension_ui_request' && record.method === 'select');
     const open = viewAt(asked);
     expect(open.status).toBe('working');
@@ -194,7 +194,7 @@ describe('a conversation recorded from a real host', () => {
       {
         id: records[asked].id,
         method: 'select',
-        title: 'mu wants to run a command\nsleep 0.2; echo asked-ok\nJev is not sure this step is what you want.',
+        title: 'spec.jev wants to run a command\nsleep 0.2; echo asked-ok\nJev is not sure this step is what you want.',
         options: ['Allow once', "Don't allow"],
         inRun: true,
         permission: {
@@ -220,11 +220,11 @@ describe('a conversation recorded from a real host', () => {
     expect(viewAt(answered).dialogs).toEqual([]);
   });
 
-  it('says a run stopped while mu asked about a command was aborted, not failed', () => {
+  it('says a run stopped while spec.jev asked about a command was aborted, not failed', () => {
     const first = find((record) => record.type === 'extension_ui_request' && record.method === 'select');
     const asked = find((record) => record.type === 'extension_ui_request' && record.method === 'select', first + 1);
     expect(viewAt(asked).dialogs).toMatchObject([{ id: records[asked].id, permission: { toolCallId: 'call_e2e_8' } }]);
-    // pi says nothing of the dialog it stopped waiting on; mu says it took the question as denied.
+    // pi says nothing of the dialog it stopped waiting on; spec.jev says it took the question as denied.
     const resolved = find((record) => frameKind(record) === 'permissions.resolved', asked);
     expect(records.slice(asked, resolved).some((record) => record.type === 'extension_ui_response')).toBe(false);
     expect(viewAt(resolved).dialogs).toEqual([]);

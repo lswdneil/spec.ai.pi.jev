@@ -4,7 +4,7 @@ import { muHome } from '@process/agent/kyrn/naming';
 import { DEFAULT_LANGUAGE, normalizeLanguageCode, type SupportedLanguage } from '@/common/config/i18n';
 
 /**
- * The file in the mu home that tells the harness which language the app shows: one language code
+ * The file in the spec.jev home that tells the harness which language the app shows: one language code
  * (`en-US`, `zh-TW`, …) and a newline. The harness runs as its own process and has no other way to learn it.
  */
 export const APP_LANGUAGE_FILE = 'app-language';
@@ -37,7 +37,7 @@ export async function writeAppLanguageFile(language: string, home?: string): Pro
       throw error;
     }
   } catch (error) {
-    console.warn('[i18n] Could not write the app language for the mu harness:', error);
+    console.warn('[i18n] Could not write the app language for the spec.jev harness:', error);
   }
 }
 

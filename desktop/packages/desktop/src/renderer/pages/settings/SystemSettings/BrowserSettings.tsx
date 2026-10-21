@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import BrowserDataSection from '@/renderer/components/settings/SettingsModal/contents/SystemModalContent/BrowserDataSection';
 import { SettingsPage } from '../components/SettingsPageHeader';
 
-/** The in-app browser: whether mu may use it, and clearing what it keeps (sign-ins, cache). */
+/** The in-app browser: whether spec.jev may use it, and clearing what it keeps (sign-ins, cache). */
 const BrowserSettings: React.FC = () => {
   const { t } = useTranslation();
   return (

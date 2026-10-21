@@ -40,7 +40,7 @@ describe('pending confirmations recovery', () => {
       position: 'left',
       content: {
         session_id: 'session-1',
-        tool_call: { tool_call_id: 'permission:ui-1', title: 'mu wants to run a command' },
+        tool_call: { tool_call_id: 'permission:ui-1', title: 'spec.jev wants to run a command' },
         options: [{ option_id: 'mu:once', name: 'Allow once', kind: 'allow_once' }],
       },
     } as TMessage;
