@@ -68,7 +68,6 @@ files:
   - '!**/node_modules/*/{*.test.js,*.spec.js,*.test.ts,*.spec.ts}'
   # Defensive: exclude sibling packages from desktop bundle
   - '!packages/web-host/**'
-  - '!packages/web-cli/**'
   - '!packages/shared-scripts/**'
   - '!packages/desktop/src/**'
   - '!**/node_modules/*.d.ts'
