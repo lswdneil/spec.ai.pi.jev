@@ -952,7 +952,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 	pi.registerCommand("board", {
 		description: say({
 			zh: "人话看板：/board 查看，/board on、/board off 为这个项目打开或关闭，/board model 换个模型来讲",
-			en: "The plain-language board: /board shows it, /board on or /board off for this project, /board model picks the model that writes it",
+			en: "Show the plain-language board; /board on|off turns it on or off for this project, /board model picks the model that writes it",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);

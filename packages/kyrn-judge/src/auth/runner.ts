@@ -109,7 +109,7 @@ export async function runAuth(argv: readonly string[], options: AuthOptions): Pr
 			return 0;
 		}
 		if (!provider) throw new Error(USAGE);
-		if (!offered.includes(provider)) throw new Error(`Signing in to ${provider} is not available in this mu`);
+		if (!offered.includes(provider)) throw new Error(`This version of mu can't sign in to ${provider}`);
 		if (mode === "logout") {
 			// Only a subscription sign-in is signed out here: a key stored for the same provider is left alone.
 			const stored = (await runtime.listCredentials()).find((credential) => credential.providerId === provider);

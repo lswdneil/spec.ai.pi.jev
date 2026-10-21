@@ -42,7 +42,7 @@ function markSaid(file: string | undefined, day: string): void {
 /**
  * Tells the person when the `jev` judge falls back to the free Jev on OpenCode Zen because no key is set: once a day,
  * at its first answer, where what it judges goes and how to use a key of their own. Once per session, when the free
- * Jev stops answering because it now asks for a key or is gone: plain rules decide until a key is set.
+ * Jev stops answering because it now asks for a key or is gone: decision points use their fallbacks until a key is set.
  */
 export function registerFreeJevNotice(runtime: KyrnRuntime, roots: HarnessRoots | undefined): void {
 	const file = roots ? join(roots.agentDir, "mu", "notices.json") : undefined;
@@ -80,11 +80,11 @@ export function registerFreeJevNotice(runtime: KyrnRuntime, roots: HarnessRoots 
 			reason === "paid"
 				? say({
 						zh: "mu：OpenCode Zen 上的免费 Jev 现在要密钥或付费了，判定暂时交给规则。配置一个 Jev 密钥就能恢复：mu setup，或桌面端「设置 → 判定器」。",
-						en: "mu: the free Jev on OpenCode Zen now requires a key or payment, so plain rules decide for now. To bring the judge back, set a Jev key with mu setup, or in the desktop app under Settings → Judges.",
+						en: "mu: the free Jev on OpenCode Zen now needs a key or payment, so mu is using its fallbacks. To bring the judge back, set a Jev key with mu setup, or in the desktop app under Settings → Judges.",
 					})
 				: say({
 						zh: "mu：OpenCode Zen 已经不提供免费的 Jev 了，判定暂时交给规则。配置一个 Jev 密钥就能恢复：mu setup，或桌面端「设置 → 判定器」。",
-						en: "mu: OpenCode Zen no longer offers the free Jev, so plain rules decide for now. To bring the judge back, set a Jev key with mu setup, or in the desktop app under Settings → Judges.",
+						en: "mu: OpenCode Zen no longer offers the free Jev, so mu is using its fallbacks. To bring the judge back, set a Jev key with mu setup, or in the desktop app under Settings → Judges.",
 					}),
 			reason,
 		);

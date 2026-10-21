@@ -393,7 +393,7 @@ export function registerLsp(runtime: KyrnRuntime): void {
 	pi.registerCommand("lsp", {
 		description: say({
 			zh: "语言服务器：装了哪些、哪些在运行、最近一次出错",
-			en: "Language servers: what's installed, what's running and the last error",
+			en: "Show the language servers: what's installed, what's running and the last error",
 		}),
 		handler: async (_args, ctx) => {
 			runtime.touch(ctx);

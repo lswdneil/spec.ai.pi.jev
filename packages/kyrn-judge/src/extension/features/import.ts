@@ -26,7 +26,7 @@ import {
 	TOOL_NAMES,
 } from "../../import/index.ts";
 import { absolute, defaultSessionDir } from "../../import/session.ts";
-import { say } from "../../language.ts";
+import { count, say } from "../../language.ts";
 
 export const IMPORT_COMMAND = "import-chat";
 
@@ -86,7 +86,7 @@ async function report(ctx: ImportContext, result: ImportResult): Promise<void> {
 	ctx.ui.notify(
 		say({
 			zh: `已从 ${TOOL_NAMES[result.tool]} 导入“${result.name}”：你的消息 ${counts.user} 条，回答 ${counts.assistant} 条，工具调用 ${counts.toolCalls} 次。保存在 ${result.sessionFile}`,
-			en: `Imported "${result.name}" from ${TOOL_NAMES[result.tool]}: ${counts.user} messages from you, ${counts.assistant} replies, ${counts.toolCalls} tool calls. Saved to ${result.sessionFile}`,
+			en: `Imported "${result.name}" from ${TOOL_NAMES[result.tool]}: ${count(counts.user, "message")} from you, ${count(counts.assistant, "reply", "replies")}, ${count(counts.toolCalls, "tool call")}. Saved to ${result.sessionFile}`,
 		}),
 		"info",
 	);
@@ -146,7 +146,7 @@ function markerLines(origin: ImportOrigin): { title: string; detail: string } {
 		title: say({ zh: `从 ${tool} 导入的对话`, en: `Conversation imported from ${tool}` }),
 		detail: say({
 			zh: `${origin.source}\n你的消息 ${counts.user} 条，回答 ${counts.assistant} 条，工具调用 ${counts.toolCalls} 次；思考过程和图片没有导入。`,
-			en: `${origin.source}\n${counts.user} messages from you, ${counts.assistant} replies, ${counts.toolCalls} tool calls; thinking and images weren't imported.`,
+			en: `${origin.source}\n${count(counts.user, "message")} from you, ${count(counts.assistant, "reply", "replies")}, ${count(counts.toolCalls, "tool call")}; thinking and images weren't imported.`,
 		}),
 	};
 }

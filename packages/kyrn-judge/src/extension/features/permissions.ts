@@ -362,7 +362,7 @@ export function registerPermissions(runtime: KyrnRuntime, roots: HarnessRoots | 
 	pi.registerCommand("permissions", {
 		description: say({
 			zh: "mu 不问你就能做多少事：/permissions full（完全访问）| jev（Jev 审批）| ask（最小权限），不带参数就弹出选择；/permissions reset 忘掉这次对话里允许过的操作",
-			en: "How much mu can do without asking: /permissions full | jev | ask, or no argument for a picker. /permissions reset clears what you allowed for this conversation",
+			en: "Set how much mu can do without asking: /permissions full | jev | ask (no argument opens a picker); /permissions reset clears what you allowed in this session",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);

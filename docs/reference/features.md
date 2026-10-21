@@ -74,7 +74,7 @@ On by default: yes. Decision points: `task.frame`.
 
 ## memory
 
-**Lessons.** Learns from your corrections, from the agent getting itself unstuck, and from what the model and subagents find. Merges each new lesson with existing ones before saving it, brings relevant lessons into later turns, and retires those that are never followed. /lessons lists them; /forget retires one.
+**Lessons.** Learns from your corrections, from the agent getting itself unstuck and from what the model and subagents find. Merges each new lesson with existing ones before saving it, brings relevant lessons into later turns and retires those that are never followed. /lessons lists them; /forget retires one.
 
 On by default: yes. Decision points: `memory.recall`, `memory.capture`, `memory.outcome`, `memory.worth`, `memory.merge`, `memory.applied`.
 
@@ -109,7 +109,7 @@ On by default: yes. Decision points: `tool.risk`.
 
 ## permissions
 
-**Permission modes.** Full access, Jev approves, or Ask first; switch any time with /permissions. When a step needs your permission, the status bar asks; allow it once or for the whole conversation. While this feature is on, it also takes over the risky command guard.
+**Permission modes.** Full access, Jev approves or Ask first; switch any time with /permissions. When a step needs your permission, the status bar asks; allow it once or for the whole conversation. While this feature is on, it also takes over the risky command guard.
 
 On by default: yes. Decision points: `tool.approval`.
 
@@ -144,7 +144,7 @@ On by default: yes. Decision points: `tool.injection`, `tool.description`.
 
 ## admission
 
-**Tool output admission.** Controls how long tool output gets into the context.
+**Tool output admission.** Decides which parts of long tool output enter the context.
 
 On by default: yes. Decision points: `tool.admission`, `tool.admission.test-log`.
 
@@ -222,7 +222,7 @@ On by default: yes. Decision points: `turn.drift`.
 
 ## lsp
 
-**Language server diagnostics.** Uses language servers already installed on this machine (it installs none), keeps only diagnostics an edit newly introduced, and lets the judge decide when to tell the model.
+**Language server diagnostics.** Uses language servers already installed on this machine (it installs none), keeps only diagnostics an edit newly introduced and lets the judge decide when to tell the model.
 
 On by default: yes. Decision points: `diagnostics.delivery`.
 
@@ -241,7 +241,7 @@ On by default: yes. Decision points: `diagnostics.delivery`.
 
 ## ttsr
 
-**Mid-stream correction (experimental).** Semantic TTSR: the judge, not a regular expression, notices when output goes astray, cuts it off, shows the rule and lets the model continue. Off by default; when on, every stretch of output costs one more judge call.
+**Mid-stream correction (experimental).** The judge, not a regular expression, notices when output goes astray, cuts it off, shows the rule and lets the model continue. Off by default; when on, every stretch of output costs one more judge call.
 
 On by default: no. Decision points: `output.drift`.
 
@@ -263,7 +263,7 @@ On by default: yes. Decision points: `goal.met`.
 | `checker` | `model` | Who checks whether the goal is met. A model reads the goal, what the run did, the last test run and the closing message, then gives a verdict and the next step; Jev steps in only when the model doesn't answer. Either way, an open acceptance item or an unverified edit means not yet. One of `model` (A model (recommended)), `jev` (Jev). |
 | `checkModel` | empty | Model for the check. As provider/model. Empty: the session's current model. |
 | `checkThinking` | `off` | Thinking level for the check. One of `off` (Off), `minimal` (Minimal), `low` (Low), `medium` (Medium), `high` (High). |
-| `checkTimeoutMs` | `90000` ms | Max wait for the check. After that, Jev decides; failing that, the facts alone. Range 5000 to 600000. |
+| `checkTimeoutMs` | `90000` ms | Max wait for the check. If the check takes longer, Jev decides; if Jev can't, only the facts count. Range 5000 to 600000. |
 | `stallLimit` | `2` | Runs without progress before pausing. Runs where the check finds the agent repeating itself. The first time, the agent is told to change course; at this count, the goal pauses for you. Range 1 to 10. |
 | `maxContinuations` | `20` | Max continuations. Counted from your last message. Range 1 to 200. |
 | `maxMinutes` | `180` min | Longest automatic run. Counted from your last message. Range 5 to 1440. |
@@ -277,7 +277,7 @@ On by default: yes. Decision points: `board.read`.
 
 | Option | Default | Meaning |
 | --- | --- | --- |
-| `defaultOn` | `false` | On for projects you haven't set yet. Off by default: each board update costs a model call. |
+| `defaultOn` | `false` | On in projects you haven't set it for. Off by default: each board update costs a model call. |
 | `model` | empty | Model that writes the board. As provider/model; if set here, you won't be asked. Empty: you pick one the first time you turn the board on (Claude Opus 4.6 recommended, then Gemini 3.8 Flash), saved in mu/board.json. If none is picked: the writer model, else the session's model. |
 | `language` | `auto` | Board language. One of `auto` (The one you write in), `zh` (Chinese), `en` (English). |
 | `everyTools` | `5` | Tool calls between checks. Range 1 to 100. |
@@ -324,7 +324,7 @@ On by default: yes. Decision points: `cache.warming`.
 
 ## warmup
 
-**Judge connection warm-up.** While the session is in use, a tiny question keeps the judge's connection warm, so the questions before a turn skip 1-3 s of connection setup.
+**Judge connection warm-up.** While the session is in use, a tiny question keeps the judge's connection warm, so the questions before a turn skip 1–3 s of connection setup.
 
 On by default: yes.
 
@@ -419,7 +419,7 @@ On by default: yes.
 
 ## web
 
-**Web reading and search.** web_fetch reads a page as text (with time and size limits, internal addresses refused, and page text labeled untrusted); web_search uses a source that works from mainland China without a key.
+**Web reading and search.** web_fetch reads a page as text (with time and size limits, internal addresses refused and page text labeled untrusted); web_search uses a source that works from mainland China without a key.
 
 On by default: yes.
 
@@ -436,7 +436,7 @@ On by default: yes.
 
 ## welcome
 
-**Welcome screen.** The terminal's welcome box and the identity note for the model.
+**Welcome screen.** The terminal's welcome screen and the identity note for the model.
 
 On by default: yes.
 

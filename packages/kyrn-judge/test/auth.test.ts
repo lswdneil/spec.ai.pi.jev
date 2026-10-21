@@ -260,8 +260,8 @@ describe("mu auth", () => {
 		const cases: [string[], string][] = [
 			[[], "usage: mu auth status | mu auth login <provider> | mu auth logout <provider>"],
 			[["login"], "usage: mu auth status | mu auth login <provider> | mu auth logout <provider>"],
-			[["login", "google-gemini-cli"], "Signing in to google-gemini-cli is not available in this mu"],
-			[["logout", "openrouter"], "Signing in to openrouter is not available in this mu"],
+			[["login", "google-gemini-cli"], "This version of mu can't sign in to google-gemini-cli"],
+			[["logout", "openrouter"], "This version of mu can't sign in to openrouter"],
 		];
 		for (const [argv, message] of cases) {
 			const app = pipe();

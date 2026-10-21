@@ -34,7 +34,7 @@ const helpZh = () => `mu ${VERSIONS.mu} · 先判断再动手的编程代理，�
   你的每条消息都先交给判定器读：读的时候消息停在输入框上方（按 esc 可跳过等待），
   判定结果留在对话里这条消息下面。${keyText("app.tools.expand")} 可以看每个判定背后的全部回答。
   /mu judge <判定器>：由哪些模型来判定、按什么顺序，比如 laya | laya,jev | jev-opencode-free | clm | classifier:<提供商>/<模型> | llm:<提供商>/<模型>
-  /mu route <判定点> <判定器|default>：让某一个判定点用自己的判定器，比如 browser.step luna
+  /mu route <判定点> <判定器|default>：让某一个判定点用自己的判定器，比如 browser.step llm:openai-codex/gpt-5.6-luna
   /mu mode <判定点|default> <off|shadow|active>：off 关闭，shadow 影子（只记录，不起作用），active 生效
   /frame：查看任务帧，也就是 mu 记住的目标、你的硬约束（原话加出处）和验收条件
   /goal <条件>：让代理一直干到大模型判断条件成立；只输入 /goal 会问你条件（或显示正在进行的目标），
@@ -75,45 +75,46 @@ const helpZh = () => `mu ${VERSIONS.mu} · 先判断再动手的编程代理，�
 const helpEn = () => `mu ${VERSIONS.mu} · a judgment-first coding agent, built on pi ${VERSIONS.pi}
 
 Start here
-  /status                  model, judge, decision point modes, what was kept out of context, recent verdicts
+  /status                  show the model, the judge, each decision point's mode, what was kept out of context and recent verdicts
   /doctor                  check that the judge, model, browser and subagents are set up
   /init                    have the agent write an AGENTS.md for this project
   /clear                   start a new session (same as /new)
-  /import-chat [file]      import this project's Claude Code or Codex conversation and continue it here
+  /import-chat [file]      import a Claude Code or Codex conversation from this project and continue it here
 
 Judgment kernel
-  The judge reads every message first. Meanwhile your message waits above the editor (esc skips the wait),
-  and the verdict then stays under it. ${keyText("app.tools.expand")} shows the full answers behind a verdict.
-  /mu judge <tiers>        which models judge, in order: laya | laya,jev | jev-opencode-free | clm | classifier:<provider>/<model> | llm:<provider>/<model>
-  /mu route <decision> <tiers|default>   give one decision point its own judge, e.g. browser.step luna
-  /mu mode <decision|default> <off|shadow|active>
+  The judge reads every message first. While it reads, your message waits above the editor (esc skips the wait);
+  the verdict then appears under your message. ${keyText("app.tools.expand")} shows the full answers behind a verdict.
+  /mu judge <judges>       set which judges answer, in order: laya | laya,jev | jev-opencode-free | clm | classifier:<provider>/<model> | llm:<provider>/<model>
+  /mu route <point> <judge|default>   give one decision point its own judge, e.g. browser.step llm:openai-codex/gpt-5.6-luna
+  /mu mode <point|default> <off|shadow|active>
                            off; shadow (asked and logged, changes nothing); active (the verdict takes effect)
-  /frame                   the current task: goal, constraints (with where you stated them) and checklist
+  /frame                   show the current task: the goal, your constraints with their source and the checklist
   /goal <condition>        keep the agent working until a model judges the condition met; /goal alone asks
-                           for one (or shows the current goal), /goal clear ends it
+                           for one (or shows the current goal) and /goal clear ends it
   /board on|off            turn the plain-language board on or off for this project: progress, what's happening,
                            what's waiting on you; /board shows it, /board model picks the model that writes it
-  /permissions [mode]      how much mu can do without asking: full (Full access), jev (Jev approves for you and
-                           asks you only when it isn't sure), ask (Ask first: asks before anything but reading)
-  /capabilities            what's installed, and what the judge turned on for this task
-  /ledger [n]              the last n verdicts, with timing
+  /permissions [mode]      set how much mu can do without asking: full (Full access), jev (Jev approves: allows
+                           what the task clearly needs and asks you about the rest), ask (Ask first: asks before
+                           anything but reading)
+  /capabilities            show what's installed and what the judge turned on for this task
+  /ledger [n]              show the last n verdicts and their latency
   /remember <lesson>       save a lesson for future sessions
-  /lessons [all]           this project's lessons, and how often each was recalled and followed; all adds
+  /lessons [all]           list this project's lessons and how often each was recalled and followed; all adds
                            global and retired lessons
   /forget <id>             retire a lesson so it's no longer recalled
 
 Tools the agent can use (and you can ask for)
   /browse <url> [goal]     drive the built-in browser yourself; the agent uses it through the browse tool
-  /agents                  subagent roles for delegate (independent tasks, or a chain of steps) and hive
+  /agents                  list the subagent roles for delegate (independent tasks or a chain of steps) and hive
                            (several investigators on one hard problem, with the judge passing findings between them)
   /implement <task>        scout, plan, implement: a chain of subagents, each working through its own checklist
   /scout-and-plan <task>   scout, then plan; changes nothing
   /implement-and-review <task>   implement, review, fix
   /hive <question>         several investigators take on one question at once, each from its own angle; the judge
                            passes each finding to whoever needs it, and the answer draws on all of them
-  /swarm                   what each running subagent is doing right now; /swarm stop [name] asks it to report
-                           now and keeps its findings, /swarm kill [name] stops it immediately
-  /review [what]           hand a review to the reviewer subagent; the judge ranks its findings from P0 to P3
+  /swarm                   show what each running subagent is doing; /swarm stop [name] asks it to report now
+                           and keeps its findings, /swarm kill [name] stops it immediately
+  /review [what]           have the reviewer subagent review your changes (or what you name); the judge ranks its findings from P0 to P3
   /commit [guidance]       split uncommitted changes into commits; shows the plan first and never pushes
 
 Session and model (from pi)
@@ -215,16 +216,10 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 	pi.registerCommand("mu", {
 		description: say({
 			zh: "mu 的状态。另外：/mu judge <判定器> | /mu route <判定点> <判定器|default> | /mu mode <判定点|default> <off|shadow|active>",
-			en: "Show mu's status. Also: /mu judge <tiers> | /mu route <decision> <tiers|default> | /mu mode <decision|default> <off|shadow|active>",
+			en: "Show mu's status. Also: /mu judge <judges> | /mu route <point> <judge|default> | /mu mode <point|default> <off|shadow|active>",
 		}),
 		getArgumentCompletions: (prefix) => {
-			const options = [
-				"judge laya",
-				"judge laya,luna",
-				"judge laya,jev",
-				"mode default active",
-				"mode default shadow",
-			];
+			const options = ["judge laya", "judge jev", "judge laya,jev", "mode default active", "mode default shadow"];
 			const matches = options.filter((option) => option.startsWith(prefix));
 			return matches.length > 0 ? matches.map((value) => ({ value, label: value })) : null;
 		},
@@ -234,7 +229,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 	pi.registerCommand("status", {
 		description: say({
 			zh: "模型、判定器、各判定点的模式、省下的上下文和最近的判定",
-			en: "Model, judge, decision point modes, context savings and recent verdicts",
+			en: "Show the model, the judge, each decision point's mode, context savings and recent verdicts",
 		}),
 		handler: async (_args, ctx) => mu("", ctx),
 	});
@@ -242,7 +237,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 	pi.registerCommand("help", {
 		description: say({
 			zh: "mu 能做什么，以及常用命令一览",
-			en: "What mu can do, and the commands worth knowing",
+			en: "Show what mu can do and the commands worth knowing",
 		}),
 		handler: async (_args, ctx) => ctx.ui.notify(help(), "info"),
 	});
@@ -260,7 +255,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 	pi.registerCommand("ledger", {
 		description: say({
 			zh: "判定器最近的判定和用时：/ledger [条数]",
-			en: "Recent verdicts, with timing: /ledger [n]",
+			en: "Show the last n verdicts and their latency: /ledger [n]",
 		}),
 		handler: async (args, ctx) => {
 			const count = Math.min(50, Math.max(1, Number.parseInt(args.trim(), 10) || 15));
@@ -302,7 +297,7 @@ export function registerCommands(runtime: KyrnRuntime, roots?: HarnessRoots): vo
 					: "--  judge      off (MU_JUDGE=off)",
 				`--  decisions  default mode ${engine.getMode("*")}. Change it with /mu mode default <off|shadow|active>`,
 				`${ok(Boolean(chrome))}browser    ${chrome ?? browserAdvice(browserHost)}`,
-				`--  browse     driven by ${engine.judgeFor("browser.step").id}. It needs a judge that can match a goal to a page (jev or an llm judge), e.g. /mu route browser.step luna`,
+				`--  browse     driven by ${engine.judgeFor("browser.step").id}. It needs a judge that can match a goal to a page (Jev or an LLM judge), e.g. /mu route browser.step llm:openai-codex/gpt-5.6-luna`,
 				`${ok(roles.length > 0)}subagents  ${roles.map((role) => role.name).join(", ")} · add your own in ${agentsDir}`,
 				`${ok(missing.length === 0)}ladder     ${ladder.length === 0 ? "none: subagents use the session's model" : ladder.join(" < ")}${
 					missing.length > 0 ? ` · unavailable: ${missing.join(", ")}` : ""

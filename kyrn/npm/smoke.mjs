@@ -45,7 +45,10 @@ const version = spawnSync(mu, ["version"], options);
 check("mu version", version.status === 0 && /^mu \d+\.\d+\.\d+ \(pi \d/.test(version.stdout), version.stdout.trim() || version.stderr.trim());
 
 const help = spawnSync(mu, ["--help"], options);
-check("mu --help", help.status === 0 && help.stdout.includes("mu command line") && help.stdout.includes("Agent flags"));
+check(
+	"mu --help",
+	help.status === 0 && help.stdout.includes("a coding agent with a judgment kernel") && help.stdout.includes("pi's help"),
+);
 
 // Without a login, doctor has something to fix and says so with exit code 1; the package row must be fine.
 const doctor = spawnSync(mu, ["doctor"], options);

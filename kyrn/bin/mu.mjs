@@ -94,26 +94,28 @@ export function platformName({ platform, wsl }) {
 export function usage(platform) {
 	const linkDir = platform === "win32" ? "%USERPROFILE%\\.local\\bin" : "~/.local/bin";
 	return [
-		"mu command line. (The project was called KYRN until 2026-09-21; the old kyrn commands still work.)",
+		"mu: a coding agent with a judgment kernel, built on pi.",
 		"",
-		"  mu                       interactive session in the current directory",
-		'  mu "prompt"              interactive session, starting with this prompt',
-		'  mu -p "prompt"           one-shot: print the answer and exit',
-		"  mu -c | -r               continue the last session | pick one to resume",
-		"  mu setup                 connect a model (with an API key or a service from a list) and choose a judge",
-		"                           (mu setup --help covers scripts, reading a key from stdin and supported services)",
-		"  mu judge <cmd>           the local judge (Laya): setup | start | stop | status | run",
-		"  mu ledger [n] [--json]   the judge's verdicts from the last n sessions",
+		"  mu                       start a session in the current directory",
+		'  mu "prompt"              start a session with this prompt',
+		'  mu -p "prompt"           run one prompt, print the answer and exit',
+		"  mu -c | -r               continue the last session | pick a session to resume",
+		"  mu setup                 connect a model (paste an API key or pick a service) and choose a judge",
+		"                           (see mu setup --help for scripting, reading a key from stdin and the supported services)",
+		"  mu judge <cmd>           manage the local judge, Laya (macOS on Apple silicon): setup | start | stop | status | run",
+		"  mu ledger [n] [--json]   print the judge's verdicts from the last n sessions",
 		"  mu import --list | <file>...   import Claude Code and Codex conversations (mu import --help)",
-		"  mu doctor                check the installation",
-		"  mu auth <cmd>            subscription sign-in for the desktop app, as JSON lines:",
+		"  mu doctor                check the installation, the judges and the connections",
+		"  mu auth <cmd>            sign-in helper for the desktop app (JSON lines):",
 		"                           status | login <provider> | logout <provider>",
-		`  mu link | unlink         put the \`mu\` command on your PATH (${linkDir}) | remove it`,
-		"  mu migrate [--dry-run]   one-time move of the pre-rename home folder, ~/.kyrn, to ~/.mu",
-		"  mu help | version",
+		`  mu link | unlink         put the mu command on your PATH (${linkDir}) | remove it`,
+		"  mu migrate [--dry-run]   move the old home folder, ~/.kyrn, to ~/.mu (once)",
+		"  mu help | version        show this help | print the version",
 		"",
-		"Everything else is passed to the agent unchanged: `mu --help` lists every flag,",
-		"and `mu install|remove|update|list|config` manage pi packages.",
+		"Everything else goes to pi unchanged: mu --help also shows pi's options,",
+		"and mu install|remove|update|list|config manage pi packages.",
+		"",
+		"Formerly KYRN: the kyrn commands still work.",
 	].join("\n");
 }
 
@@ -362,7 +364,7 @@ export function installHint({ root, platform }) {
 
 /** What mu says on a Node that does not strip TypeScript types, which a checkout cannot run on. */
 const NO_TYPE_STRIPPING =
-	"mu runs a source checkout's TypeScript with Node's built-in type stripping (on by default since Node 22.18), but this Node does not strip types";
+	"mu runs a source checkout's TypeScript with Node's built-in type stripping (on by default since Node 22.18), but this Node doesn't strip types. Use Node 22.19 or newer.";
 
 /**
  * Node's arguments for running a checkout's TypeScript, up to the entry file. Node strips the types itself (on by
@@ -428,9 +430,9 @@ export function localJudgeSupport({ platform, env, wsl = false }) {
 		runs: false,
 		url,
 		message: [
-			`The local judge (Laya) is a Core ML sidecar that runs only on macOS with Apple Silicon, not on ${where}.`,
-			"mu works without it: use Jev (TYPESAFE_API_KEY or AI_GATEWAY_API_KEY) or an llm judge in mu.json;",
-			"a local judge for the desktop app is in progress. Without a judge, decision points fall back to pi's default behavior.",
+			`The local judge (Laya) is a Core ML sidecar that runs only on macOS on Apple silicon, not on ${where}.`,
+			"mu works without it: Jev answers by default (free on OpenCode Zen, or with your own key: mu setup), or set an LLM judge in mu.json.",
+			"A local judge for the desktop app is in progress. Without a judge, decision points use their fallbacks.",
 			"To use a server that implements the same API (GET /health, POST /evaluate), set:",
 			"  MU_LOCAL_JUDGE_URL=http://host:port",
 		].join("\n"),
@@ -528,7 +530,7 @@ export function planLaunch({
 		const parsed = parseEnvFile(envText);
 		fromFile = envFileAdditions({ env, entries: parsed.entries, platform });
 		// Line numbers only: the text of a line that did not parse may well be a secret.
-		if (parsed.problems.length > 0) notes.push(`mu: .env: skipped line ${parsed.problems.join(", ")} (not KEY=VALUE)`);
+		if (parsed.problems.length > 0) notes.push(`mu: .env: skipped ${parsed.problems.length === 1 ? "line" : "lines"} ${parsed.problems.join(", ")} (expected KEY=VALUE)`);
 	}
 
 	const childEnv = {};
@@ -551,7 +553,7 @@ export function planLaunch({
 		if (support.runs) startJudge = true;
 		else if (!support.url) {
 			notes.push(
-				`mu: the configuration asks for the local judge (laya), which runs on macOS only; on ${platformName({ platform, wsl })} its decisions fall back to the next judge or to pi's behaviour (mu judge status)`,
+				`mu: the configuration asks for the local judge (Laya), which runs on macOS only; on ${platformName({ platform, wsl })} its decision points use the next judge or their fallbacks (mu judge status)`,
 			);
 		}
 	}
@@ -567,7 +569,7 @@ export function planLaunch({
 		agentDir,
 		startJudge,
 		notes,
-		preface: argv[0] === "-h" || argv[0] === "--help" ? `${usage(platform)}\n\nAgent flags:\n` : undefined,
+		preface: argv[0] === "-h" || argv[0] === "--help" ? `${usage(platform)}\n\npi's help (mu passes all of this through):\n` : undefined,
 	};
 }
 
@@ -612,7 +614,7 @@ export function planHost({ platform, env, argv, root, home, fs, wsl = false, str
 
 /** What mu says when the local judge does not come up. */
 const LOCAL_JUDGE_NOT_STARTED =
-	"mu: the local judge did not start (see mu judge status); decision points fall back to pi's default behavior";
+	"mu: the local judge (Laya) didn't start; decision points use the next judge or their fallbacks. Run mu judge status for details.";
 
 /** The part of the preparation that is files: the app view of a checkout, mu's agent folder, the configuration's notes. */
 function prepareFiles({ plan, platform, root, err }) {
@@ -1056,7 +1058,7 @@ export function planLink({ platform, env, home, bin, argv, fs }) {
 	if (windows && /[^\x00-\x7f]/.test(content)) {
 		notes.push(
 			"Note: the path from that folder to this repository has non-ASCII characters in it, and cmd reads a batch file in the",
-			"console's code page. If `mu` then cannot find its target, choose a folder on the same drive (MU_LINK_DIR), or put",
+			"console's code page. If mu then can't find its target, choose a folder on the same drive (MU_LINK_DIR), or put",
 			`${bin} on your PATH instead.`,
 		);
 	}
@@ -1354,7 +1356,7 @@ function handOver({ command, args, env, strategy }) {
 		for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) process.on(signal, () => relay(signal));
 		if (process.platform === "win32") process.on("SIGBREAK", () => {});
 		child.on("error", (error) => {
-			err(`mu: could not start ${command}: ${error.message}`);
+			err(`mu: couldn't start ${command}: ${error.message}`);
 			resolve(1);
 		});
 		child.on("exit", (code, signal) => resolve(code ?? 128 + (osConstants.signals[signal] ?? 0)));
@@ -1451,7 +1453,7 @@ export async function main(argv = process.argv.slice(2)) {
 			out(await response.text());
 			return 0;
 		} catch {
-			out(`the judge server isn't answering at ${plan.url}`);
+			out(`The local judge server isn't answering at ${plan.url}. Check that it's running.`);
 			return 1;
 		}
 	}

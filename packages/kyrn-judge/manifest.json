@@ -235,7 +235,7 @@
 			},
 			"summary": {
 				"zh": "每条消息判断一次：它是新任务、新的硬约束、对做法的纠正、新的子目标，还是什么都没变。只有变了才让模型重写任务帧。",
-				"en": "Classifies each message as a new task, a new hard constraint, a correction, a new subgoal, or no change. Only a change makes a model rewrite the task frame.",
+				"en": "Classifies each message as a new task, a new hard constraint, a correction, a new subgoal or no change. Only a change makes a model rewrite the task frame.",
 				"zh-TW": "每則訊息判斷一次：它是新任務、新的硬性約束、對做法的糾正、新的子目標，還是什麼都沒變。只有變了才讓模型重寫任務框架。",
 				"ja-JP": "メッセージごとに、新しいタスク、新しい制約、訂正、新しいサブ目標、変更なしのどれにあたるかを判定します。変更があったときだけ、モデルがタスクフレームを書き直します。",
 				"ko-KR": "메시지마다 새 작업인지, 새 제약 조건인지, 정정인지, 새 하위 목표인지, 아니면 바뀐 것이 없는지 묻습니다. 바뀐 것이 있을 때만 모델이 작업 프레임을 다시 씁니다.",
@@ -620,7 +620,7 @@
 			},
 			"summary": {
 				"zh": "模型自己想记下的经验、子代理报告里标出的经验，判断是以后还用得上、只关这一次，还是提示词或项目文件里早就有。只存以后用得上的。",
-				"en": "For a lesson the model saves with the remember tool, or a Lesson: line in a subagent's report: will it help again, is it a one-off, or is it already in the prompt or project files? Only lessons that will help again are kept.",
+				"en": "For a lesson the model saves with the remember tool, or a Lesson: line in a subagent's report: will it help again, is it a one-off or is it already in the prompt or project files? Only lessons that will help again are kept.",
 				"zh-TW": "模型用 remember 工具想記下的經驗，或子代理報告裡以 Lesson: 標出的經驗：判斷它以後還用得上、只跟這一次有關，還是提示詞或專案檔案裡早就有了。只存以後用得上的。",
 				"ja-JP": "モデルが remember ツールで残そうとする教訓や、サブエージェントの報告にある Lesson: 行について、今後も役立つか、その場限りか、プロンプトやプロジェクトのファイルからすでにわかることかを判定します。残すのは今後も役立つものだけです。",
 				"ko-KR": "모델이 remember 도구로 남기려는 교훈이나 하위 에이전트 보고의 Lesson: 줄을 두고, 나중에 다시 쓸모 있는지, 이번 한 번뿐인지, 프롬프트나 프로젝트 파일로 이미 아는 것인지 판정합니다. 나중에 쓸모 있는 것만 남깁니다.",
@@ -830,7 +830,7 @@
 			},
 			"summary": {
 				"zh": "在「Jev 审批」模式下，命令、项目外的改动、对外操作和子代理先交给 Jev：它确信这是任务需要、也是你会预期的做法才放行，否则在状态栏问你。",
-				"en": "In Jev approves mode, commands, changes outside the project, outside actions and subagents go to Jev first. Only what Jev is sure the task needs, done the way you'd expect, runs without asking; anything else asks you in the status bar.",
+				"en": "In Jev approves mode, commands, changes outside the project, external actions and subagents go to Jev first. Only what Jev is sure the task needs, done the way you'd expect, runs without asking; anything else asks you in the status bar.",
 				"zh-TW": "在「Jev 審批」模式下，指令、專案外的改動、對外操作和子代理都先交給 Jev：它確信是任務需要、做法也符合你預期的，才不問你直接執行；其餘都會在狀態列問你。",
 				"ja-JP": "「Jev が承認」モードでは、コマンド、プロジェクト外の変更、外部への操作、サブエージェントをまず Jev が審査します。タスクに必要で、あなたが期待するやり方だと確信できるものだけをそのまま実行し、それ以外はステータスバーであなたに確認します。",
 				"ko-KR": "Jev 승인 모드에서는 명령, 프로젝트 밖의 변경, 외부 작업, 하위 에이전트 실행이 먼저 Jev를 거칩니다. 작업에 필요하고 사용자가 예상하는 방식이라고 Jev가 확신하는 것만 사용자 확인 없이 실행되며, 그 밖의 것은 상태 표시줄에서 사용자에게 묻습니다.",
@@ -900,7 +900,7 @@
 			},
 			"summary": {
 				"zh": "网页、搜索结果、MCP 服务器返回的内容，以及 shell 命令从别的机器取回的内容（curl、gh issue view），模型读到之前先过一遍：哪一段是写给 AI 的指令（让它忽略规则、交出数据、跑命令，或借一个链接把对话带出去）。这样的段落被扣下，换成一行说明。Jev 没答上来时，只扣下明显的注入用语。子代理读到的内容里有段落被扣下时，它的报告交回时前面带一句警告。",
-				"en": "Before the model reads a web page, search results, an MCP server's response or what a shell command fetched from another machine (curl, gh issue view), checks which passages carry instructions aimed at an AI (to ignore rules, hand over data, run commands, or leak the conversation through a link). Those passages are withheld and replaced with a one-line note. When Jev doesn't answer, only obvious injection phrases are withheld. If a subagent had passages withheld from what it read, its report comes back with a warning.",
+				"en": "Before the model reads a web page, search results, an MCP server's response or what a shell command fetched from another machine (curl, gh issue view), checks which passages carry instructions aimed at an AI (to ignore rules, hand over data, run commands or leak the conversation through a link). Those passages are withheld and replaced with a one-line note. When Jev doesn't answer, only obvious injection phrases are withheld. If a subagent had passages withheld from what it read, its report comes back with a warning.",
 				"zh-TW": "網頁、搜尋結果、MCP 伺服器回傳的內容，以及 shell 指令從別的機器取回的內容（curl、gh issue view），在模型讀到之前先過一遍：哪一段是寫給 AI 的指令（叫它忽略規則、交出資料、執行指令，或藉一個連結把對話帶出去）。這樣的段落會被扣下，換成一行說明。Jev 沒答上來時，只扣下明顯的注入用語。子代理讀到的內容裡有段落被扣下時，它的報告交回時前面會附一句警告。",
 				"ja-JP": "モデルが Web ページ、検索結果、MCP サーバーの応答、またはシェルコマンドが別のマシンから取得した内容（curl、gh issue view）を読む前に確認します。どの段落が AI に向けた指示（ルールを無視させる、データを渡させる、コマンドを実行させる、リンク経由で会話を外部へ持ち出させる）を含むか。該当する段落は差し止め、1 行の説明に置き換えます。Jev が答えないときは、明らかなインジェクション表現だけを差し止めます。読んだ内容から段落が差し止められたサブエージェントの報告には、警告が付いて返されます。",
 				"ko-KR": "모델이 웹 페이지, 검색 결과, MCP 서버의 응답, 또는 셸 명령이 다른 컴퓨터에서 가져온 내용(curl, gh issue view)을 읽기 전에 먼저 살펴봅니다. 어떤 단락이 AI를 겨냥한 지시(규칙 무시, 데이터 넘기기, 명령 실행, 링크로 대화를 밖으로 빼내기)를 담고 있는지. 그런 단락은 보류하고 한 줄 안내로 바꿉니다. Jev가 답하지 못하면 명백한 주입 문구만 보류합니다. 읽은 내용에서 단락이 보류된 하위 에이전트의 보고서는 경고와 함께 돌아옵니다.",
@@ -935,7 +935,7 @@
 			},
 			"summary": {
 				"zh": "MCP 服务器自己写工具说明，模型把它当工具列表的一部分来读。每个工具第一次出现、说明变了时问一次：这段说明是不是要 AI 做调用这个工具以外的事（读用不着的文件或密钥、把数据发到别处、改变它对待别的工具或你的方式、瞒着你）？是的话这个工具从列表里拿掉，调用也被拒绝，并告诉你。Jev 没答上来时，只按 <IMPORTANT> 块、「别告诉用户」这类明显标记处理。",
-				"en": "MCP servers write their own tool descriptions, and the model reads them as part of its tool list. Asked once per tool when it first appears and whenever its description changes: does the description ask the AI to do more than call this tool (read files or secrets it does not need, send data elsewhere, change how it treats other tools or you, hide something from you)? If so, the tool is removed from the list, calls to it are refused, and you are told. When Jev gives no answer, only obvious markers such as an <IMPORTANT> block or \"do not tell the user\" count.",
+				"en": "MCP servers write their own tool descriptions, and the model reads them as part of its tool list. Asked once per tool when it first appears and whenever its description changes: does the description ask the AI to do more than call this tool (read files or secrets it doesn't need, send data elsewhere, change how it treats other tools or you, hide something from you)? If so, the tool is removed from the list, calls to it are refused and you're told. When Jev gives no answer, only obvious markers such as an <IMPORTANT> block or \"do not tell the user\" count.",
 				"zh-TW": "MCP 伺服器自己寫工具說明，模型把它當成工具列表的一部分來讀。每個工具第一次出現、說明變了時問一次：這段說明是不是要 AI 做呼叫這個工具以外的事（讀用不著的檔案或金鑰、把資料送到別處、改變它對待別的工具或你的方式、瞞著你）？是的話，這個工具會從列表裡拿掉，呼叫也會被拒絕，並告訴你。Jev 沒答上來時，只按 <IMPORTANT> 區塊、「別告訴使用者」這類明顯標記處理。",
 				"ja-JP": "MCP サーバーはツールの説明を自分で書き、モデルはそれをツール一覧の一部として読みます。ツールが初めて現れたときと説明が変わったときに一度だけ確認します。その説明は、このツールを呼ぶこと以上のこと（不要なファイルや秘密情報を読む、データを別の場所へ送る、他のツールやあなたへの接し方を変える、あなたに隠しごとをする）を AI に求めていないか？求めていれば、そのツールは一覧から外され、呼び出しも拒否され、あなたに知らされます。Jev が答えないときは、<IMPORTANT> ブロックや「ユーザーに伝えるな」のような明らかな印だけで判断します。",
 				"ko-KR": "MCP 서버는 도구 설명을 직접 쓰고, 모델은 그것을 도구 목록의 일부로 읽습니다. 도구가 처음 나타날 때와 설명이 바뀔 때 한 번씩 묻습니다. 이 설명이 AI에게 이 도구를 호출하는 것 이상의 일(필요 없는 파일이나 비밀 읽기, 데이터를 다른 곳으로 보내기, 다른 도구나 당신을 대하는 방식 바꾸기, 당신에게 숨기기)을 요구하는가? 그렇다면 그 도구는 목록에서 빠지고, 호출도 거부되며, 당신에게 알려집니다. Jev가 답하지 못하면 <IMPORTANT> 블록이나 \"사용자에게 말하지 마라\" 같은 명백한 표시만 봅니다.",
@@ -1110,7 +1110,7 @@
 			},
 			"summary": {
 				"zh": "监测发现原地打转或同一条命令连续失败时，判断这条路是不是死路；只有确信是死路且没有进展，才向你提议回到本回合开始前的检查点。它自己从不回退。",
-				"en": "When the monitor sees the agent going in circles, or the same command failing again and again, judges whether the approach is a dead end. Only a confident dead end with no progress leads to a proposal to go back to the turn's checkpoint. It never rewinds on its own.",
+				"en": "When the monitor sees the agent going in circles or the same command failing again and again, judges whether the approach is a dead end. Only a confident dead end with no progress makes mu propose going back to the turn's checkpoint; it never rewinds on its own.",
 				"zh-TW": "監控發現代理原地打轉，或同一條指令一再失敗時，判斷這條路是不是死路；只有確信是死路且沒有進展，才向你提議回到本輪的檢查點。它自己從不回退。",
 				"ja-JP": "逸脱検知が、エージェントの堂々巡りや同じコマンドの失敗の繰り返しを見つけると、その方針が行き止まりかを判定します。行き止まりだと確信でき、進捗もない場合にだけ、そのターンのチェックポイントに戻ることを提案します。自分から巻き戻すことはありません。",
 				"ko-KR": "감시 기능이 에이전트가 제자리를 맴돌거나 같은 명령이 계속 실패하는 것을 발견하면, 이 접근이 막다른 길인지 판정합니다. 진전 없는 막다른 길이 확실할 때만 이번 턴의 체크포인트로 되돌아가자고 제안합니다. 스스로 되감지는 않습니다.",
@@ -1285,7 +1285,7 @@
 			},
 			"summary": {
 				"zh": "改完文件后语言服务器新报的错：现在就说、等模型停下再说，还是不说（风格类警告）。回合结束时仍在的新错误一定会说。",
-				"en": "For new language server diagnostics after an edit: report now, when the model pauses, or never (style warnings). New errors still present when the turn ends are always reported.",
+				"en": "For new language server diagnostics after an edit: report now, when the model pauses or never (style warnings). New errors still present when the turn ends are always reported.",
 				"zh-TW": "改完檔案後語言伺服器新回報的診斷：現在就說、等模型停下再說，還是不說（風格類警告）。這一輪結束時仍在的新錯誤一定會說。",
 				"ja-JP": "編集後に言語サーバーが新たに出した診断を、すぐに伝えるか、モデルが手を止めたときに伝えるか、伝えないか（スタイルの警告など）を判定します。ターン終了時にまだ残っている新しいエラーは必ず伝えます。",
 				"ko-KR": "편집 후 새로 생긴 언어 서버 진단을 지금 알릴지, 모델이 멈출 때 알릴지, 알리지 않을지(스타일 경고) 정합니다. 턴이 끝날 때까지 남아 있는 새 오류는 항상 알립니다.",
@@ -1320,7 +1320,7 @@
 			},
 			"summary": {
 				"zh": "目标模式默认由大模型判断；这个判定点只在选了 Jev、或大模型没答上来时用：读结束语，判断目标是否达成、是否需要你拿主意。还有没勾掉的验收条件、或改完没跑过，一律算没达成。",
-				"en": "By default a model checks goal mode; this decision point is used when Jev is chosen or the model doesn't answer. It reads the closing message to judge whether the goal is met and whether you're needed. An open acceptance item or an unverified edit always means not yet.",
+				"en": "In goal mode, a model decides by default whether the goal is met. This decision point is used only when Jev is chosen or the model doesn't answer: it reads the closing message to judge whether the goal is met and whether you're needed. An open acceptance item or an unverified edit always means not yet.",
 				"zh-TW": "目標模式預設由大模型判斷；只有選了 Jev，或大模型沒給出答案時，才用這個判定點：讀最後的結束語，判斷目標是否達成、是否需要你。只要還有未完成的驗收項目，或有改動沒驗證過，一律算還沒達成。",
 				"ja-JP": "目標モードの達成チェックは、既定ではモデルが行います。この判定ポイントは、Jev を選んだ場合か、モデルが回答しなかった場合に使われます。最後のメッセージから、目標を達成したか、あなたの判断が必要かを読み取ります。未完了の受け入れ条件や未検証の編集が残っていれば、必ず未達成とします。",
 				"ko-KR": "목표 모드는 기본적으로 모델이 확인합니다. 이 판정 지점은 Jev를 선택했거나 모델이 답하지 않을 때 쓰이며, 마무리 메시지를 읽고 목표가 달성되었는지, 사용자가 나서야 하는지 판정합니다. 완료되지 않은 확인 항목이나 검증되지 않은 편집이 있으면 항상 아직 달성되지 않은 것으로 봅니다.",
@@ -1355,7 +1355,7 @@
 			},
 			"summary": {
 				"zh": "打开人话看板的项目里，代理每说一段话、跑完检查或勾掉一条验收条件时、每做几步、以及每次停下时，用选择题读出它处在哪个阶段、在做哪条验收条件、是不是在等你，并把这段时间发生的事逐条分成「你会想知道的」和「例行步骤」。只有出现新情况，才把挑出来的要点交给会说人话的模型重写看板、并在流水里重讲一句；一轮结束时再挑一次整轮的要点，做个总结。",
-				"en": "In a project with the board on, whenever the agent says something, after a check or a ticked acceptance item, every few tool calls, and whenever the agent stops, multiple-choice questions read its phase, the acceptance item it's working on and whether it's waiting for you, and sort what happened since the last update into news and routine. Only something new makes a plain-speaking model rewrite the board and retell the news in the running account; when a run ends, the news from the whole run is picked again for a summary.",
+				"en": "In a project with the board on, multiple-choice questions run whenever the agent says something, after a check or a ticked acceptance item, every few tool calls and whenever the agent stops. They read the agent's phase, the acceptance item it's working on and whether it's waiting for you, and sort what happened since the last update into news and routine. Only something new makes a plain-speaking model rewrite the board and retell the news in the running account. When a run ends, the news from the whole run is picked again for a summary.",
 				"zh-TW": "在開啟人話看板的專案裡，代理每說一段話、跑完檢查或勾掉一條驗收條件時、每做幾步、以及每次停下時，用選擇題讀出它處在哪個階段、在做哪條驗收條件、是不是在等你，並把這段時間發生的事逐條分成「你會想知道的」和「例行步驟」。只有出現新情況，才把挑出來的要點交給會講人話的模型重寫看板、並在流水裡重講一句；一輪結束時再挑一次整輪的要點，做個總結。",
 				"ja-JP": "ボードがオンのプロジェクトでは、エージェントが何か言うたび、検証や受け入れ条件の項目にチェックが入ったあと、数回のツール呼び出しごと、そしてエージェントが止まるたびに、選択式の質問でその段階、取り組んでいる受け入れ条件、あなたを待っているかどうかを読み取り、前回のボード以降に起きたことをニュースと日常の手順に分けます。新しいことがあったときだけ、わかりやすく話すモデルがボードを書き直し、そのニュースを記録の上で語り直します。実行が終わると、その実行全体のニュースをもう一度選び直してまとめます。",
 				"ko-KR": "보드를 켠 프로젝트에서는 에이전트가 무언가 말할 때마다, 검증을 하거나 인수 조건 항목에 체크한 뒤, 도구 호출 몇 번마다, 그리고 에이전트가 멈출 때마다 객관식 질문으로 지금 단계, 작업 중인 인수 조건 항목, 여러분을 기다리는지 여부를 읽어 내고, 지난 보드 이후 일어난 일을 새 소식과 일상적인 단계로 나눠요. 새로운 것이 있을 때만 쉽게 말하는 모델이 보드를 다시 쓰고 그 소식을 기록에 다시 말해 줘요. 실행이 끝나면 실행 전체의 소식을 다시 골라 요약해요.",
@@ -1390,7 +1390,7 @@
 			},
 			"summary": {
 				"zh": "上下文预算等事件出现时，判断该现在告诉模型、稍后再说，还是不必说。",
-				"en": "For events such as the context budget: tell the model now, later, or not at all.",
+				"en": "For events such as the context budget: tell the model now, later or not at all.",
 				"zh-TW": "上下文預算這類事件出現時，判斷該現在告訴模型、晚點再說，還是不必說。",
 				"ja-JP": "コンテキスト予算などのイベントを、モデルにすぐ伝えるか、後で伝えるか、伝えないかを判定します。",
 				"ko-KR": "컨텍스트 예산 같은 이벤트를 모델에게 지금 알릴지, 나중에 알릴지, 알리지 않을지 정합니다.",
@@ -1495,7 +1495,7 @@
 			},
 			"summary": {
 				"zh": "一只蜂的发现值不值得放到公告板上给其他蜂看。",
-				"en": "Whether a bee's finding is worth putting on the board for the others.",
+				"en": "Decides whether a bee's finding is worth putting on the board for the others.",
 				"zh-TW": "一個蜂群成員的發現，值不值得放到共享看板上給其他成員看。",
 				"ja-JP": "ビーの発見を、ほかのビーのために共有ボードへ載せる価値があるかを判定します。",
 				"ko-KR": "비(bee)의 발견이 다른 비들을 위해 공유 보드에 올릴 가치가 있는지 판정합니다.",
@@ -1530,7 +1530,7 @@
 			},
 			"summary": {
 				"zh": "公告板上的一条发现与某只蜂手头的工作有没有关系，有关系才送达。",
-				"en": "Whether a finding on the board matters to a bee's current work; only then is it delivered.",
+				"en": "Decides whether a finding on the board matters to a bee's current work; only then is it delivered.",
 				"zh-TW": "共享看板上的一則發現和某個蜂群成員手上的工作有沒有關係；有關係才送達。",
 				"ja-JP": "共有ボード上の発見が、あるビーの現在の作業に関係するかを判定し、関係する場合にだけ配信します。",
 				"ko-KR": "공유 보드의 발견이 어떤 비의 현재 작업에 중요한지 판정하고, 중요할 때만 전달합니다.",
@@ -1565,7 +1565,7 @@
 			},
 			"summary": {
 				"zh": "一条新发现对公告板上的旧发现意味着什么：更新了它、和它冲突、佐证它，还是无关。被更新的下线，听过它的蜂收到纠正；冲突两边都留着，交给蜂去核实。",
-				"en": "How a new finding relates to an earlier one on the board: it replaces it, contradicts it, supports it, or is unrelated. A replaced finding is withdrawn and every bee that heard it is told; a contradiction keeps both sides for a bee to settle.",
+				"en": "How a new finding relates to an earlier one on the board: it replaces it, contradicts it, supports it or is unrelated. A replaced finding is withdrawn and every bee that heard it is told; a contradiction keeps both sides for a bee to settle.",
 				"zh-TW": "一則新發現對共享看板上較早的發現意味著什麼：取代它、和它矛盾、佐證它，還是無關。被取代的發現會撤下，聽過它的蜂群成員會收到更正；互相矛盾時兩邊都留著，交給蜂群成員去核實。",
 				"ja-JP": "新しい発見が、共有ボード上の以前の発見にとって何を意味するかを判定します。置き換えるのか、矛盾するのか、裏付けるのか、どれでもないのかです。置き換えられた発見は取り下げられ、それを受け取ったビーに訂正が届きます。矛盾する場合は両方を残し、ビーに決着をつけさせます。",
 				"ko-KR": "새 발견이 공유 보드의 이전 발견에 어떤 의미인지 판정합니다. 대체하는지, 모순되는지, 뒷받침하는지, 아무 관계가 없는지입니다. 대체된 발견은 내려지고 그것을 받은 비에게 정정이 전달됩니다. 모순되면 양쪽을 모두 남겨 두고 비가 가리게 합니다.",
@@ -2149,7 +2149,7 @@
 			},
 			"summary": {
 				"zh": "从你的纠正、代理自己的脱困、模型和子代理的发现里学经验，存之前先和已有的合并，下次遇到相关任务时带上，没人照做的自动退役。随时可以查看、编辑或让一条退役。",
-				"en": "Learns from your corrections, from the agent getting itself unstuck, and from what the model and subagents find. Merges each new lesson with existing ones before saving it, brings relevant lessons into later turns, and retires those that are never followed. /lessons lists them; /forget retires one.",
+				"en": "Learns from your corrections, from the agent getting itself unstuck and from what the model and subagents find. Merges each new lesson with existing ones before saving it, brings relevant lessons into later turns and retires those that are never followed. /lessons lists them; /forget retires one.",
 				"zh-TW": "從你的糾正、代理自己的脫困、模型和子代理的發現裡學經驗；存之前先和已有的合併，下次遇到相關任務時帶上，沒人照做的自動退役。/lessons 列出經驗，/forget 讓一條退役。",
 				"ja-JP": "あなたの訂正、エージェントが自力で見つけた抜け道、モデルやサブエージェントの発見から教訓を学びます。保存する前に既存の教訓とまとめ、次からは関係するものを取り込み、誰も守らないものは廃止します。/lessons で一覧を表示し、/forget で 1 つを廃止します。",
 				"ko-KR": "사용자의 정정, 에이전트가 스스로 찾은 탈출구, 모델과 하위 에이전트가 알아낸 것에서 교훈을 배웁니다. 저장하기 전에 기존 교훈과 병합하고, 다음에 관련된 교훈을 함께 가져오며, 아무도 따르지 않는 교훈은 사용 중지합니다. /lessons로 목록을 보고, /forget으로 하나를 사용 중지합니다.",
@@ -2642,7 +2642,7 @@
 			},
 			"summary": {
 				"zh": "完全访问、Jev 审批、最小权限三种模式，用 /permissions 随时切换；需要授权时在状态栏提示你，可以只允许这一次，或这次对话都允许。开着它时，危险命令的把关也归它管。",
-				"en": "Full access, Jev approves, or Ask first; switch any time with /permissions. When a step needs your permission, the status bar asks; allow it once or for the whole conversation. While this feature is on, it also takes over the risky command guard.",
+				"en": "Full access, Jev approves or Ask first; switch any time with /permissions. When a step needs your permission, the status bar asks; allow it once or for the whole conversation. While this feature is on, it also takes over the risky command guard.",
 				"zh-TW": "完全存取、Jev 審批、最小權限三種模式，隨時可用 /permissions 切換。需要你授權時會在狀態列詢問，可以只允許這一次，或這次對話都允許。開啟時，危險指令的把關也由它負責。",
 				"ja-JP": "フルアクセス、Jev が承認、最小権限の 3 つのモードを、/permissions でいつでも切り替えられます。許可が必要なステップではステータスバーでお知らせし、「今回のみ許可」か「この会話中は許可」を選べます。オンの間は、危険なコマンドのチェックもこの機能が担当します。",
 				"ko-KR": "전체 접근, Jev 승인, 최소 권한 중 하나를 쓰며 /permissions로 언제든 전환합니다. 단계에 권한이 필요하면 상태 표시줄에서 묻고, 한 번만 허용하거나 대화 전체에 허용할 수 있습니다. 켜져 있는 동안에는 위험한 명령 차단도 이 기능이 맡습니다.",
@@ -3140,7 +3140,7 @@
 			},
 			"summary": {
 				"zh": "控制多长的工具输出、以什么方式进入上下文。",
-				"en": "Controls how long tool output gets into the context.",
+				"en": "Decides which parts of long tool output enter the context.",
 				"zh-TW": "控制很長的工具輸出以什麼方式進入上下文。",
 				"ja-JP": "長いツール出力をどのようにコンテキストに入れるかを制御します。",
 				"ko-KR": "긴 도구 출력이 컨텍스트에 어떻게 들어갈지 정합니다.",
@@ -4472,7 +4472,7 @@
 			},
 			"summary": {
 				"zh": "接本机已装的语言服务器（不代装），只留这次改动新引入的报错，由判定器决定何时告诉模型。",
-				"en": "Uses language servers already installed on this machine (it installs none), keeps only diagnostics an edit newly introduced, and lets the judge decide when to tell the model.",
+				"en": "Uses language servers already installed on this machine (it installs none), keeps only diagnostics an edit newly introduced and lets the judge decide when to tell the model.",
 				"zh-TW": "使用本機已安裝的語言伺服器（不會代為安裝），只保留這次改動新引入的問題，由判定器決定何時告訴模型。",
 				"ja-JP": "このマシンにインストール済みの言語サーバーを使い（新たにはインストールしません）、編集で新たに生じた診断だけを残して、モデルに伝えるタイミングを判定器に選ばせます。",
 				"ko-KR": "이 컴퓨터에 이미 설치된 언어 서버를 사용하고(따로 설치하지 않음), 편집으로 새로 생긴 진단만 남기며, 모델에게 알릴 시점은 판정기가 고릅니다.",
@@ -4860,7 +4860,7 @@
 			},
 			"summary": {
 				"zh": "语义版 TTSR：不用正则，而由判定器发现模型写偏，中断输出、摆出规则、从原处继续。默认关闭；开启后每隔一段输出就会多一次判定调用。",
-				"en": "Semantic TTSR: the judge, not a regular expression, notices when output goes astray, cuts it off, shows the rule and lets the model continue. Off by default; when on, every stretch of output costs one more judge call.",
+				"en": "The judge, not a regular expression, notices when output goes astray, cuts it off, shows the rule and lets the model continue. Off by default; when on, every stretch of output costs one more judge call.",
 				"zh-TW": "語意版 TTSR：不用正規表示式，而是由判定器發現輸出走偏，截斷輸出、指出規則，再讓模型接著寫。預設關閉；開啟後每一段輸出都會多一次判定器呼叫。",
 				"ja-JP": "意味ベースの TTSR です。正規表現ではなく判定器が出力の逸脱に気づき、出力を止めてルールを示し、モデルに続きを書かせます。既定ではオフです。オンにすると、一定量の出力ごとに判定器の呼び出しが 1 回増えます。",
 				"ko-KR": "의미 기반 TTSR: 정규식이 아니라 판정기가 출력이 벗어나는 것을 알아차리고, 출력을 끊고, 규칙을 보여 준 뒤 모델이 이어서 쓰게 합니다. 기본값은 꺼짐이며, 켜면 출력 구간마다 판정기 호출이 한 번씩 더 듭니다.",
@@ -5285,7 +5285,7 @@
 					},
 					"help": {
 						"zh": "超时就退回 Jev 判定器，再退回只看事实。",
-						"en": "After that, Jev decides; failing that, the facts alone.",
+						"en": "If the check takes longer, Jev decides; if Jev can't, only the facts count.",
 						"zh-TW": "逾時就改由 Jev 判斷，Jev 也不行就只看事實。",
 						"ja-JP": "それを過ぎると Jev が判定し、それもできなければ事実だけで判断します。",
 						"ko-KR": "이 시간이 지나면 Jev가 판정하고, 그것도 안 되면 사실만 보고 정합니다.",
@@ -5504,7 +5504,7 @@
 					"default": false,
 					"label": {
 						"zh": "没单独设置过的项目也打开",
-						"en": "On for projects you haven't set yet",
+						"en": "On in projects you haven't set it for",
 						"zh-TW": "沒單獨設定過的專案也開啟",
 						"ja-JP": "まだ切り替えていないプロジェクトでもオン",
 						"ko-KR": "아직 설정하지 않은 프로젝트에도 켜기",
@@ -6105,7 +6105,7 @@
 			},
 			"summary": {
 				"zh": "会话在用时每隔一会儿问判定器一个小问题，让连接一直热着：一轮开始前的判定省下 1–3 秒的建连。",
-				"en": "While the session is in use, a tiny question keeps the judge's connection warm, so the questions before a turn skip 1-3 s of connection setup.",
+				"en": "While the session is in use, a tiny question keeps the judge's connection warm, so the questions before a turn skip 1–3 s of connection setup.",
 				"zh-TW": "對話使用中時，每隔一陣子問判定器一個小問題，讓連線一直保持熱的：一輪開始前的判定就能省下 1–3 秒的連線時間。",
 				"ja-JP": "セッションの使用中は、ときどきごく小さな問いを送って判定器との接続をウォームな状態に保ちます。これでターン開始前の判定は、接続にかかる 1〜3 秒を省けます。",
 				"ko-KR": "세션을 쓰는 동안 이따금 아주 작은 질문을 보내 판정기와의 연결을 웜 상태로 유지합니다. 그래서 턴이 시작되기 전의 판정은 연결에 드는 1~3초를 아낍니다.",
@@ -7402,7 +7402,7 @@
 			},
 			"summary": {
 				"zh": "把网页读成文字（限时限量，拒绝内网地址，页面文字标为不可信）；网页搜索用国内不需要密钥就能访问的搜索源。",
-				"en": "web_fetch reads a page as text (with time and size limits, internal addresses refused, and page text labeled untrusted); web_search uses a source that works from mainland China without a key.",
+				"en": "web_fetch reads a page as text (with time and size limits, internal addresses refused and page text labeled untrusted); web_search uses a source that works from mainland China without a key.",
 				"zh-TW": "web_fetch 把網頁讀成文字（有時間和大小限制，拒絕內部位址，頁面文字標為不可信）；web_search 使用在中國大陸不需金鑰也能回應的搜尋來源。",
 				"ja-JP": "web_fetch はページをテキストとして読み取ります（時間とサイズに上限があり、内部アドレスは拒否し、ページのテキストは信頼できないものとして扱います）。web_search は、キーなしで中国本土から利用できる検索ソースを使います。",
 				"ko-KR": "web_fetch는 페이지를 텍스트로 읽습니다(시간·크기 제한, 내부 주소 거부, 페이지 텍스트는 신뢰할 수 없음으로 표시). web_search는 중국 본토에서 키 없이 응답하는 검색 소스를 씁니다.",
@@ -7708,7 +7708,7 @@
 			},
 			"summary": {
 				"zh": "终端里的欢迎框和身份说明。",
-				"en": "The terminal's welcome box and the identity note for the model.",
+				"en": "The terminal's welcome screen and the identity note for the model.",
 				"zh-TW": "終端機裡的歡迎框和身分說明。",
 				"ja-JP": "ターミナルに表示するウェルカムボックスと自己紹介です。",
 				"ko-KR": "터미널의 환영 상자와 신원 안내입니다.",
