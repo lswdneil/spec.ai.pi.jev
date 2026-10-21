@@ -1,8 +1,8 @@
 name: Model catalog
 
-# Weekly: pin the newest model catalog published on pi.dev (nix/model-catalog.json) and open a pull request.
-# CI builds from the pin (npm run build:pinned), so a model added, renamed or dropped upstream reaches mu here,
-# in one pull request whose checks show what it changes, instead of failing unrelated pull requests.
+# Weekly: regenerate packages/ai/model-catalog.json with mu's generator, from live sources, and open a pull request.
+# CI builds from that snapshot (npm run build:pinned), so a model added, renamed or dropped upstream reaches mu here,
+# in one pull request whose diff and checks show what it changes, instead of failing unrelated pull requests.
 
 on:
   schedule:
@@ -23,7 +23,7 @@ env:
   GH_TOKEN: ${{ github.token }}
 
 jobs:
-  pin:
+  update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,43 +31,38 @@ jobs:
         with:
           ref: ${{ github.event.repository.default_branch }}
 
-      # The pin script imports packages/ai's TypeScript scripts, which Node 24 runs as they are.
+      # The generator is TypeScript that Node 24 runs as it is, with no dependencies installed.
       - name: Setup Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
 
-      # Pins only a catalog that hydrates this checkout; otherwise the step fails and says why.
-      - name: Pin the newest catalog
-        id: pin
+      # Fails, and changes nothing, when a source is down or the new catalog can't build this checkout.
+      - name: Regenerate the catalog
+        id: catalog
         run: |
-          before=$(node -p "require('./nix/model-catalog.json').revision")
-          node scripts/update-model-catalog-pin.mjs
-          after=$(node -p "require('./nix/model-catalog.json').revision")
-          echo "revision=$after" >> "$GITHUB_OUTPUT"
-          if [ "$before" = "$after" ]; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+          node scripts/update-model-catalog.mjs
+          if git diff --quiet -- packages/ai/model-catalog.json; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
 
       - name: Open the pull request
-        if: steps.pin.outputs.changed == 'true'
-        env:
-          REVISION: ${{ steps.pin.outputs.revision }}
+        if: steps.catalog.outputs.changed == 'true'
         run: |
-          short="${REVISION:7:12}"
+          day=$(date -u +%F)
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$BRANCH"
-          git add nix/model-catalog.json
-          git commit -m "chore: model catalog $short"
+          git add packages/ai/model-catalog.json
+          git commit -m "chore: model catalog $day"
           git push --force origin "$BRANCH"
           # A pull request opened with GITHUB_TOKEN starts no workflows, so start the checks on the branch.
           for workflow in ci.yml windows-tests.yml npm.yml; do
             gh workflow run "$workflow" --ref "$BRANCH"
           done
-          body="The newest model catalog published on pi.dev, \`$REVISION\`, pinned for CI and the Nix build.
+          body="The model catalog as mu's generator makes it from live sources on $day. The diff shows which models were added, changed or dropped.
 
-          The checks were started on this branch. If a test fails, a model it names was added, renamed or dropped upstream: update the test, or mu's default for that provider, on this branch, then merge."
+          The checks were started on this branch. If a test fails, a model it names changed upstream: update the test, or mu's default for that provider, on this branch, then merge."
           if gh pr view "$BRANCH" --json state --jq .state 2>/dev/null | grep -q OPEN; then
-            gh pr edit "$BRANCH" --title "chore: model catalog $short" --body "$body"
+            gh pr edit "$BRANCH" --title "chore: model catalog $day" --body "$body"
           else
-            gh pr create --base main --head "$BRANCH" --title "chore: model catalog $short" --body "$body"
+            gh pr create --base main --head "$BRANCH" --title "chore: model catalog $day" --body "$body"
           fi

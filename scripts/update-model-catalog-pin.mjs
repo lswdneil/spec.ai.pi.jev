@@ -16,7 +16,7 @@ function sha256(bytes) {
 	return `sha256-${createHash("sha256").update(bytes).digest("hex")}`;
 }
 
-export async function fetchRevision(revision) {
+async function fetchRevision(revision) {
 	const response = await fetch(`https://pi.dev/api/models/revisions/${revision}?${MODEL_TYPES}`);
 	if (!response.ok) throw new Error(`Catalog revision ${revision} is unavailable: HTTP ${response.status}`);
 	const bytes = Buffer.from(await response.arrayBuffer());

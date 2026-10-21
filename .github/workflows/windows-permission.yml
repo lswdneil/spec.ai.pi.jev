@@ -59,9 +59,9 @@ jobs:
       - name: Install the harness
         run: npm ci --ignore-scripts
 
-      # The model catalog pi reads at start, from the pin CI's other jobs build with.
+      # The model catalog pi reads at start, from the snapshot CI's other jobs build with.
       - name: Hydrate the model catalog
-        run: npm run hydrate:model-catalog-pin
+        run: npm run hydrate:model-catalog
 
       - name: Install the desktop
         working-directory: desktop
