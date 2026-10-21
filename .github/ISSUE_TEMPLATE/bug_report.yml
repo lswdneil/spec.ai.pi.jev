@@ -7,7 +7,7 @@ body:
       value: |
         Thanks for taking the time. The most useful report is a short one that someone else can reproduce. English or Chinese is fine. 中英文都可以。
 
-        Please search [existing issues](https://github.com/qybaihe/mu/issues?q=is%3Aissue) first. Report security problems through the [private report form](https://github.com/qybaihe/mu/security/advisories/new), not here.
+        Please search [existing issues](https://github.com/lswdneil/ai.spec.pi.jev/issues?q=is%3Aissue) first. Report security problems through the [private report form](https://github.com/lswdneil/ai.spec.pi.jev/security/advisories/new), not here.
 
   - type: dropdown
     id: part

@@ -443,7 +443,7 @@ jobs:
 
       # The same conversation in the app installed where the installer puts it for all users: C:\Program Files\mu.
       # AionCore runs a registration's command only up to its first space, and the conversation above runs the app from
-      # D:\a\...\out, a path with none, so it never met that (github.com/qybaihe/mu/issues/4): the installed app
+      # D:\a\...\out, a path with none, so it never met that (github.com/lswdneil/ai.spec.pi.jev/issues/4): the installed app
       # registers its launcher by its 8.3 short path. The installer runs as a person's would, silently (/S) and for all
       # users (/allusers, as the runner's administrator).
       - name: Hold a conversation in the app installed in Program Files
