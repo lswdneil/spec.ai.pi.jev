@@ -365,7 +365,7 @@ const getBuiltinMcpScriptPath = (scriptName: string): string => {
 
 const initStorage = async () => {
   const t0 = performance.now();
-  const mark = (label: string) => console.log(`[AionUi:init] ${label} +${Math.round(performance.now() - t0)}ms`);
+  const mark = (label: string) => console.log(`[mu:init] ${label} +${Math.round(performance.now() - t0)}ms`);
   mark('start');
 
   // 1. 先执行数据迁移（在任何目录创建之前）
