@@ -1,19 +1,19 @@
-!ifndef AIONUI_INSTALLER_PROCESS_CONTROL_NSH
-!define AIONUI_INSTALLER_PROCESS_CONTROL_NSH
+!ifndef MU_INSTALLER_PROCESS_CONTROL_NSH
+!define MU_INSTALLER_PROCESS_CONTROL_NSH
 
-Var /GLOBAL AionUiStopResult
-Var /GLOBAL AionUiLockerResult
-Var /GLOBAL AionUiLockerList
-Var /GLOBAL AionUiLockerListZh
-Var /GLOBAL AionUiLockerListEn
-Var /GLOBAL AionUiLockerListFile
-Var /GLOBAL AionUiCurrentOutDir
+Var /GLOBAL MuStopResult
+Var /GLOBAL MuLockerResult
+Var /GLOBAL MuLockerList
+Var /GLOBAL MuLockerListZh
+Var /GLOBAL MuLockerListEn
+Var /GLOBAL MuLockerListFile
+Var /GLOBAL MuCurrentOutDir
 
-!macro AIONUI_FIND_APP_PROCESS _RETURN
+!macro MU_FIND_APP_PROCESS _RETURN
   nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "& { \
     $$ErrorActionPreference = 'SilentlyContinue'; \
-    $$log = '$AionUiSessionLogPath'; \
-    if (-not $$log) { $$log = Join-Path $$env:TEMP '${AIONUI_FALLBACK_LOG}' }; \
+    $$log = '$MuSessionLogPath'; \
+    if (-not $$log) { $$log = Join-Path $$env:TEMP '${MU_FALLBACK_LOG}' }; \
     $$instDir = [System.IO.Path]::GetFullPath('$INSTDIR'); \
     $$ownedPrefix = $$instDir.TrimEnd('\') + '\'; \
     $$psProc = @(Get-CimInstance -ClassName Win32_Process | Where-Object { $$_.ProcessId -eq $$PID })[0]; \
@@ -26,19 +26,19 @@ Var /GLOBAL AionUiCurrentOutDir
       return $$proc.ProcessId -ne $$installerPid -and $$full.StartsWith($$ownedPrefix, [System.StringComparison]::CurrentCultureIgnoreCase) \
     } \
     $$hits = @(Get-CimInstance -ClassName Win32_Process | Where-Object { Test-AionUiOwnedProcess $$_ }); \
-    $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'process-find'; ownedPrefix = $$ownedPrefix; installerPid = $$installerPid; hits = $$hits.Count; owned = ($$hits.Count -gt 0) }; \
+    $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'process-find'; ownedPrefix = $$ownedPrefix; installerPid = $$installerPid; hits = $$hits.Count; owned = ($$hits.Count -gt 0) }; \
     Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 8); \
-    if ($$hits.Count -gt 0) { $$hitPayload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'process-find-hits'; processes = @($$hits | Select-Object ProcessId,ParentProcessId,Name,ExecutablePath,Path,CommandLine) }; Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$hitPayload | ConvertTo-Json -Compress -Depth 10); exit 0 } \
+    if ($$hits.Count -gt 0) { $$hitPayload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'process-find-hits'; processes = @($$hits | Select-Object ProcessId,ParentProcessId,Name,ExecutablePath,Path,CommandLine) }; Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$hitPayload | ConvertTo-Json -Compress -Depth 10); exit 0 } \
     exit 1 \
   }"`
   Pop ${_RETURN}
 !macroend
 
-!macro AIONUI_STOP_APP_PROCESSES
+!macro MU_STOP_APP_PROCESSES
   nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "& { \
     $$ErrorActionPreference = 'SilentlyContinue'; \
-    $$log = '$AionUiSessionLogPath'; \
-    if (-not $$log) { $$log = Join-Path $$env:TEMP '${AIONUI_FALLBACK_LOG}' }; \
+    $$log = '$MuSessionLogPath'; \
+    if (-not $$log) { $$log = Join-Path $$env:TEMP '${MU_FALLBACK_LOG}' }; \
     $$instDir = [System.IO.Path]::GetFullPath('$INSTDIR'); \
     $$ownedPrefix = $$instDir.TrimEnd('\') + '\'; \
     $$psProc = @(Get-CimInstance -ClassName Win32_Process | Where-Object { $$_.ProcessId -eq $$PID })[0]; \
@@ -60,25 +60,25 @@ Var /GLOBAL AionUiCurrentOutDir
       $$ids = @($$ids + $$childIds | Select-Object -Unique); \
       $$frontier = $$childIds; \
     } \
-    $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'process-stop'; ids = @($$ids); result = 'start' }; \
+    $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'process-stop'; ids = @($$ids); result = 'start' }; \
     Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 8); \
     foreach ($$id in ($$ids | Sort-Object -Descending)) { Stop-Process -Id $$id -Force -ErrorAction SilentlyContinue } \
-    $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'process-stop'; ids = @($$ids); result = 'done' }; \
+    $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'process-stop'; ids = @($$ids); result = 'done' }; \
     Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 8); \
     exit 0 \
   }"`
-  Pop $AionUiStopResult
+  Pop $MuStopResult
 !macroend
 
-!macro AIONUI_QUERY_LOCKERS_INLINE_LEGACY _TARGET_PATH _RETURN
+!macro MU_QUERY_LOCKERS_INLINE_LEGACY _TARGET_PATH _RETURN
   nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "& { \
     $$ErrorActionPreference = 'SilentlyContinue'; \
-    $$log = '$AionUiSessionLogPath'; \
-    if (-not $$log) { $$log = Join-Path $$env:TEMP '${AIONUI_FALLBACK_LOG}' }; \
+    $$log = '$MuSessionLogPath'; \
+    if (-not $$log) { $$log = Join-Path $$env:TEMP '${MU_FALLBACK_LOG}' }; \
     $$instDir = [System.IO.Path]::GetFullPath('$INSTDIR'); \
     $$targetPath = '${_TARGET_PATH}'; \
-    $$currentOutDir = '$AionUiCurrentOutDir'; \
-    $$lockerListPath = '$PLUGINSDIR\aionui-rm-lockers.txt'; \
+    $$currentOutDir = '$MuCurrentOutDir'; \
+    $$lockerListPath = '$PLUGINSDIR\mu-rm-lockers.txt'; \
     [System.IO.File]::WriteAllText($$lockerListPath, '', (New-Object System.Text.UTF8Encoding $$false)); \
     try { \
     function Test-AionUiSamePath($$left, $$right) { \
@@ -106,22 +106,22 @@ Var /GLOBAL AionUiCurrentOutDir
         } elseif ($$targetPath -and (Test-Path -LiteralPath $$targetPath -PathType Container)) { \
           $$root = [System.IO.Path]::GetFullPath($$targetPath); \
           $$topLevel = @(Get-ChildItem -LiteralPath $$root -Force -File -ErrorAction SilentlyContinue | ForEach-Object { $$_.FullName }); \
-          $$knownRelative = @('${AIONUI_APP_EXECUTABLE_FILENAME}', '${UNINSTALL_FILENAME}', 'resources\app.asar', 'resources\app-update.yml', 'resources\bundled-aioncore\win32-x64\aioncore.exe'); \
+          $$knownRelative = @('${MU_APP_EXECUTABLE_FILENAME}', '${UNINSTALL_FILENAME}', 'resources\app.asar', 'resources\app-update.yml', 'resources\bundled-aioncore\win32-x64\aioncore.exe'); \
           $$known = @($$knownRelative | ForEach-Object { Join-Path $$root $$_ } | Where-Object { Test-Path -LiteralPath $$_ -PathType Leaf }); \
           $$resources = @($$topLevel + $$known | Where-Object { $$_ -and $$_.Trim().Length -gt 0 } | Select-Object -Unique | Select-Object -First 512); \
         } \
-        $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-query-start'; target = $$targetPath; resources = $$resources.Count; outerInstallerPid = $$installerPid; currentOutDir = $$currentOutDir; installerSelfLock = $$installerSelfLock }; \
+        $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-query-start'; target = $$targetPath; resources = $$resources.Count; outerInstallerPid = $$installerPid; currentOutDir = $$currentOutDir; installerSelfLock = $$installerSelfLock }; \
         Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 8); \
         if ($$resources.Count -eq 0) { \
           if ($$installerSelfLock -and $$installerPid -gt 0) { \
             $$lockerText = 'mu installer(' + $$installerPid + ')'; \
             [System.IO.File]::WriteAllText($$lockerListPath, $$lockerText, (New-Object System.Text.UTF8Encoding $$false)); \
             $$selfLockers = @([pscustomobject]@{ name = 'mu installer'; pid = [int]$$installerPid }); \
-            $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-lockers'; target = $$targetPath; resources = 0; count = 1; blockingProcesses = @($$selfLockers); fallbackReason = 'installer-self-lock'; message = 'The installer process is using the install directory as its current output directory.'; outerInstallerPid = $$installerPid; currentOutDir = $$currentOutDir; installerSelfLock = $$true }; \
+            $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-lockers'; target = $$targetPath; resources = 0; count = 1; blockingProcesses = @($$selfLockers); fallbackReason = 'installer-self-lock'; message = 'The installer process is using the install directory as its current output directory.'; outerInstallerPid = $$installerPid; currentOutDir = $$currentOutDir; installerSelfLock = $$true }; \
             Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 10); \
             exit 0 \
           }; \
-          $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-lockers'; target = $$targetPath; resources = 0; count = 0; blockingProcesses = @(); fallbackReason = 'restart-manager-no-resources'; message = 'Restart Manager had no existing files to query for this path.'; outerInstallerPid = $$installerPid; currentOutDir = $$currentOutDir; installerSelfLock = $$installerSelfLock }; \
+          $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-lockers'; target = $$targetPath; resources = 0; count = 0; blockingProcesses = @(); fallbackReason = 'restart-manager-no-resources'; message = 'Restart Manager had no existing files to query for this path.'; outerInstallerPid = $$installerPid; currentOutDir = $$currentOutDir; installerSelfLock = $$installerSelfLock }; \
           Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 8); \
           exit 1 \
         } \
@@ -159,13 +159,13 @@ Var /GLOBAL AionUiCurrentOutDir
         if ($$lockers.Count -eq 0 -and $$installerSelfLock -and $$installerPid -gt 0) { $$lockers = @([pscustomobject]@{ name = 'mu installer'; pid = [int]$$installerPid }) }; \
         $$lockerText = @($$lockers | ForEach-Object { $$_.name + '(' + $$_.pid + ')' }) -join ', '; \
         [System.IO.File]::WriteAllText($$lockerListPath, $$lockerText, (New-Object System.Text.UTF8Encoding $$false)); \
-        $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-lockers'; target = $$targetPath; resources = $$resources.Count; count = $$needed; blockingProcesses = @($$lockers); fallbackReason = ''; message = ''; outerInstallerPid = $$installerPid; currentOutDir = $$currentOutDir; installerSelfLock = $$installerSelfLock }; \
+        $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-lockers'; target = $$targetPath; resources = $$resources.Count; count = $$needed; blockingProcesses = @($$lockers); fallbackReason = ''; message = ''; outerInstallerPid = $$installerPid; currentOutDir = $$currentOutDir; installerSelfLock = $$installerSelfLock }; \
         if ($$installerSelfLock -and $$lockers.Count -gt 0) { $$payload.fallbackReason = 'installer-self-lock'; $$payload.message = 'The installer process is using the install directory as its current output directory.' } elseif ($$lockers.Count -eq 0) { $$payload.fallbackReason = 'restart-manager-no-process'; $$payload.message = 'Windows did not identify a specific locking process. Close terminals, editors, and file managers opened in the install folder.' }; \
         Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 10); \
         if ($$lockers.Count -gt 0) { exit 0 } else { exit 1 } \
       } finally { [void][AionUi.RestartManager.Native]::RmEndSession($$session) } \
     } catch { \
-      $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-error'; target = $$targetPath; error = $$_.Exception.Message }; \
+      $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-error'; target = $$targetPath; error = $$_.Exception.Message }; \
       Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 8); \
       exit 1 \
     } \
@@ -173,60 +173,60 @@ Var /GLOBAL AionUiCurrentOutDir
   Pop ${_RETURN}
 !macroend
 
-!macro AIONUI_QUERY_LOCKERS _TARGET_PATH _RETURN
+!macro MU_QUERY_LOCKERS _TARGET_PATH _RETURN
   InitPluginsDir
-  File /oname=$PLUGINSDIR\aionui-query-lockers.ps1 "${PROJECT_DIR}\resources\windows\support\query-lockers.ps1"
-  nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$PLUGINSDIR\aionui-query-lockers.ps1" -LogPath "$AionUiSessionLogPath" -InstDir "$INSTDIR" -TargetPath "${_TARGET_PATH}" -LockerListPath "$PLUGINSDIR\aionui-rm-lockers.txt" -Session "$AionUiSessionId" -Version "${VERSION}" -Arch "${AIONUI_TARGET_ARCH}" -Updated "$AionUiIsUpdated" -CurrentOutDir "$AionUiCurrentOutDir"`
+  File /oname=$PLUGINSDIR\mu-query-lockers.ps1 "${PROJECT_DIR}\resources\windows\support\query-lockers.ps1"
+  nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$PLUGINSDIR\mu-query-lockers.ps1" -LogPath "$MuSessionLogPath" -InstDir "$INSTDIR" -TargetPath "${_TARGET_PATH}" -LockerListPath "$PLUGINSDIR\mu-rm-lockers.txt" -Session "$MuSessionId" -Version "${VERSION}" -Arch "${MU_TARGET_ARCH}" -Updated "$MuIsUpdated" -CurrentOutDir "$MuCurrentOutDir"`
   Pop ${_RETURN}
 !macroend
 
-!macro AIONUI_CAPTURE_FAILED_PATH_LOCKERS _FAILED_PATH
-  !insertmacro AIONUI_QUERY_LOCKERS "${_FAILED_PATH}" $AionUiLockerResult
-  StrCpy $AionUiLockerList ""
+!macro MU_CAPTURE_FAILED_PATH_LOCKERS _FAILED_PATH
+  !insertmacro MU_QUERY_LOCKERS "${_FAILED_PATH}" $MuLockerResult
+  StrCpy $MuLockerList ""
   ClearErrors
   SetDetailsPrint none
-  FileOpen $AionUiLockerListFile "$PLUGINSDIR\aionui-rm-lockers.txt" r
+  FileOpen $MuLockerListFile "$PLUGINSDIR\mu-rm-lockers.txt" r
   ${IfNot} ${Errors}
-    FileRead $AionUiLockerListFile $AionUiLockerList
-    FileClose $AionUiLockerListFile
+    FileRead $MuLockerListFile $MuLockerList
+    FileClose $MuLockerListFile
   ${EndIf}
   SetDetailsPrint lastused
-  ${If} $AionUiLockerList == ""
-    ${If} $AionUiLockerResult == 0
-      StrCpy $AionUiLockerList "${AIONUI_MSG_UNKNOWN_PROCESS_EN}"
-      StrCpy $AionUiLockerListZh "${AIONUI_MSG_UNKNOWN_PROCESS_ZH}"
-      StrCpy $AionUiLockerListEn "${AIONUI_MSG_UNKNOWN_PROCESS_EN}"
+  ${If} $MuLockerList == ""
+    ${If} $MuLockerResult == 0
+      StrCpy $MuLockerList "${MU_MSG_UNKNOWN_PROCESS_EN}"
+      StrCpy $MuLockerListZh "${MU_MSG_UNKNOWN_PROCESS_ZH}"
+      StrCpy $MuLockerListEn "${MU_MSG_UNKNOWN_PROCESS_EN}"
     ${Else}
-      StrCpy $AionUiLockerList "${AIONUI_MSG_LOCKER_UNKNOWN_EN}"
-      StrCpy $AionUiLockerListZh "${AIONUI_MSG_LOCKER_UNKNOWN_ZH}"
-      StrCpy $AionUiLockerListEn "${AIONUI_MSG_LOCKER_UNKNOWN_EN}"
+      StrCpy $MuLockerList "${MU_MSG_LOCKER_UNKNOWN_EN}"
+      StrCpy $MuLockerListZh "${MU_MSG_LOCKER_UNKNOWN_ZH}"
+      StrCpy $MuLockerListEn "${MU_MSG_LOCKER_UNKNOWN_EN}"
     ${EndIf}
   ${Else}
-    StrCpy $AionUiLockerListZh "$AionUiLockerList"
-    StrCpy $AionUiLockerListEn "$AionUiLockerList"
+    StrCpy $MuLockerListZh "$MuLockerList"
+    StrCpy $MuLockerListEn "$MuLockerList"
   ${EndIf}
 !macroend
 
-!macro AIONUI_PROMPT_FAILED_PATH_LOCKERS _FAILED_PATH _PHASE _RETRY_LABEL _CANCEL_LABEL _CONTINUE_LABEL
-  !insertmacro AIONUI_CAPTURE_FAILED_PATH_LOCKERS "${_FAILED_PATH}"
-  ${If} $AionUiLockerResult == 0
+!macro MU_PROMPT_FAILED_PATH_LOCKERS _FAILED_PATH _PHASE _RETRY_LABEL _CANCEL_LABEL _CONTINUE_LABEL
+  !insertmacro MU_CAPTURE_FAILED_PATH_LOCKERS "${_FAILED_PATH}"
+  ${If} $MuLockerResult == 0
     ${IfNot} ${Silent}
-      MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "${AIONUI_MSG_FILE_OR_FOLDER_IN_USE_ZH}$\r$\n${_FAILED_PATH}$\r$\n$\r$\n${AIONUI_MSG_APPLICATION_USING_IT_ZH}$\r$\n$AionUiLockerListZh$\r$\n$\r$\n${AIONUI_MSG_CLOSE_LISTED_RETRY_ZH}$\r$\n$\r$\n${AIONUI_MSG_INSTALLER_LOG_ZH}:$\r$\n$AionUiSessionLogPath$\r$\n$\r$\n${AIONUI_MSG_BLOCK_SEPARATOR}$\r$\n$\r$\n${AIONUI_MSG_FILE_OR_FOLDER_IN_USE_EN}$\r$\n${_FAILED_PATH}$\r$\n$\r$\n${AIONUI_MSG_APPLICATION_USING_IT_EN}$\r$\n$AionUiLockerListEn$\r$\n$\r$\n${AIONUI_MSG_CLOSE_LISTED_RETRY_EN}$\r$\n$\r$\n${AIONUI_MSG_INSTALLER_LOG_EN}:$\r$\n$AionUiSessionLogPath" /SD IDCANCEL IDRETRY ${_RETRY_LABEL} IDCANCEL ${_CANCEL_LABEL}
+      MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "${MU_MSG_FILE_OR_FOLDER_IN_USE_ZH}$\r$\n${_FAILED_PATH}$\r$\n$\r$\n${MU_MSG_APPLICATION_USING_IT_ZH}$\r$\n$MuLockerListZh$\r$\n$\r$\n${MU_MSG_CLOSE_LISTED_RETRY_ZH}$\r$\n$\r$\n${MU_MSG_INSTALLER_LOG_ZH}:$\r$\n$MuSessionLogPath$\r$\n$\r$\n${MU_MSG_BLOCK_SEPARATOR}$\r$\n$\r$\n${MU_MSG_FILE_OR_FOLDER_IN_USE_EN}$\r$\n${_FAILED_PATH}$\r$\n$\r$\n${MU_MSG_APPLICATION_USING_IT_EN}$\r$\n$MuLockerListEn$\r$\n$\r$\n${MU_MSG_CLOSE_LISTED_RETRY_EN}$\r$\n$\r$\n${MU_MSG_INSTALLER_LOG_EN}:$\r$\n$MuSessionLogPath" /SD IDCANCEL IDRETRY ${_RETRY_LABEL} IDCANCEL ${_CANCEL_LABEL}
     ${EndIf}
   ${EndIf}
   Goto ${_CONTINUE_LABEL}
 !macroend
 
-!macro AIONUI_WRITE_INSTALLER_LAST_FAILURE_MARKER
+!macro MU_WRITE_INSTALLER_LAST_FAILURE_MARKER
   Push $9
-  ${If} $AionUiIsUpdated == "1"
+  ${If} $MuIsUpdated == "1"
     ${If} ${Silent}
       nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "& { \
         $$ErrorActionPreference = 'Stop'; \
         $$appDir = Join-Path $$env:APPDATA 'mu'; \
         $$marker = Join-Path $$appDir 'installer-last-failure.json'; \
-        $$log = '$AionUiSessionLogPath'; \
-        if (-not $$log) { $$log = Join-Path $$env:TEMP '${AIONUI_FALLBACK_LOG}' }; \
+        $$log = '$MuSessionLogPath'; \
+        if (-not $$log) { $$log = Join-Path $$env:TEMP '${MU_FALLBACK_LOG}' }; \
         try { \
           New-Item -ItemType Directory -Path $$appDir -Force | Out-Null; \
           $$payload = [ordered]@{ \
@@ -242,10 +242,10 @@ Var /GLOBAL AionUiCurrentOutDir
           }; \
           $$json = $$payload | ConvertTo-Json -Compress -Depth 4; \
           [System.IO.File]::WriteAllText($$marker, $$json, (New-Object System.Text.UTF8Encoding $$false)); \
-          $$logPayload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'marker-write'; result = 'ok'; path = $$marker; marker = $$payload }; \
+          $$logPayload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'marker-write'; result = 'ok'; path = $$marker; marker = $$payload }; \
           Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$logPayload | ConvertTo-Json -Compress -Depth 8) \
         } catch { \
-          $$logPayload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$AionUiSessionId'; version = '${VERSION}'; arch = '${AIONUI_TARGET_ARCH}'; updated = ('$AionUiIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'marker-write'; result = 'failed'; path = $$marker; error = $$_.Exception.Message }; \
+          $$logPayload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'marker-write'; result = 'failed'; path = $$marker; error = $$_.Exception.Message }; \
           Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$logPayload | ConvertTo-Json -Compress -Depth 8) \
         } \
       }"`
@@ -256,35 +256,35 @@ Var /GLOBAL AionUiCurrentOutDir
 !macroend
 
 !macro customCheckAppRunning
-  Var /GLOBAL AionUiCheckResult
-  Var /GLOBAL AionUiCloseRetries
+  Var /GLOBAL MuCheckResult
+  Var /GLOBAL MuCloseRetries
   InitPluginsDir
-  !insertmacro AIONUI_SESSION_BEGIN
+  !insertmacro MU_SESSION_BEGIN
 
-  !insertmacro AIONUI_WAIT_FOR_UPDATED_APP_EXIT
-  !insertmacro AIONUI_FIND_APP_PROCESS $AionUiCheckResult
-  ${If} $AionUiCheckResult == 0
-    MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(appRunning)" /SD IDOK IDOK aionui_do_stop_process
-    !insertmacro AIONUI_CLEAR_ACTIVE_INSTALLER_MARKER
+  !insertmacro MU_WAIT_FOR_UPDATED_APP_EXIT
+  !insertmacro MU_FIND_APP_PROCESS $MuCheckResult
+  ${If} $MuCheckResult == 0
+    MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(appRunning)" /SD IDOK IDOK mu_do_stop_process
+    !insertmacro MU_CLEAR_ACTIVE_INSTALLER_MARKER
     Quit
 
-    aionui_do_stop_process:
+    mu_do_stop_process:
       DetailPrint "$(appClosing)"
-      !insertmacro AIONUI_STOP_APP_PROCESSES
-      StrCpy $AionUiCloseRetries 0
+      !insertmacro MU_STOP_APP_PROCESSES
+      StrCpy $MuCloseRetries 0
 
-    aionui_wait_for_close:
+    mu_wait_for_close:
       Sleep 1000
-      !insertmacro AIONUI_FIND_APP_PROCESS $AionUiCheckResult
-      ${If} $AionUiCheckResult == 0
-        IntOp $AionUiCloseRetries $AionUiCloseRetries + 1
-        ${If} $AionUiCloseRetries > 10
-          MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "${AIONUI_MSG_CLOSE_OR_REMOVE_PREVIOUS_ZH}$\r$\n$\r$\n${AIONUI_MSG_MAY_USE_INSTALL_DIR_ZH}$\r$\n$INSTDIR$\r$\n$\r$\n${AIONUI_MSG_RETRY_AFTER_CLOSING_DIR_ZH}$\r$\n$\r$\n${AIONUI_MSG_BLOCK_SEPARATOR}$\r$\n$\r$\n${AIONUI_MSG_CLOSE_OR_REMOVE_PREVIOUS_EN}$\r$\n$\r$\n${AIONUI_MSG_MAY_USE_INSTALL_DIR_EN}$\r$\n$INSTDIR$\r$\n$\r$\n${AIONUI_MSG_RETRY_AFTER_CLOSING_DIR_EN}" /SD IDCANCEL IDRETRY aionui_wait_for_close
-          !insertmacro AIONUI_WRITE_INSTALLER_LAST_FAILURE_MARKER
-          !insertmacro AIONUI_FAIL_REPORTABLE_BILINGUAL_DIAGNOSTICS ${AIONUI_E_INSTALL_DIR_REMOVE_OR_LOCKED} "event=session-end result=fail code=${AIONUI_E_INSTALL_DIR_REMOVE_OR_LOCKED} phase=app-cannot-be-closed retryCount=$AionUiCloseRetries instDir=$INSTDIR" "${AIONUI_MSG_CLOSE_OR_REMOVE_PREVIOUS_EN}" "${AIONUI_MSG_CLOSE_OR_REMOVE_PREVIOUS_ZH}" "${AIONUI_MSG_CLOSE_INSTALL_DIR_ACTION_EN}" "${AIONUI_MSG_CLOSE_INSTALL_DIR_ACTION_ZH}" "app-cannot-be-closed retryCount=$AionUiCloseRetries instDir=$INSTDIR" "app-cannot-be-closed retryCount=$AionUiCloseRetries instDir=$INSTDIR"
+      !insertmacro MU_FIND_APP_PROCESS $MuCheckResult
+      ${If} $MuCheckResult == 0
+        IntOp $MuCloseRetries $MuCloseRetries + 1
+        ${If} $MuCloseRetries > 10
+          MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "${MU_MSG_CLOSE_OR_REMOVE_PREVIOUS_ZH}$\r$\n$\r$\n${MU_MSG_MAY_USE_INSTALL_DIR_ZH}$\r$\n$INSTDIR$\r$\n$\r$\n${MU_MSG_RETRY_AFTER_CLOSING_DIR_ZH}$\r$\n$\r$\n${MU_MSG_BLOCK_SEPARATOR}$\r$\n$\r$\n${MU_MSG_CLOSE_OR_REMOVE_PREVIOUS_EN}$\r$\n$\r$\n${MU_MSG_MAY_USE_INSTALL_DIR_EN}$\r$\n$INSTDIR$\r$\n$\r$\n${MU_MSG_RETRY_AFTER_CLOSING_DIR_EN}" /SD IDCANCEL IDRETRY mu_wait_for_close
+          !insertmacro MU_WRITE_INSTALLER_LAST_FAILURE_MARKER
+          !insertmacro MU_FAIL_REPORTABLE_BILINGUAL_DIAGNOSTICS ${MU_E_INSTALL_DIR_REMOVE_OR_LOCKED} "event=session-end result=fail code=${MU_E_INSTALL_DIR_REMOVE_OR_LOCKED} phase=app-cannot-be-closed retryCount=$MuCloseRetries instDir=$INSTDIR" "${MU_MSG_CLOSE_OR_REMOVE_PREVIOUS_EN}" "${MU_MSG_CLOSE_OR_REMOVE_PREVIOUS_ZH}" "${MU_MSG_CLOSE_INSTALL_DIR_ACTION_EN}" "${MU_MSG_CLOSE_INSTALL_DIR_ACTION_ZH}" "app-cannot-be-closed retryCount=$MuCloseRetries instDir=$INSTDIR" "app-cannot-be-closed retryCount=$MuCloseRetries instDir=$INSTDIR"
         ${Else}
-          !insertmacro AIONUI_STOP_APP_PROCESSES
-          Goto aionui_wait_for_close
+          !insertmacro MU_STOP_APP_PROCESSES
+          Goto mu_wait_for_close
         ${EndIf}
       ${EndIf}
   ${EndIf}
