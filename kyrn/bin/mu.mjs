@@ -310,7 +310,7 @@ export function ensureAppView({ platform, app, upstream, fs = realFs }) {
 /**
  * Where this mu comes from: "repo", a checkout that runs the TypeScript sources (sourceRuntime), or "package", the
  * npm package mu-agent, which carries pi's bundle (dist/bundle/cli.js) and the judgment layer built to
- * JavaScript (judge/dist/kyrn-judge.js). A checkout without its dependencies is still a checkout.
+ * JavaScript (judge/mu/index.js). A checkout without its dependencies is still a checkout.
  */
 export function layoutOf({ root, platform, exists }) {
 	const path = pathFor(platform);
@@ -326,7 +326,7 @@ export function packageEntries({ root, platform }) {
 	const path = pathFor(platform);
 	return {
 		cli: path.join(root, "dist", "bundle", "cli.js"),
-		extension: path.join(root, "judge", "dist", "kyrn-judge.js"),
+		extension: path.join(root, "judge", "mu", "index.js"),
 		auth: path.join(root, "judge", "dist", "auth.js"),
 		import: path.join(root, "judge", "dist", "import.js"),
 		setup: path.join(root, "judge", "dist", "setup.js"),

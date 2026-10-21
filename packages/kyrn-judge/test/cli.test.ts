@@ -93,7 +93,7 @@ describe("welcome screen", () => {
 			mkdirSync(join(pkg, "judge", "dist"), { recursive: true });
 			writeFileSync(join(pkg, "judge", "package.json"), JSON.stringify({ name: "@kyrn/judge", version: "0.1.0" }));
 			// Where the bundled welcome.ts looks from: the build rewrites import.meta.url to its source's place in judge/.
-			const bundle = pathToFileURL(join(pkg, "judge", "dist", "kyrn-judge.js")).href;
+			const bundle = pathToFileURL(join(pkg, "judge", "mu", "index.js")).href;
 			const source = new URL("src/extension/features/welcome.ts", new URL("../", bundle));
 			// pi's own VERSION in the package is mu's: it must not be taken for pi's.
 			expect(readVersions(new URL("../../../", source), "0.1.4")).toEqual({ mu: "0.1.4", pi: "0.86.0" });
