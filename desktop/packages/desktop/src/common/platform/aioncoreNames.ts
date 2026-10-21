@@ -12,6 +12,18 @@ const MU_CODE_PREFIX = 'MU_';
 /** The ownership AionCore gives its own errors; the app calls it `mu`. */
 const AIONCORE_OWN_OWNERSHIP = 'aionui';
 
+/** AionCore's file name for its database, in the app's data folder. */
+export const AIONCORE_DATABASE_FILE = 'aionui-backend.db';
+
+/** The header that marks the app's own requests to AionCore, as against a browser's. */
+export const AIONCORE_INTERNAL_HEADER = 'x-aionui-internal';
+
+/** The source AionCore gives a conversation made in the app, as against one from a chat channel. */
+export const AIONCORE_APP_SOURCE = 'aionui';
+
+/** The id of AionCore's built-in assistant that helps with the app itself (the Butler). */
+export const AIONCORE_BUTLER_ASSISTANT_ID = 'aionui-assistant';
+
 /** The variable in which AionCore names the conversation to an agent it starts (the ACP adapter). */
 export const AIONCORE_CONVERSATION_ID_ENV = 'AIONUI_CONVERSATION_ID';
 

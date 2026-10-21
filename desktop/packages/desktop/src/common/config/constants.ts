@@ -3,6 +3,7 @@
  * Copyright 2025 AionUi (aionui.com)
  * SPDX-License-Identifier: Apache-2.0
  */
+import { BROWSER_PARTITION, BUILTIN_MCP_SERVER_NAMES } from '@/common/platform/legacyNames';
 
 /**
  * AionUI应用程序共用常量
@@ -28,7 +29,7 @@
  * state must be shared across all tabs and projects and survive restarts, so a
  * user can log in once on the agent's behalf.
  */
-export const BROWSER_SESSION_PARTITION = 'persist:aionui-browser';
+export const BROWSER_SESSION_PARTITION = BROWSER_PARTITION;
 
 /**
  * 内置浏览器 MCP 的注册名。
@@ -45,7 +46,7 @@ export const BROWSER_SESSION_PARTITION = 'persist:aionui-browser';
  * light up the activity badge. Both sides must agree exactly; separate copies would
  * eventually drift, and the symptom of drift is a badge that silently never lights.
  */
-export const BUILTIN_BROWSER_MCP_NAME = 'aionui-browser';
+export const BUILTIN_BROWSER_MCP_NAME = BUILTIN_MCP_SERVER_NAMES.browser;
 
 // ===== 文件处理相关常量 =====
 

@@ -11,9 +11,10 @@ import { Message } from '@arco-design/web-react';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { mutate as swrMutate } from 'swr';
+import { AIONCORE_BUTLER_ASSISTANT_ID } from '@/common/platform/aioncoreNames';
 
-/** Backend manifest id of the built-in AionUi Butler assistant. */
-const BUTLER_ASSISTANT_ID = 'aionui-assistant';
+/** Backend manifest id of the built-in Butler assistant. */
+const BUTLER_ASSISTANT_ID = AIONCORE_BUTLER_ASSISTANT_ID;
 
 export type TalkToButlerArgs = {
   /** Prompt pre-filled into the home chat input. */

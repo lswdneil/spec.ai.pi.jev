@@ -236,7 +236,7 @@ test.describe('Agent browser control (single-target CDP bridge)', () => {
     expect(port).not.toBeNull();
     expect(token).toBeTruthy();
 
-    const base = `ws://127.0.0.1:${port}/aionui-cdp`;
+    const base = `ws://127.0.0.1:${port}/mu-cdp`;
 
     expect(await tryWebSocket(base)).toBe('refused');
     expect(await tryWebSocket(`${base}?token=not-the-token`)).toBe('refused');

@@ -47,15 +47,12 @@ const MAIN_PROCESS_FILES = [
   'packages/desktop/src/process/utils/tray.ts',
 ];
 
-/** Identifiers that keep the upstream name because data, the local service or older installs depend on them. */
-const COMPATIBILITY_IDS = new Map<string, string>([
-  ['AionUi-Dev', 'the dev data folder, a real folder on disk'],
-  ['AionUi-Dev-2', 'the second dev instance’s data folder'],
-  ['.aionui-cdp-registry.json', 'a file name in the data folder'],
-  ['aionui.dir', 'the ProcessEnv key the local service reads its folders from'],
-  ['bundled-aioncore/', 'the folder the local service ships in'],
-  ['x-aionui-internal', 'a request header between the app and its local service'],
-]);
+/**
+ * Identifiers that keep an upstream name because data, the local service or older installs depend on them. The
+ * names already on people's machines live in common/platform/legacyNames.ts and AionCore's in
+ * common/platform/aioncoreNames.ts; these files only use them by their constants.
+ */
+const COMPATIBILITY_IDS = new Map<string, string>([['bundled-aioncore/', 'the folder the local service ships in']]);
 
 /** Log lines go to the log file, not to the screen: what they say is not checked here (they are tagged `[mu]`). */
 function isLogCall(node: ts.Node): boolean {

@@ -29,6 +29,7 @@ import {
 } from './utils';
 import { runLegacyDatabaseMigrations } from '@process/services/database/runLegacyDatabaseMigrations';
 import { BUILTIN_IMAGE_GEN_ID } from '../resources/builtinMcp/constants';
+import { CONFIG_FILES, DIRS_KEY } from '@/common/platform/legacyNames';
 // Platform and architecture types (moved from deleted updateConfig)
 type PlatformType = 'win32' | 'darwin' | 'linux';
 type ArchitectureType = 'x64' | 'arm64' | 'ia32' | 'arm';
@@ -36,10 +37,10 @@ type ArchitectureType = 'x64' | 'arm64' | 'ia32' | 'arm';
 const nodePath = path;
 
 const STORAGE_PATH = {
-  config: 'aionui-config.txt',
-  chatMessage: 'aionui-chat-message.txt',
-  chat: 'aionui-chat.txt',
-  env: '.aionui-env',
+  config: CONFIG_FILES.config,
+  chatMessage: CONFIG_FILES.chatMessage,
+  chat: CONFIG_FILES.chat,
+  env: CONFIG_FILES.env,
   assistants: 'assistants',
   skills: 'skills',
   cronSkills: 'cron-skills',
@@ -236,7 +237,7 @@ const JsonFileBuilder = <S extends object = Record<string, unknown>>(file_path: 
 
 const envFile = JsonFileBuilder<IEnvStorageRefer>(path.join(getHomePage(), STORAGE_PATH.env));
 
-const dirConfig = envFile.getSync('aionui.dir');
+const dirConfig = envFile.getSync(DIRS_KEY);
 
 const cacheDir = dirConfig?.cacheDir || getHomePage();
 
@@ -249,11 +250,11 @@ const _chatFile = JsonFileBuilder<IChatConversationRefer>(path.join(cacheDir, ST
 const chatFile = _chatFile;
 
 const buildMessageListStorage = (conversation_id: string, dir: string) => {
-  const fullName = path.join(dir, 'aionui-chat-history', conversation_id + '.txt');
+  const fullName = path.join(dir, CONFIG_FILES.chatHistory, conversation_id + '.txt');
   if (!existsSync(fullName)) {
-    mkdirSync(path.join(dir, 'aionui-chat-history'));
+    mkdirSync(path.join(dir, CONFIG_FILES.chatHistory));
   }
-  return JsonFileBuilder<TMessage[]>(path.join(dir, 'aionui-chat-history', conversation_id + '.txt'));
+  return JsonFileBuilder<TMessage[]>(path.join(dir, CONFIG_FILES.chatHistory, conversation_id + '.txt'));
 };
 
 const conversationHistoryProxy = (options: typeof _chatMessageFile, dir: string) => {
@@ -274,7 +275,7 @@ const conversationHistoryProxy = (options: typeof _chatMessageFile, dir: string)
     backup(conversation_id: string) {
       const storage = buildMessageListStorage(conversation_id, dir);
       return storage.backup(
-        path.join(dir, 'aionui-chat-history', 'backup', conversation_id + '_' + Date.now() + '.txt')
+        path.join(dir, CONFIG_FILES.chatHistory, 'backup', conversation_id + '_' + Date.now() + '.txt')
       );
     },
   };
