@@ -28,7 +28,7 @@ import { shouldRegisterBackendStartup } from './process/startup/singleInstanceGa
 import { ProcessConfig } from './process/utils/initStorage';
 import type { BackendStartupFailureInfo } from './common/types/platform/electron';
 import { registerWindowMaximizeListeners } from '@process/bridge';
-import { BackendLifecycleManager } from '@aionui/web-host';
+import { BackendLifecycleManager } from '@mu/web-host';
 import { resolveBinaryPath } from '@process/backend';
 import { wasLaunchedAtLogin } from '@process/bridge/applicationBridge';
 import { applyStartupAppLanguage, onAppLanguageApplied } from '@process/services/i18n';
