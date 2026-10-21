@@ -227,15 +227,14 @@ existing compression threshold was not lowered just to manufacture a result.
 ## Icon, colour scheme and display name (2026-09-22)
 
 - `python3 scripts/kyrn/icon/build-icon.py` rebuilds every icon from
-  `resources/brand/mu-icon-source.png` (needs Pillow and numpy; `iconutil` for the
-  `.icns`, macOS only, skipped elsewhere with the iconset kept). The artwork is not repainted: only the noisy
-  edge is replaced by a clean continuous-corner mask, the body is made opaque and
-  the tile is placed on the canvas. `--verify` re-measures the source and fails if
-  the fitted tile moved; re-runs are byte-identical. `app.icns` and `app_dev.png`
-  carry the macOS margin (824/1024), everything else is full-bleed. Sizes of 32 px
-  and below use a simplified tile with a bolder glyph.
-- The glyph is one path shared by the script, `renderer/assets/logo.svg` and
-  `components/brand/glyph.ts`; `tests/unit/kyrn/brandMark.test.ts` keeps them equal.
+  `resources/brand/mu-icon-source.png` (needs Pillow and numpy). The source is the brand logo: the loop mark on
+  a transparent background, wider than it is tall. The script cuts the transparent margin, then centres the
+  mark on a square canvas at 92% of its width (`app.png`, `icon.png`, the PWA icons, the renderer's logo, the
+  site's icons) or 74% (`app_dev.png`, `app.icns`, the macOS grid). Sizes of 32 px and below take a little more
+  width. It writes the `.ico` and the `.icns` itself, so one command works on every system, and `--verify`
+  fails if the source stops looking like a wide logo. Re-runs are byte-identical. It also paints `og.jpg`.
+- The renderer draws the same PNG (`assets/logos/brand/app.png`) and `assets/logo.svg` carries it as a data
+  URI; `tests/unit/kyrn/brandMark.test.ts` keeps the two equal.
 - The look is a second colour scheme, `data-color-scheme='mu'` on `<html>`
   (`styles/themes/mu-color-scheme.css`, `mu-arco.css`, `mu-shell.css`). It keeps the
   upstream specificity, so theme tokens and custom CSS themes still win; setting the

@@ -46,6 +46,14 @@ const TEXT = new Set([
 const TEXT_NAMES = new Set(['justfile', 'Makefile', 'LICENSE', '.gitignore']);
 /** The legal files say what the license is; they are not code from either side. */
 const LEGAL = new Set(['LICENSE', 'LICENSE-APACHE', 'NOTICE', 'AIONUI-FILES.txt']);
+/**
+ * AionUi's paths, our artwork: scripts/kyrn/icon/build-icon.py writes both from the brand source, so the path
+ * matching AionUi's says nothing about where the pixels come from.
+ */
+const OWN_ARTWORK = new Set([
+  'packages/desktop/src/renderer/assets/logo.svg',
+  'packages/desktop/src/renderer/assets/logos/brand/app.png',
+]);
 
 const git = (cwd, args) => execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8', maxBuffer: 1 << 28 });
 const isText = (path) => TEXT.has(extname(path).toLowerCase()) || TEXT_NAMES.has(path.split('/').at(-1));
@@ -87,7 +95,7 @@ function aionuiFiles(upstream) {
   }
   const ours = git(DESKTOP, ['ls-files']).trim().split('\n');
   return ours.filter((path) => {
-    if (LEGAL.has(path)) return false;
+    if (LEGAL.has(path) || OWN_ARTWORK.has(path)) return false;
     if (paths.has(path)) return true;
     const full = join(DESKTOP, path);
     if (!isText(path) || !existsSync(full) || !statSync(full).isFile()) return false;

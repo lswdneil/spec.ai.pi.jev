@@ -1,5 +1,5 @@
 /*
- * mu's own small elements: the brand mark, the judge pulse, the starting points and the startup
+ * spec.jev's own small elements: the brand mark, the judge pulse, the starting points and the startup
  * gate. Every colour has a fallback so that the upstream colour scheme still renders them.
  */
 
@@ -10,10 +10,10 @@
   line-height: 0;
 }
 
-.mark svg {
+.mark img {
   position: relative;
   display: block;
-  border-radius: 27%;
+  object-fit: contain;
 }
 
 .halo::before {

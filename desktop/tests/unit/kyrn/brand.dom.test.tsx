@@ -7,7 +7,6 @@ import { SWRConfig } from 'swr';
 import common from '@/renderer/services/i18n/locales/zh-CN/common.json';
 import mu from '@/renderer/services/i18n/locales/zh-CN/mu.json';
 import JudgePulse from '@/renderer/components/brand/JudgePulse';
-import { MU_GLYPH_PATH } from '@/renderer/components/brand/glyph';
 import MuMark from '@/renderer/components/brand/MuMark';
 
 import StartupGate from '@/renderer/pages/settings/KyrnSettings/StartupGate';
@@ -66,23 +65,19 @@ const view = (node: React.ReactNode) =>
 describe('MuMark', () => {
   it('is decorative unless it is given a name', () => {
     const { container, rerender } = render(<MuMark />);
-    expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
-    expect(container.querySelector('rect')).toBeInTheDocument();
-    rerender(<MuMark title='mu' variant='glyph' size={20} />);
-    expect(screen.getByRole('img', { name: 'mu' })).toHaveAttribute('width', '20');
-    // The glyph variant has no tile behind it.
-    expect(container.querySelector('rect')).not.toBeInTheDocument();
+    expect(container.querySelector('img')).toHaveAttribute('aria-hidden', 'true');
+    rerender(<MuMark title='spec.jev' size={20} />);
+    expect(screen.getByRole('img', { name: 'spec.jev' })).toHaveAttribute('width', '20');
+    expect(container.querySelector('img')).not.toHaveAttribute('aria-hidden');
   });
 
-  it('gives every mark its own gradient id, so two marks on a page never share a fill', () => {
-    const { container } = render(
-      <>
-        <MuMark />
-        <MuMark />
-      </>
-    );
-    const ids = [...container.querySelectorAll('linearGradient')].map((node) => node.id);
-    expect(new Set(ids).size).toBe(2);
+  it('scales with the size it is given, from the one bundled asset', () => {
+    const { container, rerender } = render(<MuMark size={24} />);
+    const image = container.querySelector('img') as HTMLImageElement;
+    expect(image.getAttribute('src')).toContain('app.png');
+    expect([image.getAttribute('width'), image.getAttribute('height')]).toEqual(['24', '24']);
+    rerender(<MuMark size={64} halo />);
+    expect(container.querySelector('span')).toHaveStyle({ width: '64px', height: '64px' });
   });
 });
 
@@ -144,7 +139,7 @@ describe('StartupGate', () => {
     expect(screen.queryByRole('button', { name: common.close })).not.toBeInTheDocument();
   });
 
-  it('shows the mark while mu starts, then the app', async () => {
+  it('shows the mark while spec.jev starts, then the app', async () => {
     const start = Promise.withResolvers<unknown>();
     catalog.mockReturnValue(start.promise);
     view(
@@ -204,11 +199,11 @@ describe('StartupGate', () => {
     expect(await screen.findByText('app')).toBeInTheDocument();
   });
 
-  it('says why mu did not start in the reader’s language, with no English left in it', async () => {
+  it('says why spec.jev did not start in the reader’s language, with no English left in it', async () => {
     catalog.mockResolvedValueOnce({
       ok: false,
       code: 'runtimeOffline',
-      error: 'mu runtime is not online. Check the local launcher and login.',
+      error: 'spec.jev runtime is not online. Check the local launcher and login.',
     });
     view(
       <StartupGate>
@@ -222,12 +217,12 @@ describe('StartupGate', () => {
   });
 
   // #4: what is left to the person when Windows gives the launcher no spelling without spaces.
-  it('says to install mu into a folder whose path has no spaces when it cannot start from where it is', async () => {
+  it('says to install spec.jev into a folder whose path has no spaces when it cannot start from where it is', async () => {
     catalog.mockResolvedValueOnce({
       ok: false,
       code: 'installPath',
       error:
-        'mu cannot be started from where it is installed: C:\\Program Files\\mu\\resources\\mu\\acp.cmd has spaces',
+        'spec.jev cannot be started from where it is installed: C:\\Program Files\\spec.jev\\resources\\spec.jev\\acp.cmd has spaces',
     });
     view(
       <StartupGate>
