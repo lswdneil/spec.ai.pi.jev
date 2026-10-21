@@ -49,11 +49,6 @@ export const BUILTIN_BROWSER_MCP_NAME = 'aionui-browser';
 
 // ===== 文件处理相关常量 =====
 
-/** 临时文件时间戳分隔符 */
-export const AIONUI_TIMESTAMP_SEPARATOR = '_aionui_';
-
-/** 用于匹配和清理时间戳后缀的正则表达式 */
-export const AIONUI_TIMESTAMP_REGEX = /_aionui_\d{13}(\.\w+)?$/;
 export const FILES_MARKER = '[[AION_FILES]]';
 
 // ===== 跨会话消息相关常量 =====

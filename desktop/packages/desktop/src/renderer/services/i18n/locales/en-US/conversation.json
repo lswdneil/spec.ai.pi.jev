@@ -145,29 +145,29 @@
       "send_feedback": "Try again. If it keeps failing, check the app log."
     },
     "ownership": {
-      "aionui": "App",
+      "mu": "App",
       "user_agent": "Agent",
       "user_llm_provider": "Model provider",
       "unknown_upstream": "Upstream"
     },
     "codes": {
-      "AIONUI_STREAM_BROKEN": {
+      "MU_STREAM_BROKEN": {
         "title": "Response stream was interrupted",
         "body": "The app accepted your message, but the response stream ended unexpectedly. Try again, and if it happens again, check the app log."
       },
-      "AIONUI_STATE_INCONSISTENT": {
+      "MU_STATE_INCONSISTENT": {
         "title": "Conversation state is out of sync",
         "body": "Restart this conversation or reload the app, then try again."
       },
-      "AIONUI_PERMISSION_ERROR": {
+      "MU_PERMISSION_ERROR": {
         "title": "Couldn't access the requested resource",
         "body": "A local permission or file system check failed. Check the project path and app permissions, then try again."
       },
-      "AIONUI_INTERNAL_ERROR": {
+      "MU_INTERNAL_ERROR": {
         "title": "The app couldn't process the request",
         "body": "Something went wrong while the app was processing this request. Try again, and if it happens again, check the app log."
       },
-      "AIONUI_CONVERSATION_BUSY": {
+      "MU_CONVERSATION_BUSY": {
         "title": "Conversation is busy",
         "body": "Another response is still running. Wait for it to finish before sending a new message."
       },
