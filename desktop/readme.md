@@ -28,13 +28,13 @@ bunx vitest run
 
 ## Where things are
 
-| Path | What |
-| --- | --- |
-| `packages/desktop/src/process/` | The main process: windows, the native host that runs pi and the kernel, updates |
-| `packages/desktop/src/renderer/` | The interface: conversations, the work panel, settings, the first-run guide |
-| `packages/desktop/src/common/` | What both share, such as the native bridge contract |
-| `packages/desktop/src/renderer/services/i18n/locales/` | The 13 languages |
-| `tests/unit/` | Unit tests (Vitest) |
+| Path                                                   | What                                                                            |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| `packages/desktop/src/process/`                        | The main process: windows, the native host that runs pi and the kernel, updates |
+| `packages/desktop/src/renderer/`                       | The interface: conversations, the work panel, settings, the first-run guide     |
+| `packages/desktop/src/common/`                         | What both share, such as the native bridge contract                             |
+| `packages/desktop/src/renderer/services/i18n/locales/` | The 13 languages                                                                |
+| `tests/unit/`                                          | Unit tests (Vitest)                                                             |
 
 The conventions for code, CSS and text are in [AGENTS.md](AGENTS.md). How mu fits together is in [docs/architecture.md](../docs/architecture.md).
 
