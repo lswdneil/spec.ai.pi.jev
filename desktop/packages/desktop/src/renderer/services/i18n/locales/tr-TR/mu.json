@@ -919,6 +919,8 @@
       "idle": "Çalışmıyor",
       "starting": "Başlatılıyor",
       "running": "Çalışıyor",
+      "working": "Çalışıyor",
+      "ready": "Hazır",
       "needsModel": "Model yok",
       "failed": "Durdu"
     },

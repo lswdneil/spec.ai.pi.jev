@@ -919,6 +919,8 @@
       "idle": "Arrêté",
       "starting": "Démarrage",
       "running": "En cours",
+      "working": "Au travail",
+      "ready": "Prêt",
       "needsModel": "Aucun modèle",
       "failed": "Interrompu"
     },

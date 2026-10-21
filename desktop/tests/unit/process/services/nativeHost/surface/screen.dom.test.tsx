@@ -135,7 +135,8 @@ describe('the native conversation page', () => {
     expect(phase()).toHaveTextContent('Not running');
     const steps: Array<[NativeHostStatus, string]> = [
       [{ phase: 'starting' }, 'Starting'],
-      [{ phase: 'running' }, 'Running'],
+      // Up and waiting for a message: nothing to see, as before it starts; screen readers still hear it.
+      [{ phase: 'running' }, 'Ready'],
       [{ phase: 'needs-model' }, 'No model'],
       [{ phase: 'failed', error: { kind: 'failed', message: 'spawn ENOENT', stderr: '' } }, 'Stopped'],
     ];
@@ -144,6 +145,23 @@ describe('the native conversation page', () => {
       expect(phase()).toHaveTextContent(words);
     }
     expect(screen.getByTestId('native-failed')).toHaveTextContent('mu stopped before it could start.');
+  });
+
+  it('says Working only while a turn runs, and nothing once it has ended', async () => {
+    const host = createFakeHost();
+    host.add({ id: 'c1', title: 'Fix the build' });
+    page(host.client);
+    await opened();
+    act(() => host.setStatus('c1', { phase: 'running' }));
+    expect(phase()).toHaveClass('sr-only');
+    act(() => host.play('c1', [{ type: 'agent_start' }, ended(user('fix the build'))]));
+    await waitFor(() => expect(phase()).toHaveTextContent('Working'));
+    expect(phase()).toHaveAttribute('data-working', 'true');
+    expect(phase()).not.toHaveClass('sr-only');
+    act(() => host.play('c1', [{ type: 'agent_settled' }]));
+    await waitFor(() => expect(phase()).toHaveTextContent('Ready'));
+    expect(phase()).toHaveClass('sr-only');
+    expect(phase()).toHaveAttribute('data-phase', 'running');
   });
 
   it('shows the transcript as the host plays it, in the shared message list', async () => {

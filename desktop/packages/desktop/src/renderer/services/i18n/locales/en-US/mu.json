@@ -919,6 +919,8 @@
       "idle": "Not running",
       "starting": "Starting",
       "running": "Running",
+      "working": "Working",
+      "ready": "Ready",
       "needsModel": "No model",
       "failed": "Stopped"
     },

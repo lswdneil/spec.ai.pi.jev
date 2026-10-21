@@ -919,6 +919,8 @@
       "idle": "실행 안 함",
       "starting": "시작 중",
       "running": "실행 중",
+      "working": "작업 중",
+      "ready": "준비됨",
       "needsModel": "모델 없음",
       "failed": "중지됨"
     },
