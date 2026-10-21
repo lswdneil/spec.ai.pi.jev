@@ -71,8 +71,9 @@ export class BrowserSession {
 				deviceScaleFactor: 1,
 				mobile: false,
 			});
-			// Keeps animation frames and menus rendering in a tab that is never brought to the front.
-			await session.call("Emulation.setFocusEmulationEnabled", { enabled: true });
+			// Keeps animation frames and menus rendering in a tab that is never brought to the front. It is an
+			// improvement, not a requirement: an engine that does not know the command (moli) still browses.
+			await session.call("Emulation.setFocusEmulationEnabled", { enabled: true }).catch(() => undefined);
 			await session.call("Page.navigate", { url });
 		} catch (error) {
 			// No run owns the tab yet, so nothing else would close it.

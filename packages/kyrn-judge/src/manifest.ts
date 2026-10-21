@@ -287,7 +287,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "危险命令把关", en: "Risky command guard" },
 			summary: {
 				zh: "规则先挑出看起来危险的命令，判定器只负责确认「这是不是你要求的」；拿不准就问你。",
-				en: "Rules flag dangerous-looking commands; the judge only confirms that you asked for them. If it's unsure, mu asks you.",
+				en: "Rules flag dangerous-looking commands; the judge only confirms that you asked for them. If it's unsure, spec.jev asks you.",
 			},
 		},
 		{
@@ -377,7 +377,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "判断回退", en: "Judged rewind" },
 			summary: {
 				zh: "监测发现原地打转或同一条命令连续失败时，判断这条路是不是死路；只有确信是死路且没有进展，才向你提议回到本回合开始前的检查点。它自己从不回退。",
-				en: "When the monitor sees the agent going in circles or the same command failing again and again, judges whether the approach is a dead end. Only a confident dead end with no progress makes mu propose going back to the turn's checkpoint; it never rewinds on its own.",
+				en: "When the monitor sees the agent going in circles or the same command failing again and again, judges whether the approach is a dead end. Only a confident dead end with no progress makes spec.jev propose going back to the turn's checkpoint; it never rewinds on its own.",
 			},
 		},
 		{
@@ -1165,8 +1165,8 @@ export const MANIFEST: HarnessManifest = {
 			name: "checkpoint",
 			title: { zh: "检查点与回退", en: "Checkpoints and rewind" },
 			summary: {
-				zh: "每个会改文件的回合，在第一次改动前给工作区拍一张快照，存在 mu 自己的影子 git 目录里，不碰你的仓库。/rewind 让文件和对话一起回到那一刻，/rewind undo 撤销回退。",
-				en: "Before the first file change in each turn, snapshots the working tree into mu's own shadow git directory, without touching your repository. /rewind restores files and the conversation; /rewind undo reverses a rewind.",
+				zh: "每个会改文件的回合，在第一次改动前给工作区拍一张快照，存在 spec.jev 自己的影子 git 目录里，不碰你的仓库。/rewind 让文件和对话一起回到那一刻，/rewind undo 撤销回退。",
+				en: "Before the first file change in each turn, snapshots the working tree into spec.jev's own shadow git directory, without touching your repository. /rewind restores files and the conversation; /rewind undo reverses a rewind.",
 			},
 			defaultEnabled: true,
 			options: [
@@ -1176,8 +1176,8 @@ export const MANIFEST: HarnessManifest = {
 					default: "",
 					label: { zh: "快照存放目录", en: "Where snapshots are kept" },
 					help: {
-						zh: "留空则放在 mu 主目录的 mu/checkpoints 下，每个项目一个影子仓库。",
-						en: "Empty means mu/checkpoints in mu's home folder, with one shadow repository per project.",
+						zh: "留空则放在 spec.jev 主目录的 mu/checkpoints 下，每个项目一个影子仓库。",
+						en: "Empty means mu/checkpoints in spec.jev's home folder, with one shadow repository per project.",
 					},
 				},
 				{
@@ -1218,8 +1218,8 @@ export const MANIFEST: HarnessManifest = {
 					max: 1000000,
 					label: { zh: "一次快照最多的文件数", en: "Max files per snapshot" },
 					help: {
-						zh: "要拍的文件更多时，这个会话就不拍检查点，并说一次原因。你的主目录和 mu 自己的目录从来不拍。",
-						en: "With more files than this, the session runs without checkpoints and tells you once. Your home folder and mu's own folders are never snapshotted.",
+						zh: "要拍的文件更多时，这个会话就不拍检查点，并说一次原因。你的主目录和 spec.jev 自己的目录从来不拍。",
+						en: "With more files than this, the session runs without checkpoints and tells you once. Your home folder and spec.jev's own folders are never snapshotted.",
 					},
 					unit: { zh: "个", en: "files" },
 				},
@@ -1999,8 +1999,8 @@ export const MANIFEST: HarnessManifest = {
 						en: "Use the desktop app's browser panel when it's running",
 					},
 					help: {
-						zh: "这样每一步都看得见，可以随时暂停、停止或接管；应用没开时用 mu 自己的浏览器。",
-						en: "Every step is then visible and can be paused, stopped or taken over; without the app, mu uses its own browser.",
+						zh: "这样每一步都看得见，可以随时暂停、停止或接管；应用没开时用 spec.jev 自己的浏览器。",
+						en: "Every step is then visible and can be paused, stopped or taken over; without the app, spec.jev uses its own browser.",
 					},
 				},
 				{
@@ -2008,7 +2008,46 @@ export const MANIFEST: HarnessManifest = {
 					kind: "text",
 					default: "",
 					label: { zh: "浏览器配置目录", en: "Browser profile folder" },
-					help: { zh: "留空使用 mu 自己的目录。", en: "Empty uses mu's own folder." },
+					help: { zh: "留空使用 spec.jev 自己的目录。", en: "Empty uses spec.jev's own folder." },
+				},
+				{
+					key: "backend",
+					kind: "text",
+					default: "auto",
+					label: { zh: "浏览器后端", en: "Browser backend" },
+					help: {
+						zh: "auto：装了 moli 就用 moli，否则用 Chrome；chrome：只用 Chromium 系浏览器；moli：必须用 moli。",
+						en: "auto: moli when it is installed, Chrome otherwise; chrome: a Chromium browser only; moli: moli or nothing.",
+					},
+				},
+				{
+					key: "moliPath",
+					kind: "text",
+					default: "",
+					label: { zh: "moli 可执行文件", en: "moli executable" },
+					help: {
+						zh: "留空则搜索常见安装位置和 PATH；SPECJEV_MOLI 也可以指定。",
+						en: "Empty searches the usual install places and PATH; SPECJEV_MOLI does the same.",
+					},
+				},
+				{
+					key: "moliUrl",
+					kind: "text",
+					default: "",
+					label: { zh: "已在运行的 moli 地址", en: "Running moli address" },
+					help: {
+						zh: "例如 http://127.0.0.1:9222；留空则由 spec.jev 自己启动。",
+						en: "For example http://127.0.0.1:9222; empty lets spec.jev start its own.",
+					},
+				},
+				{
+					key: "fetchChars",
+					kind: "number",
+					default: 12000,
+					min: 1000,
+					max: 200000,
+					unit: chars,
+					label: { zh: "抓取返回的字数上限", en: "Characters kept from a fetch" },
 				},
 			],
 		},
@@ -2067,8 +2106,8 @@ export const MANIFEST: HarnessManifest = {
 					default: "",
 					label: { zh: "日志目录", en: "Log directory" },
 					help: {
-						zh: "留空为 ~/.mu/jobs/<会话 id>，7 天后清理。",
-						en: "Empty means ~/.mu/jobs/<session id>, cleared after 7 days.",
+						zh: "留空为 ~/.spec.jev/jobs/<会话 id>，7 天后清理。",
+						en: "Empty means ~/.spec.jev/jobs/<session id>, cleared after 7 days.",
 					},
 				},
 				{
@@ -2247,8 +2286,8 @@ export const MANIFEST: HarnessManifest = {
 			name: "mcp",
 			title: { zh: "MCP 服务器", en: "MCP servers" },
 			summary: {
-				zh: "MCP 服务器由 pi 自带的客户端连接（stdio 与 Streamable HTTP，支持 OAuth 登录，用 /mcp 管理）。从 Claude Code、Cursor、Codex 和 mu.json 沿用的服务器，每个是能力目录里的一项，默认隐藏：Jev 认定任务需要，或模型主动申请，才启动它并把工具交给模型。工具清单会缓存，服务器没跑过 Jev 也有描述可判。项目里定义的服务器第一次启动前要你点头，定义变了会再问。在 mu.json 里可以把某个服务器设为常开。用 mu mcp add 加的服务器归 pi 管：随会话连接，工具由 tool_search 按需加载。",
-				en: 'MCP servers connect through pi\'s own client (stdio and Streamable HTTP, OAuth sign-in, managed with /mcp). Each server mu inherits from Claude Code, Cursor, Codex or mu.json is a hidden catalog entry: it starts, and its tools reach the model, only when the judge finds the task needs it or the model asks through find_capability. Tool lists are cached, so the judge has a description even before a server has run. A server defined by a project asks before its first start, and again when its definition changes. "exposure": "always" under mcp.servers in mu.json keeps a server open. Servers added with mu mcp add belong to pi: they connect with the session, and tool_search loads their tools when needed.',
+				zh: "MCP 服务器由 pi 自带的客户端连接（stdio 与 Streamable HTTP，支持 OAuth 登录，用 /mcp 管理）。从 Claude Code、Cursor、Codex 和 mu.json 沿用的服务器，每个是能力目录里的一项，默认隐藏：Jev 认定任务需要，或模型主动申请，才启动它并把工具交给模型。工具清单会缓存，服务器没跑过 Jev 也有描述可判。项目里定义的服务器第一次启动前要你点头，定义变了会再问。在 mu.json 里可以把某个服务器设为常开。用 spec.jev mcp add 加的服务器归 pi 管：随会话连接，工具由 tool_search 按需加载。",
+				en: 'MCP servers connect through pi\'s own client (stdio and Streamable HTTP, OAuth sign-in, managed with /mcp). Each server spec.jev inherits from Claude Code, Cursor, Codex or mu.json is a hidden catalog entry: it starts, and its tools reach the model, only when the judge finds the task needs it or the model asks through find_capability. Tool lists are cached, so the judge has a description even before a server has run. A server defined by a project asks before its first start, and again when its definition changes. "exposure": "always" under mcp.servers in mu.json keeps a server open. Servers added with spec.jev mcp add belong to pi: they connect with the session, and tool_search loads their tools when needed.',
 			},
 			defaultEnabled: true,
 			options: [
@@ -2277,8 +2316,8 @@ export const MANIFEST: HarnessManifest = {
 			name: "packs",
 			title: { zh: "能力包", en: "Capability packs" },
 			summary: {
-				zh: "随 mu 装好、默认不露的工具包，任务需要时才打开；缺外部程序时给出安装提示。",
-				en: "Tool packs that ship with mu and stay hidden until a task needs them; if a required program is missing, mu shows how to install it.",
+				zh: "随 spec.jev 装好、默认不露的工具包，任务需要时才打开；缺外部程序时给出安装提示。",
+				en: "Tool packs that ship with spec.jev and stay hidden until a task needs them; if a required program is missing, spec.jev shows how to install it.",
 			},
 			defaultEnabled: true,
 			options: [
@@ -2454,7 +2493,7 @@ export const MANIFEST: HarnessManifest = {
 			title: { zh: "用 Google 账号登录（实验）", en: "Sign in with Google (experimental)" },
 			summary: {
 				zh: "在 /login 里多出两项：借 Gemini CLI 的登录用 Gemini 模型，借 Antigravity 的登录用 Gemini、Claude 和 GPT-OSS。这是 Google 给自家工具的登录，别的程序用它可能违反 Google 的条款、被限制或封号，所以登录前会先说明风险，你同意才继续。官方的方式不需要这一项：Gemini API key（提供商 google）和 Vertex AI（提供商 google-vertex，用 gcloud 登录）。",
-				en: "Adds two entries to /login: Gemini CLI's sign-in for the Gemini models, and Antigravity's for Gemini, Claude and GPT-OSS. These are Google's sign-ins for its own tools; using them from another program may violate Google's terms and get the account limited or suspended, so mu explains the risk first and continues only if you agree. The official routes need none of this: a Gemini API key (provider google) or Vertex AI (provider google-vertex, signed in with gcloud).",
+				en: "Adds two entries to /login: Gemini CLI's sign-in for the Gemini models, and Antigravity's for Gemini, Claude and GPT-OSS. These are Google's sign-ins for its own tools; using them from another program may violate Google's terms and get the account limited or suspended, so spec.jev explains the risk first and continues only if you agree. The official routes need none of this: a Gemini API key (provider google) or Vertex AI (provider google-vertex, signed in with gcloud).",
 			},
 			defaultEnabled: true,
 			beta: true,

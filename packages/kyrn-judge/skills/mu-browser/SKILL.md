@@ -5,11 +5,14 @@ description: Operate real websites with mu's fast judge-driven browser (the brow
 
 # mu browser
 
-`browse` opens a page in mu's own Chrome profile and carries out a goal on it. A fast judgment model picks every click from the elements actually on the page; you only state the goal and read the result. One call replaces a whole click-by-click conversation, which keeps your context small.
+`browse` opens a page in mu's own browser profile and carries out a goal on it. A fast judgment model picks every click from the elements actually on the page; you only state the goal and read the result. One call replaces a whole click-by-click conversation, which keeps your context small.
+
+The engine behind it is Chrome or, when it is installed, [moli](https://github.com/lexmount/moli): the same twelve CDP commands, the same loop, no decision of yours changes. `browse` and `page_fetch` behave the same either way.
 
 ## How to call it
 
 - Read a page: `browse({ url })`. Returns the visible text.
+- Read a page cheaply, no browser session and no judge call: `page_fetch({ url, format })`, with `format: "markdown"` (default) or `"semantic_tree"`. Prefer it when the page only has to be read; keep `browse` for pages that have to be operated. `/fetch <url> [format]` does the same from the command line.
 - Do something: `browse({ url, goal })`. Put the WHOLE goal in one call, including every value to type:
   `goal: "Search for WeakMap, open the WeakMap reference page"`.
 - The result is a status line, the actions taken and the final page text.
