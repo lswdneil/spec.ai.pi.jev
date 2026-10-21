@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "mu başlatılıyor…",
-      "classifying": "Jev mesajınızı okuyor…",
+      "classifying": "Hakem mesajınızı okuyor…",
       "compacting": "Konuşma sıkıştırılıyor…",
       "retrying": "Model isteği başarısız oldu. Yeniden deneniyor ({{attempt}}/{{max}})…",
       "thinking": "Düşünüyor…",
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "Her özelliğin bir anahtarı vardır, ayarları Seçenekler'dedir. Girintili satırlar Jev'e karar sorduğu yerlerdir: birini kapatırsanız o adım her zamanki gibi ilerler.",
+    "lead": "Her özelliğin bir anahtarı vardır, ayarları Seçenekler'dedir. Girintili satırlar hakeme karar sorduğu yerlerdir: birini kapatırsanız o adım her zamanki gibi ilerler.",
     "featureOff": "Özellik kapalı",
-    "askJev": "Jev karar versin",
-    "askJevAbout": "Jev karar versin: {{point}}",
+    "askJev": "Hakem karar versin",
+    "askJevAbout": "Hakem karar versin: {{point}}",
     "areas": {
       "input": "Girdi",
       "context": "Bağlam",

@@ -319,7 +319,7 @@ describe('command palette', () => {
       openPalette();
 
       expect(groupsShown()).toEqual(['settings', 'commands']);
-      expect(labelsOf('commands')).toEqual(['Start a new chat', 'Open scheduled tasks']);
+      expect(labelsOf('commands')).toEqual(['Start a new conversation', 'Open scheduled tasks']);
       expect(screen.getByTestId('command-palette-hint')).toHaveTextContent(
         'No conversations yet. Type to find settings and commands.'
       );
@@ -519,7 +519,7 @@ describe('command palette', () => {
       expect(onNavigate).toHaveBeenCalledTimes(1);
 
       openPalette();
-      type('new chat');
+      type('new conversation');
       key('Enter');
       expect(navigate).toHaveBeenLastCalledWith('/guid', { state: { resetAssistant: true } });
     });

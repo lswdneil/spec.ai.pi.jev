@@ -227,7 +227,7 @@
       "noteMissing": "発見は記録されていません。",
       "allFlow": "すべての配信",
       "beeFlow": "{{name}} の配信",
-      "audit": "Jev の判定",
+      "audit": "判定",
       "waitingRun": "この Hive の記録済みイベントを待機中です。",
       "recordedAt": "記録時刻: {{time}}",
       "beeMissing": "このビーは記録済みスナップショットにありません。",
@@ -959,7 +959,7 @@
       "auto_compaction_end": "圧縮が完了しました",
       "hive.note": "共有された発見",
       "hive.delivery": "配信を確認",
-      "hive.gate": "Jev ゲート",
+      "hive.gate": "Hive ゲート",
       "hive.manifest": "Hive の割り当て",
       "bee.event": "ビーのイベント",
       "memory.recalled": "参照した経験",
@@ -1273,7 +1273,7 @@
       "setUp": "判定器を設定",
       "skipped": "分類をスキップしました",
       "off": "分類はオフです",
-      "firstHint": "この行は Jev の判定です。Jev がまず各メッセージを分類し、mu がその後の進め方を決めます。すべての判定は右側の「判定」にあります。"
+      "firstHint": "この行は判定器の判定です。判定器がまず各メッセージを分類し、mu がその後の進め方を決めます。すべての判定は右側の「判定」にあります。"
     },
     "eventLine": {
       "judgeNotice": {
@@ -1287,7 +1287,7 @@
         "skills": "このセッションに必要なスキルを選んでいます",
         "capabilities": "このタスクに必要なケイパビリティを選んでいます",
         "goal_check": "目標が達成されたか確認しています",
-        "permissionReview": "Jev が審査しています: {{summary}}"
+        "permissionReview": "判定器が審査しています: {{summary}}"
       },
       "goal": {
         "paused": "一時停止中: {{reason}}",
@@ -1523,7 +1523,7 @@
     "previewEmpty": "プレビューするものはまだありません。会話から開いたファイルがここに表示されます。",
     "previewHidden": "プレビューは非表示です。",
     "browserEmpty": "開いているページはありません。上に URL または検索語を入力してください。会話から開いたページもここに表示されます。",
-    "firstHint": "ボードは進み具合をわかりやすい言葉で伝え、判定は Jev の判定をすべて並べ、ファイルはこの会話のフォルダーです。ほかのタブは使われたときに現れます。"
+    "firstHint": "ボードは進み具合をわかりやすい言葉で伝え、判定はすべての判定を並べ、ファイルはこの会話のフォルダーです。ほかのタブは使われたときに現れます。"
   },
   "nodeRuntime": {
     "title": "Node.js をダウンロードしますか？",

@@ -305,8 +305,9 @@ describe('generic option fields', () => {
 });
 
 describe('the details: every feature, with the decision points it asks under it', () => {
-  /** The switch of whether Jev's verdict at a point takes effect, by the point's name. */
-  const askJev = (row: HTMLElement, point: string) => within(row).getByRole('switch', { name: `Ask Jev: ${point}` });
+  /** The switch of whether the judge's verdict at a point takes effect, by the point's name. */
+  const askJudge = (row: HTMLElement, point: string) =>
+    within(row).getByRole('switch', { name: `Ask the judge: ${point}` });
 
   it('lists every feature on the page of its area, each point indented under its feature, each page within twelve rows', async () => {
     await open('details-input');
@@ -343,9 +344,9 @@ describe('the details: every feature, with the decision points it asks under it'
     expect(within(screen.getByTestId('mu-feature-compaction')).getByText('Beta')).toBeInTheDocument();
   });
   it.each([
-    ['zh-CN', '消息预判', '让 Jev 判断', '让 Jev 判断：消息预判'],
-    ['ja-JP', 'Message preflight', 'Ask Jev', 'Ask Jev: Message preflight'],
-    ['en-US', 'Message preflight', 'Ask Jev', 'Ask Jev: Message preflight'],
+    ['zh-CN', '消息预判', '让判定器判断', '让判定器判断：消息预判'],
+    ['ja-JP', 'Message preflight', 'Ask the judge', 'Ask the judge: Message preflight'],
+    ['en-US', 'Message preflight', 'Ask the judge', 'Ask the judge: Message preflight'],
   ])('reads the manifest in the language of %s', async (language, title, ask, label) => {
     await i18n.changeLanguage(language);
     await open('details-input');
@@ -369,10 +370,10 @@ describe('the details: every feature, with the decision points it asks under it'
     });
     bridge.settings.mockResolvedValue({ ok: true, data: settings({ harness: custom }) });
     await open('details-input');
-    expect(screen.getByTestId('mu-decision-input.preflight')).toHaveTextContent('Ask Jev');
+    expect(screen.getByTestId('mu-decision-input.preflight')).toHaveTextContent('Ask the judge');
     // The harness has Japanese for the point and not for its feature: the point reads in Japanese, by its name.
     await act(() => i18n.changeLanguage('ja-JP'));
-    expect(screen.getByTestId('mu-decision-input.preflight')).toHaveTextContent('Ask Jev: メッセージ事前判定');
+    expect(screen.getByTestId('mu-decision-input.preflight')).toHaveTextContent('Ask the judge: メッセージ事前判定');
     // A group the desktop has no page for, and a feature the harness does not describe: a row of its own, on Other.
     fireEvent.click(screen.getByTestId('mu-nav-details-other'));
     const stray = screen.getByTestId('mu-decision-misc.one');
@@ -444,10 +445,10 @@ describe('the details: every feature, with the decision points it asks under it'
     const risk = screen.getByTestId('mu-decision-tool.risk');
     // A switch, not a choice of modes; the harness's third mode is not offered, and is not named anywhere.
     expect(within(risk).queryByRole('radio')).not.toBeInTheDocument();
-    expect(askJev(risk, 'Risky command guard')).not.toBeChecked();
+    expect(askJudge(risk, 'Risky command guard')).not.toBeChecked();
     expect(screen.getByTestId('kyrn-settings')).not.toHaveTextContent(/shadow/i);
     fireEvent.click(screen.getByTestId('mu-nav-details-input'));
-    expect(askJev(screen.getByTestId('mu-decision-input.preflight'), 'Message preflight')).toBeChecked();
+    expect(askJudge(screen.getByTestId('mu-decision-input.preflight'), 'Message preflight')).toBeChecked();
     // The mode every point without its own follows is the judges page's switch, not a row of the details.
     expect(screen.queryByTestId('mu-judge-mode')).not.toBeInTheDocument();
     fireEvent.click(screen.getByTestId('mu-nav-judges'));
@@ -458,7 +459,7 @@ describe('the details: every feature, with the decision points it asks under it'
     fireEvent.click(verdicts);
     fireEvent.click(verdicts);
     fireEvent.click(screen.getByTestId('mu-nav-details-safety'));
-    fireEvent.click(askJev(screen.getByTestId('mu-decision-tool.risk'), 'Risky command guard'));
+    fireEvent.click(askJudge(screen.getByTestId('mu-decision-tool.risk'), 'Risky command guard'));
     expect(screen.getByTestId('mu-save-bar')).toHaveTextContent('Unsaved changes in: Judges and Decision points');
     fireEvent.click(screen.getByText('Save'));
     await waitFor(() => expect(bridge.save).toHaveBeenCalled());
@@ -470,7 +471,7 @@ describe('the details: every feature, with the decision points it asks under it'
     await open('details-team');
     const hive = screen.getByTestId('mu-feature-hive');
     const deliver = () => screen.getByTestId('mu-decision-hive.deliver');
-    expect(askJev(deliver(), 'Hive: delivery')).toBeEnabled();
+    expect(askJudge(deliver(), 'Hive: delivery')).toBeEnabled();
     expect(deliver()).not.toHaveTextContent('This feature is off');
     fireEvent.click(within(hive).getByRole('switch', { name: 'Hive' }));
     for (const id of ['hive.publish', 'hive.deliver']) {
@@ -481,7 +482,7 @@ describe('the details: every feature, with the decision points it asks under it'
     // The sub-agents' point, under a feature that is on, is not touched.
     expect(within(screen.getByTestId('mu-decision-swarm.routing')).getByRole('switch')).toBeEnabled();
     fireEvent.click(within(hive).getByRole('switch', { name: 'Hive' }));
-    expect(askJev(deliver(), 'Hive: delivery')).toBeEnabled();
+    expect(askJudge(deliver(), 'Hive: delivery')).toBeEnabled();
     expect(screen.queryByText('This feature is off')).not.toBeInTheDocument();
   });
 });

@@ -13,7 +13,7 @@
   "downloadMarkdown": "Download Markdown file",
   "downloadCode": "Download {{language}} file",
   "downloadDiff": "Download diff file",
-  "addToChat": "Add to chat",
+  "addToChat": "Add to message",
   "openSplitScreen": "Open split screen",
   "closeSplitScreen": "Close split screen",
   "edit": "Edit",
@@ -79,10 +79,10 @@
     "installLinkText": "Open officecli install guide",
     "errors": {
       "officecliNotFound": "officecli isn't installed.",
-      "installFailed": "Couldn't install officecli automatically. Check the backend logs and try again.",
+      "installFailed": "Couldn't install officecli automatically. Check the app log and try again.",
       "portTimeout": "The preview service started but wasn't ready in time. Try again.",
       "startFailed": "Couldn't start the Office preview service.",
-      "outsideSandbox": "This file is outside the current project sandbox."
+      "outsideSandbox": "This file is outside the project folder."
     },
     "serverInstall": {
       "hint": "mu is running on a server. Install the preview component on that server, then retry:",

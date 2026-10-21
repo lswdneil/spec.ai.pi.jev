@@ -153,10 +153,10 @@ describe('the native send box', () => {
     // On its way: the run it starts has not begun, so the status is still the last run's.
     expect(status()).toHaveAttribute('data-sending', 'true');
     expect(status()).toHaveAttribute('data-status', 'idle');
-    // Jev reads the message: the box holds (no second prompt), says so, and offers to stop.
+    // The judge reads the message: the box holds (no second prompt), says so, and offers to stop.
     expect(box()).toHaveAttribute('data-loading', 'true');
     expect(box()).toHaveAttribute('data-send', 'false');
-    expect(status()).toHaveTextContent('Jev is reading your message…');
+    expect(status()).toHaveTextContent('The judge is reading your message…');
     await act(async () => {
       fireEvent.click(screen.getByTestId('native-abort'));
     });

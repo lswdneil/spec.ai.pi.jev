@@ -227,7 +227,7 @@
       "noteMissing": "발견이 기록되지 않았습니다.",
       "allFlow": "모든 전달",
       "beeFlow": "{{name}}의 전달",
-      "audit": "Jev 판정",
+      "audit": "판정",
       "waitingRun": "이 Hive의 기록된 이벤트를 기다리는 중입니다.",
       "recordedAt": "기록 시간 {{time}}",
       "beeMissing": "이 벌은 기록된 스냅샷에 없습니다.",
@@ -959,7 +959,7 @@
       "auto_compaction_end": "압축 완료",
       "hive.note": "공유된 발견",
       "hive.delivery": "전달 확인됨",
-      "hive.gate": "Jev 게이트",
+      "hive.gate": "Hive 게이트",
       "hive.manifest": "Hive 할당",
       "bee.event": "벌 이벤트",
       "memory.recalled": "참조한 경험",
@@ -1273,7 +1273,7 @@
       "setUp": "판정기 설정",
       "skipped": "분류를 건너뜀",
       "off": "분류가 꺼져 있음",
-      "firstHint": "이 줄은 Jev의 판정입니다. Jev가 먼저 메시지를 분류하고, mu가 어떻게 이어갈지 정합니다. 모든 판정은 오른쪽 「판정」에 있습니다."
+      "firstHint": "이 줄은 판정기의 판정입니다. 판정기가 먼저 메시지를 분류하고, mu가 어떻게 이어갈지 정합니다. 모든 판정은 오른쪽 「판정」에 있습니다."
     },
     "eventLine": {
       "judgeNotice": {
@@ -1287,7 +1287,7 @@
         "skills": "이 세션에 필요한 스킬을 고르는 중",
         "capabilities": "이 작업에 필요한 기능 확장을 고르는 중",
         "goal_check": "목표가 달성되었는지 확인하는 중",
-        "permissionReview": "Jev 검토 중: {{summary}}"
+        "permissionReview": "판정기 검토 중: {{summary}}"
       },
       "goal": {
         "paused": "일시정지됨: {{reason}}",
@@ -1523,7 +1523,7 @@
     "previewEmpty": "아직 미리 볼 내용이 없습니다. 대화에서 연 파일이 여기에 표시됩니다.",
     "previewHidden": "미리보기가 숨겨져 있습니다.",
     "browserEmpty": "열린 페이지가 없습니다. 위에 URL이나 검색어를 입력하세요. 대화에서 연 페이지도 여기에 표시됩니다.",
-    "firstHint": "보드는 진행 상황을 쉬운 말로 알려 주고, 판정은 Jev의 모든 판정을, 파일은 이 대화의 폴더를 보여 줍니다. 다른 탭은 쓰일 때 나타납니다."
+    "firstHint": "보드는 진행 상황을 쉬운 말로 알려 주고, 판정은 모든 판정을, 파일은 이 대화의 폴더를 보여 줍니다. 다른 탭은 쓰일 때 나타납니다."
   },
   "nodeRuntime": {
     "title": "Node.js를 다운로드할까요?",

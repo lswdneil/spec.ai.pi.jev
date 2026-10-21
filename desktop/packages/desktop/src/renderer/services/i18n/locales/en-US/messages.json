@@ -85,7 +85,7 @@
   "fork": {
     "action": "Fork from here",
     "errorTurnInFlight": "Wait for the current reply to finish before forking",
-    "errorParentUnbound": "This conversation has no backend session to fork yet",
+    "errorParentUnbound": "Nothing to fork yet. Send a message first.",
     "errorPointUnsupported": "This agent can only fork from the latest message",
     "errorUnsupported": "This agent doesn't support forking",
     "errorGeneric": "Couldn't fork: {{message}}"

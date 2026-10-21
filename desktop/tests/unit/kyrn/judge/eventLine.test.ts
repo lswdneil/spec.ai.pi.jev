@@ -100,7 +100,7 @@ describe('Runtime event lines by the harness codes', () => {
       code: 'permission_review',
       params: { summary: 'rm -rf dist' },
     };
-    expect(both('progress', review)).toEqual([['Jev is reviewing: rm -rf dist'], ['Jev 在审批：rm -rf dist']]);
+    expect(both('progress', review)).toEqual([['The judge is reviewing: rm -rf dist'], ['判定器在审批：rm -rf dist']]);
     // No code, an unknown one, or a review without its summary: the step as the harness wrote it.
     expect(say(zh, 'progress', { step: 'choosing skills' })).toEqual(['choosing skills']);
     expect(say(zh, 'progress', { step: 'later step', code: 'future' })).toEqual(['later step']);

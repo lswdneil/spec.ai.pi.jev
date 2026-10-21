@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "Démarrage de mu…",
-      "classifying": "Jev lit votre message…",
+      "classifying": "Le juge lit votre message…",
       "compacting": "Compactage de la conversation…",
       "retrying": "La requête au modèle a échoué. Nouvelle tentative ({{attempt}} sur {{max}})…",
       "thinking": "Réflexion…",
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "Un interrupteur par fonction, ses réglages sous « Options ». Les lignes en retrait sont les endroits où elle consulte Jev : désactivez-en une et cette étape se déroule comme d’habitude.",
+    "lead": "Un interrupteur par fonction, ses réglages sous « Options ». Les lignes en retrait sont les endroits où elle consulte le juge : désactivez-en une et cette étape se déroule comme d’habitude.",
     "featureOff": "La fonction est désactivée",
-    "askJev": "Laisser Jev juger",
-    "askJevAbout": "Laisser Jev juger : {{point}}",
+    "askJev": "Laisser le juge décider",
+    "askJevAbout": "Laisser le juge décider : {{point}}",
     "areas": {
       "input": "Entrée",
       "context": "Contexte",

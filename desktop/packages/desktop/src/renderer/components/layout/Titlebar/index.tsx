@@ -89,7 +89,7 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
   const workspaceTooltip = workspaceCollapsed
     ? t('conversation.workspace.expandPanel')
     : t('conversation.workspace.collapsePanel');
-  const backToChatTooltip = t('common.back', { defaultValue: 'Back to Chat' });
+  const backToChatTooltip = t('common.back', { defaultValue: 'Back' });
   const isSettingsRoute = location.pathname.startsWith('/settings');
   const iconSize = 18;
   // Desktop uses slimmer strokes to match macOS-native chrome aesthetics;

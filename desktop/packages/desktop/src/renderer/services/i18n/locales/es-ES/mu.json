@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "Iniciando mu…",
-      "classifying": "Jev está leyendo tu mensaje…",
+      "classifying": "El juez está leyendo tu mensaje…",
       "compacting": "Compactando la conversación…",
       "retrying": "La solicitud al modelo ha fallado. Reintentando ({{attempt}} de {{max}})…",
       "thinking": "Pensando…",
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "Un interruptor por función, con sus ajustes en «Opciones». Las filas sangradas son donde consulta a Jev: si desactivas una, ese paso sigue como siempre.",
+    "lead": "Un interruptor por función, con sus ajustes en «Opciones». Las filas sangradas son donde consulta al juez: si desactivas una, ese paso sigue como siempre.",
     "featureOff": "La función está desactivada",
-    "askJev": "Que decida Jev",
-    "askJevAbout": "Que decida Jev: {{point}}",
+    "askJev": "Que decida el juez",
+    "askJevAbout": "Que decida el juez: {{point}}",
     "areas": {
       "input": "Entrada",
       "context": "Contexto",

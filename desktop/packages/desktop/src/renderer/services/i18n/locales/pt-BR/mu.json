@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "Iniciando o mu…",
-      "classifying": "O Jev está lendo sua mensagem…",
+      "classifying": "O juiz está lendo sua mensagem…",
       "compacting": "Compactando a conversa…",
       "retrying": "A solicitação ao modelo falhou. Tentando de novo ({{attempt}} de {{max}})…",
       "thinking": "Pensando…",
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "Um interruptor por recurso, com as configurações em Opções. As linhas recuadas são onde ele consulta o Jev: desative uma e essa etapa segue normalmente.",
+    "lead": "Um interruptor por recurso, com as configurações em Opções. As linhas recuadas são onde ele consulta o juiz: desative uma e essa etapa segue normalmente.",
     "featureOff": "O recurso está desligado",
-    "askJev": "Deixar o Jev decidir",
-    "askJevAbout": "Deixar o Jev decidir: {{point}}",
+    "askJev": "Deixar o juiz decidir",
+    "askJevAbout": "Deixar o juiz decidir: {{point}}",
     "areas": {
       "input": "Entrada",
       "context": "Contexto",

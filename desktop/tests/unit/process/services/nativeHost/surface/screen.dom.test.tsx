@@ -844,7 +844,7 @@ describe('the sidebar’s native group', () => {
       fireEvent.click(screen.getByTestId('native-sidebar-delete'));
     });
     expect(await screen.findByTestId('native-delete')).toHaveTextContent(
-      'Delete “Fix the build”? Its session file moves to the trash, so you can still restore it.'
+      'Delete “Fix the build”? Its file moves to the trash, so you can still restore it.'
     );
     // Cancelled: nothing goes.
     await act(async () => {

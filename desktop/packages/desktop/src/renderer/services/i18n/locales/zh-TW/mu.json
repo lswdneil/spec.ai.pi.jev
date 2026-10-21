@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "正在啟動 mu…",
-      "classifying": "Jev 正在讀你的訊息…",
+      "classifying": "判定器正在讀你的訊息…",
       "compacting": "正在壓縮對話…",
       "retrying": "模型請求失敗，正在重試（第 {{attempt}} 次，共 {{max}} 次）…",
       "thinking": "思考中…",
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "每項功能一個開關，選項在「選項」裡。縮排的幾行是它請 Jev 判斷的地方：關掉一處，那一步照常進行。",
+    "lead": "每項功能一個開關，選項在「選項」裡。縮排的幾行是它請判定器判斷的地方：關掉一處，那一步照常進行。",
     "featureOff": "功能已關閉",
-    "askJev": "讓 Jev 判斷",
-    "askJevAbout": "讓 Jev 判斷：{{point}}",
+    "askJev": "讓判定器判斷",
+    "askJevAbout": "讓判定器判斷：{{point}}",
     "areas": {
       "input": "輸入",
       "context": "上下文",

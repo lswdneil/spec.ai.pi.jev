@@ -881,7 +881,7 @@
   },
   "commands": {
     "frame": "The task frame: goal, your constraints (with where you stated them), current subgoal and acceptance criteria",
-    "remember": "Save a lesson for future sessions in this project: /remember <what to do>",
+    "remember": "Save a lesson for future conversations in this project: /remember <what to do>",
     "lessons": "This project's lessons: /lessons lists id · kind · recalled/followed · lesson; /lessons all adds global and retired lessons",
     "forget": "Retire a lesson so it's no longer recalled: /forget <id prefix> (find ids with /lessons)",
     "capabilities": "What's installed and what's turned on: /capabilities lists them, /capabilities open <id> turns one on",
@@ -889,7 +889,7 @@
     "lsp": "Language servers: what's installed, what's running and the last error",
     "goal": "Keep the agent working until a condition holds: /goal <condition> sets it, /goal shows it (or asks for one), /goal clear ends it",
     "board": "The plain-language board: /board shows it, /board on or /board off for this project, /board model picks the model that writes it",
-    "checkpoints": "List this session's checkpoints: turn, time and files changed since",
+    "checkpoints": "List this conversation's checkpoints: turn, time and files changed since",
     "rewind": "Go back to a checkpoint: /rewind [#] [both|files|conversation]; /rewind undo reverses the last rewind",
     "swarm": "Subagents at work: /swarm shows what each is doing, /swarm stop [name] asks it to report now, /swarm kill [name] stops it immediately",
     "agents": "List the subagent roles the delegate tool can use, and where to add your own",
@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "Starting mu…",
-      "classifying": "Jev is reading your message…",
+      "classifying": "The judge is reading your message…",
       "compacting": "Compacting the conversation…",
       "retrying": "Model request failed. Retrying ({{attempt}} of {{max}})…",
       "thinking": "Thinking…",
@@ -990,7 +990,7 @@
       "empty": "No conversations yet",
       "all": "Show all ({{count}})",
       "fewer": "Show fewer",
-      "deleteConfirm": "Delete “{{title}}”? Its session file moves to the trash, so you can still restore it.",
+      "deleteConfirm": "Delete “{{title}}”? Its file moves to the trash, so you can still restore it.",
       "messages": "Messages: {{count}}",
       "unread": "New activity",
       "working": "Working"
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "Each feature has one switch, with its settings under Options. Indented rows are the points where the feature asks Jev; turn one off and that step runs as usual.",
+    "lead": "Each feature has one switch, with its settings under Options. Indented rows are the feature's decision points, where it asks the judge. Turn one off and that step runs as usual.",
     "featureOff": "This feature is off",
-    "askJev": "Ask Jev",
-    "askJevAbout": "Ask Jev: {{point}}",
+    "askJev": "Ask the judge",
+    "askJevAbout": "Ask the judge: {{point}}",
     "areas": {
       "input": "Input",
       "context": "Context",
