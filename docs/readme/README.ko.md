@@ -238,7 +238,14 @@ mu와 런타임이 들어 있는 네이티브 앱이에요. Node를 설치할 �
 
 **보드** · **판정**(실시간 판정 장부: 모든 판정과 그 질문) · **하이브** · **교훈** · **파일** · **미리보기** · **소스** · **브라우저**(에이전트가 한 단계씩 조작하는 내장 브라우저. 목표, 일시 정지, 중지 포함)
 
-권한 모드와 목표는 입력창에 있고, `⌘K`로 명령어 팔레트를 열어요. 모델 로그인은 앱 안에서 해요. ChatGPT, Claude, Grok, Google(Gemini CLI / Antigravity) 구독이나, pi가 지원하는 어떤 프로바이더의 API 키든 쓸 수 있어요. Claude Code와 Codex CLI의 대화는 가져와서 이어 갈 수 있어요.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="app-dark.png">
+    <img src="app-light.png" width="880" alt="작은 프로젝트에서 실패하던 테스트를 고친 뒤의 mu 데스크톱 앱. Jev가 메시지를 여러 단계 작업으로 판정했고(input.preflight), 에이전트는 테스트를 돌리고 파서를 읽고 분 단위를 고친 다음 테스트를 다시 돌렸다. 오른쪽 판정 패널에는 판정마다 판정 지점과 걸린 시간(약 200~400 ms)이 나온다. 아래쪽 막대에는 판정기, 판정 지점 40개 중 켜진 38개, 판정 5건, 사용 중인 컨텍스트가 나온다.">
+  </picture>
+</p>
+
+아래쪽 막대에서 커널 상태를 늘 볼 수 있어요. 어떤 판정기가 답하고 어디서 도는지, 켜진 판정 지점이 몇 개인지, 대화 중이라면 지금까지의 판정 수, 마지막 판정에 걸린 시간, 사용 중인 컨텍스트까지 보여 줘요. 권한 모드와 목표는 입력창에 있고, `⌘K`로 명령어 팔레트를 열어요. 모델 로그인은 앱 안에서 해요. ChatGPT, Claude, Grok, Google(Gemini CLI / Antigravity) 구독이나, pi가 지원하는 어떤 프로바이더의 API 키든 쓸 수 있어요. Claude Code와 Codex CLI의 대화는 가져와서 이어 갈 수 있어요.
 
 macOS(Apple 실리콘 / Intel), Windows(x64 / Arm), Linux(x64 / Arm)용 빌드는 GitHub Actions에서 만들어 [Releases](https://github.com/qybaihe/mu/releases)에 올려요.
 
@@ -250,7 +257,14 @@ mu            # 현재 디렉터리에서 대화형 세션 시작
 mu doctor     # 설치, 판정기, 연결 상태 점검
 ```
 
-Node 22.19 이상이 필요해요. `mu -p "prompt"`는 한 번 실행하고 결과를 출력하고, `mu -c`는 마지막 세션을 이어 가요. `mu import --list`는 Claude Code와 Codex 대화를 찾아 주고, `mu import <file>`은 그 대화를 가져와요. `mu ledger [n]`은 최근 n개 세션에서 판정기가 내린 판정을 출력해요. 명령줄과 데스크톱 앱은 계정, 설정, 교훈을 함께 써요.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="cli-dark.png">
+    <img src="cli-light.png" width="720" alt="터미널에서 본 mu의 환영 화면: μ 마크, &quot;mu v0.1.9, judgment-first coding agent, built on pi 1.3.0&quot;, 이어서 판정기(Jev 1.13, 무료, 428 ms에 응답, 판정 지점 켜짐), 모델과 작업 디렉터리, 알아 두면 좋은 키.">
+  </picture>
+</p>
+
+Node 22.19 이상이 필요해요. `mu -p "prompt"`는 한 번 실행하고 결과를 출력하고, `mu -c`는 마지막 세션을 이어 가요. `mu import --list`는 Claude Code와 Codex 대화를 찾아 주고, `mu import <file>`은 그 대화를 가져와요. `mu ledger [n]`은 최근 n개 세션에서 판정기가 내린 판정을 출력해요. 명령줄과 데스크톱 앱은 계정, 설정, 교훈을 함께 써요. 터미널에서는 `/settings`에서 테마를 고르기 전까지 mu 전용 `mu-dark`와 `mu-light` 테마를 써요(`system`은 터미널 색 구성을 따라가요).
 
 | 명령어 | 하는 일 |
 | --- | --- |

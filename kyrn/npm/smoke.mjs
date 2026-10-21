@@ -149,7 +149,7 @@ check(
 );
 // mu 0.1.3 said "mu 0.1.0 · …, built on pi 0.1.3": its judgment layer's own version, and pi's, read from mu-agent's folder.
 const versions = /^mu (\S+) \(pi ([^,)]+)/.exec(version.stdout.trim());
-const greeting = versions ? `mu ${versions[1]} · judgment-first coding agent, built on pi ${versions[2]}` : undefined;
+const greeting = versions ? `mu ${versions[1]} · a judgment-first coding agent, built on pi ${versions[2]}` : undefined;
 check("/help names mu's version and pi's, as mu version does", greeting !== undefined && rpc.help === greeting, rpc.help ?? rpc.error);
 
 try {

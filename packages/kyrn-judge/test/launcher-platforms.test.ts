@@ -471,7 +471,7 @@ describe("pi inside another program (the desktop app's runtime host)", () => {
 	const WIN_PACKAGE = "C:\\Program Files\\mu\\resources\\harness\\mu-agent";
 	const winPackage = {
 		[`${WIN_PACKAGE}\\dist\\bundle\\cli.js`]: "",
-		[`${WIN_PACKAGE}\\judge\\dist\\kyrn-judge.js`]: "",
+		[`${WIN_PACKAGE}\\judge\\mu\\index.js`]: "",
 	};
 	const rpc = ["--mode", "rpc"];
 
@@ -489,7 +489,7 @@ describe("pi inside another program (the desktop app's runtime host)", () => {
 		expect(host).toMatchObject({
 			module: `${WIN_PACKAGE}\\dist\\bundle\\index.js`,
 			execArgv: [],
-			args: ["-e", `${WIN_PACKAGE}\\judge\\dist\\kyrn-judge.js`, "--mode", "rpc"],
+			args: ["-e", `${WIN_PACKAGE}\\judge\\mu\\index.js`, "--mode", "rpc"],
 			layout: "package",
 			appDir: WIN_PACKAGE,
 			agentDir: "C:\\Users\\bai\\.mu\\agent",
@@ -619,12 +619,12 @@ describe("the npm package (mu-agent)", () => {
 	const WIN_PACKAGE = "C:\\Users\\bai\\AppData\\Roaming\\npm\\node_modules\\mu-agent";
 	const winPackage = {
 		[`${WIN_PACKAGE}\\dist\\bundle\\cli.js`]: "",
-		[`${WIN_PACKAGE}\\judge\\dist\\kyrn-judge.js`]: "",
+		[`${WIN_PACKAGE}\\judge\\mu\\index.js`]: "",
 	};
 	const POSIX_PACKAGE = "/usr/local/lib/node_modules/mu-agent";
 	const posixPackage = {
 		[`${POSIX_PACKAGE}/dist/bundle/cli.js`]: "",
-		[`${POSIX_PACKAGE}/judge/dist/kyrn-judge.js`]: "",
+		[`${POSIX_PACKAGE}/judge/mu/index.js`]: "",
 	};
 
 	it("is told apart from a checkout, also from one without its dependencies", () => {
@@ -655,7 +655,7 @@ describe("the npm package (mu-agent)", () => {
 		expect(plan.args).toEqual([
 			`${WIN_PACKAGE}\\dist\\bundle\\cli.js`,
 			"-e",
-			`${WIN_PACKAGE}\\judge\\dist\\kyrn-judge.js`,
+			`${WIN_PACKAGE}\\judge\\mu\\index.js`,
 			"-p",
 			prompt,
 		]);
@@ -702,7 +702,7 @@ describe("the npm package (mu-agent)", () => {
 		});
 		expect(plan.error).toContain("npm i -g mu-agent");
 		expect(packageEntries({ root: POSIX_PACKAGE, platform: "linux" }).extension).toBe(
-			`${POSIX_PACKAGE}/judge/dist/kyrn-judge.js`,
+			`${POSIX_PACKAGE}/judge/mu/index.js`,
 		);
 	});
 
@@ -923,7 +923,7 @@ describe("mu import", () => {
 		const pkg = "/usr/local/lib/node_modules/mu-agent";
 		const built = `${pkg}/judge/dist/import.js`;
 		expect(packageEntries({ root: pkg, platform: "linux" }).import).toBe(built);
-		const installed = { [`${pkg}/dist/bundle/cli.js`]: "", [`${pkg}/judge/dist/kyrn-judge.js`]: "" };
+		const installed = { [`${pkg}/dist/bundle/cli.js`]: "", [`${pkg}/judge/mu/index.js`]: "" };
 		expect(
 			planImport({ ...importArgs, platform: "linux", root: pkg, fs: disk({ ...installed, [built]: "" }) }),
 		).toMatchObject({ command: "/usr/bin/node", args: [built, "--list"], agentDir: "/home/bai/.mu/agent" });
