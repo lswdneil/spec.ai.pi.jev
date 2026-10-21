@@ -6,6 +6,8 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 
 ## [Unreleased]
 
+## [0.1.9] - 2026-10-21
+
 ### Added
 
 - **A new provider starts with what its model list says** ([#23](https://github.com/qybaihe/mu/issues/23)). When Test connection lists the models, the desktop app reads each one's context window, output limit, image input and thinking from the list (OpenRouter, Gemini, vLLM, LM Studio, Mistral, Groq, LiteLLM and models.dev each word these differently), so a model you add from the list no longer starts at 128K, 16K, text only and no thinking. The list shows each model's context size, and the first-run guide uses the same facts. Anything the list doesn't state keeps the old defaults.

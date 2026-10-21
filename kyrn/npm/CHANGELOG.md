@@ -2,11 +2,14 @@
 
 ## [Unreleased]
 
+## [0.1.10] - 2026-10-21
+
 ### Changed
 
 - English: the kernel's messages (the `en` side of `say({ zh, en })`), the manifest's titles and summaries, `mu --help`, `mu doctor` and `mu ledger` were rewritten after `docs/writing-style.md`. The Chinese text is unchanged.
 - Themes: the package ships `judge/themes/mu-dark.json` and `mu-light.json`. An interactive `mu` passes `--theme <judge/themes>`, and `--use-theme mu-light/mu-dark` unless the command line has `--use-theme` or `settings.json` names a theme. `-p`, `--print` and `--mode` get neither. `system` is still pi's theme.
 - pi's startup list names the judgment layer `mu`, not `kyrn-judge.js`: its bundle in the package is `judge/mu/index.js` (it was `judge/dist/kyrn-judge.js`).
+- The package's description and README say what mu does by default: 38 of the 40 decision points act from the start, and approvals fall back to asking you.
 - The welcome screen drops its box: the wordmark, the version, pi's version, then the judge, the model and the working directory, and a closing rule. Judge names show as `Jev` and `Laya`; a verdict's mark is a pink `◆`.
 
 ## [0.1.9] - 2026-10-19
