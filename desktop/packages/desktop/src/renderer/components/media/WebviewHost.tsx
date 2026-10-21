@@ -344,7 +344,7 @@ const WebviewHost: React.FC<WebviewHostProps> = ({
           return;
         }
 
-        if (event.message.includes('__AIONUI_WEBVIEW_ZOOM__')) {
+        if (event.message.includes('__MU_WEBVIEW_ZOOM__')) {
           const match = event.message.match(/"deltaY":(-?\d+(\.\d+)?)/);
           if (match && match[1]) {
             const deltaY = Number(match[1]);
@@ -357,7 +357,7 @@ const WebviewHost: React.FC<WebviewHostProps> = ({
           return;
         }
 
-        if (event.message.includes('__AIONUI_WEBVIEW_ZOOM_RESET__')) {
+        if (event.message.includes('__MU_WEBVIEW_ZOOM_RESET__')) {
           setZoomFactor(1);
         }
       } catch {
@@ -444,18 +444,18 @@ const WebviewHost: React.FC<WebviewHostProps> = ({
           .executeJavaScript(
             `
           (function() {
-            if (window.__aionuiZoomInjected) return true;
-            window.__aionuiZoomInjected = true;
+            if (window.__muZoomInjected) return true;
+            window.__muZoomInjected = true;
             window.addEventListener('wheel', function(e) {
               if (!(e.ctrlKey || e.metaKey)) return;
               e.preventDefault();
-              console.log('__AIONUI_WEBVIEW_ZOOM__', JSON.stringify({ deltaY: e.deltaY }));
+              console.log('__MU_WEBVIEW_ZOOM__', JSON.stringify({ deltaY: e.deltaY }));
             }, { passive: false, capture: true });
             window.addEventListener('keydown', function(e) {
               if (!(e.ctrlKey || e.metaKey)) return;
               if (e.key === '0') {
                 e.preventDefault();
-                console.log('__AIONUI_WEBVIEW_ZOOM_RESET__');
+                console.log('__MU_WEBVIEW_ZOOM_RESET__');
               }
             }, { capture: true });
             return true;

@@ -44,7 +44,7 @@ type StreamRegistry = {
 
 declare global {
   interface Window {
-    __AIONUI_E2E_MESSAGE_STREAM__?: StreamRegistry;
+    __MU_E2E_MESSAGE_STREAM__?: StreamRegistry;
   }
 }
 
@@ -111,7 +111,7 @@ const AcpE2EStreamInjector: React.FC<{ conversationId: string }> = ({ conversati
       return;
     }
 
-    const registry = (window.__AIONUI_E2E_MESSAGE_STREAM__ ??= { controllers: {} });
+    const registry = (window.__MU_E2E_MESSAGE_STREAM__ ??= { controllers: {} });
 
     // The plan bar gates on the RUNTIME view (isProcessing + activeTurnId), not
     // on the message list, so injecting a plan row alone would never show it.
@@ -378,8 +378,8 @@ const AcpE2EStreamInjector: React.FC<{ conversationId: string }> = ({ conversati
     };
 
     return () => {
-      if (window.__AIONUI_E2E_MESSAGE_STREAM__) {
-        delete window.__AIONUI_E2E_MESSAGE_STREAM__.controllers[conversationId];
+      if (window.__MU_E2E_MESSAGE_STREAM__) {
+        delete window.__MU_E2E_MESSAGE_STREAM__.controllers[conversationId];
       }
     };
   }, [addOrUpdateMessage, conversationId]);

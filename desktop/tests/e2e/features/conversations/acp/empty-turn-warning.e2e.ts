@@ -81,9 +81,9 @@ async function waitForEmptyTurnController(page: Page, conversationId: string): P
     (id) => {
       const registry = (
         window as typeof window & {
-          __AIONUI_E2E_MESSAGE_STREAM__?: StreamRegistry;
+          __MU_E2E_MESSAGE_STREAM__?: StreamRegistry;
         }
-      ).__AIONUI_E2E_MESSAGE_STREAM__;
+      ).__MU_E2E_MESSAGE_STREAM__;
       return Boolean(registry?.controllers[id]);
     },
     conversationId,
@@ -96,9 +96,9 @@ async function emitInfoTip(page: Page, conversationId: string, tipCode: string, 
     async ({ id, tipCode: injectedCode, tipContent: injectedContent }) => {
       const registry = (
         window as typeof window & {
-          __AIONUI_E2E_MESSAGE_STREAM__?: StreamRegistry;
+          __MU_E2E_MESSAGE_STREAM__?: StreamRegistry;
         }
-      ).__AIONUI_E2E_MESSAGE_STREAM__;
+      ).__MU_E2E_MESSAGE_STREAM__;
       const controller = registry?.controllers[id];
       if (!controller) {
         throw new Error(`No E2E stream controller registered for conversation ${id}`);
@@ -113,9 +113,9 @@ async function emitFollowUpExchange(page: Page, conversationId: string): Promise
   await page.evaluate(async (id) => {
     const registry = (
       window as typeof window & {
-        __AIONUI_E2E_MESSAGE_STREAM__?: StreamRegistry;
+        __MU_E2E_MESSAGE_STREAM__?: StreamRegistry;
       }
-    ).__AIONUI_E2E_MESSAGE_STREAM__;
+    ).__MU_E2E_MESSAGE_STREAM__;
     const controller = registry?.controllers[id];
     if (!controller) {
       throw new Error(`No E2E stream controller registered for conversation ${id}`);

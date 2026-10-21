@@ -76,8 +76,8 @@ test('shows one compact row for an ACP file change', async ({ page }) => {
 
     await page.waitForFunction(
       (id) => {
-        const registry = (window as typeof window & { __AIONUI_E2E_MESSAGE_STREAM__?: StreamRegistry })
-          .__AIONUI_E2E_MESSAGE_STREAM__;
+        const registry = (window as typeof window & { __MU_E2E_MESSAGE_STREAM__?: StreamRegistry })
+          .__MU_E2E_MESSAGE_STREAM__;
         return Boolean(registry?.controllers[id]);
       },
       conversationId,
@@ -85,8 +85,8 @@ test('shows one compact row for an ACP file change', async ({ page }) => {
     );
 
     await page.evaluate(async (id) => {
-      const registry = (window as typeof window & { __AIONUI_E2E_MESSAGE_STREAM__?: StreamRegistry })
-        .__AIONUI_E2E_MESSAGE_STREAM__;
+      const registry = (window as typeof window & { __MU_E2E_MESSAGE_STREAM__?: StreamRegistry })
+        .__MU_E2E_MESSAGE_STREAM__;
       const controller = registry?.controllers[id];
       if (!controller) throw new Error(`No E2E stream controller registered for conversation ${id}`);
       await controller.emitFileChange('/workspace/research-summary.md', 'before', 'after\nsecond line');

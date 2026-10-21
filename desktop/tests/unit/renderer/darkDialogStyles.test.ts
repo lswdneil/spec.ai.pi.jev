@@ -44,19 +44,19 @@ describe('dark dialogs', () => {
   });
 
   it('draw the hairline round the whole dialog, never round a plain modal body', () => {
-    expect(body(arco, "body[arco-theme='dark'] .arco-modal:not(.aionui-modal)")).toContain(
+    expect(body(arco, "body[arco-theme='dark'] .arco-modal:not(.mu-modal)")).toContain(
       'border: 1px solid var(--border-base)'
     );
     expect(body(arco, "body[arco-theme='dark'] .arco-modal-content")).not.toContain('border');
-    expect(body(arco, '.aionui-modal .arco-modal-content')).toContain('border: 1px solid var(--border-base)');
+    expect(body(arco, '.mu-modal .arco-modal-content')).toContain('border: 1px solid var(--border-base)');
   });
 
   it('keep the accent off their surfaces', () => {
     for (const selector of [
       "body[arco-theme='dark'] .arco-modal",
       "body[arco-theme='dark'] .arco-modal-content",
-      "body[arco-theme='dark'] .arco-modal:not(.aionui-modal)",
-      '.aionui-modal .arco-modal-content',
+      "body[arco-theme='dark'] .arco-modal:not(.mu-modal)",
+      '.mu-modal .arco-modal-content',
     ]) {
       expect(body(arco, selector)).not.toMatch(/primary|accent|violet|pink/);
     }

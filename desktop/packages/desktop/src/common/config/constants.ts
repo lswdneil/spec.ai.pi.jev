@@ -54,18 +54,18 @@ export const AIONUI_TIMESTAMP_SEPARATOR = '_aionui_';
 
 /** 用于匹配和清理时间戳后缀的正则表达式 */
 export const AIONUI_TIMESTAMP_REGEX = /_aionui_\d{13}(\.\w+)?$/;
-export const AIONUI_FILES_MARKER = '[[AION_FILES]]';
+export const FILES_MARKER = '[[AION_FILES]]';
 
 // ===== 跨会话消息相关常量 =====
 // 必须与后端 crates/aionui-common/src/constants.rs 中的值逐字一致。
 
 /** 发送侧：用户用 `@@` 引用其他会话后，后端追加到消息末尾的块 */
-export const AIONUI_SESSIONS_MARKER = '[[AION_SESSIONS]]';
-export const AIONUI_SESSIONS_END_MARKER = '[[/AION_SESSIONS]]';
+export const SESSIONS_MARKER = '[[AION_SESSIONS]]';
+export const SESSIONS_END_MARKER = '[[/AION_SESSIONS]]';
 
 /** 接收侧：跨会话投递时后端加在消息开头的来源块 */
-export const AIONUI_SESSION_MESSAGE_MARKER = '[[AION_SESSION_MESSAGE]]';
-export const AIONUI_SESSION_MESSAGE_END_MARKER = '[[/AION_SESSION_MESSAGE]]';
+export const SESSION_MESSAGE_MARKER = '[[AION_SESSION_MESSAGE]]';
+export const SESSION_MESSAGE_END_MARKER = '[[/AION_SESSION_MESSAGE]]';
 
 // ===== 媒体类型相关常量 =====
 

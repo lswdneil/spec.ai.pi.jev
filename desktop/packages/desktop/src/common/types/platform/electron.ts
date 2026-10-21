@@ -69,7 +69,7 @@ declare global {
   interface Window {
     electronAPI?: ElectronBridgeAPI;
     __initialLanguage?: string | null;
-    __aionuiE2ETest?: boolean;
+    __muE2ETest?: boolean;
     __backendStartupFailed?: boolean;
     __backendStartupFailure?: BackendStartupFailureInfo | null;
     /** The person put the Node.js runtime download off at this start: see common/adapter/nodeRuntimeDeferral.ts. */

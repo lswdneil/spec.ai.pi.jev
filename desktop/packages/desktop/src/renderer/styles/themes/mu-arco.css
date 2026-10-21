@@ -319,7 +319,7 @@
 }
 
 /* arco-override.css paints these two with upstream's pale blue. */
-[data-color-scheme='mu'] .aionui-steps .arco-steps-item-finish .arco-steps-item-icon {
+[data-color-scheme='mu'] .mu-steps .arco-steps-item-finish .arco-steps-item-icon {
   background-color: var(--mu-violet-2) !important;
   border-color: var(--mu-violet-2) !important;
 }
