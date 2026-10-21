@@ -7,7 +7,6 @@ import { SWRConfig } from 'swr';
 import common from '@/renderer/services/i18n/locales/zh-CN/common.json';
 import mu from '@/renderer/services/i18n/locales/zh-CN/mu.json';
 import JudgePulse from '@/renderer/components/brand/JudgePulse';
-import MuBackdrop from '@/renderer/components/brand/MuBackdrop';
 import { MU_GLYPH_PATH } from '@/renderer/components/brand/glyph';
 import MuMark from '@/renderer/components/brand/MuMark';
 
@@ -85,28 +84,6 @@ describe('MuMark', () => {
     );
     const ids = [...container.querySelectorAll('linearGradient')].map((node) => node.id);
     expect(new Set(ids).size).toBe(2);
-  });
-});
-
-describe('MuBackdrop', () => {
-  it('draws the icon’s glyph as decoration, each with its own gradients, and fades on the way out', () => {
-    const { container, rerender } = render(
-      <>
-        <MuBackdrop />
-        <MuBackdrop />
-      </>
-    );
-    for (const backdrop of screen.getAllByTestId('mu-backdrop')) {
-      expect(backdrop).toHaveAttribute('aria-hidden', 'true');
-      expect(backdrop).toHaveAttribute('data-state', 'shown');
-    }
-    // The fill and the rim are the same glyph as the icon.
-    const paths = [...container.querySelectorAll('path')].map((node) => node.getAttribute('d'));
-    expect(new Set(paths)).toEqual(new Set([MU_GLYPH_PATH]));
-    const ids = [...container.querySelectorAll('linearGradient, mask')].map((node) => node.id);
-    expect(new Set(ids).size).toBe(ids.length);
-    rerender(<MuBackdrop leaving />);
-    expect(screen.getByTestId('mu-backdrop')).toHaveAttribute('data-state', 'leaving');
   });
 });
 

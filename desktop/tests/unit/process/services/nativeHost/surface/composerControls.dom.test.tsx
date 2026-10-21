@@ -225,7 +225,7 @@ describe('the native send box’s model, thinking level and permission mode', ()
     expect(chip()).toHaveAttribute('data-source', 'file');
     expect(chip()).toHaveTextContent('thinker · High');
     expect(pill()).toHaveAttribute('data-mode', 'ask');
-    expect(pill()).toHaveTextContent('Permission · Minimal permissions');
+    expect(pill()).toHaveTextContent('Permission · Ask first');
     expect(commands(host)).toEqual([]);
 
     // A running host says what it runs with, and mu what mode it is in: they count from then on.
@@ -434,7 +434,7 @@ describe('the native send box’s commands, mentions and attachments', () => {
           clipboardData: { files: [new File(['x'], 'blob.bin', { type: 'application/octet-stream' })] },
         });
       });
-      await waitFor(() => expect(warning).toHaveBeenCalledWith('blob.bin could not be attached.'));
+      await waitFor(() => expect(warning).toHaveBeenCalledWith("Couldn't attach blob.bin."));
       expect(chips()).toHaveLength(3);
       fireEvent.click(within(chips()[2]).getByTestId('native-attachment-remove'));
       expect(chips()).toHaveLength(2);

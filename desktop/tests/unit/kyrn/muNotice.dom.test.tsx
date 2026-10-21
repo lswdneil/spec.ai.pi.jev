@@ -101,7 +101,9 @@ describe('the bridge’s notices', () => {
     expect(screen.getByTestId('mu-notice')).toHaveTextContent(zhMu.notices.answerLost);
     zh.unmount();
     const en = show('en', lost);
-    expect(screen.getByTestId('mu-notice')).toHaveTextContent(MU_NOTICES.answer_lost);
+    expect(screen.getByTestId('mu-notice')).toHaveTextContent(
+      "mu didn't receive your answer, so it continued as if you had declined."
+    );
     en.unmount();
     show('zh', notice({ title: 'Something new', raw_input: { notice: 'newer' } }));
     expect(screen.getByTestId('mu-notice')).toHaveTextContent('Something new');

@@ -278,7 +278,7 @@ async function buildJudge(out) {
 		}
 	}
 	// manifest.json is what the desktop app draws its settings from, also for an mu that came from npm.
-	for (const name of ["agents", "prompts", "skills", "manifest.json", "THIRD_PARTY_NOTICES.md"]) {
+	for (const name of ["agents", "prompts", "skills", "themes", "manifest.json", "THIRD_PARTY_NOTICES.md"]) {
 		cpSync(join(judgeSource, name), join(judgeRoot, name), { recursive: true });
 	}
 	const judgePackage = readJson(join(judgeSource, "package.json"));

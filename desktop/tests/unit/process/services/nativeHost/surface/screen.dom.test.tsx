@@ -130,7 +130,7 @@ describe('the native conversation page', () => {
     await opened();
     expect(screen.getByRole('heading')).toHaveTextContent('New conversation');
     expect(screen.getByTestId('native-header-folder')).toHaveTextContent('alpha');
-    expect(screen.getByTestId('native-empty')).toHaveTextContent('A new conversation in alpha');
+    expect(screen.getByTestId('native-empty')).toHaveTextContent('New conversation in alpha');
     expect(phase()).toHaveAttribute('data-phase', 'idle');
     expect(phase()).toHaveTextContent('Not running');
     const steps: Array<[NativeHostStatus, string]> = [
@@ -143,7 +143,7 @@ describe('the native conversation page', () => {
       act(() => host.setStatus('c1', status));
       expect(phase()).toHaveTextContent(words);
     }
-    expect(screen.getByTestId('native-failed')).toHaveTextContent('mu stopped before it started.');
+    expect(screen.getByTestId('native-failed')).toHaveTextContent('mu stopped before it could start.');
   });
 
   it('shows the transcript as the host plays it, in the shared message list', async () => {
@@ -358,7 +358,7 @@ describe('the native conversation page', () => {
         </MemoryRouter>
       </I18nextProvider>
     );
-    expect(screen.getByTestId('kernel-no-lessons')).toHaveTextContent('Lessons show once the conversation has opened.');
+    expect(screen.getByTestId('kernel-no-lessons')).toHaveTextContent('Lessons appear once the conversation opens.');
   });
 });
 
@@ -468,7 +468,7 @@ describe('the sidebar’s native group', () => {
       fireEvent.click(screen.getByTestId('native-project'));
     });
     expect(screen.getByTestId('native-create-failed')).toHaveTextContent(
-      'The app cannot find a mu to run. no mu at /opt/mu'
+      "The app can't find mu to run. no mu at /opt/mu"
     );
     expect(screen.getByTestId('where')).toHaveTextContent('/guid');
   });
@@ -786,7 +786,7 @@ describe('the sidebar’s native group', () => {
       { method: 'rename', id: 'a', name: 'Login work' },
     ]);
     await waitFor(() => expect(items()[0]).toHaveTextContent('Login work'));
-    expect(success).toHaveBeenCalledWith('Renamed successfully');
+    expect(success).toHaveBeenCalledWith('Renamed');
     // Opening the menu did not open the conversation.
     expect(screen.getByTestId('where')).toHaveTextContent('/guid');
     success.mockRestore();
@@ -809,7 +809,7 @@ describe('the sidebar’s native group', () => {
     await act(async () => {
       fireEvent.click(screen.getByTestId('native-rename-save'));
     });
-    expect(error).toHaveBeenCalledWith('mu refused the request. Session name cannot be empty');
+    expect(error).toHaveBeenCalledWith('mu rejected the request. Session name cannot be empty');
     expect(screen.getByTestId('native-rename-input')).toHaveValue('New');
     error.mockRestore();
   });
@@ -826,7 +826,7 @@ describe('the sidebar’s native group', () => {
       fireEvent.click(screen.getByTestId('native-sidebar-delete'));
     });
     expect(await screen.findByTestId('native-delete')).toHaveTextContent(
-      'Delete “Fix the build”? Its session file goes to the bin, where you can still restore it.'
+      'Delete “Fix the build”? Its session file moves to the trash, so you can still restore it.'
     );
     // Cancelled: nothing goes.
     await act(async () => {
@@ -845,7 +845,7 @@ describe('the sidebar’s native group', () => {
     expect(host.calls.filter((call) => call.method === 'remove')).toEqual([{ method: 'remove', id: 'b' }]);
     await waitFor(() => expect(shownIds()).toEqual(['a']));
     expect(screen.getByTestId('where')).toHaveTextContent('/guid');
-    expect(success).toHaveBeenCalledWith('Deleted successfully');
+    expect(success).toHaveBeenCalledWith('Deleted');
     success.mockRestore();
   });
 

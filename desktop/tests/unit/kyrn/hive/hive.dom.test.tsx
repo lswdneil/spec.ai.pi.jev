@@ -153,7 +153,7 @@ describe('Native Hive interaction', () => {
       )
     );
     fireEvent.click(within(screen.getByRole('region', { name: 'Execution context' })).getByText('read'));
-    expect(screen.getByText('Waiting for completed tool output.')).toBeInTheDocument();
+    expect(screen.getByText('Waiting for the tool to finish.')).toBeInTheDocument();
     expect(screen.queryByText('export const stablePrefix = true;')).not.toBeInTheDocument();
   });
 

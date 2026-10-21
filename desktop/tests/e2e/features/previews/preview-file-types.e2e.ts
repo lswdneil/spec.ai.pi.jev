@@ -37,10 +37,10 @@ import { goToGuid } from '../../helpers';
 const PREVIEW_PANEL = '[data-project-preview-region]';
 
 /** `preview.unsupported.title`, both shipped locales. */
-const UNSUPPORTED_TITLE = /Preview not supported for this format|暂不支持预览此格式/;
+const UNSUPPORTED_TITLE = /Can't preview this file type|暂不支持预览此格式/;
 
 /** `preview.openInSystemApp`, both shipped locales. */
-const OPEN_IN_SYSTEM = /Open in system app|使用系统默认应用打开/;
+const OPEN_IN_SYSTEM = /Open in default app|使用系统默认应用打开/;
 
 type BackendWindow = Window & { __backendPort?: number };
 

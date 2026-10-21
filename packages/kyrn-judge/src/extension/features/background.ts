@@ -292,7 +292,7 @@ export function registerBackground(runtime: KyrnRuntime): void {
 	pi.registerCommand("jobs", {
 		description: say({
 			zh: "后台命令：/jobs 查看，/jobs stop <编号|all> 停掉",
-			en: "Background jobs: /jobs, /jobs stop <id|all>",
+			en: "Background jobs: /jobs lists them, /jobs stop <id|all> stops them",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);
@@ -332,7 +332,10 @@ export function registerBackground(runtime: KyrnRuntime): void {
 			// Never silently: on a reload or a session switch the user is still there to be told.
 			if (stopped > 0 && event.reason !== "quit" && ctx.hasUI) {
 				ctx.ui.setStatus(STATUS_KEY, undefined);
-				ctx.ui.notify(`mu stopped ${stopped} background job${stopped === 1 ? "" : "s"} with the session.`, "info");
+				ctx.ui.notify(
+					`mu stopped ${stopped} background job${stopped === 1 ? "" : "s"} when the session ended.`,
+					"info",
+				);
 			}
 			return undefined;
 		}),

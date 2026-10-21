@@ -194,14 +194,14 @@ describe("/hive in a session", () => {
 		const notes = await asRpc(harness);
 
 		await harness.session.prompt("/hive");
-		expect(notes.at(-1)).toContain("No sub-agents are running.");
-		expect(notes.at(-1)).toContain("/hive <question> puts several investigators on a question of yours.");
+		expect(notes.at(-1)).toContain("No subagents are running.");
+		expect(notes.at(-1)).toContain("/hive <question> puts several investigators to work on your question.");
 
 		harness.setResponses([callHive(), fauxAssistantMessage("Two of three reported.")]);
 		await harness.session.prompt(`/hive ${QUESTION}`);
 		await vi.waitFor(() => expect(bees).toHaveLength(3));
 		await harness.session.prompt("/hive kill config", { streamingBehavior: "steer" });
-		expect(notes.at(-1)).toBe("Ended 1 sub-agent. What they had found is kept.");
+		expect(notes.at(-1)).toBe("Stopped 1 subagent. Their findings so far are kept.");
 		release();
 		await vi.waitFor(() => expect(harness.getPendingResponseCount()).toBe(0));
 		await harness.session.waitForIdle();
@@ -244,7 +244,7 @@ describe("/hive in a session", () => {
 		await inTool;
 		// What the terminal does with anything typed while the agent works.
 		await harness.session.prompt(`/hive ${QUESTION}`, { streamingBehavior: "steer" });
-		expect(notes).toEqual(["The hive starts when the current turn is over."]);
+		expect(notes).toEqual(["The hive will start when the current turn ends."]);
 		expect(bees).toEqual([]);
 		release();
 		await first;
@@ -265,7 +265,7 @@ describe("/hive in a session", () => {
 		await harness.session.prompt(`/hive ${QUESTION}`);
 
 		expect(notes).toEqual([
-			"The hive tool is not active in this session (--tools leaves it out), so /hive cannot start one.",
+			"The hive tool isn't active in this session (--tools leaves it out), so /hive can't start one.",
 		]);
 		expect(getUserTexts(harness)).toEqual([]);
 		expect(harness.getPendingResponseCount()).toBe(1);
@@ -277,7 +277,7 @@ describe("/hive in a session", () => {
 		await printing.session.bindExtensions({ onError: (error) => errors.push(error) });
 		await printing.session.prompt(`/hive ${QUESTION}`);
 		expect(errors.map((error) => error.error)).toEqual([
-			"The hive tool is not active in this session (--tools leaves it out), so /hive cannot start one.",
+			"The hive tool isn't active in this session (--tools leaves it out), so /hive can't start one.",
 		]);
 		expect(getUserTexts(printing)).toEqual([]);
 	});

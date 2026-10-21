@@ -687,7 +687,7 @@ function registerHiveCommand(runtime: KyrnRuntime): void {
 	pi.registerCommand("hive", {
 		description: say({
 			zh: "让几个调查员同时查一个问题：/hive <问题>；不带问题时同 /swarm，看正在干活的子代理",
-			en: "Put several investigators on one question at once: /hive <question>. Without one, the same as /swarm",
+			en: "Have several investigators work on one question at once: /hive <question>. Without a question, same as /swarm",
 		}),
 		// No argument completions, like /swarm: "/hive stop" is typed by someone who wants it to happen now.
 		handler: async (args, ctx) => {
@@ -695,7 +695,12 @@ function registerHiveCommand(runtime: KyrnRuntime): void {
 			const asked = parseHiveArgs(args);
 			if (asked.kind !== "question") {
 				const control = asked.kind === "control" ? `${asked.verb} ${asked.name ?? ""}` : "";
-				controlSwarm(runtime, control, ctx, "/hive <question> puts several investigators on a question of yours.");
+				controlSwarm(
+					runtime,
+					control,
+					ctx,
+					"/hive <question> puts several investigators to work on your question.",
+				);
 				return;
 			}
 			const refuse = (message: string): void => {
@@ -704,17 +709,17 @@ function registerHiveCommand(runtime: KyrnRuntime): void {
 				ctx.ui.notify(message, "warning");
 			};
 			if (!pi.getActiveTools().includes("hive")) {
-				refuse("The hive tool is not active in this session (--tools leaves it out), so /hive cannot start one.");
+				refuse("The hive tool isn't active in this session (--tools leaves it out), so /hive can't start one.");
 				return;
 			}
 			if (!ctx.model) {
-				refuse("No model is selected: /login, then /model.");
+				refuse("No model is selected. Run /login, then /model.");
 				return;
 			}
 			const request = hiveRequest(asked.question);
 			if (!ctx.isIdle()) {
 				pi.sendUserMessage(request, { deliverAs: "followUp" });
-				ctx.ui.notify("The hive starts when the current turn is over.", "info");
+				ctx.ui.notify("The hive will start when the current turn ends.", "info");
 				return;
 			}
 			// The request is sent by the command, and what an extension sends is not counted as the user speaking.

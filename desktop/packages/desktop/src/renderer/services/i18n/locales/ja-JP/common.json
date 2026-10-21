@@ -1294,6 +1294,10 @@
       "firstHint": "この行は Jev の判定です。Jev がまず各メッセージを分類し、mu がその後の進め方を決めます。すべての判定は右側の「判定」にあります。"
     },
     "eventLine": {
+      "judgeNotice": {
+        "freeJev": "Jev キーが未設定のため、OpenCode Zen の無料 Jev を使用中",
+        "freeJevUnavailable": "無料の Jev が応答しなくなりました。Jev キーを設定するまで固定ルールで判断します"
+      },
       "detail": "詳細: {{detail}}",
       "progress": {
         "frame": "タスクフレームを更新しています",
@@ -1428,6 +1432,27 @@
       "reviewer": "レビュー",
       "scout": "偵察",
       "worker": "作業"
+    },
+    "kernel": {
+      "free": "無料",
+      "local": "ローカル",
+      "judgeHint": "mu の判定ポイントに答える判定器です。クリックして変更できます。",
+      "points": "判定ポイント {{active}}/{{total}} 件が有効",
+      "shadow_one": "· {{count}} 件がシャドー",
+      "shadow_other": "· {{count}} 件がシャドー",
+      "off": "判定はオフです",
+      "verdicts_one": "件の判定",
+      "verdicts_other": "件の判定",
+      "last": "前回",
+      "context": "コンテキスト",
+      "cache": "キャッシュ"
+    },
+    "hero": {
+      "kernel": "判定カーネル",
+      "judgeReady": "{{judge}} の準備ができました",
+      "judgeOff": "判定はオフです",
+      "title": "mu に何を任せますか？",
+      "lead": "ターン内の小さな判断はすべて、まず高速な判定器に任せます。何をコンテキストに入れるか、コマンドは安全か、作業は本当に終わったか。モデルはコードに集中します。"
     }
   },
   "menu": {

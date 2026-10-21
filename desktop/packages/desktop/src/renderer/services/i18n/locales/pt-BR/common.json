@@ -1294,6 +1294,10 @@
       "firstHint": "Esta linha é o veredito do Jev: o Jev classifica cada mensagem primeiro e depois o mu decide como seguir. Todos os vereditos ficam em Vereditos, à direita."
     },
     "eventLine": {
+      "judgeNotice": {
+        "freeJev": "Nenhuma chave do Jev definida: o Jev gratuito do OpenCode Zen responde",
+        "freeJevUnavailable": "O Jev gratuito parou de responder: regras fixas decidem até que uma chave do Jev seja definida"
+      },
       "detail": "Detalhes: {{detail}}",
       "progress": {
         "frame": "Atualizando a definição da tarefa",
@@ -1428,6 +1432,27 @@
       "reviewer": "revisor",
       "scout": "explorador",
       "worker": "executor"
+    },
+    "kernel": {
+      "free": "grátis",
+      "local": "local",
+      "judgeHint": "O juiz que responde aos pontos de decisão do mu. Clique para trocar.",
+      "points": "{{active}}/{{total}} pontos de decisão ativos",
+      "shadow_one": "· {{count}} em modo sombra",
+      "shadow_other": "· {{count}} em modo sombra",
+      "off": "Juiz desativado",
+      "verdicts_one": "veredito",
+      "verdicts_other": "vereditos",
+      "last": "último",
+      "context": "contexto",
+      "cache": "cache"
+    },
+    "hero": {
+      "kernel": "Núcleo de julgamento",
+      "judgeReady": "{{judge}} está pronto",
+      "judgeOff": "Juiz desativado",
+      "title": "No que o mu deve trabalhar?",
+      "lead": "Cada pequena decisão de um turno passa primeiro por um juiz rápido: o que entra no contexto, se um comando é seguro, se o trabalho está mesmo pronto. O modelo fica focado no código."
     }
   },
   "menu": {

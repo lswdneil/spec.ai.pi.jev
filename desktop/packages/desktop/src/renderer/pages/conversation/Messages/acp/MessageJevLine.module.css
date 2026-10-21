@@ -1,4 +1,5 @@
-/* Jev's class for a message: one quiet line, no box. */
+/* Jev's class for a message: one quiet readout line, no box. The judge's diamond, the decision point in mono, the
+   verdict, and the hints the model was given. */
 
 /* The line, and under it the first-time hint when there is one. */
 .stack {
@@ -8,9 +9,9 @@
   min-width: 0;
 }
 
-/* The hint starts under the line's words, past its dot (6px) and gap (8px), so it never reads as a second verdict. */
+/* The hint starts under the line's words, past its mark (7px) and gap (8px), so it never reads as a second verdict. */
 .stack [role='note'] {
-  padding-inline-start: 16px;
+  padding-inline-start: 17px;
 }
 
 .line {
@@ -23,6 +24,18 @@
   color: var(--text-secondary);
   font-size: 12px;
   line-height: 18px;
+}
+
+.point {
+  flex: none;
+  color: var(--mu-judge);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.01em;
+}
+
+.point::before {
+  content: attr(data-point);
 }
 
 .text {
@@ -49,15 +62,17 @@
   text-decoration: underline;
 }
 
-/* A hint the main model was given: a small label with a hairline, never a colour. The line gives way before it does. */
+/* A hint the main model was given: a small mono label with a hairline, never a colour. The line gives way first. */
 .hint {
   flex: none;
   box-sizing: border-box;
-  padding: 0 5px;
+  padding: 0 6px;
   border: 1px solid var(--border-base);
   border-radius: 4px;
+  background: var(--bg-2);
   color: var(--text-secondary);
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
   line-height: 16px;
   white-space: nowrap;
 }
@@ -68,11 +83,15 @@
   flex: none;
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  margin-inline: 0.5px;
+  border-radius: 1px;
+  transform: rotate(45deg);
 }
 
+/* The judge's mark: a small pink diamond with a faint ring. */
 .dot {
   background: var(--mu-judge-dot, rgb(var(--primary-5)));
+  box-shadow: 0 0 0 2px var(--mu-judge-dot-ring, transparent);
 }
 
 .dotMuted {

@@ -48,24 +48,24 @@ const KIND_TEXT: Readonly<Record<PermissionKind, { zh: string; en: string }>> = 
 	shell: { zh: "运行命令", en: "run a command" },
 	run: { zh: "运行程序", en: "run a program" },
 	outside: { zh: "改动项目外的文件", en: "change a file outside the project" },
-	delegate: { zh: "派出子代理", en: "start sub-agents" },
-	other: { zh: "对外操作", en: "act outside" },
+	delegate: { zh: "派出子代理", en: "start subagents" },
+	other: { zh: "对外操作", en: "act outside this computer" },
 };
 
 const REASON_TEXT: Readonly<Record<Exclude<AskReason, "flagged">, { zh: string; en: string }>> = {
-	ask: { zh: "最小权限模式：每一步都先问你。", en: "Minimal permissions: every step asks you first." },
-	unsure: { zh: "Jev 拿不准这一步是不是你要的。", en: "Jev is not sure this step is what you want." },
+	ask: { zh: "最小权限模式：每一步都先问你。", en: "Ask first: mu asks before every step." },
+	unsure: { zh: "Jev 拿不准这一步是不是你要的。", en: "Jev isn't sure this step is what you want." },
 	beyond: { zh: "Jev 认为这一步超出了你的要求。", en: "Jev thinks this goes beyond what you asked for." },
-	unrelated: { zh: "Jev 认为这一步和当前任务无关。", en: "Jev thinks this is not part of the task." },
+	unrelated: { zh: "Jev 认为这一步和当前任务无关。", en: "Jev thinks this isn't part of the task." },
 	protected: {
 		zh: "这会动到 mu 自己的设置，只能由你决定。",
 		en: "This touches mu's own settings; only you can allow it.",
 	},
 	nojudge: {
 		zh: "还没有可用的判定器，所以每一步都先问你。",
-		en: "No judge is available yet, so mu asks about each step.",
+		en: "No judge is available yet, so mu asks you about every step.",
 	},
-	judgedown: { zh: "判定器这次没有回答，所以先问你。", en: "The judge did not answer this time, so mu asks you." },
+	judgedown: { zh: "判定器这次没有回答，所以先问你。", en: "The judge didn't answer this time, so mu is asking you." },
 };
 
 /** The answers, fixed so a client can draw them as buttons. */
@@ -362,7 +362,7 @@ export function registerPermissions(runtime: KyrnRuntime, roots: HarnessRoots | 
 	pi.registerCommand("permissions", {
 		description: say({
 			zh: "mu 不问你就能做多少事：/permissions full（完全访问）| jev（Jev 审批）| ask（最小权限），不带参数就弹出选择；/permissions reset 忘掉这次对话里允许过的操作",
-			en: "How much mu may do without asking: /permissions full | jev | ask, or a picker. /permissions reset forgets what you allowed for this conversation",
+			en: "How much mu can do without asking: /permissions full | jev | ask, or no argument for a picker. /permissions reset clears what you allowed for this conversation",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);
@@ -380,7 +380,10 @@ export function registerPermissions(runtime: KyrnRuntime, roots: HarnessRoots | 
 			if (word === "reset") {
 				grants = new Set();
 				ctx.ui.notify(
-					say({ zh: "已清空这次对话里“都允许”过的操作。", en: "Forgot what you allowed for this conversation." }),
+					say({
+						zh: "已清空这次对话里“都允许”过的操作。",
+						en: "Cleared everything you allowed for this conversation.",
+					}),
 					"info",
 				);
 				return;
@@ -404,7 +407,7 @@ export function registerPermissions(runtime: KyrnRuntime, roots: HarnessRoots | 
 						...(allowed
 							? [say({ zh: `这次对话都允许：${allowed}`, en: `Allowed for this conversation: ${allowed}` })]
 							: []),
-						say({ zh: "切换：/permissions full | jev | ask", en: "Switch: /permissions full | jev | ask" }),
+						say({ zh: "切换：/permissions full | jev | ask", en: "To switch: /permissions full | jev | ask" }),
 					].join("\n"),
 					word ? "warning" : "info",
 				);
@@ -414,7 +417,7 @@ export function registerPermissions(runtime: KyrnRuntime, roots: HarnessRoots | 
 			ctx.ui.notify(
 				say({
 					zh: `权限已切换为「${modeLabel(next)}」：${MODE_TEXT[next].zhDescription}`,
-					en: `Permissions: ${modeLabel(next)}. ${MODE_TEXT[next].enDescription}`,
+					en: `Permissions set to ${modeLabel(next)}. ${MODE_TEXT[next].enDescription}`,
 				}),
 				"info",
 			);

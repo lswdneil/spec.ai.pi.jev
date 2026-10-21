@@ -27,20 +27,20 @@ export const MODE_TEXT: Readonly<
 		zh: "完全访问",
 		en: "Full access",
 		zhDescription: "什么都不问，直接执行。你明确说过不许做的事仍然会被拦下。",
-		enDescription: "Runs everything without asking. What you said not to do is still stopped.",
+		enDescription: "Runs everything without asking. Anything you told mu not to do is still blocked.",
 	},
 	jev: {
 		zh: "Jev 审批",
 		en: "Jev approves",
 		zhDescription: "项目里的读和改直接做；命令、项目外的改动、对外操作由 Jev 替你审批，它拿不准的才问你。",
 		enDescription:
-			"Reads and edits in the project go ahead; Jev approves commands, changes outside the project and outside actions for you, and asks you only when it is not sure.",
+			"Reads and edits in the project go ahead. Jev approves commands, changes outside the project and outside actions for you, and asks you only when it isn't sure.",
 	},
 	ask: {
 		zh: "最小权限",
-		en: "Minimal permissions",
+		en: "Ask first",
 		zhDescription: "只读操作直接做；改文件、跑命令、对外操作都先问你。",
-		enDescription: "Only reading goes ahead; every edit, command and outside action asks you first.",
+		enDescription: "Only reads go ahead. mu asks you before every edit, command and outside action.",
 	},
 };
 

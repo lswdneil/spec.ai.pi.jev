@@ -664,7 +664,7 @@ export function registerSwarm(runtime: KyrnRuntime, runner: SwarmRunner = spawnR
 	pi.registerCommand("agents", {
 		description: say({
 			zh: "列出 delegate 工具能用的子代理角色，以及在哪里加你自己的",
-			en: "List the sub-agent roles the delegate tool can use, and where to add your own",
+			en: "List the subagent roles the delegate tool can use, and where to add your own",
 		}),
 		handler: async (_args, ctx) => {
 			const dir = options.agentsDir || join(getAgentDir(), "agents");
@@ -674,7 +674,7 @@ export function registerSwarm(runtime: KyrnRuntime, runner: SwarmRunner = spawnR
 					...agents().map(describeAgent),
 					"",
 					`models: ${ladder}`,
-					`Add or override a role with a markdown file in ${dir} (frontmatter: name, description, tools, model, thinking).`,
+					`Add or override a role with a Markdown file in ${dir} (frontmatter: name, description, tools, model, thinking).`,
 				].join("\n"),
 				"info",
 			);
@@ -699,10 +699,10 @@ export function controlSwarm(runtime: KyrnRuntime, args: string, ctx: SwarmComma
 	const runs = activeRuns();
 	// What isolated sub-agents handed back stays listed after they are gone: it is waiting for a decision.
 	const patches = patchesOf(runtime).map((record) => `  ${describeRecord(record)}`);
-	const patchList = patches.length > 0 ? `patches (apply_patch_from brings one in)\n${patches.join("\n")}` : "";
+	const patchList = patches.length > 0 ? `patches (apply_patch_from applies one)\n${patches.join("\n")}` : "";
 	if (runs.length === 0) {
 		ctx.ui.notify(
-			[patchList || "No sub-agents are running. They start when the agent uses its delegate or hive tool.", idle]
+			[patchList || "No subagents are running. They start when the agent uses its delegate or hive tool.", idle]
 				.filter(Boolean)
 				.join("\n"),
 			"info",
@@ -720,10 +720,10 @@ export function controlSwarm(runtime: KyrnRuntime, args: string, ctx: SwarmComma
 		);
 		ctx.ui.notify(
 			reached === 0
-				? `Nothing to ${verb}${name ? ` named "${name}"` : ""}. Running: ${runs.flatMap((run) => run.bees.map((bee) => bee.name)).join(", ")}`
+				? `${name ? `No running subagent is named "${name}"` : `Nothing to ${verb}`}. Running: ${runs.flatMap((run) => run.bees.map((bee) => bee.name)).join(", ")}`
 				: verb === "stop"
-					? `Asked ${reached} sub-agent${reached === 1 ? "" : "s"} to stop and report. Anything that has not reported in time is ended.`
-					: `Ended ${reached} sub-agent${reached === 1 ? "" : "s"}. What they had found is kept.`,
+					? `Asked ${reached} subagent${reached === 1 ? "" : "s"} to stop and report. Any that don't report in time will be stopped.`
+					: `Stopped ${reached} subagent${reached === 1 ? "" : "s"}. Their findings so far are kept.`,
 			reached === 0 ? "warning" : "info",
 		);
 		return;
@@ -750,7 +750,7 @@ export function registerSwarmCommand(runtime: KyrnRuntime): void {
 	runtime.pi.registerCommand("swarm", {
 		description: say({
 			zh: "正在干活的子代理：/swarm 看每个在做什么，/swarm stop [名字] 让它现在交报告，/swarm kill [名字] 立刻结束它",
-			en: "Sub-agents at work: /swarm (what each one is doing), /swarm stop [name] (report now), /swarm kill [name]",
+			en: "Subagents at work: /swarm shows what each is doing, /swarm stop [name] asks it to report now, /swarm kill [name] stops it immediately",
 		}),
 		// No argument completions on purpose: with them the first Enter picks a completion and only the
 		// second one runs the command, and "stop" is typed by someone who wants it to happen now.

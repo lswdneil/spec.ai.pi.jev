@@ -284,7 +284,7 @@ export function registerBrowser(runtime: KyrnRuntime): void {
 	pi.registerCommand("browse", {
 		description: say({
 			zh: "让内置浏览器打开网址，照你说的去做：/browse <网址> [要做的事]",
-			en: "Drive the built-in browser yourself: /browse <url> [goal]",
+			en: "Have the built-in browser open a page and do what you ask: /browse <url> [goal]",
 		}),
 		handler: async (args, ctx) => {
 			const [url, ...rest] = args.trim().split(/\s+/);
@@ -296,7 +296,7 @@ export function registerBrowser(runtime: KyrnRuntime): void {
 				return;
 			}
 			const target = /^https?:\/\//i.test(url) ? url : `https://${url}`;
-			ctx.ui.setStatus("kyrn.browse", `browsing ${target}…`);
+			ctx.ui.setStatus("kyrn.browse", `Browsing ${target}…`);
 			try {
 				// A person wants to see where it ended up, not four thousand characters of page.
 				const result = await browse(
@@ -308,7 +308,7 @@ export function registerBrowser(runtime: KyrnRuntime): void {
 				);
 				ctx.ui.notify(result.text, result.status === "done" || result.status === "read" ? "info" : "warning");
 			} catch (error) {
-				ctx.ui.notify(`browse failed: ${error instanceof Error ? error.message : String(error)}`, "error");
+				ctx.ui.notify(`Browsing failed: ${error instanceof Error ? error.message : String(error)}`, "error");
 			} finally {
 				ctx.ui.setStatus("kyrn.browse", undefined);
 			}

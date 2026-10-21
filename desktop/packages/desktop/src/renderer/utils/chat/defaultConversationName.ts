@@ -23,11 +23,13 @@ import zhTW from '@/renderer/services/i18n/locales/zh-TW/conversation.json';
  * "新会话", …). Whether a name is still that default must not depend on the language shown now, or a conversation
  * created before a language switch would never be retitled.
  */
-const DEFAULT_NAMES = new Set(
-  [deDE, enUS, esES, faIR, frFR, jaJP, koKR, ptBR, ruRU, trTR, ukUA, zhCN, zhTW]
+const DEFAULT_NAMES = new Set([
+  ...[deDE, enUS, esES, faIR, frFR, jaJP, koKR, ptBR, ruRU, trTR, ukUA, zhCN, zhTW]
     .map((locale) => locale.welcome?.newConversation)
-    .filter((name): name is string => typeof name === 'string' && name.trim() !== '')
-);
+    .filter((name): name is string => typeof name === 'string' && name.trim() !== ''),
+  // Earlier English default titles, still stored on conversations created before the wording changed.
+  'New Chat',
+]);
 
 /** Whether a conversation name is the default title in any of the app's languages. */
 export const isDefaultConversationName = (name: string | null | undefined): boolean =>

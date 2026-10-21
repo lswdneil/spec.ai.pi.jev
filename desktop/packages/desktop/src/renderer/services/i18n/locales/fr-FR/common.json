@@ -1294,6 +1294,10 @@
       "firstHint": "Cette ligne est le jugement de Jev : Jev classe d’abord chaque message, puis mu décide comment continuer. Chaque jugement se trouve dans Jugements, à droite."
     },
     "eventLine": {
+      "judgeNotice": {
+        "freeJev": "Aucune clé Jev : le Jev gratuit d’OpenCode Zen répond",
+        "freeJevUnavailable": "Le Jev gratuit ne répond plus : des règles fixes décident jusqu’à ce qu’une clé Jev soit définie"
+      },
       "detail": "Détails : {{detail}}",
       "progress": {
         "frame": "Mise à jour du cadre de la tâche",
@@ -1428,6 +1432,27 @@
       "reviewer": "relecteur",
       "scout": "éclaireur",
       "worker": "exécutant"
+    },
+    "kernel": {
+      "free": "gratuit",
+      "local": "local",
+      "judgeHint": "Le juge qui répond aux points de décision de mu. Cliquez pour le changer.",
+      "points": "{{active}}/{{total}} points de décision actifs",
+      "shadow_one": "· {{count}} en mode fantôme",
+      "shadow_other": "· {{count}} en mode fantôme",
+      "off": "Jugement désactivé",
+      "verdicts_one": "jugement",
+      "verdicts_other": "jugements",
+      "last": "dernier",
+      "context": "contexte",
+      "cache": "cache"
+    },
+    "hero": {
+      "kernel": "Noyau de jugement",
+      "judgeReady": "{{judge}} est prêt",
+      "judgeOff": "Jugement désactivé",
+      "title": "Sur quoi mu doit-il travailler ?",
+      "lead": "Chaque petite décision d'un tour passe d'abord par un juge rapide : ce qui entre dans le contexte, si une commande est sûre, si le travail est vraiment terminé. Le modèle reste concentré sur le code."
     }
   },
   "menu": {

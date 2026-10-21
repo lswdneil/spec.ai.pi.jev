@@ -431,6 +431,16 @@ function injectionLines(t: TFunction, payload: Record<string, unknown>): string[
 const boardLine = (t: TFunction, payload: Record<string, unknown>): string[] | undefined =>
   typeof payload.on === 'boolean' ? [t(`${KEY}.board.${payload.on ? 'on' : 'off'}`)] : undefined;
 
+/** A notice about the judge itself, by its code: the free Jev answering, or no longer answering. */
+const JUDGE_NOTICES: Readonly<Record<string, string>> = {
+  free_jev: 'freeJev',
+  free_jev_unavailable: 'freeJevUnavailable',
+};
+const judgeNoticeLine = (t: TFunction, payload: Record<string, unknown>): string[] | undefined => {
+  const words = JUDGE_NOTICES[str(payload.code)];
+  return words ? [t(`${KEY}.judgeNotice.${words}`)] : undefined;
+};
+
 // ── entry ───────────────────────────────────────────────────────────────────
 
 /**
@@ -472,6 +482,8 @@ export function eventLines(
       return boardLine(t, payload);
     case 'tool.injection':
       return injectionLines(t, payload);
+    case 'judge.notice':
+      return judgeNoticeLine(t, payload);
     default:
       return undefined;
   }

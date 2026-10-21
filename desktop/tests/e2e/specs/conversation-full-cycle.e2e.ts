@@ -866,7 +866,7 @@ test.describe('Conversation Full Cycle', () => {
     await page.waitForFunction(() => window.location.hash.includes('/scheduled'), { timeout: 10_000 }).catch(() => {});
     const heading = page
       .locator('h1')
-      .filter({ hasText: /Scheduled Tasks|定时任务/ })
+      .filter({ hasText: /Scheduled tasks|定时任务/ })
       .first();
     await heading.waitFor({ state: 'visible', timeout: 10_000 }).catch(() => {});
 
@@ -970,7 +970,7 @@ test.describe('Conversation Full Cycle', () => {
     await page.waitForFunction(() => window.location.hash.includes('/scheduled'), { timeout: 10_000 }).catch(() => {});
     await page
       .locator('h1')
-      .filter({ hasText: /Scheduled Tasks|定时任务/ })
+      .filter({ hasText: /Scheduled tasks|定时任务/ })
       .first()
       .waitFor({ state: 'visible', timeout: 10_000 })
       .catch(() => {});
@@ -1103,7 +1103,7 @@ test.describe('Conversation Full Cycle', () => {
     await page.waitForFunction(() => window.location.hash.includes('/scheduled'), { timeout: 10_000 }).catch(() => {});
     await page
       .locator('h1')
-      .filter({ hasText: /Scheduled Tasks|定时任务/ })
+      .filter({ hasText: /Scheduled tasks|定时任务/ })
       .first()
       .waitFor({ state: 'visible', timeout: 10_000 })
       .catch(() => {});
@@ -1389,7 +1389,7 @@ test.describe('Conversation Full Cycle', () => {
         .catch(() => {});
       await page
         .locator('h1')
-        .filter({ hasText: /Scheduled Tasks|定时任务/ })
+        .filter({ hasText: /Scheduled tasks|定时任务/ })
         .first()
         .waitFor({ state: 'visible', timeout: 10_000 })
         .catch(() => {});

@@ -521,7 +521,7 @@ export function registerFrame(runtime: KyrnRuntime): void {
 	pi.registerCommand("frame", {
 		description: say({
 			zh: "任务帧：目标、你的硬约束（原话加出处）、当前子目标、验收条件",
-			en: "The task frame: goal, your hard constraints and where you said them, subgoal, acceptance items",
+			en: "The task frame: goal, your constraints (with where you stated them), current subgoal and acceptance criteria",
 		}),
 		handler: async (_args, ctx) => {
 			runtime.touch(ctx);

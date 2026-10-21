@@ -43,6 +43,7 @@ import { useConversationShortcuts } from '@renderer/hooks/ui/useConversationShor
 import { isElectronDesktop } from '@renderer/utils/platform';
 import { deferredRuntimeNeeds } from '@renderer/services/runtime/deferredNodeRuntime';
 import { SETTINGS_HOME } from '@renderer/pages/settings/settingsNav';
+import KernelBar from '@renderer/components/kernel/KernelBar';
 import '@renderer/styles/layout.css';
 
 const SidebarIcon: React.FC<{ size?: number; strokeWidth?: number }> = ({ size = 18, strokeWidth = 4 }) => (
@@ -445,7 +446,7 @@ const Layout: React.FC<{
               >
                 {/* The mark keeps upstream's hidden devtools click; its size follows the collapsed rail. */}
                 <div className='shrink-0 line-height-0' data-testid='sider-brand-mark' onClick={onClick}>
-                  <MuMark size={collapsed ? 24 : 32} />
+                  <MuMark size={collapsed ? 24 : 26} />
                 </div>
                 {isSettingsRoute ? (
                   <Tooltip content={t('common.back', { defaultValue: 'Back to Chat' })} position='bottom'>
@@ -529,6 +530,7 @@ const Layout: React.FC<{
               {workspaceAvailable && <WorkPanelHost rowWidth={panelRowWidth} isMobile={isMobile} />}
             </div>
           </ArcoLayout>
+          {!isMobile && <KernelBar />}
         </div>
       </NavigationHistoryProvider>
     </LayoutContext.Provider>

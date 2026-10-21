@@ -93,8 +93,8 @@ const PERMISSION_KINDS: Readonly<Record<string, { zh: string; en: string }>> = {
 	shell: { zh: "运行命令", en: "run a command" },
 	run: { zh: "运行程序", en: "run a program" },
 	outside: { zh: "改动项目外的文件", en: "change a file outside the project" },
-	delegate: { zh: "派出子代理", en: "start sub-agents" },
-	other: { zh: "对外操作", en: "act outside" },
+	delegate: { zh: "派出子代理", en: "start subagents" },
+	other: { zh: "对外操作", en: "act outside this computer" },
 };
 
 /** How many sub-agents a delegation sends out, and for what: the task titles, or the hive's goal. */
@@ -212,7 +212,7 @@ export function boardWidget(board: BoardUpdate, language: BoardLanguage, latest?
 	return [
 		`${zh ? "\u03bc 看板" : "\u03bc board"} · ${board.progress}`,
 		`  ${board.now}`,
-		...board.confirm.map((item) => `  ${zh ? "要你确认" : "For you"}: ${item}`),
+		...board.confirm.map((item) => `  ${zh ? "要你确认" : "Needs you"}: ${item}`),
 		...(latest ? [`  · ${latest.text}`] : []),
 	];
 }
@@ -400,7 +400,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 				ctx.ui.notify(
 					words({
 						zh: `看板选的模型 ${picked} 现在用不了，先用 ${writerRef(ctx) ?? "对话的模型"} 来写。/board model 可以换一个。`,
-						en: `The board's model ${picked} cannot be used here, so ${writerRef(ctx) ?? "the conversation's model"} writes it for now. /board model picks another.`,
+						en: `The board's model ${picked} isn't available here, so ${writerRef(ctx) ?? "the session's model"} is writing it for now. Use /board model to pick another.`,
 					}),
 					"warning",
 				);
@@ -417,7 +417,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 		if (picked && picked !== SESSION_MODEL && ref === picked) return ref;
 		return words({
 			zh: `对话用的模型${ref ? `（现在是 ${ref}）` : ""}`,
-			en: `the conversation's model${ref ? ` (now ${ref})` : ""}`,
+			en: `the session's model${ref ? ` (currently ${ref})` : ""}`,
 		});
 	};
 
@@ -431,7 +431,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 		const answer = await ctx.ui.select(
 			words({
 				zh: "人话看板请哪个模型来讲？每次更新调用它一次。",
-				en: "Which model should write the plain-language board? Each update is one call to it.",
+				en: "Which model should write the plain-language board? Each update costs one call.",
 			}),
 			choices.map((choice) => choice.label),
 		);
@@ -754,7 +754,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 		const kind = PERMISSION_KINDS[String(ask.kind)] ?? PERMISSION_KINDS.other;
 		const line = words({
 			zh: `mu 想${kind.zh}：${ask.summary}。在等你允许。`,
-			en: `mu wants to ${kind.en}: ${ask.summary}. It waits for your permission.`,
+			en: `mu wants to ${kind.en}: ${ask.summary}. It's waiting for your permission.`,
 		});
 		sayNow({ ...(board ?? emptyBoard()), confirm: [line], confirmCodes: [null], needsUser: true, ended: false });
 	});
@@ -952,7 +952,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 	pi.registerCommand("board", {
 		description: say({
 			zh: "人话看板：/board 查看，/board on、/board off 为这个项目打开或关闭，/board model 换个模型来讲",
-			en: "The plain-language board: /board (show it), /board on, /board off (for this project), /board model (who writes it)",
+			en: "The plain-language board: /board shows it, /board on or /board off for this project, /board model picks the model that writes it",
 		}),
 		handler: async (args, ctx) => {
 			runtime.touch(ctx);
@@ -965,7 +965,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 					if (ref !== SESSION_MODEL && !usable(ctx, ref)) {
 						if (ctx.hasUI) {
 							ctx.ui.notify(
-								`${words({ zh: `${ref} 现在用不了。`, en: `${ref} cannot be used here.` })}\n${addModelHelp(language())}`,
+								`${words({ zh: `${ref} 现在用不了。`, en: `${ref} isn't available here.` })}\n${addModelHelp(language())}`,
 								"warning",
 							);
 						}
@@ -999,7 +999,7 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 						word === "on"
 							? zh
 								? `这个项目的人话看板已打开：代理每做一步，看板就记一行；它说的话、发现的事，由 ${writerName(ctx)} 用大白话讲给你。每讲一次调用一次模型。`
-								: `The plain-language board is on for this project: every step is a line on it, and what the agent says or finds is retold by ${writerName(ctx)}. Each telling costs one model call.`
+								: `The plain-language board is on for this project. Each step adds a line, and ${writerName(ctx)} retells what the agent says or finds in plain words. Each retelling costs one model call.`
 							: zh
 								? "这个项目的人话看板已关闭。"
 								: "The plain-language board is off for this project.",
@@ -1014,7 +1014,9 @@ export function registerBoard(runtime: KyrnRuntime, roots: HarnessRoots | undefi
 			if (!ctx.hasUI) return;
 			if (!on(ctx)) {
 				ctx.ui.notify(
-					zh ? "这个项目没有打开人话看板。/board on 打开。" : "The board is off for this project: /board on.",
+					zh
+						? "这个项目没有打开人话看板。/board on 打开。"
+						: "The board is off for this project. Turn it on with /board on.",
 					"info",
 				);
 				return;

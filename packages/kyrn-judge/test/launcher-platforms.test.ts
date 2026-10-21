@@ -889,7 +889,7 @@ describe("the local judge away from macOS", () => {
 		] as const) {
 			const plan = planJudge({ platform, wsl, env: {}, argv: ["start"], bin: "bin" });
 			if (plan.kind !== "unsupported") throw new Error(`expected an explanation, got ${plan.kind}`);
-			expect(plan.message).toContain(`macOS with Apple Silicon only, not on ${name}`);
+			expect(plan.message).toContain(`runs only on macOS with Apple Silicon, not on ${name}`);
 			expect(plan.message).toContain("Jev");
 			expect(plan.message).toContain("desktop app");
 			expect(plan.message).toContain("MU_LOCAL_JUDGE_URL");
@@ -1251,7 +1251,7 @@ describe("mu migrate without pgrep", () => {
 
 		const blind = windowsHome(() => undefined);
 		expect(blind).toMatchObject({ code: 1, done: [] });
-		expect(blind.said).toContain("could not be read");
+		expect(blind.said).toContain("couldn't read the list of running processes");
 	});
 });
 

@@ -329,14 +329,14 @@ describe('the line, in the language of the app', () => {
     expect(screen.getByTestId('mu-jev-line')).toHaveTextContent('按规则归类为闲聊');
     rule.unmount();
     const none = showLine('en', jev({ title: 'Jev · Fallback' }));
-    expect(screen.getByTestId('mu-jev-line')).toHaveTextContent(/^Jev did not answer this time; going on as usual$/);
+    expect(screen.getByTestId('mu-jev-line')).toHaveTextContent(/^Jev didn't answer this time; continuing as usual$/);
     none.unmount();
     const unsure = showLine(
       'en',
       jev({ title: 'Jev · Default', rawOutput: { preflight: 'verdict', state: 'applied' } })
     );
     expect(screen.getByTestId('mu-jev-line')).toHaveTextContent(
-      /^No clear class from Jev this time; going on as usual$/
+      /^Jev gave no clear answer this time; continuing as usual$/
     );
     unsure.unmount();
     showLine('zh', jev({ title: 'Jev · Classifying', status: 'in_progress' }));
@@ -414,7 +414,7 @@ describe('the line, in the language of the app', () => {
       })
     );
     expect(screen.getByTestId('mu-jev-line')).toHaveTextContent(
-      `No clear class from Jev this time; going on as usual${enCommon.kyrn.judgeView.hintChips.answered}`
+      `Jev gave no clear answer this time; continuing as usual${enCommon.kyrn.judgeView.hintChips.answered}`
     );
     replied.unmount();
 
@@ -485,7 +485,7 @@ describe('in the conversation', () => {
       call('bash-1', { title: 'bash' }),
       call('mu:notice:1', {
         sessionUpdate: 'tool_call',
-        title: 'mu did not get your answer, so it went on as if you had declined.',
+        title: "mu didn't receive your answer, so it continued as if you had declined.",
         raw_input: { notice: 'answer_lost' },
       }),
     ];

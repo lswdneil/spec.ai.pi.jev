@@ -420,7 +420,7 @@ describe("permission modes in a session", () => {
 		expect(ran).toEqual(["edit src/a.ts", "edit src/b.ts", "bash ls"]);
 		expect(asked).toHaveLength(1);
 		expect(asked[0].title).toContain("mu wants to edit a file");
-		expect(asked[0].title).toContain("Minimal permissions");
+		expect(asked[0].title).toContain("Ask first");
 		expect(asked[0].options).toEqual(["Allow once", "Allow for this conversation (edit)", "Don't allow"]);
 		// Shown while it waited, gone once answered.
 		expect(status).toEqual(["Waiting for your permission: edit src/a.ts", undefined]);
@@ -578,7 +578,7 @@ describe("permission modes in a session", () => {
 			"npm publish",
 		);
 		expect(noKey.request).toMatchObject({ reason: "nojudge" });
-		expect(noKey.title).toContain("No judge is available yet, so mu asks about each step.");
+		expect(noKey.title).toContain("No judge is available yet, so mu asks you about every step.");
 		// An account without credit will not answer the next step either.
 		const noCredit = await refusedInJev(
 			failing(new JudgeError("payment_required", "The judge answered 402")),
@@ -592,7 +592,7 @@ describe("permission modes in a session", () => {
 		]) {
 			const down = await refusedInJev(failing(error), "npm publish");
 			expect(down.request, error.message).toMatchObject({ reason: "judgedown" });
-			expect(down.title, error.message).toContain("The judge did not answer this time, so mu asks you.");
+			expect(down.title, error.message).toContain("The judge didn't answer this time, so mu is asking you.");
 		}
 		vi.stubEnv("MU_LANG", "zh-CN");
 		expect((await refusedInJev(failing(new JudgeError("auth", "no key")), "npm publish")).title).toContain(
@@ -624,7 +624,7 @@ describe("permission modes in a session", () => {
 
 		const off = await refusedInJev(() => ({}), "npm publish", "off");
 		expect(off.request).toMatchObject({ reason: "unsure" });
-		expect(off.title).toContain("Jev is not sure this step is what you want.");
+		expect(off.title).toContain("Jev isn't sure this step is what you want.");
 	});
 
 	it("Jev approves in shadow too: its verdict counts, and a judge that did not answer is said not to have", async () => {
@@ -766,7 +766,7 @@ describe("permission modes in a session", () => {
 		expect(first.of("permissions.mode")[0]).toMatchObject({ mode: "jev", label: "Jev approves" });
 		await first.harness.session.prompt("/permissions minimal");
 		expect(first.of("permissions.mode").at(-1)).toMatchObject({ mode: "ask" });
-		expect(first.notes.at(-1)).toContain("Permissions: Minimal permissions");
+		expect(first.notes.at(-1)).toContain("Permissions set to Ask first");
 		expect(JSON.parse(readFileSync(join(dir, "mu", "permissions.json"), "utf8"))).toEqual({
 			version: 1,
 			mode: "ask",

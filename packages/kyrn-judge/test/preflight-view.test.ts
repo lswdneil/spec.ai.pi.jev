@@ -154,14 +154,14 @@ describe("preflight view", () => {
 		});
 		const none = verdictData(failed, { by: "jev-latest", state: "none" });
 		expect(renderVerdict(none, false, 120, plain)[0]).toContain(
-			"◇ jev-latest  no verdict (error:timeout) · stock behaviour for this turn",
+			"◇ jev-latest  no verdict (error:timeout) · default behavior for this turn",
 		);
 		const skipped = verdictData(undefined, { by: "jev-latest", state: "none", reason: "skipped", waitedMs: 1200 });
 		expect(renderVerdict(skipped, false, 120, plain)[0]).toContain("no verdict (skipped)");
 
 		const shadow = verdictData(decision({ mode: "shadow", source: "fallback" }), { by: "laya", state: "shadow" });
 		expect(renderVerdict(shadow, false, 120, plain)[0]).toContain(
-			"◇ laya  chat · answer directly · 640 ms · shadow, not applied",
+			"◇ Laya  chat · answer directly · 640 ms · shadow, not applied",
 		);
 
 		const late = verdictData(decision(), { by: "jev-latest", state: "late" });
