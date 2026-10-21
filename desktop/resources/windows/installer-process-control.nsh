@@ -18,14 +18,14 @@ Var /GLOBAL MuCurrentOutDir
     $$ownedPrefix = $$instDir.TrimEnd('\') + '\'; \
     $$psProc = @(Get-CimInstance -ClassName Win32_Process | Where-Object { $$_.ProcessId -eq $$PID })[0]; \
     $$installerPid = $$psProc.ParentProcessId; \
-    function Test-AionUiOwnedProcess($$proc) { \
+    function Test-MuOwnedProcess($$proc) { \
       $$path = $$proc.ExecutablePath; \
       if (-not $$path) { $$path = $$proc.Path } \
       if (-not $$path) { return $$false } \
       try { $$full = [System.IO.Path]::GetFullPath($$path) } catch { return $$false } \
       return $$proc.ProcessId -ne $$installerPid -and $$full.StartsWith($$ownedPrefix, [System.StringComparison]::CurrentCultureIgnoreCase) \
     } \
-    $$hits = @(Get-CimInstance -ClassName Win32_Process | Where-Object { Test-AionUiOwnedProcess $$_ }); \
+    $$hits = @(Get-CimInstance -ClassName Win32_Process | Where-Object { Test-MuOwnedProcess $$_ }); \
     $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'process-find'; ownedPrefix = $$ownedPrefix; installerPid = $$installerPid; hits = $$hits.Count; owned = ($$hits.Count -gt 0) }; \
     Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 8); \
     if ($$hits.Count -gt 0) { $$hitPayload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'process-find-hits'; processes = @($$hits | Select-Object ProcessId,ParentProcessId,Name,ExecutablePath,Path,CommandLine) }; Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$hitPayload | ConvertTo-Json -Compress -Depth 10); exit 0 } \
@@ -43,7 +43,7 @@ Var /GLOBAL MuCurrentOutDir
     $$ownedPrefix = $$instDir.TrimEnd('\') + '\'; \
     $$psProc = @(Get-CimInstance -ClassName Win32_Process | Where-Object { $$_.ProcessId -eq $$PID })[0]; \
     $$installerPid = $$psProc.ParentProcessId; \
-    function Test-AionUiOwnedProcess($$proc) { \
+    function Test-MuOwnedProcess($$proc) { \
       $$path = $$proc.ExecutablePath; \
       if (-not $$path) { $$path = $$proc.Path } \
       if (-not $$path) { return $$false } \
@@ -51,11 +51,11 @@ Var /GLOBAL MuCurrentOutDir
       return $$proc.ProcessId -ne $$installerPid -and $$full.StartsWith($$ownedPrefix, [System.StringComparison]::CurrentCultureIgnoreCase) \
     } \
     $$all = @(Get-CimInstance -ClassName Win32_Process); \
-    $$owned = @($$all | Where-Object { Test-AionUiOwnedProcess $$_ }); \
+    $$owned = @($$all | Where-Object { Test-MuOwnedProcess $$_ }); \
     $$ids = @($$owned | ForEach-Object { [int]$$_.ProcessId }); \
     $$frontier = @($$ids); \
     while ($$frontier.Count -gt 0) { \
-      $$children = @($$all | Where-Object { $$frontier -contains [int]$$_.ParentProcessId -and [int]$$_.ProcessId -ne [int]$$installerPid } | Where-Object { Test-AionUiOwnedProcess $$_ }); \
+      $$children = @($$all | Where-Object { $$frontier -contains [int]$$_.ParentProcessId -and [int]$$_.ProcessId -ne [int]$$installerPid } | Where-Object { Test-MuOwnedProcess $$_ }); \
       $$childIds = @($$children | ForEach-Object { [int]$$_.ProcessId }); \
       $$ids = @($$ids + $$childIds | Select-Object -Unique); \
       $$frontier = $$childIds; \
@@ -81,7 +81,7 @@ Var /GLOBAL MuCurrentOutDir
     $$lockerListPath = '$PLUGINSDIR\mu-rm-lockers.txt'; \
     [System.IO.File]::WriteAllText($$lockerListPath, '', (New-Object System.Text.UTF8Encoding $$false)); \
     try { \
-    function Test-AionUiSamePath($$left, $$right) { \
+    function Test-MuSamePath($$left, $$right) { \
       if ([string]::IsNullOrWhiteSpace($$left) -or [string]::IsNullOrWhiteSpace($$right)) { return $$false }; \
       try { \
         $$leftFull = [System.IO.Path]::GetFullPath($$left).TrimEnd('\'); \
@@ -91,11 +91,11 @@ Var /GLOBAL MuCurrentOutDir
     } \
     $$psProc = @(Get-CimInstance -ClassName Win32_Process | Where-Object { $$_.ProcessId -eq $$PID })[0]; \
     $$installerPid = if ($$psProc) { [int]$$psProc.ParentProcessId } else { 0 }; \
-    $$installerSelfLock = (Test-AionUiSamePath $$currentOutDir $$targetPath) -or (Test-AionUiSamePath $$currentOutDir $$instDir); \
-      $$source = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('dXNpbmcgU3lzdGVtOyB1c2luZyBTeXN0ZW0uVGV4dDsgdXNpbmcgU3lzdGVtLlJ1bnRpbWUuSW50ZXJvcFNlcnZpY2VzOyBuYW1lc3BhY2UgQWlvblVpLlJlc3RhcnRNYW5hZ2VyIHsgcHVibGljIGVudW0gUk1fQVBQX1RZUEUgeyBSbVVua25vd25BcHAgPSAwLCBSbU1haW5XaW5kb3cgPSAxLCBSbU90aGVyV2luZG93ID0gMiwgUm1TZXJ2aWNlID0gMywgUm1FeHBsb3JlciA9IDQsIFJtQ29uc29sZSA9IDUsIFJtQ3JpdGljYWwgPSAxMDAwIH0gW1N0cnVjdExheW91dChMYXlvdXRLaW5kLlNlcXVlbnRpYWwpXSBwdWJsaWMgc3RydWN0IFJNX1VOSVFVRV9QUk9DRVNTIHsgcHVibGljIGludCBkd1Byb2Nlc3NJZDsgcHVibGljIFN5c3RlbS5SdW50aW1lLkludGVyb3BTZXJ2aWNlcy5Db21UeXBlcy5GSUxFVElNRSBQcm9jZXNzU3RhcnRUaW1lOyB9IFtTdHJ1Y3RMYXlvdXQoTGF5b3V0S2luZC5TZXF1ZW50aWFsLCBDaGFyU2V0ID0gQ2hhclNldC5Vbmljb2RlKV0gcHVibGljIHN0cnVjdCBSTV9QUk9DRVNTX0lORk8geyBwdWJsaWMgUk1fVU5JUVVFX1BST0NFU1MgUHJvY2VzczsgW01hcnNoYWxBcyhVbm1hbmFnZWRUeXBlLkJ5VmFsVFN0ciwgU2l6ZUNvbnN0ID0gMjU2KV0gcHVibGljIHN0cmluZyBzdHJBcHBOYW1lOyBbTWFyc2hhbEFzKFVubWFuYWdlZFR5cGUuQnlWYWxUU3RyLCBTaXplQ29uc3QgPSA2NCldIHB1YmxpYyBzdHJpbmcgc3RyU2VydmljZVNob3J0TmFtZTsgcHVibGljIFJNX0FQUF9UWVBFIEFwcGxpY2F0aW9uVHlwZTsgcHVibGljIHVpbnQgQXBwU3RhdHVzOyBwdWJsaWMgdWludCBUU1Nlc3Npb25JZDsgW01hcnNoYWxBcyhVbm1hbmFnZWRUeXBlLkJvb2wpXSBwdWJsaWMgYm9vbCBiUmVzdGFydGFibGU7IH0gcHVibGljIHN0YXRpYyBjbGFzcyBOYXRpdmUgeyBbRGxsSW1wb3J0KCJyc3RydG1nci5kbGwiLCBDaGFyU2V0PUNoYXJTZXQuVW5pY29kZSldIHB1YmxpYyBzdGF0aWMgZXh0ZXJuIGludCBSbVN0YXJ0U2Vzc2lvbihvdXQgdWludCBwU2Vzc2lvbkhhbmRsZSwgaW50IGR3U2Vzc2lvbkZsYWdzLCBTdHJpbmdCdWlsZGVyIHN0clNlc3Npb25LZXkpOyBbRGxsSW1wb3J0KCJyc3RydG1nci5kbGwiLCBDaGFyU2V0PUNoYXJTZXQuVW5pY29kZSldIHB1YmxpYyBzdGF0aWMgZXh0ZXJuIGludCBSbVJlZ2lzdGVyUmVzb3VyY2VzKHVpbnQgZHdTZXNzaW9uSGFuZGxlLCBVSW50MzIgbkZpbGVzLCBzdHJpbmdbXSByZ3NGaWxlbmFtZXMsIFVJbnQzMiBuQXBwbGljYXRpb25zLCBJbnRQdHIgcmdBcHBsaWNhdGlvbnMsIFVJbnQzMiBuU2VydmljZXMsIHN0cmluZ1tdIHJnc1NlcnZpY2VOYW1lcyk7IFtEbGxJbXBvcnQoInJzdHJ0bWdyLmRsbCIpXSBwdWJsaWMgc3RhdGljIGV4dGVybiBpbnQgUm1HZXRMaXN0KHVpbnQgZHdTZXNzaW9uSGFuZGxlLCBvdXQgdWludCBwblByb2NJbmZvTmVlZGVkLCByZWYgdWludCBwblByb2NJbmZvLCBbSW4sIE91dF0gUk1fUFJPQ0VTU19JTkZPW10gcmdBZmZlY3RlZEFwcHMsIHJlZiB1aW50IGxwZHdSZWJvb3RSZWFzb25zKTsgW0RsbEltcG9ydCgicnN0cnRtZ3IuZGxsIildIHB1YmxpYyBzdGF0aWMgZXh0ZXJuIGludCBSbUVuZFNlc3Npb24odWludCBwU2Vzc2lvbkhhbmRsZSk7IH0gfQ==')); \
+    $$installerSelfLock = (Test-MuSamePath $$currentOutDir $$targetPath) -or (Test-MuSamePath $$currentOutDir $$instDir); \
+      $$source = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('dXNpbmcgU3lzdGVtOyB1c2luZyBTeXN0ZW0uVGV4dDsgdXNpbmcgU3lzdGVtLlJ1bnRpbWUuSW50ZXJvcFNlcnZpY2VzOyBuYW1lc3BhY2UgTXUuUmVzdGFydE1hbmFnZXIgeyBwdWJsaWMgZW51bSBSTV9BUFBfVFlQRSB7IFJtVW5rbm93bkFwcCA9IDAsIFJtTWFpbldpbmRvdyA9IDEsIFJtT3RoZXJXaW5kb3cgPSAyLCBSbVNlcnZpY2UgPSAzLCBSbUV4cGxvcmVyID0gNCwgUm1Db25zb2xlID0gNSwgUm1Dcml0aWNhbCA9IDEwMDAgfSBbU3RydWN0TGF5b3V0KExheW91dEtpbmQuU2VxdWVudGlhbCldIHB1YmxpYyBzdHJ1Y3QgUk1fVU5JUVVFX1BST0NFU1MgeyBwdWJsaWMgaW50IGR3UHJvY2Vzc0lkOyBwdWJsaWMgU3lzdGVtLlJ1bnRpbWUuSW50ZXJvcFNlcnZpY2VzLkNvbVR5cGVzLkZJTEVUSU1FIFByb2Nlc3NTdGFydFRpbWU7IH0gW1N0cnVjdExheW91dChMYXlvdXRLaW5kLlNlcXVlbnRpYWwsIENoYXJTZXQgPSBDaGFyU2V0LlVuaWNvZGUpXSBwdWJsaWMgc3RydWN0IFJNX1BST0NFU1NfSU5GTyB7IHB1YmxpYyBSTV9VTklRVUVfUFJPQ0VTUyBQcm9jZXNzOyBbTWFyc2hhbEFzKFVubWFuYWdlZFR5cGUuQnlWYWxUU3RyLCBTaXplQ29uc3QgPSAyNTYpXSBwdWJsaWMgc3RyaW5nIHN0ckFwcE5hbWU7IFtNYXJzaGFsQXMoVW5tYW5hZ2VkVHlwZS5CeVZhbFRTdHIsIFNpemVDb25zdCA9IDY0KV0gcHVibGljIHN0cmluZyBzdHJTZXJ2aWNlU2hvcnROYW1lOyBwdWJsaWMgUk1fQVBQX1RZUEUgQXBwbGljYXRpb25UeXBlOyBwdWJsaWMgdWludCBBcHBTdGF0dXM7IHB1YmxpYyB1aW50IFRTU2Vzc2lvbklkOyBbTWFyc2hhbEFzKFVubWFuYWdlZFR5cGUuQm9vbCldIHB1YmxpYyBib29sIGJSZXN0YXJ0YWJsZTsgfSBwdWJsaWMgc3RhdGljIGNsYXNzIE5hdGl2ZSB7IFtEbGxJbXBvcnQoInJzdHJ0bWdyLmRsbCIsIENoYXJTZXQ9Q2hhclNldC5Vbmljb2RlKV0gcHVibGljIHN0YXRpYyBleHRlcm4gaW50IFJtU3RhcnRTZXNzaW9uKG91dCB1aW50IHBTZXNzaW9uSGFuZGxlLCBpbnQgZHdTZXNzaW9uRmxhZ3MsIFN0cmluZ0J1aWxkZXIgc3RyU2Vzc2lvbktleSk7IFtEbGxJbXBvcnQoInJzdHJ0bWdyLmRsbCIsIENoYXJTZXQ9Q2hhclNldC5Vbmljb2RlKV0gcHVibGljIHN0YXRpYyBleHRlcm4gaW50IFJtUmVnaXN0ZXJSZXNvdXJjZXModWludCBkd1Nlc3Npb25IYW5kbGUsIFVJbnQzMiBuRmlsZXMsIHN0cmluZ1tdIHJnc0ZpbGVuYW1lcywgVUludDMyIG5BcHBsaWNhdGlvbnMsIEludFB0ciByZ0FwcGxpY2F0aW9ucywgVUludDMyIG5TZXJ2aWNlcywgc3RyaW5nW10gcmdzU2VydmljZU5hbWVzKTsgW0RsbEltcG9ydCgicnN0cnRtZ3IuZGxsIildIHB1YmxpYyBzdGF0aWMgZXh0ZXJuIGludCBSbUdldExpc3QodWludCBkd1Nlc3Npb25IYW5kbGUsIG91dCB1aW50IHBuUHJvY0luZm9OZWVkZWQsIHJlZiB1aW50IHBuUHJvY0luZm8sIFtJbiwgT3V0XSBSTV9QUk9DRVNTX0lORk9bXSByZ0FmZmVjdGVkQXBwcywgcmVmIHVpbnQgbHBkd1JlYm9vdFJlYXNvbnMpOyBbRGxsSW1wb3J0KCJyc3RydG1nci5kbGwiKV0gcHVibGljIHN0YXRpYyBleHRlcm4gaW50IFJtRW5kU2Vzc2lvbih1aW50IHBTZXNzaW9uSGFuZGxlKTsgfSB9')); \
       Add-Type -TypeDefinition $$source -ErrorAction Stop; \
       $$session = [uint32]0; $$key = New-Object System.Text.StringBuilder 64; \
-      $$result = [AionUi.RestartManager.Native]::RmStartSession([ref]$$session, 0, $$key); \
+      $$result = [Mu.RestartManager.Native]::RmStartSession([ref]$$session, 0, $$key); \
       if ($$result -ne 0) { throw \"RmStartSession=$$result\" } \
       try { \
         $$ERROR_MORE_DATA = 234; \
@@ -128,14 +128,14 @@ Var /GLOBAL MuCurrentOutDir
         for ($$i = 0; $$i -lt $$resources.Count; $$i += 256) { \
           $$end = [Math]::Min($$i + 255, $$resources.Count - 1); \
           $$chunk = [string[]]$$resources[$$i..$$end]; \
-          $$result = [AionUi.RestartManager.Native]::RmRegisterResources($$session, [uint32]$$chunk.Count, $$chunk, 0, [IntPtr]::Zero, 0, $$null); \
+          $$result = [Mu.RestartManager.Native]::RmRegisterResources($$session, [uint32]$$chunk.Count, $$chunk, 0, [IntPtr]::Zero, 0, $$null); \
           if ($$result -ne 0) { throw \"RmRegisterResources=$$result\" } \
         } \
         $$needed = [uint32]0; $$count = [uint32]0; $$reasons = [uint32]0; \
         for ($$attempt = 0; $$attempt -lt 6; $$attempt++) { \
           if ($$attempt -gt 0) { Start-Sleep -Milliseconds (50 * $$attempt) } \
           $$needed = [uint32]0; $$count = [uint32]0; $$reasons = [uint32]0; \
-          $$result = [AionUi.RestartManager.Native]::RmGetList($$session, [ref]$$needed, [ref]$$count, $$null, [ref]$$reasons); \
+          $$result = [Mu.RestartManager.Native]::RmGetList($$session, [ref]$$needed, [ref]$$count, $$null, [ref]$$reasons); \
           if ($$result -ne $$ERROR_ACCESS_DENIED) { break } \
         } \
         if ($$result -ne 0 -and $$result -ne 234) { throw \"RmGetList=$$result\" } \
@@ -144,8 +144,8 @@ Var /GLOBAL MuCurrentOutDir
           for ($$attempt = 0; $$attempt -lt 6; $$attempt++) { \
             if ($$attempt -gt 0) { Start-Sleep -Milliseconds (50 * $$attempt) } \
             $$count = $$needed; \
-            $$apps = New-Object 'AionUi.RestartManager.RM_PROCESS_INFO[]' $$count; \
-            $$result = [AionUi.RestartManager.Native]::RmGetList($$session, [ref]$$needed, [ref]$$count, $$apps, [ref]$$reasons); \
+            $$apps = New-Object 'Mu.RestartManager.RM_PROCESS_INFO[]' $$count; \
+            $$result = [Mu.RestartManager.Native]::RmGetList($$session, [ref]$$needed, [ref]$$count, $$apps, [ref]$$reasons); \
             if ($$result -ne $$ERROR_ACCESS_DENIED -and $$result -ne $$ERROR_MORE_DATA) { break } \
           } \
           if ($$result -ne 0) { throw \"RmGetList=$$result\" } \
@@ -163,7 +163,7 @@ Var /GLOBAL MuCurrentOutDir
         if ($$installerSelfLock -and $$lockers.Count -gt 0) { $$payload.fallbackReason = 'installer-self-lock'; $$payload.message = 'The installer process is using the install directory as its current output directory.' } elseif ($$lockers.Count -eq 0) { $$payload.fallbackReason = 'restart-manager-no-process'; $$payload.message = 'Windows did not identify a specific locking process. Close terminals, editors, and file managers opened in the install folder.' }; \
         Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 10); \
         if ($$lockers.Count -gt 0) { exit 0 } else { exit 1 } \
-      } finally { [void][AionUi.RestartManager.Native]::RmEndSession($$session) } \
+      } finally { [void][Mu.RestartManager.Native]::RmEndSession($$session) } \
     } catch { \
       $$payload = [ordered]@{ schemaVersion = 1; ts = (Get-Date -Format o); session = '$MuSessionId'; version = '${VERSION}'; arch = '${MU_TARGET_ARCH}'; updated = ('$MuIsUpdated' -eq '1'); instDir = '$INSTDIR'; event = 'rm-error'; target = $$targetPath; error = $$_.Exception.Message }; \
       Add-Content -LiteralPath $$log -Encoding UTF8 -Value ($$payload | ConvertTo-Json -Compress -Depth 8); \
