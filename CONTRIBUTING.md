@@ -162,4 +162,4 @@ mu merges pi's releases regularly. A bug that's also in pi is best fixed in [pi]
 
 ## License of contributions
 
-By contributing, you agree that your contribution is licensed under the license of the part of the repository it changes: MIT for everything outside `desktop/` ([LICENSE](LICENSE)), and Apache 2.0 for `desktop/` ([desktop/LICENSE](desktop/LICENSE)).
+By contributing, you agree that your contribution is licensed under the MIT license ([LICENSE](LICENSE), and [desktop/LICENSE](desktop/LICENSE) for the desktop app). A change to a file listed in [desktop/AIONUI-FILES.txt](desktop/AIONUI-FILES.txt), which came from AionUi, is licensed under Apache 2.0 like the rest of that file.

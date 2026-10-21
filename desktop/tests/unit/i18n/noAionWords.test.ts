@@ -57,7 +57,7 @@ const COMPATIBILITY_IDS = new Map<string, string>([
   ['x-aionui-internal', 'a request header between the app and its local service'],
 ]);
 
-/** Log lines go to the log file, not to the screen, and keep their tags (`[AionUi]`) for whoever reads old logs. */
+/** Log lines go to the log file, not to the screen: what they say is not checked here (they are tagged `[mu]`). */
 function isLogCall(node: ts.Node): boolean {
   if (!ts.isCallExpression(node)) return false;
   const callee = node.expression.getText();

@@ -1,10 +1,4 @@
 /**
- * @license
- * Copyright 2025 AionUi (aionui.com)
- * SPDX-License-Identifier: Apache-2.0
- */
-
-/**
  * The work panel's 浏览器 tab as the person uses it: its pages as tabs, one address field for the page in front (an
  * address or words to search for), back, forward and reload, a new blank page, closing, each tab's right-click menu,
  * and filling the page.

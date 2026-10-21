@@ -10,7 +10,7 @@
   <a href="https://github.com/qybaihe/mu/actions/workflows/desktop.yml"><img src="https://github.com/qybaihe/mu/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
   <a href="https://www.npmjs.com/package/mu-agent"><img src="https://img.shields.io/npm/v/mu-agent?label=mu-agent" alt="npm"></a>
   <a href="https://github.com/qybaihe/mu/releases"><img src="https://img.shields.io/github/v/release/qybaihe/mu?include_prereleases&label=desktop" alt="Desktop release"></a>
-  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT%20%2B%20Apache--2.0-blue" alt="License"></a>
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
   <a href="https://github.com/qybaihe/mu/discussions"><img src="https://img.shields.io/github/discussions/qybaihe/mu?label=discussions" alt="Discussions"></a>
 </p>
 
@@ -301,7 +301,7 @@ npm run check                  # 포맷, 린트, 타입 검사
 
 ## 출처와 라이선스
 
-mu는 [pi](https://github.com/earendil-works/pi)(코딩 에이전트, MIT; 루트의 [LICENSE](../../LICENSE)가 `packages/`와 `kyrn/`에 적용)와 [AionUi](https://github.com/iOfficeAI/AionUi)(데스크톱 앱, Apache 2.0; `desktop/`에는 AionUi의 [LICENSE](../../desktop/LICENSE)를 그대로 둠)를 바탕으로 만들었어요. 두 프로젝트에 감사드려요. 몇몇 판정 지점은 다른 프로젝트의 아이디어를 바탕으로 해요. 프롬프트 인젝션 검사의 질문 방식은 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)에서, 이어서 하기 검사와 일괄 판정 도구는 [oh-my-pi](https://github.com/can1357/oh-my-pi)를 따랐어요. 판정 커널에 쓰인 서드파티 코드는 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)에 정리되어 있어요.
+mu는 MIT 라이선스예요([LICENSE](../../LICENSE), 데스크톱 앱은 [desktop/LICENSE](../../desktop/LICENSE)). [pi](https://github.com/earendil-works/pi)(코딩 에이전트, MIT)와 [AionUi](https://github.com/iOfficeAI/AionUi)를 바탕으로 만들었어요. 두 프로젝트에 감사드려요. 데스크톱 앱은 AionUi의 포크에서 시작했고, AionUi에서 온 파일은 [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt)에 정리되어 있으며 계속 Apache 2.0을 따라요([desktop/NOTICE](../../desktop/NOTICE)). 몇몇 판정 지점은 다른 프로젝트의 아이디어를 바탕으로 해요. 프롬프트 인젝션 검사의 질문 방식은 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)에서, 이어서 하기 검사와 일괄 판정 도구는 [oh-my-pi](https://github.com/can1357/oh-my-pi)를 따랐어요. 판정 커널에 쓰인 서드파티 코드는 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)에 정리되어 있어요.
 
 ## 커뮤니티
 

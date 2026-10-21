@@ -1,9 +1,3 @@
-/**
- * @license
- * Copyright 2026 AionUi (aionui.com)
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import deDE from '@/renderer/services/i18n/locales/de-DE/conversation.json';
 import enUS from '@/renderer/services/i18n/locales/en-US/conversation.json';
 import esES from '@/renderer/services/i18n/locales/es-ES/conversation.json';

@@ -1,9 +1,3 @@
-/**
- * @license
- * Copyright 2026 AionUi (aionui.com)
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { describe, expect, it } from 'vitest';
 import type { TMessage } from '@/common/chat/chatLib';
 import { questionsBeforeCalls } from '@/renderer/pages/conversation/Messages/permissionOrder';

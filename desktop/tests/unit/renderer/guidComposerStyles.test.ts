@@ -1,10 +1,4 @@
 /**
- * @license
- * Copyright 2026 AionUi (aionui.com)
- * SPDX-License-Identifier: Apache-2.0
- */
-
-/**
  * The new-conversation card and the send box are one look: the page's own surface and a hairline in both themes,
  * focus as a darker hairline and a lifted shadow rather than the accent, a dashed outline for a file held over them.
  * The project strip under the card's input is the card's own surface below a hairline, not a tinted tray.

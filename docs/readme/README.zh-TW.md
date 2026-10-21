@@ -10,7 +10,7 @@
   <a href="https://github.com/qybaihe/mu/actions/workflows/desktop.yml"><img src="https://github.com/qybaihe/mu/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
   <a href="https://www.npmjs.com/package/mu-agent"><img src="https://img.shields.io/npm/v/mu-agent?label=mu-agent" alt="npm"></a>
   <a href="https://github.com/qybaihe/mu/releases"><img src="https://img.shields.io/github/v/release/qybaihe/mu?include_prereleases&label=desktop" alt="Desktop release"></a>
-  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT%20%2B%20Apache--2.0-blue" alt="License"></a>
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
   <a href="https://github.com/qybaihe/mu/discussions"><img src="https://img.shields.io/github/discussions/qybaihe/mu?label=discussions" alt="Discussions"></a>
 </p>
 
@@ -301,7 +301,7 @@ npm run check                  # 格式、靜態檢查、型別
 
 ## 來源與授權
 
-mu 以 [pi](https://github.com/earendil-works/pi)（程式設計代理，MIT；根目錄的 [LICENSE](../../LICENSE) 涵蓋 `packages/` 和 `kyrn/`）和 [AionUi](https://github.com/iOfficeAI/AionUi)（桌面版，Apache 2.0；`desktop/` 保留它的 [LICENSE](../../desktop/LICENSE)）為基礎改造，感謝這兩個專案。有幾個判定點參考了其他專案：提示注入篩檢的問法來自 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)，續跑檢查和批次判定工具參考了 [oh-my-pi](https://github.com/can1357/oh-my-pi)。判定核心用到的第三方程式碼列在 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)。
+mu 採用 MIT 授權（[LICENSE](../../LICENSE)；桌面版見 [desktop/LICENSE](../../desktop/LICENSE)）。它以 [pi](https://github.com/earendil-works/pi)（程式設計代理，MIT）和 [AionUi](https://github.com/iOfficeAI/AionUi) 為基礎改造，感謝這兩個專案：桌面版起步於 AionUi 的分支，來自 AionUi 的檔案列在 [desktop/AIONUI-FILES.txt](../../desktop/AIONUI-FILES.txt)，仍以 Apache 2.0 授權（見 [desktop/NOTICE](../../desktop/NOTICE)）。有幾個判定點參考了其他專案：提示注入篩檢的問法來自 [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills)，續跑檢查和批次判定工具參考了 [oh-my-pi](https://github.com/can1357/oh-my-pi)。判定核心用到的第三方程式碼列在 [THIRD_PARTY_NOTICES.md](../../packages/kyrn-judge/THIRD_PARTY_NOTICES.md)。
 
 ## 社群支援
 

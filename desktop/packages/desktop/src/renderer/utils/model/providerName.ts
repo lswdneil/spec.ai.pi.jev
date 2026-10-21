@@ -1,9 +1,3 @@
-/**
- * @license
- * Copyright 2025 AionUi (aionui.com)
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { isSubscriptionProvider } from '@/common/kyrn/login';
 import { BUILTIN_PROVIDER_NAMES } from '@/common/kyrn/models';
 
