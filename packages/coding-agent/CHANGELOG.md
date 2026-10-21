@@ -8,6 +8,7 @@
 
 ### Changed
 
+- Changed the default GitHub Copilot model to GPT-6.1 Sol (`gpt-6.1-sol`): GPT-5.4 is no longer in Copilot's model catalog.
 - `generateSummary()` and `generateSummaryWithUsage()` now ignore their `reserveTokens` parameter. Summary requests use the model's output limit instead.
 
 ### Fixed
