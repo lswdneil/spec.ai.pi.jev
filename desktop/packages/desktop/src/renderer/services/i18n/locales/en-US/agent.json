@@ -51,7 +51,7 @@
   },
   "runtimeRestart": {
     "tooltip": "Reconnect agent",
-    "confirmContent": "Restart the agent process so it picks up CLI config changes made outside mu, such as a channel switch. Conversation history is kept, and the session resumes when possible.",
+    "confirmContent": "Restart the agent process so it picks up CLI config changes made outside mu, such as a new API key or provider. Conversation history is kept, and the agent picks up where it left off when it can.",
     "success": "Agent reconnected",
     "failed": "Couldn't reconnect agent",
     "initializingTooltip": "Reconnect once the agent has finished starting",

@@ -13,7 +13,7 @@
   "settings": "Settings",
   "system": "System",
   "about": "About",
-  "back": "Back to chat",
+  "back": "Back",
   "goBack": "Back",
   "add": "Add",
   "edit": "Edit",
@@ -24,7 +24,7 @@
   "loading": "Loading…",
   "copy": "Copy",
   "reply": "Reply",
-  "openInBuiltinBrowser": "Open in built-in browser",
+  "openInBuiltinBrowser": "Open in the in-app browser",
   "openInSystemBrowser": "Open in system browser",
   "copySuccess": "Copied",
   "copyFailed": "Couldn't copy",
@@ -66,9 +66,9 @@
   "refresh": "Refresh",
   "readOnly": "Read-only",
   "tray.showWindow": "Show mu",
-  "tray.newChat": "New chat",
-  "tray.closeToTray": "Hide to tray",
-  "tray.hideToMenuBar": "Hide to menu bar",
+  "tray.newChat": "New conversation",
+  "tray.closeToTray": "Minimize to tray",
+  "tray.hideToMenuBar": "Hide mu",
   "tray.about": "About mu",
   "tray.restart": "Restart mu",
   "tray.quit": "Quit mu",
@@ -106,8 +106,8 @@
       "description": "mu opened, but its local service stopped while preparing local data such as assistant and agent records. Reinstalling mu probably won't fix this. The app log shows which data couldn't be prepared."
     },
     "startupDirectory": {
-      "title": "Startup directory unavailable",
-      "description": "mu opened, but its local service couldn't start because the configured work or log directory is missing, unavailable or blocked by permissions. Check that these directories exist and are writable, then restart mu."
+      "title": "Startup folder unavailable",
+      "description": "mu opened, but its local service couldn't start because the configured work or log folder is missing, unavailable or blocked by permissions. Check that these folders exist and are writable, then restart mu."
     },
     "recoverableDatabaseCorruption": {
       "title": "Local data is corrupted",
@@ -168,12 +168,12 @@
     "judge": "Judge configuration",
     "reload": "Reload",
     "starting": "Starting mu…",
-    "startingHint": "Connecting to the local mu kernel and reading the model and judge configuration.",
+    "startingHint": "Connecting to the local service and loading your model and judge settings.",
     "startupError": "mu couldn't start",
     "hiveView": {
       "title": "Hive",
       "agents": "Subagents",
-      "open": "Open Hive",
+      "open": "Open the hive",
       "inspect": "Inspect {{name}}",
       "summary": "{{active}} active · {{done}} done / {{total}}",
       "summaryEnded": "{{done}} done / {{total}}",
@@ -203,7 +203,7 @@
       "lineReport": "{{from}} reported back to mu",
       "deliveries": "Information flow",
       "noDeliveries": "No confirmed deliveries yet.",
-      "board": "Shared board",
+      "board": "Shared findings",
       "noNotes": "No shared findings yet.",
       "context": "Execution context",
       "contextHint": "Recorded messages and finished tool output, not the full model prompt. Tool output appears once the call finishes.",
@@ -216,9 +216,9 @@
       "input": "Input",
       "output": "Output",
       "assistant": "Bee message",
-      "thinking": "Published thinking",
+      "thinking": "Thinking",
       "user": "Task input",
-      "custom": "Harness message",
+      "custom": "Message from mu",
       "tool": "Tool",
       "waitingOutput": "Waiting for the tool to finish.",
       "noText": "No text output.",
@@ -227,8 +227,8 @@
       "noteMissing": "Finding not recorded.",
       "allFlow": "All deliveries",
       "beeFlow": "Deliveries for {{name}}",
-      "audit": "Jev verdicts",
-      "waitingRun": "Waiting for this Hive’s recorded events.",
+      "audit": "Verdicts",
+      "waitingRun": "Waiting for this hive's recorded events.",
       "recordedAt": "Recorded at {{time}}",
       "beeMissing": "This bee isn't in the recorded snapshot.",
       "snapshot": "Last reported state",
@@ -310,9 +310,9 @@
         "unknown": "Outcome unknown"
       },
       "actions": {
-        "toRuntime": "Verdict handed to the execution layer; this doesn't prove the operation completed.",
-        "observeOnly": "Shadow mode: recorded for comparison; execution doesn't change based on this verdict.",
-        "useDefault": "Fell back to this decision point’s default. A fallback isn’t permission to proceed: risk checks and Hive gates default to the cautious side.",
+        "toRuntime": "Verdict passed to mu. This doesn't confirm the action finished.",
+        "observeOnly": "Shadow mode: logged for comparison. This verdict changes nothing.",
+        "useDefault": "Fell back to this decision point's default. A fallback isn't permission to proceed: risk checks and hive gates default to the cautious side.",
         "lateIgnored": "The turn had already started; this late verdict didn't change it.",
         "waiting": "Waiting for the verdict.",
         "waitEnded": "The wait or task ended without a final verdict on record.",
@@ -339,7 +339,7 @@
         "browser": "What should the browser do next?",
         "recall": "Which past lessons apply now?",
         "capture": "Is this a lasting correction or preference?",
-        "outcome": "Did this turn find a way out worth keeping?",
+        "outcome": "Did this turn find a workaround worth remembering?",
         "worth": "Is this lesson worth keeping?",
         "merge": "Should the new lesson merge with a kept one?",
         "applied": "Were the lessons followed?",
@@ -347,7 +347,7 @@
         "drift": "Is the work still on track?",
         "completion": "Does this change still need verification?",
         "notify": "When should this notification reach the model?",
-        "cache": "Should the session cache stay warm?",
+        "cache": "Should the prompt cache stay warm?",
         "other": "Recorded verdict",
         "rewind": "Is this approach a dead end worth rewinding?",
         "goalMet": "Has the goal been reached?",
@@ -361,7 +361,7 @@
         "board": "Where does the work stand?",
         "relate": "What does this finding do to an earlier one?",
         "approval": "Is this a step the task needs, done the way you would expect?",
-        "injection": "Does this tool output carry instructions aimed at the AI?",
+        "injection": "Does this tool output carry instructions aimed at the agent?",
         "continuation": "Did the run stop short of what it should do?",
         "items": "The agent's own question about each item"
       },
@@ -388,7 +388,7 @@
         "keepResult": "Keep result",
         "keepCall": "Keep call",
         "broken": "Rules broken",
-        "open": "Capabilities to open",
+        "open": "Capabilities to turn on",
         "errors": "Errors",
         "warnings": "Warnings",
         "withinTask": "Within the task",
@@ -416,7 +416,7 @@
         "false": "No",
         "yes": "Yes",
         "no": "No",
-        "unsure": "Uncertain",
+        "unsure": "Unsure",
         "unknown": "Unknown",
         "chat": "Conversation",
         "chat_question": "Concept question",
@@ -479,7 +479,7 @@
         "constraint": "New constraint",
         "correction": "Correction",
         "subgoal": "New subgoal",
-        "unclear": "Can’t tell",
+        "unclear": "Can't tell",
         "hold": "Hold back",
         "no_answer": "No answer in time",
         "aborted": "Canceled",
@@ -490,7 +490,7 @@
         "server": "Judge server error",
         "invalid_response": "Unreadable judge answer",
         "verdict": "The judge answered",
-        "learn": "Keep the way out",
+        "learn": "Keep the workaround",
         "reusable": "Useful again",
         "one_off": "Only this once",
         "already_known": "Known already",
@@ -526,12 +526,12 @@
       "errorValue": "Error · {{kind}}",
       "noAnswerAfter": "No answer after {{duration}}",
       "hints": {
-        "answered": "This message answers the agent’s own question: act on it and don’t ask again.",
+        "answered": "This message answers the agent's own question: act on it and don't ask again.",
         "resolve": "The request is loosely worded and may change files: look at the project, state the assumption and ask only for what can't be found here.",
         "clarify": "The request looks under-specified: ask one focused question first.",
         "side_question": "This is a side question: answer it briefly, then carry on with the main task.",
         "plan_first": "This looks large or risky: write a short plan, then carry it out; pause only before a step that can't be undone.",
-        "try_hive": "This looks hard: if the cause is unknown or a direct attempt fails, use the Hive.",
+        "try_hive": "This looks hard: if the cause is unknown or a direct attempt fails, use the hive.",
         "try_delegate": "This splits into independent parts: consider handing them to subagents in parallel."
       },
       "hintChips": {
@@ -550,7 +550,7 @@
             "is_side_question": "Side question",
             "needs_clarification": "Too vague to act on",
             "needs_files_changed": "Needs a code change",
-            "needs_memory": "Past notes would help",
+            "needs_memory": "Past lessons would help",
             "swarm_worthy": "Independent parts",
             "plan_first": "Large or risky",
             "task_complexity": "Scope",
@@ -620,7 +620,7 @@
           "answers": {
             "needed": "Needed besides the summary",
             "not_needed": "The summary is enough",
-            "unclear": "Can’t tell"
+            "unclear": "Can't tell"
           }
         },
         "forget": {
@@ -738,7 +738,7 @@
             "reusable": "Useful again",
             "one_off": "Only this once",
             "already_known": "Known already",
-            "unclear": "Can’t tell"
+            "unclear": "Can't tell"
           }
         },
         "merge": {
@@ -750,7 +750,7 @@
             "refines": "The new one is more precise",
             "contradicts": "They contradict each other",
             "unrelated": "About something else",
-            "unclear": "Can’t tell"
+            "unclear": "Can't tell"
           }
         },
         "applied": {
@@ -773,7 +773,7 @@
             "detour": "A needed side step",
             "drift": "Drifting away",
             "loop": "Going in circles",
-            "other": "Can’t tell"
+            "other": "Can't tell"
           }
         },
         "completion": {
@@ -790,7 +790,7 @@
             "now": "Right away",
             "next_turn": "After the current step",
             "drop": "Never",
-            "other": "Can’t tell"
+            "other": "Can't tell"
           }
         },
         "cache": {
@@ -808,7 +808,7 @@
         "goalMet": {
           "questions": {
             "achieved": "Goal fully reached",
-            "needs_user": "Can’t go on without you"
+            "needs_user": "Can't go on without you"
           }
         },
         "outputDrift": {
@@ -873,11 +873,11 @@
             "waiting": "Waiting for you",
             "wrapping_up": "Wrapping up",
             "stuck": "Seems stuck",
-            "other": "Can’t tell",
+            "other": "Can't tell",
             "none": "None of them",
             "key": "News worth telling",
             "routine": "A routine step",
-            "unclear": "Can’t tell"
+            "unclear": "Can't tell"
           }
         },
         "relate": {
@@ -899,13 +899,13 @@
             "needed": "Needed for the task",
             "beyond": "More than you asked for",
             "unrelated": "Not part of the task",
-            "unclear": "Can’t tell"
+            "unclear": "Can't tell"
           }
         },
         "injection": {
           "questions": {
-            "injected": "Carries instructions aimed at the AI",
-            "passage": "Passage {{number}} carries instructions aimed at the AI"
+            "injected": "Carries instructions aimed at the agent",
+            "passage": "Passage {{number}} carries instructions aimed at the agent"
           }
         },
         "continuation": {
@@ -959,7 +959,7 @@
       "auto_compaction_end": "Compaction finished",
       "hive.note": "Shared finding",
       "hive.delivery": "Delivery confirmed",
-      "hive.gate": "Jev gate",
+      "hive.gate": "Hive gate",
       "hive.manifest": "Hive assignment",
       "bee.event": "Bee event",
       "memory.recalled": "Lessons recalled",
@@ -969,7 +969,7 @@
       "memory.retired": "Lesson retired",
       "memory.merged": "Lessons merged",
       "compaction_start": "Compacting context…",
-      "compaction_end": "Compaction ended",
+      "compaction_end": "Compaction finished",
       "context.usage": "Context usage",
       "context.policy": "Beta compaction mode",
       "compaction.plan": "Beta compaction plan",
@@ -978,7 +978,7 @@
       },
       "board": {
         "update": "Board updated",
-        "switched": "Board turned on or off"
+        "switched": "Board setting changed"
       },
       "permissions": {
         "mode": "Permission mode",
@@ -1002,10 +1002,10 @@
         "updated": "Task frame updated"
       },
       "capability": {
-        "opened": "Capability opened"
+        "opened": "Capability turned on"
       },
       "inherit": {
-        "found": "Inheritable setup found",
+        "found": "Found setup to reuse from Claude Code, Cursor or Codex",
         "rule": "Inherited rule used"
       },
       "mcp": {
@@ -1051,9 +1051,9 @@
     },
     "contextUsage": "Context usage",
     "contextPending": "Waiting for a fresh context measurement",
-    "betaActive": "Beta active",
-    "betaShadow": "Beta in shadow mode",
-    "betaOff": "Beta off",
+    "betaActive": "Beta compaction: on",
+    "betaShadow": "Beta compaction: shadow",
+    "betaOff": "Beta compaction: off",
     "contextWaiting": "Waiting for runtime",
     "contextTrigger": "Compacts at {{tokens}} tokens",
     "autoOff": "Auto compaction off",
@@ -1075,7 +1075,7 @@
       "judge": {
         "idle": "Judge standing by",
         "judging": "Judge at work",
-        "off": "Judge is off"
+        "off": "Judging is off"
       }
     },
     "toolStatus": {
@@ -1089,7 +1089,7 @@
       "switch": "Plain-language board for this project",
       "switching": "Switching…",
       "afterTurn": "Switches when the agent finishes this step",
-      "unknown": "No board in this conversation yet. mu conversations get one while the plain-language board is on in Features.",
+      "unknown": "No board in this conversation yet. Conversations with mu get one while the plain-language board is on in Settings → Core features.",
       "off": "When it's on, this shows in plain words how the work is going, what the agent is doing now and what needs you.",
       "cost": "For this project only. Each update costs one model call.",
       "empty": "Give the agent a moment; this will show in plain words how it's going.",
@@ -1121,12 +1121,12 @@
       "codes": {
         "progress": {
           "none": "No checklist yet.",
-          "all": "All {{total}} things on the checklist are done.",
-          "all_one": "The {{total}} thing on the checklist is done.",
-          "all_other": "All {{total}} things on the checklist are done.",
-          "some": "{{done}} of {{total}} things on the checklist are done.",
-          "some_one": "{{done}} of {{total}} thing on the checklist is done.",
-          "some_other": "{{done}} of {{total}} things on the checklist are done."
+          "all": "All {{total}} checklist items are done.",
+          "all_one": "The only checklist item is done.",
+          "all_other": "All {{total}} checklist items are done.",
+          "some": "{{done}} of {{total}} checklist items are done.",
+          "some_one": "{{done}} of {{total}} checklist item is done.",
+          "some_other": "{{done}} of {{total}} checklist items are done."
         },
         "now": {
           "understanding": "Reading the code and notes to work out what to do.",
@@ -1138,7 +1138,7 @@
           "wrapping_up": "The work is done; wrapping up.",
           "stuck": "Seems to be going in circles; it may need a hint from you.",
           "unclear": "Working.",
-          "focus": "{{now}} (On: {{focus}})"
+          "focus": "{{now}} (working on: {{focus}})"
         },
         "confirm": {
           "waiting_reply": "Waiting for your reply."
@@ -1165,7 +1165,7 @@
         "permission_allowed": "You allowed: {{summary}}",
         "permission_denied": "You didn't allow: {{summary}}",
         "goal_round": "The goal isn't met yet; mu sent it back to work (round {{round, number}}){{reason}}",
-        "goal_met": "The goal holds: {{text}}",
+        "goal_met": "Goal met: {{text}}",
         "goal_paused": "The goal is paused{{reason}}",
         "trouble_loop": "mu noticed it repeating the same step: {{detail}}",
         "trouble": "mu noticed: {{detail}}",
@@ -1198,9 +1198,9 @@
       "uses": "Recalled {{recalled}} · Followed {{applied}}",
       "origins": {
         "user": "From your correction or rule",
-        "outcome": "From the agent’s own way out",
+        "outcome": "From a workaround the agent found",
         "model": "Kept by the model",
-        "subagent": "From a subagent’s report",
+        "subagent": "From a subagent's report",
         "command": "Kept with /remember"
       },
       "updated": "Updated {{date}}",
@@ -1209,18 +1209,18 @@
       "retireConfirm": "Retire this lesson? It won't be recalled again.",
       "loadFailed": "Couldn't load lessons",
       "saveFailed": "Couldn't save the lesson",
-      "empty": "No lessons for this project yet. mu learns them from your corrections, from its own ways out of trouble and from /remember.",
+      "empty": "No lessons for this project yet. mu learns them from your corrections, from workarounds it finds and from /remember.",
       "noneActive": "No lessons in use. Choose All to see retired and replaced ones.",
-      "noMatch": "No lesson matches.",
+      "noMatch": "No matching lessons.",
       "noProject": "This conversation has no project folder, so only lessons for all projects are shown.",
       "notes": {
         "label": "What the lessons did in this conversation",
         "recalled": "This turn brought in {{count}} lessons",
         "recalled_one": "This turn brought in {{count}} lesson",
         "recalled_other": "This turn brought in {{count}} lessons",
-        "briefed": "A subagent’s brief carried {{count}} lessons: {{task}}",
-        "briefed_one": "A subagent’s brief carried {{count}} lesson: {{task}}",
-        "briefed_other": "A subagent’s brief carried {{count}} lessons: {{task}}",
+        "briefed": "A subagent's brief carried {{count}} lessons: {{task}}",
+        "briefed_one": "A subagent's brief carried {{count}} lesson: {{task}}",
+        "briefed_other": "A subagent's brief carried {{count}} lessons: {{task}}",
         "applied": "{{count}} lessons were followed",
         "applied_one": "{{count}} lesson was followed",
         "applied_other": "{{count}} lessons were followed",
@@ -1235,7 +1235,7 @@
         "mergedContradicts": "Not kept; it contradicts: {{lesson}}"
       }
     },
-    "activityLoadFailed": "Couldn't load Hive activity. Retrying…",
+    "activityLoadFailed": "Couldn't load hive activity. Retrying…",
     "beeFailed": "This bee reported an error.",
     "beeCounts": {
       "turns": "{{count}} turns",
@@ -1273,12 +1273,12 @@
       "setUp": "Set up a judge",
       "skipped": "Classification skipped",
       "off": "Classification is off",
-      "firstHint": "This line is Jev’s verdict: Jev sorts each message first, then mu decides what to do. Every verdict is listed under Judge on the right."
+      "firstHint": "This line is the judge's verdict: the judge sorts each message first, then mu decides what to do. Every verdict is listed under Judge on the right."
     },
     "eventLine": {
       "judgeNotice": {
-        "freeJev": "Using the free Jev on OpenCode Zen: no Jev key is set",
-        "freeJevUnavailable": "The free Jev stopped answering: plain rules decide until a Jev key is set"
+        "freeJev": "No Jev key is set, so mu is using Jev's free tier on OpenCode Zen",
+        "freeJevUnavailable": "Jev's free tier stopped answering, so mu's default rules decide until you add a Jev key"
       },
       "detail": "Details: {{detail}}",
       "progress": {
@@ -1286,8 +1286,8 @@
         "lessons": "Checking lessons from earlier conversations",
         "skills": "Choosing which skills this conversation needs",
         "capabilities": "Choosing which capabilities this task needs",
-        "goal_check": "Checking whether the goal holds",
-        "permissionReview": "Jev is reviewing: {{summary}}"
+        "goal_check": "Checking whether the goal is met",
+        "permissionReview": "The judge is reviewing: {{summary}}"
       },
       "goal": {
         "paused": "Paused: {{reason}}",
@@ -1296,7 +1296,7 @@
           "modelCallFailed": "a model call failed",
           "needsUser": "the agent needs something from you",
           "needsUserDetail": "the agent needs something from you: {{detail}}",
-          "unjudged": "no judge could tell whether the goal holds, and nothing is provably unfinished",
+          "unjudged": "no judge could tell whether the goal is met, and nothing is provably unfinished",
           "idle": "the agent ended {{count}} runs in a row without doing anything",
           "idle_one": "the agent ended {{count}} run without doing anything",
           "idle_other": "the agent ended {{count}} runs in a row without doing anything",
@@ -1314,10 +1314,10 @@
         }
       },
       "frame": {
-        "unclearChange": "How does this change the task: “{{message}}”?"
+        "unclearChange": "How does this change the task: \"{{message}}\"?"
       },
       "search": {
-        "notConfigured": "“{{source}}” isn’t a search source (features.web.search)",
+        "notConfigured": "\"{{source}}\" isn't a search source (features.web.search)",
         "failed": "{{source}} failed: {{message}}",
         "robotPage": "{{source}} returned a verification page; it thinks this client is a bot",
         "httpError": "{{source}} answered with HTTP {{status}}",
@@ -1358,7 +1358,7 @@
       "browser": {
         "finished": "{{status}}: {{reason}}",
         "openFailed": "Couldn't open the page in the browser.",
-        "openFailedPanel": "Couldn't open the page in the app's browser panel.",
+        "openFailedPanel": "Couldn't open the page in the in-app browser.",
         "launch": {
           "noBrowser": {
             "mac": "No Chrome, Chromium, Edge or Brave was found in /Applications. Install one, or set MU_CHROME to a Chromium-based browser's executable.",
@@ -1395,7 +1395,7 @@
         "off": "Board: off"
       },
       "injection": {
-        "withheld": "{{tool}}: withheld {{withheld}} of {{total}} passages because they carried instructions aimed at the AI",
+        "withheld": "{{tool}}: withheld {{withheld}} of {{total}} passages because they carried instructions aimed at the agent",
         "byRules": "the judge didn't answer, so mu's rules decided",
         "excerpt": "begins: {{text}}"
       }
@@ -1405,7 +1405,7 @@
       "contextHint": "The model's next input fills {{percent}} of its context window",
       "cache": "Cache hits",
       "cacheHint": "Cache hits: {{turn}} in the latest turn, {{session}} across the whole conversation",
-      "pending": "Shown after mu’s next reply"
+      "pending": "Shown after mu's next reply"
     },
     "roles": {
       "browser": "browser",
@@ -1445,7 +1445,7 @@
     "unhide": "Show all",
     "quit": "Quit {{name}}",
     "file": "File",
-    "newChat": "New chat",
+    "newChat": "New conversation",
     "closeWindow": "Close window",
     "edit": "Edit",
     "undo": "Undo",
@@ -1486,12 +1486,12 @@
       "settings": "Settings",
       "commands": "Commands"
     },
-    "searchMessages": "Search messages for “{{query}}”",
+    "searchMessages": "Search messages for \"{{query}}\"",
     "empty": "No matches",
     "noConversations": "No conversations yet. Type to find settings and commands.",
     "openSettings": "Open settings",
     "actions": {
-      "newConversation": "Start a new chat",
+      "newConversation": "Start a new conversation",
       "scheduledTasks": "Open scheduled tasks"
     },
     "commandWaits": "Runs once this reply is done"
@@ -1523,7 +1523,7 @@
     "previewEmpty": "Nothing to preview yet. Files opened from the conversation appear here.",
     "previewHidden": "The preview is hidden.",
     "browserEmpty": "No pages open. Enter an address or search above. Pages opened from the conversation appear here too.",
-    "firstHint": "Board shows progress in plain words, Judge lists every verdict from Jev and Files shows this conversation’s folder. Other tabs appear once they’re used."
+    "firstHint": "Board shows progress in plain words, Judge lists every verdict and Files shows this conversation's folder. Other tabs appear once they're used."
   },
   "nodeRuntime": {
     "title": "Download Node.js?",

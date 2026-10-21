@@ -18,13 +18,13 @@ describe('the tray menu item that hides the window', () => {
     await changeLanguage('en-US');
   });
 
-  it('names the menu bar on a Mac, where the icon sits', () => {
-    expect(i18n.t(hideItemLabelKey('darwin'))).toBe('Hide to menu bar');
+  it('says Hide mu on a Mac, as Mac apps do', () => {
+    expect(i18n.t(hideItemLabelKey('darwin'))).toBe('Hide mu');
   });
 
   it('names the tray on Windows and Linux', () => {
-    expect(i18n.t(hideItemLabelKey('win32'))).toBe('Hide to tray');
-    expect(i18n.t(hideItemLabelKey('linux'))).toBe('Hide to tray');
+    expect(i18n.t(hideItemLabelKey('win32'))).toBe('Minimize to tray');
+    expect(i18n.t(hideItemLabelKey('linux'))).toBe('Minimize to tray');
   });
 
   it('says menu bar in the app language too', async () => {

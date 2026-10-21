@@ -447,12 +447,12 @@ const Layout: React.FC<{
                   <MuMark size={collapsed ? 24 : 26} />
                 </div>
                 {isSettingsRoute ? (
-                  <Tooltip content={t('common.back', { defaultValue: 'Back to Chat' })} position='bottom'>
+                  <Tooltip content={t('common.back', { defaultValue: 'Back' })} position='bottom'>
                     <div
                       className='text-16px text-t-primary collapsed-hidden font-semibold cursor-pointer'
                       role='button'
                       tabIndex={0}
-                      aria-label={t('common.back', { defaultValue: 'Back to Chat' })}
+                      aria-label={t('common.back', { defaultValue: 'Back' })}
                       onClick={handleBrandHome}
                       onKeyDown={(event) => {
                         if (event.key === 'Enter' || event.key === ' ') {

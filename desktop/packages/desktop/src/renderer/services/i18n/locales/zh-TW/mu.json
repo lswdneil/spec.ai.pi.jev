@@ -280,7 +280,7 @@
       "other": "mu 想對外操作，需要你授權"
     },
     "reason": {
-      "ask": "最小權限模式：每一步都先問你。",
+      "ask": "最小權限模式：改檔案、執行指令、對外操作都先問你。",
       "unsure": "Jev 拿不準這一步是不是你要的。",
       "beyond": "Jev 認為這一步超出了你的要求。",
       "unrelated": "Jev 認為這一步和目前的任務無關。",
@@ -664,7 +664,7 @@
         },
         "control": {
           "title": "看得見，管得住",
-          "text": "改動隨時可以回退；瀏覽器裡的每一步都在眼前，可以暫停，也可以自己接手。"
+          "text": "檢查點讓你可以回退改動；mu 用應用內瀏覽器時，每一步都在眼前，可以暫停，也可以自己接手。"
         },
         "ready": {
           "title": "開箱即用",
@@ -802,7 +802,7 @@
     },
     "invalidJson": "{{file}} 不是有效的 JSON，請手動修正後重新載入。",
     "unreadable": "無法讀取 {{file}}。",
-    "runtimeOffline": "mu 核心目前離線，請檢查本機啟動器和登入狀態。",
+    "runtimeOffline": "mu 的 Agent 沒有回應。請重新啟動 mu 後再試。",
     "otherRegistration": "應用程式中已經註冊了另一個 mu 指令。",
     "installPath": "mu 無法從它的安裝資料夾啟動：這個資料夾的路徑裡有空格。請把 mu 重新安裝到路徑裡沒有空格的資料夾，例如 C:\\mu。",
     "backend": "本機服務回應異常（HTTP {{status}}）。",
@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "正在啟動 mu…",
-      "classifying": "Jev 正在讀你的訊息…",
+      "classifying": "判定器正在讀你的訊息…",
       "compacting": "正在壓縮對話…",
       "retrying": "模型請求失敗，正在重試（第 {{attempt}} 次，共 {{max}} 次）…",
       "thinking": "思考中…",
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "每項功能一個開關，選項在「選項」裡。縮排的幾行是它請 Jev 判斷的地方：關掉一處，那一步照常進行。",
+    "lead": "每項功能一個開關，選項在「選項」裡。縮排的幾行是它請判定器判斷的地方：關掉一處，那一步照常進行。",
     "featureOff": "功能已關閉",
-    "askJev": "讓 Jev 判斷",
-    "askJevAbout": "讓 Jev 判斷：{{point}}",
+    "askJev": "讓判定器判斷",
+    "askJevAbout": "讓判定器判斷：{{point}}",
     "areas": {
       "input": "輸入",
       "context": "上下文",

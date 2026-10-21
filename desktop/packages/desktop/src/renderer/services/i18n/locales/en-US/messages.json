@@ -80,12 +80,12 @@
     "yesAllowAlways": "Yes, always allow",
     "yesAlwaysAllowTool": "Yes, always allow tool \"{{toolName}}\" from server \"{{serverName}}\"",
     "yesAlwaysAllowServer": "Yes, always allow all tools from server \"{{serverName}}\"",
-    "no": "No (esc)"
+    "no": "No (Esc)"
   },
   "fork": {
     "action": "Fork from here",
     "errorTurnInFlight": "Wait for the current reply to finish before forking",
-    "errorParentUnbound": "This conversation has no backend session to fork yet",
+    "errorParentUnbound": "Nothing to fork yet. Send a message first.",
     "errorPointUnsupported": "This agent can only fork from the latest message",
     "errorUnsupported": "This agent doesn't support forking",
     "errorGeneric": "Couldn't fork: {{message}}"

@@ -18,10 +18,10 @@
     "checkFailed": "Couldn't check for updates. Try again later.",
     "downloadFailed": "Couldn't download the update. Try again later."
   },
-  "readyTitle": "New version {{version}} is ready",
+  "readyTitle": "Version {{version}} is ready to install",
   "restartToUpdate": "Restart to update",
   "lastInstallFailed": "The last update wasn't installed because mu couldn't quit.",
-  "availableVersion": "New version {{version}} is available",
+  "availableVersion": "Version {{version}} is available",
   "installerReason": {
     "linux": "On Linux, mu can't install updates by itself. Download the installer and open it.",
     "unpackaged": "This copy of mu can't install updates by itself. Download the installer and open it.",

@@ -227,7 +227,7 @@
       "noteMissing": "未記錄發現。",
       "allFlow": "所有送達",
       "beeFlow": "{{name}} 的送達",
-      "audit": "Jev 判定",
+      "audit": "判定",
       "waitingRun": "正在等待這次蜂群執行的紀錄。",
       "recordedAt": "記錄時間 {{time}}",
       "beeMissing": "此蜂群成員不在已記錄的快照中。",
@@ -959,7 +959,7 @@
       "auto_compaction_end": "壓縮結束",
       "hive.note": "共享發現",
       "hive.delivery": "送達已確認",
-      "hive.gate": "Jev 閘門",
+      "hive.gate": "蜂群閘門",
       "hive.manifest": "蜂群任務分配",
       "bee.event": "執行步驟",
       "memory.recalled": "引用經驗",
@@ -1089,7 +1089,7 @@
       "switch": "這個專案的人話看板",
       "switching": "正在切換…",
       "afterTurn": "代理這一步做完就切換",
-      "unknown": "這個對話還沒有人話看板。它只在 mu 的對話裡、而且「功能」裡開著人話看板時出現。",
+      "unknown": "這個對話還沒有人話看板。它只在 mu 的對話裡、而且「設定 → 核心功能」裡開著人話看板時出現。",
       "off": "開啟後，代理每做一段，這裡就用白話告訴你：進展到哪了、正在做什麼、哪些需要你確認。",
       "cost": "只對這個專案生效。每次更新會呼叫一次模型。",
       "empty": "等代理做一會兒，這裡會用白話告訴你進展",
@@ -1273,7 +1273,7 @@
       "setUp": "設定判定器",
       "skipped": "已略過分類",
       "off": "分類已關閉",
-      "firstHint": "這一行是 Jev 的判斷：每則訊息先由 Jev 快速分類，mu 再決定怎麼接。每次判斷都在右側「判定」裡。"
+      "firstHint": "這一行是判定器的判斷：每則訊息先由判定器快速分類，mu 再決定怎麼接。每次判斷都在右側「判定」裡。"
     },
     "eventLine": {
       "judgeNotice": {
@@ -1287,7 +1287,7 @@
         "skills": "正在挑選這個工作階段需要的技能",
         "capabilities": "正在挑選這個任務需要的能力",
         "goal_check": "正在檢查目標是否達成",
-        "permissionReview": "Jev 正在審批：{{summary}}"
+        "permissionReview": "判定器正在審批：{{summary}}"
       },
       "goal": {
         "paused": "已暫停：{{reason}}",
@@ -1523,7 +1523,7 @@
     "previewEmpty": "還沒有可預覽的內容。從對話中開啟的檔案會顯示在這裡。",
     "previewHidden": "預覽已隱藏。",
     "browserEmpty": "還沒有開啟的網頁。在上方輸入網址或搜尋內容；從對話中開啟的網頁也會顯示在這裡。",
-    "firstHint": "看板用白話說進度，判定列出 Jev 的每次判斷，檔案是這次對話的資料夾。其他分頁用到時才出現。"
+    "firstHint": "看板用白話說進度，判定列出每次判斷，檔案是這次對話的資料夾。其他分頁用到時才出現。"
   },
   "nodeRuntime": {
     "title": "下載 Node.js？",

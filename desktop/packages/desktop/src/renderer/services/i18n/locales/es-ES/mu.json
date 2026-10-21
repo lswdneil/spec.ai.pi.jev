@@ -280,7 +280,7 @@
       "other": "mu quiere realizar una acción externa"
     },
     "reason": {
-      "ask": "Permisos mínimos: te pregunta antes de cada paso.",
+      "ask": "Permisos mínimos: te pregunta antes de cada edición, comando o acción hacia fuera.",
       "unsure": "Jev no está seguro de que este paso sea lo que quieres.",
       "beyond": "Jev cree que esto va más allá de lo que has pedido.",
       "unrelated": "Jev cree que esto no forma parte de la tarea.",
@@ -664,7 +664,7 @@
         },
         "control": {
           "title": "Lo ves y lo diriges",
-          "text": "Cualquier cambio se puede deshacer; cada paso en el navegador está a la vista y puedes pausar o tomar el control."
+          "text": "Los puntos de control te permiten deshacer cambios; cuando mu usa el navegador integrado, cada paso está a la vista y puedes pausar o tomar el control."
         },
         "ready": {
           "title": "Listo para usar",
@@ -802,7 +802,7 @@
     },
     "invalidJson": "{{file}} no es un JSON válido. Corrígelo a mano y vuelve a cargar.",
     "unreadable": "No se pudo leer {{file}}.",
-    "runtimeOffline": "El entorno de ejecución de mu no está en línea. Comprueba el lanzador local y el inicio de sesión.",
+    "runtimeOffline": "El agente de mu no responde. Reinicia mu y vuelve a intentarlo.",
     "otherRegistration": "Ya hay otro comando mu registrado en la aplicación.",
     "installPath": "mu no puede iniciarse desde la carpeta en la que está instalado: la ruta de la carpeta tiene espacios. Vuelve a instalar mu en una carpeta cuya ruta no tenga espacios, como C:\\mu.",
     "backend": "El servicio local no respondió como se esperaba (HTTP {{status}}).",
@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "Iniciando mu…",
-      "classifying": "Jev está leyendo tu mensaje…",
+      "classifying": "El juez está leyendo tu mensaje…",
       "compacting": "Compactando la conversación…",
       "retrying": "La solicitud al modelo ha fallado. Reintentando ({{attempt}} de {{max}})…",
       "thinking": "Pensando…",
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "Un interruptor por función, con sus ajustes en «Opciones». Las filas sangradas son donde consulta a Jev: si desactivas una, ese paso sigue como siempre.",
+    "lead": "Un interruptor por función, con sus ajustes en «Opciones». Las filas sangradas son donde consulta al juez: si desactivas una, ese paso sigue como siempre.",
     "featureOff": "La función está desactivada",
-    "askJev": "Que decida Jev",
-    "askJevAbout": "Que decida Jev: {{point}}",
+    "askJev": "Que decida el juez",
+    "askJevAbout": "Que decida el juez: {{point}}",
     "areas": {
       "input": "Entrada",
       "context": "Contexto",

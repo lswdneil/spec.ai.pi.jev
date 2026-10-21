@@ -280,7 +280,7 @@
       "other": "mu möchte eine Aktion nach außen ausführen"
     },
     "reason": {
-      "ask": "Minimale Berechtigungen: Vor jedem Schritt wirst du gefragt.",
+      "ask": "Minimale Berechtigungen: Vor jeder Änderung, jedem Befehl und jeder Aktion nach außen wirst du gefragt.",
       "unsure": "Jev ist nicht sicher, ob du diesen Schritt willst.",
       "beyond": "Jev meint, das geht über das hinaus, worum du gebeten hast.",
       "unrelated": "Jev meint, das gehört nicht zur Aufgabe.",
@@ -664,7 +664,7 @@
         },
         "control": {
           "title": "Alles im Blick, alles im Griff",
-          "text": "Jede Änderung lässt sich rückgängig machen; jeder Schritt im Browser ist sichtbar, und du kannst pausieren oder übernehmen."
+          "text": "Mit Checkpoints lassen sich Änderungen rückgängig machen; nutzt mu den integrierten Browser, ist jeder Schritt sichtbar, und du kannst pausieren oder übernehmen."
         },
         "ready": {
           "title": "Sofort einsatzbereit",
@@ -802,7 +802,7 @@
     },
     "invalidJson": "{{file}} ist kein gültiges JSON. Korrigiere die Datei von Hand und lade dann neu.",
     "unreadable": "{{file}} konnte nicht gelesen werden.",
-    "runtimeOffline": "Die mu-Laufzeit ist nicht online. Prüfe den lokalen Starter und die Anmeldung.",
+    "runtimeOffline": "Der Agent von mu antwortet nicht. Starte mu neu und versuche es noch einmal.",
     "otherRegistration": "In der App ist bereits ein anderer mu-Befehl registriert.",
     "installPath": "mu kann nicht aus dem Ordner starten, in dem es installiert ist: Der Pfad des Ordners enthält Leerzeichen. Installiere mu erneut in einen Ordner, dessen Pfad keine Leerzeichen enthält, zum Beispiel C:\\mu.",
     "backend": "Der lokale Dienst hat nicht wie erwartet geantwortet (HTTP {{status}}).",
@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "mu wird gestartet…",
-      "classifying": "Jev liest deine Nachricht…",
+      "classifying": "Der Judge liest deine Nachricht…",
       "compacting": "Die Unterhaltung wird verdichtet…",
       "retrying": "Die Anfrage an das Modell ist fehlgeschlagen. Neuer Versuch ({{attempt}} von {{max}})…",
       "thinking": "Denkt nach…",
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "Ein Schalter pro Funktion, ihre Einstellungen unter „Optionen“. Die eingerückten Zeilen sind die Stellen, an denen sie Jev fragt: Schaltest du eine aus, läuft dieser Schritt wie gewohnt.",
+    "lead": "Ein Schalter pro Funktion, ihre Einstellungen unter „Optionen“. Die eingerückten Zeilen sind die Stellen, an denen sie den Judge fragt: Schaltest du eine aus, läuft dieser Schritt wie gewohnt.",
     "featureOff": "Die Funktion ist aus",
-    "askJev": "Jev entscheiden lassen",
-    "askJevAbout": "Jev entscheiden lassen: {{point}}",
+    "askJev": "Den Judge entscheiden lassen",
+    "askJevAbout": "Den Judge entscheiden lassen: {{point}}",
     "areas": {
       "input": "Eingabe",
       "context": "Kontext",

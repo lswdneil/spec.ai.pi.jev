@@ -878,7 +878,7 @@ describe('signing in with a subscription', () => {
     bridge.loginState.mockResolvedValue({ ok: true, data: asking });
     fireEvent.click(screen.getByTestId('mu-login-openai-codex'));
     const waiting = await screen.findByTestId('mu-login-waiting');
-    expect(waiting).toHaveTextContent('ChatGPT asks (original text):');
+    expect(waiting).toHaveTextContent('ChatGPT asks:');
     expect(waiting).toHaveTextContent('Enter your workspace id:');
   });
 

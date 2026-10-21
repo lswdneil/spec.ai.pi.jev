@@ -280,7 +280,7 @@
       "other": "mu bir dış işlem yapmak istiyor"
     },
     "reason": {
-      "ask": "En az izin: her adımda önce size sorulur.",
+      "ask": "En az izin: her düzenleme, komut ve dışarıya dönük işlem önce size sorulur.",
       "unsure": "Jev bu adımın istediğiniz şey olduğundan emin değil.",
       "beyond": "Jev bunun istediğiniz şeyin ötesine geçtiğini düşünüyor.",
       "unrelated": "Jev bunun görevin bir parçası olmadığını düşünüyor.",
@@ -664,7 +664,7 @@
         },
         "control": {
           "title": "Görürsünüz, yönetirsiniz",
-          "text": "Her değişiklik geri alınabilir; tarayıcıdaki her adım gözünüzün önündedir, duraklatabilir ya da devralabilirsiniz."
+          "text": "Kontrol noktaları değişiklikleri geri almanızı sağlar; mu uygulama içi tarayıcıyı kullanırken her adım gözünüzün önündedir, duraklatabilir ya da devralabilirsiniz."
         },
         "ready": {
           "title": "Hemen kullanıma hazır",
@@ -802,7 +802,7 @@
     },
     "invalidJson": "{{file}} geçerli bir JSON değil. Elle düzeltip yeniden yükleyin.",
     "unreadable": "{{file}} okunamadı.",
-    "runtimeOffline": "mu çalışma zamanı çevrimiçi değil. Yerel başlatıcıyı ve giriş durumunu kontrol edin.",
+    "runtimeOffline": "mu ajanı yanıt vermiyor. mu'yu yeniden başlatıp tekrar deneyin.",
     "otherRegistration": "Uygulamada zaten başka bir mu komutu kayıtlı.",
     "installPath": "mu kurulu olduğu klasörden başlatılamıyor: Klasörün yolunda boşluk var. mu'yu yolunda boşluk olmayan bir klasöre, örneğin C:\\mu klasörüne yeniden kurun.",
     "backend": "Yerel hizmet beklendiği gibi yanıt vermedi (HTTP {{status}}).",
@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "mu başlatılıyor…",
-      "classifying": "Jev mesajınızı okuyor…",
+      "classifying": "Hakem mesajınızı okuyor…",
       "compacting": "Konuşma sıkıştırılıyor…",
       "retrying": "Model isteği başarısız oldu. Yeniden deneniyor ({{attempt}}/{{max}})…",
       "thinking": "Düşünüyor…",
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "Her özelliğin bir anahtarı vardır, ayarları Seçenekler'dedir. Girintili satırlar Jev'e karar sorduğu yerlerdir: birini kapatırsanız o adım her zamanki gibi ilerler.",
+    "lead": "Her özelliğin bir anahtarı vardır, ayarları Seçenekler'dedir. Girintili satırlar hakeme karar sorduğu yerlerdir: birini kapatırsanız o adım her zamanki gibi ilerler.",
     "featureOff": "Özellik kapalı",
-    "askJev": "Jev karar versin",
-    "askJevAbout": "Jev karar versin: {{point}}",
+    "askJev": "Hakem karar versin",
+    "askJevAbout": "Hakem karar versin: {{point}}",
     "areas": {
       "input": "Girdi",
       "context": "Bağlam",

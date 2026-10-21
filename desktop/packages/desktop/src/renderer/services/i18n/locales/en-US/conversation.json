@@ -3,7 +3,7 @@
     "title": "What do you want to work on today?",
     "placeholder": "Send a message, attach files, open a folder, schedule a task or type / for commands…",
     "linkFolder": "Open folder",
-    "newConversation": "New chat",
+    "newConversation": "New conversation",
     "selectModel": "Select model",
     "useCliModel": "Select model",
     "modelSwitchNotSupported": "Models appear after the first connection. Send a message to connect and load them.",
@@ -15,7 +15,7 @@
     "quickActionsTitle": "What can mu do?"
   },
   "history": {
-    "recents": "Recents",
+    "recents": "Recent",
     "noHistory": "No conversations yet",
     "deleteTitle": "Delete",
     "deleteConfirm": "Delete this conversation?",
@@ -70,10 +70,10 @@
     "earlier": "Earlier",
     "projectsSection": "Projects",
     "conversationsSection": "Conversations",
-    "newConversationInProject": "New chat in this project",
+    "newConversationInProject": "New conversation in this project",
     "deleting": "Deleting…",
-    "reorderPinned": "Drag to reorder pinned conversation",
-    "forkedFrom": "Forked from “{{name}}”",
+    "reorderPinned": "Drag to reorder",
+    "forkedFrom": "Forked from \"{{name}}\"",
     "forkedConversation": "Forked conversation",
     "archive": "Archive",
     "archiveSuccess": "Archived",
@@ -125,8 +125,8 @@
   },
   "agentError": {
     "fallbackTitle": "The agent couldn't reply",
-    "retryable": "Retryable",
-    "notRetryable": "Needs configuration",
+    "retryable": "Can retry",
+    "notRetryable": "Needs setup",
     "resolutionPrefix": "Suggestion: ",
     "resolution": {
       "retry": "Try again later, or resend this message.",
@@ -145,15 +145,15 @@
       "send_feedback": "Try again. If it keeps failing, check the app log."
     },
     "ownership": {
-      "mu": "App",
+      "mu": "mu",
       "user_agent": "Agent",
       "user_llm_provider": "Model provider",
-      "unknown_upstream": "Upstream"
+      "unknown_upstream": "Unknown source"
     },
     "codes": {
       "MU_STREAM_BROKEN": {
         "title": "Response stream was interrupted",
-        "body": "The app accepted your message, but the response stream ended unexpectedly. Try again, and if it happens again, check the app log."
+        "body": "mu accepted your message, but the reply stopped partway. Try again, and if it happens again, check the app log."
       },
       "MU_STATE_INCONSISTENT": {
         "title": "Conversation state is out of sync",
@@ -164,8 +164,8 @@
         "body": "A local permission or file system check failed. Check the project path and app permissions, then try again."
       },
       "MU_INTERNAL_ERROR": {
-        "title": "The app couldn't process the request",
-        "body": "Something went wrong while the app was processing this request. Try again, and if it happens again, check the app log."
+        "title": "mu couldn't process the request",
+        "body": "Something went wrong while mu was processing this request. Try again, and if it happens again, check the app log."
       },
       "MU_CONVERSATION_BUSY": {
         "title": "Conversation is busy",
@@ -173,7 +173,7 @@
       },
       "USER_AGENT_NOT_INSTALLED": {
         "title": "The selected agent isn't installed",
-        "body": "Install the CLI or app required by this agent, then reconnect it in settings."
+        "body": "Install the CLI or app this agent needs, then reconnect it in Settings."
       },
       "USER_AGENT_STARTUP_FAILED": {
         "title": "The selected agent couldn't start",
@@ -216,11 +216,11 @@
         "body": "The app couldn't start an Agent Client Protocol (ACP) session with this agent."
       },
       "USER_AGENT_PROTOCOL_PARSE_ERROR": {
-        "title": "Agent reported a protocol parse error",
+        "title": "The agent reported a protocol parse error",
         "body": "The agent couldn't parse an ACP/JSON-RPC message."
       },
       "USER_AGENT_INVALID_REQUEST": {
-        "title": "Agent reported an invalid protocol request",
+        "title": "The agent reported an invalid protocol request",
         "body": "The agent says the ACP/JSON-RPC request object is invalid."
       },
       "USER_AGENT_RESOURCE_NOT_FOUND": {
@@ -228,7 +228,7 @@
         "body": "The agent couldn't find a resource it needs, such as a file."
       },
       "USER_AGENT_PROTOCOL_ERROR": {
-        "title": "Agent returned a protocol error",
+        "title": "The agent returned a protocol error",
         "body": "The selected agent returned a non-standard ACP error code."
       },
       "USER_AGENT_PROTOCOL_MISMATCH": {
@@ -260,7 +260,7 @@
         "body": "Couldn't build a request from the current provider settings. Check the credentials, region, base URL and other provider settings, then try again."
       },
       "USER_LLM_PROVIDER_MODEL_NOT_FOUND": {
-        "title": "The selected model was not found",
+        "title": "Couldn't find the selected model",
         "body": "The provider doesn't recognize this model name. Choose an available model in Settings and try again."
       },
       "USER_LLM_PROVIDER_RATE_LIMITED": {
@@ -284,7 +284,7 @@
         "body": "Your provider account doesn't have permission for this model or operation. Check the account's permissions or choose another model."
       },
       "USER_LLM_PROVIDER_BILLING_REQUIRED": {
-        "title": "The provider requires billing",
+        "title": "The provider needs billing or credits",
         "body": "The selected provider needs active billing, credits or quota before it can complete this request."
       },
       "USER_LLM_PROVIDER_UNSUPPORTED_MODEL": {
@@ -292,7 +292,7 @@
         "body": "The selected model is unavailable or doesn't support the requested capability. Choose a supported model and try again."
       },
       "USER_LLM_PROVIDER_ENDPOINT_NOT_FOUND": {
-        "title": "Model provider endpoint was not found",
+        "title": "Couldn't find the provider's endpoint",
         "body": "The provider couldn't find the endpoint or API path. Check the base URL, deployment name and API compatibility."
       },
       "USER_LLM_PROVIDER_INVALID_REQUEST": {
@@ -317,8 +317,8 @@
         "bodyWithPath": "The agent couldn't run in \"{{workspacePath}}\". Make sure the folder exists."
       },
       "UNKNOWN_UPSTREAM_ERROR": {
-        "title": "The upstream agent or provider failed",
-        "body": "The app got an upstream error but couldn't tell whether it came from the agent, the provider, the network or your local environment."
+        "title": "The agent or provider returned an error",
+        "body": "mu got an error but couldn't tell whether it came from the agent, the provider, the network or your computer."
       },
       "MCP_HTTP_RESPONSE_READ_FAILED": {
         "title": "Couldn't read the team helper's response",
@@ -368,12 +368,12 @@
     "empty": "No files yet",
     "emptyDescription": "Upload files or open a folder to see them here",
     "searchPlaceholder": "Search files…",
-    "createNewConversation": "New chat in this project",
+    "createNewConversation": "New conversation in this project",
     "search.empty": "No results",
     "addFile": "Add file",
     "refresh": "Refresh",
-    "temporarySpace": "Temporary space",
-    "temporaryWorkspace": "Temporary workspace",
+    "temporarySpace": "Temporary folder",
+    "temporaryWorkspace": "Temporary folder",
     "dragOverlayTitle": "Drop to import",
     "dragOverlayDesc": "Drag files or folders here to copy them into this project.",
     "dragOverlayHint": "Tip: drop anywhere to import into the selected folder.",
@@ -395,7 +395,7 @@
       "renameFailed": "Couldn't rename",
       "renameEmpty": "Name can't be empty",
       "renameTimeout": "Rename timed out. Try again.",
-      "addToChat": "Add to chat",
+      "addToChat": "Add to message",
       "addedToChat": "Added to chat",
       "openFailed": "Couldn't open",
       "revealFailed": "Couldn't open the containing folder",
@@ -405,7 +405,7 @@
     },
     "preview": {
       "errors": {
-        "outsideSandbox": "Can't preview files outside the project sandbox.",
+        "outsideSandbox": "Can't preview files outside the project folder.",
         "notFound": "This file doesn't exist or was deleted.",
         "timeout": "Timed out reading the file. Try again."
       }
@@ -470,7 +470,7 @@
     "tryAnotherAgent": "Try another agent:",
     "switchAgentFailed": "Couldn't switch agent",
     "archivedCannotSend": "This conversation is archived and can't take new messages.",
-    "awaitingConfirmation": "Awaiting confirmation"
+    "awaitingConfirmation": "Waiting for your confirmation"
   },
   "sideQuestion": {
     "title": "Side question",
@@ -485,7 +485,7 @@
     "alreadyRunning": "A side question is already running.",
     "attachmentsNotAllowed": "Side questions can't include files or DOM snippets.",
     "emptyQuestion": "Type a question after /btw.",
-    "toolsRequired": "/btw can only answer questions based on what's already in this conversation. It doesn't have access to search, browse or fetch new information.",
+    "toolsRequired": "/btw only answers from what's already in this conversation. It can't search, browse or fetch anything new.",
     "error": "Couldn't answer the side question."
   },
   "commandQueue": {
@@ -493,21 +493,21 @@
     "clear": "Clear queue",
     "edit": "Edit",
     "editing": "Editing",
-    "editPlaceholder": "Update the queued command before it runs.",
+    "editPlaceholder": "Edit the queued message before it sends.",
     "cancelEdit": "Cancel",
     "saveEdit": "Save",
     "moreActions": "More actions",
-    "reorder": "Drag to reorder queued command",
+    "reorder": "Drag to reorder",
     "remove": "Remove",
     "files": "{{count}} files",
     "files_one": "{{count}} file",
     "files_other": "{{count}} files",
-    "pausedAfterFailure": "The next queued command couldn't start. Edit, reorder or remove it to continue.",
-    "emptyInput": "Queued commands can't be empty.",
-    "queueFull": "Queue is full. Remove a command before adding more.",
-    "inputTooLong": "This queued command is too long. Shorten it before sending.",
-    "tooManyFiles": "Too many files are attached to this queued command.",
-    "queueTooLarge": "The queue is too large to save. Remove some queued commands first.",
+    "pausedAfterFailure": "The next queued message couldn't start. Edit, reorder or remove it to continue.",
+    "emptyInput": "Queued messages can't be empty.",
+    "queueFull": "The queue is full. Remove a message before adding more.",
+    "inputTooLong": "This queued message is too long. Shorten it before sending.",
+    "tooManyFiles": "Too many files are attached to this queued message.",
+    "queueTooLarge": "The queue is too large to save. Remove some queued messages first.",
     "sendNow": "Send now",
     "modeToggle": "Toggle send mode",
     "help": "Help",
@@ -521,17 +521,17 @@
       "manual": "Manual send"
     },
     "addToQueue": "Add to queue",
-    "midturnBlocked": "This agent is still working, so the message can’t be sent right now. Add it to the queue and send it later.",
+    "midturnBlocked": "This agent is still working, so the message can't be sent right now. Add it to the queue and send it later.",
     "enterShortcut": "Enter",
     "actionMode": "Choose send action",
-    "midturnBlockedSendHint": "This agent is still working, so the message can’t be sent right now. Add it to the queue and send it later.",
+    "midturnBlockedSendHint": "This agent is still working, so the message can't be sent right now. Add it to the queue and send it later.",
     "addToQueueBusyHint": "Add it to the queue and send it later."
   },
   "contextUsage": {
     "tokensUsed": "{{tokens}} tokens used",
     "windowUnknown": "Context window size unknown",
     "usedOfWindow": "{{percent}} · {{used}} / {{limit}} context used",
-    "sessionCostApprox": "Session cost ≈ {{cost}}",
+    "sessionCostApprox": "Conversation cost ≈ {{cost}}",
     "inputTokens": "Input {{tokens}}",
     "outputTokens": "Output {{tokens}}",
     "cachedReadTokens": "Cache read {{tokens}}",
@@ -581,9 +581,9 @@
       "failed": "Failed",
       "unsupported": "Unsupported"
     },
-    "selected": "Selected MCP",
+    "selected": "Selected MCP servers",
     "statusWithReason": "{{status}} · {{reason}}",
-    "selectedWithCount": "Selected MCP · {{count}}"
+    "selectedWithCount": "Selected MCP servers · {{count}}"
   },
   "runtimePreparing": {
     "sendboxHint": "Preparing the runtime environment. First startup can take a little longer."
@@ -602,7 +602,7 @@
       "endLabel": "End the goal"
     },
     "thinkingNote": "Changing the thinking level clears the prompt cache, so avoid switching it often on the same model",
-    "modelBusy": "Switch the model once this reply is done.",
+    "modelBusy": "You can switch models once this reply is done.",
     "defaultTag": "default",
     "makeDefault": "Make default for new conversations",
     "madeDefault": "New conversations will start on this model.",
@@ -657,12 +657,12 @@
       "rename": "Rename",
       "newFile": "New file",
       "newDir": "New folder",
-      "addToChat": "Add to chat",
+      "addToChat": "Add to message",
       "copyRelativePath": "Copy relative path",
       "copyAbsolutePath": "Copy absolute path"
     },
     "namePlaceholder": "Name",
-    "deleteConfirm": "Delete “{{name}}”? This can’t be undone.",
+    "deleteConfirm": "Delete \"{{name}}\"? This can't be undone.",
     "renameFailed": "Couldn't rename",
     "newFileFailed": "Couldn't create file",
     "newDirFailed": "Couldn't create folder",
@@ -670,7 +670,7 @@
       "files": "Files",
       "changes": "Changes"
     },
-    "addedToChat": "Added {{name}} to chat",
+    "addedToChat": "Added {{name}} to your message",
     "imported": "Imported {{count}} files",
     "importPartialFailed": "{{copied}} copied, {{failed}} failed (name conflicts or unsupported)",
     "importFailed": "Couldn't import files",
@@ -683,7 +683,7 @@
       "limitReached": "Showing the first {{count}} — refine your search to narrow it down"
     },
     "scm": {
-      "notARepository": "Not a version-controlled folder",
+      "notARepository": "This folder isn't a Git repository",
       "noChanges": "No changes",
       "loading": "Loading changes…",
       "loadFailed": "Couldn't load changes",
@@ -719,7 +719,7 @@
         "unknown": "?"
       },
       "conflictedHint": "Resolve this conflict outside mu first",
-      "opaqueHint": "This state comes from a newer backend — shown read-only",
+      "opaqueHint": "This state comes from a newer version of mu, so it's shown read-only",
       "degraded": "Refreshing in a slower mode because Git's index can't be updated",
       "truncated": "Too many changes to list — showing the first part only",
       "renamedFrom": "{{from}} → {{to}}",
@@ -739,7 +739,7 @@
         "unstageAll": "Unstage all",
         "blockedHint": "Resolve the conflict outside mu before staging or discarding",
         "confirmDiscardTitle": "Discard changes?",
-        "confirmDiscardTracked": "Edits to {{count}} files will be lost. This can’t be undone.",
+        "confirmDiscardTracked": "Edits to {{count}} files will be lost. This can't be undone.",
         "confirmDiscardUntracked": "{{count}} new files will be moved to the trash.",
         "confirmDiscardMixed": "Changed files (edits lost for good): {{tracked}}. New files (moved to the trash): {{untracked}}.",
         "discardConfirmButton": "Discard",
@@ -752,19 +752,19 @@
         "okDiscard": "Discarded {{count}} files",
         "okDiscard_one": "Discarded {{count}} file",
         "okDiscard_other": "Discarded {{count}} files",
-        "partial": "{{succeeded}} of {{total}} done — {{failed}} couldn’t be completed",
+        "partial": "{{succeeded}} of {{total}} done — {{failed}} couldn't be completed",
         "partialDetail": "Not completed: {{files}}",
         "rejectedBlocked": "Nothing was changed — resolve the conflict first",
-        "rejectedUnsupported": "This repository doesn’t support that action",
-        "rejectedFailed": "The action couldn’t be completed",
+        "rejectedUnsupported": "This repository doesn't support that action",
+        "rejectedFailed": "The action couldn't be completed",
         "retry": "Retry",
-        "notSent": "The request didn't reach the backend — nothing was changed. You can try again.",
+        "notSent": "The request didn't reach the local service, so nothing changed. Try again.",
         "outcomeUnknown": "The connection reset before a reply arrived — this action may or may not have completed. Refresh and check the file list before retrying.",
         "allFailed": "None of the {{count}} file(s) could be processed",
         "allFailed_one": "{{count}} file couldn't be processed",
         "allFailed_other": "None of the {{count}} files could be processed",
-        "confirmDiscardTracked_one": "Edits to {{count}} file will be lost. This can’t be undone.",
-        "confirmDiscardTracked_other": "Edits to {{count}} files will be lost. This can’t be undone.",
+        "confirmDiscardTracked_one": "Edits to {{count}} file will be lost. This can't be undone.",
+        "confirmDiscardTracked_other": "Edits to {{count}} files will be lost. This can't be undone.",
         "confirmDiscardUntracked_one": "{{count}} new file will be moved to the trash.",
         "confirmDiscardUntracked_other": "{{count}} new files will be moved to the trash."
       }
@@ -782,7 +782,7 @@
     "truncated": "(earlier output truncated)"
   },
   "emptyState": {
-    "greeting": "Tell me what you need, and I'll get started."
+    "greeting": "Describe what you need to get started."
   },
   "crossSession": {
     "mentionAgain": "Mention conversation {{name}} in the message box",

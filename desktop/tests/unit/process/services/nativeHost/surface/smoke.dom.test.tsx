@@ -81,7 +81,7 @@ describe('the native page, playing a recorded conversation', () => {
     expect(dialog).toHaveTextContent('sleep 0.2; echo asked-ok');
     const options = screen.getAllByTestId('native-dialog-option').map((option) => option.textContent);
     expect(options[0]).toBe('Allow once');
-    expect(options.at(-1)).toBe('Don’t allow');
+    expect(options.at(-1)).toBe("Don't allow");
     // Answered (in the recording, by the host): the question goes.
     play(firstAsk + 1, firstAsk + 2);
     expect(screen.queryByTestId('native-dialog')).toBeNull();

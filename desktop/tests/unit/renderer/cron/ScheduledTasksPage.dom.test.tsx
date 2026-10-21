@@ -68,7 +68,7 @@ describe('the scheduled tasks page with nothing to list', () => {
     expect(empty).toHaveTextContent('No scheduled tasks yet.');
     // The hint names the button as the button itself reads.
     expect(screen.getByTestId('new-task')).toHaveTextContent('New task');
-    expect(empty).toHaveTextContent('Use “New task” above to make one.');
+    expect(empty).toHaveTextContent('Use "New task" above to make one.');
     expect(container.querySelector('.arco-empty')).toBeNull();
   });
 

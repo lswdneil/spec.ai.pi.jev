@@ -171,7 +171,7 @@ const ModalMcpManagementSection: React.FC<{
     return (
       <TalkToButlerButton
         label={t('settings.mcpAddServer')}
-        chatLabel={t('settings.talkToButler.addViaChat', { defaultValue: 'Add via chat' })}
+        chatLabel={t('settings.talkToButler.addViaChat', { defaultValue: 'Add in a conversation' })}
         prompt={t('settings.talkToButler.prompt.addMcp', { defaultValue: 'Help me set up an MCP server.' })}
         extraActions={[
           {

@@ -162,7 +162,7 @@ describe('the board panel', () => {
     const sent = vi.fn();
     emitter.on('sendbox.command', sent);
     showBoard([]);
-    expect(screen.getByTestId('mu-board-unknown')).toHaveTextContent('in Features');
+    expect(screen.getByTestId('mu-board-unknown')).toHaveTextContent('Core features');
     expect(screen.queryByTestId('mu-board-off')).not.toBeInTheDocument();
     expect(screen.getByTestId('mu-board-switch')).toBeDisabled();
     fireEvent.click(screen.getByTestId('mu-board-switch'));

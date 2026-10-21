@@ -27,7 +27,7 @@ void i18n.init({
 const t = i18n.t.bind(i18n) as (key: string, options?: Record<string, unknown>) => string;
 const has = (key: string) => i18n.exists(key);
 
-const ANSWERS = ['Allow once', 'Allow for this conversation (ls)', 'Don’t allow'];
+const ANSWERS = ['Allow once', 'Allow for this conversation (ls)', "Don't allow"];
 const permission: ViewPermission = {
   kind: 'shell',
   summary: 'ls -la',

@@ -274,7 +274,7 @@ describe('command palette', () => {
       expect(groupsShown()).toEqual(['conversations', 'settings', 'commands', 'messages']);
       expect(labelsOf('conversations')).toEqual(['A local model chat']);
       // The pages named by the query first, then the one the rail puts under "Models".
-      expect(labelsOf('settings')).toEqual(['Default model', 'Plain-language model', 'Providers']);
+      expect(labelsOf('settings')).toEqual(['Default model', 'Board model', 'Providers']);
       expect(labelsOf('commands')).toEqual(['/model']);
     });
 
@@ -309,7 +309,7 @@ describe('command palette', () => {
       expect(labelsOf('settings')).toEqual(['Open settings']);
 
       type('model');
-      expect(labelsOf('settings')).toEqual(['Default model', 'Plain-language model', 'Providers']);
+      expect(labelsOf('settings')).toEqual(['Default model', 'Board model', 'Providers']);
     });
 
     it('with no conversation yet, shows the way into the settings and what the app can do, and says why', () => {
@@ -319,7 +319,7 @@ describe('command palette', () => {
       openPalette();
 
       expect(groupsShown()).toEqual(['settings', 'commands']);
-      expect(labelsOf('commands')).toEqual(['Start a new chat', 'Open scheduled tasks']);
+      expect(labelsOf('commands')).toEqual(['Start a new conversation', 'Open scheduled tasks']);
       expect(screen.getByTestId('command-palette-hint')).toHaveTextContent(
         'No conversations yet. Type to find settings and commands.'
       );
@@ -504,7 +504,7 @@ describe('command palette', () => {
       openPalette();
       type('deploy');
 
-      expect(chosen()).toBe('Search messages for “deploy”');
+      expect(chosen()).toBe('Search messages for "deploy"');
       key('Enter');
 
       expect(opened).toHaveBeenCalledWith('deploy');
@@ -519,7 +519,7 @@ describe('command palette', () => {
       expect(onNavigate).toHaveBeenCalledTimes(1);
 
       openPalette();
-      type('new chat');
+      type('new conversation');
       key('Enter');
       expect(navigate).toHaveBeenLastCalledWith('/guid', { state: { resetAssistant: true } });
     });

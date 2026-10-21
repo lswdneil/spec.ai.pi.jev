@@ -120,7 +120,7 @@ describe('Native Hive interaction', () => {
   it('waits for the requested run rather than opening a different run, then applies late data', () => {
     const focus = { conversationId: 'conversation-1', runId: 'run-2', beeName: 'provider-cache' };
     const { rerender } = render(view(<Hive events={hiveEvents} focus={focus} />));
-    expect(screen.getByText('Waiting for this Hive’s recorded events.')).toBeInTheDocument();
+    expect(screen.getByText("Waiting for this hive's recorded events.")).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Inspect prefix-mutations' })).not.toBeInTheDocument();
     rerender(
       view(<Hive events={[...hiveEvents, activity('other', 'swarm.snapshot', hiveSnapshot, 'run-2')]} focus={focus} />)

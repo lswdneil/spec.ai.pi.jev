@@ -280,7 +280,7 @@
       "other": "O mu quer fazer uma ação externa"
     },
     "reason": {
-      "ask": "Permissões mínimas: o mu pergunta a você antes de cada passo.",
+      "ask": "Permissões mínimas: o mu pergunta a você antes de cada edição, comando ou ação externa.",
       "unsure": "O Jev não tem certeza de que este passo é o que você quer.",
       "beyond": "O Jev acha que isto vai além do que você pediu.",
       "unrelated": "O Jev acha que isto não faz parte da tarefa.",
@@ -664,7 +664,7 @@
         },
         "control": {
           "title": "Você vê, você conduz",
-          "text": "Qualquer alteração pode ser desfeita; cada etapa no navegador fica à vista, e você pode pausar ou assumir o controle."
+          "text": "Os pontos de controle permitem desfazer alterações; quando o mu usa o navegador integrado, cada etapa fica à vista, e você pode pausar ou assumir o controle."
         },
         "ready": {
           "title": "Pronto para usar",
@@ -802,7 +802,7 @@
     },
     "invalidJson": "{{file}} não é um JSON válido. Corrija-o manualmente e depois recarregue.",
     "unreadable": "Não foi possível ler {{file}}.",
-    "runtimeOffline": "O ambiente de execução do mu não está online. Verifique o inicializador local e o login.",
+    "runtimeOffline": "O agente do mu não está respondendo. Reinicie o mu e tente novamente.",
     "otherRegistration": "Outro comando mu já está registrado no aplicativo.",
     "installPath": "O mu não consegue iniciar a partir da pasta em que está instalado: o caminho da pasta tem espaços. Instale o mu de novo em uma pasta cujo caminho não tenha espaços, como C:\\mu.",
     "backend": "O serviço local não respondeu como esperado (HTTP {{status}}).",
@@ -926,7 +926,7 @@
     },
     "status": {
       "starting": "Iniciando o mu…",
-      "classifying": "O Jev está lendo sua mensagem…",
+      "classifying": "O juiz está lendo sua mensagem…",
       "compacting": "Compactando a conversa…",
       "retrying": "A solicitação ao modelo falhou. Tentando de novo ({{attempt}} de {{max}})…",
       "thinking": "Pensando…",
@@ -1032,10 +1032,10 @@
     }
   },
   "details": {
-    "lead": "Um interruptor por recurso, com as configurações em Opções. As linhas recuadas são onde ele consulta o Jev: desative uma e essa etapa segue normalmente.",
+    "lead": "Um interruptor por recurso, com as configurações em Opções. As linhas recuadas são onde ele consulta o juiz: desative uma e essa etapa segue normalmente.",
     "featureOff": "O recurso está desligado",
-    "askJev": "Deixar o Jev decidir",
-    "askJevAbout": "Deixar o Jev decidir: {{point}}",
+    "askJev": "Deixar o juiz decidir",
+    "askJevAbout": "Deixar o juiz decidir: {{point}}",
     "areas": {
       "input": "Entrada",
       "context": "Contexto",

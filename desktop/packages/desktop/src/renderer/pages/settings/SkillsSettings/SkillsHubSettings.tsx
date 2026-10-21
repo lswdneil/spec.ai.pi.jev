@@ -304,7 +304,7 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
           <div>
             {t('settings.skillsHub.batchDeleteConfirmContent', {
               count: selectedSkillNames.size,
-              defaultValue: `Are you sure you want to delete the ${selectedSkillNames.size} selected skill(s)?`,
+              defaultValue: `Delete the ${selectedSkillNames.size} selected skills?`,
             })}
           </div>
           <div className='text-12px text-t-tertiary mt-8px'>
@@ -849,7 +849,7 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
                             <div>
                               {t('settings.skillsHub.deleteConfirmContent', {
                                 name: skill.name,
-                                defaultValue: `Are you sure you want to delete "${skill.name}"?`,
+                                defaultValue: `Delete "${skill.name}"?`,
                               })}
                             </div>
                             <div className='text-12px text-t-tertiary mt-8px'>
@@ -973,7 +973,7 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
             </Button>
             <TalkToButlerButton
               label={t('settings.skillsHub.addSkill', { defaultValue: 'Add Skill' })}
-              chatLabel={t('settings.talkToButler.addViaChat', { defaultValue: 'Add via chat' })}
+              chatLabel={t('settings.talkToButler.addViaChat', { defaultValue: 'Add in a conversation' })}
               onManual={handleManualImport}
               manualLabel={t('settings.skillsHub.manualImport', { defaultValue: 'Import Skills' })}
               prompt={t('settings.talkToButler.prompt.addSkill', {

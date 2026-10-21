@@ -227,7 +227,7 @@
       "noteMissing": "Descoberta não registrada.",
       "allFlow": "Todas as entregas",
       "beeFlow": "Entregas para {{name}}",
-      "audit": "Vereditos do Jev",
+      "audit": "Vereditos",
       "waitingRun": "Aguardando eventos registrados deste Hive.",
       "recordedAt": "Registrado em {{time}}",
       "beeMissing": "Esta abelha não está no instantâneo registrado.",
@@ -959,7 +959,7 @@
       "auto_compaction_end": "Compactação concluída",
       "hive.note": "Descoberta compartilhada",
       "hive.delivery": "Entrega confirmada",
-      "hive.gate": "Portão do Jev",
+      "hive.gate": "Portão do Hive",
       "hive.manifest": "Atribuição do Hive",
       "bee.event": "Evento de abelha",
       "memory.recalled": "Experiência recuperada",
@@ -1089,7 +1089,7 @@
       "switch": "Painel em linguagem simples deste projeto",
       "switching": "Alternando…",
       "afterTurn": "Alterna quando o agente terminar esta etapa",
-      "unknown": "Esta conversa ainda não tem painel. Ele aparece nas conversas do mu enquanto o painel em linguagem simples está ativado em Recursos.",
+      "unknown": "Esta conversa ainda não tem painel. Ele aparece nas conversas do mu enquanto o painel em linguagem simples está ativado em Configurações → Recursos principais.",
       "off": "Quando ativado, ele diz em palavras simples como o trabalho está indo, o que o agente está fazendo agora e o que precisa de você.",
       "cost": "Só para este projeto. Cada atualização custa uma chamada ao modelo.",
       "empty": "Dê um momento ao agente; aqui aparecerá em palavras simples como está indo.",
@@ -1273,7 +1273,7 @@
       "setUp": "Configurar um juiz",
       "skipped": "Classificação pulada",
       "off": "A classificação está desativada",
-      "firstHint": "Esta linha é o veredito do Jev: o Jev classifica cada mensagem primeiro e depois o mu decide como seguir. Todos os vereditos ficam em Vereditos, à direita."
+      "firstHint": "Esta linha é o veredito do juiz: o juiz classifica cada mensagem primeiro e depois o mu decide como seguir. Todos os vereditos ficam em Vereditos, à direita."
     },
     "eventLine": {
       "judgeNotice": {
@@ -1287,7 +1287,7 @@
         "skills": "Escolhendo as habilidades de que esta sessão precisa",
         "capabilities": "Escolhendo as capacidades de que esta tarefa precisa",
         "goal_check": "Verificando se o objetivo foi alcançado",
-        "permissionReview": "O Jev está avaliando: {{summary}}"
+        "permissionReview": "O juiz está avaliando: {{summary}}"
       },
       "goal": {
         "paused": "Pausado: {{reason}}",
@@ -1523,7 +1523,7 @@
     "previewEmpty": "Nada para pré-visualizar ainda. Arquivos abertos na conversa aparecem aqui.",
     "previewHidden": "A prévia está oculta.",
     "browserEmpty": "Nenhuma página aberta. Digite um endereço ou uma pesquisa acima. As páginas abertas na conversa também aparecem aqui.",
-    "firstHint": "Painel conta o progresso em palavras simples, Vereditos lista cada veredito do Jev e Arquivos é a pasta desta conversa. As outras abas aparecem quando são usadas."
+    "firstHint": "Painel conta o progresso em palavras simples, Vereditos lista cada veredito e Arquivos é a pasta desta conversa. As outras abas aparecem quando são usadas."
   },
   "nodeRuntime": {
     "title": "Baixar o Node.js?",
