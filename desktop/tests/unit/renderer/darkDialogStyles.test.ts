@@ -1,7 +1,7 @@
 /**
  * Dark dialogs sit on the card surface (--dialog-fill-0, a shade above the page's --bg-1) inside a hairline. The hairline goes
  * round the whole dialog: the body of a plain Arco modal is only the part between its title and its buttons, so a
- * line round the body would box the text in. An AionModal's body is the whole dialog, and it draws its own.
+ * line round the body would box the text in. An MuModal's body is the whole dialog, and it draws its own.
  */
 
 import { readFileSync } from 'node:fs';

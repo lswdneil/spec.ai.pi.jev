@@ -15,22 +15,21 @@ import React, { useEffect, useImperativeHandle, useRef } from 'react';
  */
 type NativeSelectProps = Omit<SelectProps, 'size'>;
 type NativeSelectSize = NonNullable<SelectProps['size']>;
-type AionSelectSize = NativeSelectSize | 'middle';
+type MuSelectSize = NativeSelectSize | 'middle';
 
-export interface AionSelectProps extends NativeSelectProps {
+export interface MuSelectProps extends NativeSelectProps {
   /** 额外的类名 / Additional class name */
   className?: string;
   /** 统一尺寸，新增 middle（32px）/ Unified size with additional "middle" (32px) */
-  size?: AionSelectSize;
+  size?: MuSelectSize;
 }
 
 /**
  * 基础样式类名
- * 注意：主题相关样式（背景色、边框色）在 arco-override.css 的 .aion-select 类中定义
- * Note: Theme-related styles (background, border colors) are defined in .aion-select class in arco-override.css
+ * Base classes. `mu-select` marks the component, for tests and custom CSS themes; its look is the utilities below.
  */
 const BASE_CLASS = classNames(
-  'aion-select',
+  'mu-select',
   '[&_.arco-select-view]:rounded-[4px]',
   '[&_.arco-select-view]:border',
   '[&_.arco-select-view]:border-solid',
@@ -75,42 +74,40 @@ const defaultGetPopupContainer = (): HTMLElement => {
  * @example
  * ```tsx
  * // 基本用法 / Basic usage
- * <AionSelect placeholder="请选择" style={{ width: 200 }}>
- *   <AionSelect.Option value="1">选项1</AionSelect.Option>
- *   <AionSelect.Option value="2">选项2</AionSelect.Option>
- * </AionSelect>
+ * <MuSelect placeholder="请选择" style={{ width: 200 }}>
+ *   <MuSelect.Option value="1">选项1</MuSelect.Option>
+ *   <MuSelect.Option value="2">选项2</MuSelect.Option>
+ * </MuSelect>
  *
  * // 多选 / Multiple selection
- * <AionSelect mode="multiple" placeholder="请选择多个">
- *   <AionSelect.Option value="1">选项1</AionSelect.Option>
- *   <AionSelect.Option value="2">选项2</AionSelect.Option>
- * </AionSelect>
+ * <MuSelect mode="multiple" placeholder="请选择多个">
+ *   <MuSelect.Option value="1">选项1</MuSelect.Option>
+ *   <MuSelect.Option value="2">选项2</MuSelect.Option>
+ * </MuSelect>
  *
  * // 分组 / Grouped options
- * <AionSelect placeholder="请选择">
- *   <AionSelect.OptGroup label="分组1">
- *     <AionSelect.Option value="1">选项1</AionSelect.Option>
- *   </AionSelect.OptGroup>
- *   <AionSelect.OptGroup label="分组2">
- *     <AionSelect.Option value="2">选项2</AionSelect.Option>
- *   </AionSelect.OptGroup>
- * </AionSelect>
+ * <MuSelect placeholder="请选择">
+ *   <MuSelect.OptGroup label="分组1">
+ *     <MuSelect.Option value="1">选项1</MuSelect.Option>
+ *   </MuSelect.OptGroup>
+ *   <MuSelect.OptGroup label="分组2">
+ *     <MuSelect.Option value="2">选项2</MuSelect.Option>
+ *   </MuSelect.OptGroup>
+ * </MuSelect>
  * ```
- *
- * @see arco-override.css for theme-related styles (.aion-select)
  */
-const mapSizeToNative = (size?: AionSelectSize): NativeSelectSize | undefined => {
+const mapSizeToNative = (size?: MuSelectSize): NativeSelectSize | undefined => {
   if (!size) return undefined;
   if (size === 'middle') return 'default';
   return size;
 };
 
-type AionSelectComponent = React.ForwardRefExoticComponent<AionSelectProps & React.RefAttributes<SelectHandle>> & {
+type MuSelectComponent = React.ForwardRefExoticComponent<MuSelectProps & React.RefAttributes<SelectHandle>> & {
   Option: typeof Select.Option;
   OptGroup: typeof Select.OptGroup;
 };
 
-const InternalSelect = React.forwardRef<SelectHandle, AionSelectProps>(
+const InternalSelect = React.forwardRef<SelectHandle, MuSelectProps>(
   ({ className, getPopupContainer, size = 'middle', ...rest }, ref) => {
     const normalizedSize = mapSizeToNative(size);
     const select = useRef<SelectHandle>(null);
@@ -135,12 +132,12 @@ const InternalSelect = React.forwardRef<SelectHandle, AionSelectProps>(
   }
 );
 
-const AionSelect = InternalSelect as AionSelectComponent;
+const MuSelect = InternalSelect as MuSelectComponent;
 
-AionSelect.displayName = 'AionSelect';
+MuSelect.displayName = 'MuSelect';
 
 // 导出子组件 / Export sub-components
-AionSelect.Option = Select.Option;
-AionSelect.OptGroup = Select.OptGroup;
+MuSelect.Option = Select.Option;
+MuSelect.OptGroup = Select.OptGroup;
 
-export default AionSelect;
+export default MuSelect;

@@ -283,7 +283,7 @@ body[arco-theme='dark'] .arco-tag-checked.arco-tag-gray {
 }
 
 /* Dark dialogs sit on the card surface inside a hairline. The hairline goes round the whole dialog: the body of a
-   plain Arco modal is only the part between its title and its buttons. An AionModal's body is the whole dialog,
+   plain Arco modal is only the part between its title and its buttons. An MuModal's body is the whole dialog,
    and it draws its own (.mu-modal .arco-modal-content above). */
 body[arco-theme='dark'] .arco-modal-content {
   background-color: var(--dialog-fill-0) !important;

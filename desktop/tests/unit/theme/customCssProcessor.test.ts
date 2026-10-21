@@ -83,12 +83,13 @@ describe('addImportantToAll', () => {
 
   it('gives a component class named by its old name its mu name, and leaves other classes alone', () => {
     const out = addImportantToAll(
-      '.aionui-modal .arco-modal-content, .aionui-modal-standard { color: red } .aionui-markdown p { margin: 0 } .aionui-other { color: blue }'
+      '.aionui-modal .arco-modal-content, .aionui-modal-standard { color: red } .aionui-markdown p { margin: 0 } .aion-select .arco-select-view { color: red } .aionui-other, .aion-other { color: blue }'
     );
     expect(selectorsOf(out)).toEqual([
       '.mu-modal .arco-modal-content, .mu-modal-standard',
       '.mu-markdown p',
-      '.aionui-other',
+      '.mu-select .arco-select-view',
+      '.aionui-other, .aion-other',
     ]);
   });
 

@@ -12,7 +12,7 @@ import {
   getCurrentThoughtLevelLabel,
   thoughtLevelOptionLabel,
 } from '@/renderer/components/agent/runtimeSelectorOptions';
-import AionInlineSearchInput from '@/renderer/components/base/AionInlineSearchInput';
+import MuInlineSearchInput from '@/renderer/components/base/MuInlineSearchInput';
 import MobileActionSheet from '@/renderer/components/chat/MobileActionSheet';
 import SendArrowIcon from '@/renderer/components/chat/SendBox/SendArrowIcon';
 import type {
@@ -51,7 +51,7 @@ const SubmenuSearchList: React.FC<{
   <>
     {showSearch ? (
       <div className='px-6px pt-4px pb-6px' style={{ background: 'var(--color-bg-popup)' }}>
-        <AionInlineSearchInput
+        <MuInlineSearchInput
           value={query}
           onChange={onQueryChange}
           placeholder={placeholder}

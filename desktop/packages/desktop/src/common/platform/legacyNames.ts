@@ -63,8 +63,11 @@ export const LEGACY_BACKGROUND_BLOCK = {
   end: '/* AionUi Theme Background End */',
 } as const;
 
-/** The components' class names before they were mu's. A custom CSS theme written then may still target them. */
-export const LEGACY_CLASS_NAMES = /\.aionui-(modal|steps|markdown)\b/g;
+/**
+ * The components' class names before they were mu's (`.aionui-modal`, `.aion-select`): the name after the prefix is
+ * in the first group or the second. A custom CSS theme written then may still target them.
+ */
+export const LEGACY_CLASS_NAMES = /\.(?:aionui-(modal|steps|markdown)|aion-(select|url-viewer-toolbar|dir-input))\b/g;
 
 /**
  * The image generation server's settings before they were named mu (`IMAGE_GEN_ENV_KEYS`). They are kept in the

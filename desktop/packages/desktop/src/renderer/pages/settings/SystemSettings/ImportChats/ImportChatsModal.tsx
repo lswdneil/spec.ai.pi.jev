@@ -2,7 +2,7 @@
  * Picking Claude Code and Codex conversations to bring into mu (common/kyrn/importChats.ts): every one found on this
  * computer, under its tool, newest first, with its project folder, date and first message. The chosen ones become mu
  * conversations in the conversation list (with the native host on, the mu sessions themselves); one alone opens right
- * away. The settings dialogs' frame (AionModal's
+ * away. The settings dialogs' frame (MuModal's
  * standard variant, as the theme and MCP import dialogs): the title at the start, hairlines between title, body and
  * buttons.
  */
@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import type { TFunction } from 'i18next';
 import { kyrnBridge, unwrap } from '@/common/kyrn/bridge';
 import { groupChats, IMPORT_TOOL_NAMES, type FoundChat, type ImportOutcome } from '@/common/kyrn/importChats';
-import AionModal from '@/renderer/components/base/AionModal';
+import MuModal from '@/renderer/components/base/MuModal';
 import { emitter } from '@/renderer/utils/emitter';
 import { formatByteSize, formatDateTime } from '@/renderer/services/i18n/format';
 import { getWorkspaceDisplayName } from '@/renderer/utils/workspace/workspace';
@@ -233,7 +233,7 @@ const ImportChatsModal: React.FC<Props> = ({ visible, onClose, stay = false }) =
   const searchable = state.phase === 'ready' && state.chats.length > 0;
 
   return (
-    <AionModal
+    <MuModal
       variant='standard'
       header={{ title: t('mu.importChats.dialog.title'), showClose: true }}
       visible={visible}
@@ -302,7 +302,7 @@ const ImportChatsModal: React.FC<Props> = ({ visible, onClose, stay = false }) =
           </div>
         )}
       </div>
-    </AionModal>
+    </MuModal>
   );
 };
 

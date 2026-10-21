@@ -37,7 +37,7 @@ vi.mock('@/renderer/pages/native/hooks/useNativeConversations', () => ({
     native.rereads++;
   },
 }));
-// The dialog frame (AionModal) sizes itself by the font scale.
+// The dialog frame (MuModal) sizes itself by the font scale.
 vi.mock('@/renderer/hooks/context/ThemeContext', () => ({ useThemeContext: () => ({ fontScale: 1 }) }));
 vi.mock('@arco-design/web-react', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@arco-design/web-react')>();
