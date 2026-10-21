@@ -802,7 +802,7 @@
     },
     "invalidJson": "{{file}} isn't valid JSON. Fix it by hand, then reload.",
     "unreadable": "Couldn't read {{file}}.",
-    "runtimeOffline": "The mu runtime isn't running. Check the local launcher and your sign-in.",
+    "runtimeOffline": "mu's agent isn't responding. Restart mu, then try again.",
     "otherRegistration": "Another mu command is already registered in the app.",
     "installPath": "mu can't start because the path of its install folder contains spaces. Reinstall mu in a folder whose path has no spaces, such as C:\\mu.",
     "backend": "The local service returned an unexpected response (HTTP {{status}}).",

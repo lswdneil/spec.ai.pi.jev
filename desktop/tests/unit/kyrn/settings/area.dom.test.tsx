@@ -732,7 +732,7 @@ describe('providers and the default model', () => {
     fireEvent.click(within(xai).getByTestId('mu-account-signin-xai'));
     const failed = await within(xai).findByTestId('mu-login-problem');
     expect(failed).toHaveTextContent("Sign-in didn't finish. Try again.");
-    expect(failed).toHaveTextContent("The mu runtime isn't running.");
+    expect(failed).toHaveTextContent("mu's agent isn't responding.");
     // A coded reason says all there is: the raw text is not repeated.
     expect(failed).not.toHaveTextContent('runtime offline');
   });

@@ -802,7 +802,7 @@
     },
     "invalidJson": "{{file}} não é um JSON válido. Corrija-o manualmente e depois recarregue.",
     "unreadable": "Não foi possível ler {{file}}.",
-    "runtimeOffline": "O ambiente de execução do mu não está online. Verifique o inicializador local e o login.",
+    "runtimeOffline": "O agente do mu não está respondendo. Reinicie o mu e tente novamente.",
     "otherRegistration": "Outro comando mu já está registrado no aplicativo.",
     "installPath": "O mu não consegue iniciar a partir da pasta em que está instalado: o caminho da pasta tem espaços. Instale o mu de novo em uma pasta cujo caminho não tenha espaços, como C:\\mu.",
     "backend": "O serviço local não respondeu como esperado (HTTP {{status}}).",

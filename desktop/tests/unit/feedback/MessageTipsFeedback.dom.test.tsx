@@ -235,7 +235,7 @@ describe('MessageTips — error chips', () => {
     expect(screen.getByText('Model provider authentication failed')).toBeInTheDocument();
     expect(screen.getByText(/rejected the API key or account credentials/)).toBeInTheDocument();
     expect(screen.getByText('Model provider')).toBeInTheDocument();
-    expect(screen.getByText('Needs configuration')).toBeInTheDocument();
+    expect(screen.getByText('Needs setup')).toBeInTheDocument();
     expect(screen.queryByText(REPORT_CHIP)).not.toBeInTheDocument();
   });
 
@@ -299,7 +299,7 @@ describe('MessageTips — error chips', () => {
       />
     );
 
-    expect(screen.getByText('The provider requires billing')).toBeInTheDocument();
+    expect(screen.getByText('The provider needs billing or credits')).toBeInTheDocument();
     expect(screen.getByText(/needs active billing, credits or quota/)).toBeInTheDocument();
     expect(screen.queryByText('backend billing required fallback')).not.toBeInTheDocument();
   });
@@ -328,7 +328,7 @@ describe('MessageTips — error chips', () => {
     expect(screen.getAllByText(/openclaw gateway status/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/openclaw gateway start/).length).toBeGreaterThan(0);
     expect(screen.getByText('Agent')).toBeInTheDocument();
-    expect(screen.getByText('Retryable')).toBeInTheDocument();
+    expect(screen.getByText('Can retry')).toBeInTheDocument();
     expect(
       screen.getByText("Suggestion: Check the agent's installation and its local command settings.")
     ).toBeInTheDocument();
@@ -373,7 +373,7 @@ describe('MessageTips — error chips', () => {
     );
 
     expect(screen.getByText('Agent')).toBeInTheDocument();
-    expect(screen.getByText('Agent reported a protocol parse error')).toBeInTheDocument();
+    expect(screen.getByText('The agent reported a protocol parse error')).toBeInTheDocument();
     expect(screen.getByText(/couldn't parse an ACP\/JSON-RPC message/)).toBeInTheDocument();
     expect(screen.queryByText(/Suggestion:/)).not.toBeInTheDocument();
     expect(screen.queryByText(REPORT_CHIP)).not.toBeInTheDocument();

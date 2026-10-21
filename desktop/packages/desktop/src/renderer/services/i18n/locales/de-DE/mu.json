@@ -802,7 +802,7 @@
     },
     "invalidJson": "{{file}} ist kein gültiges JSON. Korrigiere die Datei von Hand und lade dann neu.",
     "unreadable": "{{file}} konnte nicht gelesen werden.",
-    "runtimeOffline": "Die mu-Laufzeit ist nicht online. Prüfe den lokalen Starter und die Anmeldung.",
+    "runtimeOffline": "Der Agent von mu antwortet nicht. Starte mu neu und versuche es noch einmal.",
     "otherRegistration": "In der App ist bereits ein anderer mu-Befehl registriert.",
     "installPath": "mu kann nicht aus dem Ordner starten, in dem es installiert ist: Der Pfad des Ordners enthält Leerzeichen. Installiere mu erneut in einen Ordner, dessen Pfad keine Leerzeichen enthält, zum Beispiel C:\\mu.",
     "backend": "Der lokale Dienst hat nicht wie erwartet geantwortet (HTTP {{status}}).",
