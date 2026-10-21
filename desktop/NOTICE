@@ -1,0 +1,16 @@
+mu desktop
+
+This directory began as a fork of AionUi (https://github.com/iOfficeAI/AionUi),
+Copyright 2025 AionUi (aionui.com), licensed under the Apache License, Version
+2.0. Files derived from AionUi keep their copyright header and remain under that
+license; see LICENSE.
+
+The app runs AionCore (https://github.com/iOfficeAI/AionCore), a separate
+program from the same organization, which the build downloads and bundles.
+
+packages/desktop/src/process/services/localJudgeOnnx/laya/ contains code from
+laya-mlx (https://github.com/mizchi/laya-mlx), licensed under the Apache License,
+Version 2.0; see NOTICE.md in that folder.
+
+kyrn/src/vendor/aionui/ contains code adapted from AionUi; see
+kyrn/THIRD_PARTY_NOTICES.md.
