@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-mode="auto" data-direction="editorial">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>spec.jev · Editorial · Phase 0</title>
+    <link rel="stylesheet" href="../tokens.css" />
+    <link rel="stylesheet" href="preview.css" />
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.2-3.2" /></symbol>
+      <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" /></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="m3 13 9 5 9-5" /></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" /><circle cx="16" cy="6" r="2" /><circle cx="10" cy="12" r="2" /><circle cx="18" cy="18" r="2" /></symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6" /></symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></symbol>
+      <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M15 4v16" /></symbol>
+      <symbol id="i-paperclip" viewBox="0 0 24 24"><path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l8.9-8.9a4 4 0 0 1 5.7 5.7l-8.9 8.9a2 2 0 0 1-2.8-2.8l8.2-8.2" /></symbol>
+      <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="9" cy="10" r="2" /><path d="m21 15-4.5-4.5L7 20" /></symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5" /><path d="m5 12 7-7 7 7" /></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></symbol>
+      <symbol id="i-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6" /><path d="M12 19h8" /></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7" /><path d="M20 4v7h-7" /></symbol>
+      <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z" /></symbol>
+      <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></symbol>
+    </svg>
+
+    <header class="lab">
+      <div class="lab-brand">
+        <span class="mark">s</span>
+        spec.jev <span class="lab-sep">/</span> Phase 0
+        <span class="lab-dir">Editorial</span>
+      </div>
+      <nav class="lab-screens" aria-label="Prototype screen">
+        <button data-screen="conversation" class="on">Conversation</button>
+        <button data-screen="appearance">Appearance</button>
+        <button data-screen="mobile">Mobile</button>
+      </nav>
+      <nav class="lab-links" aria-label="Directions"><a href="index.html">All directions</a>
+        <a href="freebuff.html">Freebuff</a>
+        <a href="editorial.html" class="on">Editorial</a>
+        <a href="dense.html">Dense</a></nav>
+      <div class="lab-theme" role="group" aria-label="Theme">
+        <button data-mode="dark" aria-pressed="false">Dark</button>
+        <button data-mode="light" aria-pressed="false">Light</button>
+        <button data-mode="auto" aria-pressed="true">Auto</button>
+      </div>
+    </header>
+
+    <main class="stage">
+      <section class="screen" data-screen-panel="conversation">
+        <p class="screen-note">The same palette with a serif display, wider margins and fewer borders. Accent is punctuation, not a theme.</p>
+
+        <div class="app">
+          <aside class="sidebar" aria-label="Workspace">
+            <div class="brand">
+              <span class="mark">s</span>
+              spec.jev
+              <kbd>⌘K</kbd>
+            </div>
+            <button class="new-session"><svg class="i"><use href="#i-plus" /></svg> New session</button>
+            <nav class="nav" aria-label="Main">
+              <a href="#" class="on" aria-current="page"><svg class="i"><use href="#i-message" /></svg> Sessions <span class="count">12</span></a>
+              <a href="#"><svg class="i"><use href="#i-search" /></svg> Search</a>
+              <a href="#"><svg class="i"><use href="#i-clock" /></svg> Automations</a>
+              <a href="#"><svg class="i"><use href="#i-layers" /></svg> Skills &amp; MCP</a>
+            </nav>
+            <div class="side-group">
+              <p class="side-label">Today</p>
+              <a href="#" class="thread-item on"><span>Fix the ACP handshake</span><time>14:32</time></a>
+              <a href="#" class="thread-item"><span>Installer identity</span><time>11:08</time></a>
+              <a href="#" class="thread-item"><span>Moli browser backend</span><time>09:41</time></a>
+              <a href="#" class="thread-item"><span>Legacy reads removed</span><time>09:12</time></a>
+            </div>
+            <div class="side-foot">
+              <button class="account">
+                <span class="avatar">N</span>
+                <span><b>neil</b><small>ai.spec.pi.jev</small></span>
+                <svg class="i"><use href="#i-chevron-down" /></svg>
+              </button>
+              <a href="#" class="settings-link"><svg class="i"><use href="#i-sliders" /></svg> Settings</a>
+            </div>
+          </aside>
+
+          <div class="main">
+            <header class="topbar">
+              <div class="crumbs">
+                <span>ai.spec.pi.jev</span>
+                <svg class="i"><use href="#i-chevron-right" /></svg>
+                <b>Fix the ACP handshake</b>
+              </div>
+              <div class="top-actions">
+                <span class="chip"><span class="dot"></span> Jev · sure</span>
+                <button class="chip model">Claude Sonnet 4.5 <svg class="i"><use href="#i-chevron-down" /></svg></button>
+                <button class="icon-btn" aria-label="Toggle activity panel"><svg class="i"><use href="#i-panel" /></svg></button>
+                <div class="window-controls" aria-hidden="true"><span></span><span></span><span></span></div>
+              </div>
+            </header>
+
+            <div class="work">
+              <section class="thread" aria-label="Conversation">
+                <div class="thread-inner">
+                  <header class="thread-head">
+                    <div class="kicker"><span>desktop</span><span>·</span><span>main</span><span>·</span><span>2m 14s</span></div>
+                    <h1>Fix the ACP handshake</h1>
+                    <div class="meta"><span>6 messages</span><span class="sep"></span><span>2 tools</span><span class="sep"></span><span>Jev reviewed 4 steps</span></div>
+                  </header>
+
+                  <article class="msg user">
+                    <div class="bubble">
+                      免安装包启动失败：本地服务返回 HTTP 400，<code>acp_init_failed</code>，提示 Incoming transport closed。请核实。
+                    </div>
+                  </article>
+
+                  <article class="msg">
+                    <div class="agent-mark">J</div>
+                    <div class="msg-body">
+                      <div class="msg-head"><b>spec.jev</b><time>14:32</time><span class="tag">Jev · sure</span></div>
+                      <p>
+                        找到原因了：打包配置里 <code>asarUnpack</code> 的文件名被改成了 <code>spec.jev-acp.js</code>，但构建产物仍然是
+                        <code>mu-acp.js</code>。ACP 进程启动后立即退出，AionCore 因此收到 400。
+                      </p>
+                      <div class="tool">
+                        <div class="tool-head">
+                          <svg class="i"><use href="#i-terminal" /></svg>
+                          <code>powershell</code>
+                          <span class="status ok">exit 0</span>
+                        </div>
+                        <pre><span class="dim">PS&gt;</span> Test-Path .\resources\app.asar.unpacked\out\main\mu-acp.js
+<span class="ok">False</span>
+<span class="dim">PS&gt;</span> Get-Content .\resources\spec.jev\acp.cmd
+<span class="dim">...</span> "%~dp0..\..\spec.jev.exe" "...\out\main\mu-acp.js"</pre>
+                      </div>
+                      <div class="verdict">
+                        <span class="dot"></span>
+                        <div><b>Jev</b> · 这个修复直接解释了 transport closed，且没有改动协议层。</div>
+                        <span class="score">0.92</span>
+                      </div>
+                      <p>
+                        已重新打包：<code>spec.jev-0.1.0-win-x64.exe</code>。ACP 握手返回
+                        <code>agentInfo: spec.jev 0.1.0</code>，本地服务恢复。
+                      </p>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <aside class="rail" aria-label="Judge activity">
+                <div class="rail-head">Judge activity <span class="live">live</span></div>
+                <ol class="steps">
+                  <li class="step done">
+                    <b>Read the error</b><time>0.2s</time>
+                    <small>HTTP 400 · acp_init_failed · incoming_transport_closed</small>
+                  </li>
+                  <li class="step done">
+                    <b>Compared the launcher</b><time>0.4s</time>
+                    <small>resources/spec.jev/acp.cmd → out/main/mu-acp.js</small>
+                  </li>
+                  <li class="step done">
+                    <b>Checked the bundle</b><time>0.3s</time>
+                    <small>asarUnpack listed spec.jev-acp.js; file absent</small>
+                  </li>
+                  <li class="step current">
+                    <b>Verdict</b><time>1.1s</time>
+                    <small>sure · 0.92 · fix targets the transport, not the protocol</small>
+                  </li>
+                </ol>
+                <div class="rail-foot">
+                  <span>model · jev / claude-sonnet-4.5</span>
+                  <span>context · 18.4k / 200k</span>
+                  <span>permissions · ask</span>
+                </div>
+              </aside>
+            </div>
+
+            <footer class="composer-wrap">
+              <div class="composer">
+                <textarea rows="1" placeholder="询问 spec.jev，或输入 / 查看命令…"></textarea>
+                <div class="composer-row">
+                  <div class="composer-left">
+                    <button class="icon-btn" aria-label="Attach file"><svg class="i"><use href="#i-paperclip" /></svg></button>
+                    <button class="icon-btn" aria-label="Add image"><svg class="i"><use href="#i-image" /></svg></button>
+                    <span class="mode">Ask</span>
+                  </div>
+                  <div class="composer-right">
+                    <span class="ctx">128k</span>
+                    <button class="send" aria-label="Send"><svg class="i"><use href="#i-arrow-up" /></svg></button>
+                  </div>
+                </div>
+              </div>
+              <p class="composer-note">Enter to send · Shift+Enter for a new line · Jev reviews each step</p>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" data-screen-panel="appearance" hidden>
+        <p class="screen-note">The same palette with a serif display, wider margins and fewer borders. Accent is punctuation, not a theme.</p>
+        <div class="app">
+          <aside class="sidebar" aria-label="Workspace">
+            <div class="brand"><span class="mark">s</span> spec.jev <kbd>⌘K</kbd></div>
+            <button class="new-session"><svg class="i"><use href="#i-plus" /></svg> New session</button>
+            <nav class="nav" aria-label="Main">
+              <a href="#"><svg class="i"><use href="#i-message" /></svg> Sessions <span class="count">12</span></a>
+              <a href="#"><svg class="i"><use href="#i-search" /></svg> Search</a>
+              <a href="#"><svg class="i"><use href="#i-clock" /></svg> Automations</a>
+              <a href="#"><svg class="i"><use href="#i-layers" /></svg> Skills &amp; MCP</a>
+            </nav>
+            <div class="side-group">
+              <p class="side-label">Today</p>
+              <a href="#" class="thread-item"><span>Fix the ACP handshake</span><time>14:32</time></a>
+              <a href="#" class="thread-item"><span>Installer identity</span><time>11:08</time></a>
+            </div>
+            <div class="side-foot">
+              <button class="account">
+                <span class="avatar">N</span>
+                <span><b>neil</b><small>ai.spec.pi.jev</small></span>
+                <svg class="i"><use href="#i-chevron-down" /></svg>
+              </button>
+              <a href="#" class="settings-link on"><svg class="i"><use href="#i-sliders" /></svg> Settings</a>
+            </div>
+          </aside>
+
+          <div class="main main-settings">
+            <header class="topbar">
+              <div class="crumbs">
+                <span>Settings</span>
+                <svg class="i"><use href="#i-chevron-right" /></svg>
+                <b>Appearance</b>
+              </div>
+              <div class="top-actions">
+                <div class="window-controls" aria-hidden="true"><span></span><span></span><span></span></div>
+              </div>
+            </header>
+
+            <div class="settings">
+              <nav class="settings-nav" aria-label="Settings">
+                <h2>Settings</h2>
+                <a href="#" class="on" aria-current="page">Appearance</a>
+                <a href="#">Models</a>
+                <a href="#">Judges</a>
+                <a href="#">Permissions</a>
+                <a href="#">Skills &amp; MCP</a>
+                <a href="#">About</a>
+              </nav>
+
+              <div class="settings-main">
+                <div class="settings-inner">
+                  <header class="settings-head">
+                    <h1>Appearance</h1>
+                    <p>Choose how spec.jev looks. The theme applies instantly and is remembered on this machine.</p>
+                  </header>
+
+                  <section class="settings-section">
+                    <h2>Theme</h2>
+                    <p>Only three modes: dark, light, or follow the system. No per-window overrides.</p>
+                    <div class="theme-grid">
+                      <button class="theme-card" data-theme-card="dark" aria-pressed="false">
+                        <div class="mini" data-mini="dark" aria-hidden="true">
+                          <div class="mini-side"><i></i><i></i><i></i><i></i></div>
+                          <div class="mini-main"><div class="mini-bar short"></div><div class="mini-bar"></div><div class="mini-bubble"></div><div class="mini-composer"><span class="mini-send"></span></div></div>
+                        </div>
+                        <div class="theme-label"><div><b>Dark</b><span>Low light, quiet contrast</span></div><svg class="i check"><use href="#i-check" /></svg></div>
+                      </button>
+                      <button class="theme-card" data-theme-card="light" aria-pressed="false">
+                        <div class="mini" data-mini="light" aria-hidden="true">
+                          <div class="mini-side"><i></i><i></i><i></i><i></i></div>
+                          <div class="mini-main"><div class="mini-bar short"></div><div class="mini-bar"></div><div class="mini-bubble"></div><div class="mini-composer"><span class="mini-send"></span></div></div>
+                        </div>
+                        <div class="theme-label"><div><b>Light</b><span>Paper surfaces, soft sage</span></div><svg class="i check"><use href="#i-check" /></svg></div>
+                      </button>
+                      <button class="theme-card" data-theme-card="auto" aria-pressed="true">
+                        <div class="mini" data-mini="auto" aria-hidden="true">
+                          <div class="mini-side"><i></i><i></i><i></i><i></i></div>
+                          <div class="mini-main"><div class="mini-bar short"></div><div class="mini-bar"></div><div class="mini-bubble"></div><div class="mini-composer"><span class="mini-send"></span></div></div>
+                        </div>
+                        <div class="theme-label"><div><b>Auto</b><span id="auto-status">Following the system · dark</span></div><svg class="i check"><use href="#i-check" /></svg></div>
+                      </button>
+                    </div>
+                  </section>
+
+                  <section class="preview-panel" aria-label="Theme preview">
+                    <div class="preview-head">
+                      <h2>Preview</h2>
+                      <span class="status">Live · the whole app updates</span>
+                    </div>
+                    <div class="preview-body">
+                      <div class="preview-bubble">这个主题在会话、设置和移动端都会一致吗？</div>
+                      <div class="preview-reply">
+                        <span class="agent-mark">J</span>
+                        <div>是。同一套 token 驱动所有表面；只有信息密度会随窗口宽度变化。</div>
+                      </div>
+                      <div class="preview-composer">
+                        <span>询问 spec.jev…</span>
+                        <span class="send"><svg class="i"><use href="#i-arrow-up" /></svg></span>
+                      </div>
+                    </div>
+                  </section>
+
+                  <p class="settings-foot">The palette is fixed: surfaces, sage accent, and text contrast are part of the product. No custom accent picker.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" data-screen-panel="mobile" hidden>
+        <p class="screen-note">The same palette with a serif display, wider margins and fewer borders. Accent is punctuation, not a theme.</p>
+        <div class="phones">
+          <div class="phone">
+            <div class="phone-screen">
+              <header class="m-top">
+                <button class="icon-btn" aria-label="Back"><svg class="i"><use href="#i-arrow-left" /></svg></button>
+                <b>Fix the ACP handshake</b>
+                <button class="icon-btn" style="margin-inline-start: auto" aria-label="More"><svg class="i"><use href="#i-more" /></svg></button>
+              </header>
+              <div class="m-thread">
+                <article class="msg user">
+                  <div class="bubble">免安装包启动失败，提示 acp_init_failed。请核实。</div>
+                </article>
+                <article class="msg">
+                  <div class="agent-mark">J</div>
+                  <div class="msg-body">
+                    <div class="msg-head"><b>spec.jev</b><time>14:32</time></div>
+                    <p>打包配置里的 unpack 文件名写错了，适配器没有解出来。已改回 <code>mu-acp.js</code> 并重新打包。</p>
+                    <div class="tool">
+                      <div class="tool-head"><svg class="i"><use href="#i-terminal" /></svg><code>verify</code><span class="status ok">ok</span></div>
+                      <pre>agentInfo: spec.jev 0.1.0</pre>
+                    </div>
+                    <div class="verdict"><span class="dot"></span><div><b>Jev</b> · sure</div><span class="score">0.92</span></div>
+                  </div>
+                </article>
+              </div>
+              <div class="m-composer">
+                <div class="composer">
+                  <textarea rows="1" placeholder="询问 spec.jev…"></textarea>
+                  <div class="composer-row">
+                    <div class="composer-left">
+                      <button class="icon-btn" aria-label="Attach"><svg class="i"><use href="#i-paperclip" /></svg></button>
+                      <span class="mode">Ask</span>
+                    </div>
+                    <div class="composer-right">
+                      <button class="send" aria-label="Send"><svg class="i"><use href="#i-arrow-up" /></svg></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <nav class="m-nav" aria-label="Mobile">
+                <a href="#" class="on"><svg class="i"><use href="#i-message" /></svg> Sessions</a>
+                <a href="#"><svg class="i"><use href="#i-search" /></svg> Search</a>
+                <a href="#"><span class="new"><svg class="i"><use href="#i-plus" /></svg></span><span class="new-label">New</span></a>
+                <a href="#"><svg class="i"><use href="#i-sliders" /></svg> Settings</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="preview.js"></script>
+  </body>
+</html>

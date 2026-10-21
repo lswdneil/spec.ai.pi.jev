@@ -18,6 +18,11 @@
 - Local, reversible edits may be made directly. Commits, pushes and publishing need an explicit instruction; uploading to GitHub needs explicit authorization for that upload.
 - State the assumption when one is unavoidable, and mark what remains undecided.
 
+## Build on What Exists
+
+- Before building a UI or an infrastructure piece, search GitHub, npm and the web for a maintained open-source component or block first. Prefer permissive licences (MIT/Apache-2.0), active maintenance, and compatibility with React 19, Electron, web and mobile.
+- Composing vetted libraries beats reimplementing. When a choice is close, state the candidates, licence, maintenance status and trade-off instead of silently picking one.
+
 ## Code Quality
 
 - Read files in full before wide-ranging changes, before editing files you have not fully inspected, and when asked to investigate or audit. Do not rely on search snippets for broad changes.

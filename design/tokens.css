@@ -1,0 +1,154 @@
+/* spec.jev design tokens — generated from tokens.json, hand-kept in sync.
+   Palette verified against Freebuff's desktop CSS (2026-10-22).
+   Rules: no raw hex outside this file; one accent; no shadows. */
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #1c1d1c;
+  --chrome: #292b2a;
+  --surface: #222423;
+  --surface-2: #282a29;
+  --raised: #303330;
+  --line: #2f322f;
+  --line-strong: #767c74;
+  --text: #dedfdd;
+  --muted: #a0a39f;
+  --faint: #858984;
+  --brand: #b5cea5;
+  --brand-1: #82966f;
+  --brand-3: #e2ead9;
+  --brand-dim: #9db58b;
+  --brand-ink: #b5cea5;
+  --on-brand: #1c211b;
+  --popover: #252725;
+  --input: #282a29;
+  --placeholder: #92968f;
+  --focus: #b5cea5;
+  --selected: #363a35;
+  --scrim: #000000b8;
+  --danger: #e7a3a3;
+  --warn: #f5c86f;
+  --ok: #b5cea5;
+  --info: #c1f5f4;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f0f2ef;
+  --chrome: #e3e7e4;
+  --surface: #f7f8f5;
+  --surface-2: #e9ede8;
+  --raised: #dfe5df;
+  --line: #d8ded8;
+  --line-strong: #7f8a7f;
+  --text: #232b26;
+  --muted: #5d6962;
+  --faint: #667168;
+  --brand: #b5cea5;
+  --brand-1: #82966f;
+  --brand-3: #e2ead9;
+  --brand-dim: #5e774e;
+  --brand-ink: #4e653f;
+  --on-brand: #232b26;
+  --popover: #f7f8f5;
+  --input: #f7f8f5;
+  --placeholder: #727c76;
+  --focus: #4e653f;
+  --selected: #dce3dc;
+  --scrim: #0000004d;
+  --danger: #a12a2a;
+  --warn: #7a4b00;
+  --ok: #4e653f;
+  --info: #1f5f63;
+}
+
+:root {
+  --font-ui: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Noto Sans",
+    "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-ui);
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, "Noto Serif SC", "Songti SC", serif;
+  --font-mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", "Noto Sans Mono", monospace;
+
+  --fs-caption: 11.5px;
+  --fs-small: 12.5px;
+  --fs-meta: 13px;
+  --fs-body: 14px;
+  --fs-body-lg: 15px;
+  --fs-title: 18px;
+  --fs-h1: 26px;
+  --fs-display: 34px;
+
+  --lh-display: 1.35;
+  --lh-heading: 1.35;
+  --lh-body: 1.65;
+  --lh-small: 1.5;
+  --lh-mono: 1.6;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  --r-small: 8px;
+  --r-control: 14px;
+  --r-chrome: 18px;
+  --r-popup: 18px;
+  --r-composer: 24px;
+  --r-dialog: 24px;
+  --r-pill: 999px;
+
+  --t-instant: 80ms;
+  --t-fast: 120ms;
+  --t-base: 160ms;
+  --t-enter: 220ms;
+  --t-exit: 160ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --sidebar: 248px;
+  --rail: 272px;
+  --topbar: 52px;
+  --thread-max: 820px;
+  --phone: 390px;
+  --touch: 44px;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* Fixed preview swatches: the Appearance miniatures must show each theme,
+     not the theme the page happens to be in. */
+  --preview-dark-bg: #1c1d1c;
+  --preview-dark-chrome: #292b2a;
+  --preview-dark-surface: #222423;
+  --preview-dark-surface-2: #282a29;
+  --preview-dark-line: #2f322f;
+  --preview-dark-line-strong: #767c74;
+  --preview-light-bg: #f0f2ef;
+  --preview-light-chrome: #e3e7e4;
+  --preview-light-surface: #f7f8f5;
+  --preview-light-surface-2: #e9ede8;
+  --preview-light-line: #d8ded8;
+  --preview-light-line-strong: #7f8a7f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-instant: 0ms;
+    --t-fast: 0ms;
+    --t-base: 0ms;
+    --t-enter: 0ms;
+    --t-exit: 0ms;
+  }
+}
