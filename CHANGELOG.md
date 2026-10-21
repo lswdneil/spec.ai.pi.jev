@@ -13,6 +13,7 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
   - The home page says which judge is ready and how many decision points are active.
   - A kernel bar along the bottom shows the judge and where it runs. In a conversation it also shows the verdicts so far, the latest judge latency, context use and cache hits. Click the judge to change it.
   - Judge lines in a conversation and in the judge panel name their decision point (`input.preflight`), with the judge's latency.
+  - The first-run guide has the same look: it opens on one turn as the judge sees it (three decision points, their verdicts and timings), numbers its steps in mono, and ends on a readout of the model, the permissions, the judge and how many decision points are active.
 - **The command line has its own themes**, `mu-dark` and `mu-light`, matched to your terminal's background. mu uses them until you choose a theme in `/settings`. The welcome screen is redrawn without a box.
 
 ## [0.1.8] - 2026-10-19

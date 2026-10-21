@@ -648,6 +648,12 @@
       "permissions": "Berechtigungen"
     },
     "intro": {
+      "turn": {
+        "label": "Eine Runde aus Sicht des Judges",
+        "preflight": "Mehrschrittige Aufgabe: erst nachsehen",
+        "approval": "npm test läuft ohne Rückfrage",
+        "completion": "Tests bestanden, die Arbeit ist fertig"
+      },
       "title": "Willkommen bei mu",
       "lead": "mu ist ein Programmierassistent, der selbst Hand anlegt: mu liest dein Projekt, bearbeitet Code, führt Befehle und Tests aus und macht weiter, bis die Aufgabe erledigt ist.",
       "points": {

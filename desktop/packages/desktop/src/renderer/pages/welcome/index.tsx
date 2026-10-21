@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, AutoComplete, Button, Input, Radio } from '@arco-design/web-react';
-import { Check } from '@icon-park/react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import JudgePulse from '@renderer/components/brand/JudgePulse';
 import MuMark from '@renderer/components/brand/MuMark';
+import { summarize } from '@renderer/components/kernel/kernelSummary';
 import LanguageSwitcher from '@/renderer/components/settings/LanguageSwitcher';
 import ChoiceTile from '@/renderer/pages/settings/KyrnSettings/fields/ChoiceTile';
 import MuErrorMessage from '@/renderer/pages/settings/KyrnSettings/fields/MuErrorMessage';
@@ -59,16 +60,21 @@ type OpenAiApi = Extract<GuideApi, 'openai-completions' | 'openai-responses'>;
 const OPENAI_APIS: readonly OpenAiApi[] = ['openai-completions', 'openai-responses'];
 const INTRO_POINTS = ['judge', 'control', 'ready'] as const;
 
-/** The check on a pastel mark: dark, as every pastel fill carries dark ink. */
-const MARK_INK = '#3b2f6b';
+/**
+ * One turn as the judge sees it, for the introduction: three real decision points, what each one's verdict said and
+ * about how long it took. The ids and timings are data, not words; the verdicts are in the reader's language.
+ */
+const TURN = [
+  { point: 'input.preflight', verdict: 'preflight', ms: 340 },
+  { point: 'tool.approval', verdict: 'approval', ms: 205 },
+  { point: 'turn.completion', verdict: 'completion', ms: 207 },
+] as const;
 
 /** A line that says what is already set up and works: nothing to do on this step. */
 function Ready({ text, testId }: { text: string; testId: string }) {
   return (
     <div className={styles.ready} role='status' data-testid={testId}>
-      <span className={styles.readyMark} aria-hidden='true'>
-        <Check theme='outline' size='12' strokeWidth={5} fill={MARK_INK} />
-      </span>
+      <span className={styles.readyDot} aria-hidden='true' />
       <span>{text}</span>
     </div>
   );
@@ -226,14 +232,31 @@ export default function Welcome() {
   if (step === 'intro') {
     body = (
       <>
+        <div className={styles.eyebrow}>
+          <JudgePulse state='idle' />
+          <span>{t('common.kyrn.brand.tagline')}</span>
+        </div>
         <h1 className={styles.heroTitle}>{t('mu.welcome.intro.title')}</h1>
         <p className={styles.lead}>{t('mu.welcome.intro.lead')}</p>
+        <figure className={styles.turn} data-testid='mu-welcome-turn'>
+          <figcaption className={styles.turnLabel}>{t('mu.welcome.intro.turn.label')}</figcaption>
+          <ol className={styles.turnRows}>
+            {TURN.map((row) => (
+              <li key={row.point} className={styles.turnRow}>
+                <span className={styles.turnPoint} dir='ltr'>
+                  {row.point}
+                </span>
+                <span className={styles.turnVerdict}>{t(`mu.welcome.intro.turn.${row.verdict}`)}</span>
+                <span className={styles.turnMs} dir='ltr'>
+                  {row.ms} ms
+                </span>
+              </li>
+            ))}
+          </ol>
+        </figure>
         <ul className={styles.points}>
           {INTRO_POINTS.map((point) => (
             <li key={point} className={styles.point}>
-              <span className={styles.pointMark} aria-hidden='true'>
-                <Check theme='outline' size='12' strokeWidth={5} fill={MARK_INK} />
-              </span>
               <div>
                 <div className={styles.pointTitle}>{t(`mu.welcome.intro.points.${point}.title`)}</div>
                 <div className={styles.pointText}>{t(`mu.welcome.intro.points.${point}.text`)}</div>
@@ -437,6 +460,11 @@ export default function Welcome() {
     const needed = judge === 'jev' ? jevVariables(judgeProfile) : [];
     const keyReady = needed.every((variable) => Boolean(settings.keys[variable] || draft.judgeKeys[variable]));
     const free = judge === 'jev' && answersFree(judgeProfile, settings.keys, draft.judgeKeys);
+    // What the kernel bar will say once this is saved, keys typed in the guide included.
+    const typedKeys = Object.fromEntries(
+      Object.entries(draft.judgeKeys).map(([name, value]) => [name, Boolean(value)])
+    );
+    const kernel = summarize({ ...settings, keys: { ...settings.keys, ...typedKeys } });
     body = (
       <>
         <h1 className={styles.title}>{t('mu.welcome.done.title')}</h1>
@@ -462,6 +490,7 @@ export default function Welcome() {
           <div className={styles.summaryRow}>
             <dt>{t('mu.welcome.done.judge')}</dt>
             <dd>
+              {judge ? <span className={styles.judgeMark} aria-hidden='true' /> : null}
               {judge ? t(`mu.judges.choices.${judge}.title`) : t('mu.welcome.done.none')}
               {free ? (
                 <span className={styles.note}>{t('mu.welcome.done.freeJev')}</span>
@@ -470,6 +499,14 @@ export default function Welcome() {
               ) : null}
             </dd>
           </div>
+          {judge && kernel.total > 0 ? (
+            <div className={styles.summaryRow} data-testid='mu-welcome-kernel'>
+              <dt>{t('common.kyrn.hero.kernel')}</dt>
+              <dd className={styles.mono}>
+                {t('common.kyrn.kernel.points', { active: kernel.active, total: kernel.total })}
+              </dd>
+            </div>
+          ) : null}
           {importable > 0 ? (
             <div className={styles.summaryRow} data-testid='mu-welcome-import'>
               <dt>{t('mu.welcome.done.import')}</dt>
@@ -512,7 +549,7 @@ export default function Welcome() {
       <main className={classNames(styles.column, step === 'intro' && styles.columnIntro)}>
         <header className={styles.header}>
           <div className={styles.headerTop}>
-            <MuMark size={step === 'intro' ? 64 : 40} halo />
+            <MuMark size={step === 'intro' ? 44 : 28} halo={step === 'intro'} />
             {/* Someone on a system in another language can switch before reading a word of the guide. */}
             <div
               className={styles.language}
@@ -532,7 +569,6 @@ export default function Welcome() {
                   aria-current={name === step ? 'step' : undefined}
                   className={classNames(styles.stepItem, position <= index && styles.stepReached)}
                 >
-                  <span className={styles.stepDot} aria-hidden='true' />
                   {t(`mu.welcome.steps.${name}`)}
                 </li>
               ))}

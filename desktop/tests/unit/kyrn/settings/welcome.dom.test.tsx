@@ -10,6 +10,7 @@ import enCommon from '@/renderer/services/i18n/locales/en-US/common.json';
 import enMu from '@/renderer/services/i18n/locales/en-US/mu.json';
 import enSettings from '@/renderer/services/i18n/locales/en-US/settings.json';
 import SettingsArea from '@/renderer/pages/settings/KyrnSettings/SettingsArea';
+import { summarize } from '@/renderer/components/kernel/kernelSummary';
 import Welcome from '@/renderer/pages/welcome';
 import { ONBOARDING_KEY } from '@/renderer/pages/welcome/onboarding';
 import { useFirstRunWelcome } from '@/renderer/pages/welcome/useFirstRunWelcome';
@@ -493,6 +494,31 @@ describe('the first-run guide', () => {
     fireEvent.click(screen.getByTestId('mu-welcome-skip'));
     expect(await screen.findByTestId('mu-welcome-step-judge')).toBeInTheDocument();
     expect(bridge.save).not.toHaveBeenCalled();
+  });
+
+  it('shows a turn as the judge sees it, and ends on what the kernel bar will say', async () => {
+    const parsed = parseManifest(withOwnPlaces(manifestJson));
+    if (parsed.status !== 'ok') throw new Error('the manifest fixture is not readable');
+    const features = Object.fromEntries(
+      parsed.manifest.features.map((feature) => [feature.name, defaultFeatureState(feature)])
+    );
+    const settings = newUser({ harness: parsed, features, mode: 'active' });
+    bridge.settings.mockResolvedValue({ ok: true, data: settings });
+    at('/welcome', <Welcome />);
+
+    // Decision point ids and timings stay as they are; the verdicts are words.
+    const turn = await screen.findByTestId('mu-welcome-turn');
+    expect(turn).toHaveTextContent('A turn, as the judge sees it');
+    expect(turn).toHaveTextContent('input.preflightMulti-step task: look first340 ms');
+    expect(within(turn).getAllByRole('listitem')).toHaveLength(3);
+
+    fireEvent.click(screen.getByTestId('mu-welcome-begin'));
+    fireEvent.click(await screen.findByTestId('mu-welcome-skip'));
+    fireEvent.click(await screen.findByTestId('mu-welcome-skip'));
+    await screen.findByTestId('mu-welcome-step-done');
+    const { active, total } = summarize(settings);
+    expect(active).toBeGreaterThan(0);
+    expect(screen.getByTestId('mu-welcome-kernel')).toHaveTextContent(`${active}/${total} decision points active`);
   });
 
   it('can be skipped from the first page without saving anything', async () => {
