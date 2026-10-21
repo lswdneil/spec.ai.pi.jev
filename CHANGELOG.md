@@ -92,7 +92,7 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 
 ### Added
 
-- **Start with an API key.** The first-run guide and `mu setup` recognise the service from the key's shape, check the key with one request, and pick a model to start with ([#3](https://github.com/qybaihe/mu/issues/3)).
+- **Start with an API key.** The first-run guide and `mu setup` recognize the service from the key's shape, check the key with one request, and pick a model to start with ([#3](https://github.com/qybaihe/mu/issues/3)).
 
 ### Fixed
 
