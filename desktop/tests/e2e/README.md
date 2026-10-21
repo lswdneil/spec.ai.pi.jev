@@ -38,7 +38,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 bun run test:e2e
 
 # Specific test file
-npx playwright test --config playwright.config.ts tests/e2e/specs/team-workspace-migration.e2e.ts --reporter=list
+npx playwright test --config playwright.config.ts tests/e2e/specs/app-launch.e2e.ts --reporter=list
 ```
 
 ### 3. View Results
@@ -91,13 +91,10 @@ tests/e2e/
 │   ├── assertions.ts   # Custom assertions (expectBodyContainsAny, error collector)
 │   ├── extensions.ts   # Extension snapshot helpers
 │   ├── assistantSettings.ts # Assistant CRUD helpers
-│   ├── teamConfig.ts   # TEAM_SUPPORTED_BACKENDS whitelist
 │   └── screenshots.ts  # Manual screenshot helper
 ├── specs/
-│   ├── README.md       # Team E2E spec (rules for team tests)
 │   ├── app-launch.e2e.ts
-│   ├── team-create.e2e.ts
-│   ├── team-workspace-migration.e2e.ts
+│   ├── navigation.e2e.ts
 │   └── ...             # ~30+ test files
 ├── results/            # Test artifacts (gitignored)
 ├── report/             # HTML report (gitignored)
@@ -149,21 +146,19 @@ test.describe('Feature Name', () => {
 
 ### invokeBridge Rules
 
-| Allowed                                                 | Forbidden                                         |
-| ------------------------------------------------------- | ------------------------------------------------- |
-| **Setup:** read initial state (`team.list`, `team.get`) | **Trigger operations** (add member, send message) |
-| **Assert:** verify backend matches UI                   | Operations MUST go through UI interaction         |
-| **Cleanup:** delete test data (`team.remove`)           |                                                   |
+| Allowed                                                           | Forbidden                                 |
+| ----------------------------------------------------------------- | ----------------------------------------- |
+| **Setup:** read initial state (`database.get-user-conversations`) | **Trigger operations** (send a message)   |
+| **Assert:** verify backend matches UI                             | Operations MUST go through UI interaction |
+| **Cleanup:** delete test data (`remove-conversation`)             |                                           |
 
 ### Timeout Guidelines
 
-| Operation                                | Timeout            |
-| ---------------------------------------- | ------------------ |
-| UI element visibility                    | 5,000 - 15,000ms   |
-| Navigation + settle                      | 10,000ms           |
-| AI response (single model)               | 120,000ms          |
-| Team operations (leader inference + MCP) | 60,000 - 120,000ms |
-| Member initialization                    | 60,000ms           |
+| Operation                  | Timeout          |
+| -------------------------- | ---------------- |
+| UI element visibility      | 5,000 - 15,000ms |
+| Navigation + settle        | 10,000ms         |
+| AI response (single model) | 120,000ms        |
 
 ### Mocking Native Dialogs (Electron)
 
@@ -272,12 +267,11 @@ log), `home/Library/Logs/` (the main process's log on macOS, the only one a pack
 
 ## Environment Variables
 
-| Variable         | Default                     | Purpose                      |
-| ---------------- | --------------------------- | ---------------------------- |
-| `E2E_PACKAGED=1` | unset (dev mode)            | Use packaged app from `out/` |
-| `E2E_DEV=1`      | unset                       | Force dev mode               |
-| `TEAM_AGENT`     | all (`claude,codex,gemini`) | Filter team leader types     |
-| `CI`             | unset                       | Auto-selects packaged mode   |
+| Variable         | Default          | Purpose                      |
+| ---------------- | ---------------- | ---------------------------- |
+| `E2E_PACKAGED=1` | unset (dev mode) | Use packaged app from `out/` |
+| `E2E_DEV=1`      | unset            | Force dev mode               |
+| `CI`             | unset            | Auto-selects packaged mode   |
 
 Variables set automatically during test launch:
 
@@ -292,14 +286,9 @@ Variables set automatically during test launch:
 
 ## NPM Scripts
 
-| Command                           | Scope                    |
-| --------------------------------- | ------------------------ |
-| `bun run test:e2e`                | All E2E tests            |
-| `bun run test:e2e:team`           | All `team-*.e2e.ts`      |
-| `bun run test:e2e:team:create`    | Team creation only       |
-| `bun run test:e2e:team:lifecycle` | Add + fire members       |
-| `bun run test:e2e:team:whitelist` | Agent whitelist dropdown |
-| `bun run test:e2e:team:comm`      | Message sending          |
+| Command            | Scope         |
+| ------------------ | ------------- |
+| `bun run test:e2e` | All E2E tests |
 
 ### Examples
 
@@ -307,14 +296,8 @@ Variables set automatically during test launch:
 # Run all E2E locally (dev mode, requires build first)
 bunx electron-vite build && bun run test:e2e
 
-# Run only team tests with list reporter
-bun run test:e2e:team
-
 # Run specific test file
 npx playwright test --config playwright.config.ts tests/e2e/specs/app-launch.e2e.ts
-
-# Only test gemini leader type
-TEAM_AGENT=gemini bun run test:e2e:team
 
 # Run in packaged mode (CI-like)
 E2E_PACKAGED=1 bun run test:e2e
@@ -337,7 +320,7 @@ bunx electron-vite build
 **Cause:** The IPC provider for `xxx` doesn't exist or wasn't registered.
 
 - Check `src/common/adapter/ipcBridge.ts` for the endpoint definition
-- Check the corresponding bridge file (e.g., `src/process/bridge/teamBridge.ts`) for `.provider()` registration
+- Check the corresponding bridge file (e.g., `src/process/bridge/applicationBridge.ts`) for `.provider()` registration
 - Rebuild: `bunx electron-vite build`
 
 ### App launches but page is blank
@@ -356,19 +339,13 @@ bunx electron-vite build
 
 ### Leftover test data in sidebar
 
-```bash
-# Clean via database
-sqlite3 "~/Library/Application Support/AionUi-Dev/aionui/aionui.db" \
-  "DELETE FROM teams WHERE name LIKE 'E2E%';"
-```
-
-Or add cleanup at test start:
+Add cleanup at test start:
 
 ```ts
-const teams = await invokeBridge(page, 'team.list', { userId: 'system_default_user' });
-for (const t of teams) {
-  if (t.name.startsWith('E2E')) {
-    await invokeBridge(page, 'team.remove', { id: t.id }).catch(() => {});
+const conversations = await invokeBridge(page, 'database.get-user-conversations', { page: 0, pageSize: 1000 });
+for (const c of conversations) {
+  if (c.name?.startsWith('E2E')) {
+    await invokeBridge(page, 'remove-conversation', { id: c.id }).catch(() => {});
   }
 }
 ```

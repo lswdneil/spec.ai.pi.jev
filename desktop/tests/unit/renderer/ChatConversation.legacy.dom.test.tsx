@@ -7,7 +7,6 @@ import ChatConversation from '@/renderer/pages/conversation/components/ChatConve
 
 const usePresetAssistantInfoMock = vi.fn();
 const acpChatMock = vi.fn(() => <div data-testid='mock-acp-chat'>acp chat</div>);
-const acpModelSelectorMock = vi.fn(() => <div data-testid='mock-acp-model-selector'>model selector</div>);
 const runtimeReady = vi.hoisted(() => ({ current: false }));
 
 vi.mock('@/renderer/pages/conversation/Messages/MessageList', () => ({
@@ -37,11 +36,6 @@ vi.mock('@/renderer/pages/conversation/components/ChatLayout', () => ({
 vi.mock('@/renderer/pages/conversation/platforms/acp/AcpChat', () => ({
   __esModule: true,
   default: (props: unknown) => acpChatMock(props),
-}));
-
-vi.mock('@/renderer/components/agent/AcpModelSelector', () => ({
-  __esModule: true,
-  default: (props: unknown) => acpModelSelectorMock(props),
 }));
 
 vi.mock('@/renderer/components/agent/AcpRuntimeRestartButton', () => ({
@@ -97,7 +91,6 @@ describe('ChatConversation legacy runtime rendering', () => {
   beforeEach(() => {
     usePresetAssistantInfoMock.mockReset();
     acpChatMock.mockClear();
-    acpModelSelectorMock.mockClear();
     runtimeReady.current = false;
     usePresetAssistantInfoMock.mockReturnValue({ info: undefined, isLoading: false });
   });
@@ -173,7 +166,6 @@ describe('ChatConversation legacy runtime rendering', () => {
     } as TChatConversation;
 
     const { rerender } = render(<ChatConversation conversation={acpConversation} />);
-    expect(acpModelSelectorMock).not.toHaveBeenCalled();
     expect(screen.getByTestId('mock-runtime-restart').getAttribute('data-availability')).toBe('initializing');
 
     runtimeReady.current = true;

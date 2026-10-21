@@ -29,9 +29,6 @@ const platformMocks = vi.hoisted(() => ({
 const shortcutMocks = vi.hoisted(() => ({
   params: undefined as undefined | { toggleSider: () => void },
 }));
-const featureMocks = vi.hoisted(() => ({
-  teamModeEnabled: false,
-}));
 const runtimeMocks = vi.hoisted(() => ({
   deferredFailure: undefined as undefined | ((event: IRuntimeStatusEvent) => void),
 }));
@@ -91,11 +88,6 @@ vi.mock('@/common', () => ({
 }));
 
 // Trim Layout's collaborators to keep this a focused brand-behaviour test.
-vi.mock('@/common/config/constants', () => ({
-  get TEAM_MODE_ENABLED() {
-    return featureMocks.teamModeEnabled;
-  },
-}));
 vi.mock('@/renderer/components/layout/Titlebar', () => ({ default: () => null }));
 vi.mock('@renderer/hooks/system/useDeepLink', () => ({ useDeepLink: () => {} }));
 vi.mock('@renderer/hooks/system/notification/useNotificationClick', () => ({ useNotificationClick: () => {} }));
@@ -161,7 +153,6 @@ describe('Layout sider brand Home button', () => {
     openDevTools.mockClear();
     platformMocks.isElectronDesktopMock.mockReturnValue(false);
     shortcutMocks.params = undefined;
-    featureMocks.teamModeEnabled = false;
     sessionStorage.clear();
     localStorage.clear();
     resetCurrentProjectForTest();
@@ -283,15 +274,6 @@ describe('Layout sider brand Home button', () => {
     expect(screen.getByTestId('sider-brand-mark')).toBeVisible();
     // The sidebar's own content is still there, as a rail.
     expect(screen.getByText('sider')).toBeInTheDocument();
-  });
-
-  it('keeps the common shortcut owner mounted on team routes', () => {
-    currentPathname = '/team/team-1';
-    featureMocks.teamModeEnabled = true;
-
-    renderLayout();
-
-    expect(shortcutMocks.params?.toggleSider).toEqual(expect.any(Function));
   });
 
   it('clicking the logo icon counts toward the devtools easter-egg and never navigates', () => {
