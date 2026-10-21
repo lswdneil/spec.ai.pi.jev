@@ -61,7 +61,7 @@
     "keepAwakeTooltip": "Keeps your computer from sleeping so scheduled tasks can run",
     "searchPlaceholder": "Search tasks…",
     "noSearchResults": "No matching scheduled tasks.",
-    "emptyHint": "Use “{{button}}” above to make one.",
+    "emptyHint": "Use \"{{button}}\" above to make one.",
     "createTask": "Create scheduled task",
     "editTask": "Edit scheduled task",
     "createSuccess": "Task created",

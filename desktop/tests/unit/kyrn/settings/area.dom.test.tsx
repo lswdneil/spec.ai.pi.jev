@@ -581,7 +581,7 @@ describe('the save bar', () => {
     fireEvent.click(screen.getByRole('switch', { name: 'Automatic compaction' }));
     fireEvent.click(screen.getByText('Save'));
     // The option is named in the reader's words, from the manifest; the store's English stays out.
-    expect(await screen.findByText("Couldn't save: “Wait at most” is outside the allowed range.")).toBeInTheDocument();
+    expect(await screen.findByText('Couldn\'t save: "Wait at most" is outside the allowed range.')).toBeInTheDocument();
     expect(screen.queryByText(/Invalid value/)).not.toBeInTheDocument();
     expect(within(screen.getByTestId('mu-save-bar')).queryByText('Reload')).not.toBeInTheDocument();
   });
@@ -1988,7 +1988,7 @@ describe('one draft across the settings pages', () => {
     ['/settings/features/swarm', '/settings/details-team/swarm'],
     ['/settings/more-features/swarm', '/settings/details-team/swarm'],
     ['/settings/more-features-context/memory', '/settings/details-memory/memory'],
-  ])('sends the old link %s to the feature’s options on the page of its area', async (link, target) => {
+  ])("sends the old link %s to the feature's options on the page of its area", async (link, target) => {
     renderSettings(link);
     const feature = target.split('/').at(-1)!;
     expect(await screen.findByTestId(`mu-section-feature-${feature}`)).toBeInTheDocument();

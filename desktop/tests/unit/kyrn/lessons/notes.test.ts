@@ -112,7 +112,7 @@ describe('the quiet notes above the lessons', () => {
 
   it('names the task when the lessons went into a sub-agent’s brief', () => {
     const events = [event('memory.recalled', { ids: [c], turn: 3, task: 'Fix the login test' })];
-    expect(texts(en, events)).toEqual(['A subagent’s brief carried 1 lesson: Fix the login test']);
+    expect(texts(en, events)).toEqual(["A subagent's brief carried 1 lesson: Fix the login test"]);
   });
 
   it('adds nothing for a stored lesson, a recall without ids or a followed list that is empty', () => {

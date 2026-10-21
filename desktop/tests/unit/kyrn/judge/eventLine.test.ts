@@ -214,7 +214,7 @@ describe('Runtime event lines by the harness codes', () => {
       openQuestionCodes: [{ code: 'unclear_change', params: { message: 'use pnpm' } }, null, { code: 'future' }],
     };
     expect(both('frame.updated', payload)).toEqual([
-      ['How does this change the task: “use pnpm”?', 'Which port should the server use?', 'Third?'],
+      ['How does this change the task: "use pnpm"?', 'Which port should the server use?', 'Third?'],
       ['这条消息会怎样改变任务：「use pnpm」？', 'Which port should the server use?', 'Third?'],
     ]);
     expect(say(tw, 'frame.updated', payload, 'zh-TW')[0]).toBe('這則訊息會怎樣改變任務：「use pnpm」？');
@@ -245,7 +245,7 @@ describe('Runtime event lines by the harness codes', () => {
     };
     expect(both('web.search', payload)).toEqual([
       [
-        '“altavista” isn’t a search source (features.web.search)',
+        '"altavista" isn\'t a search source (features.web.search)',
         'bing failed: ETIMEDOUT',
         'google returned a verification page; it thinks this client is a bot',
         'brave answered with HTTP 503',
@@ -544,12 +544,12 @@ describe('Browser run lines', () => {
       ],
       [
         finished('needs_confirmation', 'not_confirmed', { label: 'Pay now' }, 'x'),
-        'Needs confirmation: “Pay now” looks irreversible and wasn’t confirmed.',
+        'Needs confirmation: "Pay now" looks irreversible and wasn\'t confirmed.',
         '需要确认：「Pay now」看起来无法撤销，且没有得到确认。',
       ],
       [
         finished('blocked', 'no_value', { label: 'Email' }, 'x'),
-        'Blocked: mu couldn’t produce a value for “Email”.',
+        'Blocked: mu couldn\'t produce a value for "Email".',
         '受阻：无法为「Email」生成要填写的内容。',
       ],
       [

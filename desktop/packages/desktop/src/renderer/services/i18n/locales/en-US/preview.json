@@ -62,12 +62,12 @@
   "oversized": {
     "title": "File too large to preview",
     "detail": "This file is {{size}}, over the {{threshold}} limit. Open it in your default app instead.",
-    "downloadUnavailable": "This file is too large to download here. Use “Open in default app” instead."
+    "downloadUnavailable": "This file is too large to download here. Use \"Open in default app\" instead."
   },
   "unsupported": {
     "title": "Can't preview this file type",
     "detail": "{{format}} files can't be previewed here. Open the file in its default app instead.",
-    "downloadUnavailable": "This file can't be downloaded here. Use “Open in default app” instead."
+    "downloadUnavailable": "This file can't be downloaded here. Use \"Open in default app\" instead."
   },
   "aiWriting": "The agent is writing…",
   "errors": {
@@ -189,7 +189,7 @@
     "elapsed": "Time elapsed",
     "steps": "Steps ({{total}})",
     "noSteps": "No steps yet",
-    "reason": "In mu’s words",
+    "reason": "In mu's words",
     "goal": "Goal",
     "pause": "Pause",
     "resume": "Resume",
@@ -249,7 +249,7 @@
     "detachCause": "Cause",
     "detachReason": {
       "tab_closed": "The tab was closed.",
-      "connection": "mu’s browsing session ended before the run finished.",
+      "connection": "mu's browsing session ended before the run finished.",
       "devtools": "The developer tools were opened on this page.",
       "crashed": "The page crashed."
     },
@@ -275,8 +275,8 @@
       "max_steps_other": "Stopped after {{count}} actions.",
       "no_judge": "No judge could choose an action ({{judgeReason}}).",
       "no_progress": "The judge found no action that moves toward the goal.",
-      "not_confirmed": "“{{label}}” looks irreversible and wasn’t confirmed.",
-      "no_value": "mu couldn’t produce a value for “{{label}}”.",
+      "not_confirmed": "\"{{label}}\" looks irreversible and wasn't confirmed.",
+      "no_value": "mu couldn't produce a value for \"{{label}}\".",
       "stuck": "{{count}} actions in a row changed nothing.",
       "stuck_one": "{{count}} action changed nothing.",
       "stuck_other": "{{count}} actions in a row changed nothing."
@@ -289,13 +289,13 @@
       "error": {
         "timeout": "the judge timed out",
         "aborted": "the judge call was canceled",
-        "unreachable": "the judge couldn’t be reached",
-        "auth": "the judge’s key was rejected",
+        "unreachable": "the judge couldn't be reached",
+        "auth": "the judge's key was rejected",
         "payment_required": "the judge needs a payment method",
         "rate_limited": "the judge is rate limited",
         "bad_request": "the judge rejected the request",
-        "server": "the judge’s server returned an error",
-        "invalid_response": "the judge’s response couldn’t be read",
+        "server": "the judge's server returned an error",
+        "invalid_response": "the judge's response couldn't be read",
         "unexpected": "an unexpected error",
         "all": "every judge call failed",
         "other": "the judge call failed"

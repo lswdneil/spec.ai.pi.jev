@@ -286,7 +286,7 @@ describe('the words a screen shows for a code', () => {
       detail: '',
     });
     expect(word('contextLimit').text).toBe('The context limit must be 0 or a whole number from 8,192 to 10,000,000.');
-    expect(word('optionValue').text).toBe('“Wait at most” is outside the allowed range.');
+    expect(word('optionValue').text).toBe('"Wait at most" is outside the allowed range.');
     expect(word('invalidJson', 'Unexpected end of JSON input')).toEqual({
       text: "/home/me/.mu/agent/mu.json isn't valid JSON. Fix it by hand, then reload.",
       detail: 'Unexpected end of JSON input',

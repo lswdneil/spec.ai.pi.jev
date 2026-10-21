@@ -479,7 +479,7 @@
         "constraint": "New constraint",
         "correction": "Correction",
         "subgoal": "New subgoal",
-        "unclear": "Can’t tell",
+        "unclear": "Can't tell",
         "hold": "Hold back",
         "no_answer": "No answer in time",
         "aborted": "Canceled",
@@ -526,7 +526,7 @@
       "errorValue": "Error · {{kind}}",
       "noAnswerAfter": "No answer after {{duration}}",
       "hints": {
-        "answered": "This message answers the agent’s own question: act on it and don’t ask again.",
+        "answered": "This message answers the agent's own question: act on it and don't ask again.",
         "resolve": "The request is loosely worded and may change files: look at the project, state the assumption and ask only for what can't be found here.",
         "clarify": "The request looks under-specified: ask one focused question first.",
         "side_question": "This is a side question: answer it briefly, then carry on with the main task.",
@@ -620,7 +620,7 @@
           "answers": {
             "needed": "Needed besides the summary",
             "not_needed": "The summary is enough",
-            "unclear": "Can’t tell"
+            "unclear": "Can't tell"
           }
         },
         "forget": {
@@ -738,7 +738,7 @@
             "reusable": "Useful again",
             "one_off": "Only this once",
             "already_known": "Known already",
-            "unclear": "Can’t tell"
+            "unclear": "Can't tell"
           }
         },
         "merge": {
@@ -750,7 +750,7 @@
             "refines": "The new one is more precise",
             "contradicts": "They contradict each other",
             "unrelated": "About something else",
-            "unclear": "Can’t tell"
+            "unclear": "Can't tell"
           }
         },
         "applied": {
@@ -773,7 +773,7 @@
             "detour": "A needed side step",
             "drift": "Drifting away",
             "loop": "Going in circles",
-            "other": "Can’t tell"
+            "other": "Can't tell"
           }
         },
         "completion": {
@@ -790,7 +790,7 @@
             "now": "Right away",
             "next_turn": "After the current step",
             "drop": "Never",
-            "other": "Can’t tell"
+            "other": "Can't tell"
           }
         },
         "cache": {
@@ -808,7 +808,7 @@
         "goalMet": {
           "questions": {
             "achieved": "Goal fully reached",
-            "needs_user": "Can’t go on without you"
+            "needs_user": "Can't go on without you"
           }
         },
         "outputDrift": {
@@ -873,11 +873,11 @@
             "waiting": "Waiting for you",
             "wrapping_up": "Wrapping up",
             "stuck": "Seems stuck",
-            "other": "Can’t tell",
+            "other": "Can't tell",
             "none": "None of them",
             "key": "News worth telling",
             "routine": "A routine step",
-            "unclear": "Can’t tell"
+            "unclear": "Can't tell"
           }
         },
         "relate": {
@@ -899,7 +899,7 @@
             "needed": "Needed for the task",
             "beyond": "More than you asked for",
             "unrelated": "Not part of the task",
-            "unclear": "Can’t tell"
+            "unclear": "Can't tell"
           }
         },
         "injection": {
@@ -1200,7 +1200,7 @@
         "user": "From your correction or rule",
         "outcome": "From a workaround the agent found",
         "model": "Kept by the model",
-        "subagent": "From a subagent’s report",
+        "subagent": "From a subagent's report",
         "command": "Kept with /remember"
       },
       "updated": "Updated {{date}}",
@@ -1218,9 +1218,9 @@
         "recalled": "This turn brought in {{count}} lessons",
         "recalled_one": "This turn brought in {{count}} lesson",
         "recalled_other": "This turn brought in {{count}} lessons",
-        "briefed": "A subagent’s brief carried {{count}} lessons: {{task}}",
-        "briefed_one": "A subagent’s brief carried {{count}} lesson: {{task}}",
-        "briefed_other": "A subagent’s brief carried {{count}} lessons: {{task}}",
+        "briefed": "A subagent's brief carried {{count}} lessons: {{task}}",
+        "briefed_one": "A subagent's brief carried {{count}} lesson: {{task}}",
+        "briefed_other": "A subagent's brief carried {{count}} lessons: {{task}}",
         "applied": "{{count}} lessons were followed",
         "applied_one": "{{count}} lesson was followed",
         "applied_other": "{{count}} lessons were followed",
@@ -1314,10 +1314,10 @@
         }
       },
       "frame": {
-        "unclearChange": "How does this change the task: “{{message}}”?"
+        "unclearChange": "How does this change the task: \"{{message}}\"?"
       },
       "search": {
-        "notConfigured": "“{{source}}” isn’t a search source (features.web.search)",
+        "notConfigured": "\"{{source}}\" isn't a search source (features.web.search)",
         "failed": "{{source}} failed: {{message}}",
         "robotPage": "{{source}} returned a verification page; it thinks this client is a bot",
         "httpError": "{{source}} answered with HTTP {{status}}",
@@ -1405,7 +1405,7 @@
       "contextHint": "The model's next input fills {{percent}} of its context window",
       "cache": "Cache hits",
       "cacheHint": "Cache hits: {{turn}} in the latest turn, {{session}} across the whole conversation",
-      "pending": "Shown after mu’s next reply"
+      "pending": "Shown after mu's next reply"
     },
     "roles": {
       "browser": "browser",
@@ -1486,7 +1486,7 @@
       "settings": "Settings",
       "commands": "Commands"
     },
-    "searchMessages": "Search messages for “{{query}}”",
+    "searchMessages": "Search messages for \"{{query}}\"",
     "empty": "No matches",
     "noConversations": "No conversations yet. Type to find settings and commands.",
     "openSettings": "Open settings",

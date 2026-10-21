@@ -777,7 +777,7 @@ describe('the sidebar’s native group', () => {
     await waitFor(() => expect(shownIds()).toEqual(['g', 'f', 'p']));
     const [g, f, p] = items();
     expect(p.getAttribute('title')).toBe('The plan\n/work/app\nMessages: 4');
-    expect(f.getAttribute('title')).toBe('Try B\n/work/app\nMessages: 6\nForked from “The plan”');
+    expect(f.getAttribute('title')).toBe('Try B\n/work/app\nMessages: 6\nForked from "The plan"');
     // The parent is not in the list; how many messages is not known.
     expect(g.getAttribute('title')).toBe('New conversation\n/work/app\nForked conversation');
   });
@@ -844,7 +844,7 @@ describe('the sidebar’s native group', () => {
       fireEvent.click(screen.getByTestId('native-sidebar-delete'));
     });
     expect(await screen.findByTestId('native-delete')).toHaveTextContent(
-      'Delete “Fix the build”? Its file moves to the trash, so you can still restore it.'
+      'Delete "Fix the build"? Its file moves to the trash, so you can still restore it.'
     );
     // Cancelled: nothing goes.
     await act(async () => {

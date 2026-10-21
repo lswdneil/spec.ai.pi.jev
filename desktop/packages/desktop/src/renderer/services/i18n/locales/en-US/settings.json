@@ -1067,7 +1067,7 @@
   "mcpOAuthLoginFailedNamedWithDetail": "Couldn't sign in to {{name}}: {{error}}",
   "extensionTab": {
     "frameTitle": "Extension settings: {{name}}",
-    "notFound": "Settings page “{{id}}” wasn't found. Its extension may have been removed or turned off.",
+    "notFound": "Settings page \"{{id}}\" wasn't found. Its extension may have been removed or turned off.",
     "noTabId": "No settings page was specified."
   },
   "mcpAuthRequiredNamed": "{{name}} needs you to sign in",

@@ -504,7 +504,7 @@ describe('command palette', () => {
       openPalette();
       type('deploy');
 
-      expect(chosen()).toBe('Search messages for “deploy”');
+      expect(chosen()).toBe('Search messages for "deploy"');
       key('Enter');
 
       expect(opened).toHaveBeenCalledWith('deploy');

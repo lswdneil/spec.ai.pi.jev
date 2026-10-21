@@ -284,7 +284,7 @@
       "unsure": "Jev isn't sure this step is what you want.",
       "beyond": "Jev thinks this goes beyond what you asked for.",
       "unrelated": "Jev thinks this isn't part of the task.",
-      "protected": "This touches mu’s own settings; only you can allow it.",
+      "protected": "This touches mu's own settings; only you can allow it.",
       "nojudge": "No judge is available yet, so mu asks you about each step.",
       "judgedown": "The judge didn't answer this time, so mu is asking you."
     },
@@ -304,7 +304,7 @@
       "once": "Allow once",
       "session": "Allow for this conversation",
       "sessionFor": "Allow for this conversation ({{grant}})",
-      "deny": "Don’t allow"
+      "deny": "Don't allow"
     },
     "decided": {
       "once": "You allowed this once: {{summary}}",
@@ -313,7 +313,7 @@
     }
   },
   "providers": {
-    "lead": "Where your models come from: subscriptions and endpoints. Pick a conversation’s model and thinking level in its message box.",
+    "lead": "Where your models come from: subscriptions and endpoints. Pick a conversation's model and thinking level in its message box.",
     "title": "Providers",
     "custom": "Custom providers",
     "manualGroup": "Added by hand",
@@ -459,7 +459,7 @@
   },
   "boardModel": {
     "title": "Board model",
-    "summary": "Writes the board: a plain-language summary of how the work is going. It's for you only and never enters the conversation’s context. Each update is one model call.",
+    "summary": "Writes the board: a plain-language summary of how the work is going. It's for you only and never enters the conversation's context. Each update is one model call.",
     "pick": "Choose a model",
     "recommended": "Recommended: Claude Opus 4.6 for the most natural, consistent writing, or Gemini 3.8 Flash for speed and lower cost.",
     "recommendedTag": "recommended",
@@ -563,7 +563,7 @@
         "unreachable": "Couldn't reach {{service}}. Check your network. If the service is blocked where you are, turn on a proxy and check again.",
         "offline": "{{service}} isn't responding on this computer. Start it, then check again.",
         "region": "{{service}} isn't available in your region. Connect through a proxy in a supported region, or choose another service.",
-        "wrongAddress": "{{service}} returned an unexpected response (HTTP {{status}}). Its address may have changed; enter the new one under “Another service” below.",
+        "wrongAddress": "{{service}} returned an unexpected response (HTTP {{status}}). Its address may have changed; enter the new one under \"Another service\" below.",
         "down": "{{service}} is having trouble right now (HTTP {{status}}). Try again in a moment."
       },
       "problems": {
@@ -763,10 +763,10 @@
       "xcodeLicense": "Checkpoints are off in this conversation: Git can't run on this Mac until you accept the Xcode license. Run sudo xcodebuild -license in Terminal to accept it, then start a new conversation.",
       "developerToolsMissing": "Checkpoints are off in this conversation: Git needs the command line developer tools, which aren't installed on this Mac. Run xcode-select --install in Terminal, then start a new conversation.",
       "homeFolder": "Checkpoints are off in this conversation: its folder is your home folder or contains it. Start a conversation in a project folder to use them.",
-      "muFolder": "Checkpoints are off in this conversation: its folder is inside mu’s own folder. Start a conversation in a project folder to use them.",
+      "muFolder": "Checkpoints are off in this conversation: its folder is inside mu's own folder. Start a conversation in a project folder to use them.",
       "tooManyFiles": "Checkpoints are off in this conversation: its folder has more than {{limit}} files. Start a conversation in a project folder to use them.",
       "tooManyBytes": "Checkpoints are off in this conversation: its folder contains more than {{limitMb}} MB of files. Start a conversation in a project folder to use them.",
-      "tooSlow": "Checkpoints are off in this conversation: listing its folder’s files took longer than {{seconds}} seconds. Start a conversation in a project folder to use them."
+      "tooSlow": "Checkpoints are off in this conversation: listing its folder's files took longer than {{seconds}} seconds. Start a conversation in a project folder to use them."
     },
     "stopped": "You stopped this reply.",
     "answerLost": "mu didn't receive your answer, so it continued as if you had declined.",
@@ -795,10 +795,10 @@
     "modelsUnreadable": "Couldn't read models.json. Fix it by hand before saving providers.",
     "modelsCommented": "models.json contains comments that saving from here would remove. Edit providers by hand.",
     "option": {
-      "type": "“{{name}}” has a value of the wrong type.",
-      "range": "“{{name}}” is outside the allowed range.",
-      "choice": "“{{name}}” isn't one of the allowed values.",
-      "length": "“{{name}}” is too long, or has an empty entry."
+      "type": "\"{{name}}\" has a value of the wrong type.",
+      "range": "\"{{name}}\" is outside the allowed range.",
+      "choice": "\"{{name}}\" isn't one of the allowed values.",
+      "length": "\"{{name}}\" is too long, or has an empty entry."
     },
     "invalidJson": "{{file}} isn't valid JSON. Fix it by hand, then reload.",
     "unreadable": "Couldn't read {{file}}.",
@@ -813,12 +813,12 @@
     "importMissing": "This version of mu can't import conversations. Update mu first.",
     "importFailed": "mu couldn't import the conversations.",
     "skillInvalid": "This folder isn't a skill: it has no SKILL.md with a description.",
-    "skillName": "“{{name}}” isn't a valid skill folder name. Use lowercase letters, digits and hyphens.",
+    "skillName": "\"{{name}}\" isn't a valid skill folder name. Use lowercase letters, digits and hyphens.",
     "skillExists": "mu already has a skill named {{name}}.",
     "skillTooLarge": "This folder is too large to be a skill (over 2,000 files or 50 MB).",
     "notFound": "Couldn't find {{name}}. It may have been moved.",
     "notMine": "{{name}} comes from {{source}}. mu doesn't change those files.",
-    "mcpName": "“{{name}}” isn't a valid server name. Use letters, digits, _ and -.",
+    "mcpName": "\"{{name}}\" isn't a valid server name. Use letters, digits, _ and -.",
     "mcpExists": "mu already has a server named {{name}}.",
     "mcpInvalid": {
       "command": "This command isn't valid. Check it and try again.",
@@ -990,7 +990,7 @@
       "empty": "No conversations yet",
       "all": "Show all ({{count}})",
       "fewer": "Show fewer",
-      "deleteConfirm": "Delete “{{title}}”? Its file moves to the trash, so you can still restore it.",
+      "deleteConfirm": "Delete \"{{title}}\"? Its file moves to the trash, so you can still restore it.",
       "messages": "Messages: {{count}}",
       "unread": "New activity",
       "working": "Working"
@@ -1052,7 +1052,7 @@
     "toolsClassic": "MCP and images",
     "remove": "Remove",
     "from": {
-      "mu": "mu’s skills folder",
+      "mu": "mu's skills folder",
       "agents": "the shared .agents folder",
       "builtin": "mu itself",
       "claude": "Claude Code",
@@ -1070,11 +1070,11 @@
       "removeContent": "Its folder moves to the trash, and new conversations won't load it.",
       "empty": "mu has no skills yet.",
       "noMatch": "No matching skills.",
-      "failed": "Couldn't read mu’s skills.",
-      "project": "Project skills (.mu/skills, .agents/skills, .claude/skills) load only in that project’s conversations and aren't listed here.",
+      "failed": "Couldn't read mu's skills.",
+      "project": "Project skills (.mu/skills, .agents/skills, .claude/skills) load only in that project's conversations and aren't listed here.",
       "groups": {
         "mu": {
-          "title": "mu’s skills",
+          "title": "mu's skills",
           "help": "In {{folder}}. Skills you add go here, and only these can be removed."
         },
         "agents": {
@@ -1106,14 +1106,14 @@
       "removeContent": "This deletes its entry from {{file}}.",
       "use": "Use {{name}}",
       "empty": "mu isn't using any MCP servers yet.",
-      "failed": "Couldn't read mu’s MCP servers.",
+      "failed": "Couldn't read mu's MCP servers.",
       "featureOff": "The MCP feature is off in mu.json: only the servers in mcp.json are used.",
       "unreadable": "Couldn't read these files, so their servers are missing: {{files}}",
-      "project": "Project servers (.mu/mcp.json, .mcp.json, .cursor/mcp.json) are used only in that project’s conversations and aren't listed here.",
+      "project": "Project servers (.mu/mcp.json, .mcp.json, .cursor/mcp.json) are used only in that project's conversations and aren't listed here.",
       "locked": {
         "offInSource": {
           "label": "Off in its source",
-          "help": "It's turned off in its own tool’s settings. mu doesn't change other tools’ files, so turn it on there."
+          "help": "It's turned off in its own tool's settings. mu doesn't change other tools' files, so turn it on there."
         },
         "unsupported": {
           "label": "Not supported",
@@ -1122,20 +1122,20 @@
       },
       "groups": {
         "mu": {
-          "title": "mu’s servers",
+          "title": "mu's servers",
           "help": "In mcp.json and mu.json. Servers you add go into {{file}}, the same as with mu mcp add."
         },
         "claude": {
           "title": "From Claude Code",
-          "help": "From ~/.claude.json. Turning one off here only writes to mu.json, never to Claude Code’s file."
+          "help": "From ~/.claude.json. Turning one off here only writes to mu.json, never to Claude Code's file."
         },
         "cursor": {
           "title": "From Cursor",
-          "help": "From ~/.cursor/mcp.json. Turning one off here only writes to mu.json, never to Cursor’s file."
+          "help": "From ~/.cursor/mcp.json. Turning one off here only writes to mu.json, never to Cursor's file."
         },
         "codex": {
           "title": "From Codex",
-          "help": "From ~/.codex/config.toml. Turning one off here only writes to mu.json, never to Codex’s file."
+          "help": "From ~/.codex/config.toml. Turning one off here only writes to mu.json, never to Codex's file."
         }
       },
       "form": {
