@@ -1852,6 +1852,25 @@ describe('one draft across the settings pages', () => {
     expect(screen.getByTestId('mu-save-bar')).toHaveTextContent('Unsaved changes in: Features');
   });
 
+  it('marks the group of the page above its title, and each point’s id beside it, outside their text', async () => {
+    renderSettings('/settings/details-input');
+    const section = await screen.findByTestId('mu-section-details-input');
+    const group = within(section).getByTestId('settings-page-group');
+    // The rail's name of the group (this test loads no settings texts, so the key stands in for it).
+    expect(group).toHaveAttribute('data-group', 'details');
+    expect(group).toHaveAttribute('data-label', 'settings.groups.details');
+    expect(group).toHaveAttribute('aria-hidden', 'true');
+    expect(group).toBeEmptyDOMElement();
+    const row = screen.getByTestId('mu-decision-input.preflight');
+    expect(row.querySelector('[data-point]')).toHaveAttribute('data-point', 'input.preflight');
+    expect(row.querySelector('[data-point]')).toHaveAttribute('aria-hidden', 'true');
+    expect(row).not.toHaveTextContent('input.preflight');
+
+    fireEvent.click(screen.getByTestId('mu-feature-open-preflight'));
+    const page = await screen.findByTestId('mu-section-feature-preflight');
+    expect(within(page).getByTestId('settings-page-group')).toHaveAttribute('data-group', 'details');
+  });
+
   it('opens a feature’s page from a link as well, and its way back is the page its row is on', async () => {
     renderSettings('/settings/details-team/swarm');
     const page = await screen.findByTestId('mu-section-feature-swarm');

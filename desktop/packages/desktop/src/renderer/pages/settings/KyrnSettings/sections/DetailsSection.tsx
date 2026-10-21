@@ -92,7 +92,14 @@ export default function DetailsSection({
       >
         <div className={classNames(styles.plainMain, feature && styles.nestedMain, off && styles.plainMuted)}>
           <div className={styles.plainText}>
-            <div className={feature ? styles.nestedTitle : styles.plainTitle}>{feature ? title : point}</div>
+            <div className={feature ? styles.nestedTitle : styles.plainTitle}>
+              <span>{feature ? title : point}</span>
+              {/* The point as the judge's lines in a conversation name it: the diamond, then its id in mono. Drawn from an
+              attribute, so the row still reads, and is named, by its plain sentence. */}
+              <span className={styles.point} data-point={decision.id} aria-hidden='true'>
+                <span className={styles.judgeMark} />
+              </span>
+            </div>
             <OneLine text={say(decision.summary)} />
             {off ? <div className={styles.plainNote}>{t('mu.details.featureOff')}</div> : null}
           </div>
