@@ -36,7 +36,7 @@ const findButler = (assistants: Assistant[]): Assistant | undefined => {
 
 /**
  * Shared entry point behind every "via chat" action: jump to the home page,
- * select the AionUi Butler, and pre-fill the chat input with a ready-made
+ * select the Butler, and pre-fill the chat input with a ready-made
  * prompt (and optional attachments). Auto-enables the Butler if the user has
  * disabled it, since clicking the action is an explicit intent to use it.
  *

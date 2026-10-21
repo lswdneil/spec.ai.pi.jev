@@ -257,7 +257,7 @@ const CONFIRM_OPTIONS = [
   { optionId: 'reject', name: 'Reject', kind: 'reject_once' },
 ] as const;
 
-/** ACP adapter only: AionUi owns the UI and projects; mu owns all execution and judgment. */
+/** ACP adapter only: the app owns the UI and projects; mu owns all execution and judgment. */
 export class KyrnAgent implements Agent {
   private connection: Connection;
   private store: string;

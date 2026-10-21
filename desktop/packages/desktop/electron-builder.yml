@@ -1,5 +1,5 @@
-# mu's own identity. It is a fork of AionUi (Apache-2.0) but a different app: its own bundle id, name, data folder
-# (userData follows productName) and link scheme, so it installs beside AionUi instead of over it.
+# mu's own identity: its own bundle id, name, data folder (userData follows productName) and link scheme, so it installs
+# beside the app it was forked from (see NOTICE) instead of over it.
 appId: io.github.qybaihe.mu
 productName: mu
 executableName: mu

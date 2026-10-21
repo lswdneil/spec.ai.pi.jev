@@ -144,7 +144,7 @@ if (electronSquirrelStartup) {
 // Global error handlers for main process
 // The handlers prevent Electron's default error dialog. Both swallow the failure and keep the process alive;
 // they only log allow-listed attribution first, because an error such as `read ECONNRESET` otherwise carries
-// nothing but Node-internal frames (TCP.onStreamRead) and cannot be traced back to a subsystem (AIONUI-128).
+// nothing but Node-internal frames (TCP.onStreamRead) and cannot be traced back to a subsystem.
 process.on('uncaughtException', (error, origin) => {
   logUncaught(describeUncaughtError(error, origin));
 });
@@ -287,7 +287,7 @@ function broadcastBackendStartupState(state: BackendStartupFailureInfo | null): 
 function markBackendStartupFailed(error: unknown): void {
   backendStartupFailed = true;
   // Stamp the currently installed app version so failure dialogs (notably the
-  // downgrade "update AionUi" dialog) can tell the user which version they are
+  // downgrade "update the app" dialog) can tell the user which version they are
   // on now — i.e. that they need something newer than this.
   backendStartupFailureInfo = { ...classifyBackendStartupFailure(error), appVersion: app.getVersion() };
   (globalThis as typeof globalThis & { __backendStartupFailed?: boolean }).__backendStartupFailed = true;
@@ -528,7 +528,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   // crashes, escalate to a throttled app relaunch when the renderer cannot
   // launch at all (e.g. app files replaced by an update while running).
   // An unconditional immediate reload here caused a ~50/s crash storm on
-  // `launch-failed` (Sentry AIONUI-DESKTOP-A).
+  // `launch-failed`.
   const rendererRecovery = createRendererRecoveryPolicy();
 
   mainWindow.webContents.on('render-process-gone', (_event, details) => {

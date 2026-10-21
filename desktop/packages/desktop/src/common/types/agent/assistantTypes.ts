@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// Mirror of aionui-api-types/src/assistant.rs.
+// Mirror of AionCore's api-types crate (assistant.rs).
 // Any shape change on either side requires a same-PR update on the other.
 
 export type AssistantSource = 'builtin' | 'generated' | 'user';

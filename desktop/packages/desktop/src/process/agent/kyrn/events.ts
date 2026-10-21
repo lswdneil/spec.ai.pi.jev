@@ -17,7 +17,7 @@ export const messageThinking = (value: unknown): string =>
     .map((block) => text(block.thinking))
     .join('');
 
-/** Maps real mu events onto existing AionUi tool cards; no second renderer or synthetic reasoning. */
+/** Maps real mu events onto the app's existing tool cards; no second renderer or synthetic reasoning. */
 export function mapEvent(event: JsonRecord): SessionUpdate[] {
   if (event.type === 'message_update') {
     const delta = asRecord(event.assistantMessageEvent);

@@ -11,7 +11,7 @@
  * conversation/team into its group (pinned / project / pseudo-dir / chats),
  * windows each group, and hydrates items. The front-end renders in the given
  * order and runs no classification. These shapes mirror the backend
- * `aionui-api-types/sidebar` DTOs 1:1 (including the flat team variant, see
+ * AionCore's api-types `sidebar` DTOs 1:1 (including the flat team variant, see
  * `SidebarItem` below), except conversation items carry the mapped
  * `TChatConversation` (the wire `ConversationResponse` is mapped by the
  * ipcBridge response mapper, matching `getUserConversations`).

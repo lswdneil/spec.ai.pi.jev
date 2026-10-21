@@ -161,7 +161,7 @@ export default defineConfig(({ mode }) => {
       publicDir: resolve('public'),
       appType: 'mpa',
       server: {
-        // Default to 5173; when occupied (e.g. another AionUi clone is running),
+        // Default to 5173; when occupied (e.g. another clone of the repo is running),
         // Vite auto-increments to the next available port.
         // electron-vite reads the actual port and sets ELECTRON_RENDERER_URL accordingly.
         port: 5173,

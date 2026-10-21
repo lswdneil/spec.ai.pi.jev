@@ -130,6 +130,7 @@ function prepareManagedResources(binaryPath, targetDir) {
     stdio: 'inherit',
     env: {
       ...process.env,
+      // AionCore's own variable: preparing the bundle must not read an earlier bundle.
       AIONUI_BUNDLED_MANAGED_RESOURCES: '',
     },
   });

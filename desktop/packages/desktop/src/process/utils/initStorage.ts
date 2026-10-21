@@ -325,8 +325,8 @@ const cleanupLegacyBuiltinSkillsDir = () => {
 /**
  * Ensure user-facing config directories exist. Built-in assistant rules and
  * skill files are now owned by the backend (see
- * `crates/aionui-app/assets/builtin-assistants/` and
- * `crates/aionui-app/assets/builtin-skills/`) — neither is synced from
+ * AionCore's app crate, `assets/builtin-assistants/` and
+ * `assets/builtin-skills/`) — neither is synced from
  * renderer resources anymore.
  */
 const ensureAssistantDirs = async (): Promise<void> => {
@@ -386,7 +386,7 @@ const initStorage = async () => {
   mark('4. MCP config initialization skipped');
 
   // 5. Ensure assistant-related directories exist. Built-in assistant records
-  //    now live in the backend SQLite catalog (see aionui-assistant crate) and
+  //    now live in the backend SQLite catalog (see AionCore's assistant crate) and
   //    are no longer seeded into ConfigStorage. User-authored rule md files
   //    continue to live under `{cacheDir}/assistants/` until the one-shot
   //    migration (T3b) imports them into the backend.

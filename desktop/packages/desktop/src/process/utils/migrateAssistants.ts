@@ -335,7 +335,7 @@ function collectBuiltinAgentIdOverrides(
 /**
  * Replay user-picked legacy backend choices onto `assistant_overrides`
  * via `PUT /api/assistants/{id}`. The backend accepts only `agent_id`
- * on built-in rows (see `aionui-assistant/src/service.rs`). 404 is treated as
+ * on built-in rows (see AionCore's assistant crate, `service.rs`). 404 is treated as
  * skip for the same reason as {@link applyBuiltinOverrides}: the built-in was
  * retired between versions and the user preference is moot.
  */

@@ -6,7 +6,7 @@
 import { BROWSER_PARTITION, BUILTIN_MCP_SERVER_NAMES } from '@/common/platform/legacyNames';
 
 /**
- * AionUI应用程序共用常量
+ * 应用程序共用常量 / Constants shared across the app
  */
 
 // ===== 应用内浏览器 / In-app browser =====
@@ -53,7 +53,7 @@ export const BUILTIN_BROWSER_MCP_NAME = BUILTIN_MCP_SERVER_NAMES.browser;
 export const FILES_MARKER = '[[AION_FILES]]';
 
 // ===== 跨会话消息相关常量 =====
-// 必须与后端 crates/aionui-common/src/constants.rs 中的值逐字一致。
+// 必须与 AionCore 的 common crate（constants.rs）中的值逐字一致。
 
 /** 发送侧：用户用 `@@` 引用其他会话后，后端追加到消息末尾的块 */
 export const SESSIONS_MARKER = '[[AION_SESSIONS]]';

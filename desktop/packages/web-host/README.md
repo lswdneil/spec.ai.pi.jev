@@ -1,6 +1,6 @@
 # @mu/web-host
 
-WebUI host package for AionUi - zero Electron dependency.
+WebUI host package for mu - zero Electron dependency.
 
 ## Responsibilities
 
