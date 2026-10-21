@@ -121,6 +121,34 @@ const specialColors = {
   inverse: 'var(--inverse)',
 };
 
+// ==================== spec.jev UI tokens / Dense shell ====================
+// Namespaced with sv- so they never collide with Arco's --color-* or the theme gallery's --brand.
+const specjevColors = {
+  'sv-bg': 'var(--sv-bg)',
+  'sv-chrome': 'var(--sv-chrome)',
+  'sv-surface': 'var(--sv-surface)',
+  'sv-surface-2': 'var(--sv-surface-2)',
+  'sv-raised': 'var(--sv-raised)',
+  'sv-line': 'var(--sv-line)',
+  'sv-line-strong': 'var(--sv-line-strong)',
+  'sv-text': 'var(--sv-text)',
+  'sv-muted': 'var(--sv-muted)',
+  'sv-faint': 'var(--sv-faint)',
+  'sv-brand': 'var(--sv-brand)',
+  'sv-brand-dim': 'var(--sv-brand-dim)',
+  'sv-brand-ink': 'var(--sv-brand-ink)',
+  'sv-on-brand': 'var(--sv-on-brand)',
+  'sv-popover': 'var(--sv-popover)',
+  'sv-input': 'var(--sv-input)',
+  'sv-placeholder': 'var(--sv-placeholder)',
+  'sv-focus': 'var(--sv-focus)',
+  'sv-selected': 'var(--sv-selected)',
+  'sv-danger': 'var(--sv-danger)',
+  'sv-warn': 'var(--sv-warn)',
+  'sv-ok': 'var(--sv-ok)',
+  'sv-info': 'var(--sv-info)',
+};
+
 export default defineConfig({
   presets: [presetMini(), presetExtra(), presetWind3()],
   transformers: [transformerVariantGroup(), transformerDirectives({ enforce: 'pre' })],
@@ -251,6 +279,7 @@ export default defineConfig({
       ...aouColors,
       ...componentColors,
       ...specialColors,
+      ...specjevColors,
     },
     fontFamily: {
       // Reference the centralized --font-mono token (defined in arco-override.css)

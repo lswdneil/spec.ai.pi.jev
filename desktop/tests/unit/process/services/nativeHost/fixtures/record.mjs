@@ -5,7 +5,7 @@
 //
 //   node tests/unit/process/services/nativeHost/fixtures/record.mjs [harness root] [--out <folder>]
 //
-// The harness is the argument, else SPECJEV_ROOT / SPECJEV_ROOT, else the KYRN checkout beside this repository
+// The harness is the argument, else SPECJEV_ROOT, else the KYRN checkout beside this repository
 // (tests/e2e/mu-conversation/profile.mjs). It needs a Node that strips TypeScript types (22.18 or newer) and a
 // harness whose launcher has planHost. macOS and Linux. `--out` writes the files elsewhere, to compare a new
 // recording with the committed one.

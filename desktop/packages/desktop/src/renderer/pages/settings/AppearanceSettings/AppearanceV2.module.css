@@ -1,0 +1,126 @@
+/* Preview swatches only. The live UI uses --sv-* tokens; these minis must show
+   each mode on its own, even while another mode is active. */
+
+.mini {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  height: 92px;
+  overflow: hidden;
+  border: 1px solid var(--sv-line);
+  border-radius: 8px;
+}
+
+.miniSide {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 4px;
+  border-inline-end: 1px solid var(--sv-line);
+}
+
+.miniSide span {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+.miniSide span:first-child {
+  width: 60%;
+  margin-bottom: 4px;
+  opacity: 0.8;
+}
+
+.miniMain {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+}
+
+.miniBar {
+  height: 4px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.28;
+}
+
+.miniBarShort {
+  width: 45%;
+}
+
+.miniBubble {
+  align-self: flex-end;
+  width: 58%;
+  height: 13px;
+  border: 1px solid var(--sv-line);
+  border-radius: 5px;
+  background: var(--sv-surface-2);
+}
+
+.miniComposer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 15px;
+  margin-top: auto;
+  padding-inline-end: 3px;
+  border: 1px solid var(--sv-line);
+  border-radius: 6px;
+  background: var(--sv-surface);
+}
+
+.miniSend {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #b5cea5;
+}
+
+.miniDark {
+  color: #dedfdd;
+  --sv-bg: #1c1d1c;
+  --sv-chrome: #292b2a;
+  --sv-surface: #222423;
+  --sv-surface-2: #282a29;
+  --sv-line: #2f322f;
+  background: #1c1d1c;
+}
+
+.miniDark .miniSide {
+  background: #292b2a;
+}
+
+.miniLight {
+  color: #232b26;
+  --sv-bg: #f0f2ef;
+  --sv-chrome: #e3e7e4;
+  --sv-surface: #f7f8f5;
+  --sv-surface-2: #e9ede8;
+  --sv-line: #d8ded8;
+  background: #f0f2ef;
+}
+
+.miniLight .miniSide {
+  background: #e3e7e4;
+}
+
+.miniAuto {
+  color: #232b26;
+  --sv-bg: #f0f2ef;
+  --sv-surface: #f7f8f5;
+  --sv-surface-2: #e9ede8;
+  --sv-line: #d8ded8;
+  background: linear-gradient(90deg, #1c1d1c 0 50%, #f0f2ef 50% 100%);
+}
+
+.miniAuto .miniSide {
+  background: #292b2a;
+  border-color: #2f322f;
+}
+
+.miniAuto .miniBar {
+  color: #232b26;
+  opacity: 0.28;
+}

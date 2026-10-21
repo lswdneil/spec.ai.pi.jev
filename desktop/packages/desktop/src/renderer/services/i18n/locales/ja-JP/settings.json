@@ -1088,5 +1088,15 @@
     "results": "検索結果"
   },
   "learnMore": "詳しく",
-  "showLess": "閉じる"
+  "showLess": "閉じる",
+  "appearanceThemeHint": "3 つのモードのみ: ダーク、ライト、システムに従う。",
+  "appearanceDarkDesc": "暗い環境向けの落ち着いたコントラスト",
+  "appearanceLightDesc": "紙のような面と柔らかなセージ",
+  "appearanceAutoDesc": "システムに従う · {{mode}}",
+  "appearancePreview": "プレビュー",
+  "appearancePreviewLive": "ライブ · アプリ全体に反映",
+  "appearancePreviewQuestion": "このテーマは会話・設定・モバイルで一貫しますか？",
+  "appearancePreviewAnswer": "はい。同じ token がすべての面を駆動し、変わるのは情報密度だけです。",
+  "appearancePreviewPlaceholder": "spec.jev に質問…",
+  "appearanceFixedPalette": "配色は固定です。面、セージ、文字コントラストは製品の一部です。"
 }

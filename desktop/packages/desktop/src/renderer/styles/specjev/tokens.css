@@ -1,0 +1,107 @@
+/* spec.jev tokens for the renderer.
+   Source: design/tokens.json (Phase 0). Namespaced with --sv- so they never
+   collide with Arco or the existing theme tokens. */
+
+:root,
+:root[data-theme="dark"] {
+  --sv-bg: #1c1d1c;
+  --sv-chrome: #292b2a;
+  --sv-surface: #222423;
+  --sv-surface-2: #282a29;
+  --sv-raised: #303330;
+  --sv-line: #2f322f;
+  --sv-line-strong: #767c74;
+  --sv-text: #dedfdd;
+  --sv-muted: #a0a39f;
+  --sv-faint: #858984;
+  --sv-brand: #b5cea5;
+  --sv-brand-1: #82966f;
+  --sv-brand-3: #e2ead9;
+  --sv-brand-dim: #9db58b;
+  --sv-brand-ink: #b5cea5;
+  --sv-on-brand: #1c211b;
+  --sv-popover: #252725;
+  --sv-input: #282a29;
+  --sv-placeholder: #92968f;
+  --sv-focus: #b5cea5;
+  --sv-selected: #363a35;
+  --sv-scrim: #000000b8;
+  --sv-danger: #e7a3a3;
+  --sv-warn: #f5c86f;
+  --sv-ok: #b5cea5;
+  --sv-info: #c1f5f4;
+}
+
+:root[data-theme="light"] {
+  --sv-bg: #f0f2ef;
+  --sv-chrome: #e3e7e4;
+  --sv-surface: #f7f8f5;
+  --sv-surface-2: #e9ede8;
+  --sv-raised: #dfe5df;
+  --sv-line: #d8ded8;
+  --sv-line-strong: #7f8a7f;
+  --sv-text: #232b26;
+  --sv-muted: #5d6962;
+  --sv-faint: #667168;
+  --sv-brand: #b5cea5;
+  --sv-brand-1: #82966f;
+  --sv-brand-3: #e2ead9;
+  --sv-brand-dim: #5e774e;
+  --sv-brand-ink: #4e653f;
+  --sv-on-brand: #232b26;
+  --sv-popover: #f7f8f5;
+  --sv-input: #f7f8f5;
+  --sv-placeholder: #727c76;
+  --sv-focus: #4e653f;
+  --sv-selected: #dce3dc;
+  --sv-scrim: #0000004d;
+  --sv-danger: #a12a2a;
+  --sv-warn: #7a4b00;
+  --sv-ok: #4e653f;
+  --sv-info: #1f5f63;
+}
+
+:root {
+  --sv-font-ui: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Noto Sans",
+    "Helvetica Neue", Arial, sans-serif;
+  --sv-font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, "Noto Serif SC", "Songti SC", serif;
+  --sv-font-mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", "Noto Sans Mono", monospace;
+
+  --sv-fs-caption: 11.5px;
+  --sv-fs-small: 12.5px;
+  --sv-fs-meta: 13px;
+  --sv-fs-body: 14px;
+  --sv-fs-body-lg: 15px;
+  --sv-fs-title: 18px;
+  --sv-fs-h1: 26px;
+
+  --sv-lh-body: 1.65;
+  --sv-lh-small: 1.5;
+  --sv-lh-mono: 1.6;
+
+  --sv-r-small: 8px;
+  --sv-r-control: 14px;
+  --sv-r-chrome: 18px;
+  --sv-r-popup: 18px;
+  --sv-r-composer: 24px;
+  --sv-r-dialog: 24px;
+  --sv-r-pill: 999px;
+
+  --sv-t-fast: 120ms;
+  --sv-t-base: 160ms;
+  --sv-t-enter: 220ms;
+  --sv-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --sv-sidebar: 208px;
+  --sv-rail: 300px;
+  --sv-topbar: 40px;
+  --sv-touch: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --sv-t-fast: 0ms;
+    --sv-t-base: 0ms;
+    --sv-t-enter: 0ms;
+  }
+}

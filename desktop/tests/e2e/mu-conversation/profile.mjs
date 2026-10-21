@@ -106,9 +106,9 @@ export function mainCheckout(root) {
   }
 }
 
-/** The harness checkout (or npm package) to run: SPECJEV_ROOT / SPECJEV_ROOT, else `../KYRN` beside the desktop checkout. */
+/** The harness checkout (or npm package) to run: SPECJEV_ROOT, else `../KYRN` beside the desktop checkout. */
 export function findHarnessSource(desktopRoot) {
-  const named = process.env.SPECJEV_ROOT || process.env.SPECJEV_ROOT;
+  const named = process.env.SPECJEV_ROOT;
   const candidates = named
     ? [resolve(named)]
     : [join(desktopRoot, '..', 'KYRN'), join(mainCheckout(desktopRoot), '..', 'KYRN')];
@@ -258,10 +258,7 @@ export function profileEnv({ platform = process.platform, env = process.env, pat
   if (checkout) {
     Object.assign(result, {
       MU_BACKEND_BIN: checkout.backend,
-      KYRN_DESKTOP_ROOT: checkout.desktopRoot,
-      SPECJEV_ROOT: checkout.harness,
-      SPECJEV_ROOT: checkout.harness,
-    });
+      KYRN_DESKTOP_ROOT: checkout.desktopRoot,    });
   }
   return result;
 }

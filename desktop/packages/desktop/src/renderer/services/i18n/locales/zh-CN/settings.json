@@ -1088,5 +1088,15 @@
     "results": "搜索结果"
   },
   "learnMore": "了解更多",
-  "showLess": "收起"
+  "showLess": "收起",
+  "appearanceThemeHint": "只有三种模式：深色、浅色或跟随系统。",
+  "appearanceDarkDesc": "低光环境，安静对比",
+  "appearanceLightDesc": "纸感表面，柔和鼠尾草绿",
+  "appearanceAutoDesc": "跟随系统 · {{mode}}",
+  "appearancePreview": "预览",
+  "appearancePreviewLive": "实时 · 全应用同步",
+  "appearancePreviewQuestion": "这个主题在会话、设置和移动端都一致吗？",
+  "appearancePreviewAnswer": "是。同一套 token 驱动所有表面；只有信息密度随窗口变化。",
+  "appearancePreviewPlaceholder": "询问 spec.jev…",
+  "appearanceFixedPalette": "配色固定：表面、品牌色和文字对比度属于产品本身。"
 }

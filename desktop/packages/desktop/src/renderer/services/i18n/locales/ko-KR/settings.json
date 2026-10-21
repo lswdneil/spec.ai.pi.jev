@@ -1088,5 +1088,15 @@
     "results": "검색 결과"
   },
   "learnMore": "자세히",
-  "showLess": "접기"
+  "showLess": "접기",
+  "appearanceThemeHint": "세 가지 모드만: 다크, 라이트, 시스템 따르기.",
+  "appearanceDarkDesc": "어두운 환경을 위한 차분한 대비",
+  "appearanceLightDesc": "종이 같은 표면과 부드러운 세이지",
+  "appearanceAutoDesc": "시스템 따르기 · {{mode}}",
+  "appearancePreview": "미리보기",
+  "appearancePreviewLive": "실시간 · 앱 전체에 반영",
+  "appearancePreviewQuestion": "이 테마가 대화, 설정, 모바일에서 동일하게 적용되나요?",
+  "appearancePreviewAnswer": "예. 같은 token이 모든 표면을 구동하며, 정보 밀도만 창에 따라 달라집니다.",
+  "appearancePreviewPlaceholder": "spec.jev에 질문…",
+  "appearanceFixedPalette": "색상은 고정입니다. 표면, 세이지, 텍스트 대비는 제품의 일부입니다."
 }

@@ -50,6 +50,7 @@ const DeveloperSettings = preloadablePage(() => import('@renderer/pages/settings
 const ArchivedSettings = preloadablePage(() => import('@renderer/pages/settings/ArchivedSettings'));
 const ExtensionSettingsPage = preloadablePage(() => import('@renderer/pages/settings/ExtensionSettingsPage'));
 const ComponentsShowcase = preloadablePage(() => import('@renderer/pages/TestShowcase'));
+const DesignSystem = preloadablePage(() => import('@renderer/pages/DesignSystem'));
 const ScheduledTasksPage = preloadablePage(() => import('@renderer/pages/cron/ScheduledTasksPage'));
 const TaskDetailPage = preloadablePage(() => import('@renderer/pages/cron/ScheduledTasksPage/TaskDetailPage'));
 
@@ -302,6 +303,7 @@ const PanelRoute: React.FC<{ layout: React.ReactElement }> = ({ layout }) => {
           ))}
           <Route path='/settings' element={<Navigate to={SETTINGS_HOME} replace />} />
           <Route path='/test/components' element={withRouteFallback(ComponentsShowcase)} />
+          <Route path='/design-system' element={withRouteFallback(DesignSystem)} />
           <Route path='/scheduled' element={withRouteFallback(ScheduledTasksPage)} />
           <Route path='/scheduled/:job_id' element={withRouteFallback(TaskDetailPage)} />
         </Route>

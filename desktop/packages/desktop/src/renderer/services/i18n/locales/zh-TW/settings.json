@@ -1088,5 +1088,15 @@
     "results": "搜尋結果"
   },
   "learnMore": "了解更多",
-  "showLess": "收起"
+  "showLess": "收起",
+  "appearanceThemeHint": "只有三種模式：深色、淺色或跟隨系統。",
+  "appearanceDarkDesc": "低光環境，安靜對比",
+  "appearanceLightDesc": "紙感表面，柔和鼠尾草綠",
+  "appearanceAutoDesc": "跟隨系統 · {{mode}}",
+  "appearancePreview": "預覽",
+  "appearancePreviewLive": "即時 · 全應用同步",
+  "appearancePreviewQuestion": "這個主題在工作階段、設定和行動端都一致嗎？",
+  "appearancePreviewAnswer": "是。同一套 token 驅動所有表面；只有資訊密度隨視窗變化。",
+  "appearancePreviewPlaceholder": "詢問 spec.jev…",
+  "appearanceFixedPalette": "配色固定：表面、品牌色和文字對比度屬於產品本身。"
 }

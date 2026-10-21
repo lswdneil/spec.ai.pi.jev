@@ -19,6 +19,7 @@ import type { TFunction } from 'i18next';
 
 // Context providers
 import { ThemeProvider } from './hooks/context/ThemeContext';
+import { AppToaster } from './ui/toast';
 import { PreviewProvider } from './pages/conversation/Preview/context/PreviewContext';
 
 // Arco Design
@@ -37,6 +38,7 @@ import { useTranslation } from 'react-i18next';
 import 'uno.css';
 import './styles/arco-override.css';
 import './styles/themes/index.css';
+import './styles/specjev/tokens.css';
 import './styles/markdown.css';
 
 // Config service — kick off initialization before i18n / theme modules load,
@@ -236,6 +238,7 @@ const AppProviders: React.FC<PropsWithChildren> = ({ children }) =>
         React.createElement(
           React.Fragment,
           null,
+          React.createElement(AppToaster, null),
           React.createElement(RuntimeFailureDialogs, null),
           React.createElement(GpuAutoDisableNotice, null),
           children

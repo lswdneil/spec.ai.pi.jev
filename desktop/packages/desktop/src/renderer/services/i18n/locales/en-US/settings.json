@@ -1087,5 +1087,15 @@
     "results": "Search results"
   },
   "learnMore": "Learn more",
-  "showLess": "Show less"
+  "showLess": "Show less",
+  "appearanceThemeHint": "Only three modes: dark, light, or follow the system.",
+  "appearanceDarkDesc": "Low light, quiet contrast",
+  "appearanceLightDesc": "Paper surfaces, soft sage",
+  "appearanceAutoDesc": "Following the system · {{mode}}",
+  "appearancePreview": "Preview",
+  "appearancePreviewLive": "Live · the whole app updates",
+  "appearancePreviewQuestion": "Does this theme hold across conversations, settings and mobile?",
+  "appearancePreviewAnswer": "Yes. The same tokens drive every surface; only density changes with the window.",
+  "appearancePreviewPlaceholder": "Ask spec.jev…",
+  "appearanceFixedPalette": "The palette is fixed: surfaces, sage accent, and text contrast are part of the product."
 }
