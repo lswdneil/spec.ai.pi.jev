@@ -87,7 +87,7 @@ if (layout === "package") {
 	row(
 		linked ? "ok" : "--",
 		"command",
-		linked ? linked.replaceAll(homedir(), "~") : `not on PATH yet: ${join(root, "kyrn", "bin", process.platform === "win32" ? "mu.cmd" : "mu")} link`,
+		linked ? linked.replaceAll(homedir(), "~") : `not on your PATH yet: run ${join(root, "kyrn", "bin", process.platform === "win32" ? "mu.cmd" : "mu")} link`,
 	);
 }
 
@@ -127,8 +127,8 @@ row("--", "subagents", ladder.length > 0 ? `model ladder ${ladder.join(" < ")}` 
 const judgeSupport = localJudgeSupport({ platform: process.platform, env: process.env, wsl });
 if (tiers.some((tier) => tier.startsWith("laya")) && !judgeSupport.runs && !judgeSupport.url) {
 	// Not a failure of this installation: the sidecar is Core ML, and there is none for this platform.
-	row("--", "local judge", `not available on ${platformName({ platform: process.platform, wsl })}: the Laya sidecar needs Core ML (macOS on Apple Silicon).`);
-	row("--", "", "laya's decision points fall back to the next judge or to pi's default behavior. Use jev, an llm judge, or MU_LOCAL_JUDGE_URL=<a server with the same API>");
+	row("--", "local judge", `not available on ${platformName({ platform: process.platform, wsl })}: the Laya sidecar needs Core ML (macOS on Apple silicon)`);
+	row("--", "", "Laya's decision points use the next judge or their fallbacks. Use Jev, an LLM judge or MU_LOCAL_JUDGE_URL=<a server with the same API>");
 } else if (tiers.some((tier) => tier.startsWith("laya"))) {
 	const base = env("LOCAL_JUDGE_URL") ?? `http://127.0.0.1:${env("LOCAL_JUDGE_PORT") ?? 47823}`;
 	const startedAt = performance.now();
@@ -207,7 +207,7 @@ if (jevTier) {
 			has(name) && !unsent ? "ok" : "fix",
 			"jev key",
 			unsent
-				? `${jevTier} has no baseUrl: its key ${name} is only sent to the address it was set up for`
+				? `${jevTier} has no baseUrl, so its key ${name} isn't sent anywhere: add the address the key is for`
 				: has(name)
 					? `${name} is set: Jev is called ${via} (value not shown)`
 					: `missing: add ${name} ${where} (Jev is called ${via})`,
@@ -229,9 +229,9 @@ for (const model of new Set(askedTiers.map(classifierOf).filter((judge) => judge
 	// OpenCode's free models answer without a key (the client sends "public", as OpenCode's own does).
 	const names = provider === "opencode" && String(model).endsWith("-free") ? [] : CLASSIFIER_KEYS[provider];
 	if (!model?.includes("/")) {
-		row("fix", "classifier", `${model ?? "a classifier judge"} needs a model written "provider/model-id"`);
+		row("fix", "classifier", `${model ?? "a classifier judge"} needs a model in the form provider/model-id`);
 	} else if (!names) {
-		row("--", "classifier", `${model}: a provider of your own; its key is the one models.json names`);
+		row("--", "classifier", `${model}: a provider of your own: mu uses the key models.json names for it`);
 	} else if (names.every(has)) {
 		row("ok", "classifier", `${model}: ${names.length > 0 ? `${names.join(", ")} set (value not shown)` : "no key needed"}`);
 	} else {
@@ -274,9 +274,9 @@ for (const endpoint of new Set(clmJudges.map((judge) => clmEndpoint(judge.baseUr
 	const served = Array.isArray(health.models) ? health.models : [];
 	const missing = [...new Set(judges.map((judge) => judge.model || "clm-latest"))].filter((model) => !served.includes(model));
 	if (health.embedder === false) {
-		row("fix", "clm", `${host} answers, but its encoder does not: every question fails until the embedding server is up`);
+		row("fix", "clm", `${host} answers, but its encoder doesn't: every question fails until the embedding server is up`);
 	} else if (missing.length > 0) {
-		row("fix", "clm", `${host} does not serve ${missing.join(", ")} (it serves ${served.join(", ")})`);
+		row("fix", "clm", `${host} doesn't serve ${missing.join(", ")} (it serves ${served.join(", ")})`);
 	} else {
 		row("ok", "clm", `${host} · ${served.join(", ")} · ${ms} ms`);
 	}
@@ -330,7 +330,7 @@ row(
 	"browse",
 	[browseTiers].flat().some(canRelate)
 		? `driven by ${[browseTiers].flat().join(" > ")}`
-		: 'needs a judge that can match a goal to a page. In mu.json: "routes": { "browser.step": ["luna"] }',
+		: 'needs a judge that can match a goal to a page. In mu.json: "routes": { "browser.step": ["llm:openai-codex/gpt-5.6-luna"] }',
 );
 
 const marks = { ok: "\x1b[32m ok\x1b[0m", fix: "\x1b[33mfix\x1b[0m", "--": "\x1b[2m  ·\x1b[0m" };

@@ -414,7 +414,7 @@ describe("starting pi", () => {
 		const runtime = (stripsTypes: boolean, files: Record<string, string>) =>
 			sourceRuntime({ root: POSIX_ROOT, platform: "linux", stripsTypes, ...disk(files) }).error;
 		// A runtime that does not strip types.
-		expect(runtime(false, posixInstalled)).toContain("does not strip types");
+		expect(runtime(false, posixInstalled)).toContain("doesn't strip types");
 		// A checkout from before pi's source resolver.
 		const older = Object.entries(posixInstalled).filter(([file]) => !file.endsWith("source-resolver.ts"));
 		expect(runtime(true, Object.fromEntries(older))).toContain("source resolver");
@@ -461,7 +461,7 @@ describe("starting pi", () => {
 	});
 
 	it("prints the launcher's own help before the agent's", () => {
-		expect(launch({ argv: ["--help"] }).preface).toContain("Agent flags:");
+		expect(launch({ argv: ["--help"] }).preface).toContain("pi's help (mu passes all of this through):");
 		expect(launch({ argv: ["-h"] }).preface).toContain("mu link | unlink");
 		expect(launch({ argv: ["-p", "--help"] }).preface).toBeUndefined();
 	});
@@ -535,7 +535,7 @@ describe("pi inside another program (the desktop app's runtime host)", () => {
 	it("refuses a checkout it cannot run on the host's own Node", () => {
 		const input = { platform: "linux" as const, env: {}, argv: rpc, root: POSIX_ROOT, home: "/home/bai" };
 		expect(planHost({ ...input, stripsTypes: false, fs: disk(posixInstalled) }).error).toContain(
-			"does not strip types",
+			"doesn't strip types",
 		);
 		const noResolver = Object.fromEntries(
 			Object.entries(posixInstalled).filter(([path]) => !path.endsWith("source-resolver.ts")),
@@ -546,7 +546,7 @@ describe("pi inside another program (the desktop app's runtime host)", () => {
 
 describe("preparing a launch, for the command line and for a program that must not stop", () => {
 	const posix = process.platform !== "win32";
-	const NOT_STARTED = "the local judge did not start";
+	const NOT_STARTED = "the local judge (Laya) didn't start";
 
 	/** A launcher folder whose local judge is a script that runs `script`, and an agent folder to prepare. */
 	function prepared(script: string | undefined, startJudge: boolean) {
@@ -846,7 +846,7 @@ describe("the repo-root .env", () => {
 			expect(said).not.toContain(secret);
 		}
 		// The file can name the judges, as it could when it was sourced.
-		expect(plan.notes.join("\n")).toContain("local judge (laya)");
+		expect(plan.notes.join("\n")).toContain("local judge (Laya)");
 	});
 });
 
@@ -857,7 +857,7 @@ describe("the local judge away from macOS", () => {
 
 		const linux = launch({ fs: disk(files) });
 		expect(linux.startJudge).toBe(false);
-		expect(linux.notes[0]).toMatch(/local judge \(laya\), which runs on macOS only; on Linux/);
+		expect(linux.notes[0]).toMatch(/local judge \(Laya\), which runs on macOS only; on Linux/);
 		expect(launch({ wsl: true, fs: disk(files) }).notes[0]).toContain("on WSL");
 
 		// A server of one's own is the way out, and then there is nothing to say.
@@ -889,7 +889,7 @@ describe("the local judge away from macOS", () => {
 		] as const) {
 			const plan = planJudge({ platform, wsl, env: {}, argv: ["start"], bin: "bin" });
 			if (plan.kind !== "unsupported") throw new Error(`expected an explanation, got ${plan.kind}`);
-			expect(plan.message).toContain(`runs only on macOS with Apple Silicon, not on ${name}`);
+			expect(plan.message).toContain(`runs only on macOS on Apple silicon, not on ${name}`);
 			expect(plan.message).toContain("Jev");
 			expect(plan.message).toContain("desktop app");
 			expect(plan.message).toContain("MU_LOCAL_JUDGE_URL");
@@ -962,7 +962,7 @@ describe("mu import", () => {
 			stripsTypes: false,
 		};
 		expect(planImport({ ...electron, fs: disk({ ...winInstalled, [source]: "" }) }).error).toContain(
-			"does not strip types",
+			"doesn't strip types",
 		);
 	});
 

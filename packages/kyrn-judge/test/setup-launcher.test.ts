@@ -168,7 +168,7 @@ describe("mu setup, as the launcher starts it", () => {
 			stripsTypes: false,
 			fs: disk(posixInstalled),
 		});
-		expect(unstripped.error).toContain("does not strip types");
+		expect(unstripped.error).toContain("doesn't strip types");
 		const moved = planSetup({
 			...setupArgs,
 			platform: "linux",
