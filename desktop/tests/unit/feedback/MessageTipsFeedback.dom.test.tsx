@@ -66,7 +66,7 @@ import MessageTips from '@/renderer/pages/conversation/Messages/components/Messa
 import type { AgentStreamErrorInfo, IMessageTips } from '@/common/chat/chatLib';
 
 const requiredAgentErrorCodes = [
-  'AIONUI_CONVERSATION_BUSY',
+  'MU_CONVERSATION_BUSY',
   'USER_AGENT_HANDSHAKE_FAILED',
   'USER_AGENT_HANDSHAKE_TIMEOUT',
   'USER_AGENT_ACP_INIT_FAILED',
@@ -412,14 +412,14 @@ describe('MessageTips — error chips', () => {
       <MessageTips
         message={buildTips('error', 'Model request failed: 429 rate limited', {
           message: 'Model request failed: 429 rate limited',
-          code: 'AIONUI_INTERNAL_ERROR',
-          ownership: 'aionui',
+          code: 'MU_INTERNAL_ERROR',
+          ownership: 'mu',
         })}
       />
     );
 
     expect(screen.getByText('mu.turnErrors.modelFailed')).toBeInTheDocument();
-    expect(screen.getByText(/Error code: AIONUI_INTERNAL_ERROR/)).toBeInTheDocument();
+    expect(screen.getByText(/Error code: MU_INTERNAL_ERROR/)).toBeInTheDocument();
     expect(screen.getByText(/429 rate limited/)).toBeInTheDocument();
   });
 
@@ -435,7 +435,7 @@ describe('MessageTips — error chips', () => {
       <MessageTips
         message={buildTips('error', 'fallback', {
           message: 'AionUI lost its Agent protocol connection',
-          ownership: 'aionui',
+          ownership: 'mu',
         })}
       />
     );
@@ -497,17 +497,17 @@ describe('agent error locale copy', () => {
     }
   });
 
-  it('does not label app-side errors as direct AionUi ownership', () => {
+  it('does not name AionUi in the copy of the app’s own errors', () => {
     const localeDir = path.join(process.cwd(), 'packages/desktop/src/renderer/services/i18n/locales');
 
     for (const localeName of supportedLocaleNames) {
       const locale = JSON.parse(readFileSync(path.join(localeDir, localeName, 'conversation.json'), 'utf8'));
       const agentError = locale.agentError;
 
-      expect(agentError.ownership.aionui, localeName).not.toMatch(/AionUi/);
+      expect(agentError.ownership.mu, localeName).not.toMatch(/AionUi/);
 
       for (const [code, copy] of Object.entries<Record<string, string>>(agentError.codes)) {
-        if (!code.startsWith('AIONUI_')) continue;
+        if (!code.startsWith('MU_')) continue;
 
         expect(copy.title, `${localeName} ${code} title`).not.toMatch(/AionUi/);
         expect(copy.body, `${localeName} ${code} body`).not.toMatch(/AionUi/);

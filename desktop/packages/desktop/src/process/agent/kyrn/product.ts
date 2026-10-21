@@ -40,7 +40,7 @@ const OWN_DESCRIPTIONS = new Set(
  * which it reads from the registration's `yolo_id`; nobody could answer a question there, so mu runs with full access.
  */
 export const FULL_AUTO_MODE = 'full';
-/** AionUi's own words for full auto. mu has no such mode: a registration saying one of them is set to mu's. */
+/** AionCore's words for full auto. mu has no such mode: a registration saying one of them is set to mu's. */
 const LEGACY_FULL_AUTO = new Set(['yolo', 'yoloNoSandbox']);
 const needsFullAuto = (row: AgentRow): boolean => !row.yolo_id?.trim() || LEGACY_FULL_AUTO.has(row.yolo_id.trim());
 

@@ -156,9 +156,9 @@ describe('buildSpawnArgs', () => {
     expect(args).not.toContain('--local');
   });
 
-  it('passes prompt dump flag in development only when AIONUI_DUMP_PROMPTS is enabled', () => {
-    const prev = process.env.AIONUI_DUMP_PROMPTS;
-    process.env.AIONUI_DUMP_PROMPTS = '1';
+  it('passes prompt dump flag in development only when MU_DUMP_PROMPTS is enabled', () => {
+    const prev = process.env.MU_DUMP_PROMPTS;
+    process.env.MU_DUMP_PROMPTS = '1';
     try {
       const args = buildSpawnArgs({
         port: 1,
@@ -170,14 +170,14 @@ describe('buildSpawnArgs', () => {
 
       expect(args).toContain('--dump-prompts');
     } finally {
-      if (prev === undefined) delete process.env.AIONUI_DUMP_PROMPTS;
-      else process.env.AIONUI_DUMP_PROMPTS = prev;
+      if (prev === undefined) delete process.env.MU_DUMP_PROMPTS;
+      else process.env.MU_DUMP_PROMPTS = prev;
     }
   });
 
   it('passes bundled managed resources mode when packaged', () => {
-    const prev = process.env.AIONUI_DUMP_PROMPTS;
-    process.env.AIONUI_DUMP_PROMPTS = '1';
+    const prev = process.env.MU_DUMP_PROMPTS;
+    process.env.MU_DUMP_PROMPTS = '1';
     try {
       const args = buildSpawnArgs({
         port: 1,
@@ -191,8 +191,8 @@ describe('buildSpawnArgs', () => {
       expect(args).toContain('bundled');
       expect(args).not.toContain('--dump-prompts');
     } finally {
-      if (prev === undefined) delete process.env.AIONUI_DUMP_PROMPTS;
-      else process.env.AIONUI_DUMP_PROMPTS = prev;
+      if (prev === undefined) delete process.env.MU_DUMP_PROMPTS;
+      else process.env.MU_DUMP_PROMPTS = prev;
     }
   });
 
@@ -225,9 +225,9 @@ describe('buildSpawnArgs', () => {
     expect(args).toContain('--recover-corrupted-database');
   });
 
-  it('respects AIONUI_LOG_LEVEL override', () => {
-    const prev = process.env.AIONUI_LOG_LEVEL;
-    process.env.AIONUI_LOG_LEVEL = 'trace';
+  it('respects MU_LOG_LEVEL override', () => {
+    const prev = process.env.MU_LOG_LEVEL;
+    process.env.MU_LOG_LEVEL = 'trace';
     try {
       const args = buildSpawnArgs({
         port: 1,
@@ -238,8 +238,8 @@ describe('buildSpawnArgs', () => {
       });
       expect(args).toContain('trace');
     } finally {
-      if (prev === undefined) delete process.env.AIONUI_LOG_LEVEL;
-      else process.env.AIONUI_LOG_LEVEL = prev;
+      if (prev === undefined) delete process.env.MU_LOG_LEVEL;
+      else process.env.MU_LOG_LEVEL = prev;
     }
   });
 });
@@ -255,6 +255,26 @@ describe('buildSpawnEnv', () => {
     expect(env.AIONUI_WORK_DIR).toBe('/w');
     expect(env.AIONUI_LOG_DIR).toBe('/l');
     expect(env.PATH).toBe(process.env.PATH); // inherits
+  });
+
+  it('hands AionCore the variables it reads under its own names', () => {
+    const keys = ['MU_E2E_TEST', 'MU_EXTENSIONS_PATH', 'MU_EXTENSION_STATES_FILE', 'AIONUI_E2E_TEST'] as const;
+    const saved = Object.fromEntries(keys.map((k) => [k, process.env[k]]));
+    process.env.MU_E2E_TEST = '1';
+    process.env.MU_EXTENSIONS_PATH = '/x';
+    process.env.MU_EXTENSION_STATES_FILE = '/s.json';
+    delete process.env.AIONUI_E2E_TEST;
+    try {
+      const env = buildSpawnEnv();
+      expect(env.AIONUI_E2E_TEST).toBe('1');
+      expect(env.AIONUI_EXTENSIONS_PATH).toBe('/x');
+      expect(env.AIONUI_EXTENSION_STATES_FILE).toBe('/s.json');
+    } finally {
+      for (const k of keys) {
+        if (saved[k] === undefined) delete process.env[k];
+        else process.env[k] = saved[k];
+      }
+    }
   });
 
   it('strips PREBUILDS_ONLY so agent CLIs spawned under aioncore can load their build/Release natives (#4070)', () => {

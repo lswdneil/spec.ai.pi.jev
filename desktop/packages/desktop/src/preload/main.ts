@@ -49,7 +49,7 @@ const backendStartupFailure = ipcRenderer.sendSync('get-backend-startup-failure'
 const nodeRuntimeDeferred = ipcRenderer.sendSync('get-node-runtime-deferred') as boolean;
 contextBridge.exposeInMainWorld('__backendPort', backendPort > 0 ? backendPort : 0);
 contextBridge.exposeInMainWorld('__initialLanguage', initialLanguage ?? null);
-contextBridge.exposeInMainWorld('__aionuiE2ETest', process.env.AIONUI_E2E_TEST === '1');
+contextBridge.exposeInMainWorld('__muE2ETest', process.env.MU_E2E_TEST === '1');
 contextBridge.exposeInMainWorld('__backendStartupFailed', backendStartupFailed === true);
 contextBridge.exposeInMainWorld('__backendStartupFailure', backendStartupFailure ?? null);
 // The person put the Node.js runtime download off at this start: see common/adapter/nodeRuntimeDeferral.ts.

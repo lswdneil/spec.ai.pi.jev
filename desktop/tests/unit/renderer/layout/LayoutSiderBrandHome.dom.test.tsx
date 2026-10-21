@@ -166,7 +166,7 @@ describe('Layout sider brand Home button', () => {
 
   it('navigates to the recorded last non-settings path when clicked in a settings route', () => {
     currentPathname = '/settings/about';
-    sessionStorage.setItem('aion:last-non-settings-path', '/conversation/abc');
+    sessionStorage.setItem('mu:last-non-settings-path', '/conversation/abc');
     renderLayout();
 
     fireEvent.click(screen.getByLabelText(BACK_KEY));
@@ -183,7 +183,7 @@ describe('Layout sider brand Home button', () => {
 
   it('falls back to /guid when the recorded path is itself a settings path', () => {
     currentPathname = '/settings/about';
-    sessionStorage.setItem('aion:last-non-settings-path', '/settings/system');
+    sessionStorage.setItem('mu:last-non-settings-path', '/settings/system');
     renderLayout();
 
     fireEvent.click(screen.getByLabelText(BACK_KEY));
@@ -192,7 +192,7 @@ describe('Layout sider brand Home button', () => {
 
   it('activates via keyboard (Enter and Space) in a settings route', () => {
     currentPathname = '/settings/about';
-    sessionStorage.setItem('aion:last-non-settings-path', '/conversation/abc');
+    sessionStorage.setItem('mu:last-non-settings-path', '/conversation/abc');
     renderLayout();
 
     const brand = screen.getByLabelText(BACK_KEY);
@@ -204,7 +204,7 @@ describe('Layout sider brand Home button', () => {
 
   it('ignores non-activation keys in a settings route', () => {
     currentPathname = '/settings/about';
-    sessionStorage.setItem('aion:last-non-settings-path', '/conversation/abc');
+    sessionStorage.setItem('mu:last-non-settings-path', '/conversation/abc');
     renderLayout();
 
     const brand = screen.getByLabelText(BACK_KEY);
@@ -278,7 +278,7 @@ describe('Layout sider brand Home button', () => {
 
   it('clicking the logo icon counts toward the devtools easter-egg and never navigates', () => {
     currentPathname = '/settings/about';
-    sessionStorage.setItem('aion:last-non-settings-path', '/conversation/abc');
+    sessionStorage.setItem('mu:last-non-settings-path', '/conversation/abc');
     renderLayout();
 
     // The icon is the div wrapping the mu mark, separate from the wordmark.

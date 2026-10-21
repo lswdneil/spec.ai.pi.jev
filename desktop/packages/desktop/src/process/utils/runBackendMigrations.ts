@@ -12,6 +12,7 @@ import { BUILTIN_BROWSER_MCP_NAME } from '@/common/config/constants';
 import {
   removeImageGenerationEnvKeys,
   resolveImageGenerationMcpEnv,
+  withCurrentImageGenerationEnvKeys,
   type ImageGenerationMcpEnvResolveResult,
 } from '@/common/config/imageGenerationMcpEnv';
 import { BUILTIN_IMAGE_GEN_NAME, type IMcpServer, type IProvider } from '@/common/config/storage';
@@ -222,6 +223,23 @@ function buildDefaultMcpServers(): McpImportServer[] {
   ];
 }
 
+/** The image generation server's `original_json`, the form the MCP settings page edits. */
+function imageServerOriginalJson(transport: {
+  command: string;
+  args?: string[];
+  env?: Record<string, string>;
+}): string {
+  return JSON.stringify(
+    {
+      mcpServers: {
+        [BUILTIN_IMAGE_GEN_NAME]: { command: transport.command, args: transport.args || [], env: transport.env || {} },
+      },
+    },
+    null,
+    2
+  );
+}
+
 function buildOriginalJsonFromTransport(server: Pick<IMcpServer, 'name' | 'description' | 'transport'>): string {
   const transport_config =
     server.transport.type === 'stdio'
@@ -308,19 +326,7 @@ async function ensureBootstrapMcpServersInDb(configFile: ConfigFile): Promise<vo
       ...imageServer.transport,
       env: mergedEnv,
     };
-    const original_json = JSON.stringify(
-      {
-        mcpServers: {
-          [BUILTIN_IMAGE_GEN_NAME]: {
-            command: updatedTransport.command,
-            args: updatedTransport.args || [],
-            env: mergedEnv,
-          },
-        },
-      },
-      null,
-      2
-    );
+    const original_json = imageServerOriginalJson(updatedTransport);
     const imageTransportChanged = !isSameStdioTransport(existingImageServer.transport, updatedTransport);
     const imageOriginalJsonChanged = existingImageServer.original_json !== original_json;
     const imageServerChanged = imageTransportChanged || imageOriginalJsonChanged;
@@ -347,6 +353,20 @@ async function ensureBootstrapMcpServersInDb(configFile: ConfigFile): Promise<vo
       existingImageServer.id,
       imageEnvResolution.reason
     );
+    // The settings stay as they are; only those an earlier version stored under its old names move to the current
+    // ones, which the server reads.
+    if (existingImageServer.transport.type === 'stdio') {
+      const storedEnv = existingImageServer.transport.env || {};
+      const renamedEnv = withCurrentImageGenerationEnvKeys(storedEnv);
+      if (renamedEnv !== storedEnv) {
+        const renamedTransport = { ...existingImageServer.transport, env: renamedEnv };
+        await mcpService.updateServer.invoke({
+          id: existingImageServer.id,
+          data: { transport: renamedTransport, original_json: imageServerOriginalJson(renamedTransport) },
+        });
+        imageServerUpdated = true;
+      }
+    }
   }
 
   /**

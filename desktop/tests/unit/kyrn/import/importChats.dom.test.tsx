@@ -37,7 +37,7 @@ vi.mock('@/renderer/pages/native/hooks/useNativeConversations', () => ({
     native.rereads++;
   },
 }));
-// The dialog frame (AionModal) sizes itself by the font scale.
+// The dialog frame (MuModal) sizes itself by the font scale.
 vi.mock('@/renderer/hooks/context/ThemeContext', () => ({ useThemeContext: () => ({ fontScale: 1 }) }));
 vi.mock('@arco-design/web-react', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@arco-design/web-react')>();
@@ -250,7 +250,7 @@ describe('the import dialog', () => {
     render(<Dialog onClose={onClose} />);
     await settle();
     const title = screen.getByRole('heading', { name: 'Import conversations' });
-    expect(title.closest('.arco-modal')?.classList.contains('aionui-modal-standard')).toBe(true);
+    expect(title.closest('.arco-modal')?.classList.contains('mu-modal-standard')).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(onClose).toHaveBeenCalled();
   });
@@ -338,7 +338,7 @@ describe('an imported conversation', () => {
     );
     await settle();
     const title = screen.getByRole('heading', { name: 'Earlier in Claude Code' });
-    expect(title.closest('.arco-modal')?.classList.contains('aionui-modal-standard')).toBe(true);
+    expect(title.closest('.arco-modal')?.classList.contains('mu-modal-standard')).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(onClose).toHaveBeenCalled();
   });

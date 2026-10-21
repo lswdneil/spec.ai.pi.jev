@@ -57,7 +57,7 @@ vi.mock('@/common/kyrn/bridge', () => ({
     return result.data;
   },
 }));
-// The import dialog's frame (AionModal) sizes itself by the font scale, which the app's theme provider gives.
+// The import dialog's frame (MuModal) sizes itself by the font scale, which the app's theme provider gives.
 vi.mock('@/renderer/hooks/context/ThemeContext', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/renderer/hooks/context/ThemeContext')>()),
   useThemeContext: () => ({ fontScale: 1 }),

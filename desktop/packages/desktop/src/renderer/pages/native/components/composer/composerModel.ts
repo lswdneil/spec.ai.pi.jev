@@ -7,7 +7,7 @@
 import type { IMessageText } from '@/common/chat/chatLib';
 import type { SlashCommandItem } from '@/common/chat/slash/types';
 import { supportedThinkingLevels, UNOFFERED_PROVIDER_IDS, type ModelThinkingLevels } from '@/common/kyrn/models';
-import { AIONUI_FILES_MARKER } from '@/common/config/constants';
+import { FILES_MARKER } from '@/common/config/constants';
 import {
   asList,
   asObject,
@@ -167,7 +167,7 @@ export function runsCommand(text: string, names: ReadonlySet<string>): boolean {
 export function withFiles(text: string, paths: readonly string[]): string {
   const files = [...new Set(paths.filter(Boolean))];
   if (!files.length) return text;
-  return `${text.trimEnd()}\n\n${AIONUI_FILES_MARKER}\n${files.join('\n')}`;
+  return `${text.trimEnd()}\n\n${FILES_MARKER}\n${files.join('\n')}`;
 }
 
 /**

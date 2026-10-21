@@ -28,7 +28,7 @@ import { shouldRegisterBackendStartup } from './process/startup/singleInstanceGa
 import { ProcessConfig } from './process/utils/initStorage';
 import type { BackendStartupFailureInfo } from './common/types/platform/electron';
 import { registerWindowMaximizeListeners } from '@process/bridge';
-import { BackendLifecycleManager } from '@aionui/web-host';
+import { BackendLifecycleManager } from '@mu/web-host';
 import { resolveBinaryPath } from '@process/backend';
 import { wasLaunchedAtLogin } from '@process/bridge/applicationBridge';
 import { applyStartupAppLanguage, onAppLanguageApplied } from '@process/services/i18n';
@@ -72,13 +72,14 @@ import {
 import { readCloseToTraySetting } from './process/utils/closeToTraySetting';
 // @ts-expect-error - electron-squirrel-startup doesn't have types
 import electronSquirrelStartup from 'electron-squirrel-startup';
+import { AIONCORE_INTERNAL_HEADER } from '@/common/platform/aioncoreNames';
 
 // ============ Single Instance Lock ============
 // Acquire lock early so the second instance quits before doing unnecessary work.
 // When a second instance starts (e.g. from protocol URL), it sends its data
 // to the first instance via second-instance event, then quits.
-const isE2ETestMode = process.env.AIONUI_E2E_TEST === '1';
-const skipSingleInstanceLock = isE2ETestMode || process.env.AIONUI_MULTI_INSTANCE === '1';
+const isE2ETestMode = process.env.MU_E2E_TEST === '1';
+const skipSingleInstanceLock = isE2ETestMode || process.env.MU_MULTI_INSTANCE === '1';
 const deepLinkFromArgv = process.argv.find((arg) => arg.startsWith(`${PROTOCOL_SCHEME}://`));
 const gotTheLock = skipSingleInstanceLock ? true : app.requestSingleInstanceLock({ deepLinkUrl: deepLinkFromArgv });
 if (!gotTheLock) {
@@ -143,7 +144,7 @@ if (electronSquirrelStartup) {
 // Global error handlers for main process
 // The handlers prevent Electron's default error dialog. Both swallow the failure and keep the process alive;
 // they only log allow-listed attribution first, because an error such as `read ECONNRESET` otherwise carries
-// nothing but Node-internal frames (TCP.onStreamRead) and cannot be traced back to a subsystem (AIONUI-128).
+// nothing but Node-internal frames (TCP.onStreamRead) and cannot be traced back to a subsystem.
 process.on('uncaughtException', (error, origin) => {
   logUncaught(describeUncaughtError(error, origin));
 });
@@ -286,7 +287,7 @@ function broadcastBackendStartupState(state: BackendStartupFailureInfo | null): 
 function markBackendStartupFailed(error: unknown): void {
   backendStartupFailed = true;
   // Stamp the currently installed app version so failure dialogs (notably the
-  // downgrade "update AionUi" dialog) can tell the user which version they are
+  // downgrade "update the app" dialog) can tell the user which version they are
   // on now — i.e. that they need something newer than this.
   backendStartupFailureInfo = { ...classifyBackendStartupFailure(error), appVersion: app.getVersion() };
   (globalThis as typeof globalThis & { __backendStartupFailed?: boolean }).__backendStartupFailed = true;
@@ -300,7 +301,7 @@ function registerCronResumeBridge(backendPort: number): void {
     void fetch(`http://127.0.0.1:${backendPort}/api/cron/internal/system-resume`, {
       method: 'POST',
       headers: {
-        'x-aionui-internal': '1',
+        [AIONCORE_INTERNAL_HEADER]: '1',
       },
     }).catch((error) => {
       console.error('[mu] Failed to notify backend about system resume:', error);
@@ -356,12 +357,12 @@ function markBackendReady(backendPort: number, source: string): void {
 }
 
 function resolveDebugBackendStartupFailure(): BackendStartupFailureInfo | null {
-  const reason = process.env.AIONUI_DEBUG_BACKEND_STARTUP_FAILURE as BackendStartupFailureInfo['reason'] | undefined;
+  const reason = process.env.MU_DEBUG_BACKEND_STARTUP_FAILURE as BackendStartupFailureInfo['reason'] | undefined;
   if (!reason) {
     return null;
   }
   if (app.isPackaged && !isE2ETestMode) {
-    console.warn('[mu] Ignoring AIONUI_DEBUG_BACKEND_STARTUP_FAILURE outside desktop dev/e2e mode.');
+    console.warn('[mu] Ignoring MU_DEBUG_BACKEND_STARTUP_FAILURE outside desktop dev/e2e mode.');
     return null;
   }
 
@@ -401,7 +402,7 @@ function resolveDebugBackendStartupFailure(): BackendStartupFailureInfo | null {
     return { reason };
   }
 
-  console.warn(`[mu] Ignoring unknown AIONUI_DEBUG_BACKEND_STARTUP_FAILURE value: ${reason}`);
+  console.warn(`[mu] Ignoring unknown MU_DEBUG_BACKEND_STARTUP_FAILURE value: ${reason}`);
   return null;
 }
 
@@ -527,7 +528,7 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   // crashes, escalate to a throttled app relaunch when the renderer cannot
   // launch at all (e.g. app files replaced by an update while running).
   // An unconditional immediate reload here caused a ~50/s crash storm on
-  // `launch-failed` (Sentry AIONUI-DESKTOP-A).
+  // `launch-failed`.
   const rendererRecovery = createRendererRecoveryPolicy();
 
   mainWindow.webContents.on('render-process-gone', (_event, details) => {
@@ -711,8 +712,8 @@ const handleAppReady = async (): Promise<void> => {
        * any MCP config the user copied from there could never connect.
        */
       setActiveCdpPort(bridge.port);
-      process.env.AIONUI_CDP_ACTIVE_PORT = String(bridge.port);
-      process.env.AIONUI_CDP_BRIDGE_TOKEN = bridge.token;
+      process.env.MU_CDP_ACTIVE_PORT = String(bridge.port);
+      process.env.MU_CDP_BRIDGE_TOKEN = bridge.token;
       console.log(`[CDP] Single-target bridge listening on 127.0.0.1:${bridge.port} (token required)`);
       app.once('will-quit', () => {
         void bridge.close();
@@ -865,7 +866,7 @@ const handleAppReady = async (): Promise<void> => {
 
     // mu updates itself from the releases of github.com/qybaihe/mu (process/services/update): a check a little after
     // the start and then every 6 hours, besides the one on 关于 (About). A build run from its sources and automated
-    // runs (CI, E2E, AIONUI_DISABLE_AUTO_UPDATE=1) check only when asked.
+    // runs (CI, E2E, MU_DISABLE_AUTO_UPDATE=1) check only when asked.
     const updates = getUpdateService();
     updates.setInstallHooks({
       beforeInstall: async () => {
@@ -880,7 +881,7 @@ const handleAppReady = async (): Promise<void> => {
       },
     });
     const isCiRuntime = process.env.CI === 'true' || process.env.CI === '1' || process.env.GITHUB_ACTIONS === 'true';
-    if (app.isPackaged && !isE2ETestMode && !isCiRuntime && process.env.AIONUI_DISABLE_AUTO_UPDATE !== '1') {
+    if (app.isPackaged && !isE2ETestMode && !isCiRuntime && process.env.MU_DISABLE_AUTO_UPDATE !== '1') {
       updates.start();
     }
 

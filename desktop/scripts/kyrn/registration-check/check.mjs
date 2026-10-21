@@ -18,7 +18,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const desktop = resolve(here, '../../..');
 const harness = process.env.KYRN_ROOT || join(dirname(desktop), 'KYRN');
 const backendBin =
-  process.env.AIONUI_BACKEND_BIN ||
+  process.env.MU_BACKEND_BIN ||
   join(desktop, `resources/bundled-aioncore/${process.platform}-${process.arch}/aioncore`);
 const command = join(desktop, 'scripts/kyrn/acp');
 const nodeDir = dirname(process.execPath);
@@ -121,7 +121,7 @@ const named = (agents) => agents.filter((row) => ['mu', 'KYRN'].includes(row.nam
 function runRegister() {
   const out = spawnSync(process.execPath, [join(desktop, 'scripts/kyrn/register.mjs')], {
     encoding: 'utf8',
-    env: { PATH: `${nodeDir}:/usr/bin:/bin`, HOME: join(scratch, 'unused-home'), AIONUI_BACKEND_URL: base },
+    env: { PATH: `${nodeDir}:/usr/bin:/bin`, HOME: join(scratch, 'unused-home'), MU_BACKEND_URL: base },
     timeout: 180000,
   });
   return { code: out.status, stdout: out.stdout.trim(), stderr: out.stderr.trim() };

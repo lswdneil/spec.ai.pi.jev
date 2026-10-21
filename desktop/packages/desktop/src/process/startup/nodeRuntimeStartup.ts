@@ -49,7 +49,7 @@ export function planStartupNodeRuntime(options: {
   const runtime = managedNodeRuntime(options.dataDir, process.platform, process.arch);
   return planNodeRuntime({
     isPackaged: options.isPackaged,
-    isE2E: process.env.AIONUI_E2E_TEST === '1',
+    isE2E: process.env.MU_E2E_TEST === '1',
     preset: process.env.MU_NODE_RUNTIME,
     runtime,
     installed: runtime ? hasManagedNodeRuntime(runtime, process.platform) : false,

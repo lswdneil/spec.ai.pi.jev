@@ -1,7 +1,7 @@
 /**
  * Dark dialogs sit on the card surface (--dialog-fill-0, a shade above the page's --bg-1) inside a hairline. The hairline goes
  * round the whole dialog: the body of a plain Arco modal is only the part between its title and its buttons, so a
- * line round the body would box the text in. An AionModal's body is the whole dialog, and it draws its own.
+ * line round the body would box the text in. An MuModal's body is the whole dialog, and it draws its own.
  */
 
 import { readFileSync } from 'node:fs';
@@ -44,19 +44,19 @@ describe('dark dialogs', () => {
   });
 
   it('draw the hairline round the whole dialog, never round a plain modal body', () => {
-    expect(body(arco, "body[arco-theme='dark'] .arco-modal:not(.aionui-modal)")).toContain(
+    expect(body(arco, "body[arco-theme='dark'] .arco-modal:not(.mu-modal)")).toContain(
       'border: 1px solid var(--border-base)'
     );
     expect(body(arco, "body[arco-theme='dark'] .arco-modal-content")).not.toContain('border');
-    expect(body(arco, '.aionui-modal .arco-modal-content')).toContain('border: 1px solid var(--border-base)');
+    expect(body(arco, '.mu-modal .arco-modal-content')).toContain('border: 1px solid var(--border-base)');
   });
 
   it('keep the accent off their surfaces', () => {
     for (const selector of [
       "body[arco-theme='dark'] .arco-modal",
       "body[arco-theme='dark'] .arco-modal-content",
-      "body[arco-theme='dark'] .arco-modal:not(.aionui-modal)",
-      '.aionui-modal .arco-modal-content',
+      "body[arco-theme='dark'] .arco-modal:not(.mu-modal)",
+      '.mu-modal .arco-modal-content',
     ]) {
       expect(body(arco, selector)).not.toMatch(/primary|accent|violet|pink/);
     }

@@ -71,7 +71,7 @@ registration is dropped as side-effect free.
 - Real models, real Jev, real tools (`noTools: "builtin"`), long sessions, compaction, sub-agents (swarm / hive
   spawn child pi processes by default; `swarmRunner` is the seam for running them in-host).
 - The renderer. The stream stops at Electron's main process; the reducer and the React surfaces are the next step.
-- AionUi's side: its conversation DB and history list still think in ACP conversations.
+- The app's side: its conversation DB and history list still think in ACP conversations.
 - Several sessions in one host. `process.env` and other process-level state are shared; start with one host per
   session or audit first.
 - Electron 37 (the version in the root `package.json`): dev runs on the 44.4.3 binary from `kyrn/node_modules`

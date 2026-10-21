@@ -1,6 +1,6 @@
 name: Desktop app
 
-# Builds the desktop app (desktop/, an AionUi fork) for macOS, Windows and Linux on x64 and arm64.
+# Builds the desktop app (desktop/) for macOS, Windows and Linux on x64 and arm64.
 # A push to main that touches the app keeps the installers as workflow artifacts; a `v*` tag also
 # publishes them, with a source archive, as a GitHub pre-release.
 #
@@ -97,7 +97,7 @@ jobs:
       npm_config_cache: ${{ github.workspace }}/.cache/npm
       ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
       ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
-      AIONUI_BACKEND_ARCH: ${{ matrix.arch }}
+      MU_BACKEND_ARCH: ${{ matrix.arch }}
       # Public release downloads (AionCore, Electron) are rate-limited without a token.
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -2,7 +2,7 @@
  * Assistant Settings Migration — phase-1 governance E2E coverage.
  *
  * These tests exercise a real upgrade path:
- * 1. seed a legacy `aionui.db` using the pre-unification assistants schema
+ * 1. seed a legacy database (`LEGACY_DATABASE_FILE`) using the pre-unification assistants schema
  * 2. start the current backend against that data dir
  * 3. verify phase-1 assistant fields and overlays are materialized correctly
  */
@@ -11,6 +11,8 @@ import { spawn, type ChildProcess, execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { AIONCORE_DATABASE_FILE } from '@/common/platform/aioncoreNames';
+import { LEGACY_DATABASE_FILE } from '@/common/platform/legacyNames';
 
 const MIGRATION_BACKEND_PORT = 25912;
 const BUILTIN_ID = 'word-creator';
@@ -70,7 +72,7 @@ type AssistantDetail = {
 function resolveBackendBinary(): string {
   const projectRoot = process.cwd();
   const candidates = [
-    process.env.AIONUI_BACKEND_BINARY,
+    process.env.MU_BACKEND_BINARY,
     path.join(projectRoot, '../aionCore/target/debug/aioncore'),
     path.join(os.homedir(), '.cargo', 'bin', 'aioncore'),
   ].filter((value): value is string => Boolean(value));
@@ -89,12 +91,12 @@ function schemaPath(): string {
 }
 
 function querySqliteValue(dataDir: string, sql: string): string {
-  const dbPath = path.join(dataDir, 'aionui-backend.db');
+  const dbPath = path.join(dataDir, AIONCORE_DATABASE_FILE);
   return execFileSync('sqlite3', ['-readonly', dbPath, sql], { encoding: 'utf8' }).trim();
 }
 
 function seedLegacyDatabase(dataDir: string): void {
-  const legacyDbPath = path.join(dataDir, 'aionui.db');
+  const legacyDbPath = path.join(dataDir, LEGACY_DATABASE_FILE);
   const schemaSql = fs.readFileSync(schemaPath(), 'utf8');
   execFileSync('sqlite3', [legacyDbPath], { input: schemaSql, encoding: 'utf8' });
 
@@ -198,7 +200,7 @@ test.describe('Assistant Settings Migration', () => {
       env: {
         ...process.env,
         RUST_LOG: 'warn',
-        AIONUI_EXTENSIONS_PATH: path.join(process.cwd(), 'examples'),
+        MU_EXTENSIONS_PATH: path.join(process.cwd(), 'examples'),
       },
     });
     try {
@@ -210,7 +212,7 @@ test.describe('Assistant Settings Migration', () => {
   }
 
   test.beforeEach(async () => {
-    dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'aionui-assistant-migration-'));
+    dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mu-assistant-migration-'));
     seedLegacyDatabase(dataDir);
     await startBackend();
   });

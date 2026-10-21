@@ -204,7 +204,7 @@ describe('usePresetAssistantInfo', () => {
         id: 'assistant-local-avatar',
         source: 'user',
         name: 'Local Avatar',
-        avatar: '/Users/demo/.aionui/assistant-avatars/assistant-local-avatar.jpg',
+        avatar: '/Users/demo/.mu-desktop/assistant-avatars/assistant-local-avatar.jpg',
         backend: 'codex',
       },
     } as TChatConversation;
@@ -236,7 +236,7 @@ describe('usePresetAssistantInfo', () => {
         id: 'assistant-local-avatar',
         source: 'user',
         name: 'Local Avatar',
-        avatar: '/Users/demo/.aionui/assistant-avatars/assistant-local-avatar.jpg',
+        avatar: '/Users/demo/.mu-desktop/assistant-avatars/assistant-local-avatar.jpg',
         backend: 'codex',
       },
     } as TChatConversation;

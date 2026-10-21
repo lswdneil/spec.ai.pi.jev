@@ -8,8 +8,9 @@
 //
 // A file came from AionUi when it has the same path as a file of AionUi v2.2.2 (6744099b, the version the fork is
 // based on), or when 15% or more of its distinctive lines (30 characters or more, with a letter) appear in AionUi's
-// files of the same kind: code copied or moved to a new path. Rewriting such a file from scratch, or deleting it,
-// takes it off the list.
+// files of the same kind: code copied or moved to a new path. Lines are compared without case and with AionUi's names
+// read as mu's (`AIONUI_E_…` and `MU_E_…`, `AionModal` and `MuModal` are the same line), so renaming AionUi's code
+// keeps it on the list. Rewriting such a file from scratch, or deleting it, takes it off the list.
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -49,12 +50,15 @@ const LEGAL = new Set(['LICENSE', 'LICENSE-APACHE', 'NOTICE', 'AIONUI-FILES.txt'
 const git = (cwd, args) => execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8', maxBuffer: 1 << 28 });
 const isText = (path) => TEXT.has(extname(path).toLowerCase()) || TEXT_NAMES.has(path.split('/').at(-1));
 
-/** The lines that say something: whitespace evened out, 30 characters or more, with a letter. */
+/**
+ * The lines that say something: whitespace evened out, 30 characters or more, with a letter. Each is kept in lower
+ * case with AionUi's names as mu's, so a line that only had its names changed is still the same line.
+ */
 function distinctive(text) {
   const lines = new Set();
   for (const line of text.split('\n')) {
     const even = line.trim().split(/\s+/).join(' ');
-    if (even.length >= 30 && /\p{L}/u.test(even)) lines.add(even);
+    if (even.length >= 30 && /\p{L}/u.test(even)) lines.add(even.toLowerCase().replace(/aion(?:ui)?/g, 'mu'));
   }
   return lines;
 }

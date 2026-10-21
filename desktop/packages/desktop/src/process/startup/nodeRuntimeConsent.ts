@@ -15,7 +15,7 @@ import path from 'node:path';
  *   fetched.
  */
 
-/** The runtime aioncore v0.2.2 installs: `MANAGED_NODE_VERSION` in crates/aionui-runtime/src/node_runtime/managed.rs. */
+/** The runtime aioncore v0.2.2 installs: `MANAGED_NODE_VERSION` in AionCore's runtime crate (`node_runtime/managed.rs`). */
 export const MANAGED_NODE_VERSION = '24.11.0';
 
 /** The archive aioncore fetches on each platform, with its size on nodejs.org in bytes (checked 2026-09-23). */

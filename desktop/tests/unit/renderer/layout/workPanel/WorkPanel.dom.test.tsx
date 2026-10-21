@@ -183,6 +183,7 @@ import {
   WORKSPACE_STATE_EVENT,
   type WorkspaceStateDetail,
 } from '@/renderer/utils/workspace/workspaceEvents';
+import { BUILTIN_MCP_SERVER_NAMES } from '@/common/platform/legacyNames';
 
 const i18n = createInstance();
 beforeAll(async () => {
@@ -563,7 +564,7 @@ describe('the work panel', () => {
         wires.stream?.({
           type: 'tool_group',
           conversation_id: conversation,
-          data: [{ name: 'aionui-browser__navigate_page', status }],
+          data: [{ name: `${BUILTIN_MCP_SERVER_NAMES.browser}__navigate_page`, status }],
         })
       );
     browse('conv-2', 'Executing');

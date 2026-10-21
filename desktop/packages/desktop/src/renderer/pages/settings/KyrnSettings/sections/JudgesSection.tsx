@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { CLM_DEFAULT_ADDRESS, CLM_DEFAULT_MODEL } from '@/common/kyrn/clm';
 import { isPlainRemoteEndpoint, isSafeEndpoint } from '@/common/kyrn/models';
 import type { JudgeSettings, KyrnSettings } from '@/common/kyrn/types';
-import AionSelect from '@/renderer/components/base/AionSelect';
+import MuSelect from '@/renderer/components/base/MuSelect';
 import OneLine from '@/renderer/components/settings/OneLine';
 import { formatNumber } from '@/renderer/services/i18n/format';
 import type { Draft } from '../draft';
@@ -206,7 +206,7 @@ export function ChoiceBody({ choice, draft, guide = false, onChange, onKey }: Bo
       <div className={styles.choiceFields}>
         <div className={styles.choiceField}>
           <label className={styles.choiceLabel}>{t('mu.judges.service')}</label>
-          <AionSelect
+          <MuSelect
             className={styles.choiceInput}
             aria-label={t('mu.judges.service')}
             value={service}
@@ -310,7 +310,7 @@ function JudgeTiers({ draft, base, onChange, onKey }: JudgesSectionProps) {
           help={t('mu.judges.orderHelp')}
           modified={base.tiers.join() !== settings.tiers.join()}
         >
-          <AionSelect
+          <MuSelect
             mode='multiple'
             size='small'
             className={fieldStyles.wide}
@@ -467,7 +467,7 @@ function JevFields({ draft, base, index, onChange, onKey }: JudgesSectionProps &
           help={t(`mu.judges.services.${service}.help`)}
           modified={before !== undefined && serviceOf(before) !== service}
         >
-          <AionSelect
+          <MuSelect
             size='small'
             className={fieldStyles.wide}
             aria-label={t('mu.judges.service')}

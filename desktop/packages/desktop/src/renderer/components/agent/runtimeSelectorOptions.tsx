@@ -5,7 +5,7 @@
  */
 
 import type { AcpConfigSetStatus } from '@/renderer/hooks/agent/useAcpConfigOptions';
-import AionInlineSearchInput from '@/renderer/components/base/AionInlineSearchInput';
+import MuInlineSearchInput from '@/renderer/components/base/MuInlineSearchInput';
 import { isThinkingLevel, thinkingLevelLabel } from '@/renderer/utils/model/thinkingLevel';
 import { Menu, Tooltip } from '@arco-design/web-react';
 import type { TFunction } from 'i18next';
@@ -162,7 +162,7 @@ export const RuntimeSelectorModelList: React.FC<{
     <>
       {showSearch ? (
         <div className='px-6px pt-4px pb-6px' style={{ background: 'var(--color-bg-popup)' }}>
-          <AionInlineSearchInput
+          <MuInlineSearchInput
             value={query}
             onChange={setQuery}
             placeholder={t('agent.model.searchPlaceholder', { defaultValue: 'Search models' })}

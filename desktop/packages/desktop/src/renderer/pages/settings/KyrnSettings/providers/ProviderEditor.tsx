@@ -1,7 +1,7 @@
 import React, { useId, useState } from 'react';
 import { Checkbox, Input, Tag } from '@arco-design/web-react';
 import { useTranslation } from 'react-i18next';
-import AionSelect from '@/renderer/components/base/AionSelect';
+import MuSelect from '@/renderer/components/base/MuSelect';
 import {
   ENDPOINT_TYPES,
   isPlainRemoteEndpoint,
@@ -103,7 +103,7 @@ export default function ProviderEditor(props: ProviderEditorProps) {
           <span className={styles.label} id={formatLabel}>
             {t('mu.providers.endpointType')}
           </span>
-          <AionSelect
+          <MuSelect
             disabled={readOnly}
             aria-labelledby={formatLabel}
             data-testid='mu-endpoint-select'

@@ -7,6 +7,7 @@
  */
 
 import { showAsMu } from '../kyrn/displayName';
+import { fromAionCoreCode } from '../platform/aioncoreNames';
 import { refreshSession, WS_CLOSE_POLICY_VIOLATION } from './sessionRefresh';
 
 // ---------------------------------------------------------------------------
@@ -86,7 +87,10 @@ function getWsUrl(): string {
  */
 export class BackendHttpError extends Error {
   readonly status: number;
-  /** Machine-readable error code from the backend `ErrorResponse.code`, or `''` when parse failed. */
+  /**
+   * Machine-readable error code from the backend `ErrorResponse.code` by the app's name (`fromAionCoreCode`), or `''`
+   * when parse failed.
+   */
   readonly code: string;
   /**
    * Backend-provided human message from `ErrorResponse.error`, or the raw body when parse failed. It is shown as it
@@ -106,14 +110,15 @@ export class BackendHttpError extends Error {
     let details: unknown;
     if (body && typeof body === 'object') {
       const b = body as { code?: unknown; error?: unknown; details?: unknown };
-      if (typeof b.code === 'string') code = b.code;
+      if (typeof b.code === 'string') code = fromAionCoreCode(b.code);
       if (typeof b.error === 'string') backendMessage = b.error;
       details = b.details;
     } else if (typeof body === 'string') {
       backendMessage = body;
     }
-    // Toasts show `message` too.
-    super(showAsMu(`Backend ${method} ${path} failed (${status}): ${JSON.stringify(body)}`));
+    // Toasts show `message` too, with the code by the app's name.
+    const shown = code && body && typeof body === 'object' ? { ...body, code } : body;
+    super(showAsMu(`Backend ${method} ${path} failed (${status}): ${JSON.stringify(shown)}`));
     this.name = 'BackendHttpError';
     this.status = status;
     this.code = code;

@@ -4,15 +4,15 @@
  * Reads environment variables and invokes the shared module.
  *
  * Version resolution order:
- *  1. AIONUI_BACKEND_RUN_ID env (download from AionCore Manual Build artifact)
- *  2. AIONUI_BACKEND_VERSION env (for ad-hoc release overrides)
+ *  1. MU_BACKEND_RUN_ID env (download from AionCore Manual Build artifact)
+ *  2. MU_BACKEND_VERSION env (for ad-hoc release overrides)
  *  3. "aioncoreVersion" field in repo-root package.json (the pin)
  *  4. 'latest' (fallback; not recommended for reproducible builds)
  *
  * Environment variables:
- *  - AIONUI_BACKEND_RUN_ID: AionCore Manual Build workflow run id
- *  - AIONUI_BACKEND_VERSION: override the pinned version
- *  - AIONUI_BACKEND_ARCH: target architecture (default: process.arch)
+ *  - MU_BACKEND_RUN_ID: AionCore Manual Build workflow run id
+ *  - MU_BACKEND_VERSION: override the pinned version
+ *  - MU_BACKEND_ARCH: target architecture (default: process.arch)
  *  - GH_TOKEN / GITHUB_TOKEN: GitHub API token (for rate limiting)
  */
 
@@ -22,8 +22,8 @@ const { resolveAioncoreVersion } = require('./resolveAioncoreVersion.js');
 
 const projectRoot = path.resolve(__dirname, '..');
 const platform = process.platform;
-// Support cross-compilation: AIONUI_BACKEND_ARCH > npm_config_target_arch > process.arch
-const arch = process.env.AIONUI_BACKEND_ARCH || process.env.npm_config_target_arch || process.arch;
+// Support cross-compilation: MU_BACKEND_ARCH > npm_config_target_arch > process.arch
+const arch = process.env.MU_BACKEND_ARCH || process.env.npm_config_target_arch || process.arch;
 const version = resolveAioncoreVersion(projectRoot);
 
 try {

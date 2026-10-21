@@ -22,7 +22,7 @@ KYRN_ROOT="$(cd .. && pwd)" bun run start
 
 ### The local service
 
-The app also starts AionCore, a separate program it inherited from AionUi. `node scripts/prepareAioncore.js` downloads the version pinned in `package.json` (`aioncoreVersion`) into `resources/bundled-aioncore/`. To use a binary of your own, set `AIONUI_BACKEND_BIN` to its path; failing both, the app looks for `aioncore` on `PATH`.
+The app also starts AionCore, a separate program it inherited from AionUi. `node scripts/prepareAioncore.js` downloads the version pinned in `package.json` (`aioncoreVersion`) into `resources/bundled-aioncore/`. To use a binary of your own, set `MU_BACKEND_BIN` to its path; failing both, the app looks for `aioncore` on `PATH`.
 
 ## Checks
 

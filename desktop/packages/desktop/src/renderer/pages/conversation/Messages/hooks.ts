@@ -17,6 +17,7 @@ import {
 } from '@/common/chat/chatLib';
 import { createContext as createReactContext, useCallback, useContext, useEffect, useRef } from 'react';
 import { createContext } from '@renderer/utils/ui/createContext';
+import { fromAionCoreCode } from '@/common/platform/aioncoreNames';
 import {
   DEFAULT_MESSAGE_PAGE_LIMIT,
   loadConversationAnchorWindow,
@@ -602,7 +603,7 @@ const normalizePersistedWorkspaceRuntimeError = (
   return {
     message,
     code: 'WORKSPACE_PATH_RUNTIME_UNAVAILABLE',
-    ownership: 'aionui',
+    ownership: 'mu',
     detail,
     workspacePath,
     retryable: false,
@@ -618,7 +619,8 @@ const classifyPersistedSendFailure = (
     return undefined;
   }
 
-  const persistedCode = typeof parsed.code === 'string' ? parsed.code : undefined;
+  // Stored as AionCore wrote it: its own errors' code goes by the app's name.
+  const persistedCode = typeof parsed.code === 'string' ? fromAionCoreCode(parsed.code) : undefined;
   const structuredContent = isRecord(parsed.structuredContent) ? parsed.structuredContent : undefined;
   const domainCode =
     typeof structuredContent?.domainCode === 'string'
@@ -638,7 +640,7 @@ const classifyPersistedSendFailure = (
     return {
       message,
       code: effectiveCode,
-      ownership: 'aionui',
+      ownership: 'mu',
       detail: message,
       retryable: true,
       feedback_recommended: true,
@@ -653,7 +655,7 @@ const classifyPersistedSendFailure = (
     return {
       message,
       code: effectiveCode,
-      ownership: 'aionui',
+      ownership: 'mu',
       detail: message,
       retryable: false,
       feedback_recommended: false,
@@ -674,16 +676,16 @@ const classifyPersistedSendFailure = (
   if (persistedCode === 'INTERNAL_ERROR') {
     return {
       message,
-      code: 'AIONUI_INTERNAL_ERROR',
-      ownership: 'aionui',
+      code: 'MU_INTERNAL_ERROR',
+      ownership: 'mu',
       detail: message,
       retryable: true,
       feedback_recommended: true,
     };
   }
 
-  if (persistedCode?.startsWith('AIONUI_')) {
-    return { message, code: persistedCode, ownership: 'aionui', detail: message, retryable: true };
+  if (persistedCode?.startsWith('MU_')) {
+    return { message, code: persistedCode, ownership: 'mu', detail: message, retryable: true };
   }
   if (persistedCode?.startsWith('USER_AGENT_')) {
     return { message, code: persistedCode, ownership: 'user_agent', detail: message, retryable: true };
@@ -712,8 +714,8 @@ const classifyPersistedSendFailure = (
   if (parsed.source === 'send_failed') {
     return {
       message,
-      code: 'AIONUI_INTERNAL_ERROR',
-      ownership: 'aionui',
+      code: 'MU_INTERNAL_ERROR',
+      ownership: 'mu',
       detail: message,
       retryable: true,
       feedback_recommended: true,

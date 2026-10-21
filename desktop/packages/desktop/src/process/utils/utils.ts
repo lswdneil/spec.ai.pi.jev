@@ -11,6 +11,7 @@ import { existsSync, lstatSync, mkdirSync, readlinkSync, realpathSync, symlinkSy
 import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
+import { DATA_FOLDER, DEV_SHORTCUT_BASES, LEGACY_TEMP_FOLDER } from '@/common/platform/legacyNames';
 export const hasElectronAppPath = (): boolean => {
   return typeof process.versions.electron === 'string';
 };
@@ -29,7 +30,7 @@ const getElectronPathOrFallback = (name: 'temp' | 'home' | 'userData'): string =
 
 export const getTempPath = () => {
   const rootPath = getElectronPathOrFallback('temp');
-  return path.join(rootPath, 'aionui');
+  return path.join(rootPath, LEGACY_TEMP_FOLDER);
 };
 
 /**
@@ -47,9 +48,9 @@ const ensureCliSafeSymlink = (targetPath: string, symlinkName: string): string =
   if (!getPlatformServices().paths.needsCliSafeSymlinks()) {
     return targetPath;
   }
-  // An E2E run keeps to its sandbox profile (AIONUI_E2E_USER_DATA_DIR, a temporary folder): a shortcut in the real
+  // An E2E run keeps to its sandbox profile (MU_E2E_USER_DATA_DIR, a temporary folder): a shortcut in the real
   // home folder would outlive the run and re-point the installed app's own.
-  if (process.env.AIONUI_E2E_TEST === '1' && process.env.AIONUI_E2E_USER_DATA_DIR?.trim()) {
+  if (process.env.MU_E2E_TEST === '1' && process.env.MU_E2E_USER_DATA_DIR?.trim()) {
     return targetPath;
   }
 
@@ -95,36 +96,35 @@ const ensureCliSafeSymlink = (targetPath: string, symlinkName: string): string =
 };
 
 /**
- * The names of the home-folder shortcuts. A packaged mu has its own: `~/.aionui` and `~/.aionui-config` belong to
- * AionUi, which may be installed beside mu, and each app would keep re-pointing the other's shortcut at itself. A dev
- * build keeps `~/.aionui-dev` and `~/.aionui-config-dev`, through which its existing data was written.
+ * The names of the home-folder shortcuts: a packaged build's are mu's, a development build keeps those its data was
+ * written through (`DEV_SHORTCUT_BASES`).
  */
-const MU_SHORTCUT_NAMES = { '.aionui': '.mu-desktop', '.aionui-config': '.mu-desktop-config' } as const;
-const shortcutName = (upstreamName: keyof typeof MU_SHORTCUT_NAMES): string =>
-  getPlatformServices().paths.isPackaged() === true ? MU_SHORTCUT_NAMES[upstreamName] : getEnvAwareName(upstreamName);
+const MU_SHORTCUT_NAMES = { data: '.mu-desktop', config: '.mu-desktop-config' } as const;
+const shortcutName = (folder: keyof typeof MU_SHORTCUT_NAMES): string =>
+  getPlatformServices().paths.isPackaged() === true
+    ? MU_SHORTCUT_NAMES[folder]
+    : getEnvAwareName(DEV_SHORTCUT_BASES[folder]);
 
 /**
  * Get data path, using CLI-safe symlink on macOS.
- * Release builds use ~/.mu-desktop; dev builds use ~/.aionui-dev.
+ * Release builds use ~/.mu-desktop; dev builds keep their own (`DEV_SHORTCUT_BASES`).
  * 获取数据目录路径，macOS 上使用符号链接。
- * Release 使用 ~/.mu-desktop，Dev 模式使用 ~/.aionui-dev。
  */
 export const getDataPath = (): string => {
   const rootPath = getElectronPathOrFallback('userData');
-  const dataPath = path.join(rootPath, 'aionui');
-  return ensureCliSafeSymlink(dataPath, shortcutName('.aionui'));
+  const dataPath = path.join(rootPath, DATA_FOLDER);
+  return ensureCliSafeSymlink(dataPath, shortcutName('data'));
 };
 
 /**
  * Get config path, using CLI-safe symlink on macOS.
- * Release builds use ~/.mu-desktop-config; dev builds use ~/.aionui-config-dev.
+ * Release builds use ~/.mu-desktop-config; dev builds keep their own (`DEV_SHORTCUT_BASES`).
  * 获取配置目录路径，macOS 上使用符号链接。
- * Release 使用 ~/.mu-desktop-config，Dev 模式使用 ~/.aionui-config-dev。
  */
 export const getConfigPath = (): string => {
   const rootPath = getElectronPathOrFallback('userData');
   const configPath = path.join(rootPath, 'config');
-  return ensureCliSafeSymlink(configPath, shortcutName('.aionui-config'));
+  return ensureCliSafeSymlink(configPath, shortcutName('config'));
 };
 
 /**

@@ -16,6 +16,7 @@ import {
   type SessionConfigOption,
   type SessionUpdate,
 } from '@agentclientprotocol/sdk';
+import { AIONCORE_CONVERSATION_ID_ENV } from '../../../common/platform/aioncoreNames.ts';
 import { randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import { realpath } from 'node:fs/promises';
@@ -256,7 +257,7 @@ const CONFIRM_OPTIONS = [
   { optionId: 'reject', name: 'Reject', kind: 'reject_once' },
 ] as const;
 
-/** ACP adapter only: AionUi owns the UI and projects; mu owns all execution and judgment. */
+/** ACP adapter only: the app owns the UI and projects; mu owns all execution and judgment. */
 export class KyrnAgent implements Agent {
   private connection: Connection;
   private store: string;
@@ -720,10 +721,10 @@ export class KyrnAgent implements Agent {
   /**
    * The session a conversation the app made from a Claude Code or Codex transcript goes on with, until an adapter
    * session has opened it (process/agent/kyrn/importChats.ts). The backend starts an adapter for each conversation and
-   * names the conversation in the adapter's environment (`AIONUI_CONVERSATION_ID`, the backend's own variable).
+   * names the conversation in the adapter's environment (`AIONCORE_CONVERSATION_ID_ENV`).
    */
   private async importFor(cwd: string): Promise<{ conversationId: string; record: ImportRecord } | undefined> {
-    const conversationId = process.env.AIONUI_CONVERSATION_ID;
+    const conversationId = process.env[AIONCORE_CONVERSATION_ID_ENV];
     if (!isConversationId(conversationId)) return undefined;
     const record = readImportRecord(this.store, conversationId);
     if (!record || record.session || !existsSync(record.file)) return undefined;

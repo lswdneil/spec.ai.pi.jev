@@ -1,7 +1,7 @@
 param(
   [string[]]$Versions = @(),
   [string]$OutputDir = (Join-Path $PSScriptRoot '..\out-fast-builds'),
-  [string]$WorktreeRoot = (Join-Path $PSScriptRoot '..\..\aionui-build-worktrees'),
+  [string]$WorktreeRoot = (Join-Path $PSScriptRoot '..\..\mu-build-worktrees'),
   [int]$TimeoutSeconds = 1800,
   [switch]$Sequential
 )
@@ -83,10 +83,10 @@ function New-BuildCommandFile([string]$WorktreePath, [string]$Version, [string]$
     'New-Item -ItemType Directory -Force -Path $buildTemp | Out-Null',
     '$env:TEMP = $buildTemp',
     '$env:TMP = $buildTemp',
-    '$env:AIONUI_DEBUG_AUTO_UPDATE_CURRENT_VERSION = ''' + $Version + '''',
+    '$env:MU_DEBUG_AUTO_UPDATE_CURRENT_VERSION = ''' + $Version + '''',
     '$env:ELECTRON_BUILDER_COMPRESSION_LEVEL = ''1''',
-    '$env:AIONUI_BACKEND_LOCAL_BINARY = ''' + ($LocalAioncoreBinary -replace "'", "''") + '''',
-    '$env:AIONUI_BACKEND_LOCAL_BUNDLE_DIR = ''' + ($LocalAioncoreBundleDir -replace "'", "''") + '''',
+    '$env:MU_BACKEND_LOCAL_BINARY = ''' + ($LocalAioncoreBinary -replace "'", "''") + '''',
+    '$env:MU_BACKEND_LOCAL_BUNDLE_DIR = ''' + ($LocalAioncoreBundleDir -replace "'", "''") + '''',
     '$env:ELECTRON_CACHE = Join-Path $env:LOCALAPPDATA ''electron\Cache''',
     '& bun run build-win:x64:fast',
     'exit $LASTEXITCODE'
@@ -244,7 +244,7 @@ $completed = $false
 
 try {
   foreach ($version in $buildVersions) {
-    $worktreePath = Join-Path $runRoot "AionUi-$version"
+    $worktreePath = Join-Path $runRoot "mu-$version"
     $worktrees += $worktreePath
     Write-Host "=== prepare worktree ${version}: $worktreePath ==="
     Invoke-Git $repoRoot @('worktree', 'add', '--detach', $worktreePath, $baseRef) | Out-Null
@@ -260,7 +260,7 @@ try {
   }
 
   foreach ($version in $buildVersions) {
-    $worktreePath = Join-Path $runRoot "AionUi-$version"
+    $worktreePath = Join-Path $runRoot "mu-$version"
     Write-Host "=== build $version start: $(Get-Date -Format o) ==="
     $build = Start-BuildProcess $worktreePath $version $runRoot $localAioncoreBinary $localAioncoreBundleDir
     if ($Sequential) {

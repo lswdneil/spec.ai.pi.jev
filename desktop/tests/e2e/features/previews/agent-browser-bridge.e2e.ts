@@ -44,11 +44,11 @@ type BridgeEnv = { port: number | null; token: string | null };
 const readBridgeEnv = async (electronApp: ElectronApplication): Promise<BridgeEnv> => {
   const readOnce = (): Promise<BridgeEnv> =>
     electronApp.evaluate(async () => {
-      const rawPort = process.env.AIONUI_CDP_ACTIVE_PORT;
+      const rawPort = process.env.MU_CDP_ACTIVE_PORT;
       const parsed = rawPort ? Number(rawPort) : NaN;
       return {
         port: Number.isInteger(parsed) && parsed > 0 ? parsed : null,
-        token: process.env.AIONUI_CDP_BRIDGE_TOKEN ?? null,
+        token: process.env.MU_CDP_BRIDGE_TOKEN ?? null,
       };
     });
 
@@ -130,7 +130,7 @@ test.describe('Agent browser control (single-target CDP bridge)', () => {
 
     const mainPid = electronApp.process().pid;
 
-    // Match on --parent-pid so a separately installed AionUi (or another dev instance)
+    // Match on --parent-pid so a separately installed copy of the app (or another dev instance)
     // cannot be mistaken for the backend this test launched.
     const readOurAioncoreEnv = (): { token: string | null; activePort: string | null } | null => {
       let listing = '';
@@ -150,8 +150,8 @@ test.describe('Agent browser control (single-target CDP bridge)', () => {
           return null;
         }
         return {
-          token: env.match(/AIONUI_CDP_BRIDGE_TOKEN=(\S+)/)?.[1] ?? null,
-          activePort: env.match(/AIONUI_CDP_ACTIVE_PORT=(\d+)/)?.[1] ?? null,
+          token: env.match(/MU_CDP_BRIDGE_TOKEN=(\S+)/)?.[1] ?? null,
+          activePort: env.match(/MU_CDP_ACTIVE_PORT=(\d+)/)?.[1] ?? null,
         };
       }
       return null;
@@ -179,9 +179,9 @@ test.describe('Agent browser control (single-target CDP bridge)', () => {
      *
      * Asks "does *this* app answer on the legacy port?" rather than "is the legacy port
      * free?". The port is a fixed well-known number, so anything else on the machine can be
-     * listening on it — a stray Chrome, or another AionUi dev instance still running the
+     * listening on it — a stray Chrome, or another dev instance of the app still running the
      * app-wide switch. A bare reachability check would fail for reasons unrelated to this
-     * code, and a name match like /aionui/ cannot tell a *different* AionUi from our own.
+     * code, and a name match cannot tell a *different* copy of the app from our own.
      *
      * The bridge's fixed targetId is the reliable discriminator: it appears only in a
      * response served by this bridge, and Chromium's own endpoint never mints it.
@@ -201,7 +201,7 @@ test.describe('Agent browser control (single-target CDP bridge)', () => {
      * And it must not be *our* renderer. Chromium's app-wide endpoint lists targets by URL,
      * so if the switch were back for this instance its own window would appear here. Compare
      * against the URL this app actually loaded rather than the product name, so a second
-     * AionUi checkout on the same machine cannot fail this test.
+     * checkout of the app on the same machine cannot fail this test.
      */
     const ourRendererUrl = await electronApp.evaluate(async ({ BrowserWindow }) => {
       const win = BrowserWindow.getAllWindows().find((w) => !w.isDestroyed());
@@ -236,7 +236,7 @@ test.describe('Agent browser control (single-target CDP bridge)', () => {
     expect(port).not.toBeNull();
     expect(token).toBeTruthy();
 
-    const base = `ws://127.0.0.1:${port}/aionui-cdp`;
+    const base = `ws://127.0.0.1:${port}/mu-cdp`;
 
     expect(await tryWebSocket(base)).toBe('refused');
     expect(await tryWebSocket(`${base}?token=not-the-token`)).toBe('refused');

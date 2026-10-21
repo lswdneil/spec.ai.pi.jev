@@ -225,7 +225,7 @@ process's and the adapter's reports):
 How it stays apart from your own setup: everything lives in one temporary folder (`$TMPDIR/mu-e2e-*`, or
 `MU_E2E_ROOT`): a home folder (`HOME`; on Windows `USERPROFILE` too, with `APPDATA` and `LOCALAPPDATA` inside it, and
 the user's own folders, Documents, Downloads and the rest, which Windows looks for there and must find),
-Electron's user data (`AIONUI_E2E_USER_DATA_DIR`), mu's agent folder (`MU_AGENT_DIR`, with the offline mock judge and
+Electron's user data (`MU_E2E_USER_DATA_DIR`), mu's agent folder (`MU_AGENT_DIR`, with the offline mock judge and
 every decision point off), the project, and for the checkout's build a linked view of the harness checkout with its own
 `.env` (symlinks; on Windows junctions and copies). The environment is built from a short list, so no key of yours
 reaches the app; PATH is the system's own folders. The backend's Node.js runtime is declined (`MU_NODE_RUNTIME=later`),
@@ -251,7 +251,7 @@ The fake model (`fakeModel.mjs`, Node's http only) answers by a marker in the la
 `node tests/e2e/mu-conversation/fakeModel.mjs --port 8765` runs it alone.
 
 Needs, for the checkout's build: the harness checkout beside this one (`../KYRN`) or `MU_ROOT`; the AionCore binary
-in `resources/bundled-aioncore/<platform>-<arch>/` (or `AIONUI_BACKEND_BIN`); a Node 22.19 or newer on `PATH` or in
+in `resources/bundled-aioncore/<platform>-<arch>/` (or `MU_BACKEND_BIN`); a Node 22.19 or newer on `PATH` or in
 nvm (or `MU_E2E_NODE`); an Electron executable: `MU_E2E_ELECTRON`, else `ELECTRON_EXEC_PATH`, else the checkout's
 `electron` package, else `kyrn/node_modules/electron` (the one `scripts/kyrn/start` uses; a worktree looks in its main
 checkout too). A checkout installed without install scripts has no Electron in its `electron` package: the test then
@@ -275,12 +275,12 @@ log), `home/Library/Logs/` (the main process's log on macOS, the only one a pack
 
 Variables set automatically during test launch:
 
-| Variable                     | Value | Purpose                  |
-| ---------------------------- | ----- | ------------------------ |
-| `AIONUI_E2E_TEST`            | `1`   | App recognizes test mode |
-| `AIONUI_DISABLE_AUTO_UPDATE` | `1`   | No update checks         |
-| `AIONUI_DISABLE_DEVTOOLS`    | `1`   | No DevTools windows      |
-| `AIONUI_CDP_PORT`            | `0`   | CDP disabled             |
+| Variable                 | Value | Purpose                  |
+| ------------------------ | ----- | ------------------------ |
+| `MU_E2E_TEST`            | `1`   | App recognizes test mode |
+| `MU_DISABLE_AUTO_UPDATE` | `1`   | No update checks         |
+| `MU_DISABLE_DEVTOOLS`    | `1`   | No DevTools windows      |
+| `MU_CDP_PORT`            | `0`   | CDP disabled             |
 
 ---
 

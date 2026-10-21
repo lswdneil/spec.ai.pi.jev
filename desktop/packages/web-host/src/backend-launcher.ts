@@ -199,7 +199,7 @@ export class BackendStartupCancelledError extends Error {
 }
 
 export function buildSpawnArgs(config: SpawnConfig): string[] {
-  const logLevel = process.env.AIONUI_LOG_LEVEL || (config.isPackaged ? 'info' : 'debug');
+  const logLevel = process.env.MU_LOG_LEVEL || (config.isPackaged ? 'info' : 'debug');
   const args = [
     '--port',
     String(config.port),
@@ -212,7 +212,7 @@ export function buildSpawnArgs(config: SpawnConfig): string[] {
     config.appVersion,
   ];
   if (config.isPackaged || config.bundledManagedResources) args.push('--managed-resources-mode', 'bundled');
-  if (!config.isPackaged && process.env.AIONUI_DUMP_PROMPTS === '1') args.push('--dump-prompts');
+  if (!config.isPackaged && process.env.MU_DUMP_PROMPTS === '1') args.push('--dump-prompts');
   if (config.logDir) args.push('--log-dir', config.logDir);
   if (config.workDir) args.push('--work-dir', config.workDir);
   if (config.local) args.push('--local');
@@ -221,10 +221,20 @@ export function buildSpawnArgs(config: SpawnConfig): string[] {
 }
 
 /**
- * Backend reads AIONUI_{CACHE,WORK,LOG}_DIR env vars to report system dirs
- * (see AionCore/crates/aionui-system/src/sysinfo.rs). Inject them so the
- * backend's `/api/system/info` matches what Electron main persists in
- * ProcessEnv('aionui.dir').
+ * The variables AionCore reads, by the names the app and its tests set them under. AionCore began as AionUi's backend
+ * and reads AionUi's names; this launcher is the one place that speaks them.
+ */
+const AIONCORE_ENV_NAMES = {
+  MU_E2E_TEST: 'AIONUI_E2E_TEST',
+  MU_EXTENSIONS_PATH: 'AIONUI_EXTENSIONS_PATH',
+  MU_EXTENSION_STATES_FILE: 'AIONUI_EXTENSION_STATES_FILE',
+} as const;
+
+/**
+ * AionCore's environment: the app's, with the variables AionCore reads under its names (`AIONCORE_ENV_NAMES`). It
+ * reads its cache, work and log folders from AIONUI_{CACHE,WORK,LOG}_DIR to report them (AionCore's
+ * `crates/aionui-system/src/sysinfo.rs`); they are set from `dirs` so its `/api/system/info` matches what the
+ * Electron main process keeps.
  */
 export function buildSpawnEnv(dirs?: BackendDirConfig): NodeJS.ProcessEnv {
   // PREBUILDS_ONLY protects the packaged Electron process's own node-gyp-build
@@ -233,9 +243,13 @@ export function buildSpawnEnv(dirs?: BackendDirConfig): NodeJS.ProcessEnv {
   // build/Release only, and node-gyp-build skips that directory for any
   // non-empty value, aborting the agent before the ACP handshake (#4070).
   const { PREBUILDS_ONLY: _prebuildsOnly, ...parentEnv } = process.env;
-  if (!dirs) return parentEnv;
+  const env: NodeJS.ProcessEnv = { ...parentEnv };
+  for (const [muName, aioncoreName] of Object.entries(AIONCORE_ENV_NAMES)) {
+    if (parentEnv[muName] !== undefined) env[aioncoreName] = parentEnv[muName];
+  }
+  if (!dirs) return env;
   return {
-    ...parentEnv,
+    ...env,
     AIONUI_CACHE_DIR: dirs.cacheDir,
     AIONUI_WORK_DIR: dirs.workDir,
     AIONUI_LOG_DIR: dirs.logDir,
