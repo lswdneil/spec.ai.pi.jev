@@ -358,9 +358,86 @@ function decision(c) {
   );
 }
 
-for (const [name, draw] of Object.entries({ turn, pieces, decision })) {
+// ── Judges in tiers ──────────────────────────────────────────────────────────
+
+function tiers(c) {
+  const W = 880;
+  const H = 330;
+  const out = [`<defs>${arrowHead('a', c.faint)}${arrowHead('p', c.pink)}</defs>`];
+  out.push(text(0, 22, 'Judges in tiers', { size: 18, weight: 600, fill: c.text }));
+  out.push(
+    text(0, 46, 'A cascade such as laya,jev: each judge only sees the questions the one before it wasn’t sure about.', {
+      size: 13.5,
+      fill: c.muted,
+    })
+  );
+  out.push(`<line x1="0" x2="${W}" y1="66" y2="66" stroke="${c.line}"/>`);
+
+  const y = 104;
+  const h = 84;
+  const boxes = [
+    { x: 0, w: 150, name: 'Questions', lines: ['one or many,', 'from a decision point'], judge: false },
+    { x: 214, w: 190, name: 'Laya', lines: ['local, offline, no cost', 'trusted on classifying'], judge: true },
+    { x: 468, w: 190, name: 'Jev', lines: ['hosted, about 0.3 s', 'trusted on every kind'], judge: true },
+    { x: 722, w: 158, name: 'The fallback', lines: ['what mu would do', 'without a judge'], judge: false },
+  ];
+  for (const b of boxes) {
+    out.push(rect(b.x, y, b.w, h, { fill: b.judge ? c.pinkFill : c.box, stroke: b.judge ? c.pinkLine : c.boxLine }));
+    if (b.judge) out.push(diamond(b.x + 18, y + 24, c, 6));
+    out.push(text(b.x + (b.judge ? 32 : 16), y + 29, b.name, { size: 14.5, weight: 600, fill: c.text }));
+    b.lines.forEach((line, i) => out.push(text(b.x + 16, y + 52 + i * 18, line, { size: 12.5, fill: c.muted })));
+  }
+  // Between the boxes: what passes on.
+  const pass = [
+    [150, 214, 'all'],
+    [404, 468, 'unsure'],
+    [658, 722, 'unsure'],
+  ];
+  for (const [from, to, what] of pass) {
+    out.push(path(`M${from + 4},${y + h / 2} L${to - 5},${y + h / 2}`, c.faint, { marker: 'a' }));
+    out.push(text((from + to) / 2, y + h / 2 - 8, what, { size: 11.5, fill: c.faint, anchor: 'middle', mono: true }));
+  }
+  // What a judge is sure of is settled there and goes to the ledger.
+  const rail = y + h + 64;
+  for (const b of boxes.filter((box) => box.judge)) {
+    out.push(path(`M${b.x + b.w / 2},${y + h + 4} L${b.x + b.w / 2},${rail - 6}`, c.pink, { marker: 'p' }));
+    out.push(text(b.x + b.w / 2 + 8, y + h + 36, 'sure: a verdict', { size: 12, fill: c.pink }));
+  }
+  out.push(path(`M${722 + 79},${y + h + 4} L${722 + 79},${rail - 6}`, c.faint, { marker: 'a' }));
+  out.push(rect(200, rail, W - 200, 34, { fill: c.box, stroke: c.boxLine, r: 8 }));
+  out.push(text(216, rail + 22, 'The ledger: every answer, which judge gave it or why the fallback was used, and the time.', { size: 12.5, fill: c.muted }));
+
+  // The probability band a yes/no answer is read with.
+  const bx = 0;
+  const bw = 170;
+  const by = rail + 4;
+  out.push(label(bx, by + 2, 'Unsure means', c.faint));
+  const x2 = bx + bw * 0.2;
+  const x8 = bx + bw * 0.8;
+  out.push(rect(bx, by + 12, bw, 8, { fill: c.box, stroke: c.boxLine, r: 4 }));
+  out.push(rect(x2, by + 12, x8 - x2, 8, { fill: c.pinkFill, stroke: c.pinkLine, r: 0 }));
+  out.push(text(x2, by + 34, '0.2', { size: 11, fill: c.faint, anchor: 'middle', mono: true }));
+  out.push(text(x8, by + 34, '0.8', { size: 11, fill: c.faint, anchor: 'middle', mono: true }));
+  out.push(
+    text(0, H - 6, 'A judge’s known weakness never decides: Laya isn’t trusted on relating, scoring or meta-judgments, so those go on to Jev.', {
+      size: 12,
+      fill: c.faint,
+    })
+  );
+  return svg(
+    {
+      width: W,
+      height: H,
+      title: 'Judges in tiers',
+      desc: 'A cascade such as laya,jev. All questions go to Laya first: local, offline and free, trusted on classifying. What Laya is sure of becomes a verdict; a yes/no answer is unsure when its probability is between 0.2 and 0.8, and unsure questions go on to Jev, hosted, about 0.3 seconds. What Jev is sure of becomes a verdict; what is still unsure, or what no judge answered, gets the fallback: what mu would do without a judge. The ledger records every answer, which judge gave it or why the fallback was used, and the time. Laya is not trusted on relating, scoring or meta-judgments, so those questions go on to Jev.',
+    },
+    out
+  );
+}
+
+for (const [name, draw] of Object.entries({ turn, pieces, decision, tiers })) {
   for (const [theme, colours] of Object.entries(THEMES)) {
     writeFileSync(join(HERE, `${name}-${theme}.svg`), draw(colours));
   }
 }
-console.log('wrote turn, pieces and decision, dark and light');
+console.log('wrote turn, pieces, decision and tiers, dark and light');

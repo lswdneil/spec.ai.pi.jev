@@ -171,6 +171,15 @@ Every point, with its feature switch and options: [docs/reference/decision-point
 - **Any classifier model** in pi's catalog can serve as a tier: `classifier:<provider>/<model>`. For example, Cloudflare's Clef (`clef`, `clef-flash`), the System One models on OpenRouter and the Vercel AI Gateway, or a llama.cpp classifier.
 - **Any LLM** can serve as a tier: `llm:<provider>/<model>`.
 
+Judges can be chained in tiers, cheapest first:
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/tiers-dark.svg">
+    <img src="docs/readme/tiers-light.svg" width="880" alt="Judges in tiers, for a cascade such as laya,jev. All questions go to Laya first, local and free. What it is sure of becomes a verdict; a yes/no answer between 0.2 and 0.8 is unsure and goes on to Jev, hosted, about 0.3 seconds. What is still unsure, or what no judge answered, gets the fallback: what mu would do without a judge. The ledger records every answer and which judge gave it. Laya is not trusted on relating, scoring or meta-judgments, so those go on to Jev.">
+  </picture>
+</p>
+
 ## How mu is built
 
 <p align="center">
