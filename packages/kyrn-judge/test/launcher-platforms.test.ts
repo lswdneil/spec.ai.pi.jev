@@ -1309,24 +1309,27 @@ describe("the launcher, run for real on this machine", () => {
 		);
 	});
 
-	it.runIf(windows)("reaches mu.cmd through the shim `spec.jev link` writes, below a user name that is not ASCII", () => {
-		// cmd reads a batch file in the console's code page: the shim names mu.cmd relative to itself, through %~dp0,
-		// which cmd fills in itself.
-		const dir = join(temp(), "白鹤");
-		const bin = join(dir, "code", "spec.jev", "kyrn", "bin");
-		const links = join(dir, ".local", "bin");
-		mkdirSync(bin, { recursive: true });
-		mkdirSync(links, { recursive: true });
-		writeFileSync(join(bin, "mu.cmd"), "@echo reached %*\r\n");
-		const shim = shimContent({ linkDir: links, bin });
-		expect(shim).toContain('"%~dp0..\\..\\code\\spec.jev\\kyrn\\bin\\mu.cmd" %*');
-		writeFileSync(join(links, "mu.cmd"), shim);
+	it.runIf(windows)(
+		"reaches mu.cmd through the shim `spec.jev link` writes, below a user name that is not ASCII",
+		() => {
+			// cmd reads a batch file in the console's code page: the shim names mu.cmd relative to itself, through %~dp0,
+			// which cmd fills in itself.
+			const dir = join(temp(), "白鹤");
+			const bin = join(dir, "code", "spec.jev", "kyrn", "bin");
+			const links = join(dir, ".local", "bin");
+			mkdirSync(bin, { recursive: true });
+			mkdirSync(links, { recursive: true });
+			writeFileSync(join(bin, "mu.cmd"), "@echo reached %*\r\n");
+			const shim = shimContent({ linkDir: links, bin });
+			expect(shim).toContain('"%~dp0..\\..\\code\\spec.jev\\kyrn\\bin\\mu.cmd" %*');
+			writeFileSync(join(links, "mu.cmd"), shim);
 
-		const reached = runScript(join(links, "mu.cmd"), ["help"], { HOME: dir });
+			const reached = runScript(join(links, "mu.cmd"), ["help"], { HOME: dir });
 
-		expect(reached.code).toBe(0);
-		expect(reached.out).toContain("reached help");
-	});
+			expect(reached.code).toBe(0);
+			expect(reached.out).toContain("reached help");
+		},
+	);
 
 	// Three starts of pi from its sources, each slow on GitHub's Windows runners.
 	it.skipIf(!installed)(

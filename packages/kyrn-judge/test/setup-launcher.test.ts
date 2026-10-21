@@ -124,7 +124,10 @@ describe("spec.jev setup, as the launcher starts it", () => {
 		// The word after --model is its value, not a key.
 		const named = plan(["--model", "deepseek-chat", KEY]);
 		expect(named.error === undefined && named.env.MU_SETUP_KEY).toBe(KEY);
-		expect(plan([KEY, "another"])).toEqual({ error: "spec.jev setup takes one key at most (spec.jev setup --help)", code: 2 });
+		expect(plan([KEY, "another"])).toEqual({
+			error: "spec.jev setup takes one key at most (spec.jev setup --help)",
+			code: 2,
+		});
 	});
 
 	it("runs the package's built wizard on Windows, and the .env of spec.jev's home", () => {
