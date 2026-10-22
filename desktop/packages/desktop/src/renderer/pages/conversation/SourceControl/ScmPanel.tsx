@@ -27,7 +27,8 @@
  * section drops in as a third with no framework change (see `ScmSectionStack`).
  */
 
-import { Button, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { BranchTwo, FolderCode, FolderCodeOne, Plus, RightBranchOne, TreeList, Undo, ViewList } from '@icon-park/react';
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';

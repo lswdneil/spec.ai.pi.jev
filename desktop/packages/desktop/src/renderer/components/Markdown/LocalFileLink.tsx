@@ -5,7 +5,9 @@
  */
 
 import React, { useCallback } from 'react';
-import { Button, Message, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Copy } from '@icon-park/react';
 import { iconColors } from '@/renderer/styles/colors';
 import { copyText } from '@/renderer/utils/ui/clipboard';
@@ -34,7 +36,7 @@ const LocalFileLink: React.FC<LocalFileLinkProps> = ({ reference, children, onOp
   const canOpen = Boolean(onOpen);
 
   const handleOpen = useCallback(
-    (event: Event) => {
+    (event: React.MouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
       if (onOpen) {
@@ -45,7 +47,7 @@ const LocalFileLink: React.FC<LocalFileLinkProps> = ({ reference, children, onOp
   );
 
   const handleCopy = useCallback(
-    (event: Event) => {
+    (event: React.MouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
       copyText(rawReference).catch(() => {

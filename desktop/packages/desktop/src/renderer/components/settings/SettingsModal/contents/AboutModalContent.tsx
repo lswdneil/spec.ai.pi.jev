@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Button, Message } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
 import { FolderOpen, Github, Right } from '@icon-park/react';
 import React from 'react';
 import MuMark from '@renderer/components/brand/MuMark';

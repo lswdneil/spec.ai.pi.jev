@@ -31,10 +31,9 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@arco-design/web-react')>();
-  return { ...actual, Message: { ...actual.Message, error: mocks.messageErrorMock } };
-});
+vi.mock('@/renderer/ui/toast', () => ({
+  Message: { error: mocks.messageErrorMock },
+}));
 
 vi.mock('@/common', () => ({
   ipcBridge: {

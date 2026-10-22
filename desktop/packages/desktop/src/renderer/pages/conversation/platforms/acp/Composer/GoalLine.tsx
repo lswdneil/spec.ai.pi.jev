@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Button, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { SendBoxCommandState } from '@/renderer/utils/emitter';

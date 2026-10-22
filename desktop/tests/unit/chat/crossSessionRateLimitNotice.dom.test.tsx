@@ -55,8 +55,7 @@ vi.mock('@/common', () => ({
   },
 }));
 
-vi.mock('@arco-design/web-react', () => ({
-  Button: ({ children }: React.PropsWithChildren) => <button type='button'>{children}</button>,
+vi.mock('@/renderer/ui/toast', () => ({
   Message: { error: vi.fn() },
   Notification: {
     warning: (config: unknown) => notificationWarning(config),

@@ -7,7 +7,8 @@
 import { ipcBridge } from '@/common';
 import { iconColors } from '@/renderer/styles/colors';
 import { useUpdateConversationArtifactStatus } from '@renderer/pages/conversation/Messages/artifacts';
-import { Button, Message } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
 import { Down, Lightning, Up } from '@icon-park/react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

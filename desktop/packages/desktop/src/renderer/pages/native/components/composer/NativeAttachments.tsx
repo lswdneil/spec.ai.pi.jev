@@ -3,7 +3,8 @@
  * (a file input, so the files are read here and nothing is uploaded), and the chips of what is attached, above the
  * text, each with a way to take it off again.
  */
-import { Button, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { CloseSmall, FileText, Plus } from '@icon-park/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

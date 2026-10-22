@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Down, HandUp, Pause, PlayOne, Square, Up } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import { kyrnBrowserBridge } from '@/common/kyrn/browserBridge';

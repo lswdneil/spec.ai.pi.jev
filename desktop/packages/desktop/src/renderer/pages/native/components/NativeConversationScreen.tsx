@@ -5,7 +5,8 @@
  * this conversation, its Jev tabs fed from the view. With no transcript yet, the screen says where spec.jev will work; a
  * conversation that cannot be opened says why, and can be tried again.
  */
-import { Button, Message } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
 import { Attention } from '@icon-park/react';
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

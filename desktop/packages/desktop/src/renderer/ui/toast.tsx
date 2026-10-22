@@ -69,6 +69,19 @@ export const Message = {
 /** Arco's `Notification` shape; it shares the same surface and adds a title above the content. */
 export const Notification = {
   ...messageApi,
+  /** A notice that can keep its own action buttons; returns the id `remove` dismisses. */
+  open: (config: MessageConfig) => {
+    const { content } = messageOf(config);
+    return toast.info(
+      <div className='flex flex-col gap-1'>
+        {config.title ? <strong className='font-medium'>{config.title}</strong> : null}
+        <div>{content}</div>
+        {config.btn ? <div>{config.btn as React.ReactNode}</div> : null}
+      </div>,
+      config.duration ?? 4500
+    );
+  },
+  remove: (id?: string | number) => toast.dismiss(id),
 };
 
 /** Mount once inside the theme provider. */

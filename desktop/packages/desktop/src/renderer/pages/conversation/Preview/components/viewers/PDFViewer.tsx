@@ -9,7 +9,8 @@ import type { ChatFileRef } from '@/common/types/chatFile';
 import { buildPdfSrc } from '../../previewUrls';
 import { registerTabReloader } from '../../context/tabReloaderRegistry';
 import { usePreviewToolbarExtras } from '../../context/PreviewToolbarExtrasContext';
-import { Button, Message } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

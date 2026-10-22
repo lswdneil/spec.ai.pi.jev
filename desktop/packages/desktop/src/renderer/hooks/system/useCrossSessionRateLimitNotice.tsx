@@ -9,7 +9,9 @@ import type { SessionMessageRateLimitedPayload } from '@/common/adapter/ipcBridg
 import { useCrossSessionMessageEnabled } from '@/renderer/hooks/chat/useCrossSessionMessageEnabled';
 import { resolveCurrentUserId } from '@/renderer/hooks/system/currentUserId';
 import { getConversationRuntimeViewSnapshot } from '@/renderer/pages/conversation/runtime/conversationRuntimeViewStore';
-import { Button, Message, Notification } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
+import { Notification } from '@/renderer/ui/toast';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

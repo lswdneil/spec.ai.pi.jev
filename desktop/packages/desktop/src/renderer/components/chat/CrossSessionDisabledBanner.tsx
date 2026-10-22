@@ -5,7 +5,8 @@
  */
 
 import { useCrossSessionMessageEnabled } from '@/renderer/hooks/chat/useCrossSessionMessageEnabled';
-import { Button, Message } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
