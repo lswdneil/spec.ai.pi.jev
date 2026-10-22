@@ -29,3 +29,10 @@ export { Tag, type TagProps, type TagTone } from './tag';
 export { AppToaster } from './toaster';
 export { Message, Notification, toast } from './toast';
 export { Tooltip, TooltipProvider, type TooltipProps } from './tooltip';
+export {
+  Typography,
+  type TypographyTextProps,
+  type TypographyParagraphProps,
+  type TypographyTitleProps,
+  type TypographyLinkProps,
+} from './typography';

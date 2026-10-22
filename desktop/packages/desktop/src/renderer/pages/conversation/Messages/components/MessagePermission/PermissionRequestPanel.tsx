@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Button, Card, Typography } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Card } from '@/renderer/ui/card';
+import { Typography } from '@/renderer/ui/typography';
 import { Attention, CheckOne, Forbid, Info } from '@icon-park/react';
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';

@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Spin, Typography } from '@arco-design/web-react';
+import { Spin } from '@/renderer/ui/spinner';
+import { Typography } from '@/renderer/ui/typography';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
