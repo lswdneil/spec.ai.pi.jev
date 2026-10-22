@@ -18,6 +18,7 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   color?: string;
   size?: 'small' | 'default' | 'medium' | 'large';
   bordered?: boolean;
+  checkable?: boolean;
   closable?: boolean;
   onClose?: (event: React.MouseEvent) => void;
   closeIcon?: React.ReactNode;
@@ -41,6 +42,7 @@ export const Tag: React.FC<TagProps> = ({
   children,
   size: _size,
   bordered: _bordered,
+  checkable: _checkable,
   closable,
   onClose,
   closeIcon,

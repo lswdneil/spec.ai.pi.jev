@@ -1,4 +1,7 @@
-import { Button, Message, Collapse, Tag } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
+import { Collapse } from '@/renderer/ui/collapse';
+import { Tag } from '@/renderer/ui/tag';
 import React, { useState } from 'react';
 import StepsWrapper from '@/renderer/components/base/StepsWrapper';
 import ModalWrapper from '@/renderer/components/base/ModalWrapper';

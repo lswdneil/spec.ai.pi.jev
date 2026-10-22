@@ -3,7 +3,7 @@
  * blocks (their data and type), with no path a file chip could read them by. Shown as a sent image file shows in the
  * person's bubble (`FilePreview`): a 60 px picture, whole on a click.
  */
-import { Image } from '@arco-design/web-react';
+import { Image } from '@/renderer/ui/image';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
