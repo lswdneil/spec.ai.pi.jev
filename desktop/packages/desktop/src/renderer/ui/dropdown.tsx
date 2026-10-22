@@ -12,6 +12,7 @@ export interface DropdownItem {
   checked?: boolean;
   separator?: boolean;
   'data-testid'?: string;
+  'data-tab'?: string;
 }
 
 export interface DropdownProps {
@@ -25,6 +26,7 @@ export interface DropdownProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   disabled?: boolean;
+  trigger?: 'click' | 'hover';
   contentRef?: React.Ref<HTMLDivElement>;
   onContentKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
   onContentKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
@@ -40,6 +42,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   onOpenChange,
   contentRef,
   disabled,
+  trigger = 'click',
   onContentKeyDown,
   onContentKeyDownCapture,
 }) => {
@@ -51,26 +54,31 @@ export const Dropdown: React.FC<DropdownProps> = ({
     if (open === undefined) setInternalOpen(next);
     onOpenChange?.(next);
   };
-  const trigger = React.isValidElement(children)
-    ? React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
-        onPointerDown: (event: React.PointerEvent) => {
-          pointerDownAt.current = Date.now();
-          (children.props as { onPointerDown?: (event: React.PointerEvent) => void }).onPointerDown?.(event);
-        },
-        onClick: (event: React.MouseEvent) => {
-          (children.props as { onClick?: (event: React.MouseEvent) => void }).onClick?.(event);
-          if (event.defaultPrevented) return;
-          // Pointer-driven browsers already toggle on pointerdown; a bare click
-          // (keyboard activation, tests) opens here.
-          if (Date.now() - pointerDownAt.current < 500) return;
-          setOpen(!isOpen);
-        },
-      })
-    : children;
   if (disabled) return <>{children}</>;
   return (
     <DropdownMenuPrimitive.Root open={isOpen} onOpenChange={setOpen}>
-      <DropdownMenuPrimitive.Trigger asChild>{trigger}</DropdownMenuPrimitive.Trigger>
+      <DropdownMenuPrimitive.Trigger asChild>
+        <span
+          className='inline-flex'
+          onPointerDown={() => {
+            pointerDownAt.current = Date.now();
+          }}
+          onMouseEnter={() => {
+            if (trigger === 'hover') setOpen(true);
+          }}
+          onMouseLeave={() => {
+            if (trigger === 'hover') setOpen(false);
+          }}
+          onClick={() => {
+            // Pointer-driven browsers already toggle on pointerdown; a bare
+            // click (keyboard activation, tests) opens here.
+            if (Date.now() - pointerDownAt.current < 500) return;
+            setOpen(!isOpen);
+          }}
+        >
+          {children}
+        </span>
+      </DropdownMenuPrimitive.Trigger>
       <DropdownMenuPrimitive.Portal>
         <DropdownMenuPrimitive.Content
           ref={contentRef}
@@ -92,6 +100,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
               key={item.key ?? index}
               disabled={item.disabled}
               data-testid={item['data-testid']}
+              data-tab={item['data-tab']}
               onSelect={item.onSelect}
               className={cn(
                 'flex h-7 cursor-default select-none items-center gap-2 rounded-[6px] px-2 outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
