@@ -1,0 +1,247 @@
+/* Dense skin for the existing shell.
+   Tokens and legacy chrome live here; the structural shell is DenseSider + MobileTabBar
+   and the 40px header in ChatLayout. */
+
+html[data-sv-ui="dense"] {
+  --titlebar-height: 40px;
+
+  --bg-base: var(--sv-bg);
+  --bg-1: var(--sv-surface);
+  --bg-2: var(--sv-chrome);
+  --bg-3: var(--sv-line);
+  --bg-4: var(--sv-line-strong);
+  --bg-5: var(--sv-faint);
+  --bg-6: var(--sv-muted);
+  --bg-8: var(--sv-muted);
+  --bg-9: var(--sv-text);
+  --bg-10: var(--sv-text);
+
+  --bg-hover: var(--sv-raised);
+  --bg-active: var(--sv-selected);
+
+  --text-primary: var(--sv-text);
+  --color-text-1: var(--sv-text);
+  --text-secondary: var(--sv-muted);
+  --color-text-2: var(--sv-muted);
+  --color-text-3: var(--sv-faint);
+  --text-disabled: var(--sv-faint);
+  --color-text-4: var(--sv-faint);
+
+  --primary: var(--sv-brand-ink);
+  --success: var(--sv-ok);
+  --warning: var(--sv-warn);
+  --danger: var(--sv-danger);
+  --info: var(--sv-info);
+
+  --border-base: var(--sv-line);
+  --border-light: var(--sv-line);
+  --color-border-1: var(--sv-line);
+  --color-border-2: var(--sv-line);
+  --color-border-3: var(--sv-line-strong);
+
+  --brand: var(--sv-brand-ink);
+  --brand-light: var(--sv-brand-3);
+  --brand-hover: var(--sv-brand-dim);
+
+  --message-user-bg: var(--sv-surface-2);
+  --message-tips-bg: var(--sv-surface);
+  --workspace-btn-bg: var(--sv-surface-2);
+
+  --fill: var(--sv-surface-2);
+  --inverse: var(--sv-bg);
+  --dialog-fill-0: var(--sv-popover);
+  --text-0: var(--sv-text);
+  --fill-0: var(--sv-popover);
+  --fill-white-to-black: var(--sv-surface);
+  --border-special: var(--sv-line);
+
+  --aion-overlay-bg: var(--sv-popover);
+  --aion-overlay-text: var(--sv-text);
+  --aion-overlay-border: var(--sv-line);
+  --color-guid-agent-bar: var(--sv-surface-2);
+
+  /* Arco's palette, so old widgets do not keep the blue/purple while the new ones use sage. */
+  --color-fill-1: var(--sv-surface);
+  --color-fill-2: var(--sv-surface-2);
+  --color-fill-3: var(--sv-raised);
+  --color-bg-1: var(--sv-surface);
+  --color-bg-2: var(--sv-chrome);
+  --color-bg-3: var(--sv-surface-2);
+  --color-bg-4: var(--sv-raised);
+  --color-bg-5: var(--sv-raised);
+  --color-bg-popup: var(--sv-popover);
+
+  /* The app's own accent (buttons, switches, checks, focus) is sage, not violet/black. */
+  --mu-accent-fill: var(--sv-brand);
+  --mu-accent-fill-hover: var(--sv-brand-1);
+  --mu-accent-fill-active: var(--sv-brand-1);
+  --mu-accent-on: var(--sv-on-brand);
+  --mu-accent-on-disabled: var(--sv-faint);
+  --mu-accent-border: var(--sv-brand-1);
+  --mu-accent-dot: var(--sv-brand-1);
+  --mu-accent-tint: var(--sv-selected);
+  --mu-accent-gradient: var(--sv-brand);
+  --mu-input-border-active: var(--sv-brand-1);
+  --mu-ring: color-mix(in srgb, var(--sv-focus) 30%, transparent);
+  --mu-selection: color-mix(in srgb, var(--sv-brand) 35%, transparent);
+  --mu-scrim: var(--sv-scrim);
+  --mu-glow-violet: color-mix(in srgb, var(--sv-brand) 10%, transparent);
+  --mu-glow-pink: transparent;
+
+  /* Message bodies follow the Dense rhythm without hard-coding their size: the
+     person's own chat font-size setting still wins. */
+  --chat-line-height: 1.65;
+  --chat-paragraph-margin: 10px;
+
+  font-size: 13px;
+}
+
+html[data-sv-ui="dense"] body {
+  font-family: var(--sv-font-ui);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+html[data-sv-ui="dense"] .app-titlebar {
+  font-size: 12px;
+}
+
+html[data-sv-ui="dense"] .app-titlebar--desktop:not(.app-titlebar--mac) {
+  height: 40px;
+  min-height: 40px;
+}
+
+html[data-sv-ui="dense"] .layout-sider {
+  font-size: 12px;
+}
+
+html[data-sv-ui="dense"] .layout-sider .text-14px {
+  font-size: 13px;
+}
+
+html[data-sv-ui="dense"] .layout-sider [data-testid="sider-new-chat"],
+html[data-sv-ui="dense"] .layout-sider [data-testid="sider-search"],
+html[data-sv-ui="dense"] .layout-sider [data-testid="sider-scheduled"] {
+  height: 32px;
+}
+
+html[data-sv-ui="dense"] .layout-sider .chat-history__item {
+  height: 28px;
+  border-radius: 5px;
+}
+
+html[data-sv-ui="dense"] .layout-sider .chat-history__item-name {
+  font-size: 12px;
+  line-height: 20px;
+}
+
+html[data-sv-ui="dense"] .message-user-bubble {
+  background-color: var(--sv-surface-2) !important;
+  border: 1px solid var(--sv-line);
+  border-radius: 8px 8px 2px 8px !important;
+  padding: 8px 12px !important;
+}
+
+html[data-sv-ui="dense"] .settings-page-title {
+  font-size: 20px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+html[data-sv-ui="dense"] .settings-page-header p {
+  font-size: 12px;
+}
+
+/* Arco primary buttons: sage fill, dark ink, no blue. */
+html[data-sv-ui="dense"] .arco-btn-primary:not(.arco-btn-disabled) {
+  background-color: var(--sv-brand);
+  color: var(--sv-on-brand);
+}
+
+html[data-sv-ui="dense"] .arco-btn-primary:not(.arco-btn-disabled):hover {
+  background-color: var(--sv-brand-1);
+}
+
+html[data-sv-ui="dense"] .arco-btn-primary.arco-btn-disabled {
+  background-color: var(--sv-raised);
+  color: var(--sv-faint);
+}
+
+/* Arco links and selected rows follow the one accent. */
+html[data-sv-ui="dense"] a {
+  color: var(--sv-brand-ink);
+}
+
+html[data-sv-ui="dense"] .arco-menu-selected,
+html[data-sv-ui="dense"] .arco-tabs-tab-active {
+  color: var(--sv-text);
+}
+
+/* Flat chrome: the Dense reference has no shadows. */
+html[data-sv-ui="dense"] .arco-modal,
+html[data-sv-ui="dense"] .arco-dropdown,
+html[data-sv-ui="dense"] .arco-popover-content {
+  border: 1px solid var(--sv-line);
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+/* The settings pages are flat in Dense: no glow, no dot grid. */
+html[data-sv-ui="dense"] .settings-page-wrapper::before {
+  display: none;
+}
+
+/* The welcome page keeps the hero, not the atmosphere; its card is a flat field. */
+html[data-sv-ui="dense"] .sv-dense-welcome::before {
+  display: none;
+}
+
+html[data-sv-ui="dense"] .guid-input-card-shell {
+  border-color: var(--sv-line);
+  border-radius: 18px;
+  background: var(--sv-surface);
+  box-shadow: none;
+}
+
+html[data-sv-ui="dense"] .guid-input-card-shell[data-active='true'] {
+  border-color: var(--sv-line-strong);
+  box-shadow: none;
+}
+
+/* The composer is a flat field in Dense; only its send button carries the accent. */
+html[data-sv-ui="dense"] .sendbox-panel,
+html[data-sv-ui="dense"] .sendbox-panel--active {
+  background-color: var(--sv-surface);
+  border-color: var(--sv-line);
+  box-shadow: none;
+}
+
+html[data-sv-ui="dense"] .sendbox-panel {
+  padding: 10px 12px !important;
+  border-radius: 18px !important;
+}
+
+html[data-sv-ui="dense"] .sendbox-panel textarea,
+html[data-sv-ui="dense"] .sendbox-highlight-layer {
+  font-size: 13px !important;
+  line-height: 20px !important;
+}
+
+html[data-sv-ui="dense"] .sendbox-toolbar {
+  row-gap: 6px;
+}
+
+html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled,
+html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled.arco-btn {
+  background-color: var(--sv-brand) !important;
+  border-color: var(--sv-brand) !important;
+  color: var(--sv-on-brand) !important;
+}
+
+html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled:not(:disabled):hover,
+html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled:not(:disabled):active,
+html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled:not(:disabled):focus-visible {
+  background-color: var(--sv-brand-1) !important;
+  border-color: var(--sv-brand-1) !important;
+  color: var(--sv-on-brand) !important;
+}

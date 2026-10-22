@@ -38,6 +38,8 @@ import { useNotificationClick } from '@renderer/hooks/system/notification/useNot
 import { useDesktopTurnNotification } from '@renderer/hooks/system/notification/useDesktopTurnNotification';
 import { useNativeAttention } from '@renderer/pages/native/hooks/useNativeAttention';
 import { cleanupSiderTooltips } from '@renderer/utils/ui/siderTooltip';
+import MobileTabBar from './MobileTabBar';
+import { isUiV2Enabled } from '@renderer/utils/ui/uiV2';
 import { useConversationShortcuts } from '@renderer/hooks/ui/useConversationShortcuts';
 import { isElectronDesktop } from '@renderer/utils/platform';
 import { deferredRuntimeNeeds } from '@renderer/services/runtime/deferredNodeRuntime';
@@ -94,7 +96,8 @@ const useDebug = () => {
   return { onClick };
 };
 
-const DEFAULT_SIDER_WIDTH = 260;
+const UI_V2 = isUiV2Enabled();
+const DEFAULT_SIDER_WIDTH = UI_V2 ? 208 : 260;
 // 桌面侧栏连续可调：下限 200；低于此值拖拽即吸附收起（消灭旧 130 死区）。
 // 上限 = 窗口宽 50%（动态随窗口）。
 const SIDER_MIN_WIDTH = 200;
@@ -240,7 +243,7 @@ const Layout: React.FC<{
     defaultWidth: DEFAULT_SIDER_WIDTH,
     minWidth: SIDER_MIN_WIDTH,
     maxWidth: Math.max(SIDER_MIN_WIDTH, Math.round(viewportWidth * 0.5)),
-    storageKey: 'sider-width-px',
+    storageKey: UI_V2 ? 'sider-width-px-v2' : 'sider-width-px',
     collapseThreshold: SIDER_MIN_WIDTH,
     collapsedWidth: SIDER_RAIL_WIDTH,
     collapsed,
@@ -433,9 +436,13 @@ const Layout: React.FC<{
             >
               <ArcoLayout.Header
                 className={classNames(
-                  'flex items-center pt-8px pb-8px gap-12px layout-sider-header',
-                  // The rail centres the mark over its icons.
-                  collapsed && !isMobile ? 'justify-center px-0' : 'justify-start ps-18px pe-16px',
+                  'flex items-center gap-12px layout-sider-header',
+                  UI_V2 ? 'pt-1.5 pb-1.5' : 'pt-8px pb-8px',
+                  collapsed && !isMobile
+                    ? 'justify-center px-0'
+                    : UI_V2
+                      ? 'justify-start ps-10px pe-8px'
+                      : 'justify-start ps-18px pe-16px',
                   isMobile && 'layout-sider-header--mobile',
                   {
                     'cursor-pointer group ': collapsed,
@@ -444,12 +451,15 @@ const Layout: React.FC<{
               >
                 {/* The mark keeps upstream's hidden devtools click; its size follows the collapsed rail. */}
                 <div className='shrink-0 line-height-0' data-testid='sider-brand-mark' onClick={onClick}>
-                  <MuMark size={collapsed ? 24 : 26} />
+                  <MuMark size={UI_V2 ? 20 : collapsed ? 24 : 26} />
                 </div>
                 {isSettingsRoute ? (
                   <Tooltip content={t('common.back', { defaultValue: 'Back' })} position='bottom'>
                     <div
-                      className='text-16px text-t-primary collapsed-hidden font-semibold cursor-pointer'
+                      className={classNames(
+                        'collapsed-hidden font-semibold cursor-pointer',
+                        UI_V2 ? 'text-[13px] tracking-[-0.01em] text-t-primary' : 'text-16px text-t-primary'
+                      )}
                       role='button'
                       tabIndex={0}
                       aria-label={t('common.back', { defaultValue: 'Back' })}
@@ -461,11 +471,18 @@ const Layout: React.FC<{
                         }
                       }}
                     >
-                      mu
+                      {UI_V2 ? 'spec.jev' : 'mu'}
                     </div>
                   </Tooltip>
                 ) : (
-                  <div className='text-16px text-t-primary collapsed-hidden font-semibold'>mu</div>
+                  <div
+                    className={classNames(
+                      'collapsed-hidden font-semibold',
+                      UI_V2 ? 'text-[13px] tracking-[-0.01em] text-t-primary' : 'text-16px text-t-primary'
+                    )}
+                  >
+                    {UI_V2 ? 'spec.jev' : 'mu'}
+                  </div>
                 )}
                 {isMobile && !collapsed && (
                   <button
@@ -528,6 +545,7 @@ const Layout: React.FC<{
               {workspaceAvailable && <WorkPanelHost rowWidth={panelRowWidth} isMobile={isMobile} />}
             </div>
           </ArcoLayout>
+          {UI_V2 && isMobile ? <MobileTabBar /> : null}
           {!isMobile && <KernelBar />}
         </div>
       </NavigationHistoryProvider>

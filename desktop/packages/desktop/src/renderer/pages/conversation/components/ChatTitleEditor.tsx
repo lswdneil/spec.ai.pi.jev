@@ -17,6 +17,8 @@ type ChatTitleEditorProps = {
   conversation_id?: string;
   /** Optional leading icon (e.g. agent logo) rendered inside the hover region, just before the title */
   leading?: React.ReactNode;
+  /** Dense header: 12px title, tighter padding, no floating shadow. */
+  compact?: boolean;
 };
 
 // Inline title display with click-to-edit rename support
@@ -32,6 +34,7 @@ const ChatTitleEditor: React.FC<ChatTitleEditorProps> = ({
   title,
   conversation_id,
   leading,
+  compact = false,
 }) => {
   const { t } = useTranslation();
 
@@ -51,22 +54,36 @@ const ChatTitleEditor: React.FC<ChatTitleEditorProps> = ({
   return (
     <div
       className={classNames(
-        'group flex min-w-0 max-w-full items-center rounded-12px border border-solid border-transparent transition-all duration-180',
+        'group flex min-w-0 max-w-full items-center border border-solid border-transparent transition-all duration-180',
+        compact ? 'rounded-[5px]' : 'rounded-12px',
         editingTitle
-          ? 'bg-fill-2 border-[var(--color-fill-3)] shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
-          : 'hover:bg-fill-2 hover:border-[var(--color-fill-3)] hover:shadow-[0_1px_2px_rgba(15,23,42,0.06)] focus-within:bg-fill-2 focus-within:border-[var(--color-fill-3)] focus-within:shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
+          ? compact
+            ? 'bg-sv-surface'
+            : 'bg-fill-2 border-[var(--color-fill-3)] shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
+          : compact
+            ? 'hover:bg-sv-surface focus-within:bg-sv-surface'
+            : 'hover:bg-fill-2 hover:border-[var(--color-fill-3)] hover:shadow-[0_1px_2px_rgba(15,23,42,0.06)] focus-within:bg-fill-2 focus-within:border-[var(--color-fill-3)] focus-within:shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
       )}
       style={{ width: '100%', maxWidth: `${titleAreaMaxWidth}px` }}
     >
       {/* `empty:hidden`: an agent without a logo renders no icon, and its empty slot must not indent the title. */}
-      {leading && <div className='shrink-0 flex items-center ps-8px empty:hidden'>{leading}</div>}
+      {leading && (
+        <div className={classNames('flex shrink-0 items-center empty:hidden', compact ? 'ps-0' : 'ps-8px')}>
+          {leading}
+        </div>
+      )}
       {editingTitle && canRenameTitle ? (
-        <div className='min-w-0 flex-1 px-8px py-5px'>
+        <div className={classNames('min-w-0 flex-1', compact ? 'px-1 py-0.5' : 'px-8px py-5px')}>
           <Input
             autoFocus
             value={titleDraft}
             disabled={renameLoading}
-            className='w-full min-w-0 max-w-full border-none bg-transparent shadow-none [&_.arco-input-inner-wrapper]:border-none [&_.arco-input-inner-wrapper]:bg-transparent [&_.arco-input-inner-wrapper]:shadow-none [&_.arco-input]:bg-transparent [&_.arco-input]:px-0 [&_.arco-input]:text-16px [&_.arco-input]:font-700 [&_.arco-input]:leading-24px [&_.arco-input]:text-[var(--color-text-1)]'
+            className={classNames(
+              'w-full min-w-0 max-w-full border-none bg-transparent shadow-none [&_.arco-input-inner-wrapper]:border-none [&_.arco-input-inner-wrapper]:bg-transparent [&_.arco-input-inner-wrapper]:shadow-none [&_.arco-input]:bg-transparent [&_.arco-input]:px-0 [&_.arco-input]:text-[var(--color-text-1)]',
+              compact
+                ? '[&_.arco-input]:text-13px [&_.arco-input]:font-500 [&_.arco-input]:leading-20px'
+                : '[&_.arco-input]:text-16px [&_.arco-input]:font-700 [&_.arco-input]:leading-24px'
+            )}
             style={{
               width: '100%',
               maxWidth: '100%',
@@ -103,7 +120,8 @@ const ChatTitleEditor: React.FC<ChatTitleEditorProps> = ({
           role={canRenameTitle ? 'button' : undefined}
           tabIndex={canRenameTitle ? 0 : undefined}
           className={classNames(
-            'min-w-0 flex-1 px-8px py-5px min-h-24px',
+            'min-w-0 flex-1',
+            compact ? 'min-h-5 px-1 py-0.5' : 'min-h-24px px-8px py-5px',
             canRenameTitle && 'cursor-text focus:outline-none'
           )}
           onClick={startEditing}
@@ -117,7 +135,8 @@ const ChatTitleEditor: React.FC<ChatTitleEditorProps> = ({
         >
           <span
             className={classNames(
-              'block min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-16px font-bold transition-colors duration-150',
+              'block min-w-0 overflow-hidden text-ellipsis whitespace-nowrap transition-colors duration-150',
+              compact ? 'text-[12px] font-medium leading-5' : 'text-16px font-bold',
               isTitleBlank ? 'text-t-tertiary' : 'text-t-primary',
               canRenameTitle &&
                 'group-hover:text-[rgb(var(--primary-6))] group-focus-within:text-[rgb(var(--primary-6))]'

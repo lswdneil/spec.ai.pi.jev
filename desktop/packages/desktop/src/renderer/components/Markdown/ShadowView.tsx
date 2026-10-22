@@ -29,11 +29,11 @@ export const createInitStyle = (
         .join('\n    ')
     : '';
 
-  const lineHeight = isMobile ? '19.6px' : '24px';
+  const lineHeight = isMobile ? '19.6px' : 'var(--chat-line-height, 24px)';
   const fontSize = isMobile ? 'var(--chat-font-size, 14px)' : 'var(--chat-font-size, 16px)';
   // Desktop paragraph spacing trimmed from 16px to 12px (~0.85em) for a more
   // compact reply; mobile spacing is left untouched (tuned separately).
-  const paragraphMargin = isMobile ? '16px' : '12px';
+  const paragraphMargin = isMobile ? '16px' : 'var(--chat-paragraph-margin, 12px)';
 
   style.innerHTML = `
   /* Shadow DOM CSS variable definitions */
@@ -360,6 +360,8 @@ const THEME_VARIABLES = [
   '--text-primary',
   '--text-secondary',
   '--chat-font-size',
+  '--chat-line-height',
+  '--chat-paragraph-margin',
   '--code-font-size',
 ] as const;
 
@@ -377,7 +379,10 @@ const readTheme = (): ThemeSnapshot => {
   if (themeSnapshot) return themeSnapshot;
   const computedStyle = getComputedStyle(document.documentElement);
   const cssVars: Record<string, string> = {};
-  for (const name of THEME_VARIABLES) cssVars[name] = computedStyle.getPropertyValue(name);
+  for (const name of THEME_VARIABLES) {
+    const value = computedStyle.getPropertyValue(name);
+    if (value) cssVars[name] = value;
+  }
   themeSnapshot = { theme: document.documentElement.getAttribute('data-theme') || 'light', cssVars };
   queueMicrotask(() => {
     themeSnapshot = undefined;

@@ -39,6 +39,7 @@ import 'uno.css';
 import './styles/arco-override.css';
 import './styles/themes/index.css';
 import './styles/specjev/tokens.css';
+import './styles/specjev/dense.css';
 import './styles/markdown.css';
 
 // Config service — kick off initialization before i18n / theme modules load,
@@ -54,6 +55,7 @@ import './services/i18n';
 import { isRtlLanguage } from './services/i18n/direction';
 import { formatNameList } from './services/i18n/list';
 import { registerPwa } from './services/registerPwa';
+import { isUiV2Enabled } from './utils/ui/uiV2';
 
 import { ipcBridge } from '@/common';
 import { repairAllCronJobTimeZonesOnce } from '@renderer/pages/cron/repairCronJobTimeZone';
@@ -67,6 +69,7 @@ import GpuAutoDisableNotice from './components/layout/GpuAutoDisableNotice';
 import Layout from './components/layout/Layout';
 import Router from './components/layout/Router';
 import Sider from './components/layout/Sider';
+import DenseSider from './components/layout/Sider/DenseSider';
 import { ConversationHistoryProvider } from './hooks/context/ConversationHistoryContext';
 import type { BackendStartupFailureInfo } from '@/common/types/platform/electron';
 import type { IRuntimeStatusEvent, RuntimeFailureKind } from '@/common/adapter/ipcBridge';
@@ -282,7 +285,7 @@ const Main = () => {
     <Router
       layout={
         <ConversationHistoryProvider>
-          <Layout sider={<Sider />} />
+          <Layout sider={isUiV2Enabled() ? <DenseSider /> : <Sider />} />
         </ConversationHistoryProvider>
       }
     />
@@ -406,6 +409,8 @@ const BackendStartupFailureDialog: React.FC<{ failure: BackendStartupFailureInfo
 };
 
 void registerPwa();
+
+if (isUiV2Enabled()) document.documentElement.dataset.svUi = 'dense';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(

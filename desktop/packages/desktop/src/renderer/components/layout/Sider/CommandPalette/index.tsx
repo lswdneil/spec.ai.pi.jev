@@ -5,11 +5,13 @@
  */
 
 import { Message, Modal } from '@arco-design/web-react';
+import classNames from 'classnames';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import ConversationSearchPopover from '@/renderer/pages/conversation/GroupedHistory/ConversationSearchPopover';
 import { emitter, useAddEventListener } from '@/renderer/utils/emitter';
+import { isUiV2Enabled } from '@/renderer/utils/ui/uiV2';
 import CommandPalettePanel from './CommandPalettePanel';
 import type { PaletteItem } from './paletteGroups';
 import styles from './CommandPalette.module.css';
@@ -44,6 +46,7 @@ type CommandPaletteProps = {
 const CommandPalette: React.FC<CommandPaletteProps> = ({ onNavigate }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const dense = isUiV2Enabled();
   const [open, setOpen] = useState(false);
   const openRef = useRef(open);
   openRef.current = open;
@@ -126,7 +129,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ onNavigate }) => {
         alignCenter={false}
         unmountOnExit
         className={styles.palette}
-        wrapClassName={styles.wrap}
+        wrapClassName={classNames(styles.wrap, dense && styles.dense)}
         maskStyle={MASK_STYLE}
       >
         <CommandPalettePanel onRun={run} />

@@ -135,6 +135,8 @@ const specjevColors = {
   'sv-muted': 'var(--sv-muted)',
   'sv-faint': 'var(--sv-faint)',
   'sv-brand': 'var(--sv-brand)',
+  'sv-brand-1': 'var(--sv-brand-1)',
+  'sv-brand-3': 'var(--sv-brand-3)',
   'sv-brand-dim': 'var(--sv-brand-dim)',
   'sv-brand-ink': 'var(--sv-brand-ink)',
   'sv-on-brand': 'var(--sv-on-brand)',

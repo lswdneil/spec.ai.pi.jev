@@ -18,6 +18,62 @@
   overflow: hidden;
 }
 
+.dense .palette.palette {
+  top: 18vh;
+  border-radius: 14px;
+  border-color: var(--sv-line);
+  background-color: var(--sv-popover) !important;
+  box-shadow: none;
+}
+
+.dense .field :global(.arco-input-inner-wrapper) {
+  height: 40px;
+  padding: 0 12px;
+}
+
+.dense .field :global(.arco-input) {
+  font-size: 13px;
+}
+
+.dense .list {
+  padding: 2px 4px 4px;
+}
+
+.dense .row {
+  min-height: 28px;
+  gap: 8px;
+  padding: 0 8px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.dense .row[aria-selected='true'] {
+  background-color: var(--sv-selected);
+}
+
+.dense .row[aria-selected='true']::before {
+  top: 6px;
+  bottom: 6px;
+  background-color: var(--sv-brand);
+}
+
+.dense .detail {
+  font-size: 11.5px;
+}
+
+.dense .meta {
+  font-size: 10.5px;
+}
+
+.dense .groupLabel {
+  padding: 6px 8px 3px;
+  font-size: 10px;
+}
+
+.dense .hint {
+  font-size: 10.5px;
+}
+
 /* The dark theme also gives every modal body a fill of its own. */
 .wrap .palette.palette :global(.arco-modal-content) {
   padding: 0;

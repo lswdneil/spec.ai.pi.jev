@@ -1280,6 +1280,7 @@ export type I18nKey =
   | 'common.selectedSkills'
   | 'common.selectedSkillsWithCount'
   | 'common.send'
+  | 'common.sessions'
   | 'common.settings'
   | 'common.show'
   | 'common.skills'

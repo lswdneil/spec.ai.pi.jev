@@ -12,8 +12,12 @@ import { useTitleRename } from '@/renderer/pages/conversation/hooks/useTitleRena
 import { useWorkspaceCollapse } from '@/renderer/pages/conversation/hooks/useWorkspaceCollapse';
 import { PreviewPanel, usePreviewContext } from '@/renderer/pages/conversation/Preview';
 import MuBrowserHost from '@/renderer/pages/conversation/Preview/browser/muBrowser/MuBrowserHost';
+import { Button, Tooltip } from '@/renderer/ui';
+import { isUiV2Enabled } from '@/renderer/utils/ui/uiV2';
 import { dispatchWorkspaceToggleEvent } from '@/renderer/utils/workspace/workspaceEvents';
 import classNames from 'classnames';
+import { ChevronRight, PanelRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   DEFAULT_WORKSPACE_PANEL_PX,
   MAX_WORKSPACE_PANEL_PX,
@@ -68,6 +72,8 @@ const ChatLayout: React.FC<{
   const { conversation_id, workspacePath, isTemporaryWorkspace } = props;
   const { backend, presetAssistant, agent_name, workspacePreferenceKey } = props;
   const panelHosted = Boolean(props.panelHosted);
+  const dense = isUiV2Enabled();
+  const { t } = useTranslation();
   const workspaceEnabled = (props.workspaceEnabled ?? true) && !panelHosted;
   const layout = useLayoutContext();
   const isDesktop = !layout?.isMobile;
@@ -191,7 +197,20 @@ const ChatLayout: React.FC<{
     return () => observer.disconnect();
   }, [layout?.isMobile]);
 
-  const desktopHeader = (
+  const headerLeading =
+    props.headerLeading ??
+    ((backend || presetAssistant) && (
+      <AgentLogoIcon
+        backend={backend}
+        agent_name={display_name}
+        agentLogo={presetAssistant?.logo}
+        agentLogoIsEmoji={presetAssistant?.isEmoji}
+        agentLogoIsFallback={presetAssistant?.isFallback}
+      />
+    ));
+  const denseCrumb = workspacePath?.split(/[\\/]/).findLast(Boolean) || display_name || 'spec.jev';
+
+  const legacyDesktopHeader = (
     <ArcoLayout.Header
       className={classNames(
         'min-h-44px flex items-center justify-between px-16px pt-8px pb-10px gap-16px !bg-1 chat-layout-header chat-layout-header--glass overflow-hidden'
@@ -209,23 +228,53 @@ const ChatLayout: React.FC<{
           titleAreaMaxWidth={titleAreaMaxWidth}
           title={props.title}
           conversation_id={conversation_id}
-          leading={
-            props.headerLeading ??
-            ((backend || presetAssistant) && (
-              <AgentLogoIcon
-                backend={backend}
-                agent_name={display_name}
-                agentLogo={presetAssistant?.logo}
-                agentLogoIsEmoji={presetAssistant?.isEmoji}
-                agentLogoIsFallback={presetAssistant?.isFallback}
-              />
-            ))
-          }
+          leading={headerLeading}
         />
       </FlexFullContainer>
       <div className='flex items-center gap-12px shrink-0'>{props.headerExtra}</div>
     </ArcoLayout.Header>
   );
+
+  const denseHeader = (
+    <div className='flex h-10 min-h-10 shrink-0 items-center gap-2 border-b border-sv-line bg-sv-bg px-2.5'>
+      <div className='flex min-w-0 flex-1 items-center gap-1.5 text-[11px] text-sv-muted'>
+        <span className='max-w-[160px] shrink-0 truncate font-mono text-[10px]'>{denseCrumb}</span>
+        <ChevronRight className='h-3 w-3 shrink-0 text-sv-faint' strokeWidth={1.75} />
+        <div className='min-w-0 flex-1'>
+          <ChatTitleEditor
+            editingTitle={editingTitle}
+            titleDraft={titleDraft}
+            setTitleDraft={setTitleDraft}
+            setEditingTitle={setEditingTitle}
+            renameLoading={renameLoading}
+            canRenameTitle={canRenameTitle}
+            submitTitleRename={submitTitleRename}
+            titleAreaMaxWidth={titleAreaMaxWidth}
+            title={props.title}
+            conversation_id={conversation_id}
+            leading={headerLeading}
+            compact
+          />
+        </div>
+      </div>
+      <div className='flex shrink-0 items-center gap-1.5'>
+        {props.headerExtra}
+        <Tooltip content={t('common.workPanel.label')} position='bottom'>
+          <Button
+            variant='ghost'
+            size='icon'
+            className='h-6 w-6 text-sv-muted hover:bg-sv-surface hover:text-sv-text'
+            onClick={() => dispatchWorkspaceToggleEvent()}
+            aria-label={t('common.workPanel.label')}
+          >
+            <PanelRight className='h-3.5 w-3.5' strokeWidth={1.75} />
+          </Button>
+        </Tooltip>
+      </div>
+    </div>
+  );
+
+  const desktopHeader = dense ? denseHeader : legacyDesktopHeader;
 
   const headerBlock = (
     <>
@@ -253,7 +302,7 @@ const ChatLayout: React.FC<{
             flexBasis: 0,
           }}
         >
-          <div className='shrink-0 !bg-1'>{headerBlock}</div>
+          <div className={classNames('shrink-0', dense ? 'bg-sv-bg' : '!bg-1')}>{headerBlock}</div>
           <div className='flex flex-1 min-h-0 relative'>
             {/* Chat area - always mounted, never unmounted on preview toggle */}
             <div

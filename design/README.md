@@ -1,4 +1,4 @@
-# spec.jev design (Phase 0)
+# spec.jev design (Phase 0–2b)
 
 Static design work only. No existing app code was changed.
 
@@ -55,8 +55,35 @@ localStorage.setItem('specjev.ui.v2', '1')
 Then reload and open Settings → Appearance, or go to `#/design-system`.
 Disable with `localStorage.removeItem('specjev.ui.v2')` or `?ui=v1`.
 
-The shell in the gallery is static. Phase 2 wires it to the real router, session store and
-judge store; the old shell stays the default until then.
+The gallery stays a static reference; the real shell is wired behind the flag.
+
+### Phase 2: Dense shell (in progress)
+
+With the flag on, the app uses the Dense chrome:
+
+- `components/layout/Sider/DenseSider.tsx` — new 208px sidebar: brand row, New session,
+  Search, Scheduled tasks, Skills, batch selection, then the existing conversation history
+  and footer. The rail keeps named icon buttons; settings still uses its own rail.
+- `components/layout/MobileTabBar.tsx` — four phone tabs: sessions, search, new, settings.
+- `pages/conversation/components/ChatLayout` — a 40px conversation header with the
+  workspace/conversation breadcrumb, inline rename, existing actions and a judge-rail toggle.
+- Work panel: on a window at least 1280px wide, Dense starts it open on the judge tab at
+  300px; narrower windows start it closed, and the toggle plus per-conversation memory still
+  apply. It uses its own storage key so old non-Dense choices do not decide it.
+- `styles/specjev/dense.css` — the app's semantic variables, Arco palette and `--mu-accent-*`
+  map onto `--sv-*`; base text 13px, titlebar 40px, settings title 20px; Arco buttons,
+  switches, checks and focus rings are sage; popups lose their shadows.
+- Message body: the shadow Markdown view reads `--chat-line-height` and
+  `--chat-paragraph-margin`, so Dense replies get the 1.65 rhythm while the person's own
+  chat font size still applies; user bubbles are flat with an 8/2px corner.
+- Composer: flat field, 18px radius, 13px input, sage send button.
+- Command palette: 14px popup, 40px query, 28px rows and 12px labels when Dense is on.
+- Sidebar width uses `sider-width-px-v2`, separate from the old 260px preference.
+- Welcome: the hero stays, the violet glow/dot grid goes, and the new-conversation card is a
+  flat 18px field like the composer.
+
+Still old in this slice: the settings rail markup (it already uses 32px rows and 13px labels)
+and the tool-call cards.
 
 ## Build and verify
 
