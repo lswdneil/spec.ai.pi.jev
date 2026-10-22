@@ -52,7 +52,8 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   },
   ref
 ) {
-  const statusClass = status === 'error' ? 'border-sv-danger' : status === 'warning' ? 'border-sv-warn' : '';
+  const statusClass =
+    status === 'error' ? 'border-sv-danger arco-input-error' : status === 'warning' ? 'border-sv-warn arco-input-warning' : '';
   const input = (
     <input
       ref={ref}

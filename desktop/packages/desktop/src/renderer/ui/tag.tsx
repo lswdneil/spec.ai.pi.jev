@@ -21,6 +21,7 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   closable?: boolean;
   onClose?: (event: React.MouseEvent) => void;
   closeIcon?: React.ReactNode;
+  icon?: React.ReactNode;
 }
 
 const arcoTones: Record<NonNullable<TagProps['color']>, TagTone> = {
@@ -43,6 +44,7 @@ export const Tag: React.FC<TagProps> = ({
   closable,
   onClose,
   closeIcon,
+  icon,
   ...props
 }) => (
   <span
@@ -53,6 +55,7 @@ export const Tag: React.FC<TagProps> = ({
     )}
     {...props}
   >
+    {icon}
     {children}
     {closable ? (
       <button

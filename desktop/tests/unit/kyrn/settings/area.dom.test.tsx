@@ -279,7 +279,7 @@ describe('generic option fields', () => {
     expect(row).toHaveTextContent('Range: 0.5–30.');
     expect(row).toHaveTextContent('s');
     expect(row).not.toHaveTextContent('ms');
-    expect(within(row).getByRole('spinbutton')).toHaveValue('6');
+    expect(within(row).getByRole('spinbutton')).toHaveValue(6);
     fireEvent.change(within(row).getByRole('spinbutton'), { target: { value: '2.5' } });
     expect(onChange).toHaveBeenLastCalledWith(2500);
     // Under a second it stays in milliseconds: nothing to gain from 0.25 s.
@@ -914,7 +914,7 @@ describe('providers and the default model', () => {
     expect(row).toHaveTextContent(enMu.models.tagReasoning);
     expect(row).toHaveTextContent(enMu.models.tagImage);
     fireEvent.click(screen.getByRole('button', { name: 'Edit big-vision' }));
-    expect(screen.getByLabelText('Max output 2')).toHaveValue('65536');
+    expect(screen.getByLabelText('Max output 2')).toHaveValue(65536);
     expect(screen.getByTestId('mu-model-levels-1')).toBeInTheDocument();
   });
   it('shows each model on one line and opens one to edit; a model without an id stays open', async () => {

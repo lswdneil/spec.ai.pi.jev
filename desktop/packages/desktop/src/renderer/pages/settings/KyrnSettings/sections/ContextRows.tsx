@@ -1,5 +1,6 @@
 import React from 'react';
-import { InputNumber, Switch } from '@arco-design/web-react';
+import { InputNumber } from '@/renderer/ui/input-number';
+import { Switch } from '@/renderer/ui/switch';
 import { useTranslation } from 'react-i18next';
 import type { KyrnSettings } from '@/common/kyrn/types';
 import { formatNumber } from '@/renderer/services/i18n/format';

@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Input, InputNumber, Tag } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Checkbox } from '@/renderer/ui/checkbox';
+import { Input } from '@/renderer/ui/input';
+import { InputNumber } from '@/renderer/ui/input-number';
+import { Tag } from '@/renderer/ui/tag';
 import { Check, Delete, Edit, Plus } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import {

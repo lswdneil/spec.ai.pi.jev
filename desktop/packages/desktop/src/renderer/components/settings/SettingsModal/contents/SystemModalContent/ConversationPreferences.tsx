@@ -13,7 +13,9 @@ import {
   MIN_TEXT_PREVIEW_LIMIT_MB,
   normalizeTextPreviewLimitMb,
 } from '@/renderer/utils/file/previewPayload';
-import { InputNumber, Message, Switch } from '@arco-design/web-react';
+import { InputNumber } from '@/renderer/ui/input-number';
+import { Message } from '@/renderer/ui/toast';
+import { Switch } from '@/renderer/ui/switch';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PreferenceRow from './PreferenceRow';

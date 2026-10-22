@@ -9,7 +9,7 @@ export interface SwitchProps {
   /** Arco compatibility; the Dense switch keeps one size. */
   size?: 'small' | 'default' | 'large';
   loading?: boolean;
-  onChange?: (checked: boolean) => void;
+  onChange?: (checked: boolean, event?: unknown) => void;
   onCheckedChange?: (checked: boolean) => void;
   className?: string;
   id?: string;
@@ -36,7 +36,7 @@ export const Switch: React.FC<SwitchProps> = ({
     aria-label={ariaLabel}
     {...props}
     onCheckedChange={(next) => {
-      onChange?.(next);
+      onChange?.(next, {});
       onCheckedChange?.(next);
     }}
     className={cn(
