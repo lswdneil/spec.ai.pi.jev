@@ -32,6 +32,13 @@ vi.mock('@arco-design/web-react', async () => {
   };
 });
 
+vi.mock('@/renderer/ui/toast', () => ({
+  Message: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
 vi.mock('@/common', () => ({
   ipcBridge: {
     cron: {
@@ -114,7 +121,7 @@ vi.mock('@renderer/pages/cron/ScheduledTasksPage/resolveCronAgentConfig', () => 
   })),
 }));
 
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { ipcBridge } from '@/common';
 import CreateTaskDialog from '@/renderer/pages/cron/ScheduledTasksPage/CreateTaskDialog';
 import { resolveCronAgentConfig } from '@/renderer/pages/cron/ScheduledTasksPage/resolveCronAgentConfig';
@@ -473,8 +480,8 @@ function teamOwnedJob(): ICronJob {
   } as ICronJob;
 }
 
-function executionModeInputs(): HTMLInputElement[] {
-  return Array.from(document.querySelectorAll<HTMLInputElement>('.arco-radio input[type="radio"]'));
+function executionModeInputs(): HTMLButtonElement[] {
+  return Array.from(document.querySelectorAll<HTMLButtonElement>('[role="radio"]'));
 }
 
 function assistants(): Assistant[] {

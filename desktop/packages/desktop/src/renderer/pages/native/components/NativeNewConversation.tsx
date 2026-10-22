@@ -3,7 +3,9 @@
  * disk, with the permission mode its spec.jev starts in (spec.jev's own default unless one is chosen). The new conversation opens,
  * ready for its first message; one that cannot be made says why.
  */
-import { Button, Popover, Select } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Popover } from '@/renderer/ui/popover';
+import { SelectWithOptions as Select } from '@/renderer/ui/select';
 import { FolderOpen, Plus } from '@icon-park/react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -6,7 +6,13 @@
 
 import React, { useState, useMemo, useEffect, useCallback, useId } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Form, Input, Select, Message, TimePicker, Radio, Button, Switch } from '@arco-design/web-react';
+import { Input } from '@/renderer/ui/input';
+import { SelectWithOptions as Select } from '@/renderer/ui/select';
+import { Message } from '@/renderer/ui/toast';
+import { Radio } from '@/renderer/ui/radio';
+import { Button } from '@/renderer/ui/button';
+import { Switch } from '@/renderer/ui/switch';
+import { Form, TimePicker } from '@arco-design/web-react';
 import MuModal from '@renderer/components/base/MuModal';
 import ThemedLogo from '@/renderer/components/agent/ThemedLogo';
 import { Down, Robot } from '@icon-park/react';

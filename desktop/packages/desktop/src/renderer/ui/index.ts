@@ -24,6 +24,7 @@ export { InputNumber, type InputNumberProps } from './input-number';
 export { Popover, type PopoverProps, type PopoverPosition } from './popover';
 export { Popconfirm, type PopconfirmProps, type PopconfirmPosition } from './popconfirm';
 export { Radio, type RadioProps, type RadioGroupProps } from './radio';
+export { SelectWithOptions as Select, type SelectProps, type SelectOptionProps, type SelectValue } from './select';
 export { Spinner, Spin, type SpinnerProps } from './spinner';
 export { Slider, type SliderProps } from './slider';
 export { Switch, type SwitchProps } from './switch';
