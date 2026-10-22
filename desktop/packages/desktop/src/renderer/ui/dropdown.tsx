@@ -82,15 +82,13 @@ export const Dropdown: React.FC<DropdownProps> = ({
 /** Arco compatibility aliases; put them inside `droplist`. */
 export const Menu: React.FC<{ children: React.ReactNode }> = ({ children }) => <>{children}</>;
 
-export const MenuItem: React.FC<{ children: React.ReactNode; onClick?: () => void; disabled?: boolean }> = ({
-  children,
-  onClick,
-  disabled,
-}) => (
+export const MenuItem: React.FC<
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & { onClick?: () => void }
+> = ({ children, onClick, ...props }) => (
   <DropdownMenuPrimitive.Item
-    disabled={disabled}
     onSelect={onClick}
     className='flex h-7 cursor-default select-none items-center rounded-[6px] px-2 text-sv-text outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 data-[highlighted]:bg-sv-surface'
+    {...props}
   >
     {children}
   </DropdownMenuPrimitive.Item>

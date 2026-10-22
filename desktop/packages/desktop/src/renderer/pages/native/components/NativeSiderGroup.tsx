@@ -7,7 +7,7 @@
  * confirmation); its tooltip says the folder, how many messages, and what it was forked from. Nothing at all while
  * the host is off.
  */
-import { Button, Dropdown, Input, Menu, Message, Modal, Spin } from '@arco-design/web-react';
+import { Button, Dropdown, Input, MenuItem, Message, Modal, Spinner } from '@/renderer/ui';
 import { DeleteOne, EditOne, FolderClose, FolderOpen, Inbox, MoreOne, Pushpin, Right } from '@icon-park/react';
 import classNames from 'classnames';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -146,7 +146,7 @@ const Row: React.FC<RowProps> = ({
             data-testid={`native-sidebar-${mark}`}
           >
             {mark === 'running' ? (
-              <Spin size={12} aria-label={t('mu.native.sider.working')} />
+              <Spinner size='sm' aria-label={t('mu.native.sider.working')} />
             ) : mark === 'unread' ? (
               // Inline: the theme's `--primary-6` is comma separated, and the utility class for `rgb(var(--primary-6))`
               // adds `/ opacity` to it, which is no colour at all (the dot was there, and could not be seen).
@@ -171,72 +171,96 @@ const Row: React.FC<RowProps> = ({
           )}
         >
           <Dropdown
-            trigger='click'
-            position='br'
-            popupVisible={menuOpen}
-            onVisibleChange={onMenu}
-            getPopupContainer={() => document.body}
+            open={menuOpen}
+            onOpenChange={onMenu}
+            align='end'
             droplist={
-              <Menu
-                onClickMenuItem={(key) => {
-                  onMenu(false);
-                  if (key === 'pin') onPin();
-                  if (key === 'unread') onToggleUnread();
-                  if (key === 'rename') onRename();
-                  if (key === 'archive') onArchive();
-                  if (key === 'restore') onRestore();
-                  if (key === 'delete') onDelete();
-                }}
-              >
+              <>
                 {/* A conversation that has no session file yet has no id to keep: its id changes when pi names it. */}
                 {conversation.sessionFile && !archived ? (
-                  <Menu.Item key='pin' data-testid='native-sidebar-pin'>
+                  <MenuItem
+                    data-testid='native-sidebar-pin'
+                    onClick={() => {
+                      onMenu(false);
+                      onPin();
+                    }}
+                  >
                     <div className='flex items-center gap-8px'>
                       <Pushpin theme='outline' size='14' />
                       <span>{pinned ? t('conversation.history.unpin') : t('conversation.history.pin')}</span>
                     </div>
-                  </Menu.Item>
+                  </MenuItem>
                 ) : null}
                 {conversation.sessionFile && !archived ? (
-                  <Menu.Item key='unread' data-testid='native-sidebar-mark'>
+                  <MenuItem
+                    data-testid='native-sidebar-mark'
+                    onClick={() => {
+                      onMenu(false);
+                      onToggleUnread();
+                    }}
+                  >
                     <div className='flex items-center gap-8px'>
                       <Inbox theme='outline' size='14' />
                       <span>
                         {unread ? t('conversation.history.markAsRead') : t('conversation.history.markAsUnread')}
                       </span>
                     </div>
-                  </Menu.Item>
+                  </MenuItem>
                 ) : null}
-                <Menu.Item key='rename' data-testid='native-sidebar-rename'>
+                <MenuItem
+                  data-testid='native-sidebar-rename'
+                  onClick={() => {
+                    onMenu(false);
+                    onRename();
+                  }}
+                >
                   <div className='flex items-center gap-8px'>
                     <EditOne theme='outline' size='14' />
                     <span>{t('conversation.history.rename')}</span>
                   </div>
-                </Menu.Item>
+                </MenuItem>
                 {conversation.sessionFile ? (
                   archived ? (
-                    <Menu.Item key='restore' data-testid='native-sidebar-restore'>
+                    <MenuItem
+                      data-testid='native-sidebar-restore'
+                      onClick={() => {
+                        onMenu(false);
+                        onRestore();
+                      }}
+                    >
                       <div className='flex items-center gap-8px'>
                         <FolderOpen theme='outline' size='14' />
                         <span>{t('settings.archived.restore')}</span>
                       </div>
-                    </Menu.Item>
+                    </MenuItem>
                   ) : (
-                    <Menu.Item key='archive' data-testid='native-sidebar-archive'>
+                    <MenuItem
+                      data-testid='native-sidebar-archive'
+                      onClick={() => {
+                        onMenu(false);
+                        onArchive();
+                      }}
+                    >
                       <div className='flex items-center gap-8px'>
                         <FolderClose theme='outline' size='14' />
                         <span>{t('conversation.history.archive')}</span>
                       </div>
-                    </Menu.Item>
+                    </MenuItem>
                   )
                 ) : null}
-                <Menu.Item key='delete' data-testid='native-sidebar-delete'>
+                <MenuItem
+                  data-testid='native-sidebar-delete'
+                  onClick={() => {
+                    onMenu(false);
+                    onDelete();
+                  }}
+                >
                   <div className='flex items-center gap-8px text-danger'>
                     <DeleteOne theme='outline' size='14' />
                     <span>{t('conversation.history.deleteTitle')}</span>
                   </div>
-                </Menu.Item>
-              </Menu>
+                </MenuItem>
+              </>
             }
           >
             <button
@@ -415,7 +439,7 @@ const Group: React.FC<{ onSessionClick?: () => void }> = ({ onSessionClick }) =>
         <>
           {loading ? (
             <div className='px-12px py-6px'>
-              <Spin size={12} />
+              <Spinner size='sm' />
             </div>
           ) : null}
           {failure ? <Failure failure={failure} testId='native-sidebar-list-failed' /> : null}
@@ -498,9 +522,6 @@ const Group: React.FC<{ onSessionClick?: () => void }> = ({ onSessionClick }) =>
         title={t('conversation.history.renameTitle')}
         visible={renaming !== undefined}
         onCancel={() => setRenaming(undefined)}
-        style={{ borderRadius: '12px' }}
-        alignCenter
-        getPopupContainer={() => document.body}
         footer={
           <>
             <Button onClick={() => setRenaming(undefined)}>{t('conversation.history.cancelEdit')}</Button>
@@ -519,8 +540,11 @@ const Group: React.FC<{ onSessionClick?: () => void }> = ({ onSessionClick }) =>
         <Input
           autoFocus
           value={renaming?.name ?? ''}
-          onChange={(name) => setRenaming((old) => (old ? { ...old, name } : old))}
-          onPressEnter={() => void saveName()}
+          onChange={(event) => setRenaming((old) => (old ? { ...old, name: event.target.value } : old))}
+          onClear={() => setRenaming((old) => (old ? { ...old, name: '' } : old))}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') void saveName();
+          }}
           placeholder={t('conversation.history.renamePlaceholder')}
           allowClear
           data-testid='native-rename-input'
@@ -530,9 +554,6 @@ const Group: React.FC<{ onSessionClick?: () => void }> = ({ onSessionClick }) =>
         title={t('conversation.history.deleteTitle')}
         visible={deleting !== undefined}
         onCancel={() => setDeleting(undefined)}
-        style={{ borderRadius: '12px' }}
-        alignCenter
-        getPopupContainer={() => document.body}
         footer={
           <>
             <Button onClick={() => setDeleting(undefined)}>{t('common.cancel')}</Button>
