@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Button, Tooltip } from '@arco-design/web-react';
+import { Button, Tooltip } from '@/renderer/ui';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import type { Activity } from '@/common/kyrn/types';
@@ -50,7 +50,7 @@ const KernelBar: React.FC = () => {
   return (
     <footer className={styles.bar} data-testid='mu-kernel-bar'>
       <div className={styles.group}>
-        <Tooltip content={t('common.kyrn.kernel.judgeHint')} position='tl' mini>
+        <Tooltip content={t('common.kyrn.kernel.judgeHint')} position='top'>
           <Button
             type='text'
             className={styles.judge}
