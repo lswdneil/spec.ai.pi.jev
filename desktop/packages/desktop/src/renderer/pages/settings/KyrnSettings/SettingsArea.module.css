@@ -35,11 +35,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 32px;
+  height: 27px;
   padding: 0 8px;
-  border-radius: 6px;
+  border-radius: 5px;
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 400;
   white-space: nowrap;
   cursor: pointer;
