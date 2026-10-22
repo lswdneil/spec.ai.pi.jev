@@ -58,7 +58,7 @@
   position: fixed;
   inset: 0;
   z-index: 90;
-  background: rgb(0 0 0 / 30%);
+  background: color-mix(in srgb, var(--sv-scrim) 50%, transparent);
 }
 
 .frame {

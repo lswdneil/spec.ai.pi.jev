@@ -121,7 +121,7 @@
   background: transparent;
 }
 .mu-markdown :where(pre)::-webkit-scrollbar-thumb {
-  background-color: rgba(127, 127, 127, 0.35);
+  background-color: var(--sv-faint);
   border-radius: 3px;
 }
 
@@ -253,7 +253,7 @@
   border: 1px solid var(--bg-3);
   border-radius: 6px;
   background: var(--bg-1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--mu-shadow-1);
 }
 .mu-markdown [class~='min-w-[120px]'] > button {
   display: block;

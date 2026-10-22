@@ -71,8 +71,8 @@
   border-radius: 4px;
   background: var(--bg-2);
   color: var(--text-secondary);
-  font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-family: var(--sv-font-ui);
+  font-size: var(--sv-fs-small);
   line-height: 16px;
   white-space: nowrap;
 }

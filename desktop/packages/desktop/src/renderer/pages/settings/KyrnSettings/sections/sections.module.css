@@ -267,7 +267,7 @@
   border-radius: 6px;
   background: var(--color-fill-1);
   color: var(--text-secondary);
-  font-family: var(--font-mono, ui-monospace, 'SF Mono', Menlo, monospace);
+  font-family: var(--font-mono);
   font-size: 11px;
   line-height: 16px;
   white-space: pre-wrap;
@@ -297,7 +297,7 @@
   border-radius: 6px;
   background: var(--color-fill-1);
   color: var(--text-primary);
-  font-family: var(--font-mono, ui-monospace, 'SF Mono', Menlo, monospace);
+  font-family: var(--font-mono);
   font-size: 11px;
   line-height: 16px;
   word-break: break-all;

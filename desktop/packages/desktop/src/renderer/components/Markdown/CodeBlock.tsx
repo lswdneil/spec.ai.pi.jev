@@ -158,8 +158,6 @@ function CodeBlock(props: CodeBlockProps) {
   const formattedContent = formatCode(children);
   const totalLines = formattedContent.split('\n').length;
   const canCollapse = totalLines > PREVIEW_LINES;
-  const isDark = currentTheme === 'dark';
-
   const handleCopy = () => {
     void copyText(formattedContent)
       .then(() => {
@@ -178,10 +176,10 @@ function CodeBlock(props: CodeBlockProps) {
       });
   };
 
-  const iconFill = isDark ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.45)';
-  const footerTextColor = isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.35)';
-  const borderColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
-  const bgColor = isDark ? 'rgba(255,255,255,0.04)' : 'var(--bg-2)';
+  const iconFill = 'var(--sv-muted)';
+  const footerTextColor = 'var(--sv-faint)';
+  const borderColor = 'var(--sv-line)';
+  const bgColor = 'var(--sv-surface)';
 
   return (
     <div

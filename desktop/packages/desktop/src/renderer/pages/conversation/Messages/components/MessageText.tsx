@@ -402,7 +402,7 @@ const MessageText: React.FC<{
           content={t('messages.copySuccess')}
           showIcon
           className='fixed top-20px left-50% transform -translate-x-50% z-9999 w-max max-w-[80%]'
-          style={{ boxShadow: '0px 2px 12px rgba(0,0,0,0.12)' }}
+          style={{ boxShadow: 'var(--mu-shadow-2)' }}
           closable={false}
         />
       )}

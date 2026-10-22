@@ -80,7 +80,7 @@
   background:
     radial-gradient(56% 100% at 50% -30%, var(--mu-glow-violet, transparent), transparent 72%),
     radial-gradient(circle at 1px 1px, var(--mu-grid-dot, transparent) 1px, transparent 1.4px) 0 0 / 22px 22px;
-  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.4) 46%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, color-mix(in srgb, black 40%, transparent) 46%, transparent 100%);
 }
 
 /* The page's header: the group in mono, the title, its one line. A header that stays on top while the page scrolls
@@ -97,10 +97,10 @@
   height: 16px;
   margin-bottom: 6px;
   color: var(--bg-6);
-  font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-family: var(--sv-font-ui);
+  font-size: var(--sv-fs-small);
   font-weight: 500;
-  letter-spacing: 0.09em;
+  letter-spacing: 0;
   line-height: 16px;
   text-transform: uppercase;
 }

@@ -16,7 +16,7 @@
   border: 1px solid var(--color-border-2);
   border-radius: 12px;
   background: linear-gradient(180deg, var(--color-bg-2) 0%, var(--color-fill-1) 100%);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--mu-shadow-1);
   transition:
     border-color 0.16s ease,
     background-color 0.16s ease,
@@ -31,9 +31,7 @@
 .searchbar:focus-within {
   border-color: rgb(var(--primary-6));
   background: var(--color-bg-2);
-  box-shadow:
-    0 0 0 3px rgba(var(--primary-6), 0.1),
-    0 4px 12px rgba(15, 23, 42, 0.06);
+  box-shadow: var(--mu-shadow-2);
 }
 
 .icon {

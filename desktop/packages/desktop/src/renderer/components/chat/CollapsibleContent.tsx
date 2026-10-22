@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useThemeContext } from '@/renderer/hooks/context/ThemeContext';
 import { Down, Up } from '@icon-park/react';
 import classNames from 'classnames';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -18,10 +17,8 @@ const MASK_GRADIENT =
 
 // 背景渐变模式：使用固定颜色遮罩，适用于普通场景
 // Background gradient mode: use fixed color mask, suitable for normal scenarios
-const BG_GRADIENT_DARK =
-  'linear-gradient(to bottom, rgba(30, 30, 30, 0) 0%, rgba(30, 30, 30, 0.6) 40%, rgba(30, 30, 30, 0.95) 80%, rgba(30, 30, 30, 1) 100%)';
-const BG_GRADIENT_LIGHT =
-  'linear-gradient(to bottom, rgba(247, 248, 250, 0) 0%, rgba(247, 248, 250, 0.6) 40%, rgba(247, 248, 250, 0.95) 80%, rgba(247, 248, 250, 1) 100%)';
+const BG_GRADIENT =
+  'linear-gradient(to bottom, color-mix(in srgb, var(--sv-bg) 0%, transparent) 0%, color-mix(in srgb, var(--sv-bg) 60%, transparent) 40%, color-mix(in srgb, var(--sv-bg) 95%, transparent) 80%, var(--sv-bg) 100%)';
 
 interface CollapsibleContentProps {
   children: React.ReactNode;
@@ -86,7 +83,6 @@ export const CollapsibleContent: React.FC<CollapsibleContentProps> = ({
   allowHorizontalScroll = false,
 }) => {
   const { t } = useTranslation(); // 国际化 i18n
-  const { theme } = useThemeContext(); // 主题上下文（亮色/暗色）Theme context (light/dark)
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed); // 折叠状态 Collapse state
   const [needsCollapse, setNeedsCollapse] = useState(false); // 是否需要折叠功能 Whether collapse feature is needed
   const contentRef = useRef<HTMLDivElement>(null); // 内容容器引用 Content container ref
@@ -174,9 +170,8 @@ export const CollapsibleContent: React.FC<CollapsibleContentProps> = ({
   }, [allowHorizontalScroll, isCollapsed, maxHeight, useMask]);
 
   // 计算背景渐变颜色 Calculate background gradient color
-  const bgGradient = useMemo(() => {
-    return theme === 'dark' ? BG_GRADIENT_DARK : BG_GRADIENT_LIGHT;
-  }, [theme]);
+  // The fade follows the page background token in either appearance.
+  const bgGradient = BG_GRADIENT;
 
   return (
     <div className={classNames('relative', className)}>

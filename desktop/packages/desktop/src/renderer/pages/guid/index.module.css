@@ -18,7 +18,7 @@
     radial-gradient(60% 46% at 50% -6%, var(--mu-glow-violet, transparent), transparent 72%),
     radial-gradient(34% 30% at 88% 4%, var(--mu-glow-pink, transparent), transparent 70%),
     radial-gradient(circle at 1px 1px, var(--mu-grid-dot, transparent) 1px, transparent 1.4px) 0 0 / 22px 22px;
-  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.55) 42%, transparent 78%);
+  mask-image: linear-gradient(to bottom, black 0%, color-mix(in srgb, black 55%, transparent) 42%, transparent 78%);
 }
 
 .assistantPromptHint {
@@ -267,13 +267,11 @@
 
 /* workspace dropdown popup — portal-rendered, position set via JS */
 .wsDropdown {
-  background: var(--bg-base, #fff);
+  background: var(--bg-base);
   border: 1px solid var(--color-border-2);
   border-radius: 12px;
   padding: 6px;
-  box-shadow:
-    0 10px 32px rgba(0, 0, 0, 0.1),
-    0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--mu-shadow-2);
   min-width: 230px;
   max-height: 360px;
   overflow-y: auto;
@@ -349,7 +347,7 @@
 }
 
 .lightPlaceholder::placeholder {
-  color: #b4b5bc;
+  color: var(--sv-placeholder);
   opacity: 1;
 }
 
@@ -540,7 +538,7 @@
 
 /* 浅色占位符 */
 .lightPlaceholder :global(textarea::placeholder) {
-  color: #b4b5bc !important;
+  color: var(--sv-placeholder) !important;
   opacity: 1 !important;
 }
 
@@ -585,7 +583,7 @@
   gap: 10px;
   min-width: 0;
   padding: 12px 14px;
-  background: var(--bg-base, #fff);
+  background: var(--bg-base);
   border: 1px solid color-mix(in srgb, var(--color-border-2) 70%, transparent);
   border-radius: 14px;
   cursor: pointer;
@@ -596,15 +594,15 @@
 
 .assistantCard:hover {
   border-color: var(--color-border-3);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--mu-shadow-1);
 }
 
 :global([data-theme='dark']) .assistantCard {
-  background: #262626;
+  background: var(--sv-surface);
 }
 
 :global([data-theme='dark']) .assistantCard:hover {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--mu-shadow-2);
 }
 
 .assistantCardAvatar {

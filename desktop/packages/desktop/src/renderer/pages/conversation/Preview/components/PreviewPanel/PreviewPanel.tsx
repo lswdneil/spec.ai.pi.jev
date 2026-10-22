@@ -59,7 +59,7 @@ import {
   MAX_SPLIT_WIDTH,
   MIN_SPLIT_WIDTH,
 } from '../../constants';
-import { usePreviewKeyboardShortcuts, useScrollSync, useTabOverflow, useThemeDetection } from '../../hooks';
+import { usePreviewKeyboardShortcuts, useScrollSync, useTabOverflow } from '../../hooks';
 import { useTranslation } from 'react-i18next';
 import './preview.css';
 
@@ -136,7 +136,6 @@ const PreviewPanel: React.FC = () => {
   const previewContainerRef = useRef<HTMLDivElement>(null);
 
   // 使用自定义 Hooks / Use custom hooks
-  const currentTheme = useThemeDetection();
   const { tabsContainerRef, tabFadeState } = useTabOverflow([tabs, activeTabId]);
   const { handleEditorScroll, handlePreviewScroll } = useScrollSync({
     enabled: isSplitScreenEnabled,
@@ -1234,7 +1233,6 @@ const PreviewPanel: React.FC = () => {
         <PreviewContextMenu
           contextMenu={contextMenu}
           tabs={previewTabs}
-          currentTheme={currentTheme}
           onClose={() => setContextMenu({ show: false, x: 0, y: 0, tabId: null })}
           onCloseTab={handleCloseTab}
           onCloseLeft={handleCloseLeft}

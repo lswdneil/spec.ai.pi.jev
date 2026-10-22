@@ -194,7 +194,7 @@ const WorkspaceFolderSelect: React.FC<WorkspaceFolderSelectProps> = ({
             WebkitBackdropFilter: 'none',
             isolation: 'isolate',
           }}
-          className='overflow-x-hidden overflow-y-auto rounded-12px border border-border-1 p-6px shadow-[0_18px_48px_rgba(0,0,0,0.42)]'
+          className='overflow-x-hidden overflow-y-auto rounded-12px border border-border-1 p-6px shadow-none'
         >
           {recentWorkspaces.length > 0 && (
             <>

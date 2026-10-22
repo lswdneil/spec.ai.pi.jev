@@ -16,7 +16,7 @@ import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
  * Exported for tests (heading inline-markup sizing regression).
  */
 export const createInitStyle = (
-  currentTheme = 'light',
+  _currentTheme = 'light',
   cssVars?: Record<string, string>,
   customCss?: string,
   isMobile?: boolean
@@ -205,7 +205,7 @@ export const createInitStyle = (
   pre,
   .hljs {
     scrollbar-width: thin;
-    scrollbar-color: ${currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.18)' : 'rgba(0, 0, 0, 0.1)'} transparent;
+    scrollbar-color: var(--sv-faint) transparent;
   }
   pre::-webkit-scrollbar,
   .hljs::-webkit-scrollbar {
@@ -220,12 +220,12 @@ export const createInitStyle = (
   }
   pre::-webkit-scrollbar-thumb,
   .hljs::-webkit-scrollbar-thumb {
-    background-color: ${currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.18)' : 'rgba(0, 0, 0, 0.1)'};
+    background-color: var(--sv-faint);
     border-radius: 3px;
   }
   pre::-webkit-scrollbar-thumb:hover,
   .hljs::-webkit-scrollbar-thumb:hover {
-    background-color: ${currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.28)' : 'rgba(0, 0, 0, 0.2)'};
+    background-color: var(--sv-muted);
   }
   img {
     max-width: 100%;

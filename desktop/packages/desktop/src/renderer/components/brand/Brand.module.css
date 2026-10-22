@@ -23,9 +23,9 @@
   border-radius: 50%;
   background: radial-gradient(
     closest-side,
-    rgba(195, 162, 251, 0.42) 0%,
-    rgba(240, 196, 251, 0.2) 48%,
-    rgba(240, 196, 251, 0) 100%
+    color-mix(in srgb, var(--sv-brand) 42%, transparent) 0%,
+    color-mix(in srgb, var(--sv-brand) 20%, transparent) 48%,
+    transparent 100%
   );
   pointer-events: none;
 }
@@ -47,30 +47,30 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--mu-judge-dot, #d97fe6);
-  box-shadow: 0 0 0 2px var(--mu-judge-dot-ring, rgba(217, 127, 230, 0.2));
+  background: var(--mu-judge-dot);
+  box-shadow: 0 0 0 2px var(--mu-judge-dot-ring);
   transition:
     background-color var(--mu-duration, 160ms) var(--mu-ease, ease),
     box-shadow var(--mu-duration, 160ms) var(--mu-ease, ease);
 }
 
 .pulse[data-state='judging'] .pulseDot {
-  background: var(--mu-pink-6, #c55fd3);
+  background: var(--mu-pink-6);
   animation: mu-pulse 1.6s ease-in-out infinite;
 }
 
 .pulse[data-state='off'] .pulseDot {
-  background: var(--bg-4, #c9cdd4);
+  background: var(--bg-4);
   box-shadow: none;
 }
 
 @keyframes mu-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 2px var(--mu-judge-dot-ring, rgba(217, 127, 230, 0.2));
+    box-shadow: 0 0 0 2px var(--mu-judge-dot-ring);
   }
   50% {
-    box-shadow: 0 0 0 5px rgba(226, 155, 238, 0);
+    box-shadow: 0 0 0 5px transparent;
   }
 }
 
@@ -132,7 +132,7 @@
   inset-inline-start: 0;
   width: 42%;
   border-radius: 3px;
-  background: var(--text-tertiary, #86909c);
+  background: var(--text-tertiary);
   animation: mu-sweep 1.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 

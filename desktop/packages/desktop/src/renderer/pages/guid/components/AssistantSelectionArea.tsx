@@ -242,7 +242,7 @@ const AssistantSelectionArea: React.FC<AssistantSelectionAreaProps> = ({
             ? 'font-600 text-t-primary shadow-sm'
             : `text-t-secondary opacity-75 hover:opacity-100 ${styles.assistantSelectorInactive}`
         }`}
-        style={isSelected ? { background: 'var(--bg-base, #fff)' } : { background: 'transparent' }}
+        style={isSelected ? { background: 'var(--bg-base)' } : { background: 'transparent' }}
         onClick={() => {
           onSelectAssistant(assistant.id);
           setMoreVisible(false);
@@ -270,7 +270,7 @@ const AssistantSelectionArea: React.FC<AssistantSelectionAreaProps> = ({
       data-testid='assistant-overflow-panel'
       data-overflow-columns={overflowColumns}
       className={`absolute start-0 top-[calc(100%+8px)] z-100 w-full rounded-12px border border-border-2 p-8px shadow-lg ${styles.assistantOverflowPanel}`}
-      style={{ background: 'var(--bg-base, #fff)' }}
+      style={{ background: 'var(--bg-base)' }}
     >
       {showOverflowSearch ? (
         <div className='mb-8px'>

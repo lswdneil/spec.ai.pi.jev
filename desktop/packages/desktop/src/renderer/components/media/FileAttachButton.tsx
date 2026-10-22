@@ -117,10 +117,10 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
   }
 
   const cardStyle: React.CSSProperties = {
-    backgroundColor: 'var(--color-bg-2, #fff)',
-    borderRadius: 12,
-    boxShadow: '0 4px 24px rgba(0,0,0,0.13)',
-    border: '1px solid var(--color-border-1, #e5e6eb)',
+    backgroundColor: 'var(--color-bg-2)',
+    borderRadius: 'var(--sv-r-composer)',
+    boxShadow: 'var(--mu-shadow-2)',
+    border: '1px solid var(--color-border-1)',
     padding: '6px 0',
     minWidth: 220,
     zIndex: 1050,
@@ -166,7 +166,7 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
           title={item.reason}
         />
       ))}
-      <div style={{ margin: '4px 12px', height: 1, backgroundColor: 'var(--color-border-1, #e5e6eb)' }} />
+      <div style={{ margin: '4px 12px', height: 1, backgroundColor: 'var(--color-border-1)' }} />
       <div className='px-12px py-8px'>
         <div className='text-12px leading-16px text-t-secondary whitespace-normal break-words'>
           {t('conversation.mcp.managementHint', {
@@ -244,7 +244,7 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
               </Trigger>
             </div>
           )}
-          <div style={{ margin: '4px 12px', height: 1, backgroundColor: 'var(--color-border-1, #e5e6eb)' }} />
+          <div style={{ margin: '4px 12px', height: 1, backgroundColor: 'var(--color-border-1)' }} />
         </>
       )}
 

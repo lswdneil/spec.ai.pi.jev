@@ -40,7 +40,7 @@ const formatScalePercent = (value: number, language: string) =>
  */
 const ScaleControl: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const { fontScale, setFontScale, theme } = useThemeContext();
+  const { fontScale, setFontScale } = useThemeContext();
 
   // 拖动中的临时值，仅用于驱动滑块和百分比显示，松手前不应用缩放
   // Transient value while dragging — drives the slider/label only, scale is applied on release
@@ -141,11 +141,7 @@ const ScaleControl: React.FC = () => {
             onClick={handleReset}
             disabled={isResetDisabled}
             style={{
-              color: isResetDisabled
-                ? theme === 'dark'
-                  ? 'rgba(230, 232, 236, 0.62)'
-                  : 'rgba(78, 89, 105, 0.72)'
-                : 'rgb(var(--primary-6))',
+              color: isResetDisabled ? 'var(--sv-faint)' : 'var(--sv-brand-ink)',
               opacity: 1,
             }}
           >

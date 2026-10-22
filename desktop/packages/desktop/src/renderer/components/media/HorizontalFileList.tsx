@@ -141,7 +141,7 @@ const HorizontalFileList: React.FC<HorizontalFileListProps> = ({ children }) => 
             className='ms-0px w-28px h-28px rd-50% bg-1 flex items-center justify-center hover:bg-2 transition-colors border-1 border-solid b-color-border-2'
             style={{
               pointerEvents: 'auto', // 按钮响应点击
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+              boxShadow: 'var(--mu-shadow-1)',
             }}
           >
             <ChevronLeft size={14} style={{ color: 'var(--text-t-primary)' }} />
@@ -163,7 +163,7 @@ const HorizontalFileList: React.FC<HorizontalFileListProps> = ({ children }) => 
             className='ms-auto me-0px w-28px h-28px rd-50% bg-1 flex items-center justify-center hover:bg-2 transition-colors border-1 border-solid b-color-border-2'
             style={{
               pointerEvents: 'auto', // 按钮响应点击
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+              boxShadow: 'var(--mu-shadow-1)',
             }}
           >
             <ChevronRight size={14} style={{ color: 'var(--text-t-primary)' }} />

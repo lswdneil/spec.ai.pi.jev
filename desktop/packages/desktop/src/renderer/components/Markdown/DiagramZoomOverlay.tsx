@@ -223,7 +223,7 @@ function DiagramZoomOverlay({ svg, onClose, ariaLabel, panelBackground }: Diagra
         position: 'fixed',
         inset: 0,
         zIndex: 10000,
-        background: 'var(--color-bg-mask, rgba(29, 33, 41, 0.6))',
+        background: 'var(--sv-scrim)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

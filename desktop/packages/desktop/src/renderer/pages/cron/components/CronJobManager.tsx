@@ -115,7 +115,7 @@ const CronJobManager: React.FC<CronJobManagerProps> = ({ conversation_id, cron_j
         >
           <AlarmClock theme='outline' size={16} fill={iconColors.primary} />
           <span
-            className={`ms-4px w-8px h-8px rounded-full ${hasError ? 'bg-[#f53f3f]' : isPaused ? 'bg-[#ff7d00]' : 'bg-[#00b42a]'}`}
+            className={`ms-4px w-8px h-8px rounded-full ${hasError ? 'bg-sv-danger' : isPaused ? 'bg-sv-warn' : 'bg-sv-ok'}`}
           />
         </span>
       </Button>

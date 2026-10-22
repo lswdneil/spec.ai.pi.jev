@@ -86,7 +86,7 @@ const MobileWorkspaceOverlay: React.FC<MobileWorkspaceOverlayProps> = ({
             borderBottomRightRadius: '0',
             borderRight: 'none',
             backgroundColor: 'var(--bg-2)',
-            boxShadow: '0 8px 20px rgba(0, 0, 0, 0.12)',
+            boxShadow: 'var(--mu-shadow-2)',
           }}
           onClick={() => dispatchWorkspaceToggleEvent()}
           aria-label={t('conversation.workspace.collapsePanel')}

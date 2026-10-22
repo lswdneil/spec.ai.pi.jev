@@ -1,4 +1,4 @@
-/* The home page's header: a mono status line and a large question. Left-aligned with the input. */
+/* The home page's header: a UI status line and a large question. Left-aligned with the input. */
 .hero {
   position: relative;
   display: flex;
@@ -25,9 +25,9 @@
   background: color-mix(in srgb, var(--bg-1) 72%, transparent);
   backdrop-filter: blur(8px);
   color: var(--bg-6);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.02em;
+  font-family: var(--sv-font-ui);
+  font-size: var(--sv-fs-meta);
+  letter-spacing: 0;
   font-variant-numeric: tabular-nums;
 }
 
@@ -38,7 +38,7 @@
 .title {
   margin: 4px 0 0;
   color: var(--text-primary);
-  font-size: clamp(26px, 3.4vw, 34px);
+  font-size: var(--sv-fs-display);
   font-weight: 600;
   line-height: 1.12;
   letter-spacing: -0.025em;

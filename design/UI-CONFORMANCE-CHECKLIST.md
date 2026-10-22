@@ -18,6 +18,8 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | Motion | fast 120, base 160, enter 220, ease `(.2,.7,.2,1)` | `--sv-t-*` / `--sv-ease` | PASS |
 | Shadows | none | Dense sheets and primitives use borders | PASS |
 | One accent | brand only | no second accent in Dense primitives | PASS |
+| Token precedence | Dense mappings beat colour-scheme blocks | `html[data-sv-ui="dense"][data-theme]` | FIXED |
+| Raw theme values | token sources only | UI sheets use tokens; see `HARDCODING-AUDIT.md` | FIXED |
 
 ## 2. Shell
 
@@ -39,6 +41,8 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | Home composer placeholder | 13px, UI typeface | FIXED |
 | Send button | 26 x 26 | PASS |
 | Composer note | 9.5 | PASS |
+| Hero status pill | 12, UI typeface | FIXED |
+| Kernel status bar | 11.5, UI typeface | FIXED |
 | Thread message body | 12.5 / 1.55 | PASS |
 | User bubble | pad 8/10, radius 8/8/2/8 | PASS |
 | Tool card | margin 8, radius 5, head 26, code 10.5 | PASS |
@@ -51,6 +55,7 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | --- | --- | --- |
 | Settings nav row | 27 high, 11, radius 5 | PASS |
 | Settings rail typeface | group headers and page rows both use `--sv-font-ui` | FIXED |
+| Settings eyebrow / list headings | UI typeface and type tokens | FIXED |
 | Settings nav padding | 16 / 8 | PASS |
 | Settings main padding | 18 / 22 / 28 | FIXED |
 | Settings heading | 20 | PASS |
@@ -113,6 +118,7 @@ Native `<button>` paints a light system background unless reset. Each surface be
 - Focused regressions:
   - `tests/unit/renderer/settingsFrame.test.ts`
   - `tests/unit/renderer/sidebarTypography.test.ts`
+  - `tests/unit/renderer/themeTokens.test.ts`
   - `tests/unit/renderer/nativeButtonSurfaces.test.ts`
   - `tests/unit/renderer/fieldFocusSurfaces.test.ts`
   - `tests/unit/renderer/radioSurface.dom.test.tsx`

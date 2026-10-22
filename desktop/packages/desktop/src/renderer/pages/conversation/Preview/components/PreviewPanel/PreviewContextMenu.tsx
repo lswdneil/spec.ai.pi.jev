@@ -64,12 +64,6 @@ interface PreviewContextMenuProps {
   tabs: PreviewTab[];
 
   /**
-   * 当前主题
-   * Current theme
-   */
-  currentTheme: 'light' | 'dark';
-
-  /**
    * 关闭菜单回调
    * Close menu callback
    */
@@ -172,7 +166,6 @@ const MenuDivider: React.FC = () => <div className='h-1px bg-border-1 my-4px mx-
 const PreviewContextMenu: React.FC<PreviewContextMenuProps> = ({
   contextMenu,
   tabs,
-  currentTheme,
   onClose,
   onCloseTab,
   onCloseLeft,
@@ -289,12 +282,12 @@ const PreviewContextMenu: React.FC<PreviewContextMenuProps> = ({
     // restores positioning against the viewport.
     <div
       ref={contextMenuRef}
-      className='fixed shadow-lg rd-8px py-4px z-9999'
+      className='fixed shadow-none rd-8px py-4px z-9999'
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
-        backgroundColor: currentTheme === 'dark' ? '#1d1d1f' : '#ffffff',
-        border: '1px solid var(--border-base, #e5e6eb)',
+        backgroundColor: 'var(--sv-popover)',
+        border: '1px solid var(--sv-line)',
         minWidth: '180px',
       }}
     >

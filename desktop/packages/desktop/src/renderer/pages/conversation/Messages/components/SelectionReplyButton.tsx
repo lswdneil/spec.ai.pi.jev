@@ -179,7 +179,7 @@ const SelectionReplyButton: React.FC<{ messages: TMessage[] }> = ({ messages }) 
         transform: 'translateX(-50%)',
         background: 'var(--brand-light)',
         border: '1px solid var(--brand-hover)',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.12)',
+        boxShadow: 'var(--mu-shadow-2)',
         color: 'var(--brand)',
       }}
     >

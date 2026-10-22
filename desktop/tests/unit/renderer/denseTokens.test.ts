@@ -24,6 +24,7 @@ describe('the Dense token contract', () => {
       '--sv-fs-body-lg': '15px',
       '--sv-fs-title': '18px',
       '--sv-fs-h1': '20px',
+      '--sv-fs-display': '34px',
     };
     for (const [name, value] of Object.entries(sizes)) expect(rendererTokens).toContain(`${name}: ${value};`);
     expect(designTokens.typography.sizes).toMatchObject({

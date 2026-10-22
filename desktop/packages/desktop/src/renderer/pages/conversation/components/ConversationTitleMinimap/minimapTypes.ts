@@ -41,7 +41,7 @@ export const defaultVisualStyle: MinimapVisualStyle = {
   border: '1px solid var(--color-border-2)',
   borderColor: 'var(--color-border-2)',
   borderRadius: '12px',
-  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.16)',
+  boxShadow: 'var(--mu-shadow-2)',
 };
 
 export type ConversationTitleMinimapProps = {

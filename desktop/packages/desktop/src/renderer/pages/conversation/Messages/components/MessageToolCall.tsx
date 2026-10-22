@@ -72,7 +72,7 @@ const MessageToolCall: React.FC<{ message: IMessageToolCall }> = ({ message }) =
 
   return (
     <div className='flex flex-col'>
-      <div className='flex flex-row color-#86909C gap-12px items-center'>
+      <div className='flex flex-row text-t-tertiary gap-12px items-center'>
         <Badge
           status={statusToBadge(normalized.status)}
           className={normalized.status === 'running' ? styles.breathing : undefined}
@@ -81,7 +81,7 @@ const MessageToolCall: React.FC<{ message: IMessageToolCall }> = ({ message }) =
           className={
             'flex-1 min-w-0' +
             (expanded ? ' break-all' : ' truncate') +
-            (hasDetail ? ' cursor-pointer hover:color-#4E5969' : '')
+            (hasDetail ? ' cursor-pointer hover:text-t-secondary' : '')
           }
           onClick={hasDetail ? () => setExpanded(!expanded) : undefined}
         >
@@ -90,7 +90,7 @@ const MessageToolCall: React.FC<{ message: IMessageToolCall }> = ({ message }) =
         </span>
         {hasDetail && (
           <span
-            className='flex-shrink-0 cursor-pointer hover:color-#4E5969 transition-colors'
+            className='flex-shrink-0 cursor-pointer hover:text-t-secondary transition-colors'
             onClick={() => setExpanded(!expanded)}
           >
             {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}

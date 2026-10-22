@@ -21,7 +21,7 @@
     radial-gradient(60% 46% at 50% -6%, var(--mu-glow-violet, transparent), transparent 72%),
     radial-gradient(34% 30% at 88% 4%, var(--mu-glow-pink, transparent), transparent 70%),
     radial-gradient(circle at 1px 1px, var(--mu-grid-dot, transparent) 1px, transparent 1.4px) 0 0 / 22px 22px;
-  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.55) 40%, transparent 75%);
+  mask-image: linear-gradient(to bottom, black 0%, color-mix(in srgb, black 55%, transparent) 40%, transparent 75%);
 }
 
 /* The window has no title bar here: this strip is what it is moved by. */
@@ -34,7 +34,7 @@
 
 .column {
   display: flex;
-  font-family: var(--font-ui);
+  font-family: var(--sv-font-ui);
   flex-direction: column;
   gap: 28px;
   width: min(560px, calc(100% - 48px));

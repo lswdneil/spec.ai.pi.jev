@@ -16,7 +16,7 @@ describe('the welcome guide styles', () => {
   });
 
   it('uses one UI family and lets the lead fill its line', () => {
-    expect(css).toContain('font-family: var(--font-ui);');
+    expect(css).toContain('font-family: var(--sv-font-ui);');
     expect(css).not.toContain('font-family: var(--font-mono);');
     expect(css).not.toContain('text-wrap: balance;');
   });

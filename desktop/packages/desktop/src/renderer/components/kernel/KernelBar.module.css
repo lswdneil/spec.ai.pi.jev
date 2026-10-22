@@ -1,4 +1,4 @@
-/* The kernel bar: one mono line along the bottom of the window, on the sidebar's surface. */
+/* The kernel bar: one status line along the bottom of the window, on the sidebar's surface. */
 .bar {
   display: flex;
   flex-shrink: 0;
@@ -10,10 +10,10 @@
   border-top: 1px solid var(--border-base);
   background: var(--bg-2);
   color: var(--bg-6);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--sv-font-ui);
+  font-size: var(--sv-fs-small);
   line-height: 26px;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
   font-variant-numeric: tabular-nums;
   user-select: none;
   overflow: hidden;
@@ -74,8 +74,8 @@
   border: 1px solid var(--mu-judge-border);
   border-radius: 4px;
   color: var(--mu-judge);
-  font-size: 10px;
-  line-height: 14px;
+  font-size: var(--sv-fs-small);
+  line-height: 16px;
 }
 
 .meter {

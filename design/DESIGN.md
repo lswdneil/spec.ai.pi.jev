@@ -98,7 +98,8 @@ Usage notes:
 --font-mono:  "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans Mono", monospace
 ```
 
-- Dense (approved direction): UI base **13px**; sidebar primary labels 13; sidebar section headers and empty-state copy 12; small 11.5; caption 11.5; meta 12; h1 20. Editorial alternatives may use 14/26.
+- Dense (approved direction): UI base **13px**; sidebar primary labels 13; sidebar section headers and empty-state copy 12; small 11.5; caption 11.5; meta 12; h1 20; hero display 34. Editorial alternatives may use 14/26.
+- UI labels and prose use `--sv-font-ui`. Monospace is only for code, identifiers, timings and commands. Colours come from `--sv-*` tokens (or the mapped legacy theme variables); raw colours live only in token sources and documented data/preview exceptions.
 - Line-height: body **1.65** (CJK 1.7–1.8), headings **1.35** (CJK 1.35–1.4), small 1.5.
 - Weights: 400 / 500 / 600 only. No 700 body.
 - Numbers in tables and timing: `font-variant-numeric: tabular-nums`.

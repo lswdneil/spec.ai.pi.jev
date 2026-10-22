@@ -2,7 +2,7 @@
    Tokens and legacy chrome live here; the structural shell is DenseSider + MobileTabBar
    and the 40px header in ChatLayout. */
 
-html[data-sv-ui="dense"] {
+html[data-sv-ui="dense"][data-theme] {
   --titlebar-height: 40px;
 
   --bg-base: var(--sv-bg);
@@ -102,6 +102,7 @@ html[data-sv-ui="dense"] {
   --mu-judge-border: var(--sv-line);
   --mu-judge-dot: var(--sv-brand-1);
   --mu-judge-dot-ring: color-mix(in srgb, var(--sv-brand) 22%, transparent);
+  --mu-pink-6: var(--sv-brand-1);
 
   /* The violet scale becomes the Dense surface/sage scale. */
   --mu-violet-1: var(--sv-surface);

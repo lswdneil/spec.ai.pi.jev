@@ -59,10 +59,10 @@ const ChatTitleEditor: React.FC<ChatTitleEditorProps> = ({
         editingTitle
           ? compact
             ? 'bg-sv-surface'
-            : 'bg-fill-2 border-[var(--color-fill-3)] shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
+            : 'bg-fill-2 border-[var(--color-fill-3)] shadow-none'
           : compact
             ? 'hover:bg-sv-surface focus-within:bg-sv-surface'
-            : 'hover:bg-fill-2 hover:border-[var(--color-fill-3)] hover:shadow-[0_1px_2px_rgba(15,23,42,0.06)] focus-within:bg-fill-2 focus-within:border-[var(--color-fill-3)] focus-within:shadow-[0_1px_2px_rgba(15,23,42,0.06)]'
+            : 'hover:bg-fill-2 hover:border-[var(--color-fill-3)] hover:shadow-none focus-within:bg-fill-2 focus-within:border-[var(--color-fill-3)] focus-within:shadow-none'
       )}
       style={{ width: '100%', maxWidth: `${titleAreaMaxWidth}px` }}
     >
