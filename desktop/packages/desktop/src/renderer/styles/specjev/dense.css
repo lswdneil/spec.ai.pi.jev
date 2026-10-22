@@ -71,6 +71,11 @@ html[data-sv-ui="dense"] {
   --color-bg-5: var(--sv-raised);
   --color-bg-popup: var(--sv-popover);
 
+  /* Checked radios, segments and choice tags follow the one accent too. */
+  --primary-5: 157, 180, 141;
+  --primary-6: 130, 150, 111;
+  --primary-7: 100, 121, 84;
+
   /* The app's own accent (buttons, switches, checks, focus) is sage, not violet/black. */
   --mu-accent-fill: var(--sv-brand);
   --mu-accent-fill-hover: var(--sv-brand-1);
@@ -94,6 +99,18 @@ html[data-sv-ui="dense"] {
   --chat-paragraph-margin: 10px;
 
   font-size: 13px;
+}
+
+html[data-sv-ui="dense"][data-theme="dark"] {
+  --primary-5: 196, 216, 182;
+  --primary-6: 181, 206, 165;
+  --primary-7: 157, 180, 141;
+}
+
+html[data-sv-ui="dense"][data-theme="light"] {
+  --primary-5: 100, 121, 84;
+  --primary-6: 78, 101, 63;
+  --primary-7: 62, 82, 50;
 }
 
 html[data-sv-ui="dense"] body {
@@ -152,6 +169,38 @@ html[data-sv-ui="dense"] .sv-dense-tool-summary {
   border: 1px solid var(--sv-line);
   border-radius: 5px;
   background: var(--sv-surface);
+}
+
+html[data-sv-ui="dense"] .sv-dense-acp-card {
+  border-radius: 5px;
+}
+
+html[data-sv-ui="dense"] .sv-dense-acp-card .arco-card-body {
+  padding: 8px;
+}
+
+html[data-sv-ui="dense"] .sv-dense-acp-title,
+html[data-sv-ui="dense"] .sv-dense-acp-command {
+  font-size: 11.5px;
+  line-height: 18px;
+}
+
+html[data-sv-ui="dense"] .sv-dense-acp-card .arco-tag {
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+html[data-sv-ui="dense"] .sv-dense-terminal-output,
+html[data-sv-ui="dense"] .sv-dense-code-block {
+  padding: 6px 8px;
+  border: 1px solid var(--sv-line);
+  border-radius: 4px;
+  background: var(--sv-surface-2);
+  font-size: 10.5px;
+  line-height: 1.6;
 }
 
 html[data-sv-ui="dense"] .settings-page-title {
@@ -227,6 +276,19 @@ html[data-sv-ui="dense"] a {
 html[data-sv-ui="dense"] .arco-menu-selected,
 html[data-sv-ui="dense"] .arco-tabs-tab-active {
   color: var(--sv-text);
+}
+
+html[data-sv-ui="dense"] .arco-input,
+html[data-sv-ui="dense"] .arco-textarea,
+html[data-sv-ui="dense"] .arco-select-view,
+html[data-sv-ui="dense"] .arco-input-inner-wrapper,
+html[data-sv-ui="dense"] .arco-btn {
+  font-size: 13px;
+}
+
+html[data-sv-ui="dense"] .arco-form-label-item > label,
+html[data-sv-ui="dense"] .arco-form-item-label-col > label {
+  font-size: 12px;
 }
 
 /* Flat chrome: the Dense reference has no shadows. */

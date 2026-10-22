@@ -81,7 +81,7 @@ const ContentView: React.FC<{ content: IMessageAcpToolCall['content']['update'][
   if (content.type === 'content' && content.content && content.content.type === 'text' && content.content.text) {
     return (
       <div className='mt-3'>
-        <div className='bg-1 p-3 rounded border overflow-hidden'>
+        <div className='sv-dense-code-block bg-1 p-3 rounded border overflow-hidden'>
           <div className='overflow-x-auto break-words'>
             <MarkdownView>{content.content.text}</MarkdownView>
           </div>
@@ -146,12 +146,14 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
   }
 
   return (
-    <Card className='w-full mb-2' size='small' bordered>
+    <Card className='sv-dense-acp-card w-full mb-2' size='small' bordered>
       {messageContext}
       <div className='flex items-start gap-3'>
         <div className='flex-1 min-w-0'>
           <div className='flex items-center gap-2 mb-2'>
-            <span className='font-medium text-t-primary'>{title || getKindDisplayName(kind, t)}</span>
+            <span className='sv-dense-acp-title font-medium text-t-primary'>
+              {title || getKindDisplayName(kind, t)}
+            </span>
             <StatusTag status={status} />
           </div>
           {rawInput && (
@@ -159,7 +161,9 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
               {typeof rawInput === 'string' ? (
                 <MarkdownView>{`\`\`\`\n${rawInput}\n\`\`\``}</MarkdownView>
               ) : (
-                <pre className='bg-1 p-2 rounded text-xs overflow-x-auto'>{JSON.stringify(rawInput, null, 2)}</pre>
+                <pre className='sv-dense-terminal-output bg-1 p-2 rounded text-xs overflow-x-auto'>
+                  {JSON.stringify(rawInput, null, 2)}
+                </pre>
               )}
             </div>
           )}

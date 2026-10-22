@@ -66,11 +66,11 @@ const MessageAcpTerminalOutput: React.FC<{ message: IMessageAcpTerminalOutput }>
   );
 
   return (
-    <Card className='w-full mb-2' size='small' bordered>
+    <Card className='sv-dense-acp-card w-full mb-2' size='small' bordered>
       <div className='flex items-center gap-2 mb-2 min-w-0'>
         <code
           dir='ltr'
-          className='text-13px font-mono text-t-primary truncate flex-1'
+          className='sv-dense-acp-command text-13px font-mono text-t-primary truncate flex-1'
           data-testid='terminal-card-command'
         >
           $ {content.command}
@@ -87,7 +87,7 @@ const MessageAcpTerminalOutput: React.FC<{ message: IMessageAcpTerminalOutput }>
           ref={outputRef}
           data-testid='terminal-card-output'
           dir='ltr'
-          className='bg-1 p-2 rounded text-xs font-mono overflow-x-auto overflow-y-auto max-h-320px whitespace-pre-wrap m-0'
+          className='sv-dense-terminal-output bg-1 p-2 rounded text-xs font-mono overflow-x-auto overflow-y-auto max-h-320px whitespace-pre-wrap m-0'
         >
           {content.truncated
             ? `…${t('conversation.terminal.truncated', { defaultValue: '(earlier output truncated)' })}\n`
