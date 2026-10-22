@@ -18,7 +18,7 @@
  * a modal.
  */
 
-import { Notification } from '@arco-design/web-react';
+import { Notification } from '@/renderer/ui/toast';
 import i18next from 'i18next';
 
 /**

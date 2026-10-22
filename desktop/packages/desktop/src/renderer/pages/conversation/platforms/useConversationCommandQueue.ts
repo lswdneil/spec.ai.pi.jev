@@ -7,7 +7,7 @@ import {
   turnCompleted,
 } from '@/renderer/pages/conversation/runtime/conversationRuntimeViewStore';
 import { useAddEventListener } from '@/renderer/utils/emitter';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import i18next from 'i18next';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

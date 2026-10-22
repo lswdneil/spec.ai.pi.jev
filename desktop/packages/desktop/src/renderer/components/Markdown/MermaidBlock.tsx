@@ -9,7 +9,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { muCodeTheme } from './muCodeTheme';
 
 import { copyText } from '@/renderer/utils/ui/clipboard';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { Copy, PreviewOpen, Refresh, ZoomIn, ZoomOut } from '@icon-park/react';
 import { usePreviewContext } from '@/renderer/pages/conversation/Preview';
 import React, { useEffect, useRef, useState } from 'react';

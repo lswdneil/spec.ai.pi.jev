@@ -4,7 +4,7 @@
  * any other file travels as its full path in the message (`withFiles`), as spec.jev reads files in its other conversations.
  * A file without a path on this computer (text pasted as a file) cannot be attached, and says so.
  */
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PiImage } from '@/common/utils/nativeHost';

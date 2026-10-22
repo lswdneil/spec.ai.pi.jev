@@ -46,7 +46,7 @@ vi.mock('@/renderer/utils/emitter', () => ({
   emitter: { emit: emitMock },
 }));
 
-vi.mock('@arco-design/web-react', () => ({
+vi.mock('@/renderer/ui/toast', () => ({
   Message: { warning: warningMock },
 }));
 

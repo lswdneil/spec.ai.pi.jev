@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { Copy, Down, Up } from '@icon-park/react';
 import katex from 'katex';
 import React, { useRef, useState } from 'react';

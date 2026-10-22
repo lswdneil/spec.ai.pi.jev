@@ -17,7 +17,7 @@
  * overrides. The full-page editor still renders builtin skills and prompts as
  * read-only so users can inspect what's bundled.
  */
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { useAssistantEditor, useAssistantList } from '@/renderer/hooks/assistant';
 import { useManagedAgentRuntimeCatalog } from '@/renderer/hooks/agent/useManagedAgents';
 import { buildAssistantEditorBackends, resolveAvatarImageSrc } from './assistantUtils';

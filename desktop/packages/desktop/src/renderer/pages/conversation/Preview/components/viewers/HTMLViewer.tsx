@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import MonacoEditor from '@monaco-editor/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

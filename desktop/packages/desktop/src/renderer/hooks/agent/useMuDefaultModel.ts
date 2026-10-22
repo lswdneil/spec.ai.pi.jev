@@ -1,4 +1,4 @@
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';

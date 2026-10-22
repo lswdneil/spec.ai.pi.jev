@@ -12,13 +12,51 @@ export const toast = {
   promise: sonnerToast.promise,
 };
 
+type MessageConfig = {
+  content?: React.ReactNode;
+  title?: React.ReactNode;
+  duration?: number;
+  [key: string]: unknown;
+};
+
+/**
+ * Arco accepts either a node or a config object. The facade does the same; a config's
+ * `title` (a Notification) is kept above its content.
+ */
+const messageOf = (value: unknown): { content: React.ReactNode; duration?: number } => {
+  if (value !== null && typeof value === 'object' && 'content' in value) {
+    const config = value as MessageConfig;
+    const title = config.title;
+    return {
+      content: title ? (
+        <div className='flex flex-col gap-0.5'>
+          <strong className='font-medium'>{title}</strong>
+          <div>{config.content}</div>
+        </div>
+      ) : (
+        config.content
+      ),
+      duration: config.duration,
+    };
+  }
+  return { content: value as React.ReactNode };
+};
+
+const notify =
+  (kind: 'success' | 'error' | 'info' | 'warning' | 'loading') =>
+  (value: unknown, fallbackDuration?: number) => {
+    const { content, duration } = messageOf(value);
+    const id = toast[kind](content, duration ?? fallbackDuration);
+    return () => toast.dismiss(id);
+  };
+
 /** Arco's `Message` shape, for the codemod. */
 const messageApi = {
-  success: (content: React.ReactNode, duration?: number) => toast.success(content, duration),
-  error: (content: React.ReactNode, duration?: number) => toast.error(content, duration),
-  info: (content: React.ReactNode, duration?: number) => toast.info(content, duration),
-  warning: (content: React.ReactNode, duration?: number) => toast.warning(content, duration),
-  loading: (content: React.ReactNode) => toast.loading(content),
+  success: notify('success'),
+  error: notify('error'),
+  info: notify('info'),
+  warning: notify('warning'),
+  loading: notify('loading'),
   clear: () => toast.dismiss(),
 };
 
@@ -28,8 +66,10 @@ export const Message = {
   useMessage: (_config?: { maxCount?: number }): [typeof messageApi, React.ReactNode] => [messageApi, null],
 };
 
-/** Arco's `Notification` shape. Same surface today; it can diverge later. */
-export const Notification = Message;
+/** Arco's `Notification` shape; it shares the same surface and adds a title above the content. */
+export const Notification = {
+  ...messageApi,
+};
 
 /** Mount once inside the theme provider. */
 export const AppToaster: React.FC = () => {

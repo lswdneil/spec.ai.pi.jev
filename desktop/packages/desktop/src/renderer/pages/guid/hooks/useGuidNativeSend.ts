@@ -6,7 +6,7 @@
  * one says why, in the native screens' words, and keeps what was typed. GuidPage uses useGuidSend instead while the
  * host is off.
  */
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import type { TFunction } from 'i18next';
 import { useCallback, useRef } from 'react';
 import type { NavigateFunction } from 'react-router-dom';

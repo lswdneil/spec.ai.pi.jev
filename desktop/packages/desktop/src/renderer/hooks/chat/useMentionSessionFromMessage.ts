@@ -7,7 +7,7 @@
 import { sessionMention } from '@/common/adapter/ipcBridge';
 import { useConversationContextSafe } from '@/renderer/hooks/context/ConversationContext';
 import { emitter } from '@/renderer/utils/emitter';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

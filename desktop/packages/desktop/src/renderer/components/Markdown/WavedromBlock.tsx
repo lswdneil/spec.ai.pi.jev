@@ -13,7 +13,7 @@ import WaveDrom, { type OnmlTree, type WaveSkin, type WaveSource } from 'wavedro
 import waveSkinDark from 'wavedrom/skins/dark.js';
 import waveSkinDefault from 'wavedrom/skins/default.js';
 
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { Copy, PreviewOpen, Refresh, ZoomIn, ZoomOut } from '@icon-park/react';
 import { usePreviewContext } from '@/renderer/pages/conversation/Preview';
 import { copyText } from '@/renderer/utils/ui/clipboard';

@@ -7,7 +7,7 @@
 import { ipcBridge } from '@/common';
 import type { Assistant } from '@/common/types/agent/assistantTypes';
 import { globalNavigate } from '@/renderer/utils/navigation';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { mutate as swrMutate } from 'swr';

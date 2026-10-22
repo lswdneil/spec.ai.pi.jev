@@ -188,12 +188,12 @@ describe('StartupGate', () => {
     catalog.mockReturnValueOnce(pending.promise);
     const reload = screen.getByRole('button', { name: copy.reload });
     fireEvent.click(reload);
-    await waitFor(() => expect(reload).toHaveClass('arco-btn-loading'));
+    await waitFor(() => expect(reload).toHaveAttribute('aria-busy', 'true'));
     fireEvent.click(screen.getByRole('button', { name: common.close }));
     expect(closeWindow).toHaveBeenCalledTimes(1);
     pending.resolve({ ok: false, error: 'second failure' });
     await waitFor(() => expect(screen.getByTestId('mu-error-detail')).toHaveTextContent('second failure'));
-    expect(reload).not.toHaveClass('arco-btn-loading');
+    expect(reload).not.toHaveAttribute('aria-busy');
     catalog.mockResolvedValueOnce({ ok: true, data: { assistants: [] } });
     fireEvent.click(reload);
     expect(await screen.findByText('app')).toBeInTheDocument();

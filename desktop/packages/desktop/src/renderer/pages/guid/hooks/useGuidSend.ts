@@ -10,7 +10,7 @@ import type { IMcpServer, TProviderWithModel } from '@/common/config/storage';
 import { toSessionMcpServer } from '@/renderer/hooks/mcp/catalog';
 import { emitter } from '@/renderer/utils/emitter';
 import { updateWorkspaceTime } from '@/renderer/utils/workspace/workspaceHistory';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { useCallback, useRef } from 'react';
 import { type TFunction } from 'i18next';
 import type { NavigateFunction } from 'react-router-dom';

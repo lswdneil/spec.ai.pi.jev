@@ -6,7 +6,7 @@
 
 import { ipcBridge } from '@/common';
 import { isElectronDesktop } from '@/renderer/utils/platform';
-import { Notification } from '@arco-design/web-react';
+import { Notification } from '@/renderer/ui/toast';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GPU_AUTO_DISABLE_ACK_KEY, shouldNotifyGpuAutoDisable } from './gpuAutoDisableDecision';

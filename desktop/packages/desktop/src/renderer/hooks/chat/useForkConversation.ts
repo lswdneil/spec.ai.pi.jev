@@ -6,7 +6,7 @@
 
 import { ipcBridge } from '@/common';
 import { parseError } from '@/common/utils';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

@@ -1,7 +1,7 @@
 import { ipcBridge } from '@/common';
 import { refreshConversationCache } from '@/renderer/pages/conversation/utils/conversationCache';
 import { emitter } from '@/renderer/utils/emitter';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { useTranslation } from 'react-i18next';
 import { mcpService } from '@/common/adapter/ipcBridge';
 import { isBackendHttpError } from '@/common/adapter/httpBridge';
