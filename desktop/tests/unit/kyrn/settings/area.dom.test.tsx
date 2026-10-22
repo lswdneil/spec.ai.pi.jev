@@ -261,7 +261,7 @@ describe('generic option fields', () => {
     const control = within(row).getByRole('switch', { name: 'Give the model a one-line hint' });
     expect(control).toHaveAttribute('aria-checked', 'true');
     fireEvent.click(control);
-    expect(onChange).toHaveBeenCalledWith(false, expect.anything());
+    expect(onChange).toHaveBeenCalledWith(false);
     expect(within(row).queryByTestId('mu-modified')).not.toBeInTheDocument();
   });
   it('draws a number with its unit and range, and says when a value is out of range', () => {

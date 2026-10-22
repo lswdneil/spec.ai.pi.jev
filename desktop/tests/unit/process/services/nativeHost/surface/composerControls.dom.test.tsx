@@ -69,6 +69,10 @@ vi.mock('@arco-design/web-react', async (importOriginal) => {
   };
 });
 
+vi.mock('@/renderer/ui/toast', () => ({
+  Message: { warning, error: vi.fn(), success: vi.fn() },
+}));
+
 // The real label measures itself for a marquee, which prints the text more than once.
 vi.mock('@/renderer/components/agent/MarqueePillLabel', () => ({
   default: ({ children }: { children?: React.ReactNode }) => <span>{children}</span>,

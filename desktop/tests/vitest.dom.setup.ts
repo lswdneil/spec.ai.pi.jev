@@ -16,7 +16,10 @@ if (typeof document !== 'undefined') {
   host.setAttribute('data-test-toaster', '');
   document.body.appendChild(host);
   createRoot(host).render(createElement(Toaster, { position: 'bottom-right', closeButton: true }));
-  afterEach(() => toast.dismiss());
+  afterEach(async () => {
+    toast.dismiss();
+    await new Promise((resolve) => setTimeout(resolve, 300));
+  });
 }
 
 // Make this a module

@@ -5,7 +5,7 @@
  */
 
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { BackendHttpError } from '@/common/adapter/httpBridge';
 import type { TConversationRuntimeSummary } from '@/common/config/storage';
 import { createElement, type PropsWithChildren } from 'react';
@@ -45,7 +45,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', () => ({
+vi.mock('@/renderer/ui/toast', () => ({
   Message: {
     info: vi.fn(),
     warning: vi.fn(),

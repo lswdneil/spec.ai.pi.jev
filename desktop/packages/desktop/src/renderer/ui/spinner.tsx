@@ -22,7 +22,11 @@ export const Spinner: React.FC<SpinnerProps> = ({ size = 'md', className, label 
   <span
     role='status'
     aria-label={typeof tip === 'string' ? tip : label}
-    className={cn('inline-block animate-spin rounded-full border-sv-line border-t-sv-text', sizes[sizeFor(size)], className)}
+    className={cn(
+      'arco-spin inline-block animate-spin rounded-full border-sv-line border-t-sv-text',
+      sizes[sizeFor(size)],
+      className
+    )}
   />
 );
 

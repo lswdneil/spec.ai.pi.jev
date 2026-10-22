@@ -21,7 +21,7 @@
 // mock.
 
 import React from 'react';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import enPreview from '@/renderer/services/i18n/locales/en-US/preview.json';

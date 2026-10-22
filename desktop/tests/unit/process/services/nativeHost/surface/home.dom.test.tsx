@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, cleanup, fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { createInstance } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
