@@ -105,8 +105,10 @@ describe('AboutModalContent', () => {
     expect(screen.getByTestId('about-company')).toHaveTextContent('settings.aboutCompany');
   });
 
-  it('opens the new repository and releases pages', async () => {
+  it('opens the website, repository and releases pages', async () => {
     await renderAbout();
+    fireEvent.click(screen.getByRole('link', { name: 'www.spec-ai.cn' }));
+    expect(mocks.openExternalUrl).toHaveBeenCalledWith('https://www.spec-ai.cn');
     fireEvent.click(screen.getByRole('button', { name: 'common.github' }));
     expect(mocks.openExternalUrl).toHaveBeenCalledWith('https://github.com/lswdneil/spec.ai.pi.jev');
     fireEvent.click(screen.getByRole('button', { name: 'settings.updateLog' }));

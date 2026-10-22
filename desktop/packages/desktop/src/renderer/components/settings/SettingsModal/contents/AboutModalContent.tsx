@@ -5,6 +5,7 @@
  */
 
 import { Button } from '@/renderer/ui/button';
+import { Link } from '@/renderer/ui/display';
 import { Message } from '@/renderer/ui/toast';
 import { FolderOpen, Github, Right } from '@icon-park/react';
 import React from 'react';
@@ -23,6 +24,7 @@ declare const __APP_VERSION__: string;
 
 const MU_REPO_URL = 'https://github.com/lswdneil/spec.ai.pi.jev';
 const MU_RELEASES_URL = 'https://github.com/lswdneil/spec.ai.pi.jev/releases';
+const MU_WEBSITE_URL = 'https://www.spec-ai.cn';
 
 /** While these run, another check has nothing to add. */
 const BUSY_PHASES: ReadonlySet<UpdatePhase> = new Set(['downloading', 'installing', 'downloadingInstaller']);
@@ -96,7 +98,16 @@ const AboutModalContent: React.FC = () => {
         <MuMark size={48} halo />
         <div className='flex min-w-0 flex-col gap-4px'>
           <div className='flex items-center gap-8px'>
-            <span className='text-18px font-600 leading-24px text-t-primary'>mu</span>
+            <Link
+              href={MU_WEBSITE_URL}
+              className='text-18px font-600 leading-24px text-t-primary'
+              onClick={(event) => {
+                event.preventDefault();
+                void openLink(MU_WEBSITE_URL);
+              }}
+            >
+              www.spec-ai.cn
+            </Link>
             {isElectron ? null : (
               <span
                 className='rd-4px bg-fill-2 px-6px py-2px text-12px font-500 text-t-secondary'
