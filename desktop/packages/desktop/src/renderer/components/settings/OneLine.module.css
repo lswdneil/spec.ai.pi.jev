@@ -27,8 +27,8 @@
   text-wrap: balance;
 }
 
-/* Arco's mini text button, down to the height of the line it closes. */
-.more:global(.arco-btn) {
+/* The small text button, down to the height of the line it closes. */
+.more {
   flex: none;
   height: 18px;
   padding: 0 2px;
@@ -37,11 +37,11 @@
   line-height: 18px;
 }
 
-.lineOpen .more:global(.arco-btn) {
+.lineOpen .more {
   margin-inline-start: 4px;
   vertical-align: baseline;
 }
 
-.more:global(.arco-btn):hover {
+.more:hover {
   color: var(--text-primary);
 }

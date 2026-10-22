@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import styles from './OneLine.module.css';
@@ -55,7 +55,7 @@ export default function OneLine({ text, className, testId }: OneLineProps) {
       {cut || open ? (
         <Button
           type='text'
-          size='mini'
+          size='sm'
           className={styles.more}
           aria-expanded={open}
           onClick={() => setOpen((now) => !now)}
