@@ -85,9 +85,10 @@ With the flag on, the app uses the Dense chrome:
 Still old in this slice: the settings rail markup (it already uses 32px rows and 13px labels)
 and the ACP tool/terminal cards.
 
-The shell's command palette, sidebar footer, settings rail, update notice, message search,
-layout, `MuModal`, conversation-history chrome and kernel bar no longer import Arco at
-runtime; the conversation rows and the native sidebar group still do.
+The v2 shell has no runtime Arco imports left: its layout, sidebar, history rows, native
+group, command palette, settings rail, dialogs, update notice and kernel bar use `@/ui` or
+plain elements. Arco remains in the legacy `Sider`, in the `ModalProps` type and across the
+rest of the renderer.
 
 ## Build and verify
 
