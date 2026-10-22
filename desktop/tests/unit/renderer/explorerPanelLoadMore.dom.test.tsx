@@ -31,7 +31,7 @@ vi.mock('@/renderer/pages/conversation/explorer/monitorTransport', () => ({ init
 // Capture the `loadMore` prop arco would call, so it can be invoked directly — the
 // switcher click that triggers it inside real arco is not reachable under jsdom.
 let capturedLoadMore: ((node: unknown) => Promise<unknown>) | undefined;
-vi.mock('@arco-design/web-react', async (importActual) => {
+vi.mock('@/renderer/ui/tree', async (importActual) => {
   const actual = await importActual<Record<string, unknown>>();
   return {
     ...actual,

@@ -17,7 +17,7 @@ export {
   Modal,
   type ModalProps,
 } from './dialog';
-export { Dropdown, Menu, MenuItem, type DropdownItem, type DropdownProps } from './dropdown';
+export { Dropdown, type DropdownItem, type DropdownProps } from './dropdown';
 export { Form, type FormProps, type FormInstance, type FormItemProps, type FormRule } from './form';
 export { Link, Progress, Result, Space, type LinkProps, type ProgressProps, type ResultProps, type SpaceProps } from './display';
 export { Empty, type EmptyProps } from './empty';
@@ -25,6 +25,7 @@ export { Image, type ImageProps, type ImagePreviewGroupProps } from './image';
 export { Input, Textarea, type InputProps, type TextareaProps } from './input';
 export { InputNumber, type InputNumberProps } from './input-number';
 export { InputTag, type InputTagProps } from './input-tag';
+export { Menu, MenuItem, type MenuProps, type MenuItemProps, type SubMenuProps, type MenuItemGroupProps } from './menu';
 export { Layout } from './layout';
 export { Popover, type PopoverProps, type PopoverPosition } from './popover';
 export { Pagination, type PaginationProps } from './pagination';

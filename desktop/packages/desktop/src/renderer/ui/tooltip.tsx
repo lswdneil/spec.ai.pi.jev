@@ -51,6 +51,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const [hovered, setHovered] = React.useState(false);
   if (!content || disabled || !React.isValidElement(children)) return <>{children}</>;
   const child = React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
+    'data-tooltip-content': typeof content === 'string' ? content : undefined,
+    'data-tooltip': typeof content === 'string' ? content : undefined,
     onMouseEnter: (event: React.MouseEvent) => {
       (children.props as { onMouseEnter?: (event: React.MouseEvent) => void }).onMouseEnter?.(event);
       setHovered(true);

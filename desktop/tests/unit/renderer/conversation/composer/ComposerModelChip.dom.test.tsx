@@ -74,75 +74,9 @@ vi.mock('@icon-park/react', () => ({
 const dataOf = (props: Record<string, unknown>) =>
   Object.fromEntries(Object.entries(props).filter(([name]) => name.startsWith('data-')));
 
-vi.mock('@arco-design/web-react', () => {
-  const Menu = Object.assign(({ children }: { children?: React.ReactNode }) => <div role='menu'>{children}</div>, {
-    Item: ({
-      children,
-      onClick,
-      className: _className,
-      ...rest
-    }: {
-      children?: React.ReactNode;
-      onClick?: () => void;
-      className?: string;
-      [key: string]: unknown;
-    }) => (
-      <div role='menuitem' onClick={onClick} {...dataOf(rest)}>
-        {children}
-      </div>
-    ),
-    ItemGroup: ({ children, title }: { children?: React.ReactNode; title?: React.ReactNode }) => (
-      <div role='group' aria-label={String(title)}>
-        {children}
-      </div>
-    ),
-    // Both levels at once: the row and what it opens.
-    SubMenu: ({
-      children,
-      title,
-      triggerProps: _triggerProps,
-      ...rest
-    }: {
-      children?: React.ReactNode;
-      title?: React.ReactNode;
-      triggerProps?: unknown;
-      [key: string]: unknown;
-    }) => (
-      <div {...dataOf(rest)}>
-        <div>{title}</div>
-        <div>{children}</div>
-      </div>
-    ),
-  });
-  return {
-    Button: ({
-      children,
-      disabled,
-      onClick,
-      ...rest
-    }: {
-      children?: React.ReactNode;
-      disabled?: boolean;
-      onClick?: () => void;
-      [key: string]: unknown;
-    }) => (
-      <button type='button' disabled={disabled} onClick={onClick} {...dataOf(rest)}>
-        {children}
-      </button>
-    ),
-    Dropdown: ({ children, droplist }: { children?: React.ReactNode; droplist?: React.ReactNode }) => (
-      <div>
-        {children}
-        {droplist}
-      </div>
-    ),
-    Menu,
-    Message: { error: messageErrorMock },
-    Tooltip: ({ children, content }: { children?: React.ReactNode; content?: React.ReactNode }) => (
-      <span data-tooltip={typeof content === 'string' ? content : undefined}>{children}</span>
-    ),
-  };
-});
+
+
+vi.mock('@/renderer/ui/toast', () => ({ Message: { error: messageErrorMock } }));
 
 const MODELS = [
   { value: 'anthropic/claude-sonnet-4-5', name: 'Claude Sonnet 4.5' },

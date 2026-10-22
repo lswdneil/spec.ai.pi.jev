@@ -10,7 +10,9 @@ import { useAcpConfigOptions, type AcpConfigOptionsPort } from '@/renderer/hooks
 import { useProviderNames } from '@/renderer/hooks/agent/useProviderNames';
 import { iconColors } from '@/renderer/styles/colors';
 import { providerDisplayName } from '@/renderer/utils/model/providerName';
-import { Dropdown, Message, Tooltip } from '@arco-design/web-react';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Message } from '@/renderer/ui/toast';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Brain, Down } from '@icon-park/react';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -117,7 +119,7 @@ const ComposerModelChip: React.FC<{
 
   return (
     // The chip sits at the right of the box, beside the send button: the menu opens above it, flush right.
-    <Dropdown
+    <Dropdown renderClosed
       trigger='click'
       position='tr'
       popupVisible={visible}

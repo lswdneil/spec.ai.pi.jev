@@ -7,7 +7,8 @@
 import type { AcpConfigSetStatus } from '@/renderer/hooks/agent/useAcpConfigOptions';
 import MuInlineSearchInput from '@/renderer/components/base/MuInlineSearchInput';
 import { isThinkingLevel, thinkingLevelLabel } from '@/renderer/utils/model/thinkingLevel';
-import { Menu, Tooltip } from '@arco-design/web-react';
+import { Menu } from '@/renderer/ui/menu';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import type { TFunction } from 'i18next';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';

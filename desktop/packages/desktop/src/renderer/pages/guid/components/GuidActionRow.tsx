@@ -26,7 +26,11 @@ import { getCleanFileNames } from '@/renderer/services/FileService';
 import { iconColors } from '@/renderer/styles/colors';
 import type { AcpModelInfo } from '../types';
 import { getAvailableModels } from '../utils/modelUtils';
-import { Button, Checkbox, Dropdown, Menu, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Checkbox } from '@/renderer/ui/checkbox';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Menu } from '@/renderer/ui/menu';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Brain, FolderUpload, Lightning, Plus, Shield, UploadOne } from '@icon-park/react';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -520,7 +524,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
               )}
             </span>
           ) : (
-            <Dropdown trigger='hover' onVisibleChange={handlePlusDropdownVisibleChange} droplist={menuContent}>
+            <Dropdown renderClosed trigger='hover' onVisibleChange={handlePlusDropdownVisibleChange} droplist={menuContent}>
               <span className='flex items-center gap-4px cursor-pointer lh-[1]'>
                 <Button
                   type='secondary'

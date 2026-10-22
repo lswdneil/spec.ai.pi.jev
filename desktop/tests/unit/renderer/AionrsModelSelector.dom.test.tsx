@@ -98,64 +98,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', () => {
-  const Menu = Object.assign(
-    ({ children }: { children?: React.ReactNode; className?: string }) => (
-      <div data-testid='dropdown-menu'>{children}</div>
-    ),
-    {
-      Item: ({
-        children,
-        className,
-        onClick,
-      }: {
-        children?: React.ReactNode;
-        className?: string;
-        onClick?: () => void;
-      }) => (
-        <div role='menuitem' className={className} onClick={onClick}>
-          {children}
-        </div>
-      ),
-      ItemGroup: ({ children, title }: { children?: React.ReactNode; title?: React.ReactNode }) => (
-        <div role='group' aria-label={String(title)}>
-          {children}
-        </div>
-      ),
-      SubMenu: ({ children, title }: { children?: React.ReactNode; title?: React.ReactNode }) => (
-        <div role='group'>
-          <div data-testid='submenu-title'>{title}</div>
-          <div data-testid='submenu-body'>{children}</div>
-        </div>
-      ),
-    }
-  );
-  return {
-    Button: ({
-      children,
-      disabled,
-      onClick,
-      ...props
-    }: {
-      children?: React.ReactNode;
-      disabled?: boolean;
-      onClick?: () => void;
-      [key: string]: unknown;
-    }) => (
-      <button type='button' disabled={disabled} onClick={onClick} {...props}>
-        {children}
-      </button>
-    ),
-    Dropdown: ({ children, droplist }: { children?: React.ReactNode; droplist?: React.ReactNode }) => (
-      <div>
-        {children}
-        {droplist}
-      </div>
-    ),
-    Menu,
-    Tooltip: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
-  };
-});
+
 
 describe('AionrsModelSelector runtime options', () => {
   beforeEach(() => {

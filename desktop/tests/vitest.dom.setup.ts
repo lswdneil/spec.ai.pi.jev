@@ -4,7 +4,7 @@
  */
 
 import '@testing-library/jest-dom/vitest';
-import { afterEach } from 'vitest';
+import { afterEach, vi } from 'vitest';
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Toaster, toast } from 'sonner';
@@ -18,6 +18,7 @@ if (typeof document !== 'undefined') {
   document.body.appendChild(host);
   createRoot(host).render(createElement(Toaster, { position: 'bottom-right', closeButton: true }));
   afterEach(async () => {
+    vi.useRealTimers();
     toast.dismiss();
     Modal.destroyAll();
     await new Promise((resolve) => setTimeout(resolve, 300));

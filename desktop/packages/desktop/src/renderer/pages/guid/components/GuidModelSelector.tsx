@@ -16,7 +16,10 @@ import { useProviderNames } from '@/renderer/hooks/agent/useProviderNames';
 import { modelDisplayName, providerDisplayName } from '@/renderer/utils/model/providerName';
 import type { AcpModelInfo } from '../types';
 import { getAvailableModels } from '../utils/modelUtils';
-import { Button, Dropdown, Menu, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Menu } from '@/renderer/ui/menu';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Brain, Down, Plus } from '@icon-park/react';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -115,7 +118,7 @@ const AcpModelChip: React.FC<AcpModelChipProps> = ({
 
   return (
     // The composer sits mid-page: the menu opens below the chip, flush right.
-    <Dropdown
+    <Dropdown renderClosed
       trigger='click'
       position='br'
       popupVisible={visible}
@@ -261,7 +264,7 @@ const GuidModelSelector: React.FC<GuidModelSelectorProps> = ({
     );
 
     return (
-      <Dropdown
+      <Dropdown renderClosed
         trigger='hover'
         droplist={
           <Menu selectedKeys={currentProviderModelId ? [currentProviderModelId] : []}>

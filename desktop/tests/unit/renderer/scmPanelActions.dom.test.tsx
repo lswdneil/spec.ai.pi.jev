@@ -35,8 +35,8 @@ vi.mock('@/renderer/pages/conversation/SourceControl/scmTransport', () => ({
  *  OK path driven without a real dialog. */
 const confirmCalls: Array<{ content?: unknown; onOk?: () => unknown }> = [];
 
-vi.mock('@arco-design/web-react', async () => {
-  const actual = await vi.importActual<typeof import('@arco-design/web-react')>('@arco-design/web-react');
+vi.mock('@/renderer/ui/dialog', async () => {
+  const actual = await vi.importActual<typeof import('@/renderer/ui/dialog')>('@/renderer/ui/dialog');
   return {
     ...actual,
     Modal: {

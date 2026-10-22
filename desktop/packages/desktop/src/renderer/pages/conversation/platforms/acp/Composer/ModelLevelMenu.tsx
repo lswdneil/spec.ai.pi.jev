@@ -11,7 +11,7 @@ import {
   RuntimeSelectorCheckedItem,
   thoughtLevelOptionLabel,
 } from '@/renderer/components/agent/runtimeSelectorOptions';
-import { Menu } from '@arco-design/web-react';
+import { Menu } from '@/renderer/ui/menu';
 import type { TFunction } from 'i18next';
 import React from 'react';
 import type { MenuModel, MenuModelGroup } from './modelMenu';
@@ -111,7 +111,7 @@ export function modelLevelMenu(
   };
 
   return (
-    <Menu>
+    <Menu data-testid='guid-model-menu'>
       {total > DROPDOWN_SEARCH_THRESHOLD ? (
         <div className='px-6px pt-4px pb-6px' style={{ background: 'var(--color-bg-popup)' }}>
           <MuInlineSearchInput

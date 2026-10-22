@@ -14,7 +14,12 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Button, Dropdown, Menu, Modal, Tooltip, Typography } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Menu } from '@/renderer/ui/menu';
+import { Modal } from '@/renderer/ui/dialog';
+import { Tooltip } from '@/renderer/ui/tooltip';
+import { Typography } from '@/renderer/ui/typography';
 import { CornerDownRight, Delete, Drag, Edit, MoreOne, SendOne, SortTwo } from '@icon-park/react';
 import React, { useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -524,7 +529,7 @@ const CommandQueuePanel: React.FC<CommandQueuePanelProps> = ({
                 </span>
               </Button>
             </Tooltip>
-            <Dropdown trigger='click' droplist={moreMenu} position='br'>
+            <Dropdown renderClosed trigger='click' droplist={moreMenu} position='br'>
               <Button
                 size='mini'
                 type='text'

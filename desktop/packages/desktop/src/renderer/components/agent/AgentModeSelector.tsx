@@ -12,7 +12,10 @@ import {
 import type { AgentModeOption } from '@/renderer/utils/model/agentTypes';
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { AgentLogoIcon } from './AgentBadge';
-import { Dropdown, Menu, Message, Tooltip } from '@arco-design/web-react';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Menu } from '@/renderer/ui/menu';
+import { Message } from '@/renderer/ui/toast';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Down, Time } from '@icon-park/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -337,7 +340,7 @@ const AgentModeSelector: React.FC<AgentModeSelectorProps> = ({
     }
 
     return (
-      <Dropdown
+      <Dropdown renderClosed
         trigger='click'
         popupVisible={dropdownVisible}
         onVisibleChange={(visible) => !isSetting && setDropdownVisible(visible)}
@@ -376,7 +379,7 @@ const AgentModeSelector: React.FC<AgentModeSelectorProps> = ({
   // Render dropdown with mode selection menu
   return (
     <div className='ms-16px'>
-      <Dropdown
+      <Dropdown renderClosed
         trigger='click'
         popupVisible={dropdownVisible}
         onVisibleChange={(visible) =>

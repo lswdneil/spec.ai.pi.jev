@@ -54,6 +54,11 @@ vi.mock('@arco-design/web-react', () => {
   return { Button, Dropdown, Menu, Modal, Tooltip, Typography };
 });
 
+vi.mock('@/renderer/ui/dialog', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/renderer/ui/dialog')>();
+  return { ...actual, Modal: { ...actual.Modal, confirm: (config: { onOk?: () => void }) => confirmMock(config) } };
+});
+
 vi.mock('@icon-park/react', () => ({
   CornerDownRight: () => <span data-testid='corner-down-right-icon' />,
   Delete: () => <span data-testid='delete-icon' />,
@@ -157,7 +162,7 @@ describe('CommandQueuePanel', () => {
     const onClear = vi.fn();
     renderPanel({ onClear });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Clear draft box' }));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Clear draft box' }));
     // Clearing must go through a confirm step, not fire immediately.
     expect(onClear).not.toHaveBeenCalled();
     expect(confirmMock).toHaveBeenCalledTimes(1);

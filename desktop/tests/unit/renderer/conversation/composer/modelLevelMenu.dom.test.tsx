@@ -53,10 +53,8 @@ describe('modelLevelMenu', () => {
     );
 
     await screen.findByText('GPT-5 mini');
-    const menu = document.querySelector('.arco-dropdown-menu');
+    const menu = screen.getByRole('menu');
     expect(menu).not.toBeNull();
-    expect(menu?.classList.contains('arco-menu-inline')).toBe(false);
-    expect(document.querySelector('.arco-dropdown-menu-pop-header')).not.toBeNull();
     expect(screen.getByText('GPT-5 mini')).toBeInTheDocument();
   });
 

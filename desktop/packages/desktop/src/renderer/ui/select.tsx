@@ -263,7 +263,7 @@ const OptionRow: React.FC<{
       selected ? 'text-sv-text' : 'text-sv-muted'
     )}
   >
-    <span className='flex-1 truncate'>{option.label}</span>
+    <span className='arco-select-option flex-1 truncate'>{option.label}</span>
     {selected ? <Check className='h-3.5 w-3.5 text-sv-brand-ink' aria-hidden='true' /> : null}
     {multiple && selected ? <span className='sr-only'>selected</span> : null}
   </button>

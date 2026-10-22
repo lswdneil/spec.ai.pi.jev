@@ -115,7 +115,7 @@ export const Tree: React.FC<TreeProps> = ({
       const open = expanded.includes(key);
       const isSelected = selected.includes(key);
       const children = childrenOf(node);
-      const hasChildren = Boolean(children?.length) || Boolean(loadMore);
+      const hasChildren = !leafOf(node);
       const rendered = renderNode(node, key);
       return (
         <div key={key}>
@@ -127,7 +127,10 @@ export const Tree: React.FC<TreeProps> = ({
             data-key={key}
             className={cn(
               'arco-tree-node group flex min-h-7 cursor-pointer items-center gap-1 rounded-[6px] pr-1 text-[12px] outline-none',
-              isSelected ? 'bg-sv-selected text-sv-text' : 'text-sv-muted hover:bg-sv-surface hover:text-sv-text'
+              !hasChildren && 'is-leaf',
+              isSelected
+                ? 'arco-tree-node-selected bg-sv-selected text-sv-text'
+                : 'text-sv-muted hover:bg-sv-surface hover:text-sv-text'
             )}
             onClick={(event) => {
               event.stopPropagation();

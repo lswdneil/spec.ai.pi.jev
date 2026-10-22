@@ -6,7 +6,9 @@
  * switch waits for the run to end, as elsewhere, and is for this conversation only: the menu's "make default" is how
  * it becomes the model new conversations start on.
  */
-import { Dropdown, Menu, Tooltip } from '@arco-design/web-react';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Menu } from '@/renderer/ui/menu';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Brain, Down } from '@icon-park/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -137,7 +139,7 @@ const NativeModelChip: React.FC<{
     );
 
   return (
-    <Dropdown
+    <Dropdown renderClosed
       trigger='click'
       position='tr'
       popupVisible={visible}

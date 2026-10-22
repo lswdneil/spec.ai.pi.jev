@@ -30,7 +30,9 @@ export interface DropdownProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   disabled?: boolean;
-  trigger?: 'click' | 'hover';
+  /** Keep the menu in the DOM while closed (tests and Arco-compatible markup). */
+  renderClosed?: boolean;
+  trigger?: 'click' | 'hover' | 'contextMenu' | ('click' | 'hover' | 'contextMenu')[];
   contentRef?: React.Ref<HTMLDivElement>;
   onContentKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
   onContentKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
@@ -49,6 +51,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   onOpenChange,
   contentRef,
   disabled,
+  renderClosed,
   trigger = 'click',
   onContentKeyDown,
   onContentKeyDownCapture,
@@ -56,6 +59,10 @@ export const Dropdown: React.FC<DropdownProps> = ({
   const [internalOpen, setInternalOpen] = React.useState(false);
   const isOpen = popupVisible ?? open ?? internalOpen;
   const pointerDownAt = React.useRef(0);
+  const triggers = Array.isArray(trigger) ? trigger : [trigger];
+  const hover = triggers.includes('hover');
+  const click = triggers.includes('click');
+  const context = triggers.includes('contextMenu');
   const setOpen = (next: boolean) => {
     if (disabled) return;
     if (open === undefined && popupVisible === undefined) setInternalOpen(next);
@@ -63,30 +70,76 @@ export const Dropdown: React.FC<DropdownProps> = ({
     onVisibleChange?.(next);
   };
   if (disabled) return <>{children}</>;
+  const openOnClick = (event: React.MouseEvent) => {
+    if (!click) return;
+    if (Date.now() - pointerDownAt.current < 500) return;
+    setOpen(!isOpen);
+  };
+  const openOnKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key !== 'ArrowDown' && event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    setOpen(true);
+  };
+  const openOnContextMenu = (event: React.MouseEvent) => {
+    if (!context) return;
+    event.preventDefault();
+    setOpen(!isOpen);
+  };
+  const triggerNode =
+    React.isValidElement(children) && typeof children.type === 'string' ? (
+      React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
+        onPointerDown: () => {
+          pointerDownAt.current = Date.now();
+        },
+        onMouseEnter: () => {
+          if (hover) setOpen(true);
+        },
+        onMouseLeave: () => {
+          if (hover) setOpen(false);
+        },
+        onClick: (event: React.MouseEvent) => {
+          (children.props as { onClick?: (event: React.MouseEvent) => void }).onClick?.(event);
+          if (!event.defaultPrevented) openOnClick(event);
+        },
+        onKeyDown: (event: React.KeyboardEvent) => {
+          (children.props as { onKeyDown?: (event: React.KeyboardEvent) => void }).onKeyDown?.(event);
+          if (!event.defaultPrevented) openOnKeyDown(event);
+        },
+        onContextMenu: (event: React.MouseEvent) => {
+          (children.props as { onContextMenu?: (event: React.MouseEvent) => void }).onContextMenu?.(event);
+          if (!event.defaultPrevented) openOnContextMenu(event);
+        },
+      })
+    ) : (
+      <span
+        className='inline-flex'
+        onPointerDown={() => {
+          pointerDownAt.current = Date.now();
+        }}
+        onMouseEnter={() => {
+          if (hover) setOpen(true);
+        }}
+        onMouseLeave={() => {
+          if (hover) setOpen(false);
+        }}
+        onClick={openOnClick}
+        onKeyDown={openOnKeyDown}
+        onContextMenu={openOnContextMenu}
+      >
+        {children}
+      </span>
+    );
   return (
     <DropdownMenuPrimitive.Root open={isOpen} onOpenChange={setOpen}>
-      <DropdownMenuPrimitive.Trigger asChild>
-        <span
-          className='inline-flex'
-          onPointerDown={() => {
-            pointerDownAt.current = Date.now();
-          }}
-          onMouseEnter={() => {
-            if (trigger === 'hover') setOpen(true);
-          }}
-          onMouseLeave={() => {
-            if (trigger === 'hover') setOpen(false);
-          }}
-          onClick={() => {
-            // Pointer-driven browsers already toggle on pointerdown; a bare
-            // click (keyboard activation, tests) opens here.
-            if (Date.now() - pointerDownAt.current < 500) return;
-            setOpen(!isOpen);
-          }}
+      <DropdownMenuPrimitive.Trigger asChild>{triggerNode}</DropdownMenuPrimitive.Trigger>
+      {!isOpen && renderClosed && droplist ? (
+        <div
+          data-dropdown-closed=''
+          style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }}
         >
-          {children}
-        </span>
-      </DropdownMenuPrimitive.Trigger>
+          {droplist}
+        </div>
+      ) : null}
       <DropdownMenuPrimitive.Portal>
         <DropdownMenuPrimitive.Content
           ref={contentRef}

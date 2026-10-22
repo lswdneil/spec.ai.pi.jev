@@ -69,61 +69,7 @@ vi.mock('@icon-park/react', () => ({
   Search: () => <span aria-hidden='true'>search</span>,
 }));
 
-vi.mock('@arco-design/web-react', () => {
-  const Menu = Object.assign(
-    ({ children, className }: { children?: React.ReactNode; className?: string }) => (
-      <div data-testid='guid-model-menu' className={className}>
-        {children}
-      </div>
-    ),
-    {
-      Item: ({
-        children,
-        className,
-        onClick,
-      }: {
-        children?: React.ReactNode;
-        className?: string;
-        onClick?: () => void;
-      }) => (
-        <div role='menuitem' className={className} onClick={onClick}>
-          {children}
-        </div>
-      ),
-      ItemGroup: ({ children, title }: { children?: React.ReactNode; title?: React.ReactNode }) => (
-        <div role='group' aria-label={String(title)}>
-          <div>{title}</div>
-          {children}
-        </div>
-      ),
-      // SubMenu renders both its title row and its children so tests can inspect both levels.
-      SubMenu: ({ children, title }: { children?: React.ReactNode; title?: React.ReactNode }) => (
-        <div role='group'>
-          <div data-testid='submenu-title'>{title}</div>
-          <div data-testid='submenu-body'>{children}</div>
-        </div>
-      ),
-    }
-  );
 
-  return {
-    Button: ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) => (
-      <button type='button' {...props}>
-        {children}
-      </button>
-    ),
-    Dropdown: ({ children, droplist }: { children?: React.ReactNode; droplist?: React.ReactNode }) => (
-      <div>
-        {children}
-        {droplist}
-      </div>
-    ),
-    Menu,
-    Tooltip: ({ children, content }: { children?: React.ReactNode; content?: React.ReactNode }) => (
-      <span data-tooltip-content={typeof content === 'string' ? content : undefined}>{children}</span>
-    ),
-  };
-});
 
 describe('GuidModelSelector', () => {
   const thoughtLevelOption = {

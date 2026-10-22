@@ -35,48 +35,11 @@ vi.mock('@icon-park/react', () => ({
   Time: (props: { 'data-testid'?: string }) => <span aria-hidden='true' data-testid={props['data-testid']} />,
 }));
 
-vi.mock('@arco-design/web-react', () => {
-  const Menu = Object.assign(
-    ({ children, onClickMenuItem }: { children?: React.ReactNode; onClickMenuItem?: (key: string) => void }) => (
-      <menuContext.Provider value={onClickMenuItem ?? null}>{children}</menuContext.Provider>
-    ),
-    {
-      ItemGroup: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
-      Item: ({ children }: { children?: React.ReactNode }) => {
-        const onClickMenuItem = React.useContext(menuContext);
-        const child = React.isValidElement(children) ? children : null;
-        const itemKey = child?.props?.['data-mode-value'] as string | undefined;
-        return (
-          <button type='button' onClick={() => itemKey && onClickMenuItem?.(itemKey)}>
-            {children}
-          </button>
-        );
-      },
-    }
-  );
-  return {
-    Button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
-      <button type='button' {...props}>
-        {children}
-      </button>
-    ),
-    Dropdown: ({ children, droplist }: { children?: React.ReactNode; droplist?: React.ReactNode }) => (
-      <>
-        {children}
-        {droplist}
-      </>
-    ),
-    Menu,
-    Message: {
-      success: vi.fn(),
-      error: vi.fn(),
-      info: vi.fn(),
-    },
-    Tooltip: ({ children, content }: { children?: React.ReactNode; content?: React.ReactNode }) => (
-      <span data-tooltip-content={typeof content === 'string' ? content : undefined}>{children}</span>
-    ),
-  };
-});
+
+
+vi.mock('@/renderer/ui/toast', () => ({
+  Message: { success: vi.fn(), error: vi.fn(), info: vi.fn() },
+}));
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -185,7 +148,7 @@ describe('AgentModeSelector', () => {
   // move the pill: the old code threw `config_not_observed` for anything that did not
   // read back as the requested value, which is exactly what a deferred switch looks like.
   it('treats a deferred switch as pending rather than an error', async () => {
-    const { Message } = (await import('@arco-design/web-react')) as unknown as {
+    const { Message } = (await import('@/renderer/ui/toast')) as unknown as {
       Message: { success: ReturnType<typeof vi.fn>; error: ReturnType<typeof vi.fn>; info: ReturnType<typeof vi.fn> };
     };
     // The backend answers with the mode still in force, not the one just requested.

@@ -31,7 +31,6 @@ import { ensureBackendMcpCatalog } from '@/renderer/hooks/mcp/catalog';
 import { resolveGuidAssistantDefaults } from './utils/assistantDefaults';
 import { chatFileRefPath, uploadFileRef } from '@/common/types/chatFile';
 import { useOpenFileSelector } from '@/renderer/hooks/file/useOpenFileSelector';
-import { ConfigProvider } from '@arco-design/web-react';
 import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -57,10 +56,6 @@ const GuidPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const guidContainerRef = useRef<HTMLDivElement>(null);
-  // Arco's nested ConfigProvider does not inherit: whatever it leaves out falls back to Arco's defaults (zh-CN
-  // locale, no RTL), and by default it also pushes those to the static Modal/Message helpers app-wide.
-  const arcoConfig = useContext(ConfigProvider.ConfigContext);
-
   const localeKey = resolveLocaleKey(i18n.language);
 
   // --- Skills state ---
@@ -683,14 +678,6 @@ const GuidPage: React.FC = () => {
   ) : null;
 
   return (
-    <ConfigProvider
-      locale={arcoConfig.locale}
-      rtl={arcoConfig.rtl}
-      componentConfig={arcoConfig.componentConfig}
-      effectGlobalModal={false}
-      effectGlobalNotice={false}
-      getPopupContainer={() => guidContainerRef.current || document.body}
-    >
       <div
         ref={guidContainerRef}
         className={`${styles.guidContainer}${isUiV2Enabled() ? ' sv-dense-welcome' : ''}`}
@@ -727,7 +714,6 @@ const GuidPage: React.FC = () => {
           />
         </div>
       </div>
-    </ConfigProvider>
   );
 };
 

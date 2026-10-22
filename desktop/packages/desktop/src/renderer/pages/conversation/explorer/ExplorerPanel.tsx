@@ -12,9 +12,11 @@
  * a right-click "Remove from project" action; the workspace root is immutable.
  */
 
-import { Button, Dropdown, Menu, Tree } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Menu } from '@/renderer/ui/menu';
+import { Tree, type TreeProps } from '@/renderer/ui/tree';
 import { isElectronDesktop } from '@/renderer/utils/platform';
-import type { TreeProps } from '@arco-design/web-react';
 import { Caution, MoreOne } from '@icon-park/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
