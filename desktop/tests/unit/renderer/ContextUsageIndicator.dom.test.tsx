@@ -26,7 +26,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', () => ({
+vi.mock('@/renderer/ui/popover', () => ({
   Popover: ({ children, content }: { children?: React.ReactNode; content?: React.ReactNode }) => (
     <>
       {children}

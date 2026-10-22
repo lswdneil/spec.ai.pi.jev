@@ -18,6 +18,7 @@ export {
 export { Dropdown, Menu, MenuItem, type DropdownItem, type DropdownProps } from './dropdown';
 export { Empty, type EmptyProps } from './empty';
 export { Input, Textarea, type InputProps, type TextareaProps } from './input';
+export { Popover, type PopoverProps, type PopoverPosition } from './popover';
 export { Spinner, Spin, type SpinnerProps } from './spinner';
 export { Slider, type SliderProps } from './slider';
 export { Switch, type SwitchProps } from './switch';

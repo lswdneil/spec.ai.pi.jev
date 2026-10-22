@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Popover } from '@arco-design/web-react';
+import { Popover } from '@/renderer/ui/popover';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
