@@ -25,16 +25,18 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | --- | --- | --- |
 | Sidebar padding / gap | 8 / 8 | PASS |
 | Sidebar brand height | 26 | PASS |
-| New session | 28 high, 11.5 label | PASS |
-| Nav rows | 27 high, 11.5, radius 5 | PASS |
-| Conversation rows | 27 high, 11, radius 5, pad 10/6 | PASS |
+| New session | 28 high, 13 label | UPDATED for readability |
+| Nav rows | 27 high, 13, radius 5 | UPDATED for readability |
+| Conversation rows | 27 high, 13, radius 5, pad 10/6 | UPDATED for readability |
 | Active conversation mark | 2 x 11 brand bar | FIXED |
-| Section label | 9 | PASS |
+| Section label | 12, UI typeface | UPDATED |
+| Empty-state copy | 12, UI typeface | FIXED |
 | Account avatar | 22 | PASS |
 | Topbar | 40 high, pad 10, gap 8 | PASS |
 | Crumbs / chips | 11 / 24 high | FIXED |
 | Composer wrap | pad 7/14/10 | PASS |
 | Composer | pad 7/9/5, radius 12, text 12.5 | PASS |
+| Home composer placeholder | 13px, UI typeface | FIXED |
 | Send button | 26 x 26 | PASS |
 | Composer note | 9.5 | PASS |
 | Thread message body | 12.5 / 1.55 | PASS |
@@ -83,6 +85,7 @@ Native `<button>` paints a light system background unless reset. Each surface be
 | Check | Status |
 | --- | --- |
 | Text fields and settings search focus | FIXED (strong hairline only; no ring or accent bar) |
+| Native fields / buttons | FIXED (inherit the app UI typeface) |
 | Focus after closing the command palette | FIXED (inset sage hairline; no clipped purple bar) |
 | Popovers above the welcome screen | FIXED (`screen` z 50, popovers 60/70) |
 | Language menu opens and switches language | FIXED |
@@ -109,6 +112,7 @@ Native `<button>` paints a light system background unless reset. Each surface be
 - `bunx vitest run` (full desktop suite)
 - Focused regressions:
   - `tests/unit/renderer/settingsFrame.test.ts`
+  - `tests/unit/renderer/sidebarTypography.test.ts`
   - `tests/unit/renderer/nativeButtonSurfaces.test.ts`
   - `tests/unit/renderer/fieldFocusSurfaces.test.ts`
   - `tests/unit/renderer/radioSurface.dom.test.tsx`

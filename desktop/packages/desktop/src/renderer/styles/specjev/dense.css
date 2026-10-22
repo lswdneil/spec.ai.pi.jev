@@ -144,6 +144,18 @@ html[data-sv-ui="dense"] body {
   scrollbar-width: thin;
 }
 
+/* Native fields and buttons otherwise fall back to the browser's own control font. */
+html[data-sv-ui="dense"] button,
+html[data-sv-ui="dense"] input,
+html[data-sv-ui="dense"] select,
+html[data-sv-ui="dense"] textarea {
+  font-family: inherit;
+}
+
+html[data-sv-ui="dense"] .guid-input-card-shell textarea {
+  font-family: var(--sv-font-ui);
+}
+
 html[data-sv-ui="dense"] ::selection {
   background: color-mix(in srgb, var(--sv-brand) 35%, transparent);
 }
@@ -168,6 +180,12 @@ html[data-sv-ui="dense"] .layout-sider {
 
 html[data-sv-ui="dense"] .layout-sider .text-14px {
   font-size: 13px;
+}
+
+html[data-sv-ui="dense"] .layout-sider .sider-section-title {
+  font-family: var(--sv-font-ui);
+  font-size: 12px;
+  line-height: 16px;
 }
 
 html[data-sv-ui="dense"] .layout-sider [data-testid="sider-new-chat"] {
@@ -210,8 +228,8 @@ html[data-sv-ui="dense"] .layout-sider .chat-history__item[aria-current="page"]:
 }
 
 html[data-sv-ui="dense"] .layout-sider .chat-history__item-name {
-  font-size: 11px;
-  line-height: 16px;
+  font-size: 13px;
+  line-height: 18px;
 }
 
 html[data-sv-ui="dense"] .message-user-bubble {
