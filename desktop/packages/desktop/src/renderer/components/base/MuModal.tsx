@@ -5,7 +5,8 @@
  */
 
 import type { ModalProps } from '@arco-design/web-react';
-import { Modal, Button } from '@arco-design/web-react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { Button } from '@/renderer/ui';
 import { Close } from '@icon-park/react';
 import classNames from 'classnames';
 import type { CSSProperties } from 'react';
@@ -204,11 +205,22 @@ const MuModal: React.FC<MuModalProps> = ({
   onCancel,
   className = '',
   style,
-  ...props
+  visible = false,
+  onOk,
+  okText,
+  cancelText,
+  confirmLoading = false,
+  maskClosable = true,
+  afterClose,
 }) => {
   const isStandard = variant === 'standard';
   const { fontScale } = useThemeContext();
   const { t } = useTranslation();
+  const wasOpen = React.useRef(visible);
+  React.useEffect(() => {
+    if (wasOpen.current && !visible) afterClose?.();
+    wasOpen.current = visible;
+  }, [afterClose, visible]);
   // standard 变体默认给内容区标准内边距（上下20/左右24）；当调用方显式传入
   // contentStyle.padding（如团队创建的通栏双栏传 0）时，交由调用方自行处理内边距。
   const stdBodyHasCustomPadding = isStandard && contentStyle?.padding !== undefined;
@@ -273,6 +285,16 @@ const MuModal: React.FC<MuModalProps> = ({
     borderRadius: mergedStyle.borderRadius ?? '16px',
   };
 
+  const dialogStyle: CSSProperties = {
+    position: 'fixed',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: 1001,
+    margin: 0,
+    ...finalStyle,
+  };
+
   const bodyInlineStyle = React.useMemo<CSSProperties>(() => {
     const style: CSSProperties = {
       background: contentBg,
@@ -318,8 +340,8 @@ const MuModal: React.FC<MuModalProps> = ({
 
     // 未提供 footer 时，使用默认模板
     if (footer === undefined) {
-      const cancelLabel = props.cancelText ?? t('common.cancel', { defaultValue: 'Cancel' });
-      const okLabel = props.okText ?? t('common.confirm', { defaultValue: 'Confirm' });
+      const cancelLabel = cancelText ?? t('common.cancel', { defaultValue: 'Cancel' });
+      const okLabel = okText ?? t('common.confirm', { defaultValue: 'Confirm' });
       return {
         render: () => (
           <div className='flex justify-end gap-10px'>
@@ -330,8 +352,8 @@ const MuModal: React.FC<MuModalProps> = ({
             </Button>
             <Button
               type='primary'
-              onClick={props.onOk}
-              loading={props.confirmLoading}
+              onClick={() => void onOk?.()}
+              loading={confirmLoading}
               className='px-20px min-w-80px'
               style={{ borderRadius: 8 }}
             >
@@ -349,7 +371,7 @@ const MuModal: React.FC<MuModalProps> = ({
       };
     }
     return footer as ModalFooterConfig;
-  }, [footer, onCancel, props.cancelText, props.okText, props.onOk, props.confirmLoading, t]);
+  }, [footer, onCancel, cancelText, okText, onOk, confirmLoading, t]);
 
   // 渲染 Header
   const renderHeader = () => {
@@ -431,16 +453,29 @@ const MuModal: React.FC<MuModalProps> = ({
   };
 
   return (
-    <Modal
-      {...props}
-      title={null}
-      closable={false}
-      footer={null}
-      onCancel={onCancel}
-      className={classNames('mu-modal', isStandard && 'mu-modal-standard', className)}
-      style={finalStyle}
-      getPopupContainer={() => document.body}
+    <DialogPrimitive.Root
+      open={Boolean(visible)}
+      onOpenChange={(next) => {
+        if (!next) onCancel?.();
+      }}
     >
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className='fixed inset-0 z-[1000] bg-[var(--mu-scrim)]' />
+        <DialogPrimitive.Content
+          className={classNames('mu-modal arco-modal', isStandard && 'mu-modal-standard', className)}
+          style={{
+            ...dialogStyle,
+            padding: 0,
+            background: contentBg,
+            border: '1px solid var(--border-base)',
+            boxShadow: 'none',
+          }}
+          aria-label={typeof headerConfig.title === 'string' ? headerConfig.title : undefined}
+          aria-describedby={undefined}
+          onInteractOutside={(event) => {
+            if (!maskClosable) event.preventDefault();
+          }}
+        >
       <div
         className={classNames('mu-modal-wrapper', isStandard && 'flex flex-col min-h-0')}
         style={{ borderRadius: borderRadiusVal }}
@@ -459,7 +494,9 @@ const MuModal: React.FC<MuModalProps> = ({
         </div>
         {renderFooter()}
       </div>
-    </Modal>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 };
 
