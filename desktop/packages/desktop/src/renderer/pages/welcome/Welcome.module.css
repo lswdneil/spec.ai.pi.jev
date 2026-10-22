@@ -42,7 +42,7 @@
 }
 
 .columnIntro {
-  width: min(720px, calc(100% - 48px));
+  width: min(920px, calc(100% - 48px));
   margin-top: 8vh;
 }
 
@@ -183,6 +183,7 @@
   color: var(--text-secondary);
   font-size: 15px;
   line-height: 25px;
+  text-wrap: pretty;
 }
 
 /*
