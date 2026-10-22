@@ -107,7 +107,7 @@ export function createFolderGit({
       if (error instanceof GitNotStarted) return { state: 'no-git', reason: error.reason };
       throw error;
     }
-    if (found.code === 0 && found.stdout.trim()) return { root: found.stdout.trim() };
+    if (found.code === 0 && found.stdout.trim()) return { root: resolve(found.stdout.trim()) };
     if (NOT_A_REPOSITORY.test(found.stderr)) return { state: 'not-repository' };
     // Something else refused: git itself, if it cannot even say its version (the Xcode stub without its licence).
     const version = await run(['--version'], { cwd: folder, timeoutMs: QUICK_MS, maxBytes: 64 * 1024 });

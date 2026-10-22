@@ -1,6 +1,5 @@
 import { spawn } from 'node:child_process';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -27,11 +26,18 @@ const PI_RPC = join(ROOT, 'packages/desktop/src/process/agent/kyrn/piRpc.ts');
 const dirs: string[] = [];
 const ports: PiRpc[] = [];
 
-afterEach(() => {
+afterEach(async () => {
   vi.restoreAllMocks();
   for (const port of ports.splice(0)) port.close();
   // On Windows spec.jev is ended through taskkill, which takes a moment: until then its folder cannot be removed.
-  for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
+  await new Promise((resolve) => setTimeout(resolve, 250));
+  for (const dir of dirs.splice(0)) {
+    try {
+      rmSync(dir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'EPERM') throw error;
+    }
+  }
 });
 
 /** Starts `script` as spec.jev and collects what it sends. */
@@ -204,9 +210,9 @@ new PiRpc(${JSON.stringify(join(dir, 'mu.mjs'))}, ${JSON.stringify(dir)}, undefi
 });
 `
     );
-    const tsx = createRequire(join(ROOT, 'package.json')).resolve('tsx/cli');
-    const adapter = spawn(process.execPath, [tsx, join(dir, 'adapter.ts')], {
+    const adapter = spawn('bun', [join(dir, 'adapter.ts')], {
       cwd: dir,
+      shell: process.platform === 'win32',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     adapter.stderr.destroy();

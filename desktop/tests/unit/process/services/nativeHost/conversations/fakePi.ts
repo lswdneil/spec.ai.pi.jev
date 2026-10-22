@@ -173,7 +173,7 @@ export class FakeHost implements ConversationHost {
 
   private fresh(): Session {
     const id = this.pi.nextId('s');
-    const file = join(this.pi.sessionsDir, `--${this.input.cwd.replace(/\//g, '-')}--`, `2026_${id}.jsonl`);
+    const file = join(this.pi.sessionsDir, `--${this.input.cwd.replace(/[\\/:]/g, '-')}--`, `2026_${id}.jsonl`);
     return {
       id,
       file,

@@ -841,6 +841,7 @@ const SendBox: React.FC<{
   }, [input, isInputFocused, isMobile, isSingleLine, syncHighlightTextMetrics]);
 
   const handleTextAreaChange = (rawValue: string) => {
+    if (isComposing.current) return;
     // A Chinese IME writes `、` where the `/` key is: as the first character of an empty box that
     // is the command menu's own key, so it becomes `/` and the menu opens, where there is a menu.
     // Only what the IME committed counts: Arco hands the committed text over at compositionend,
@@ -2162,6 +2163,10 @@ const SendBox: React.FC<{
                 syncHighlightScroll(event.currentTarget);
               }}
               {...compositionHandlers}
+              onCompositionEnd={(event) => {
+                const next = rewriteIdeographicSlash(input, event.currentTarget.value);
+                if (next !== event.currentTarget.value) handleTextAreaChange(next);
+              }}
               autoSize={isSingleLine ? false : MULTI_LINE_AUTO_SIZE}
               onKeyDown={createKeyDownHandler(handlePrimaryAction, (event) => {
                 return (

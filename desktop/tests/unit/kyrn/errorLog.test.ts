@@ -1,6 +1,5 @@
 import { spawn } from 'node:child_process';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -23,8 +22,8 @@ async function run(body: string): Promise<{ code: number | null; out: string; er
     join(dir, 'adapter.ts'),
     `import { logUncaught } from ${JSON.stringify(ERROR_LOG)};\nlogUncaught();\n${body}\n`
   );
-  const tsx = createRequire(join(ROOT, 'package.json')).resolve('tsx/cli');
-  const child = spawn(process.execPath, [tsx, join(dir, 'adapter.ts')], {
+  const child = spawn('bun', [join(dir, 'adapter.ts')], {
+    shell: process.platform === 'win32',
     cwd: dir,
     stdio: ['ignore', 'pipe', 'pipe'],
   });

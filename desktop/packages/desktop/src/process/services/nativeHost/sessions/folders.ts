@@ -1,4 +1,4 @@
-import { readFileSync, realpathSync } from 'node:fs';
+import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { homedir } from 'node:os';
 import path from 'node:path';
 import { muEnv, muHome } from '../../../agent/kyrn/naming.ts';
@@ -47,10 +47,14 @@ export function sessionFolders(
 ): SessionFolders {
   const env = options.env ?? process.env;
   const home = options.home ?? homedir();
+  const specHome = muHome(home);
+  const legacyHome = path.join(home, '.kyrn');
+  const chosenHome = !existsSync(specHome) && existsSync(legacyHome) ? legacyHome : specHome;
   const agentDir = path.resolve(
-    muEnv('AGENT_DIR', env) || muEnv('CODING_AGENT_DIR', env) || path.join(muHome(home), 'agent')
+    muEnv('AGENT_DIR', env) || muEnv('CODING_AGENT_DIR', env) || path.join(chosenHome, 'agent')
   );
   const custom =
+    muEnv('CODING_AGENT_SESSION_DIR', env) ||
     env.MU_CODING_AGENT_SESSION_DIR ||
     settingsSessionDir(agentDir, options.readFile ?? ((file) => readFileSync(file, 'utf8')));
   return {

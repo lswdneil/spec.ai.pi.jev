@@ -15,7 +15,7 @@ import { SUPPORTED_LANGUAGES } from '@/common/config/i18n';
 
 const repoRoot = fileURLToPath(new URL('../../../', import.meta.url));
 const localeRoot = join(repoRoot, 'packages/desktop/src/renderer/services/i18n/locales');
-const EMOJI = /(?![©®™])[\p{Extended_Pictographic}\p{Regional_Indicator}\u{FE0F}\u{20E3}]/u;
+const EMOJI = /(?![©®™\u2691])[\p{Extended_Pictographic}\p{Regional_Indicator}\u{FE0F}\u{20E3}]/u;
 
 /** Every string in a locale file, with its key path. */
 function localeValues(node: unknown, path = ''): Array<[string, string]> {

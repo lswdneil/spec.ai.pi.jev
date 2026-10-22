@@ -1,6 +1,6 @@
 import { mkdirSync, mkdtempSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 import {
   insideSessionFolders,
@@ -40,13 +40,13 @@ describe('sessionFolders', () => {
     expect(
       sessionFolders({ env: { SPECJEV_AGENT_DIR: '/a', SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings })
     ).toEqual({
-      agentDir: '/a',
-      sessionsDir: '/a/sessions',
+      agentDir: resolve('/a'),
+      sessionsDir: join(resolve('/a'), 'sessions'),
     });
     expect(
       sessionFolders({ env: { SPECJEV_AGENT_DIR: '/k', SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings }).agentDir
-    ).toBe('/k');
-    expect(sessionFolders({ env: { SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings }).agentDir).toBe('/b');
+    ).toBe(resolve('/k'));
+    expect(sessionFolders({ env: { SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings }).agentDir).toBe(resolve('/b'));
   });
 
   it('adds the session folder the configuration names: the environment first, then the settings', () => {
@@ -57,7 +57,7 @@ describe('sessionFolders', () => {
     expect(sessionFolders({ env: { SPECJEV_AGENT_DIR: agentDir }, home }).customDir).toBe(join(home, 'all-sessions'));
     expect(
       sessionFolders({ env: { SPECJEV_AGENT_DIR: agentDir, SPECJEV_CODING_AGENT_SESSION_DIR: '/elsewhere' }, home }).customDir
-    ).toBe('/elsewhere');
+    ).toBe(resolve('/elsewhere'));
     writeFileSync(join(agentDir, 'settings.json'), '{ not json');
     expect(sessionFolders({ env: { SPECJEV_AGENT_DIR: agentDir }, home }).customDir).toBeUndefined();
   });
