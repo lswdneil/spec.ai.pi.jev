@@ -2,7 +2,8 @@
 .screen {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  /* Below the popovers (60/70): the language and service menus open above this screen. */
+  z-index: 50;
   overflow-y: auto;
   background: var(--bg-base);
   color: var(--text-primary);
@@ -33,6 +34,7 @@
 
 .column {
   display: flex;
+  font-family: var(--font-ui);
   flex-direction: column;
   gap: 28px;
   width: min(560px, calc(100% - 48px));
@@ -40,6 +42,7 @@
 }
 
 .columnIntro {
+  width: min(720px, calc(100% - 48px));
   margin-top: 8vh;
 }
 
@@ -103,8 +106,7 @@
 
 .stepItem::before {
   content: counter(step, decimal-leading-zero);
-  font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
 }
@@ -144,9 +146,9 @@
 
 .title {
   margin: 0;
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 650;
-  line-height: 34px;
+  line-height: 28px;
   letter-spacing: -0.01em;
 }
 
@@ -164,9 +166,8 @@
   background: color-mix(in srgb, var(--bg-1) 72%, transparent);
   backdrop-filter: blur(8px);
   color: var(--text-secondary);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.02em;
+  font-size: 11.5px;
+  letter-spacing: 0;
 }
 
 .heroTitle {
@@ -182,7 +183,6 @@
   color: var(--text-secondary);
   font-size: 15px;
   line-height: 25px;
-  text-wrap: balance;
 }
 
 /*
@@ -202,8 +202,7 @@
   padding: 9px 14px;
   border-bottom: 1px solid var(--border-base);
   color: var(--text-tertiary, var(--text-secondary));
-  font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 11.5px;
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -222,7 +221,7 @@
   grid-template-columns: 9.5em minmax(0, 1fr) auto;
   align-items: baseline;
   gap: 12px;
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 24px;
   animation: verdict 0.36s ease both;
 }
@@ -247,7 +246,6 @@
   align-items: center;
   gap: 8px;
   color: var(--mu-judge, var(--text-primary));
-  font-family: var(--font-mono);
   font-size: 11.5px;
 }
 
@@ -272,8 +270,7 @@
 
 .turnMs {
   color: var(--text-tertiary, var(--text-secondary));
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 11.5px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -306,8 +303,7 @@
   width: 22px;
   line-height: 24px;
   color: var(--mu-violet-6, rgb(var(--primary-6)));
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 11.5px;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
 }
@@ -340,9 +336,9 @@
 
 .pointTitle {
   color: var(--text-primary);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
-  line-height: 24px;
+  line-height: 20px;
 }
 
 .pointText {
@@ -350,15 +346,13 @@
   color: var(--text-secondary);
   font-size: 13px;
   line-height: 21px;
-  text-wrap: balance;
 }
 
 .subtitle {
   margin: 0 0 12px;
   color: var(--text-secondary);
-  font-size: 14px;
-  line-height: 22px;
-  text-wrap: balance;
+  font-size: 13px;
+  line-height: 20px;
 }
 
 .fields {
@@ -376,13 +370,13 @@
 
 .problem {
   color: rgb(var(--danger-6));
-  font-size: 12px;
+  font-size: 11.5px;
   line-height: 18px;
 }
 
 .warning {
   color: rgb(var(--warning-6));
-  font-size: 12px;
+  font-size: 11.5px;
   line-height: 18px;
   text-wrap: pretty;
 }
@@ -392,7 +386,7 @@
   padding: 20px 0 6px;
   border-top: 1px solid var(--border-base);
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   line-height: 18px;
 }
@@ -407,7 +401,7 @@
 
 .keyPage {
   padding: 0;
-  font-size: 12px;
+  font-size: 11.5px;
   line-height: 18px;
 }
 
@@ -449,8 +443,8 @@
   align-items: baseline;
   gap: 16px;
   padding: 13px 16px;
-  font-size: 14px;
-  line-height: 22px;
+  font-size: 13px;
+  line-height: 20px;
 }
 
 .summaryRow + .summaryRow {
@@ -461,8 +455,7 @@
   flex: none;
   width: 124px;
   color: var(--text-tertiary, var(--text-secondary));
-  font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 11.5px;
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -473,8 +466,7 @@
 }
 
 .mono {
-  font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -490,15 +482,14 @@
 
 .warn {
   color: rgb(var(--warning-6));
-  font-size: 12px;
+  font-size: 11.5px;
 }
 
 .note {
   margin: 6px 0 0;
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 11.5px;
   line-height: 20px;
-  text-wrap: balance;
 }
 
 .footer {
@@ -587,14 +578,14 @@
 }
 
 .accountName {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  line-height: 20px;
+  line-height: 18px;
 }
 
 .accountPlan {
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 11.5px;
   line-height: 18px;
 }
 

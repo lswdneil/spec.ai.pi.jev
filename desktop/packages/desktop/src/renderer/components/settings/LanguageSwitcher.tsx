@@ -1,9 +1,7 @@
-import { Button } from '@/renderer/ui/button';
-import { Dropdown, MenuItem } from '@/renderer/ui/dropdown';
-import { ChevronDown } from 'lucide-react';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { changeLanguage } from '@/renderer/services/i18n';
+import MuSelect from '@/renderer/components/base/MuSelect';
 import { languageListOrder, nativeLanguageName } from './languageOrder';
 
 const LanguageSwitcher: React.FC = () => {
@@ -26,28 +24,16 @@ const LanguageSwitcher: React.FC = () => {
 
   return (
     <div className='flex items-center gap-8px'>
-      <Dropdown
-        align='end'
-        droplist={
-          <>
-            {languageListOrder(i18n.language).map((language) => (
-              <MenuItem key={language} onClick={() => handleLanguageChange(language)}>
-                {nativeLanguageName(language)}
-              </MenuItem>
-            ))}
-          </>
-        }
-      >
-        <Button
-          variant='secondary'
-          size='sm'
-          className='w-160px justify-between'
-          aria-label={t('settings.language')}
-        >
-          {nativeLanguageName(i18n.language)}
-          <ChevronDown className='h-3.5 w-3.5 text-sv-faint' strokeWidth={1.75} />
-        </Button>
-      </Dropdown>
+      <MuSelect
+        className='w-160px'
+        value={i18n.language}
+        onChange={handleLanguageChange}
+        aria-label={t('settings.language')}
+        options={languageListOrder(i18n.language).map((language) => ({
+          value: language,
+          label: nativeLanguageName(language),
+        }))}
+      />
     </div>
   );
 };

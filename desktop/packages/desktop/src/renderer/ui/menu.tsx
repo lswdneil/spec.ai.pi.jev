@@ -56,7 +56,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({ children, disabled, onClick,
       data-menu-key={__menuKey}
       aria-current={selected ? 'true' : undefined}
       className={cn(
-        'flex min-h-8 w-full items-center gap-2 rounded-[6px] px-2 py-1 text-left text-[12px] outline-none transition-colors',
+        'flex min-h-8 w-full items-center gap-2 bg-transparent rounded-[6px] px-2 py-1 text-left text-[12px] outline-none transition-colors',
         selected ? 'bg-sv-selected text-sv-text' : 'text-sv-muted hover:bg-sv-surface hover:text-sv-text',
         'focus-visible:bg-sv-surface disabled:cursor-not-allowed disabled:opacity-40',
         disabled && 'arco-menu-item-disabled',

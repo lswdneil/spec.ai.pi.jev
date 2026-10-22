@@ -126,7 +126,7 @@ export const Tree: React.FC<TreeProps> = ({
             aria-selected={isSelected}
             data-key={key}
             className={cn(
-              'arco-tree-node group flex min-h-7 cursor-pointer items-center gap-1 rounded-[var(--sv-r-control)] pr-1 text-[12px] outline-none',
+              'arco-tree-node group flex min-h-7 cursor-pointer items-center gap-1 bg-transparent rounded-[var(--sv-r-control)] pr-1 text-[12px] outline-none',
               !hasChildren && 'is-leaf',
               isSelected
                 ? 'arco-tree-node-selected bg-sv-selected text-sv-text'

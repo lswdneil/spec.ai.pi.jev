@@ -372,7 +372,7 @@ const OptionRow: React.FC<{
     disabled={option.disabled}
     onClick={onPick}
     className={cn(
-      'arco-select-option flex h-7 w-full items-center gap-2 rounded-[6px] px-2 text-left outline-none hover:bg-sv-surface focus-visible:bg-sv-surface disabled:cursor-not-allowed disabled:opacity-40',
+      'arco-select-option flex h-7 w-full items-center gap-2 bg-transparent rounded-[6px] px-2 text-left outline-none hover:bg-sv-surface focus-visible:bg-sv-surface disabled:cursor-not-allowed disabled:opacity-40',
       selected ? 'text-sv-text' : 'text-sv-muted'
     )}
   >

@@ -165,7 +165,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
               data-tab={item['data-tab']}
               onSelect={item.onSelect}
               className={cn(
-                'flex h-7 cursor-default select-none items-center gap-2 rounded-[6px] px-2 outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
+                'flex h-7 cursor-default select-none items-center gap-2 bg-transparent rounded-[6px] px-2 outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
                 item.danger ? 'text-sv-danger' : 'text-sv-text',
                 'data-[highlighted]:bg-sv-surface'
               )}
@@ -189,7 +189,7 @@ export const MenuItem: React.FC<
 > = ({ children, onClick, ...props }) => (
   <DropdownMenuPrimitive.Item
     onClick={() => onClick?.()}
-    className='flex h-7 cursor-default select-none items-center rounded-[6px] px-2 text-sv-text outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 data-[highlighted]:bg-sv-surface'
+    className='flex h-7 cursor-default select-none items-center rounded-[6px] bg-transparent px-2 text-sv-text outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 data-[highlighted]:bg-sv-surface'
     {...props}
   >
     {children}
