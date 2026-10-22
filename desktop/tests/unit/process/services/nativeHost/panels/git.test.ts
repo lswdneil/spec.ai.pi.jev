@@ -21,8 +21,16 @@ const temp = (prefix = 'mu-git-'): string => {
   dirs.push(dir);
   return dir;
 };
-afterEach(() => {
-  for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
+afterEach(async () => {
+  // On Windows a git process can still hold its folder for a moment after the test ends.
+  await new Promise((resolve) => setTimeout(resolve, 150));
+  for (const dir of dirs.splice(0)) {
+    try {
+      rmSync(dir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'EPERM') throw error;
+    }
+  }
 });
 
 let home = '';
@@ -82,7 +90,14 @@ const failure = async (work: () => Promise<unknown>): Promise<string | undefined
 beforeAll(() => {
   home = realpathSync(mkdtempSync(join(tmpdir(), 'mu-git-home-')));
 });
-afterAll(() => rmSync(home, { recursive: true, force: true }));
+afterAll(async () => {
+  await new Promise((resolve) => setTimeout(resolve, 150));
+  try {
+    rmSync(home, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'EPERM') throw error;
+  }
+});
 
 describe('git’s environment', () => {
   it('leaves out what would point git elsewhere, and takes no optional lock', () => {
