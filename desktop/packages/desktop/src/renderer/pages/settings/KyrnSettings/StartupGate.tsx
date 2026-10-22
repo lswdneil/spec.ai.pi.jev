@@ -1,6 +1,6 @@
 import React from 'react';
 import useSWR, { mutate } from 'swr';
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import { useTranslation } from 'react-i18next';
 import { kyrnBridge, unwrap } from '@/common/kyrn/bridge';
 import MuMark from '@renderer/components/brand/MuMark';

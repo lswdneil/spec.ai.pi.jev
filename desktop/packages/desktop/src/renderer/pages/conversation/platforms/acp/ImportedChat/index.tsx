@@ -3,7 +3,7 @@
  * a way to read what was said before (common/kyrn/importChats.ts). In place of the greeting while the conversation has
  * no message of its own yet, and above its first message after that.
  */
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';

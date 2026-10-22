@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import React from 'react';
 import MarqueePillLabel from './MarqueePillLabel';
 

@@ -28,15 +28,22 @@ const buttonVariants = cva(
 );
 
 type ArcoButtonType = 'primary' | 'secondary' | 'outline' | 'dashed' | 'text';
+type ArcoButtonSize = 'mini' | 'small' | 'default' | 'large';
 
 export interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'>,
-    VariantProps<typeof buttonVariants> {
+    Omit<VariantProps<typeof buttonVariants>, 'size'> {
   /** Arco compatibility: the visual type. Prefer `variant` in new code. */
   type?: ArcoButtonType;
+  /** Arco's names (`mini`, `small`, `default`, `large`) also work. */
+  size?: VariantProps<typeof buttonVariants>['size'] | ArcoButtonSize;
   htmlType?: 'button' | 'submit' | 'reset';
   status?: 'normal' | 'success' | 'warning' | 'danger';
   loading?: boolean;
+  /** Arco compatibility: a leading icon; `loading` replaces it. */
+  icon?: React.ReactNode;
+  shape?: 'circle' | 'round' | 'square';
+  long?: boolean;
   asChild?: boolean;
 }
 
@@ -48,8 +55,30 @@ function variantFor(type: ArcoButtonType | undefined, status: ButtonProps['statu
   return 'secondary';
 }
 
+function sizeFor(size: ButtonProps['size']): VariantProps<typeof buttonVariants>['size'] {
+  if (size === 'mini' || size === 'small') return 'sm';
+  if (size === 'default') return 'md';
+  if (size === 'large') return 'lg';
+  return size;
+}
+
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant, size, type, htmlType = 'button', status, loading = false, asChild = false, disabled, children, ...props },
+  {
+    className,
+    variant,
+    size,
+    type,
+    htmlType = 'button',
+    status,
+    loading = false,
+    icon,
+    shape,
+    long,
+    asChild = false,
+    disabled,
+    children,
+    ...props
+  },
   ref
 ) {
   const Component = asChild ? Slot : 'button';
@@ -59,10 +88,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       type={asChild ? undefined : htmlType}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      className={cn(buttonVariants({ variant: variant ?? variantFor(type, status), size }), className)}
+      className={cn(
+        buttonVariants({ variant: variant ?? variantFor(type, status), size: sizeFor(size) }),
+        long && 'w-full',
+        shape === 'circle' || shape === 'round' ? 'rounded-full' : null,
+        className
+      )}
       {...props}
     >
-      {loading ? <Loader2 className='h-3.5 w-3.5 animate-spin' aria-hidden='true' /> : null}
+      {loading ? <Loader2 className='h-3.5 w-3.5 animate-spin' aria-hidden='true' /> : icon}
       {children}
     </Component>
   );

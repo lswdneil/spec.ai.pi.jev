@@ -1,5 +1,5 @@
 import type { AssistantEditorViewModel, AssistantListItem } from './types';
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import { ArrowLeft } from '@icon-park/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

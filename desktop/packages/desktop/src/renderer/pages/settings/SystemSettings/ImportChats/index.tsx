@@ -3,7 +3,7 @@
  * (./ImportChatsModal.tsx), which looks for them only once it is open. An action, not a setting: nothing here is
  * stored.
  */
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PreferenceRow from '@/renderer/components/settings/SettingsModal/contents/SystemModalContent/PreferenceRow';

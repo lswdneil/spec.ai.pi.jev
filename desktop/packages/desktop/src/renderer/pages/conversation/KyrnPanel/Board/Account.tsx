@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useLogClock } from '../clock';

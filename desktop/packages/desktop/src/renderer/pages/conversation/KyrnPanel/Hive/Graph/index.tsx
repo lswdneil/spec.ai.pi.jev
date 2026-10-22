@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import { useTranslation } from 'react-i18next';
 import type { HiveBee, SwarmKind } from '@/common/kyrn/hive';
 import { useContainerWidth } from '@/renderer/pages/conversation/hooks/useContainerWidth';

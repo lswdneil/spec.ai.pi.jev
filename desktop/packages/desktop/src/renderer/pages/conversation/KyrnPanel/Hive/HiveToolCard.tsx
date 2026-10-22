@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import { Right } from '@icon-park/react';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';

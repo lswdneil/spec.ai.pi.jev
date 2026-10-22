@@ -13,13 +13,19 @@ export const toast = {
 };
 
 /** Arco's `Message` shape, for the codemod. */
-export const Message = {
+const messageApi = {
   success: (content: React.ReactNode, duration?: number) => toast.success(content, duration),
   error: (content: React.ReactNode, duration?: number) => toast.error(content, duration),
   info: (content: React.ReactNode, duration?: number) => toast.info(content, duration),
   warning: (content: React.ReactNode, duration?: number) => toast.warning(content, duration),
   loading: (content: React.ReactNode) => toast.loading(content),
   clear: () => toast.dismiss(),
+};
+
+export const Message = {
+  ...messageApi,
+  /** Arco's hook; the toaster is mounted once at the app root, so there is no holder to render. */
+  useMessage: (_config?: { maxCount?: number }): [typeof messageApi, React.ReactNode] => [messageApi, null],
 };
 
 /** Arco's `Notification` shape. Same surface today; it can diverge later. */

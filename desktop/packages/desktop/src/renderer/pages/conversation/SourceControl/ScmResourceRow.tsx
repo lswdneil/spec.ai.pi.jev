@@ -21,7 +21,7 @@
  * Read-only for this round: no stage/unstage/discard affordance (PR-4).
  */
 
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import { Minus, Plus, Undo } from '@icon-park/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

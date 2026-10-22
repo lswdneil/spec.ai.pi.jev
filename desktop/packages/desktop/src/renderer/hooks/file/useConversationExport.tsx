@@ -1,7 +1,7 @@
 import { ipcBridge } from '@/common';
 import type { TMessage } from '@/common/chat/chatLib';
 import type { TChatConversation } from '@/common/config/storage';
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import type { SlashCommandMenuItem } from '@/renderer/components/chat/SlashCommandMenu';
 import { getConversationOrNull } from '@/renderer/pages/conversation/utils/conversationCache';
 import { loadAllConversationMessagesPaged } from '@/renderer/utils/chat/messagePagination';

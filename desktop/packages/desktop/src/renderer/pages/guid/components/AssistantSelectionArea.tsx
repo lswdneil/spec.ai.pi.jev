@@ -7,7 +7,7 @@
 import styles from '../index.module.css';
 import { assistantRuntimeKey, type Assistant } from '@/common/types/agent/assistantTypes';
 import { Down } from '@icon-park/react';
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import { MuSearchInput } from '@/renderer/components/base';
 import { useAssistantOrder } from '@/renderer/hooks/assistant/useAssistantOrder';
 import { useManagedAgentRuntimeCatalog } from '@/renderer/hooks/agent/useManagedAgents';

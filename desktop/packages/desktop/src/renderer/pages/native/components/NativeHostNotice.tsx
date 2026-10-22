@@ -3,7 +3,7 @@
  * page where one is set up), that it stopped (why, and its last output), or that the last thing asked of it failed
  * for a reason the transcript cannot show. The failure's own message, plain English, goes under the sentence.
  */
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import { Attention, Close } from '@icon-park/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

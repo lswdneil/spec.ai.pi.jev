@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import { useTranslation } from 'react-i18next';
 import { useCurrentConversation } from '@/renderer/pages/conversation/explorer/currentConversationStore';
 import { useCurrentProject } from '@/renderer/pages/conversation/explorer/currentProjectStore';

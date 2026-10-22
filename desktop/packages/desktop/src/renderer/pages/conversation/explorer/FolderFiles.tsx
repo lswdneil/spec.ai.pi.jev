@@ -6,7 +6,7 @@
  * control view is the folder's repository, read with git by the main process (`NativeSource`).
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
 import { Down, Refresh, Right } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import { unwrap } from '@/common/kyrn/bridge';
