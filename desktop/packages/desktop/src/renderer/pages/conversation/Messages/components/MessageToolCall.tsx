@@ -11,7 +11,7 @@ import FileChangesPanel from '@/renderer/components/base/FileChangesPanel';
 import { useDiffPreviewHandlers } from '@/renderer/hooks/file/useDiffPreviewHandlers';
 import { parseDiff } from '@/renderer/utils/file/diffUtils';
 import { Badge, type BadgeProps } from '@/renderer/ui/badge';
-import { IconDown, IconRight } from '@arco-design/web-react/icon';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { createTwoFilesPatch } from 'diff';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -93,7 +93,7 @@ const MessageToolCall: React.FC<{ message: IMessageToolCall }> = ({ message }) =
             className='flex-shrink-0 cursor-pointer hover:color-#4E5969 transition-colors'
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? <IconDown style={{ fontSize: 12 }} /> : <IconRight style={{ fontSize: 12 }} />}
+            {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
           </span>
         )}
       </div>

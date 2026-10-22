@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { BadgeProps } from '@arco-design/web-react';
+import type { BadgeProps } from '@/renderer/ui/badge';
 import { Badge } from '@/renderer/ui/badge';
 import { Button } from '@/renderer/ui/button';
 import { Message } from '@/renderer/ui/toast';

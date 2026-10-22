@@ -3,7 +3,7 @@
  * 1. Delete pending skill confirmation
  * 2. Remove custom skill from assistant confirmation
  */
-import type { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import type { PendingSkill } from './types';
 import { Modal } from '@/renderer/ui/dialog';
 import React from 'react';

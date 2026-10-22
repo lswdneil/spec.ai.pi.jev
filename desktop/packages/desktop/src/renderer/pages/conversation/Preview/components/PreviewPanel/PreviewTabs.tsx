@@ -6,7 +6,7 @@
 
 import { iconColors } from '@/renderer/styles/colors';
 import { Close } from '@icon-park/react';
-import { IconFullscreen, IconFullscreenExit, IconShrink } from '@arco-design/web-react/icon';
+import { Maximize2, Minimize2, Shrink } from 'lucide-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TabFadeState } from '../../hooks/useTabOverflow';
@@ -260,9 +260,9 @@ const PreviewTabs: React.FC<PreviewTabsProps> = ({
                 title={isMaximized ? t('preview.restorePanel') : t('preview.maximizePanel')}
               >
                 {isMaximized ? (
-                  <IconFullscreenExit style={{ fontSize: 14, color: iconColors.secondary }} />
+                  <Minimize2 size={14} style={{ color: iconColors.secondary }} />
                 ) : (
-                  <IconFullscreen style={{ fontSize: 14, color: iconColors.secondary }} />
+                  <Maximize2 size={14} style={{ color: iconColors.secondary }} />
                 )}
               </div>
             )}
@@ -272,7 +272,7 @@ const PreviewTabs: React.FC<PreviewTabsProps> = ({
                 onClick={onClosePanel}
                 title={t('preview.collapsePanel')}
               >
-                <IconShrink style={{ fontSize: 14, color: iconColors.secondary }} />
+                <Shrink size={14} style={{ color: iconColors.secondary }} />
               </div>
             )}
           </div>

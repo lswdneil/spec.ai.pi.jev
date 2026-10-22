@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { useEffect, useMemo, useRef } from 'react';
 
 type MessageInstance = ReturnType<typeof Message.useMessage>[0];

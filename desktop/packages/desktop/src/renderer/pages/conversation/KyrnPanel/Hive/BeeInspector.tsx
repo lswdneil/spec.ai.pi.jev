@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import { Button, Collapse, Pagination, Tag } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Collapse } from '@/renderer/ui/collapse';
+import { Pagination } from '@/renderer/ui/pagination';
+import { Tag } from '@/renderer/ui/tag';
 import { Terminal } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import type { HiveBee } from '@/common/kyrn/hive';

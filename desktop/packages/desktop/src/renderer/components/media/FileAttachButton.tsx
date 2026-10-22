@@ -6,7 +6,8 @@
 
 import type { IConversationMcpStatus, IConversationMcpStatusKind } from '@/common/config/storage';
 import { ipcBridge } from '@/common';
-import { Button, Trigger } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Trigger } from '@/renderer/ui/trigger';
 import { Lightning, Paperclip, Plus, Right, Shield } from '@icon-park/react';
 import { useConversationContextSafe } from '@/renderer/hooks/context/ConversationContext';
 import { iconColors } from '@/renderer/styles/colors';

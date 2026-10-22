@@ -8,7 +8,9 @@ import { ipcBridge } from '@/common';
 import type { SkillFileNode } from '@/common/adapter/ipcBridge';
 import CodeEditor from '@/renderer/pages/conversation/Preview/components/editors/CodeEditor';
 import MarkdownViewer from '@/renderer/pages/conversation/Preview/components/viewers/MarkdownViewer';
-import { Empty, Spin, Tree } from '@arco-design/web-react';
+import { Empty } from '@/renderer/ui/empty';
+import { Spin } from '@/renderer/ui/spinner';
+import { Tree } from '@/renderer/ui/tree';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

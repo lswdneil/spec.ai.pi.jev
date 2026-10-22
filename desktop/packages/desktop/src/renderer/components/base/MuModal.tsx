@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { ModalProps } from '@arco-design/web-react';
+import type { ModalProps } from '@/renderer/ui/dialog';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { Button } from '@/renderer/ui';
 import { Close } from '@icon-park/react';

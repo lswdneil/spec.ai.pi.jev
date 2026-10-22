@@ -5,7 +5,7 @@ import { Empty } from '@/renderer/ui/empty';
 import { Tabs } from '@/renderer/ui/tabs-legacy';
 import { Tag } from '@/renderer/ui/tag';
 import { SelectWithOptions as Select } from '@/renderer/ui/select';
-import { Pagination } from '@arco-design/web-react';
+import { Pagination } from '@/renderer/ui/pagination';
 import { ArrowRight, Bee } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import type { Activity } from '@/common/kyrn/types';

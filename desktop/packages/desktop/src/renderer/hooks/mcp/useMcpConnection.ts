@@ -136,7 +136,7 @@ const formatThrownMcpErrorMessage = (t: TFunction, error: unknown): string => {
  */
 export const useMcpConnection = (
   setMcpServers: React.Dispatch<React.SetStateAction<IMcpServer[]>>,
-  message: ReturnType<typeof import('@arco-design/web-react').Message.useMessage>[0],
+  message: ReturnType<typeof import('@/renderer/ui/toast').Message.useMessage>[0],
   onAuthRequired?: (server: IMcpServer) => void,
   onAuthResolved?: (server: IMcpServer) => void
 ) => {

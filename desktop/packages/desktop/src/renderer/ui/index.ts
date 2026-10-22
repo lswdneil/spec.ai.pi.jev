@@ -22,18 +22,23 @@ export { Empty, type EmptyProps } from './empty';
 export { Image, type ImageProps, type ImagePreviewGroupProps } from './image';
 export { Input, Textarea, type InputProps, type TextareaProps } from './input';
 export { InputNumber, type InputNumberProps } from './input-number';
+export { Layout } from './layout';
 export { Popover, type PopoverProps, type PopoverPosition } from './popover';
+export { Pagination, type PaginationProps } from './pagination';
 export { Popconfirm, type PopconfirmProps, type PopconfirmPosition } from './popconfirm';
 export { Radio, type RadioProps, type RadioGroupProps } from './radio';
 export { SelectWithOptions as Select, type SelectProps, type SelectOptionProps, type SelectValue } from './select';
 export { Spinner, Spin, type SpinnerProps } from './spinner';
 export { Slider, type SliderProps } from './slider';
+export { Steps, type StepsProps, type StepProps } from './steps';
 export { Switch, type SwitchProps } from './switch';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Tag, type TagProps, type TagTone } from './tag';
 export { AppToaster } from './toaster';
 export { Message, Notification, toast } from './toast';
 export { Tooltip, TooltipProvider, type TooltipProps } from './tooltip';
+export { Tree, type TreeProps, type TreeNodeData, type TreeFieldNames } from './tree';
+export { Trigger, type TriggerProps } from './trigger';
 export {
   Typography,
   type TypographyTextProps,

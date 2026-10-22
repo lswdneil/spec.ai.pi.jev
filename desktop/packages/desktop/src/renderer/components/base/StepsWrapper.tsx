@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Steps } from '@arco-design/web-react';
-import type { StepsProps } from '@arco-design/web-react/es/Steps';
+import { Steps } from '@/renderer/ui/steps';
+import type { StepsProps } from '@/renderer/ui/steps';
 import React from 'react';
 
 interface StepsWrapperProps extends StepsProps {

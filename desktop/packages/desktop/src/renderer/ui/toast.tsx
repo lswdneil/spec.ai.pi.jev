@@ -55,6 +55,7 @@ const messageApi = {
   error: notify('error'),
   info: notify('info'),
   warning: notify('warning'),
+  normal: notify('info'),
   loading: notify('loading'),
   clear: () => toast.dismiss(),
 };

@@ -25,7 +25,7 @@ import {
   WORKSPACE_HEADER_HEIGHT,
   calcLayoutMetrics,
 } from '@/renderer/pages/conversation/utils/layoutCalc';
-import { Layout as ArcoLayout } from '@arco-design/web-react';
+import { Layout as ArcoLayout } from '@/renderer/ui/layout';
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import './chat-layout.css';

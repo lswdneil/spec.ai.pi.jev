@@ -23,7 +23,8 @@ import { AppToaster } from './ui/toaster';
 import { PreviewProvider } from './pages/conversation/Preview/context/PreviewContext';
 
 // Arco Design
-import { ConfigProvider, Typography } from '@arco-design/web-react';
+import { ConfigProvider } from '@arco-design/web-react';
+import { Typography } from '@/renderer/ui/typography';
 import { Modal } from '@/renderer/ui/dialog';
 // Configure Arco Design to use React 18's createRoot, fixing Message component's CopyReactDOM.render error
 import '@arco-design/web-react/es/_util/react-19-adapter';
