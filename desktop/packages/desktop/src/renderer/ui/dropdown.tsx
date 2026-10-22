@@ -21,6 +21,10 @@ export interface DropdownProps {
   /** Arco compatibility: a Menu tree rendered inside the popup. */
   droplist?: React.ReactNode;
   align?: 'start' | 'center' | 'end';
+  position?: 'top' | 'bottom' | 'left' | 'right' | 'tl' | 'tr' | 'bl' | 'br';
+  popupVisible?: boolean;
+  onVisibleChange?: (visible: boolean) => void;
+  getPopupContainer?: (node: HTMLElement) => HTMLElement;
   className?: string;
   /** Controlled open, for callers that keep the menu's state. */
   open?: boolean;
@@ -36,8 +40,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
   children,
   items,
   droplist,
-  align = 'start',
+  align,
+  position,
   className,
+  popupVisible,
+  onVisibleChange,
   open,
   onOpenChange,
   contentRef,
@@ -47,12 +54,13 @@ export const Dropdown: React.FC<DropdownProps> = ({
   onContentKeyDownCapture,
 }) => {
   const [internalOpen, setInternalOpen] = React.useState(false);
-  const isOpen = open ?? internalOpen;
+  const isOpen = popupVisible ?? open ?? internalOpen;
   const pointerDownAt = React.useRef(0);
   const setOpen = (next: boolean) => {
     if (disabled) return;
-    if (open === undefined) setInternalOpen(next);
+    if (open === undefined && popupVisible === undefined) setInternalOpen(next);
     onOpenChange?.(next);
+    onVisibleChange?.(next);
   };
   if (disabled) return <>{children}</>;
   return (
@@ -84,7 +92,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
           ref={contentRef}
           onKeyDown={onContentKeyDown}
           onKeyDownCapture={onContentKeyDownCapture}
-          align={align}
+          align={align ?? (position === 'br' || position === 'tr' ? 'end' : 'start')}
+          side={position === 'tl' || position === 'tr' || position === 'top' ? 'top' : 'bottom'}
           sideOffset={6}
           className={cn(
             'z-[60] min-w-[180px] rounded-[var(--sv-r-popup)] border border-sv-line bg-sv-popover p-1 text-[12px] text-sv-text outline-none',
