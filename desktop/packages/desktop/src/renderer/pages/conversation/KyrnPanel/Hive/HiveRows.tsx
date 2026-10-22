@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Collapse } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Collapse } from '@/renderer/ui/collapse';
 import { Check, Close } from '@icon-park/react';
 import classNames from 'classnames';
 import type { TFunction } from 'i18next';

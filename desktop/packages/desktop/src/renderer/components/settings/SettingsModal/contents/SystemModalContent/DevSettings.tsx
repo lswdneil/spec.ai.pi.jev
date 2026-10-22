@@ -6,7 +6,10 @@
 
 import { ipcBridge } from '@/common';
 import { globalNavigate } from '@/renderer/utils/navigation';
-import { Button, Collapse, Message, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Collapse } from '@/renderer/ui/collapse';
+import { Message } from '@/renderer/ui/toast';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Copy, Down, Link } from '@icon-park/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

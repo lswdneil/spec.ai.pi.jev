@@ -6,7 +6,9 @@
 
 import type { IMessageTips } from '@/common/chat/chatLib';
 import { showAsMu } from '@/common/kyrn/displayName';
-import { Button, Collapse, Tag } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Collapse } from '@/renderer/ui/collapse';
+import { Tag } from '@/renderer/ui/tag';
 import { Attention, CheckOne, Info } from '@icon-park/react';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';

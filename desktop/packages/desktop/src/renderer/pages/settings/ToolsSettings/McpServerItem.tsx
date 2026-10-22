@@ -1,4 +1,4 @@
-import { Collapse } from '@arco-design/web-react';
+import { Collapse } from '@/renderer/ui/collapse';
 import React from 'react';
 import type { IMcpServer } from '@/common/config/storage';
 import McpServerHeader from './McpServerHeader';

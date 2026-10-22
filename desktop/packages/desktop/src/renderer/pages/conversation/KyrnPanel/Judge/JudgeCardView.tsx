@@ -1,5 +1,7 @@
 import React from 'react';
-import { Collapse, Tag, Tooltip } from '@arco-design/web-react';
+import { Collapse } from '@/renderer/ui/collapse';
+import { Tag } from '@/renderer/ui/tag';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { ArrowRight, Help, Lightning, ListCheckbox } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import type { Activity } from '@/common/kyrn/types';

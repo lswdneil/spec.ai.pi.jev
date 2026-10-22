@@ -3,7 +3,8 @@ export { Avatar, type AvatarProps, type AvatarGroupProps } from './avatar';
 export { Badge, type BadgeProps, type BadgeStatus } from './badge';
 export { Button, type ButtonProps } from './button';
 export { Card, type CardProps } from './card';
-export { Checkbox, type CheckboxProps } from './checkbox';
+export { Checkbox, type CheckboxProps, type CheckboxGroupProps } from './checkbox';
+export { Collapse, type CollapseProps, type CollapseItemProps } from './collapse';
 export { cn } from './cn';
 export {
   Dialog,
@@ -25,5 +26,6 @@ export { Slider, type SliderProps } from './slider';
 export { Switch, type SwitchProps } from './switch';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Tag, type TagProps, type TagTone } from './tag';
-export { AppToaster, Message, Notification, toast } from './toast';
+export { AppToaster } from './toaster';
+export { Message, Notification, toast } from './toast';
 export { Tooltip, TooltipProvider, type TooltipProps } from './tooltip';

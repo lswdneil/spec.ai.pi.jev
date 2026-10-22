@@ -85,6 +85,14 @@ vi.mock('@/common', () => ({
   },
 }));
 
+vi.mock('@/renderer/ui/toast', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/renderer/ui/toast')>();
+  return {
+    ...actual,
+    Message: { ...actual.Message, info: messageInfoMock },
+  };
+});
+
 vi.mock('@arco-design/web-react', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@arco-design/web-react')>();
   return {
