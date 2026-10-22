@@ -4,6 +4,7 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
+  --sv-focus: var(--sv-jev-violet);
   gap: 16px;
   height: 26px;
   padding: 0 12px 0 6px;

@@ -6,6 +6,7 @@
   flex-direction: column;
   height: 100%;
   min-height: 0;
+  --sv-focus: var(--sv-jev-violet);
   color: var(--text-primary);
   font-size: 12px;
 }
@@ -175,9 +176,10 @@
   margin-inline-start: 6px;
   padding: 0 5px;
   overflow: hidden;
-  border: 1px solid var(--border-base);
+  border: 1px solid var(--sv-jev-tag-border);
   border-radius: 4px;
-  color: var(--text-secondary);
+  background: var(--sv-jev-tag-bg);
+  color: var(--sv-jev-violet);
   font-size: 11px;
   line-height: 16px;
   text-overflow: ellipsis;

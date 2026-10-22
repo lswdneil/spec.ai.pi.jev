@@ -72,6 +72,17 @@ describe('Dense theme and type tokens', () => {
     expect(dense).toMatch(/background: var\(--sv-brand\);/);
   });
 
+  it('keeps the Jev accent scoped to Jev surfaces', () => {
+    const tokens = read('styles/specjev/tokens.css');
+    const dense = read('styles/specjev/dense.css');
+    expect(tokens).toContain('--sv-jev-pink:');
+    expect(tokens).toContain('--sv-jev-violet:');
+    expect(dense).toContain('--mu-judge-dot: var(--sv-jev-pink);');
+    expect(dense).toContain('--mu-judge: var(--sv-jev-violet);');
+    expect(read('components/kernel/KernelBar.module.css')).toContain('--sv-focus: var(--sv-jev-violet);');
+    expect(read('components/kernel/MuHero.module.css')).toContain('--sv-focus: var(--sv-jev-violet);');
+  });
+
   it('uses the UI typeface for every non-code label', () => {
     for (const path of [
       'components/kernel/MuHero.module.css',

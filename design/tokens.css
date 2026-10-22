@@ -32,6 +32,8 @@
   --warn: #f5c86f;
   --ok: #b5cea5;
   --info: #c1f5f4;
+  --jev-pink: #f06bc9;
+  --jev-violet: #8f7cf7;
 }
 
 :root[data-theme="light"] {
@@ -63,6 +65,8 @@
   --warn: #7a4b00;
   --ok: #4e653f;
   --info: #1f5f63;
+  --jev-pink: #d63fa2;
+  --jev-violet: #7f6af0;
 }
 
 :root {

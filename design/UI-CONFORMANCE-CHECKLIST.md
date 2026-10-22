@@ -17,7 +17,7 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | Layout | sidebar 208, rail 300, topbar 40 | `--sv-sidebar/rail/topbar` | PASS |
 | Motion | fast 120, base 160, enter 220, ease `(.2,.7,.2,1)` | `--sv-t-*` / `--sv-ease` | PASS |
 | Shadows | none | Dense sheets and primitives use borders | PASS |
-| One accent | brand only | no second accent in Dense primitives | PASS |
+| One UI accent | brand sage for ordinary UI | Jev status/focus/tags use the separate pink/violet `--sv-jev-*` accent | FIXED |
 | Token precedence | Dense mappings beat colour-scheme blocks | `html[data-sv-ui="dense"][data-theme]` | FIXED |
 | Raw theme values | token sources only | UI sheets use tokens; see `HARDCODING-AUDIT.md` | FIXED |
 
@@ -41,8 +41,8 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | Home composer placeholder | 13px, UI typeface | FIXED |
 | Send button | 26 x 26 | PASS |
 | Composer note | 9.5 | PASS |
-| Hero status pill | 12, UI typeface | FIXED |
-| Kernel status bar | 11.5, UI typeface | FIXED |
+| Hero status pill | 12, UI typeface; Jev pink dot | FIXED |
+| Kernel status bar | 11.5, UI typeface; Jev violet name/tag and pink dot | FIXED |
 | Thread message body | 12.5 / 1.55 | PASS |
 | User bubble | pad 8/10, radius 8/8/2/8 | PASS |
 | Tool card | margin 8, radius 5, head 26, code 10.5 | PASS |

@@ -7,6 +7,7 @@
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  --sv-focus: var(--sv-jev-violet);
 }
 
 /* The hint starts under the line's words, past its mark (7px) and gap (8px), so it never reads as a second verdict. */
@@ -67,10 +68,10 @@
   flex: none;
   box-sizing: border-box;
   padding: 0 6px;
-  border: 1px solid var(--border-base);
+  border: 1px solid var(--sv-jev-tag-border);
   border-radius: 4px;
-  background: var(--bg-2);
-  color: var(--text-secondary);
+  background: var(--sv-jev-tag-bg);
+  color: var(--sv-jev-violet);
   font-family: var(--sv-font-ui);
   font-size: var(--sv-fs-small);
   line-height: 16px;

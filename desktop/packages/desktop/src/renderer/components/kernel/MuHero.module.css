@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  --sv-focus: var(--sv-jev-violet);
   gap: 10px;
   margin: 0 4px 26px;
   animation: mu-hero-in 520ms var(--mu-ease, ease) both;

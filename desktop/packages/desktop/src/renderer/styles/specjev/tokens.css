@@ -30,6 +30,8 @@
   --sv-warn: #f5c86f;
   --sv-ok: #b5cea5;
   --sv-info: #c1f5f4;
+  --sv-jev-pink: #f06bc9;
+  --sv-jev-violet: #8f7cf7;
 }
 
 :root[data-theme="light"] {
@@ -59,6 +61,8 @@
   --sv-warn: #7a4b00;
   --sv-ok: #4e653f;
   --sv-info: #1f5f63;
+  --sv-jev-pink: #d63fa2;
+  --sv-jev-violet: #7f6af0;
 }
 
 :root {
@@ -97,6 +101,10 @@
   --sv-rail: 300px;
   --sv-topbar: 40px;
   --sv-touch: 44px;
+
+  --sv-jev-pink-ring: color-mix(in srgb, var(--sv-jev-pink) 25%, transparent);
+  --sv-jev-tag-bg: color-mix(in srgb, var(--sv-jev-violet) 10%, var(--sv-surface-2));
+  --sv-jev-tag-border: color-mix(in srgb, var(--sv-jev-violet) 28%, var(--sv-line));
 }
 
 @media (prefers-reduced-motion: reduce) {

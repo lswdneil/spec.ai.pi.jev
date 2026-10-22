@@ -95,14 +95,14 @@ html[data-sv-ui="dense"][data-theme] {
   --mu-glow-violet: color-mix(in srgb, var(--sv-brand) 10%, transparent);
   --mu-glow-pink: transparent;
 
-  /* Judge marks use the one accent rather than pink. */
-  --mu-judge: var(--sv-brand-ink);
-  --mu-judge-bg-flat: var(--sv-surface-2);
-  --mu-judge-bg: var(--sv-surface-2);
-  --mu-judge-border: var(--sv-line);
-  --mu-judge-dot: var(--sv-brand-1);
-  --mu-judge-dot-ring: color-mix(in srgb, var(--sv-brand) 22%, transparent);
-  --mu-pink-6: var(--sv-brand-1);
+  /* Judge marks keep the Jev accent, distinct from the Dense UI accent. */
+  --mu-judge: var(--sv-jev-violet);
+  --mu-judge-bg-flat: var(--sv-jev-tag-bg);
+  --mu-judge-bg: var(--sv-jev-tag-bg);
+  --mu-judge-border: var(--sv-jev-tag-border);
+  --mu-judge-dot: var(--sv-jev-pink);
+  --mu-judge-dot-ring: var(--sv-jev-pink-ring);
+  --mu-pink-6: var(--sv-jev-pink);
 
   /* The violet scale becomes the Dense surface/sage scale. */
   --mu-violet-1: var(--sv-surface);

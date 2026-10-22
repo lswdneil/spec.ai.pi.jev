@@ -19,7 +19,7 @@ Scope: replace the AionUI interface with spec.jev's own shell and visual languag
 
 ## 2. Non-negotiables
 
-1. **One accent.** Brand sage is used at most twice per screen: one primary action and one current/selected marker. Everything else is text, surface or border.
+1. **One UI accent, plus the Jev system accent.** Brand sage is used at most twice per screen: one primary action and one current/selected marker. The judge/Jev system keeps its own pink dot and violet focus/tag accent (`--sv-jev-*`) so it reads as a separate subsystem; do not spread that accent to ordinary UI.
 2. **Flat.** No `box-shadow`. Depth comes from surfaces, 1px borders and spacing.
 3. **No pure black or white.** Use the verified surfaces.
 4. **Three theme modes only**: dark, light, auto (follows the OS). No per-window theme, no custom accent picker.
@@ -49,6 +49,8 @@ Scope: replace the AionUI interface with spec.jev's own shell and visual languag
 | `--brand` | `#b5cea5` | primary action fill, current marker |
 | `--brand-ink` | `#b5cea5` | brand text on dark |
 | `--on-brand` | `#1c211b` | text on brand fill |
+| `--jev-pink` | `#f06bc9` | Jev status dot; judge system only |
+| `--jev-violet` | `#8f7cf7` | Jev focus, tags and readouts; judge system only |
 | `--danger` / `--warn` / `--ok` | `#e7a3a3` / `#f5c86f` / `#b5cea5` | semantics |
 
 ### Light
@@ -68,6 +70,8 @@ Scope: replace the AionUI interface with spec.jev's own shell and visual languag
 | `--brand` | `#b5cea5` | fill only |
 | `--brand-ink` | `#4e653f` | brand text/link on light |
 | `--on-brand` | `#232b26` | text on brand fill |
+| `--jev-pink` | `#d63fa2` | Jev status dot; judge system only |
+| `--jev-violet` | `#7f6af0` | Jev focus, tags and readouts; judge system only |
 
 Contrast gates (verified):
 
@@ -88,7 +92,7 @@ Usage notes:
 - Light mode: sage is a **fill**, or `--brand-ink` for text. Never `--brand` for body text, links or small icons.
 - Borders are decorative at ~1.2–1.3:1. Any control whose boundary is the only affordance uses `--line-strong` (3.19–3.95:1) or an explicit focus ring.
 - Semantic colors are for meaning only, not decoration.
-- Accent budget per screen: **2**. In the prototypes: selected session + send (conversation); selected theme card + check (appearance); active tab + send (mobile).
+- Accent budget per screen: **2** for the UI accent. In the prototypes: selected session + send (conversation); selected theme card + check (appearance); active tab + send (mobile). Jev status/focus/tag marks are a separate system accent.
 
 ## 4. Typography
 
@@ -99,7 +103,7 @@ Usage notes:
 ```
 
 - Dense (approved direction): UI base **13px**; sidebar primary labels 13; sidebar section headers and empty-state copy 12; small 11.5; caption 11.5; meta 12; h1 20; hero display 34. Editorial alternatives may use 14/26.
-- UI labels and prose use `--sv-font-ui`. Monospace is only for code, identifiers, timings and commands. Colours come from `--sv-*` tokens (or the mapped legacy theme variables); raw colours live only in token sources and documented data/preview exceptions.
+- UI labels and prose use `--sv-font-ui`. Monospace is only for code, identifiers, timings and commands. Colours come from `--sv-*` tokens (or the mapped legacy theme variables); raw colours live only in token sources and documented data/preview exceptions. Jev status, focus and tags use `--sv-jev-pink` / `--sv-jev-violet`; everything else uses the Dense sage accent.
 - Line-height: body **1.65** (CJK 1.7–1.8), headings **1.35** (CJK 1.35–1.4), small 1.5.
 - Weights: 400 / 500 / 600 only. No 700 body.
 - Numbers in tables and timing: `font-variant-numeric: tabular-nums`.
@@ -210,7 +214,7 @@ Forms add untouched / dirty-valid / submitted-pending; validate on blur, then li
 2. Mirror to `design/tokens.css` (prototypes) and `renderer/styles/specjev/tokens.css` (`--sv-*`, the app). No raw hex in components.
 3. Components use semantic tokens, never palette names (`--sv-brand`, not `--green`).
 4. UnoCSS is the utility layer already in the project; new primitives use Uno utilities plus `--sv-*` values. No Tailwind install.
-5. One accent; if a screen needs a second emphasis, use weight/surface, not a new color.
+5. One UI accent; the Jev subsystem owns pink/violet status, focus and tag marks. If a non-Jev screen needs a second emphasis, use weight/surface, not a new color.
 6. Arco imports and the package are gone; remaining legacy variables live in `legacy-overrides.css` and `mu-scales.css`. New work uses `--sv-*` only.
 7. Any new component must document its five states and its mobile behavior.
 
