@@ -16,7 +16,7 @@ import { resolveConversationLeadingMark } from '@/renderer/pages/conversation/ut
 import { useAddEventListener } from '@/renderer/utils/emitter';
 import { blockMobileInputFocus, blurActiveElement } from '@/renderer/utils/ui/focus';
 import { isPrimaryApplicationShortcut, MESSAGE_SEARCH_SHORTCUT } from '@/renderer/utils/ui/keyboardShortcuts';
-import { Empty, Spin, Typography } from '@arco-design/web-react';
+import { Empty, Spinner } from '@/renderer/ui';
 import { Close, Search } from '@icon-park/react';
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -361,7 +361,7 @@ const ConversationSearchPopover: React.FC<ConversationSearchPopoverProps> = ({
     if (loading && items.length === 0) {
       return (
         <div className='h-120px flex items-center justify-center'>
-          <Spin size={20} />
+          <Spinner size='md' />
         </div>
       );
     }
@@ -421,7 +421,7 @@ const ConversationSearchPopover: React.FC<ConversationSearchPopoverProps> = ({
 
           {loadingMore && (
             <div className='py-8px flex items-center justify-center gap-8px text-12px text-t-secondary'>
-              <Spin size={14} />
+              <Spinner size='sm' />
               <span>{t('conversation.historySearch.loadingMore')}</span>
             </div>
           )}
@@ -518,9 +518,9 @@ const ConversationSearchPopover: React.FC<ConversationSearchPopoverProps> = ({
           <div className='conversation-search-modal__header'>
             <div className='conversation-search-modal__header-main'>
               <div className='conversation-search-modal__title'>{t('conversation.historySearch.title')}</div>
-              <Typography.Paragraph className='conversation-search-modal__description !mb-0 text-13px text-t-secondary'>
+              <p className='conversation-search-modal__description !mb-0 text-13px text-t-secondary'>
                 {t('conversation.historySearch.description')}
-              </Typography.Paragraph>
+              </p>
             </div>
             <button
               type='button'
