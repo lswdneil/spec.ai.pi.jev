@@ -93,6 +93,26 @@ html[data-sv-ui="dense"] {
   --mu-glow-violet: color-mix(in srgb, var(--sv-brand) 10%, transparent);
   --mu-glow-pink: transparent;
 
+  /* Judge marks use the one accent rather than pink. */
+  --mu-judge: var(--sv-brand-ink);
+  --mu-judge-bg-flat: var(--sv-surface-2);
+  --mu-judge-bg: var(--sv-surface-2);
+  --mu-judge-border: var(--sv-line);
+  --mu-judge-dot: var(--sv-brand-1);
+  --mu-judge-dot-ring: color-mix(in srgb, var(--sv-brand) 22%, transparent);
+
+  /* The violet scale becomes the Dense surface/sage scale. */
+  --mu-violet-1: var(--sv-surface);
+  --mu-violet-2: var(--sv-surface-2);
+  --mu-violet-3: var(--sv-raised);
+  --mu-violet-4: var(--sv-line-strong);
+  --mu-violet-5: var(--sv-brand-1);
+  --mu-violet-6: var(--sv-brand-1);
+  --mu-violet-7: var(--sv-brand-ink);
+  --mu-violet-8: var(--sv-text);
+  --mu-violet-9: var(--sv-text);
+  --mu-violet-10: var(--sv-text);
+
   /* Message bodies follow the Dense rhythm without hard-coding their size: the
      person's own chat font-size setting still wins. */
   --chat-line-height: 1.65;
@@ -117,6 +137,8 @@ html[data-sv-ui="dense"] body {
   font-family: var(--sv-font-ui);
   font-size: 13px;
   line-height: 1.65;
+  scrollbar-color: var(--sv-line-strong) transparent;
+  scrollbar-width: thin;
 }
 
 html[data-sv-ui="dense"] .app-titlebar {
@@ -314,6 +336,10 @@ html[data-sv-ui="dense"] .arco-card-header {
 /* The settings pages are flat in Dense: no glow, no dot grid. */
 html[data-sv-ui="dense"] .settings-page-wrapper::before {
   display: none;
+}
+
+html[data-sv-ui="dense"] .settings-page-eyebrow::before {
+  background: var(--sv-brand-1);
 }
 
 /* The welcome page keeps the hero, not the atmosphere; its card is a flat field. */
