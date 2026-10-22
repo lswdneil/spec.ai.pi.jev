@@ -18,6 +18,9 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   color?: 'gray' | 'green' | 'red' | 'orange' | 'blue' | 'arcoblue' | 'purple';
   size?: 'small' | 'default' | 'medium' | 'large';
   bordered?: boolean;
+  closable?: boolean;
+  onClose?: (event: React.MouseEvent) => void;
+  closeIcon?: React.ReactNode;
 }
 
 const arcoTones: Record<NonNullable<TagProps['color']>, TagTone> = {
@@ -37,16 +40,32 @@ export const Tag: React.FC<TagProps> = ({
   children,
   size: _size,
   bordered: _bordered,
+  closable,
+  onClose,
+  closeIcon,
   ...props
 }) => (
   <span
     className={cn(
-      'inline-flex h-[22px] items-center rounded-full border px-2 text-[10.5px] font-medium leading-none',
+      'inline-flex h-[22px] items-center gap-1 rounded-full border px-2 text-[10.5px] font-medium leading-none',
       tones[tone ?? (color ? arcoTones[color] : 'neutral')],
       className
     )}
     {...props}
   >
     {children}
+    {closable ? (
+      <button
+        type='button'
+        aria-label='Remove'
+        className='-me-1 flex h-3.5 w-3.5 items-center justify-center rounded-full text-current opacity-60 hover:bg-sv-raised hover:opacity-100'
+        onClick={(event) => {
+          event.stopPropagation();
+          onClose?.(event);
+        }}
+      >
+        {closeIcon ?? <span aria-hidden='true'>×</span>}
+      </button>
+    ) : null}
   </span>
 );

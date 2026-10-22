@@ -5,7 +5,9 @@
  */
 
 import { formatDuration } from '@/renderer/services/i18n/format';
-import { Tag, Spin, Button } from '@arco-design/web-react';
+import { Tag } from '@/renderer/ui/tag';
+import { Spin } from '@/renderer/ui/spinner';
+import { Button } from '@/renderer/ui/button';
 import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -2,22 +2,8 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@arco-design/web-react', () => ({
+vi.mock('@/renderer/ui/spinner', () => ({
   Spin: () => <span data-testid='spinner' />,
-  Tag: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
-  Button: ({
-    children,
-    className,
-    onClick,
-  }: {
-    children: React.ReactNode;
-    className?: string;
-    onClick?: () => void;
-  }) => (
-    <button className={className} onClick={onClick}>
-      {children}
-    </button>
-  ),
 }));
 
 vi.mock('@/renderer/hooks/context/ThemeContext', () => ({

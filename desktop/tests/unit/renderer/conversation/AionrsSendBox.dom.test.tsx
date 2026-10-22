@@ -1,7 +1,7 @@
 import React from 'react';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { BackendHttpError } from '@/common/adapter/httpBridge';
 import AionrsSendBox from '@/renderer/pages/conversation/platforms/aionrs/AionrsSendBox';
 import type { AionrsModelSelection } from '@/renderer/pages/conversation/platforms/aionrs/useAionrsModelSelection';
@@ -257,26 +257,12 @@ vi.mock('@/renderer/utils/file/messageFiles', () => ({
   collectChatFileRefs: () => [],
   splitChatFileRefs: () => ({ uploadFiles: [], atPath: [] }),
 }));
-vi.mock('@arco-design/web-react', () => ({
+vi.mock('@/renderer/ui/toast', () => ({
   Message: {
     warning: vi.fn(),
     error: vi.fn(),
     success: vi.fn(),
   },
-  Tag: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
-  Button: ({
-    children,
-    onClick,
-    disabled,
-  }: {
-    children?: React.ReactNode;
-    onClick?: () => void;
-    disabled?: boolean;
-  }) => (
-    <button type='button' onClick={onClick} disabled={disabled}>
-      {children}
-    </button>
-  ),
 }));
 vi.mock('@icon-park/react', () => ({
   Brain: () => null,

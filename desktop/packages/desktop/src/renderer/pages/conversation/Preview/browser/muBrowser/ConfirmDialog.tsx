@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Modal } from '@/renderer/ui/dialog';
 import { useTranslation } from 'react-i18next';
 import { kyrnBrowserBridge } from '@/common/kyrn/browserBridge';
 import type { BrowserRunState } from '@/common/kyrn/browserRun';

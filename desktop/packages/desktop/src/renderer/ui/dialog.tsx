@@ -70,6 +70,7 @@ export interface ModalProps {
   wrapStyle?: React.CSSProperties;
   maskStyle?: React.CSSProperties;
   afterClose?: () => void;
+  escToExit?: boolean;
   'data-testid'?: string;
 }
 
@@ -95,6 +96,7 @@ export const Modal: React.FC<ModalProps> = ({
   cancelButtonProps,
   closable = true,
   afterClose,
+  escToExit = true,
   'data-testid': testId,
 }) => {
   const isOpen = visible ?? open ?? false;
@@ -134,6 +136,9 @@ export const Modal: React.FC<ModalProps> = ({
         style={{ '--sv-modal-width': `${width}px`, ...style } as React.CSSProperties}
         onInteractOutside={(event) => {
           if (!maskClosable) event.preventDefault();
+        }}
+        onEscapeKeyDown={(event) => {
+          if (!escToExit) event.preventDefault();
         }}
         className={className}
         data-testid={testId}

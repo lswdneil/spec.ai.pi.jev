@@ -337,27 +337,12 @@ vi.mock('@/renderer/utils/file/messageFiles', () => ({
 vi.mock('@/renderer/pages/conversation/platforms/acp/useAcpInitialMessage', () => ({
   useAcpInitialMessage: vi.fn(),
 }));
-vi.mock('@arco-design/web-react', () => ({
+vi.mock('@/renderer/ui/toast', () => ({
   Message: {
     success: vi.fn(),
     error: vi.fn(),
     warning: messageWarningMock,
   },
-  Tag: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
-  Popover: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
-  Button: ({
-    children,
-    onClick,
-    disabled,
-  }: {
-    children?: React.ReactNode;
-    onClick?: () => void;
-    disabled?: boolean;
-  }) => (
-    <button type='button' onClick={onClick} disabled={disabled}>
-      {children}
-    </button>
-  ),
 }));
 
 const makeMessageState = (): UseAcpMessageReturn => ({
