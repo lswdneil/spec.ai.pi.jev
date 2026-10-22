@@ -540,7 +540,7 @@ const Group: React.FC<{ onSessionClick?: () => void }> = ({ onSessionClick }) =>
         <Input
           autoFocus
           value={renaming?.name ?? ''}
-          onChange={(event) => setRenaming((old) => (old ? { ...old, name: event.target.value } : old))}
+          onChange={(name) => setRenaming((old) => (old ? { ...old, name } : old))}
           onClear={() => setRenaming((old) => (old ? { ...old, name: '' } : old))}
           onKeyDown={(event) => {
             if (event.key === 'Enter') void saveName();

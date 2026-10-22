@@ -21,7 +21,8 @@
  *     is active. Preview is a deferred feature — no action wired here yet.
  */
 
-import { Button, Input } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
 import { Plus, Search } from '@icon-park/react';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';

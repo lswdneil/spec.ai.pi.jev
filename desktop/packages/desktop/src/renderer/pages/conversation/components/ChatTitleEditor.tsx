@@ -1,5 +1,5 @@
 import ConversationTitleMinimap from '@/renderer/pages/conversation/components/ConversationTitleMinimap';
-import { Input } from '@arco-design/web-react';
+import { Input } from '@/renderer/ui/input';
 import classNames from 'classnames';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

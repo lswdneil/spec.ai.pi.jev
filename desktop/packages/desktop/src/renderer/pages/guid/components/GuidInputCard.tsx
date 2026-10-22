@@ -8,8 +8,7 @@ import FilePreview from '@/renderer/components/media/FilePreview';
 import UploadProgressBar from '@/renderer/components/media/UploadProgressBar';
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { useCompositionInput } from '@/renderer/hooks/chat/useCompositionInput';
-import { Input } from '@arco-design/web-react';
-import type { RefTextAreaType } from '@arco-design/web-react/es/Input';
+import { Input } from '@/renderer/ui/input';
 import React, { useEffect, useRef } from 'react';
 import styles from '../index.module.css';
 import GuidWorkspaceFootnote from './GuidWorkspaceFootnote';
@@ -71,13 +70,13 @@ const GuidInputCard: React.FC<GuidInputCardProps> = ({
   const layout = useLayoutContext();
   const isMobile = layout?.isMobile ?? false;
   const { compositionHandlers, isComposing } = useCompositionInput();
-  const inputRef = useRef<RefTextAreaType | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const textareaAutoSize = isMobile ? MOBILE_AUTO_SIZE : DESKTOP_AUTO_SIZE;
 
   useEffect(() => {
     if (!focusRequestKey || isMobile) return;
     inputRef.current?.focus();
-    inputRef.current?.dom.setSelectionRange(input.length, input.length);
+    inputRef.current?.setSelectionRange(input.length, input.length);
   }, [focusRequestKey, input, isMobile]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

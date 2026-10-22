@@ -4,7 +4,8 @@
  * how long it has and closes itself when the time is up (pi then goes on with its default). An answer closes it at
  * once; one that does not go through brings it back, and the screen says why.
  */
-import { Button, Input } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { NativeResult } from '@/common/kyrn/nativeBridge';

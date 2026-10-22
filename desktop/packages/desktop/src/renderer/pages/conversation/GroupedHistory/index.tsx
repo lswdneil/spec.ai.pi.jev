@@ -318,7 +318,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
         <Input
           autoFocus
           value={renameModalName}
-          onChange={(event) => setRenameModalName(event.target.value)}
+          onChange={setRenameModalName}
           onClear={() => setRenameModalName('')}
           onKeyDown={(event) => {
             if (event.key === 'Enter') void handleRenameConfirm();

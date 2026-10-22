@@ -65,7 +65,7 @@ const CommandPalettePanel: React.FC<{ onRun: (item: PaletteItem) => void }> = ({
         <Input
           autoFocus
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={setQuery}
           onKeyDown={onKeyDown}
           placeholder={t('common.commandPalette.placeholder')}
           prefix={<Search className='h-4 w-4' strokeWidth={1.75} />}

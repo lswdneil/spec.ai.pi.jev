@@ -44,7 +44,11 @@ import { peLabeledPath } from '@/renderer/pages/conversation/explorer/search/sea
 import { copyText } from '@/renderer/utils/ui/clipboard';
 import { blurActiveElement, shouldBlockMobileInputFocus } from '@/renderer/utils/ui/focus';
 import { formatPrimaryEnterShortcut, isPlatformPrimaryModifier } from '@/renderer/utils/ui/keyboardShortcuts';
-import { Button, Input, Message, Tag, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
+import { Message } from '@/renderer/ui/toast';
+import { Tag } from '@/renderer/ui/tag';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { CloseSmall, Plus, Quote } from '@icon-park/react';
 import { chatFileRefKey } from '@/common/types/chatFile';
 import type { SlashCommandItem } from '@/common/chat/slash/types';

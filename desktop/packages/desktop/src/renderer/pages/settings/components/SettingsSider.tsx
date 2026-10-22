@@ -165,7 +165,7 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
             aria-label={t('settings.search.placeholder')}
             placeholder={t('settings.search.placeholder')}
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={setQuery}
             onClear={() => setQuery('')}
             onKeyDown={(event) => {
               if (event.key === 'Escape') setQuery('');

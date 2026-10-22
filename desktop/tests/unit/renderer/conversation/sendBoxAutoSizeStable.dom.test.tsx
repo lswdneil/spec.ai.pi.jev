@@ -20,14 +20,14 @@ const { layoutState, autoSizes } = vi.hoisted(() => ({
   autoSizes: [] as unknown[],
 }));
 
-vi.mock('@arco-design/web-react', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@arco-design/web-react')>();
-  const TextArea = actual.Input.TextArea;
+vi.mock('@/renderer/ui/input', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/renderer/ui/input')>();
+  const TextArea = actual.Textarea;
   const Recording = React.forwardRef<unknown, React.ComponentProps<typeof TextArea>>((props, ref) => {
     autoSizes.push(props.autoSize);
     return <TextArea {...props} ref={ref as never} />;
   });
-  return { ...actual, Input: Object.assign(actual.Input, { TextArea: Recording }) };
+  return { ...actual, Input: Object.assign({}, actual.Input, { TextArea: Recording }) };
 });
 
 vi.mock('react-i18next', () => ({

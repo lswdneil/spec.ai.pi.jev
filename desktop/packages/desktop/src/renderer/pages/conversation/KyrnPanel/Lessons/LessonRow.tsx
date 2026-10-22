@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Input } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
 import { useTranslation } from 'react-i18next';
 import { flatLesson, LESSON_CHARS, type StoredLesson } from '@/common/kyrn/lessons';
 import { formatDate, formatNumber } from '@/renderer/services/i18n/format';

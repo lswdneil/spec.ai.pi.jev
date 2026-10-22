@@ -7,7 +7,8 @@
  * leaving the field saves, Esc leaves it as it was. The new name comes back as the conversation's change, which the
  * header and the sidebar row both show; a refused one keeps the field open and says so.
  */
-import { Input, Message } from '@arco-design/web-react';
+import { Input } from '@/renderer/ui/input';
+import { Message } from '@/renderer/ui/toast';
 import { FolderOpen } from '@icon-park/react';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Input } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
 import { useTranslation } from 'react-i18next';
 import {
   isGoogleProvider,

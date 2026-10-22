@@ -1,4 +1,4 @@
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import React from 'react';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createInstance } from 'i18next';
