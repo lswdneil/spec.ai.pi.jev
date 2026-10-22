@@ -7,7 +7,6 @@
 import React from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { ConfigProvider } from '@arco-design/web-react';
 import { MemoryRouter } from 'react-router-dom';
 import AssistantSettings from '@/renderer/pages/settings/AssistantSettings';
 import EnabledAssistantsList from '@/renderer/pages/settings/AssistantSettings/home/EnabledAssistantsList';
@@ -23,16 +22,6 @@ vi.mock('react-i18next', () => ({
     i18n: { language: 'en-US' },
   }),
 }));
-
-vi.mock('@arco-design/web-react', async () => {
-  const actual = await vi.importActual<typeof import('@arco-design/web-react')>('@arco-design/web-react');
-  return {
-    ...actual,
-    Message: {
-      useMessage: () => [{ success: vi.fn(), error: vi.fn(), warning: vi.fn() }, <div key='message-context' />],
-    },
-  };
-});
 
 vi.mock('@/renderer/ui/toast', () => ({
   Message: {
@@ -155,11 +144,11 @@ describe('AssistantSettings', () => {
 
   it('keeps the editor visible when an existing assistant session is open and activeAssistant is temporarily null', () => {
     render(
-      <ConfigProvider>
+
         <MemoryRouter>
           <AssistantSettings />
         </MemoryRouter>
-      </ConfigProvider>
+
     );
 
     expect(screen.getByTestId('assistant-editor-page')).toBeInTheDocument();
@@ -201,7 +190,7 @@ describe('AssistantSettings', () => {
     ] as AssistantListItem[];
 
     render(
-      <ConfigProvider>
+
         <EnabledAssistantsList
           assistants={assistants}
           assistantOrder={['official', 'custom', 'cli']}
@@ -212,7 +201,7 @@ describe('AssistantSettings', () => {
           onReorder={vi.fn()}
           onStartChat={vi.fn()}
         />
-      </ConfigProvider>
+
     );
 
     const rows = screen.getAllByTestId(/^enabled-assistant-row-/);
@@ -243,7 +232,7 @@ describe('AssistantSettings', () => {
       { id: 'coder', name: 'Coder', sort_order: 2, source: 'builtin', enabled: false },
     ] as AssistantListItem[];
     render(
-      <ConfigProvider>
+
         <OfficialAssistantsGrid
           assistants={assistants}
           localeKey='en-US'
@@ -252,7 +241,7 @@ describe('AssistantSettings', () => {
           onToggleEnabled={vi.fn()}
           onStartChat={vi.fn()}
         />
-      </ConfigProvider>
+
     );
     expect(screen.getByRole('switch', { name: 'Writer (en)' })).toBe(screen.getByTestId('switch-enabled-writer'));
     expect(screen.getByRole('switch', { name: 'Coder' })).toBe(screen.getByTestId('switch-enabled-coder'));
@@ -265,7 +254,7 @@ describe('AssistantSettings', () => {
     ] as AssistantListItem[];
 
     render(
-      <ConfigProvider>
+
         <EnabledAssistantsList
           assistants={assistants}
           assistantOrder={[]}
@@ -276,7 +265,7 @@ describe('AssistantSettings', () => {
           onReorder={vi.fn()}
           onStartChat={vi.fn()}
         />
-      </ConfigProvider>
+
     );
 
     expect(screen.getByTestId('enabled-reorder-search-hint')).toHaveTextContent('Clear search to reorder.');
@@ -290,7 +279,7 @@ describe('AssistantSettings', () => {
     ] as AssistantListItem[];
 
     render(
-      <ConfigProvider>
+
         <EnabledAssistantsList
           assistants={assistants}
           assistantOrder={[]}
@@ -301,7 +290,7 @@ describe('AssistantSettings', () => {
           onReorder={vi.fn()}
           onStartChat={vi.fn()}
         />
-      </ConfigProvider>
+
     );
 
     const row = screen.getByTestId('enabled-assistant-row-mu');
@@ -327,7 +316,7 @@ describe('AssistantSettings', () => {
     ] as AssistantListItem[];
 
     render(
-      <ConfigProvider>
+
         <EnabledAssistantsList
           assistants={assistants}
           assistantOrder={[]}
@@ -338,7 +327,7 @@ describe('AssistantSettings', () => {
           onReorder={vi.fn()}
           onStartChat={onStartChat}
         />
-      </ConfigProvider>
+
     );
 
     const chatButton = screen.getByTestId('btn-chat-cli');
@@ -369,7 +358,7 @@ describe('AssistantSettings', () => {
     ] as AssistantListItem[];
 
     render(
-      <ConfigProvider>
+
         <EnabledAssistantsList
           assistants={assistants}
           assistantOrder={[]}
@@ -380,7 +369,7 @@ describe('AssistantSettings', () => {
           onReorder={vi.fn()}
           onStartChat={vi.fn()}
         />
-      </ConfigProvider>
+
     );
 
     // Wait for ThemedLogo detection to settle

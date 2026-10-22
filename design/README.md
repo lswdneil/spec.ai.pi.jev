@@ -87,8 +87,8 @@ and the ACP tool/terminal cards.
 
 The v2 shell and the legacy sidebar have no runtime Arco imports left: their layout, rows,
 native group, command palette, settings rail, dialogs, update notice and kernel bar use
-`@/ui` or plain elements. Arco remains in 123 business files across the rest of the renderer,
-and `MuModal` keeps only its `ModalProps` type.
+`@/ui` or plain elements. Arco imports are now zero across the renderer, and the package is removed.
+`MuModal` keeps only its `ModalProps` type.
 
 ## Build and verify
 

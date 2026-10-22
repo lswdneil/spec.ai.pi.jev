@@ -1,6 +1,5 @@
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ConfigProvider } from '@arco-design/web-react';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import AssistantEditorSections from '@/renderer/pages/settings/AssistantSettings/AssistantEditorSections';
@@ -103,7 +102,7 @@ vi.mock('@/common', () => ({
 const renderWithProviders = (ui: React.ReactElement) =>
   render(
     <MemoryRouter>
-      <ConfigProvider>{ui}</ConfigProvider>
+      {ui}
     </MemoryRouter>
   );
 
@@ -323,9 +322,9 @@ describe('AssistantEditorSections', () => {
     mockLanguage = 'zh-CN';
     rerender(
       <MemoryRouter>
-        <ConfigProvider>
+
           <AssistantEditorSections editor={editor} activeAssistant={null} />
-        </ConfigProvider>
+
       </MemoryRouter>
     );
 
@@ -408,9 +407,9 @@ describe('AssistantEditorSections', () => {
 
     rerender(
       <MemoryRouter>
-        <ConfigProvider>
+
           <AssistantEditorSections editor={editor} activeAssistant={null} />
-        </ConfigProvider>
+
       </MemoryRouter>
     );
 

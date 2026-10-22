@@ -242,7 +242,6 @@ export default defineConfig(({ mode }) => {
               if (
                 id.includes('/react-dom/') ||
                 id.includes('/react/') ||
-                id.includes('/@arco-design/') ||
                 id.includes('/react-markdown/') ||
                 id.includes('/remark-') ||
                 id.includes('/rehype-') ||
@@ -285,7 +284,6 @@ export default defineConfig(({ mode }) => {
           'react-router-dom',
           'react-i18next',
           'i18next',
-          '@arco-design/web-react',
           '@icon-park/react',
           'react-markdown',
           'react-syntax-highlighter',

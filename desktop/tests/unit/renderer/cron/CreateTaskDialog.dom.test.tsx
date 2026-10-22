@@ -21,17 +21,6 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', async () => {
-  const actual = await vi.importActual<typeof import('@arco-design/web-react')>('@arco-design/web-react');
-  return {
-    ...actual,
-    Message: {
-      success: vi.fn(),
-      error: vi.fn(),
-    },
-  };
-});
-
 vi.mock('@/renderer/ui/toast', () => ({
   Message: {
     success: vi.fn(),

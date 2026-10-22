@@ -30,45 +30,6 @@ import { ended, frame, reply, text, user } from './records';
 
 const { warning, mention } = vi.hoisted(() => ({ warning: vi.fn(), mention: { items: [] as unknown[] } }));
 
-vi.mock('@arco-design/web-react', async (importOriginal) => {
-  const actual = (await importOriginal()) as Record<string, unknown>;
-  // oxlint-disable-next-line unicorn/consistent-function-scoping -- vi.mock is hoisted above anything outside it
-  const dataOf = (props: Record<string, unknown>) =>
-    Object.fromEntries(Object.entries(props).filter(([name]) => name.startsWith('data-')));
-  type Props = { children?: React.ReactNode; [key: string]: unknown };
-  const Menu = Object.assign(({ children }: Props) => <div role='menu'>{children}</div>, {
-    Item: ({ children, onClick, ...rest }: Props & { onClick?: () => void }) => (
-      <div role='menuitem' onClick={onClick} {...dataOf(rest)}>
-        {children}
-      </div>
-    ),
-    ItemGroup: ({ children }: Props) => <div role='group'>{children}</div>,
-    // Both levels at once: the row and what it opens.
-    SubMenu: ({ children, title, ...rest }: Props & { title?: React.ReactNode }) => (
-      <div {...dataOf(rest)}>
-        <div>{title}</div>
-        <div>{children}</div>
-      </div>
-    ),
-  });
-  return {
-    ...actual,
-    Dropdown: ({
-      children,
-      droplist,
-      popupVisible,
-    }: Props & { droplist?: React.ReactNode; popupVisible?: boolean }) => (
-      <div>
-        {children}
-        {popupVisible ? droplist : null}
-      </div>
-    ),
-    Menu,
-    Message: { warning, error: vi.fn(), success: vi.fn() },
-    Tooltip: ({ children }: Props) => <>{children}</>,
-  };
-});
-
 vi.mock('@/renderer/ui/toast', () => ({
   Message: { warning, error: vi.fn(), success: vi.fn() },
 }));

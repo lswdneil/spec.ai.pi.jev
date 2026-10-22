@@ -38,6 +38,7 @@ html[data-sv-ui="dense"] {
   --color-border-1: var(--sv-line);
   --color-border-2: var(--sv-line);
   --color-border-3: var(--sv-line-strong);
+  --color-border-4: var(--sv-line-strong);
 
   --brand: var(--sv-brand-ink);
   --brand-light: var(--sv-brand-3);
@@ -64,6 +65,7 @@ html[data-sv-ui="dense"] {
   --color-fill-1: var(--sv-surface);
   --color-fill-2: var(--sv-surface-2);
   --color-fill-3: var(--sv-raised);
+  --color-fill-4: var(--sv-selected);
   --color-bg-1: var(--sv-surface);
   --color-bg-2: var(--sv-chrome);
   --color-bg-3: var(--sv-surface-2);

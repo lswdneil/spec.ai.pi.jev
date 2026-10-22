@@ -17,16 +17,6 @@ vi.mock('@icon-park/react', () => ({
   Loading: ({ className }: { className?: string }) => <span aria-hidden='true' className={className} />,
 }));
 
-vi.mock('@arco-design/web-react', () => ({
-  Button: React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
-    ({ children, ...props }, ref) => (
-      <button ref={ref} type='button' {...props}>
-        {children}
-      </button>
-    )
-  ),
-}));
-
 describe('RuntimeSelectorPill', () => {
   it('forwards dropdown trigger props and ref to the button anchor', () => {
     const ref = React.createRef<HTMLButtonElement>();

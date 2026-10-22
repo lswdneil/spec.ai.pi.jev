@@ -23,16 +23,6 @@ vi.mock('react-router-dom', () => ({
   useNavigate: () => vi.fn(),
 }));
 
-vi.mock('@arco-design/web-react', async () => {
-  const actual = await vi.importActual<typeof import('@arco-design/web-react')>('@arco-design/web-react');
-  return {
-    ...actual,
-    Message: {
-      useMessage: () => [{ warning: vi.fn() }, <div key='message-holder' />],
-    },
-  };
-});
-
 describe('AssistantSelectionArea', () => {
   it('maps available width to 4, 3, 2, then 1 visible assistant slots', () => {
     expect(resolveAssistantVisibleLimit(800)).toBe(4);

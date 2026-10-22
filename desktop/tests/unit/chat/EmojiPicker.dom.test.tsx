@@ -1,7 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { ConfigProvider } from '@arco-design/web-react';
 import EmojiPicker from '@/renderer/components/chat/EmojiPicker';
 
 vi.mock('react-i18next', () => ({
@@ -15,7 +14,7 @@ describe('EmojiPicker', () => {
     const onChange = vi.fn();
 
     render(
-      <ConfigProvider>
+
         <EmojiPicker
           builtinAvatars={[
             {
@@ -28,7 +27,7 @@ describe('EmojiPicker', () => {
         >
           <button type='button'>Open picker</button>
         </EmojiPicker>
-      </ConfigProvider>
+
     );
 
     fireEvent.click(screen.getByText('Open picker'));
@@ -46,11 +45,11 @@ describe('EmojiPicker', () => {
 
   it('names the emoji categories through translation keys', () => {
     render(
-      <ConfigProvider>
+
         <EmojiPicker>
           <button type='button'>Open picker</button>
         </EmojiPicker>
-      </ConfigProvider>
+
     );
 
     fireEvent.click(screen.getByText('Open picker'));

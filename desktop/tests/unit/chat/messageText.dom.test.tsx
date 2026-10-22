@@ -141,14 +141,6 @@ vi.mock('@/renderer/utils/ui/clipboard', () => ({
   copyText: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock('@arco-design/web-react', () => ({
-  Alert: () => null,
-  Message: {
-    error: vi.fn(),
-  },
-  Tooltip: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
-}));
-
 vi.mock('@icon-park/react', () => ({
   Copy: () => <span data-testid='copy-icon' />,
 }));

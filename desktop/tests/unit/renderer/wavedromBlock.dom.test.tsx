@@ -52,10 +52,6 @@ vi.mock('react-syntax-highlighter', () => ({
 }));
 vi.mock('react-syntax-highlighter/dist/esm/styles/hljs', () => ({ vs: {}, vs2015: {} }));
 
-vi.mock('@arco-design/web-react', () => ({
-  Message: { success: vi.fn(), error: vi.fn() },
-}));
-
 vi.mock('@/renderer/utils/ui/clipboard', () => ({
   copyText: vi.fn().mockResolvedValue(undefined),
 }));

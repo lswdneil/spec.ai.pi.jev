@@ -2,10 +2,10 @@ import React from 'react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Select } from '@arco-design/web-react';
 import { createInstance } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import { Link, MemoryRouter, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { SelectOption } from '@/renderer/ui/select';
 import { defaultFeatureState, parseManifest, type OptionInfo, type OptionValue } from '@/common/kyrn/manifest';
 import type { KyrnSettings, Result, SaveSettings } from '@/common/kyrn/types';
 import enCommon from '@/renderer/services/i18n/locales/en-US/common.json';
@@ -245,7 +245,7 @@ function realShaped() {
 }
 
 /** A model's entry in a picker, as the picker's search sees it. */
-const modelChoice = (id: string, name: string) => <Select.Option value={id} extra={name} />;
+const modelChoice = (id: string, name: string) => <SelectOption value={id} extra={name} />;
 
 const option = (feature: string, key: string): OptionInfo =>
   manifest.features.find((item) => item.name === feature)!.options.find((item) => item.key === key)!;

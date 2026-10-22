@@ -11,7 +11,8 @@ Strategy: a small compatibility layer that mirrors the Arco APIs we actually use
 - Renderer `.tsx`/`.ts` files importing `@arco-design/web-react` (components or types): **0**, down from 217.
 - Done: tokens, Dense shell, settings, forms, welcome, dialogs, and the primitives in `ui/` — Alert, AutoComplete, Avatar, Badge, Button, Card, Checkbox, Collapse, Dialog/Modal (`confirm`/`useModal`), Dropdown (Radix), Empty, Form, Image, Input, InputNumber, InputTag, Layout, Link/Space/Result/Progress, menu aliases, Pagination, Popover, Popconfirm, Radio, Select, Spinner, Steps, Switch, Tabs, Tag, TimePicker, toast/AppToaster, Tooltip, Tree, Trigger, Typography.
 - Done since the last update: `MuSelect` now wraps the Dense Select; `BrowserChrome` uses the Dense Dropdown and Menu; `main.tsx` has no ConfigProvider, Arco locales, adapter or `arco.css`.
-- Remaining: test-only Arco imports and mocks, the `@arco-design/web-react` package, and the Arco-derived CSS/variables (`arco-override.css`, `mu-arco.css`, `themes/index.css`). None are imported by renderer source.
+- Test imports and `vi.mock('@arco-design/web-react')` blocks are gone; `@arco-design/web-react` was removed from `desktop/package.json`, `desktop/kyrn/package.json`, `bun.lock` and the Electron-Vite chunk config.
+- Remaining: CSS file names and variables inherited from Arco (`arco-override.css`, `mu-arco.css`, `themes/index.css`). They hold the app's font tokens and the full status-colour scales; renaming them is cosmetic cleanup, not an Arco dependency.
 - Last full desktop suite: **6711 passed / 0 failed** (116 skipped); `tsc`, lint and `package` pass.
 
 ---

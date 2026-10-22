@@ -104,10 +104,10 @@ describe('the Arco border scale as UnoCSS colours', () => {
     expect(await cssFor('bg-2')).toBe('.bg-2{background-color:var(--bg-2);}');
   });
 
-  it('points at variables Arco defines', () => {
-    const arco = readFileSync(path.join(REPO_ROOT, 'node_modules/@arco-design/web-react/dist/css/arco.css'), 'utf8');
+  it('points at variables the Dense sheet defines', () => {
+    const arco = readFileSync(path.join(REPO_ROOT, 'packages/desktop/src/renderer/styles/specjev/dense.css'), 'utf8');
     for (const step of [1, 2, 3, 4]) {
-      expect(arco, `arco.css defines --color-border-${step}`).toMatch(new RegExp(`--color-border-${step}:`));
+      expect(arco, `dense.css defines --color-border-${step}`).toMatch(new RegExp(`--color-border-${step}:`));
     }
   });
 
@@ -158,8 +158,8 @@ describe('the text and fill tokens', () => {
     expect(await cssFor('bg-fill-2')).toBe('.bg-fill-2{background-color:var(--color-fill-2);}');
   });
 
-  it('points at variables Arco defines', () => {
-    const arco = readFileSync(path.join(REPO_ROOT, 'node_modules/@arco-design/web-react/dist/css/arco.css'), 'utf8');
+  it('points at variables the Dense sheet defines', () => {
+    const arco = readFileSync(path.join(REPO_ROOT, 'packages/desktop/src/renderer/styles/specjev/dense.css'), 'utf8');
     expect(arco).toMatch(/--color-text-3:/);
     for (const step of [1, 2, 3, 4]) expect(arco).toMatch(new RegExp(`--color-fill-${step}:`));
   });

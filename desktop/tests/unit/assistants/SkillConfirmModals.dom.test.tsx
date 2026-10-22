@@ -10,7 +10,6 @@ import React from 'react';
 
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { render, cleanup, screen } from '@testing-library/react';
-import { ConfigProvider } from '@arco-design/web-react';
 
 vi.mock('react-i18next', () => ({
   // The key, and the name it was given when there is one.
@@ -20,19 +19,9 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', async () => {
-  const actual = await vi.importActual('@arco-design/web-react');
-  return {
-    ...actual,
-    Message: {
-      useMessage: () => [{ success: vi.fn(), error: vi.fn() }],
-    },
-  };
-});
-
 import SkillConfirmModals from '@/renderer/pages/settings/AssistantSettings/SkillConfirmModals';
 
-const renderWithProviders = (ui: React.ReactElement) => render(<ConfigProvider>{ui}</ConfigProvider>);
+const renderWithProviders = (ui: React.ReactElement) => render(ui);
 
 describe('SkillConfirmModals', () => {
   const mockMessage = { success: vi.fn(), error: vi.fn() };
@@ -77,9 +66,9 @@ describe('SkillConfirmModals', () => {
     const { rerender } = renderWithProviders(<SkillConfirmModals {...defaultProps} deletePendingSkillName='skill-x' />);
     expect(screen.getByText('settings.deletePendingSkillConfirm [skill-x]')).toBeInTheDocument();
     rerender(
-      <ConfigProvider>
+
         <SkillConfirmModals {...defaultProps} deleteCustomSkillName='custom-skill' />
-      </ConfigProvider>
+
     );
     expect(screen.getByText('settings.removeCustomSkillConfirm [custom-skill]')).toBeInTheDocument();
   });

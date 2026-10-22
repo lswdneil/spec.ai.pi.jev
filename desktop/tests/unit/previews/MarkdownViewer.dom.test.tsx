@@ -83,23 +83,6 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', () => ({
-  Button: ({
-    children,
-    icon,
-    ...props
-  }: React.ButtonHTMLAttributes<HTMLButtonElement> & { icon?: React.ReactNode }) => (
-    <button type='button' {...props}>
-      {icon}
-      {children}
-    </button>
-  ),
-  Message: {
-    error: vi.fn(),
-  },
-  Tooltip: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
-}));
-
 vi.mock('@icon-park/react', () => ({
   Copy: () => <span data-testid='copy-icon' />,
 }));

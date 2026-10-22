@@ -7,7 +7,6 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ConfigProvider } from '@arco-design/web-react';
 import type { Assistant } from '@/common/types/agent/assistantTypes';
 import AssistantSelectionArea from '@/renderer/pages/guid/components/AssistantSelectionArea';
 
@@ -32,14 +31,14 @@ describe('AssistantSelectionArea', () => {
     const onSelectAssistant = vi.fn();
 
     render(
-      <ConfigProvider>
+
         <AssistantSelectionArea
           selectedAssistantId='cowork'
           assistants={assistants()}
           localeKey='en-US'
           onSelectAssistant={onSelectAssistant}
         />
-      </ConfigProvider>
+
     );
 
     fireEvent.click(screen.getByTestId('preset-pill-writer'));
@@ -49,14 +48,14 @@ describe('AssistantSelectionArea', () => {
 
   it('renders assistant pills in sort_order order', () => {
     render(
-      <ConfigProvider>
+
         <AssistantSelectionArea
           selectedAssistantId='cowork'
           assistants={assistants()}
           localeKey='en-US'
           onSelectAssistant={vi.fn()}
         />
-      </ConfigProvider>
+
     );
 
     const presetPills = screen
@@ -68,7 +67,7 @@ describe('AssistantSelectionArea', () => {
 
   it('prefers localized assistant names for the active locale', () => {
     render(
-      <ConfigProvider>
+
         <AssistantSelectionArea
           selectedAssistantId='academic-paper'
           assistants={[
@@ -102,7 +101,7 @@ describe('AssistantSelectionArea', () => {
           localeKey='zh-CN'
           onSelectAssistant={vi.fn()}
         />
-      </ConfigProvider>
+
     );
 
     expect(screen.getByText('学术论文助手')).toBeInTheDocument();
@@ -111,14 +110,14 @@ describe('AssistantSelectionArea', () => {
 
   it('draws no picker for a single assistant, which has nothing to pick', () => {
     const { container } = render(
-      <ConfigProvider>
+
         <AssistantSelectionArea
           selectedAssistantId='writer'
           assistants={assistants().filter((assistant) => assistant.id === 'writer')}
           localeKey='en-US'
           onSelectAssistant={vi.fn()}
         />
-      </ConfigProvider>
+
     );
 
     expect(screen.queryByTestId('preset-pill-writer')).not.toBeInTheDocument();
@@ -133,14 +132,14 @@ describe('AssistantSelectionArea', () => {
     );
 
     render(
-      <ConfigProvider>
+
         <AssistantSelectionArea
           selectedAssistantId={null}
           assistants={[...fillers, antigravity]}
           localeKey='en-US'
           onSelectAssistant={vi.fn()}
         />
-      </ConfigProvider>
+
     );
 
     fireEvent.click(screen.getByTestId('assistant-more-btn'));

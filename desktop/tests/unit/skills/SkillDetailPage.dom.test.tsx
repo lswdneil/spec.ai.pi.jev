@@ -43,25 +43,6 @@ vi.mock('@/renderer/hooks/assistant/useTalkToButler', () => ({
   useTalkToButler: () => mocks.talkToButler,
 }));
 
-vi.mock('@arco-design/web-react', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@arco-design/web-react')>();
-  return {
-    ...actual,
-    Message: {
-      ...actual.Message,
-      error: mocks.messageError,
-      success: mocks.messageSuccess,
-    },
-    Tree: ({ treeData }: { treeData?: Array<{ name: string; relativePath: string }> }) => (
-      <div data-testid='skill-file-tree'>
-        {(treeData ?? []).map((node) => (
-          <span key={node.relativePath}>{node.name}</span>
-        ))}
-      </div>
-    ),
-  };
-});
-
 vi.mock('react-router-dom', () => ({
   useNavigate: () => mocks.navigate,
   useParams: () => mocks.params,

@@ -36,13 +36,6 @@ vi.mock('@/renderer/utils/workspace/workspaceHistory', () => ({
   updateWorkspaceTime: vi.fn(),
 }));
 
-vi.mock('@arco-design/web-react', () => ({
-  Message: {
-    warning: vi.fn(),
-    error: vi.fn(),
-  },
-}));
-
 const createDeps = (): GuidSendDeps => ({
   input: 'hello',
   setInput: vi.fn(),

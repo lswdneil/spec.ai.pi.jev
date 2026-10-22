@@ -8,7 +8,6 @@ import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ConfigProvider } from '@arco-design/web-react';
 import { SWRConfig } from 'swr';
 
 const { systemInfoMock, updateSystemInfoMock, restartMock, showOpenMock, messageInfoMock, configServiceMock } =
@@ -111,28 +110,6 @@ vi.mock('@/renderer/ui/dialog', async (importOriginal) => {
   };
 });
 
-vi.mock('@arco-design/web-react', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@arco-design/web-react')>();
-  return {
-    ...actual,
-    Message: {
-      ...actual.Message,
-      info: messageInfoMock,
-    },
-    Modal: {
-      ...actual.Modal,
-      useModal: () => [
-        {
-          confirm: ({ onOk }: { onOk?: () => void }) => {
-            onOk?.();
-          },
-        },
-        null,
-      ],
-    },
-  };
-});
-
 import SystemModalContent from '@/renderer/components/settings/SettingsModal/contents/SystemModalContent';
 import ConversationPreferences from '@/renderer/components/settings/SettingsModal/contents/SystemModalContent/ConversationPreferences';
 
@@ -147,7 +124,7 @@ const defaultSystemInfo = {
 const renderContent = (content: React.ReactElement = <SystemModalContent />) =>
   render(
     <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
-      <ConfigProvider>{content}</ConfigProvider>
+      {content}
     </SWRConfig>
   );
 

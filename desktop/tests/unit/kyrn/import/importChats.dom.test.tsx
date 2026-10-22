@@ -39,16 +39,6 @@ vi.mock('@/renderer/pages/native/hooks/useNativeConversations', () => ({
 }));
 // The dialog frame (MuModal) sizes itself by the font scale.
 vi.mock('@/renderer/hooks/context/ThemeContext', () => ({ useThemeContext: () => ({ fontScale: 1 }) }));
-vi.mock('@arco-design/web-react', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@arco-design/web-react')>();
-  const toast = (kind: string) => (text: string) => {
-    said.push([kind, text]);
-  };
-  return {
-    ...actual,
-    Message: { ...actual.Message, success: toast('success'), warning: toast('warning'), error: toast('error') },
-  };
-});
 
 vi.mock('@/renderer/ui/toast', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/renderer/ui/toast')>();

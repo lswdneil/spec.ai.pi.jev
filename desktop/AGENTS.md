@@ -32,14 +32,14 @@ See [docs/contributing/file-structure.md](docs/contributing/file-structure.md) f
 
 ### UI Library & Icons
 
-- **Components**: `@arco-design/web-react` — no raw interactive HTML (`<button>`, `<input>`, `<select>`, etc.)
+- **Components**: `@/renderer/ui` primitives (Dense); no raw interactive HTML (`<button>`, `<input>`, `<select>`, etc.) unless the primitive intentionally does not exist
 - **Icons**: `@icon-park/react`
 
 ### CSS
 
 - Prefer **UnoCSS utility classes**; complex styles use **CSS Modules** (`ComponentName.module.css`)
 - Colors must use **semantic tokens** from `uno.config.ts` or CSS variables — no hardcoded values
-- Arco theme overrides go in `packages/desktop/src/renderer/styles/arco-override.css`; component-scoped Arco overrides use CSS Module with `:global()`
+- Legacy Arco-derived theme variables live in `packages/desktop/src/renderer/styles/arco-override.css`; new work uses `--sv-*` tokens and Dense primitives
 - Global styles only in `packages/desktop/src/renderer/styles/`
 
 Formatting rules (Oxfmt, Prettier-compatible):

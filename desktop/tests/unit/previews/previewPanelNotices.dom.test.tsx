@@ -16,7 +16,6 @@
 // called" would stay green with the holder deleted, which is the exact trap of
 // testing the call instead of the outcome.
 //
-// Deliberately does NOT mock @arco-design/web-react: the real Message.useMessage
 // and its holder are the things under test. Mocking them would only verify the
 // mock.
 

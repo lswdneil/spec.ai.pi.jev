@@ -178,9 +178,9 @@ A single directory must not contain more than **10** direct children (files + su
 
 ## UI Library & Icon Standards
 
-- **Component library**: `@arco-design/web-react`. All new UI must use Arco components first.
+- **Component library**: `@/renderer/ui` Dense primitives. All new UI must use them first.
 - **Icon library**: `@icon-park/react`. All icons must come from this library.
-- **No raw HTML for interactive elements**: Do not use native `<button>`, `<input>`, `<select>`, `<textarea>`, `<modal>`, etc. Use the corresponding Arco component (`Button`, `Input`, `Select`, `Modal`, etc.).
+- **No raw HTML for interactive elements**: Do not use native `<button>`, `<input>`, `<select>`, `<textarea>`, `<modal>`, etc. Use the corresponding `@/renderer/ui` primitive (`Button`, `Input`, `Select`, `Modal`, etc.).
 - **Layout tags are fine**: `<div>`, `<span>`, `<section>`, `<nav>`, `<main>`, and other pure layout/semantic tags may be used freely.
 
 ## CSS Conventions
@@ -189,7 +189,7 @@ A single directory must not contain more than **10** direct children (files + su
 - **Complex/reusable styles**: Must use **CSS Modules** (`ComponentName.module.css`). Plain `.css` files are not allowed for component styles.
 - **Semantic color tokens only**: Use colors from `uno.config.ts` (e.g., `text-t-primary`, `bg-base`, `border-b-base`) or CSS variables. **Hardcoded color values are forbidden** (e.g., `#86909C`, `rgb(0,0,0)`). Exception: theme preset files under `src/renderer/pages/settings/CssThemeSettings/presets/` may use hardcoded values since they define the theme tokens themselves.
 - **No inline styles**: Do not use `style={{}}` except for dynamically computed values (e.g., calculated widths, positions).
-- **Arco style overrides**: Co-locate in the component's CSS Module using `:global(.arco-xxx)`. Do not use a global override file.
+- **Legacy theme variables**: Arco-derived variables remain in `styles/arco-override.css`; new work uses `--sv-*` tokens and Dense primitives.
 - **Global styles**: Only allowed in `src/renderer/styles/` (themes, reset, layout base). No CSS files directly in `src/renderer/` root.
 
 ## Renderer Root Directory — Standard Layout

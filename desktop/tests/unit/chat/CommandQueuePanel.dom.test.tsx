@@ -18,42 +18,6 @@ vi.mock('react-i18next', () => ({
 
 const confirmMock = vi.fn();
 
-vi.mock('@arco-design/web-react', () => {
-  const Button = ({
-    children,
-    ...props
-  }: React.PropsWithChildren<React.ButtonHTMLAttributes<HTMLButtonElement> & { status?: string }>) => (
-    <button type='button' {...props}>
-      {children}
-    </button>
-  );
-  const Dropdown = ({ children, droplist }: React.PropsWithChildren<{ droplist: React.ReactNode }>) => (
-    <div>
-      {children}
-      {droplist}
-    </div>
-  );
-  const Menu = ({ children }: React.PropsWithChildren) => <div>{children}</div>;
-  Menu.Item = ({
-    children,
-    onClick,
-  }: React.PropsWithChildren<{
-    onClick?: () => void;
-  }>) => (
-    <button type='button' onClick={onClick}>
-      {children}
-    </button>
-  );
-  const Typography = {
-    Ellipsis: ({ children, ...props }: React.PropsWithChildren) => <span {...props}>{children}</span>,
-  };
-  const Tooltip = ({ children }: React.PropsWithChildren) => <>{children}</>;
-  const Modal = {
-    confirm: (config: { onOk?: () => void }) => confirmMock(config),
-  };
-  return { Button, Dropdown, Menu, Modal, Tooltip, Typography };
-});
-
 vi.mock('@/renderer/ui/dialog', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/renderer/ui/dialog')>();
   return { ...actual, Modal: { ...actual.Modal, confirm: (config: { onOk?: () => void }) => confirmMock(config) } };

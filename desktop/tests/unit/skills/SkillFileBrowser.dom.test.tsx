@@ -22,30 +22,6 @@ vi.mock('@/common', () => ({
   },
 }));
 
-vi.mock('@arco-design/web-react', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@arco-design/web-react')>();
-  type Node = { name: string; relativePath: string; type: 'directory' | 'file'; children?: Node[] };
-  const renderNodes = (
-    nodes: Node[],
-    onSelect?: (keys: string[], extra: { node: { props: { dataRef: Node } } }) => void
-  ) =>
-    nodes.map((node) => (
-      <React.Fragment key={node.relativePath}>
-        <button type='button' onClick={() => onSelect?.([node.relativePath], { node: { props: { dataRef: node } } })}>
-          {node.name}
-        </button>
-        {node.children ? renderNodes(node.children, onSelect) : null}
-      </React.Fragment>
-    ));
-
-  return {
-    ...actual,
-    Tree: ({ treeData = [], onSelect }: { treeData?: Node[]; onSelect?: Parameters<typeof renderNodes>[1] }) => (
-      <div data-testid='skill-file-tree'>{renderNodes(treeData, onSelect)}</div>
-    ),
-  };
-});
-
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, options?: { defaultValue?: string }) => options?.defaultValue ?? key,

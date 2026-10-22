@@ -19,13 +19,6 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', () => ({
-  Message: {
-    info: vi.fn(),
-    warning: vi.fn(),
-  },
-}));
-
 const createSwrWrapper = () => {
   const cache = new Map();
   return function SwrTestWrapper({ children }: PropsWithChildren) {

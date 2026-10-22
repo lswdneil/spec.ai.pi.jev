@@ -24,20 +24,6 @@ vi.mock('@/renderer/pages/settings/AssistantSettings/home/RuntimeBadge', () => (
   default: ({ assistant }: { assistant: AssistantListItem }) => <div data-testid={`runtime-${assistant.id}`} />,
 }));
 
-// Render the dropdown menu inline so gated menu items are queryable without hover/click on a portal.
-vi.mock('@arco-design/web-react', async () => {
-  const actual = await vi.importActual<typeof import('@arco-design/web-react')>('@arco-design/web-react');
-  return {
-    ...actual,
-    Dropdown: ({ children, droplist }: { children?: React.ReactNode; droplist?: React.ReactNode }) => (
-      <div>
-        {children}
-        {droplist}
-      </div>
-    ),
-  };
-});
-
 import MyAssistantCard from '@/renderer/pages/settings/AssistantSettings/home/MyAssistantCard';
 
 const makeAssistant = (overrides: Partial<AssistantListItem> = {}): AssistantListItem => ({

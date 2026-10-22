@@ -1,8 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Button, Switch } from '@arco-design/web-react';
 import { describe, expect, it } from 'vitest';
 import PreferenceRow from '@/renderer/components/settings/SettingsModal/contents/SystemModalContent/PreferenceRow';
+import { Button } from '@/renderer/ui/button';
+import { Switch } from '@/renderer/ui/switch';
 
 describe('a settings row', () => {
   // QA on macOS, 2026-09-25: the switches of the system page had no name for a screen reader.

@@ -40,12 +40,6 @@ vi.mock('react-router-dom', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', () => ({
-  Image: {
-    PreviewGroup: ({ children }: PropsWithChildren) => <>{children}</>,
-  },
-}));
-
 vi.mock('@/renderer/hooks/context/ConversationContext', () => ({
   useConversationContextSafe: () => null,
 }));

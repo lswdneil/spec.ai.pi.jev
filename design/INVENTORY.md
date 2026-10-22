@@ -10,7 +10,7 @@ Measured on 2026-10-22 from `desktop/packages/desktop/src/renderer`.
 | Item | Count |
 | --- | --- |
 | renderer files (ts/tsx/css) | **887** |
-| files with a named `@arco-design/web-react` import | **210** (about 220 reference Arco in total) |
+| files with a named `@arco-design/web-react` import | **0** (217 migrated) |
 | CSS Modules | 37 |
 | `pages/conversation` | 285 |
 | `pages/settings` | 99 |
@@ -23,7 +23,7 @@ Measured on 2026-10-22 from `desktop/packages/desktop/src/renderer`.
 
 The shell is small; the product surfaces are large. That is why the plan replaces the shell and the chrome first, and reuses message rendering, Monaco, diff, browser panels and forms.
 
-## 2. Arco usage, by component
+## 2. Arco usage, by component (historical)
 
 | Count | Component | Target |
 | --- | --- | --- |

@@ -26,12 +26,6 @@ vi.mock('@monaco-editor/react', () => ({
   default: ({ value }: { value: string }) => <div data-testid='monaco-editor'>{value}</div>,
 }));
 
-vi.mock('@arco-design/web-react', () => ({
-  Message: {
-    useMessage: () => [{ info: vi.fn(), success: vi.fn(), error: vi.fn() }, null],
-  },
-}));
-
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,

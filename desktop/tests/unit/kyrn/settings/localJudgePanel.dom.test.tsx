@@ -30,11 +30,6 @@ vi.mock('@/renderer/ui/toast', async (actual) => ({
   Message: { success: outside.copied, error: vi.fn() },
 }));
 
-vi.mock('@arco-design/web-react', async (actual) => ({
-  ...(await actual<typeof import('@arco-design/web-react')>()),
-  Message: { success: outside.copied, error: vi.fn() },
-}));
-
 const i18n = createInstance();
 beforeAll(async () => {
   await i18n.init({

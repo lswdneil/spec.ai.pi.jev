@@ -107,9 +107,9 @@ describe('every badge class actually produces a CSS rule', () => {
     // `border-danger-4` compiles to `rgb(var(--danger-4))`. If `--danger-4` were
     // undefined — or defined as a colour rather than bare `R,G,B` components — the
     // whole declaration would be invalid and the border would simply not paint.
-    // So follow the chain in Arco's stylesheet to its end and require numbers.
+    // So follow the chain in the app's Arco-derived stylesheet to its end and require numbers.
     const arco = readFileSync(
-      path.join(__dirname, '../../../node_modules/@arco-design/web-react/dist/css/arco.css'),
+      path.join(__dirname, '../../../packages/desktop/src/renderer/styles/themes/mu-arco.css'),
       'utf8'
     );
     const define = (name: string): string | undefined => arco.match(new RegExp(`--${name}:\\s*([^;]+);`))?.[1]?.trim();
@@ -160,7 +160,7 @@ describe('every badge class actually produces a CSS rule', () => {
     // dark values while this chip silently kept its light-pink background on a dark
     // panel. Hence this assertion is on the pairing, not on one selector.
     const arco = readFileSync(
-      path.join(__dirname, '../../../node_modules/@arco-design/web-react/dist/css/arco.css'),
+      path.join(__dirname, '../../../packages/desktop/src/renderer/styles/themes/mu-arco.css'),
       'utf8'
     );
     // Arco defines the scale twice: once under `body`, once under `body[arco-theme='dark']`.

@@ -7,7 +7,6 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { ConfigProvider } from '@arco-design/web-react';
 import AssistantEditorPage from '@/renderer/pages/settings/AssistantSettings/AssistantEditorPage';
 import type { AssistantEditorViewModel } from '@/renderer/pages/settings/AssistantSettings/types';
 
@@ -74,9 +73,9 @@ describe('AssistantEditorPage', () => {
 
   it('renders a single assistant-editor-page test id', () => {
     render(
-      <ConfigProvider>
+
         <AssistantEditorPage editor={createEditor()} activeAssistant={null} onBack={vi.fn()} />
-      </ConfigProvider>
+
     );
 
     expect(screen.getAllByTestId('assistant-editor-page')).toHaveLength(1);
@@ -86,9 +85,9 @@ describe('AssistantEditorPage', () => {
 
   it('uses a high-contrast back action in the editor header', () => {
     render(
-      <ConfigProvider>
+
         <AssistantEditorPage editor={createEditor()} activeAssistant={null} onBack={vi.fn()} />
-      </ConfigProvider>
+
     );
 
     expect(screen.getByTestId('btn-back-assistant-editor').className).toContain('text-t-primary');
@@ -100,7 +99,7 @@ describe('AssistantEditorPage', () => {
     editor.profile.name = '学术论文助手';
 
     render(
-      <ConfigProvider>
+
         <AssistantEditorPage
           editor={editor}
           activeAssistant={{
@@ -121,7 +120,7 @@ describe('AssistantEditorPage', () => {
           }}
           onBack={vi.fn()}
         />
-      </ConfigProvider>
+
     );
 
     expect(screen.getByText('学术论文助手')).toBeInTheDocument();
@@ -134,7 +133,7 @@ describe('AssistantEditorPage', () => {
     editor.profile.name = 'Droid';
 
     render(
-      <ConfigProvider>
+
         <AssistantEditorPage
           editor={editor}
           activeAssistant={{
@@ -155,7 +154,7 @@ describe('AssistantEditorPage', () => {
           }}
           onBack={vi.fn()}
         />
-      </ConfigProvider>
+
     );
 
     expect(screen.queryByTestId('btn-delete-assistant')).not.toBeInTheDocument();

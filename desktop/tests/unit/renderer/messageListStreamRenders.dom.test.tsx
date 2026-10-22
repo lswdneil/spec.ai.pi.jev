@@ -89,9 +89,6 @@ vi.mock('@/renderer/pages/conversation/Messages/MessageFileChanges', () => ({
   default: () => null,
   parseDiff: vi.fn(),
 }));
-vi.mock('@arco-design/web-react', () => ({
-  Image: { PreviewGroup: ({ children }: PropsWithChildren) => <>{children}</> },
-}));
 vi.mock('@icon-park/react', () => ({ Down: () => <span>down</span> }));
 
 const text = (id: string, position: 'left' | 'right', content: string, created_at: number): IMessageText => ({
