@@ -83,4 +83,14 @@ const Link = React.forwardRef<HTMLAnchorElement, TypographyLinkProps>(function L
   );
 });
 
-export const Typography = { Text, Paragraph, Title, Link };
+const Ellipsis: React.FC<{ children?: React.ReactNode; className?: string; style?: React.CSSProperties; rows?: number; showTooltip?: boolean }> = ({
+  children,
+  className,
+  style,
+}) => (
+  <span className={cn('block overflow-hidden text-ellipsis whitespace-nowrap', className)} style={style}>
+    {children}
+  </span>
+);
+
+export const Typography = { Text, Paragraph, Title, Link, Ellipsis };

@@ -27,7 +27,7 @@ const buttonVariants = cva(
   }
 );
 
-type ArcoButtonType = 'primary' | 'secondary' | 'outline' | 'dashed' | 'text';
+type ArcoButtonType = 'default' | 'primary' | 'secondary' | 'outline' | 'dashed' | 'text';
 type ArcoButtonSize = 'mini' | 'small' | 'default' | 'large';
 
 export interface ButtonProps
@@ -38,7 +38,7 @@ export interface ButtonProps
   /** Arco's names (`mini`, `small`, `default`, `large`) also work. */
   size?: VariantProps<typeof buttonVariants>['size'] | ArcoButtonSize;
   htmlType?: 'button' | 'submit' | 'reset';
-  status?: 'normal' | 'success' | 'warning' | 'danger';
+  status?: 'default' | 'normal' | 'success' | 'warning' | 'danger';
   loading?: boolean;
   /** Arco compatibility: a leading icon; `loading` replaces it. */
   icon?: React.ReactNode;
