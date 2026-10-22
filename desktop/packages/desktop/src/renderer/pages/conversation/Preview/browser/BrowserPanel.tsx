@@ -6,7 +6,6 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Message } from '@/renderer/ui/toast';
-import type { RefInputType } from '@arco-design/web-react/es/Input/interface';
 import { useTranslation } from 'react-i18next';
 import type { WebviewNavigation, WebviewNavigationState } from '@/renderer/components/media/WebviewHost';
 import { copyText } from '@/renderer/utils/ui/clipboard';
@@ -49,7 +48,7 @@ export default function BrowserPanel({
   const { tabs, activeTabId, limitHitAt } = useBrowser();
   const [message, messageHolder] = Message.useMessage();
   const root = useRef<HTMLDivElement>(null);
-  const address = useRef<RefInputType>(null);
+  const address = useRef<HTMLInputElement>(null);
   // Every page's navigation, by tab id: what it reports, and the handle the chrome's buttons use.
   const [navigation, setNavigation] = useState<Readonly<Record<string, WebviewNavigationState>>>({});
   const handles = useRef(new Map<string, NavigationRef>());

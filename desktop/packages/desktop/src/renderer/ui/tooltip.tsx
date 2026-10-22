@@ -28,7 +28,7 @@ export interface TooltipProps {
   popupVisible?: boolean;
   unmountOnExit?: boolean;
   popupHoverStay?: boolean;
-  getPopupContainer?: (node: HTMLElement) => HTMLElement;
+  getPopupContainer?: (node: HTMLElement) => Element;
 }
 
 const sideFor = (position: TooltipPosition): 'top' | 'bottom' | 'left' | 'right' => {

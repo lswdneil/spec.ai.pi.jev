@@ -1,4 +1,4 @@
-import type { TooltipProps } from '@arco-design/web-react';
+import type { TooltipProps } from '@/renderer/ui/tooltip';
 
 /**
  * 侧边栏内 Tooltip 的挂载容器：将 popup 挂到左侧边栏根节点，
@@ -30,7 +30,7 @@ export const getSiderTooltipProps = (enabled = false): SiderTooltipProps => {
   const disabled = !enabled || isNoHoverDevice();
   return {
     className: SIDER_TOOLTIP_CLASS,
-    trigger: (disabled ? [] : 'hover') as 'hover' | 'hover'[],
+    trigger: 'hover',
     disabled,
     unmountOnExit: true,
     popupHoverStay: false,

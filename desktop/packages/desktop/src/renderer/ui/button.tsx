@@ -90,6 +90,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       aria-busy={loading || undefined}
       className={cn(
         buttonVariants({ variant: variant ?? variantFor(type, status), size: sizeFor(size) }),
+        (variant ?? variantFor(type, status)) === 'primary' && 'arco-btn-primary',
         loading && 'arco-btn-loading',
         status && `arco-btn-status-${status}`,
         long && 'w-full',

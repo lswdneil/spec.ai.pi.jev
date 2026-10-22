@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, AutoComplete, Button, Input, Radio } from '@arco-design/web-react';
+import { Alert } from '@/renderer/ui/alert';
+import { AutoComplete } from '@/renderer/ui/autocomplete';
+import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
+import { Radio } from '@/renderer/ui/radio';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

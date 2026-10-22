@@ -22,11 +22,12 @@ export interface RadioGroupProps {
   size?: RadioSize;
   className?: string;
   'aria-label'?: string;
+  options?: { value: string; label: React.ReactNode; disabled?: boolean }[];
   children?: React.ReactNode;
 }
 
 const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(function RadioGroup(
-  { value, defaultValue, onChange, disabled, type = 'radio', direction = 'horizontal', size = 'default', className, children, ...props },
+  { value, defaultValue, onChange, disabled, type = 'radio', direction = 'horizontal', size = 'default', className, options, children, ...props },
   ref
 ) {
   return (
@@ -45,6 +46,11 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(function Ra
         )}
         {...props}
       >
+        {options?.map((option) => (
+          <Radio key={option.value} value={option.value} disabled={option.disabled}>
+            {option.label}
+          </Radio>
+        ))}
         {children}
       </RadioGroupPrimitive.Root>
     </GroupContext.Provider>

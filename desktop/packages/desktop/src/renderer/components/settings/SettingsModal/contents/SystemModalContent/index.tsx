@@ -10,7 +10,11 @@ import { configService } from '@/common/config/configService';
 import MuScrollArea from '@/renderer/components/base/MuScrollArea';
 import { notifyManualRestartRequired } from '@/renderer/utils/appRestart';
 import { isElectronDesktop, isMacOS } from '@/renderer/utils/platform';
-import { Alert, Form, Message, Modal, Switch } from '@arco-design/web-react';
+import { Alert } from '@/renderer/ui/alert';
+import { Form } from '@/renderer/ui/form';
+import { Message } from '@/renderer/ui/toast';
+import { Modal } from '@/renderer/ui/dialog';
+import { Switch } from '@/renderer/ui/switch';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
@@ -253,7 +257,7 @@ const SystemModalContent: React.FC = () => {
       modal.confirm({
         title: t('settings.updateConfirm'),
         content: t('settings.restartConfirm'),
-        onOk: resolve,
+        onOk: () => resolve(undefined),
         onCancel: reject,
       });
     });

@@ -215,30 +215,36 @@ const ConfirmDialog: React.FC<{
   };
   const content = typeof config.content === 'function' ? config.content() : config.content;
   const notice = kind !== 'confirm';
+  if (!open) return null;
   return (
-    <DialogPrimitive.Root
-      open={open}
-      onOpenChange={(next) => {
-        if (!next) cancel();
+    <div
+      className='fixed inset-0 z-[80] flex items-center justify-center bg-[var(--sv-scrim)] p-4'
+      onClick={(event) => {
+        if (event.target === event.currentTarget && config.maskClosable !== false) cancel();
       }}
     >
-      <DialogContent
-        style={{ '--sv-modal-width': `${config.width ?? 420}px`, ...config.style } as React.CSSProperties}
-        className={config.className}
+      <div
+        role='dialog'
+        aria-modal='true'
+        aria-label={typeof config.title === 'string' ? config.title : undefined}
+        style={{ width: config.width ?? 420, ...config.style }}
+        className={`rounded-[var(--sv-r-dialog)] border border-sv-line bg-sv-popover p-5 text-sv-text ${config.className ?? ''}`}
       >
         <div className='flex items-start gap-3'>
           {config.icon ? <div className='shrink-0 text-sv-warn'>{config.icon}</div> : null}
           <div className='min-w-0 flex-1'>
-            {config.title ? <DialogTitle>{config.title}</DialogTitle> : null}
+            {config.title ? <h2 className='m-0 text-[15px] font-semibold'>{config.title}</h2> : null}
             {content ? <div className='mt-2 text-[13px] leading-[1.65] text-sv-muted'>{content}</div> : null}
           </div>
           {config.closable !== false ? (
-            <DialogPrimitive.Close
+            <button
+              type='button'
               aria-label='Close'
               className='-mr-1 -mt-1 rounded-[8px] p-1 text-sv-faint outline-none hover:bg-sv-surface hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
+              onClick={cancel}
             >
               <X className='h-4 w-4' />
-            </DialogPrimitive.Close>
+            </button>
           ) : null}
         </div>
         {config.footer === undefined || notice ? (
@@ -272,19 +278,19 @@ const ConfirmDialog: React.FC<{
         ) : (
           <div className='mt-5'>{config.footer}</div>
         )}
-      </DialogContent>
-    </DialogPrimitive.Root>
+      </div>
+    </div>
   );
 };
 
-const liveRoots = new Set<ReturnType<typeof createRoot>>();
+const liveRoots = new Map<ReturnType<typeof createRoot>, HTMLElement>();
 
 const openConfirm = (config: ModalConfirmConfig, kind: ConfirmKind): ModalController => {
   if (typeof document === 'undefined') return { destroy: () => undefined };
   const host = document.createElement('div');
   document.body.appendChild(host);
   const root = createRoot(host);
-  liveRoots.add(root);
+  liveRoots.set(root, host);
   const destroy = () => {
     liveRoots.delete(root);
     root.unmount();
@@ -299,7 +305,13 @@ const info = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: 
 const success = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'success');
 const warning = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'warning');
 const error = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'error');
-const destroyAll = () => liveRoots.forEach((root) => root.unmount());
+const destroyAll = () => {
+  for (const [root, host] of liveRoots) {
+    root.unmount();
+    host.remove();
+  }
+  liveRoots.clear();
+};
 
 const modalApi = { confirm, info, success, warning, error, destroyAll };
 

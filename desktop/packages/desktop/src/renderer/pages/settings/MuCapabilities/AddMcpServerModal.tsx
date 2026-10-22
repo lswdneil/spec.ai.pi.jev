@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Form, Input, Modal, Radio } from '@arco-design/web-react';
+import { Form } from '@/renderer/ui/form';
+import { Input } from '@/renderer/ui/input';
+import { Modal } from '@/renderer/ui/dialog';
+import { Radio } from '@/renderer/ui/radio';
 import { useTranslation } from 'react-i18next';
 import { kyrnBridge, unwrap } from '@/common/kyrn/bridge';
 import { MCP_SERVER_NAME, type McpServerInput, type MuMcpServers } from '@/common/kyrn/capabilities';
@@ -80,7 +83,7 @@ export default function AddMcpServerModal({ onCancel, onAdded }: AddMcpServerMod
           <Input value={name} onChange={setName} placeholder='filesystem' aria-label={form('name')} />
         </Form.Item>
         <Form.Item label={form('kind')}>
-          <Radio.Group type='button' value={kind} onChange={setKind}>
+          <Radio.Group type='button' value={kind} onChange={(value) => setKind(value as 'command' | 'url')}>
             <Radio value='command'>{form('command')}</Radio>
             <Radio value='url'>{form('url')}</Radio>
           </Radio.Group>

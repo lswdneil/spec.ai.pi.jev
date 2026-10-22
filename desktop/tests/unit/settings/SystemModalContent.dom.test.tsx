@@ -93,6 +93,24 @@ vi.mock('@/renderer/ui/toast', async (importOriginal) => {
   };
 });
 
+vi.mock('@/renderer/ui/dialog', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/renderer/ui/dialog')>();
+  return {
+    ...actual,
+    Modal: {
+      ...actual.Modal,
+      useModal: () => [
+        {
+          confirm: ({ onOk }: { onOk?: () => void }) => {
+            onOk?.();
+          },
+        },
+        null,
+      ],
+    },
+  };
+});
+
 vi.mock('@arco-design/web-react', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@arco-design/web-react')>();
   return {

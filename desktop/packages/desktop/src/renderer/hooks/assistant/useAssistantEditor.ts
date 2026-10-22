@@ -1,7 +1,7 @@
 import { ipcBridge } from '@/common';
 import type { IMcpServer } from '@/common/config/storage';
 import type { Assistant, CreateAssistantRequest, UpdateAssistantRequest } from '@/common/types/agent/assistantTypes';
-import { Message } from '@/renderer/ui/toast';
+import type { Message } from '@/renderer/ui/toast';
 import type {
   AssistantListItem,
   BuiltinAutoSkill,

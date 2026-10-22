@@ -12,7 +12,8 @@ import { Message } from '@/renderer/ui/toast';
 import { Radio } from '@/renderer/ui/radio';
 import { Button } from '@/renderer/ui/button';
 import { Switch } from '@/renderer/ui/switch';
-import { Form, TimePicker } from '@arco-design/web-react';
+import { Form } from '@/renderer/ui/form';
+import { TimePicker } from '@/renderer/ui/time-picker';
 import MuModal from '@renderer/components/base/MuModal';
 import ThemedLogo from '@/renderer/components/agent/ThemedLogo';
 import { Down, Robot } from '@icon-park/react';
@@ -581,10 +582,10 @@ const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
 
         // Edit mode: update existing job
         const updates: ICronJobUpdateParams = {
-          name: values.name,
+          name: String(values.name ?? ''),
           schedule,
           target: {
-            payload: { kind: 'message', text: values.prompt },
+            payload: { kind: 'message', text: String(values.prompt ?? '') },
             execution_mode: resolvedExecutionMode,
           },
           metadata,
@@ -602,9 +603,9 @@ const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
       } else {
         // Create mode
         const params: ICreateCronJobParams = {
-          name: values.name,
+          name: String(values.name ?? ''),
           schedule,
-          prompt: values.prompt,
+          prompt: String(values.prompt ?? ''),
           conversation_id: _conversation_id ?? '',
           conversation_title,
           created_by: 'user',

@@ -8,6 +8,7 @@ import { afterEach } from 'vitest';
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Toaster, toast } from 'sonner';
+import { Modal } from '@/renderer/ui/dialog';
 
 // A real toaster for every DOM test: components call the Dense toast facade,
 // and assertions look for the words it showed.
@@ -18,6 +19,7 @@ if (typeof document !== 'undefined') {
   createRoot(host).render(createElement(Toaster, { position: 'bottom-right', closeButton: true }));
   afterEach(async () => {
     toast.dismiss();
+    Modal.destroyAll();
     await new Promise((resolve) => setTimeout(resolve, 300));
   });
 }

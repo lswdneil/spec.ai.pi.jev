@@ -1,4 +1,5 @@
 export { Alert, type AlertProps, type AlertTone } from './alert';
+export { AutoComplete, type AutoCompleteProps } from './autocomplete';
 export { Avatar, type AvatarProps, type AvatarGroupProps } from './avatar';
 export { Badge, type BadgeProps, type BadgeStatus } from './badge';
 export { Button, type ButtonProps } from './button';
@@ -17,11 +18,13 @@ export {
   type ModalProps,
 } from './dialog';
 export { Dropdown, Menu, MenuItem, type DropdownItem, type DropdownProps } from './dropdown';
+export { Form, type FormProps, type FormInstance, type FormItemProps, type FormRule } from './form';
 export { Link, Progress, Result, Space, type LinkProps, type ProgressProps, type ResultProps, type SpaceProps } from './display';
 export { Empty, type EmptyProps } from './empty';
 export { Image, type ImageProps, type ImagePreviewGroupProps } from './image';
 export { Input, Textarea, type InputProps, type TextareaProps } from './input';
 export { InputNumber, type InputNumberProps } from './input-number';
+export { InputTag, type InputTagProps } from './input-tag';
 export { Layout } from './layout';
 export { Popover, type PopoverProps, type PopoverPosition } from './popover';
 export { Pagination, type PaginationProps } from './pagination';
@@ -34,6 +37,7 @@ export { Steps, type StepsProps, type StepProps } from './steps';
 export { Switch, type SwitchProps } from './switch';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Tag, type TagProps, type TagTone } from './tag';
+export { TimePicker, type TimePickerProps } from './time-picker';
 export { AppToaster } from './toaster';
 export { Message, Notification, toast } from './toast';
 export { Tooltip, TooltipProvider, type TooltipProps } from './tooltip';

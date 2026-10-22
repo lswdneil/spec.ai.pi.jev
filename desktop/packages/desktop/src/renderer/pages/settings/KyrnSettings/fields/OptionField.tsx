@@ -2,7 +2,7 @@ import React from 'react';
 import { Input } from '@/renderer/ui/input';
 import { InputNumber } from '@/renderer/ui/input-number';
 import { Switch } from '@/renderer/ui/switch';
-import { InputTag } from '@arco-design/web-react';
+import { InputTag } from '@/renderer/ui/input-tag';
 import { useTranslation } from 'react-i18next';
 import MuSelect from '@/renderer/components/base/MuSelect';
 import { checkOption, localized, optionEquals, type OptionInfo, type OptionValue } from '@/common/kyrn/manifest';

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Dropdown, Input, Menu } from '@arco-design/web-react';
-import type { RefInputType } from '@arco-design/web-react/es/Input/interface';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown, Menu } from '@arco-design/web-react';
+import { Input } from '@/renderer/ui/input';
 import { Close, Earth, FullScreen, Left, Loading, OffScreen, Plus, Refresh, Right } from '@icon-park/react';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +16,7 @@ export type BrowserChromeProps = {
   /** The page in front: where it is and what its history allows; absent until it has reported. */
   navigation?: WebviewNavigationState;
   /** The address field, for focusing it when the person opens a blank page. */
-  addressRef?: React.Ref<RefInputType>;
+  addressRef?: React.Ref<HTMLInputElement>;
   onSelect: (tabId: string) => void;
   onClose: (tabId: string) => void;
   /** Close every page but this one (from its tab's right-click menu). */

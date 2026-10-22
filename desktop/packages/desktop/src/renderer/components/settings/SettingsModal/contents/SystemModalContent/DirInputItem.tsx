@@ -6,7 +6,9 @@
 
 import { ipcBridge } from '@/common';
 import { iconColors } from '@/renderer/styles/colors';
-import { Button, Form, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Form } from '@/renderer/ui/form';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { FolderOpen } from '@icon-park/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +26,7 @@ const DirInputItem: React.FC<{
   return (
     <Form.Item field={field} className='!mb-0'>
       {(_value, form) => {
-        const current_value = form.getFieldValue(field) || '';
+        const current_value = (form.getFieldValue(field) as string | undefined) || '';
         const actionTooltip = field === 'workDir' ? t('settings.changeWorkDir') : t('settings.changeLogDir');
 
         const handlePick = () => {
