@@ -13,7 +13,7 @@ import { blurActiveElement } from '@renderer/utils/ui/focus';
 import { rowButtonProps } from '@renderer/utils/ui/rowButton';
 import { cleanupSiderTooltips, getSiderTooltipProps } from '@renderer/utils/ui/siderTooltip';
 import CommandPalette, { toggleCommandPalette } from './CommandPalette';
-import SiderFooter from './SiderFooter';
+import DenseSiderFooter from './DenseSiderFooter';
 
 const WorkspaceGroupedHistory = React.lazy(() => import('@renderer/pages/conversation/GroupedHistory'));
 const SettingsSider = React.lazy(() => import('@renderer/pages/settings/components/SettingsSider'));
@@ -195,7 +195,7 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
       </div>
 
       <CommandPalette onNavigate={handlePaletteNavigate} />
-      <SiderFooter
+      <DenseSiderFooter
         isMobile={isMobile}
         isSettings={isSettings}
         collapsed={collapsed}

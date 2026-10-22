@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message, Modal } from '@arco-design/web-react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import ConversationSearchPopover from '@/renderer/pages/conversation/GroupedHistory/ConversationSearchPopover';
+import { Message } from '@/renderer/ui';
 import { emitter, useAddEventListener } from '@/renderer/utils/emitter';
 import { isUiV2Enabled } from '@/renderer/utils/ui/uiV2';
 import CommandPalettePanel from './CommandPalettePanel';
@@ -17,14 +18,8 @@ import type { PaletteItem } from './paletteGroups';
 import styles from './CommandPalette.module.css';
 
 /**
- * A veil of the page's own colour (white in light, black in dark): what lies under the palette recedes, the send
- * button's lavender and the chips with it, without the page turning grey.
+ * Open the palette, or close it when it is open.
  */
-const MASK_STYLE: React.CSSProperties = {
-  backgroundColor: 'var(--mu-scrim, color-mix(in srgb, var(--color-mask-bg) 30%, transparent))',
-};
-
-/** Open the palette, or close it when it is open. */
 export const toggleCommandPalette = (): void => {
   emitter.emit('commandPalette.toggle');
 };
@@ -120,20 +115,23 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ onNavigate }) => {
 
   return (
     <>
-      <Modal
-        visible={open}
-        onCancel={() => close(true)}
-        title={null}
-        footer={null}
-        closable={false}
-        alignCenter={false}
-        unmountOnExit
-        className={styles.palette}
-        wrapClassName={classNames(styles.wrap, dense && styles.dense)}
-        maskStyle={MASK_STYLE}
+      <DialogPrimitive.Root
+        open={open}
+        onOpenChange={(next) => {
+          if (!next) close(true);
+        }}
       >
-        <CommandPalettePanel onRun={run} />
-      </Modal>
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Overlay className='fixed inset-0 z-[1000] bg-[var(--sv-scrim)]' />
+          <DialogPrimitive.Content
+            className={classNames(styles.radix, dense && styles.dense)}
+            aria-describedby={undefined}
+          >
+            <DialogPrimitive.Title className='sr-only'>{t('common.commandPalette.title')}</DialogPrimitive.Title>
+            <CommandPalettePanel onRun={run} />
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
       <ConversationSearchPopover renderTrigger={() => null} onConversationSelect={onNavigate} />
     </>
   );

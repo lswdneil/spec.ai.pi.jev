@@ -4,7 +4,7 @@
  * event bus, the shortcut hook and the palette's own hooks are real; the data sources are stubbed.
  */
 
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui';
 import React from 'react';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { NavigateFunction } from 'react-router-dom';

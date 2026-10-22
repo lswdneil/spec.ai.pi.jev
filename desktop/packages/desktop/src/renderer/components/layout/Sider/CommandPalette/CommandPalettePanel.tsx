@@ -1,8 +1,8 @@
-import { Input } from '@arco-design/web-react';
-import { Search } from '@icon-park/react';
 import React, { useEffect, useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Search } from 'lucide-react';
 import { useIndexedItemRefs } from '@/renderer/hooks/ui/useIndexedItemRefs';
+import { Input } from '@/renderer/ui';
 import { formatPrimaryShortcut, MESSAGE_SEARCH_SHORTCUT } from '@/renderer/utils/ui/keyboardShortcuts';
 import { splitByHits, type PaletteItem } from './paletteGroups';
 import { usePaletteGroups } from './usePaletteGroups';
@@ -65,10 +65,11 @@ const CommandPalettePanel: React.FC<{ onRun: (item: PaletteItem) => void }> = ({
         <Input
           autoFocus
           value={query}
-          onChange={setQuery}
+          onChange={(event) => setQuery(event.target.value)}
           onKeyDown={onKeyDown}
           placeholder={t('common.commandPalette.placeholder')}
-          prefix={<Search theme='outline' size='16' fill='currentColor' />}
+          prefix={<Search className='h-4 w-4' strokeWidth={1.75} />}
+          className={styles.fieldInput}
           role='combobox'
           aria-label={title}
           aria-expanded

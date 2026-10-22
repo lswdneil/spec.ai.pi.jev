@@ -141,6 +141,10 @@ html[data-sv-ui="dense"] body {
   scrollbar-width: thin;
 }
 
+html[data-sv-ui="dense"] ::selection {
+  background: color-mix(in srgb, var(--sv-brand) 35%, transparent);
+}
+
 html[data-sv-ui="dense"] .app-titlebar {
   font-size: 12px;
 }
@@ -229,6 +233,10 @@ html[data-sv-ui="dense"] .settings-page-title {
   font-size: 20px;
   line-height: 1.35;
   letter-spacing: -0.01em;
+}
+
+html[data-sv-ui="dense"] .settings-page-content {
+  max-width: 760px;
 }
 
 html[data-sv-ui="dense"] .settings-page-header p {

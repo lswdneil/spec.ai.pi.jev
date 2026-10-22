@@ -18,6 +18,47 @@
   overflow: hidden;
 }
 
+.radix {
+  position: fixed;
+  left: 50%;
+  top: 20vh;
+  z-index: 1000;
+  width: 560px;
+  max-width: calc(100vw - 32px);
+  padding: 0;
+  border: 1px solid var(--border-base);
+  border-radius: 8px;
+  background: var(--bg-base);
+  box-shadow: var(--mu-shadow-2, none);
+  overflow: hidden;
+  outline: none;
+  transform: translateX(-50%);
+}
+
+.radix.dense {
+  top: 18vh;
+  border-color: var(--sv-line);
+  border-radius: 14px;
+  background: var(--sv-popover);
+  box-shadow: none;
+}
+
+.fieldInput {
+  height: 48px !important;
+  padding-inline: 36px 16px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 15px;
+}
+
+.radix.dense .fieldInput {
+  height: 40px !important;
+  padding-inline: 34px 12px !important;
+  font-size: 13px;
+}
+
 .dense .palette.palette {
   top: 18vh;
   border-radius: 14px;

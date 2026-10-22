@@ -5,8 +5,8 @@
  */
 
 /**
- * The veil under the command palette is the page's own colour, white in light and black in dark: what lies under the
- * palette (the home composer's chips, the send button's lavender) recedes, and the page never turns grey.
+ * The veil under the command palette is the page's own scrim token: what lies under the palette recedes, and the
+ * page never turns grey.
  */
 
 import { readFileSync } from 'node:fs';
@@ -15,19 +15,12 @@ import { describe, expect, it } from 'vitest';
 
 const renderer = resolve(__dirname, '../../../../../packages/desktop/src/renderer');
 const palette = readFileSync(resolve(renderer, 'components/layout/Sider/CommandPalette/index.tsx'), 'utf8');
-const scheme = readFileSync(resolve(renderer, 'styles/themes/mu-color-scheme.css'), 'utf8');
-
-/** The body of the first rule whose selector is exactly `selector`. */
-const block = (selector: string): string => {
-  const start = scheme.indexOf(`${selector} {`);
-  return start < 0 ? '' : scheme.slice(start, scheme.indexOf('\n}', start));
-};
+const tokens = readFileSync(resolve(renderer, 'styles/specjev/tokens.css'), 'utf8');
 
 describe('the command palette’s veil', () => {
-  it('is the page’s own colour in each theme', () => {
-    expect(palette).toContain("backgroundColor: 'var(--mu-scrim");
-    expect(palette).toContain('maskStyle={MASK_STYLE}');
-    expect(block("[data-color-scheme='mu']")).toMatch(/--mu-scrim: rgba\(255, 255, 255, 0\.\d+\);/);
-    expect(block("[data-color-scheme='mu'][data-theme='dark']")).toMatch(/--mu-scrim: rgba\(0, 0, 0, 0\.\d+\);/);
+  it('is a Radix overlay painted with the scrim token', () => {
+    expect(palette).toContain('DialogPrimitive.Overlay');
+    expect(palette).toContain('bg-[var(--sv-scrim)]');
+    expect(tokens).toMatch(/--sv-scrim: #[0-9a-f]{6}[0-9a-f]{2};/i);
   });
 });
