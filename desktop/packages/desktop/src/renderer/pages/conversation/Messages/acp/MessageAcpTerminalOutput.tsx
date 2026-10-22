@@ -6,7 +6,9 @@
 
 import { ipcBridge } from '@/common';
 import type { IMessageAcpTerminalOutput } from '@/common/chat/chatLib';
-import { Button, Card, Tag } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Card } from '@/renderer/ui/card';
+import { Tag } from '@/renderer/ui/tag';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

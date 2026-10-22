@@ -13,21 +13,39 @@ export type AlertTone = keyof typeof tones;
 
 export interface AlertProps {
   tone?: AlertTone;
+  /** Arco compatibility. */
+  type?: AlertTone;
   title?: React.ReactNode;
+  content?: React.ReactNode;
   children?: React.ReactNode;
   action?: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
+  showIcon?: boolean;
+  closable?: boolean;
 }
 
-export const Alert: React.FC<AlertProps> = ({ tone = 'info', title, children, action, className }) => {
-  const config = tones[tone];
+export const Alert: React.FC<AlertProps> = ({
+  tone,
+  type,
+  title,
+  content,
+  children,
+  action,
+  className,
+  style,
+  showIcon = true,
+}) => {
+  const config = tones[tone ?? type ?? 'info'];
   const Icon = config.icon;
   return (
-    <div role={tone === 'error' ? 'alert' : 'status'} className={cn('flex gap-2.5 rounded-[var(--sv-r-control)] border p-3', config.box, className)}>
-      <Icon className={cn('mt-0.5 h-4 w-4 shrink-0', config.iconColor)} aria-hidden='true' />
+    <div role={(tone ?? type) === 'error' ? 'alert' : 'status'} className={cn('flex gap-2.5 rounded-[var(--sv-r-control)] border p-3', config.box, className)} style={style}>
+      {showIcon ? <Icon className={cn('mt-0.5 h-4 w-4 shrink-0', config.iconColor)} aria-hidden='true' /> : null}
       <div className='min-w-0 flex-1'>
         {title ? <p className='text-[13px] font-medium text-sv-text'>{title}</p> : null}
-        {children ? <div className='mt-0.5 text-[12px] leading-[1.6] text-sv-muted'>{children}</div> : null}
+        {content ?? children ? (
+          <div className='mt-0.5 text-[12px] leading-[1.6] text-sv-muted'>{content ?? children}</div>
+        ) : null}
       </div>
       {action ? <div className='shrink-0'>{action}</div> : null}
     </div>

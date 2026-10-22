@@ -15,12 +15,15 @@ const sizeFor = (size: AvatarSize = 'default'): number => {
   return size;
 };
 
+const AvatarSizeContext = React.createContext<AvatarSize | undefined>(undefined);
+
 /** A round or square identity tile; the person's content fills it. */
 const AvatarBase = React.forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
-  { size = 'default', shape = 'circle', className, style, children, ...props },
+  { size, shape = 'circle', className, style, children, ...props },
   ref
 ) {
-  const edge = sizeFor(size);
+  const groupSize = React.useContext(AvatarSizeContext);
+  const edge = sizeFor(size ?? groupSize);
   return (
     <span
       ref={ref}
@@ -29,6 +32,7 @@ const AvatarBase = React.forwardRef<HTMLSpanElement, AvatarProps>(function Avata
         shape === 'square' ? 'rounded-[8px]' : 'rounded-full',
         className
       )}
+      data-sv-avatar=''
       style={{ width: edge, height: edge, ...style }}
       {...props}
     >
@@ -41,10 +45,12 @@ export interface AvatarGroupProps extends React.HTMLAttributes<HTMLSpanElement> 
   size?: AvatarSize;
 }
 
-const AvatarGroup: React.FC<AvatarGroupProps> = ({ className, children, ...props }) => (
-  <span className={cn('inline-flex items-center', className)} {...props}>
-    {children}
-  </span>
+const AvatarGroup: React.FC<AvatarGroupProps> = ({ size, className, children, ...props }) => (
+  <AvatarSizeContext.Provider value={size}>
+    <span className={cn('inline-flex items-center', className)} {...props}>
+      {children}
+    </span>
+  </AvatarSizeContext.Provider>
 );
 
 type AvatarComponent = typeof AvatarBase & { Group: typeof AvatarGroup };

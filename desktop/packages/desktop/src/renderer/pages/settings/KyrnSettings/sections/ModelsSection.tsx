@@ -1,5 +1,6 @@
 import React from 'react';
-import { Alert, Button } from '@arco-design/web-react';
+import { Alert } from '@/renderer/ui/alert';
+import { Button } from '@/renderer/ui/button';
 import { useTranslation } from 'react-i18next';
 import { useInRouterContext, useNavigate } from 'react-router-dom';
 import type { AvailableModels } from '@/common/kyrn/models';

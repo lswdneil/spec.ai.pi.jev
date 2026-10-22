@@ -1,5 +1,7 @@
 import React, { useId, useState } from 'react';
-import { Checkbox, Input, Tag } from '@arco-design/web-react';
+import { Checkbox } from '@/renderer/ui/checkbox';
+import { Input } from '@/renderer/ui/input';
+import { Tag } from '@/renderer/ui/tag';
 import { useTranslation } from 'react-i18next';
 import MuSelect from '@/renderer/components/base/MuSelect';
 import {

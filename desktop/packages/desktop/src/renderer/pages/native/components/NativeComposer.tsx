@@ -10,7 +10,8 @@
  * ↑/↓ history and `/copy` read the conversation's text. Above it, the goal spec.jev works towards (`/goal <condition>`),
  * which the person can end; beside the send button, how full the model's context is.
  */
-import { Button, Radio } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Radio } from '@/renderer/ui/radio';
 import type { TMessage } from '@/common/chat/chatLib';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

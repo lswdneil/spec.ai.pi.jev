@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Empty, Input, Spin } from '@arco-design/web-react';
+import { Empty } from '@/renderer/ui/empty';
+import { Input } from '@/renderer/ui/input';
+import { Spin } from '@/renderer/ui/spinner';
 import { IconSearch } from '@arco-design/web-react/icon';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';

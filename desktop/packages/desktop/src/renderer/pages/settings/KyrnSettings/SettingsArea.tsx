@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Alert, Button, Message, Spin } from '@arco-design/web-react';
+import { Alert } from '@/renderer/ui/alert';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
+import { Spin } from '@/renderer/ui/spinner';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { formatNameList } from '@/renderer/services/i18n/list';

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Button, Switch } from '@arco-design/web-react';
+import { Alert } from '@/renderer/ui/alert';
+import { Button } from '@/renderer/ui/button';
+import { Switch } from '@/renderer/ui/switch';
 import { Right } from '@icon-park/react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';

@@ -6,7 +6,11 @@
 
 import { conversation } from '@/common/adapter/ipcBridge';
 import type { IAskQuestion, IMessageAsk } from '@/common/chat/chatLib';
-import { Button, Card, Checkbox, Input, Radio } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Card } from '@/renderer/ui/card';
+import { Checkbox } from '@/renderer/ui/checkbox';
+import { Input } from '@/renderer/ui/input';
+import { Radio } from '@/renderer/ui/radio';
 import { CheckOne } from '@icon-park/react';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';

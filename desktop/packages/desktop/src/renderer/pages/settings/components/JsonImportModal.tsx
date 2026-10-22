@@ -1,5 +1,6 @@
 import type { IMcpServer, IMcpServerTransport } from '@/common/config/storage';
-import { Alert, Button } from '@arco-design/web-react';
+import { Alert } from '@/renderer/ui/alert';
+import { Button } from '@/renderer/ui/button';
 import React, { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import CodeMirror from '@uiw/react-codemirror';

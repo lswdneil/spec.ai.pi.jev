@@ -1,5 +1,7 @@
 import EmojiPicker from '@/renderer/components/chat/EmojiPicker';
-import { Avatar, Button, Input } from '@arco-design/web-react';
+import { Avatar } from '@/renderer/ui/avatar';
+import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
 import type { BuiltinAvatarOption } from '../types';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

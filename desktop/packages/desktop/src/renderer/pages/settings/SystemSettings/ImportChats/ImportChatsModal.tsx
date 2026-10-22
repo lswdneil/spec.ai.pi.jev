@@ -6,7 +6,11 @@
  * standard variant, as the theme and MCP import dialogs): the title at the start, hairlines between title, body and
  * buttons.
  */
-import { Button, Checkbox, Input, Message, Spin } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Checkbox } from '@/renderer/ui/checkbox';
+import { Input } from '@/renderer/ui/input';
+import { Message } from '@/renderer/ui/toast';
+import { Spin } from '@/renderer/ui/spinner';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

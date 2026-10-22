@@ -1,5 +1,7 @@
 import React from 'react';
-import { Input, Switch, Tag } from '@arco-design/web-react';
+import { Input } from '@/renderer/ui/input';
+import { Switch } from '@/renderer/ui/switch';
+import { Tag } from '@/renderer/ui/tag';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { CLM_DEFAULT_ADDRESS, CLM_DEFAULT_MODEL } from '@/common/kyrn/clm';

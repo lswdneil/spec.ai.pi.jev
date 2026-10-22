@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Switch, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Switch } from '@/renderer/ui/switch';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Check } from '@icon-park/react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';

@@ -3,10 +3,13 @@ import { cn } from './cn';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   interactive?: boolean;
+  /** Arco compatibility; the Dense card always uses its hairline. */
+  bordered?: boolean;
+  size?: 'small' | 'default' | 'medium';
 }
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
-  { className, interactive, ...props },
+  { className, interactive, bordered: _bordered, size: _size, ...props },
   ref
 ) {
   return (

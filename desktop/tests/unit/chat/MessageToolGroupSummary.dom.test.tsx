@@ -31,16 +31,11 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', async () => {
-  const actual = await vi.importActual<typeof import('@arco-design/web-react')>('@arco-design/web-react');
-
-  return {
-    ...actual,
-    Message: {
-      useMessage: () => [{ success: mockMessageSuccess, error: mockMessageError }, null],
-    },
-  };
-});
+vi.mock('@/renderer/ui/toast', () => ({
+  Message: {
+    useMessage: () => [{ success: mockMessageSuccess, error: mockMessageError }, null],
+  },
+}));
 
 describe('MessageToolGroupSummary ACP image output', () => {
   beforeEach(() => {

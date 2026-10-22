@@ -34,6 +34,12 @@ vi.mock('@arco-design/web-react', async () => {
   };
 });
 
+vi.mock('@/renderer/ui/toast', () => ({
+  Message: {
+    useMessage: () => [{ success: vi.fn(), error: vi.fn(), warning: vi.fn() }, <div key='message-context' />],
+  },
+}));
+
 vi.mock('@/renderer/hooks/assistant', () => ({
   useAssistantList: () => useAssistantListMock(),
   useAssistantEditor: (params: unknown) => useAssistantEditorMock(params),
@@ -301,7 +307,7 @@ describe('AssistantSettings', () => {
     const row = screen.getByTestId('enabled-assistant-row-mu');
     expect(screen.queryByTestId('enabled-assistant-reorder-handle-mu')).toBeNull();
     // No picture of its own: its name alone, neither a letter standing in nor a robot.
-    expect(row.querySelector('.arco-avatar')).toBeNull();
+    expect(row.querySelector('[data-sv-avatar]')).toBeNull();
     expect(row).toHaveTextContent('mu');
     expect(row.querySelector('svg')).toBeNull();
   });
@@ -383,7 +389,7 @@ describe('AssistantSettings', () => {
     });
 
     const row = screen.getByTestId('enabled-assistant-row-claude');
-    expect(row.querySelector('.arco-avatar-circle')).toHaveStyle({ height: '20px', width: '20px' });
+    expect(row.querySelector('[data-sv-avatar]')).toHaveStyle({ height: '20px', width: '20px' });
     const logo = row.querySelector('img, span[role="img"]');
     expect(logo).not.toBeNull();
     expect(logo).toHaveClass('object-contain');

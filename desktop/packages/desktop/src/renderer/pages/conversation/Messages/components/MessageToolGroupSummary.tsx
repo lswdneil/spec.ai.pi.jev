@@ -5,7 +5,10 @@
  */
 
 import type { BadgeProps } from '@arco-design/web-react';
-import { Badge, Button, Message, Tooltip } from '@arco-design/web-react';
+import { Badge } from '@/renderer/ui/badge';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Down, Download, Right } from '@icon-park/react';
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';

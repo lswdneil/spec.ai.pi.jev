@@ -12,7 +12,11 @@ export interface SwitchProps {
   onChange?: (checked: boolean) => void;
   onCheckedChange?: (checked: boolean) => void;
   className?: string;
+  id?: string;
+  title?: string;
+  style?: React.CSSProperties;
   'aria-label'?: string;
+  'data-testid'?: string;
 }
 
 export const Switch: React.FC<SwitchProps> = ({
@@ -23,12 +27,14 @@ export const Switch: React.FC<SwitchProps> = ({
   onCheckedChange,
   className,
   'aria-label': ariaLabel,
+  ...props
 }) => (
   <SwitchPrimitive.Root
     checked={checked}
     defaultChecked={defaultChecked}
     disabled={disabled}
     aria-label={ariaLabel}
+    {...props}
     onCheckedChange={(next) => {
       onChange?.(next);
       onCheckedChange?.(next);

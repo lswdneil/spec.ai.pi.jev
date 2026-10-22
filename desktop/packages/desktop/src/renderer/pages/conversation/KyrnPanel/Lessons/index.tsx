@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { Input, Radio } from '@arco-design/web-react';
+import { Input } from '@/renderer/ui/input';
+import { Radio } from '@/renderer/ui/radio';
 import { useTranslation } from 'react-i18next';
 import type { StoredLesson } from '@/common/kyrn/lessons';
 import type { Activity } from '@/common/kyrn/types';

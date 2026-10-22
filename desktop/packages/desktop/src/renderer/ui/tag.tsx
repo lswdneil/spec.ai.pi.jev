@@ -15,7 +15,7 @@ export type TagTone = keyof typeof tones;
 export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   tone?: TagTone;
   /** Arco compatibility: a named colour. */
-  color?: 'gray' | 'green' | 'red' | 'orange' | 'blue' | 'arcoblue' | 'purple';
+  color?: string;
   size?: 'small' | 'default' | 'medium' | 'large';
   bordered?: boolean;
   closable?: boolean;
@@ -48,7 +48,7 @@ export const Tag: React.FC<TagProps> = ({
   <span
     className={cn(
       'arco-tag inline-flex h-[22px] items-center gap-1 rounded-full border px-2 text-[10.5px] font-medium leading-none',
-      tones[tone ?? (color ? arcoTones[color] : 'neutral')],
+      tones[tone ?? (color ? arcoTones[color as keyof typeof arcoTones] ?? 'neutral' : 'neutral')],
       className
     )}
     {...props}

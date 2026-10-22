@@ -8,7 +8,6 @@ import type { ChatSearchPanelOpenDetail } from '@/renderer/utils/chat/chatMinima
 import { CHAT_SEARCH_PANEL_OPEN_EVENT, dispatchChatMessageJump } from '@/renderer/utils/chat/chatMinimapEvents';
 import { loadAllConversationMessagesPaged } from '@/renderer/utils/chat/messagePagination';
 import { isPrimaryApplicationShortcut } from '@/renderer/utils/ui/keyboardShortcuts';
-import type { RefInputType } from '@arco-design/web-react/es/Input/interface';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { MinimapVisualStyle, TurnPreviewItem } from './minimapTypes';
 import {
@@ -36,7 +35,7 @@ type UseMinimapPanelReturn = {
   visualStyle: MinimapVisualStyle;
   triggerRef: React.RefObject<HTMLSpanElement | null>;
   panelRef: React.RefObject<HTMLDivElement | null>;
-  searchInputRef: React.RefObject<RefInputType | null>;
+  searchInputRef: React.RefObject<HTMLInputElement | null>;
   normalizedKeyword: string;
   filteredItems: TurnPreviewItem[];
   panelHeight: number;
@@ -65,7 +64,7 @@ export const useMinimapPanel = (conversation_id?: string): UseMinimapPanelReturn
   const [visualStyle, setVisualStyle] = useState<MinimapVisualStyle>(defaultVisualStyle);
   const triggerRef = useRef<HTMLSpanElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
-  const searchInputRef = useRef<RefInputType | null>(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
   const isSearchInputComposingRef = useRef(false);
   const pendingCloseAfterCompositionRef = useRef(false);
   const searchKeywordRef = useRef('');
@@ -144,7 +143,7 @@ export const useMinimapPanel = (conversation_id?: string): UseMinimapPanelReturn
     return Math.max(PANEL_MIN_HEIGHT, Math.min(PANEL_HEIGHT, computed));
   }, [filteredItems.length, items.length, loading]);
 
-  // Panel positioning — always center within the chat header area
+  // Panel positioning �?always center within the chat header area
   const updatePanelLayout = useCallback((height = PANEL_HEIGHT) => {
     if (typeof window === 'undefined') return;
     const width = getPanelWidth();
@@ -200,7 +199,7 @@ export const useMinimapPanel = (conversation_id?: string): UseMinimapPanelReturn
   const collapseSearchModeIfIdle = useCallback(() => {
     if (isSearchInputComposingRef.current) return;
     if (normalizeText(searchKeywordRef.current)) return;
-    if (searchInputRef.current?.dom === document.activeElement) return;
+    if (searchInputRef.current === document.activeElement) return;
     setIsSearchMode(false);
   }, []);
 

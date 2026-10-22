@@ -50,6 +50,17 @@ vi.mock('@arco-design/web-react', async (importOriginal) => {
   };
 });
 
+vi.mock('@/renderer/ui/toast', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/renderer/ui/toast')>();
+  const toast = (kind: string) => (text: string) => {
+    said.push([kind, text]);
+  };
+  return {
+    ...actual,
+    Message: { ...actual.Message, success: toast('success'), warning: toast('warning'), error: toast('error') },
+  };
+});
+
 const i18n = createInstance();
 beforeAll(async () => {
   await i18n.init({

@@ -23,7 +23,10 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Button, Empty, Switch, Tag } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Empty } from '@/renderer/ui/empty';
+import { Switch } from '@/renderer/ui/switch';
+import { Tag } from '@/renderer/ui/tag';
 import { Drag } from '@icon-park/react';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';

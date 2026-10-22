@@ -32,15 +32,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('@arco-design/web-react', () => ({
-  Card: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
-  Tag: ({ children }: { children?: React.ReactNode }) => <span>{children}</span>,
-  Button: ({ children, onClick, ...props }: { children?: React.ReactNode; onClick?: () => void }) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  ),
-  Tooltip: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
+vi.mock('@/renderer/ui/toast', () => ({
   Message: {
     useMessage: () => [{ success: mockMessageSuccess, error: mockMessageError }, null],
   },
