@@ -3,13 +3,13 @@ import { resolveExtensionAssetUrl } from '@/renderer/utils/platform';
 import { type IExtensionSettingsTab } from '@/common/adapter/ipcBridge';
 import { useExtI18n } from '@/renderer/hooks/system/useExtI18n';
 import { useExtensionSettingsTabs } from '@/renderer/hooks/system/useExtensionSettingsTabs';
-import { Puzzle, Search } from '@icon-park/react';
+import { Puzzle } from '@icon-park/react';
 import classNames from 'classnames';
+import { Search } from 'lucide-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Input, Tooltip } from '@arco-design/web-react';
-import { getSiderTooltipProps } from '@/renderer/utils/ui/siderTooltip';
+import { Input, Tooltip } from '@/renderer/ui';
 import { rowButtonProps } from '@/renderer/utils/ui/rowButton';
 import { useNativeEnabled } from '@/renderer/pages/native/hooks/useNativeConversations';
 import {
@@ -134,7 +134,6 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
   const { t, i18n } = useTranslation();
   const { pathname, search } = useLocation();
   const groups = useSettingsNav();
-  const siderTooltipProps = getSiderTooltipProps(tooltipEnabled);
   const rail = useRef<HTMLElement>(null);
   const [query, setQuery] = useState('');
   const searching = !collapsed && query.trim() !== '';
@@ -160,13 +159,14 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
       {collapsed ? null : (
         <div className='settings-sider__search shrink-0 pb-8px'>
           <Input
-            size='small'
+            size='sm'
             allowClear
-            prefix={<Search theme='outline' size='14' />}
+            prefix={<Search size={14} />}
             aria-label={t('settings.search.placeholder')}
             placeholder={t('settings.search.placeholder')}
             value={query}
-            onChange={setQuery}
+            onChange={(event) => setQuery(event.target.value)}
+            onClear={() => setQuery('')}
             onKeyDown={(event) => {
               if (event.key === 'Escape') setQuery('');
               else if (event.key === 'Enter' && hits[0]) go(hits[0].path);
@@ -199,7 +199,7 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
               {group.items.map((item) => {
                 const isSelected = isSettingsRouteActive(pathname, `/settings/${item.path}`);
                 return (
-                  <Tooltip key={item.id} {...siderTooltipProps} content={item.label} position='right'>
+                  <Tooltip key={item.id} content={item.label} position='right' disabled={!tooltipEnabled}>
                     {/* A button for the keyboard too: Tab reaches every page, Enter or Space opens it. Named by the page's
                     whole name, which the folded rail does not show. */}
                     <div
