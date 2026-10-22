@@ -19,7 +19,7 @@ vi.mock('react-router-dom', () => ({
   useNavigate: () => vi.fn(),
 }));
 
-vi.mock('@arco-design/web-react', () => {
+vi.mock('@/renderer/ui/select', () => {
   const Select = Object.assign(
     ({
       children,
@@ -56,12 +56,15 @@ vi.mock('@arco-design/web-react', () => {
     }
   );
 
-  return {
-    Button: ({ children }: { children?: React.ReactNode }) => <button type='button'>{children}</button>,
-    Select,
-    Tooltip: ({ children }: { children?: React.ReactNode }) => <span>{children}</span>,
-  };
+  return { SelectWithOptions: Select };
 });
+
+vi.mock('@/renderer/ui/button', () => ({
+  Button: ({ children }: { children?: React.ReactNode }) => <button type='button'>{children}</button>,
+}));
+vi.mock('@/renderer/ui/tooltip', () => ({
+  Tooltip: ({ children }: { children?: React.ReactNode }) => <span>{children}</span>,
+}));
 
 const makeSkillOptions = (count: number) =>
   Array.from({ length: count }, (_, i) => ({ value: `skill-${i}`, label: `skill-${i}` }));

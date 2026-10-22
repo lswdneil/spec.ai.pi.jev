@@ -61,13 +61,15 @@ export interface SelectProps {
   dropdownRender?: (menu: React.ReactNode) => React.ReactNode;
   onVisibleChange?: (visible: boolean) => void;
   getPopupContainer?: (node: HTMLElement) => Element;
-  options?: { label: React.ReactNode; value: SelectValue; disabled?: boolean }[];
+  options?: Array<{ label: React.ReactNode; value: SelectValue; disabled?: boolean } | string | number>;
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
   children?: React.ReactNode;
   'aria-label'?: string;
   'data-testid'?: string;
   notFoundContent?: React.ReactNode;
   showSearch?: boolean;
-  filterOption?: unknown;
+  filterOption?: (inputValue: string, option: React.ReactElement<{ children?: React.ReactNode; value?: unknown }>) => boolean;
   onClear?: () => void;
   renderTag?: (props: { label: React.ReactNode; value: SelectValue }) => React.ReactNode;
   onSearch?: (value: string) => void;
@@ -102,6 +104,8 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
     onVisibleChange,
     getPopupContainer,
     options,
+    prefix,
+    suffix,
     children,
     'aria-label': ariaLabel,
     'data-testid': testId,
@@ -114,7 +118,9 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
   const parsed: ParsedOption[] = [];
   const groups: { label: React.ReactNode; options: ParsedOption[] }[] = [];
   walk(children, parsed, groups);
-  for (const option of options ?? []) parsed.push(option);
+  for (const option of options ?? []) {
+    parsed.push(typeof option === 'object' ? option : { value: option, label: option });
+  }
   const [uncontrolled, setUncontrolled] = React.useState<SelectValue | SelectValue[] | undefined>(defaultValue);
   const current = value ?? uncontrolled;
   const selectedValues = new Set(Array.isArray(current) ? current : current === undefined ? [] : [current]);
@@ -207,7 +213,9 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
           )}
           style={style}
         >
+          {prefix ? <span className='shrink-0 text-sv-muted'>{prefix}</span> : null}
           <span className={cn('min-w-0 flex-1 truncate', !selected.length && 'text-sv-muted')}>{text}</span>
+          {suffix ? <span className='shrink-0 text-sv-muted'>{suffix}</span> : null}
           {allowClear && selected.length ? (
             <span
               role='button'

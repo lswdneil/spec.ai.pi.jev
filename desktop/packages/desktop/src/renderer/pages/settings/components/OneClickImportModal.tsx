@@ -1,6 +1,10 @@
 import type { IMcpServer, IMcpTool } from '@/common/config/storage';
 import { mcpService } from '@/common/adapter/ipcBridge';
-import { Button, Select, Spin, Tag, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { SelectWithOptions as Select } from '@/renderer/ui/select';
+import { Spin } from '@/renderer/ui/spinner';
+import { Tag } from '@/renderer/ui/tag';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check } from '@icon-park/react';

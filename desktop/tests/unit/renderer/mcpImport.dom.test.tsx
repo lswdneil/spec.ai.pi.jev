@@ -63,21 +63,15 @@ vi.mock('@icon-park/react', () => ({
   Check: () => <span>check</span>,
 }));
 
-vi.mock('@arco-design/web-react', () => {
-  const Button = ({
-    children,
-    onClick,
-    disabled,
-  }: {
-    children: React.ReactNode;
-    onClick?: () => void;
-    disabled?: boolean;
-  }) => (
+vi.mock('@/renderer/ui/button', () => ({
+  Button: ({ children, onClick, disabled }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean }) => (
     <button disabled={disabled} onClick={onClick}>
       {children}
     </button>
-  );
+  ),
+}));
 
+vi.mock('@/renderer/ui/select', () => {
   const Select = ({
     children,
     value,
@@ -99,19 +93,15 @@ vi.mock('@arco-design/web-react', () => {
       </div>
     </div>
   );
-
   Select.Option = ({ children, onSelect }: { children: React.ReactNode; onSelect?: () => void }) => (
     <button onClick={onSelect}>{children}</button>
   );
-
-  return {
-    Button,
-    Select,
-    Spin: () => <span>spin</span>,
-    Tag: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
-    Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  };
+  return { SelectWithOptions: Select };
 });
+
+vi.mock('@/renderer/ui/spinner', () => ({ Spin: () => <span>spin</span> }));
+vi.mock('@/renderer/ui/tag', () => ({ Tag: ({ children }: { children: React.ReactNode }) => <span>{children}</span> }));
+vi.mock('@/renderer/ui/tooltip', () => ({ Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</> }));
 
 vi.mock('@/renderer/pages/settings/components/JsonImportModal', () => ({
   default: ({ visible }: { visible: boolean }) => (visible ? <div data-testid='json-import-modal' /> : null),

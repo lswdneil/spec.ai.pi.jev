@@ -1,7 +1,9 @@
 import type { BuiltinAutoSkill, SkillInfo } from '../types';
 import type { IMcpServer } from '@/common/config/storage';
 import { DROPDOWN_SEARCH_THRESHOLD, thoughtLevelOptionLabel } from '@/renderer/components/agent/runtimeSelectorOptions';
-import { Button, Select, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { SelectWithOptions as Select } from '@/renderer/ui/select';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Brain, Lightning, LinkCloud, Shield, Toolkit } from '@icon-park/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

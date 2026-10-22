@@ -20,7 +20,11 @@ import type { Assistant, UpdateAssistantRequest } from '@/common/types/agent/ass
 import { resolveLocaleKey } from '@/common/utils';
 import { useTalkToButler } from '@/renderer/hooks/assistant/useTalkToButler';
 import AssistantAvatar from '@/renderer/pages/settings/AssistantSettings/AssistantAvatar';
-import { Button, Dropdown, Menu, Message, Spin, Typography } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Spin } from '@/renderer/ui/spinner';
+import { Message } from '@/renderer/ui/toast';
+import { Typography } from '@/renderer/ui/typography';
 import { ArrowLeft, Close, Plus, Right } from '@icon-park/react';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -219,25 +223,19 @@ const SkillDetailPage: React.FC = () => {
               data-testid='skill-detail-used-by'
               extra={
                 <Dropdown
-                  trigger='click'
-                  position='br'
+                  align='end'
                   disabled={saving || addableAssistants.length === 0}
-                  droplist={
-                    <Menu style={{ maxHeight: 320, overflow: 'auto' }}>
-                      {addableAssistants.map((assistant) => (
-                        <Menu.Item
-                          key={assistant.id}
-                          data-testid={`menu-add-assistant-${assistant.id}`}
-                          onClick={() => void setAttachment(assistant, true)}
-                        >
-                          <span className='flex items-center gap-8px'>
-                            <AssistantAvatar assistant={assistant} size={20} />
-                            <span className='truncate'>{assistantLabel(assistant)}</span>
-                          </span>
-                        </Menu.Item>
-                      ))}
-                    </Menu>
-                  }
+                  items={addableAssistants.map((assistant) => ({
+                    key: assistant.id,
+                    'data-testid': `menu-add-assistant-${assistant.id}`,
+                    label: (
+                      <span className='flex items-center gap-8px'>
+                        <AssistantAvatar assistant={assistant} size={20} />
+                        <span className='truncate'>{assistantLabel(assistant)}</span>
+                      </span>
+                    ),
+                    onSelect: () => void setAttachment(assistant, true),
+                  }))}
                 >
                   <Button
                     size='mini'
