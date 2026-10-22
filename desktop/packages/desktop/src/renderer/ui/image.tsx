@@ -51,7 +51,7 @@ const ImageBase = React.forwardRef<HTMLImageElement, ImageProps>(function Image(
               <button
                 type='button'
                 aria-label='Close preview'
-                className='absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-sv-line-strong text-sv-text outline-none hover:bg-sv-raised focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus'
+                className='absolute right-4 top-4 flex h-8 w-8 bg-transparent items-center justify-center rounded-full border border-sv-line-strong text-sv-text outline-none hover:bg-sv-raised focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus'
                 onClick={() => setOpen(false)}
               >
                 <X className='h-4 w-4' strokeWidth={1.75} />

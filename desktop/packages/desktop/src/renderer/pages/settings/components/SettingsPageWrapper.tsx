@@ -15,14 +15,14 @@ import './settings.css';
  * that keeps its header out of its scroll body (the assistants, the scheduled tasks) lays itself out with the same
  * three, so every page has its title in the same place and the same width.
  */
-export const SETTINGS_PAGE_GUTTER = 'px-16px md:px-32px';
+export const SETTINGS_PAGE_GUTTER = 'px-16px md:px-22px';
 export const SETTINGS_PAGE_COLUMN = 'mx-auto w-full md:max-w-880px';
-export const SETTINGS_PAGE_TOP = 'pt-16px md:pt-24px';
+export const SETTINGS_PAGE_TOP = 'pt-16px md:pt-[18px]';
 /**
  * A sticky header takes back exactly the space above it, as margin, and returns it as padding: it then sits where a
  * plain header would, and its title lands at the same height as every other page's.
  */
-export const SETTINGS_PAGE_STICKY_TOP = '-mt-16px pt-16px md:-mt-24px md:pt-24px';
+export const SETTINGS_PAGE_STICKY_TOP = '-mt-16px pt-16px md:-mt-[18px] md:pt-[18px]';
 
 interface SettingsPageWrapperProps {
   children: React.ReactNode;
@@ -53,7 +53,7 @@ const SettingsPageWrapper: React.FC<SettingsPageWrapperProps> = ({ children, cla
     'settings-page-content',
     SETTINGS_PAGE_COLUMN,
     SETTINGS_PAGE_TOP,
-    'pb-16px md:pb-24px',
+    'pb-16px md:pb-[28px]',
     contentClassName
   );
 

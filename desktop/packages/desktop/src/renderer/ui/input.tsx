@@ -96,7 +96,7 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
             <button
               type='button'
               aria-label='Clear'
-              className='rounded p-0.5 hover:bg-sv-raised hover:text-sv-text'
+              className='rounded bg-transparent p-0.5 hover:bg-sv-raised hover:text-sv-text'
               onClick={() => {
                 onClear?.();
                 onChange?.('');

@@ -84,7 +84,7 @@ const CollapseItem: React.FC<CollapseItemProps> = ({
         disabled={disabled}
         aria-expanded={open}
         onClick={() => context?.toggle(key)}
-        className='flex w-full items-center gap-2 px-1 py-2 text-left outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-50'
+        className='flex w-full items-center gap-2 bg-transparent px-1 py-2 text-left outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-50'
       >
         {showExpandIcon ? (
           <ChevronRight

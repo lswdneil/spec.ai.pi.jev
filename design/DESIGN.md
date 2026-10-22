@@ -98,7 +98,7 @@ Usage notes:
 --font-mono:  "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans Mono", monospace
 ```
 
-- Dense (approved direction): UI base **13px**; small 11.5; caption 10.5; meta 12; h1 20. Editorial alternatives may use 14/26.
+- Dense (approved direction): UI base **13px**; small 11.5; caption 11.5; meta 12; h1 20. Editorial alternatives may use 14/26.
 - Line-height: body **1.65** (CJK 1.7–1.8), headings **1.35** (CJK 1.35–1.4), small 1.5.
 - Weights: 400 / 500 / 600 only. No 700 body.
 - Numbers in tables and timing: `font-variant-numeric: tabular-nums`.

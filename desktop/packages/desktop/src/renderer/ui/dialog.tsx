@@ -155,7 +155,7 @@ const ModalBase: React.FC<ModalProps> = ({
           {closable ? (
             <DialogPrimitive.Close
               aria-label='Close'
-              className='-mr-1 -mt-1 rounded-[8px] p-1 text-sv-faint outline-none hover:bg-sv-surface hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
+              className='-mr-1 -mt-1 rounded-[8px] bg-transparent p-1 text-sv-faint outline-none hover:bg-sv-surface hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
             >
               <X className='h-4 w-4' />
             </DialogPrimitive.Close>
@@ -240,7 +240,7 @@ const ConfirmDialog: React.FC<{
             <button
               type='button'
               aria-label='Close'
-              className='-mr-1 -mt-1 rounded-[8px] p-1 text-sv-faint outline-none hover:bg-sv-surface hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
+              className='-mr-1 -mt-1 rounded-[8px] bg-transparent p-1 text-sv-faint outline-none hover:bg-sv-surface hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
               onClick={cancel}
             >
               <X className='h-4 w-4' />

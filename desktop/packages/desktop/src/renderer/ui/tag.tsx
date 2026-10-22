@@ -63,7 +63,7 @@ export const Tag: React.FC<TagProps> = ({
       <button
         type='button'
         aria-label='Remove'
-        className='arco-tag-close-btn -me-1 flex h-3.5 w-3.5 items-center justify-center rounded-full text-current opacity-60 hover:bg-sv-raised hover:opacity-100'
+        className='arco-tag-close-btn -me-1 flex h-3.5 w-3.5 bg-transparent items-center justify-center rounded-full text-current opacity-60 hover:bg-sv-raised hover:opacity-100'
         onClick={(event) => {
           event.stopPropagation();
           onClose?.(event);

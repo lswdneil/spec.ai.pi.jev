@@ -76,7 +76,7 @@ export const InputTag = React.forwardRef<HTMLInputElement, InputTagProps>(functi
             <button
               type='button'
               aria-label={`Remove ${entry}`}
-              className='flex h-3 w-3 items-center justify-center rounded-full text-sv-muted hover:text-sv-text'
+              className='flex h-3 w-3 items-center justify-center rounded-full bg-transparent text-sv-muted hover:text-sv-text'
               onClick={() => commit(entries.filter((item) => item !== entry))}
             >
               <X className='h-2.5 w-2.5' />
@@ -107,7 +107,7 @@ export const InputTag = React.forwardRef<HTMLInputElement, InputTagProps>(functi
         <button
           type='button'
           aria-label='Clear all'
-          className='ms-auto flex h-4 w-4 items-center justify-center rounded-full text-sv-muted hover:text-sv-text'
+          className='ms-auto flex h-4 w-4 items-center justify-center rounded-full bg-transparent text-sv-muted hover:text-sv-text'
           onClick={() => commit([])}
         >
           <X className='h-3 w-3' />

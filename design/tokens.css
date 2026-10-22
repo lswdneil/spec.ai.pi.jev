@@ -72,12 +72,12 @@
   --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, "Noto Serif SC", "Songti SC", serif;
   --font-mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", "Noto Sans Mono", monospace;
 
-  --fs-caption: 10.5px;
+  --fs-caption: 11.5px;
   --fs-small: 11.5px;
   --fs-meta: 12px;
   --fs-body: 13px;
-  --fs-body-lg: 14px;
-  --fs-title: 16px;
+  --fs-body-lg: 15px;
+  --fs-title: 18px;
   --fs-h1: 20px;
   --fs-display: 34px;
 

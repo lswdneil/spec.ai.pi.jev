@@ -56,7 +56,7 @@ export const Popconfirm: React.FC<PopconfirmProps> = ({
           <div className='mt-3 flex justify-end gap-1.5'>
             <button
               type='button'
-              className='h-7 rounded-[5px] border border-sv-line px-2.5 text-[12px] text-sv-muted outline-none hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus'
+              className='h-7 rounded-[5px] border border-sv-line bg-transparent px-2.5 text-[12px] text-sv-muted outline-none hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus'
               onClick={() => {
                 setOpen(false);
                 onCancel?.();
