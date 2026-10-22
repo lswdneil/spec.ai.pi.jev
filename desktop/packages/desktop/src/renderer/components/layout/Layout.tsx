@@ -7,7 +7,7 @@
 import { ipcBridge } from '@/common';
 import Titlebar from '@/renderer/components/layout/Titlebar';
 import MuMark from '@renderer/components/brand/MuMark';
-import { Layout as ArcoLayout, Message, Tooltip } from '@arco-design/web-react';
+import { Message, Tooltip } from '@/renderer/ui';
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -424,19 +424,22 @@ const Layout: React.FC<{
             <div className='fixed inset-0 bg-black/30 z-90' onClick={putAwayPhoneSider} aria-hidden='true' />
           )}
 
-          <ArcoLayout className={'size-full layout flex-1 min-h-0'}>
-            <ArcoLayout.Sider
-              collapsedWidth={isMobile ? 0 : SIDER_RAIL_WIDTH}
-              collapsed={collapsed}
-              width={siderWidth}
-              className={classNames('!bg-2 layout-sider', {
-                collapsed: collapsed,
+          <div className='arco-layout size-full layout flex flex-1 min-h-0'>
+            <aside
+              className={classNames('arco-layout-sider !bg-2 layout-sider', {
+                collapsed,
+                'arco-layout-sider-collapsed': collapsed,
               })}
-              style={siderStyle}
+              style={{
+                ...siderStyle,
+                width: collapsed ? (isMobile ? 0 : SIDER_RAIL_WIDTH) : siderWidth,
+                flex: '0 0 auto',
+              }}
             >
-              <ArcoLayout.Header
+              <div className='arco-layout-sider-children'>
+                <header
                 className={classNames(
-                  'flex items-center gap-12px layout-sider-header',
+                  'arco-layout-header flex items-center gap-12px layout-sider-header',
                   UI_V2 ? 'pt-1.5 pb-1.5' : 'pt-8px pb-8px',
                   collapsed && !isMobile
                     ? 'justify-center px-0'
@@ -496,8 +499,8 @@ const Layout: React.FC<{
                   </button>
                 )}
                 {/* 侧栏折叠改由标题栏统一控制 / Sidebar folding handled by Titlebar toggle */}
-              </ArcoLayout.Header>
-              <ArcoLayout.Content className='pt-0 px-8px pb-0 layout-sider-content'>
+              </header>
+              <div className='arco-layout-content pt-0 px-8px pb-0 layout-sider-content'>
                 {React.isValidElement(sider)
                   ? React.cloneElement(sider, {
                       onSessionClick: () => {
@@ -507,14 +510,15 @@ const Layout: React.FC<{
                       collapsed,
                     } as any)
                   : sider}
-              </ArcoLayout.Content>
+              </div>
               {!isMobile &&
                 createSiderDragHandle({
                   className: 'z-20',
                   style: { right: '-4px', width: '8px' },
                   linePlacement: 'start',
                 })}
-            </ArcoLayout.Sider>
+              </div>
+            </aside>
 
             {/* The route content and the work panel share one measured flex row.
                 `mainRowRef` gives the [content | panel] width that bounds the panel
@@ -522,8 +526,8 @@ const Layout: React.FC<{
                 The panel is a sibling of the route content, above the
                 per-conversation subtree, so it persists across conversation switches. */}
             <div ref={mainRowRef} className='relative flex flex-1 min-h-0 overflow-hidden'>
-              <ArcoLayout.Content
-                className={'bg-1 layout-content flex flex-col min-h-0 flex-1'}
+              <div
+                className={'arco-layout-content bg-1 layout-content flex flex-col min-h-0 flex-1'}
                 onClick={() => {
                   if (isMobile && !collapsed) putAwayPhoneSider();
                 }}
@@ -541,10 +545,10 @@ const Layout: React.FC<{
                 }
               >
                 <Outlet />
-              </ArcoLayout.Content>
+              </div>
               {workspaceAvailable && <WorkPanelHost rowWidth={panelRowWidth} isMobile={isMobile} />}
             </div>
-          </ArcoLayout>
+          </div>
           {UI_V2 && isMobile ? <MobileTabBar /> : null}
           {!isMobile && <KernelBar />}
         </div>
