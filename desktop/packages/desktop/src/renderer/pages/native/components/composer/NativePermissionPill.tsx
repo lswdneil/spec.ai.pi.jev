@@ -5,7 +5,8 @@
  * spec.jev's own `/permissions <mode> --here`, which switches this conversation only (the mode new conversations start in is
  * set in the settings). It runs at once, during a run too: spec.jev checks the next call under the new mode.
  */
-import { Dropdown, Menu, Tooltip } from '@arco-design/web-react';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Down, Shield } from '@icon-park/react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -45,27 +46,25 @@ const NativePermissionPill: React.FC<{
     }
   };
 
-  const menu = (
-    <Menu>
-      <Menu.ItemGroup title={t('agentMode.switchMode')}>
-        {modes.map((each) => (
-          <Menu.Item key={each.id} className={shown === each.id ? '!bg-2' : ''} onClick={() => void pick(each.id)}>
-            <div className='flex items-center gap-8px' data-testid='native-permission-option' data-mode={each.id}>
-              <span aria-hidden='true' className='w-16px shrink-0 flex items-center text-t-primary'>
-                {shown === each.id ? '✓' : ''}
-              </span>
-              <Tooltip
-                content={t(`agentMode.descriptions.${each.id}`, { defaultValue: each.description || each.id })}
-                position='right'
-              >
-                <span className='min-w-0 truncate'>{nameOf(each.id, each.label)}</span>
-              </Tooltip>
-            </div>
-          </Menu.Item>
-        ))}
-      </Menu.ItemGroup>
-    </Menu>
-  );
+  const items = modes.map((each) => ({
+    key: each.id,
+    label: (
+      <div className='flex items-center gap-2' data-testid='native-permission-option' data-mode={each.id}>
+        <span aria-hidden='true' className='flex w-4 shrink-0 items-center text-t-primary'>
+          {shown === each.id ? '✓' : ''}
+        </span>
+        <Tooltip
+          content={t(`agentMode.descriptions.${each.id}`, { defaultValue: each.description || each.id })}
+          position='right'
+        >
+          <span className='min-w-0 truncate'>{nameOf(each.id, each.label)}</span>
+        </Tooltip>
+      </div>
+    ),
+    onSelect: (): void => {
+      void pick(each.id);
+    },
+  }));
 
   const disabled = held || switching;
   return (
@@ -73,7 +72,7 @@ const NativePermissionPill: React.FC<{
       trigger='click'
       popupVisible={visible && !disabled}
       onVisibleChange={(open) => setVisible(open)}
-      droplist={menu}
+      items={items}
     >
       <span data-testid='native-permission-pill' data-mode={mode ?? ''} className='inline-flex'>
         <RuntimeSelectorPill
