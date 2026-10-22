@@ -83,7 +83,7 @@ With the flag on, the app uses the Dense chrome:
   flat 18px field like the composer.
 
 Still old in this slice: the settings rail markup (it already uses 32px rows and 13px labels)
-and the tool-call cards.
+and the ACP tool/terminal cards.
 
 ## Build and verify
 

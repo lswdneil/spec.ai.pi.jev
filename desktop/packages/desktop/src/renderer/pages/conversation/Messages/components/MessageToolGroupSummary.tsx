@@ -7,6 +7,7 @@
 import type { BadgeProps } from '@arco-design/web-react';
 import { Badge, Button, Message, Tooltip } from '@arco-design/web-react';
 import { Down, Download, Right } from '@icon-park/react';
+import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ipcBridge } from '@/common';
@@ -18,6 +19,7 @@ import { HiveToolCard } from '@/renderer/pages/conversation/KyrnPanel/Hive';
 import { swarmProgressText } from '@/renderer/pages/conversation/KyrnPanel/Hive/codes';
 import { formatNumber } from '@/renderer/services/i18n/format';
 import { downloadFileFromPath } from '@/renderer/utils/file/download';
+import { isUiV2Enabled } from '@/renderer/utils/ui/uiV2';
 import { useMessageListRun } from '../hooks';
 import styles from './MessageToolGroupSummary.module.css';
 import ToolKindIcon from './ToolKindIcon';
@@ -361,7 +363,11 @@ const MessageToolGroupSummary: React.FC<{
   // A sub-agent run is its own panel, never a step in a fold.
   const folds = shouldFoldActivity(tools) && !tools.some((item) => item.hive);
   return (
-    <div className={styles.summary} role='group' aria-label={t('tools.execution.title')}>
+    <div
+      className={classNames(styles.summary, isUiV2Enabled() && 'sv-dense-tool-summary')}
+      role='group'
+      aria-label={t('tools.execution.title')}
+    >
       {folds ? <ToolActivityGroup tools={tools} language={i18n?.language} /> : <ToolRows tools={tools} />}
     </div>
   );

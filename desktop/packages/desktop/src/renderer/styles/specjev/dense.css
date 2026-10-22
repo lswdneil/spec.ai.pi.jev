@@ -142,6 +142,13 @@ html[data-sv-ui="dense"] .message-user-bubble {
   padding: 8px 12px !important;
 }
 
+html[data-sv-ui="dense"] .sv-dense-tool-summary {
+  padding: 2px 4px;
+  border: 1px solid var(--sv-line);
+  border-radius: 5px;
+  background: var(--sv-surface);
+}
+
 html[data-sv-ui="dense"] .settings-page-title {
   font-size: 20px;
   line-height: 1.35;
@@ -150,6 +157,30 @@ html[data-sv-ui="dense"] .settings-page-title {
 
 html[data-sv-ui="dense"] .settings-page-header p {
   font-size: 12px;
+}
+
+/* The settings rail follows the same 32px rows as the conversation sidebar. */
+html[data-sv-ui="dense"] .settings-sider__group-header {
+  height: 20px;
+  align-items: center;
+  padding-bottom: 0;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sv-faint);
+}
+
+html[data-sv-ui="dense"] .settings-sider__item {
+  border-radius: 9px;
+}
+
+html[data-sv-ui="dense"] .settings-sider__item[aria-current='page'] {
+  background: var(--sv-selected);
+}
+
+html[data-sv-ui="dense"] .settings-sider__item-label {
+  font-size: 12px;
+  line-height: 20px;
 }
 
 /* Arco primary buttons: sage fill, dark ink, no blue. */
