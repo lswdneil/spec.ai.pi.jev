@@ -262,6 +262,14 @@ html[data-sv-ui="dense"] .settings-page-header p {
   font-size: 12px;
 }
 
+/* The search field only darkens its hairline on focus: no ring, glow or accent bar. */
+html[data-sv-ui="dense"] .settings-sider__search input:focus,
+html[data-sv-ui="dense"] .settings-sider__search input:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--sv-line-strong);
+}
+
 /* The settings rail follows the same 32px rows as the conversation sidebar. */
 html[data-sv-ui="dense"] .settings-sider__group-header {
   height: 20px;

@@ -81,6 +81,7 @@ Native `<button>` paints a light system background unless reset. Each surface be
 
 | Check | Status |
 | --- | --- |
+| Text fields and settings search focus | FIXED (strong hairline only; no ring or accent bar) |
 | Popovers above the welcome screen | FIXED (`screen` z 50, popovers 60/70) |
 | Language menu opens and switches language | FIXED |
 | API key service menu is selectable | FIXED |
@@ -107,6 +108,7 @@ Native `<button>` paints a light system background unless reset. Each surface be
 - Focused regressions:
   - `tests/unit/renderer/settingsFrame.test.ts`
   - `tests/unit/renderer/nativeButtonSurfaces.test.ts`
+  - `tests/unit/renderer/fieldFocusSurfaces.test.ts`
   - `tests/unit/renderer/radioSurface.dom.test.tsx`
   - `tests/unit/renderer/switchGeometry.dom.test.tsx`
   - `tests/unit/renderer/menuSurfaces.test.ts`

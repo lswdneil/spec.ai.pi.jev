@@ -2,7 +2,7 @@ import * as React from 'react';
 import { cn } from './cn';
 
 const field =
-  'w-full rounded-[var(--sv-r-control)] border border-sv-line bg-sv-input px-2.5 text-[13px] text-sv-text placeholder:text-sv-placeholder outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-50 focus:border-sv-line-strong focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-sv-focus';
+  'w-full rounded-[var(--sv-r-control)] border border-sv-line bg-sv-input px-2.5 text-[13px] text-sv-text placeholder:text-sv-placeholder outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-50 focus:border-sv-line-strong focus:outline-none';
 
 type ArcoSize = 'mini' | 'small' | 'default' | 'large';
 type Size = 'sm' | 'md' | 'lg';
