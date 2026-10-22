@@ -8,9 +8,9 @@ Strategy: a small compatibility layer that mirrors the Arco APIs we actually use
 
 ## Status (2026-10-22)
 
-- Renderer `.tsx`/`.ts` files importing `@arco-design/web-react` (components or types): **15**, down from 217.
+- Renderer `.tsx`/`.ts` files importing `@arco-design/web-react` (components or types): **3**, down from 217.
 - Done: tokens, Dense shell, settings, forms, welcome, dialogs, and the primitives in `ui/` — Alert, AutoComplete, Avatar, Badge, Button, Card, Checkbox, Collapse, Dialog/Modal (`confirm`/`useModal`), Dropdown (Radix), Empty, Form, Image, Input, InputNumber, InputTag, Layout, Link/Space/Result/Progress, menu aliases, Pagination, Popover, Popconfirm, Radio, Select, Spinner, Steps, Switch, Tabs, Tag, TimePicker, toast/AppToaster, Tooltip, Tree, Trigger, Typography.
-- Remaining: `AgentModeSelector`, `runtimeSelectorOptions`, `GuidModelSelector`, `GuidActionRow`, `AionrsModelSelector`, `ModelLevelMenu`, `ComposerModelChip`, `NativeModelChip`, `ChatConversation`, `CommandQueuePanel`, `ExplorerPanel`, `BrowserChrome`, `MuSelect`, and the two `ConfigProvider` roots (`main.tsx`, `GuidPage`). These share Arco's `Menu.SubMenu`/`ItemGroup` or expect its popup markup in tests; they need a real menu rewrite rather than a prop shim.
+- Remaining: only `main.tsx` (ConfigProvider + locales + Arco CSS, kept for `MuSelect`), `components/base/MuSelect.tsx` (the last Arco component), and `pages/conversation/Preview/browser/BrowserChrome.tsx` (its tab strip/context menu still uses Arco's Dropdown).
 - Last full desktop suite: **6664 passed / 49 failed in 11 files**, all the known environment/`nativeHost` failures (piRpc/errorLog, NativeConversations, git/folders, the emoji regex); the native sidebar menu tests now pass.
 
 ---
