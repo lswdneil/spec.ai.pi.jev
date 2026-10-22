@@ -17,6 +17,7 @@ const mocks = vi.hoisted(() => ({
   run: vi.fn(),
   push: undefined as undefined | ((state: UpdateState) => void),
   messageErrorMock: vi.fn(),
+  openExternalUrl: vi.fn(() => Promise.resolve()),
 }));
 
 vi.mock('react-i18next', () => ({
@@ -54,7 +55,7 @@ vi.mock('@/common', () => ({
 
 vi.mock('@/renderer/utils/platform', () => ({
   isElectronDesktop: () => mocks.isElectron,
-  openExternalUrl: vi.fn(),
+  openExternalUrl: mocks.openExternalUrl,
 }));
 
 vi.mock('@/renderer/components/settings/SettingsModal/settingsViewContext', () => ({
@@ -102,6 +103,14 @@ describe('AboutModalContent', () => {
   it('names the company and the internal test build', async () => {
     await renderAbout();
     expect(screen.getByTestId('about-company')).toHaveTextContent('settings.aboutCompany');
+  });
+
+  it('opens the new repository and releases pages', async () => {
+    await renderAbout();
+    fireEvent.click(screen.getByRole('button', { name: 'common.github' }));
+    expect(mocks.openExternalUrl).toHaveBeenCalledWith('https://github.com/lswdneil/spec.ai.pi.jev');
+    fireEvent.click(screen.getByRole('button', { name: 'settings.updateLog' }));
+    expect(mocks.openExternalUrl).toHaveBeenCalledWith('https://github.com/lswdneil/spec.ai.pi.jev/releases');
   });
 
   it('shows the build version until the main process answers', () => {
