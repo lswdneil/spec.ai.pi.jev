@@ -6,9 +6,9 @@
 
 import type { UpdatePhase } from '@/common/update/updateTypes';
 import { useUpdateState } from '@renderer/hooks/system/useUpdateState';
+import { Button, Tooltip } from '@/renderer/ui';
 import { rowButtonProps } from '@renderer/utils/ui/rowButton';
 import type { SiderTooltipProps } from '@renderer/utils/ui/siderTooltip';
-import { Button, Tooltip } from '@arco-design/web-react';
 import { UpdateRotation } from '@icon-park/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -50,7 +50,7 @@ const UpdateNotice: React.FC<UpdateNoticeProps> = ({ collapsed = false, siderToo
 
   if (collapsed) {
     return (
-      <Tooltip {...siderTooltipProps} content={headline} position='right'>
+      <Tooltip content={headline} position='right' disabled={Boolean(siderTooltipProps.disabled)}>
         <div
           {...rowButtonProps(() => void navigate('/settings/about'))}
           data-testid='update-notice'
@@ -81,7 +81,7 @@ const UpdateNotice: React.FC<UpdateNoticeProps> = ({ collapsed = false, siderToo
         {main ? (
           <Button
             type='primary'
-            size='mini'
+            size='sm'
             loading={main.busy}
             disabled={main.busy}
             onClick={() => void run(main.action)}
@@ -90,7 +90,7 @@ const UpdateNotice: React.FC<UpdateNoticeProps> = ({ collapsed = false, siderToo
           </Button>
         ) : null}
         {installing ? null : (
-          <Button type='text' size='mini' onClick={() => void run('later')}>
+          <Button type='text' size='sm' onClick={() => void run('later')}>
             {t('update.later')}
           </Button>
         )}
