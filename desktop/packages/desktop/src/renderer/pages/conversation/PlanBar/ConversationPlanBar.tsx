@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Badge } from '@arco-design/web-react';
+import { Badge } from '@/renderer/ui/badge';
 import { CheckOne, Down, Right } from '@icon-park/react';
 import { getChatSurfaceWidthClass } from '@renderer/pages/conversation/utils/chatSurfaceWidth';
 import { useConversationRuntimeView } from '@renderer/pages/conversation/runtime/useConversationRuntimeView';

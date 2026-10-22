@@ -1,4 +1,5 @@
 export { Alert, type AlertProps, type AlertTone } from './alert';
+export { Badge, type BadgeProps, type BadgeStatus } from './badge';
 export { Button, type ButtonProps } from './button';
 export { Card, type CardProps } from './card';
 export { Checkbox, type CheckboxProps } from './checkbox';

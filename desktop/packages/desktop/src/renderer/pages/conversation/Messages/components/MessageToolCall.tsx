@@ -10,12 +10,11 @@ import type { NormalizedToolStatus } from '@/common/chat/normalizeToolCall';
 import FileChangesPanel from '@/renderer/components/base/FileChangesPanel';
 import { useDiffPreviewHandlers } from '@/renderer/hooks/file/useDiffPreviewHandlers';
 import { parseDiff } from '@/renderer/utils/file/diffUtils';
-import { Badge } from '@arco-design/web-react';
+import { Badge, type BadgeProps } from '@/renderer/ui/badge';
 import { IconDown, IconRight } from '@arco-design/web-react/icon';
 import { createTwoFilesPatch } from 'diff';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { BadgeProps } from '@arco-design/web-react';
 import styles from './MessageToolGroupSummary.module.css';
 
 const statusToBadge = (status: NormalizedToolStatus): BadgeProps['status'] => {

@@ -6,12 +6,10 @@
 
 import type { IMessageAgentStatus } from '@/common/chat/chatLib';
 import { showAsMu } from '@/common/kyrn/displayName';
-import { Badge, Typography } from '@arco-design/web-react';
+import { Badge } from '@/renderer/ui/badge';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ButlerDiagnoseButton from '@/renderer/components/base/ButlerDiagnoseButton';
-
-const { Text } = Typography;
 
 interface MessageAgentStatusProps {
   message: IMessageAgentStatus;
@@ -64,9 +62,7 @@ const MessageAgentStatus: React.FC<MessageAgentStatusProps> = ({ message }) => {
       }}
     >
       <div className='flex items-center gap-2'>
-        <Text style={{ fontWeight: 'bold' }} className='capitalize'>
-          {display_name}
-        </Text>
+        <strong className='capitalize'>{display_name}</strong>
       </div>
 
       <div className='flex-1 flex items-center gap-6px'>
