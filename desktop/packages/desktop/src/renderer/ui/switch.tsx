@@ -6,6 +6,9 @@ export interface SwitchProps {
   checked?: boolean;
   defaultChecked?: boolean;
   disabled?: boolean;
+  /** Arco compatibility; the Dense switch keeps one size. */
+  size?: 'small' | 'default' | 'large';
+  loading?: boolean;
   onChange?: (checked: boolean) => void;
   onCheckedChange?: (checked: boolean) => void;
   className?: string;
