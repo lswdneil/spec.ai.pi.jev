@@ -1,4 +1,4 @@
-import { Spin } from '@arco-design/web-react';
+import { Spin } from '@/renderer/ui/spinner';
 import React from 'react';
 
 const AppLoader: React.FC = () => {

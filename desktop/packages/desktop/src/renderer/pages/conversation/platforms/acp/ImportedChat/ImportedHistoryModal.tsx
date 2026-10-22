@@ -4,7 +4,7 @@
  * words as they were written. The settings dialogs' frame (MuModal's standard variant, as the import dialog): the
  * title at the start and a close button.
  */
-import { Spin } from '@arco-design/web-react';
+import { Spin } from '@/renderer/ui/spinner';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { kyrnBridge, unwrap } from '@/common/kyrn/bridge';

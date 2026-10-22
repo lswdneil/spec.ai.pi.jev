@@ -1,5 +1,5 @@
 import MarkdownView from '@/renderer/components/Markdown';
-import { Spin } from '@arco-design/web-react';
+import { Spin } from '@/renderer/ui/spinner';
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useTranslation } from 'react-i18next';
