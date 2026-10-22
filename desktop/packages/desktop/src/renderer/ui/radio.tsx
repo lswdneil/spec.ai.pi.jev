@@ -83,7 +83,7 @@ const RadioBase = React.forwardRef<HTMLButtonElement, RadioProps>(function Radio
         'inline-flex items-center gap-1.5 outline-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-50',
         button
           ? cn(
-              'justify-center rounded-[5px] border border-sv-line px-2 text-sv-muted hover:text-sv-text',
+              'justify-center rounded-[5px] border border-sv-line bg-transparent px-2 text-sv-muted hover:bg-sv-surface hover:text-sv-text',
               small ? 'h-6 text-[11px]' : 'h-7 text-[12px]',
               'data-[state=checked]:border-sv-line-strong data-[state=checked]:bg-sv-selected data-[state=checked]:text-sv-text'
             )
