@@ -14,7 +14,11 @@ import { mcpService } from '@/common/adapter/ipcBridge';
 import { type IMcpServer, BUILTIN_IMAGE_GEN_ID, BUILTIN_IMAGE_GEN_NAME } from '@/common/config/storage';
 import { isImageGenSupported } from '@/common/utils/imageModelAllowlist';
 import { parseError } from '@/common/utils';
-import { Button, Message, Modal, Switch, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Modal } from '@/renderer/ui/dialog';
+import { Switch } from '@/renderer/ui/switch';
+import { Message } from '@/renderer/ui/toast';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Help, Right } from '@icon-park/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -508,7 +512,7 @@ const ToolsModalContent: React.FC = () => {
                 disableOverflow={isPageMode}
               >
                 <ModalMcpManagementSection
-                  message={mcpMessage}
+                  message={mcpMessage as MessageInstance}
                   mcpServers={mcpServers}
                   extensionMcpServers={extensionMcpServers}
                   setMcpServers={setMcpServers}

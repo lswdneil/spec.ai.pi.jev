@@ -1,4 +1,8 @@
-import { Button, Message, Modal, Space, Typography } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
+import { Modal } from '@/renderer/ui/dialog';
+import { Link, Progress, Result, Space } from '@/renderer/ui/display';
+import { Typography } from '@/renderer/ui/typography';
 import type { TFunction } from 'i18next';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

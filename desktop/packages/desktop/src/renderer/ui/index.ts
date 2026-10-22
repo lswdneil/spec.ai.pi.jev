@@ -17,6 +17,7 @@ export {
   type ModalProps,
 } from './dialog';
 export { Dropdown, Menu, MenuItem, type DropdownItem, type DropdownProps } from './dropdown';
+export { Link, Progress, Result, Space, type LinkProps, type ProgressProps, type ResultProps, type SpaceProps } from './display';
 export { Empty, type EmptyProps } from './empty';
 export { Image, type ImageProps, type ImagePreviewGroupProps } from './image';
 export { Input, Textarea, type InputProps, type TextareaProps } from './input';

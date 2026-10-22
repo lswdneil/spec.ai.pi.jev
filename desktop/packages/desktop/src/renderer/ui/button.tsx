@@ -91,6 +91,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       className={cn(
         buttonVariants({ variant: variant ?? variantFor(type, status), size: sizeFor(size) }),
         loading && 'arco-btn-loading',
+        status && `arco-btn-status-${status}`,
         long && 'w-full',
         shape === 'circle' || shape === 'round' ? 'rounded-full' : null,
         className

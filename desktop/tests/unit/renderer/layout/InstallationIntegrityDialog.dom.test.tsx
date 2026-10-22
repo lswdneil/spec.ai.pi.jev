@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message, Modal } from '@arco-design/web-react';
+import { Modal } from '@/renderer/ui/dialog';
+import { Message } from '@/renderer/ui/toast';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';

@@ -28,7 +28,8 @@ import { PreviewToolbarExtrasProvider, type PreviewToolbarExtras } from '../../c
 import { usePreviewContext } from '../../context/PreviewContext';
 import { previewTabDisplayTitle } from '../../context/tabTitle';
 import { useResizableSplit } from '@/renderer/hooks/ui/useResizableSplit';
-import { Link, Message } from '@arco-design/web-react';
+import { Link, Progress, Result, Space } from '@/renderer/ui/display';
+import { Message } from '@/renderer/ui/toast';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import DiffPreview from '../viewers/DiffViewer';
 import ExcelPreview from '../viewers/ExcelViewer';

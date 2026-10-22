@@ -61,8 +61,8 @@ export interface ModalProps {
   okText?: React.ReactNode;
   cancelText?: React.ReactNode;
   confirmLoading?: boolean;
-  okButtonProps?: { disabled?: boolean; status?: 'normal' | 'success' | 'warning' | 'danger' };
-  cancelButtonProps?: { disabled?: boolean };
+  okButtonProps?: { disabled?: boolean; status?: 'normal' | 'success' | 'warning' | 'danger'; style?: React.CSSProperties };
+  cancelButtonProps?: { disabled?: boolean; style?: React.CSSProperties; className?: string };
   /** Arco compatibility; the Dense dialog is always centred. */
   alignCenter?: boolean;
   closable?: boolean;
@@ -173,8 +173,8 @@ export interface ModalConfirmConfig {
   icon?: React.ReactNode;
   okText?: React.ReactNode;
   cancelText?: React.ReactNode;
-  okButtonProps?: { disabled?: boolean; status?: 'normal' | 'success' | 'warning' | 'danger' };
-  cancelButtonProps?: { disabled?: boolean };
+  okButtonProps?: { disabled?: boolean; status?: 'normal' | 'success' | 'warning' | 'danger'; style?: React.CSSProperties };
+  cancelButtonProps?: { disabled?: boolean; style?: React.CSSProperties; className?: string };
   onOk?: () => void | boolean | Promise<unknown>;
   onCancel?: () => void;
   footer?: React.ReactNode;
@@ -186,6 +186,7 @@ export interface ModalConfirmConfig {
   alignCenter?: boolean;
   getPopupContainer?: (node: HTMLElement) => HTMLElement;
   maskStyle?: React.CSSProperties;
+  maskClosable?: boolean;
   mountOnEnter?: boolean;
   unmountOnExit?: boolean;
 }

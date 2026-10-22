@@ -23,7 +23,8 @@ import { AppToaster } from './ui/toaster';
 import { PreviewProvider } from './pages/conversation/Preview/context/PreviewContext';
 
 // Arco Design
-import { ConfigProvider, Modal, Typography } from '@arco-design/web-react';
+import { ConfigProvider, Typography } from '@arco-design/web-react';
+import { Modal } from '@/renderer/ui/dialog';
 // Configure Arco Design to use React 18's createRoot, fixing Message component's CopyReactDOM.render error
 import '@arco-design/web-react/es/_util/react-19-adapter';
 import '@arco-design/web-react/dist/css/arco.css';
@@ -42,7 +43,7 @@ import './styles/specjev/tokens.css';
 import './styles/specjev/dense.css';
 import './styles/markdown.css';
 
-// Config service â€?kick off initialization before i18n / theme modules load,
+// Config service ï¿½?kick off initialization before i18n / theme modules load,
 // so their startup paths (which await configService.whenReady()) observe the
 // authoritative settings from the backend instead of the empty cache.
 import { configService } from '@/common/config/configService';
@@ -181,7 +182,7 @@ const RuntimeFailureDialogs: React.FC = () => {
         const resource = resolveRuntimeResourceLabel(event, t);
         const description = getRuntimeComponentInstallationDescription(t, resource);
         const controller = showInstallationIntegrityModal(modal, t, description);
-        return { close: () => controller.close() };
+        return { close: () => controller.destroy() };
       },
     });
 
@@ -220,8 +221,8 @@ const RuntimeFailureDialogs: React.FC = () => {
 
 // Global SWR default: do NOT revalidate every query on window focus. Focus
 // refetch (SWR's default) made the app re-hit /api/assistants, /api/skills,
-// /api/conversations, etc. on every window focus â€?often twice (same endpoint
-// under different SWR keys) â€?even though those are kept fresh by WebSocket
+// /api/conversations, etc. on every window focus ï¿½?often twice (same endpoint
+// under different SWR keys) ï¿½?even though those are kept fresh by WebSocket
 // events (conversation.listChanged, team events, extensions.state-changed) or
 // in-app `mutate` after edits. Queries that genuinely need focus refresh (e.g.
 // Google auth/subscription status, which change in an external browser) opt back

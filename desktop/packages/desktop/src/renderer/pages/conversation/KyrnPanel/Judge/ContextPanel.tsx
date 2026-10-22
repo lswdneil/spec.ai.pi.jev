@@ -1,5 +1,8 @@
 import React from 'react';
-import { Collapse, Progress, Tag, Tooltip } from '@arco-design/web-react';
+import { Collapse } from '@/renderer/ui/collapse';
+import { Link, Progress, Result, Space } from '@/renderer/ui/display';
+import { Tag } from '@/renderer/ui/tag';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import type { Activity } from '@/common/kyrn/types';
 import { formatNumber } from '@/renderer/services/i18n/format';

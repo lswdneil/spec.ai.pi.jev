@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { HashRouter, Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Result, Space } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Link, Progress, Result, Space } from '@/renderer/ui/display';
 import { useTranslation } from 'react-i18next';
 import AppLoader from '@renderer/components/layout/AppLoader';
 import DocumentTitle from '@renderer/components/layout/DocumentTitle';

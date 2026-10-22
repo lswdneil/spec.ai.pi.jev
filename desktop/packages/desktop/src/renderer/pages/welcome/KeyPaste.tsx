@@ -1,5 +1,7 @@
 import React from 'react';
-import { Button, Input, Link } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
+import { Link, Progress, Result, Space } from '@/renderer/ui/display';
 import { useTranslation } from 'react-i18next';
 import MuSelect from '@/renderer/components/base/MuSelect';
 import MuErrorMessage from '@/renderer/pages/settings/KyrnSettings/fields/MuErrorMessage';
