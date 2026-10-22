@@ -2,7 +2,7 @@
  * AssistantAvatar — Renders an assistant's avatar: its image or emoji, else the first letter of its name.
  */
 import type { AssistantListItem } from './types';
-import { Avatar } from '@arco-design/web-react';
+import { Avatar } from '@/renderer/ui/avatar';
 import React from 'react';
 import { isEmoji, resolveAvatarImageSrc } from './assistantUtils';
 import ThemedLogo from '@/renderer/components/agent/ThemedLogo';
