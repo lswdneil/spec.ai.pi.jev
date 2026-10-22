@@ -246,6 +246,8 @@ describe('the browser’s pages', () => {
     expect(screen.getByRole('menuitem', { name: preview.closeOthers }).className).toMatch(/-disabled/);
     fireEvent.click(copy);
     expect(copyTextMock).not.toHaveBeenCalled();
+    // The disabled item stays put: close the menu the way a person does before moving on.
+    fireEvent.keyDown(screen.getByRole('menu'), { key: 'Escape' });
 
     act(() => updateBrowserTab(browserNow().tabs[0].id, { url: 'https://moved.test/' }));
     copyTextMock.mockRejectedValue(new Error('no clipboard'));

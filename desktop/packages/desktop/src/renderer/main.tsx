@@ -12,7 +12,7 @@ import '@/common/adapter/browser';
 
 // React and core dependencies
 import type { PropsWithChildren } from 'react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { SWRConfig } from 'swr';
 import type { TFunction } from 'i18next';
@@ -22,18 +22,8 @@ import { ThemeProvider } from './hooks/context/ThemeContext';
 import { AppToaster } from './ui/toaster';
 import { PreviewProvider } from './pages/conversation/Preview/context/PreviewContext';
 
-// Arco Design
-import { ConfigProvider } from '@arco-design/web-react';
 import { Typography } from '@/renderer/ui/typography';
 import { Modal } from '@/renderer/ui/dialog';
-// Configure Arco Design to use React 18's createRoot, fixing Message component's CopyReactDOM.render error
-import '@arco-design/web-react/es/_util/react-19-adapter';
-import '@arco-design/web-react/dist/css/arco.css';
-import enUS from '@arco-design/web-react/es/locale/en-US';
-import jaJP from '@arco-design/web-react/es/locale/ja-JP';
-import zhCN from '@arco-design/web-react/es/locale/zh-CN';
-import zhTW from '@arco-design/web-react/es/locale/zh-TW';
-import koKR from '@arco-design/web-react/es/locale/ko-KR';
 import { useTranslation } from 'react-i18next';
 
 // Styles
@@ -54,7 +44,6 @@ configService.initialize().catch((err) => {
 
 // i18n
 import './services/i18n';
-import { isRtlLanguage } from './services/i18n/direction';
 import { formatNameList } from './services/i18n/list';
 import { registerPwa } from './services/registerPwa';
 import { isUiV2Enabled } from './utils/ui/uiV2';
@@ -62,7 +51,6 @@ import { isUiV2Enabled } from './utils/ui/uiV2';
 import { ipcBridge } from '@/common';
 import { repairAllCronJobTimeZonesOnce } from '@renderer/pages/cron/repairCronJobTimeZone';
 import { bootstrapRendererConfig } from '@renderer/services/bootstrapRenderer';
-import { ARCO_COMPONENT_CONFIG } from '@renderer/utils/ui/arcoComponentConfig';
 
 // Components and utilities
 import BackendStartingView from './components/layout/BackendStartingView';
@@ -84,71 +72,6 @@ import {
   showInstallationIntegrityModal,
 } from './components/layout/InstallationIntegrityDialog';
 import { createRuntimeInstallationReconciler } from './services/runtime/runtimeInstallationReconciler';
-
-// Arco ships several locales that predate its newer components: sections such
-// as Form, ColorPicker and the Calendar month/year formats are missing there.
-// Backfill anything absent from the English locale so every entry satisfies the
-// full locale shape (generalises the previous hand-written ko-KR patch).
-type ArcoLocaleInput = Omit<Partial<typeof enUS>, 'Calendar' | 'DatePicker'> & {
-  Calendar?: Partial<(typeof enUS)['Calendar']>;
-  DatePicker?: Omit<Partial<(typeof enUS)['DatePicker']>, 'Calendar'> & {
-    Calendar?: Partial<(typeof enUS)['DatePicker']['Calendar']>;
-  };
-};
-
-const completeArcoLocale = (locale: ArcoLocaleInput): typeof enUS => ({
-  ...enUS,
-  ...locale,
-  Calendar: {
-    ...enUS.Calendar,
-    ...locale.Calendar,
-    monthFormat: locale.Calendar?.monthFormat ?? enUS.Calendar.monthFormat,
-    yearFormat: locale.Calendar?.yearFormat ?? enUS.Calendar.yearFormat,
-  },
-  DatePicker: {
-    ...enUS.DatePicker,
-    ...locale.DatePicker,
-    Calendar: {
-      ...enUS.DatePicker.Calendar,
-      ...locale.DatePicker?.Calendar,
-      monthFormat: locale.DatePicker?.Calendar?.monthFormat ?? enUS.Calendar.monthFormat,
-      yearFormat: locale.DatePicker?.Calendar?.yearFormat ?? enUS.Calendar.yearFormat,
-    },
-  },
-  Form: locale.Form ?? enUS.Form,
-  ColorPicker: locale.ColorPicker ?? enUS.ColorPicker,
-});
-
-// Every language the app ships that Arco publishes a locale for; a language Arco has
-// no locale for gets buildAppArcoLocale below.
-const arcoLocales: Record<string, typeof enUS> = {
-  'zh-CN': zhCN,
-  'zh-TW': zhTW,
-  'ja-JP': jaJP,
-  'ko-KR': completeArcoLocale(koKR),
-  'en-US': enUS,
-};
-
-/**
- * For a language Arco publishes no locale for: the texts users meet most (dialog buttons, "No data",
- * upload actions) come from the app's own translations; the rest (date pickers, pagination) stay English.
- */
-const buildAppArcoLocale = (t: TFunction): typeof enUS => {
-  const okCancel = { okText: t('common.confirm'), cancelText: t('common.cancel') };
-  return completeArcoLocale({
-    Modal: okCancel,
-    Popconfirm: okCancel,
-    Drawer: okCancel,
-    Empty: { noData: t('common.noData') },
-    Upload: {
-      ...enUS.Upload,
-      cancel: t('common.cancel'),
-      delete: t('common.delete'),
-      upload: t('common.upload'),
-      reupload: t('common.retry'),
-    },
-  });
-};
 
 const INSTALLATION_INTEGRITY_FAILURES = new Set<RuntimeFailureKind>([
   'bundled_resource_missing',
@@ -251,22 +174,6 @@ const AppProviders: React.FC<PropsWithChildren> = ({ children }) =>
       )
     )
   );
-
-const Config: React.FC<PropsWithChildren> = ({ children }) => {
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation();
-  const arcoLocale = useMemo(() => arcoLocales[language] ?? buildAppArcoLocale(t), [language, t]);
-
-  // No `theme` here: Arco writes a primaryColor inline on <body>, one value for both appearances. spec.jev's primary,
-  // per appearance, is in styles/themes/mu-arco.css.
-  return React.createElement(
-    ConfigProvider,
-    { locale: arcoLocale, rtl: isRtlLanguage(language), componentConfig: ARCO_COMPONENT_CONFIG },
-    children
-  );
-};
 
 const Main = () => {
   const [configReady, setConfigReady] = useState(false);
@@ -417,24 +324,12 @@ if (isUiV2Enabled()) document.documentElement.dataset.svUi = 'dense';
 const root = createRoot(document.getElementById('root')!);
 root.render(
   <BackendStartupGate
-    renderStarting={() => (
-      <Config>
-        <BackendStartingView />
-      </Config>
-    )}
-    renderFailure={(failure) => (
-      <Config>
-        <BackendStartupFailureDialog failure={failure} />
-      </Config>
-    )}
+    renderStarting={() => <BackendStartingView />}
+    renderFailure={(failure) => <BackendStartupFailureDialog failure={failure} />}
     renderApp={() => (
-      // Config (Arco's locale and direction) goes outside AppProviders: the feedback modal, the runtime failure
-      // dialogs and the GPU notice mounted there use Arco's built-in texts too.
-      <Config>
-        <AppProviders>
-          <Main />
-        </AppProviders>
-      </Config>
+      <AppProviders>
+        <Main />
+      </AppProviders>
     )}
   />
 );

@@ -852,8 +852,8 @@ describe('providers and the default model', () => {
 
     fireEvent.click(screen.getByTestId('mu-nav-board-model'));
     await user.click(within(screen.getByTestId('mu-board-model')).getByLabelText('Provider'));
-    await waitFor(() => expect(document.querySelectorAll('.arco-select-option').length).toBeGreaterThan(0));
-    const offered = [...document.querySelectorAll('.arco-select-option')].map((choice) => choice.textContent);
+    await waitFor(() => expect(screen.queryAllByRole('option').length).toBeGreaterThan(0));
+    const offered = screen.queryAllByRole('option').map((choice) => choice.textContent);
     expect(offered).toEqual(expect.arrayContaining(['Relay', 'ChatGPT', 'corp-gateway']));
     expect(offered).not.toContain('openai-codex');
   });
@@ -1007,14 +1007,14 @@ describe('providers and the default model', () => {
     expect(card).toHaveTextContent('Choose a provider first.');
     const user = userEvent.setup();
     await user.click(within(card).getByLabelText('Provider'));
-    fireEvent.click(await screen.findByText('corp-gateway', { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'corp-gateway' }));
     // Nothing is set before a model is picked.
     expect(screen.queryByTestId('mu-save-bar')).not.toBeInTheDocument();
     await user.click(within(card).getByLabelText('Model'));
-    await waitFor(() => expect(document.querySelectorAll('.arco-select-option').length).toBeGreaterThan(1));
-    const offered = [...document.querySelectorAll('.arco-select-option')].map((choice) => choice.textContent);
+    await waitFor(() => expect(screen.queryAllByRole('option').length).toBeGreaterThan(1));
+    const offered = screen.queryAllByRole('option').map((choice) => choice.textContent);
     expect(offered.slice(-2)).toEqual(['claude-opus-4-6 · recommended', 'gpt-5']);
-    fireEvent.click(screen.getByText('claude-opus-4-6 · recommended', { selector: '.arco-select-option span' }));
+    fireEvent.click(screen.getByRole('option', { name: 'claude-opus-4-6 · recommended' }));
     expect(screen.getByTestId('mu-save-bar')).toHaveTextContent('Unsaved changes in: Board model');
     expect(card).not.toHaveTextContent('None yet');
 
@@ -1041,11 +1041,11 @@ describe('providers and the default model', () => {
     expect(within(card).getByRole('radio', { name: 'High' })).toBeDisabled();
     const user = userEvent.setup();
     await user.click(within(card).getByLabelText('Provider'));
-    fireEvent.click(await screen.findByText('corp-gateway', { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'corp-gateway' }));
     // A model belongs to its provider: another provider, and it is to be picked again.
     expect(screen.getByTestId('mu-save-bar')).toHaveTextContent('Unsaved changes in: Default model');
     await user.click(within(card).getByLabelText('Model'));
-    fireEvent.click(await screen.findByText('gpt-5', { selector: '.arco-select-option span' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'gpt-5' }));
     fireEvent.click(within(card).getByRole('radio', { name: 'High' }));
     fireEvent.click(screen.getByText('Save'));
     await waitFor(() => expect(bridge.save).toHaveBeenCalled());
@@ -1075,7 +1075,7 @@ describe('providers and the default model', () => {
     const card = screen.getByTestId('mu-defaults');
     const user = userEvent.setup();
     await user.click(within(card).getByLabelText('Provider'));
-    fireEvent.click(await screen.findByText('corp-gateway', { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'corp-gateway' }));
     await user.click(within(card).getByLabelText('Model'));
     const terra = await screen.findByText('GPT-5.6 Terra');
     expect(terra).toHaveAttribute('title', 'gpt-5-6-terra');
@@ -1093,7 +1093,7 @@ describe('providers and the default model', () => {
     fireEvent.click(screen.getByTestId('mu-nav-board-model'));
     const board = screen.getByTestId('mu-board-model');
     await user.click(within(board).getByLabelText('Provider'));
-    fireEvent.click(await screen.findByText('corp-gateway', { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'corp-gateway' }));
     await user.click(within(board).getByLabelText('Model'));
     expect(await screen.findByText('Claude Opus 4.6 · recommended')).toHaveAttribute('title', 'claude-opus-4-6');
   });
@@ -1217,8 +1217,8 @@ describe('providers and the default model', () => {
     const user = userEvent.setup();
     fireEvent.click(screen.getByTestId('mu-nav-board-model'));
     await user.click(within(screen.getByTestId('mu-board-model')).getByLabelText('Provider'));
-    await waitFor(() => expect(document.querySelectorAll('.arco-select-option').length).toBeGreaterThan(0));
-    const offered = [...document.querySelectorAll('.arco-select-option')].map((choice) => choice.textContent);
+    await waitFor(() => expect(screen.queryAllByRole('option').length).toBeGreaterThan(0));
+    const offered = screen.queryAllByRole('option').map((choice) => choice.textContent);
     // A custom provider is offered by its name, not its id.
     expect(offered).toContain('Relay');
     expect(offered).not.toContain('relay');
@@ -1382,7 +1382,7 @@ describe('the permission modes and the board', () => {
     expect(mode).toHaveTextContent('Mode of a new conversation');
     const user = userEvent.setup();
     await user.click(within(mode).getByLabelText('Mode of a new conversation'));
-    fireEvent.click(await screen.findByText('Full access', { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'Full access' }));
     expect(screen.getByTestId('mu-save-bar')).toHaveTextContent('Unsaved changes in: Features');
     fireEvent.click(screen.getByText('Save'));
     await waitFor(() => expect(bridge.save).toHaveBeenCalled());
@@ -1440,9 +1440,9 @@ describe('the permission modes and the board', () => {
     await open('board-model');
     const user = userEvent.setup();
     await user.click(within(screen.getByTestId('mu-board-model')).getByLabelText('Provider'));
-    fireEvent.click(await screen.findByText('corp-gateway', { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'corp-gateway' }));
     await user.click(within(screen.getByTestId('mu-board-model')).getByLabelText('Model'));
-    fireEvent.click(await screen.findByText('gpt-5', { selector: '.arco-select-option span' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'gpt-5' }));
     expect(screen.getByTestId('mu-save-bar')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Discard'));
     const card = screen.getByTestId('mu-board-model');
@@ -1519,7 +1519,7 @@ describe('the kernel pages', () => {
     await open('judges');
     const choice = screen.getByTestId('mu-judge-choice-jev');
     fireEvent.click(within(choice).getByLabelText(enMu.judges.service));
-    fireEvent.click(await screen.findByText(enMu.judges.services.gateway.name, { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: enMu.judges.services.gateway.name }));
     expect(screen.getByTestId('mu-save-bar')).toHaveTextContent('Unsaved changes in: Judges');
     // The gateway's own model, and still one Jev in the order.
     fireEvent.click(screen.getByTestId('mu-nav-judge-order'));
@@ -1539,7 +1539,7 @@ describe('the kernel pages', () => {
     const choice = await screen.findByTestId('mu-judge-choice-jev');
     expect(within(choice).queryByLabelText(enMu.judges.baseUrl)).not.toBeInTheDocument();
     fireEvent.click(within(choice).getByLabelText(enMu.judges.service));
-    fireEvent.click(await screen.findByText(enMu.judges.services.typesafe.name, { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: enMu.judges.services.typesafe.name }));
     const tile = () => screen.getByTestId('mu-judge-choice-jev');
     const field = await within(tile()).findByLabelText(enMu.judges.baseUrl);
     fireEvent.change(field, { target: { value: 'http://169.254.169.254/v1' } });
@@ -1600,7 +1600,7 @@ describe('the kernel pages', () => {
       target: { value: 'typesafe-key' },
     });
     fireEvent.click(within(choice).getByLabelText(enMu.judges.service));
-    fireEvent.click(await screen.findByText(enMu.judges.services.openrouter.name, { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: enMu.judges.services.openrouter.name }));
     const key = await within(screen.getByTestId('mu-judge-choice-jev')).findByLabelText(
       enMu.judges.services.openrouter.key
     );
@@ -1628,7 +1628,7 @@ describe('the kernel pages', () => {
     render(<SettingsArea page='judges' />, { wrapper });
     const choice = await screen.findByTestId('mu-judge-choice-jev');
     fireEvent.click(within(choice).getByLabelText(enMu.judges.service));
-    fireEvent.click(await screen.findByText(enMu.judges.services.custom.name, { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: enMu.judges.services.custom.name }));
     const tile = screen.getByTestId('mu-judge-choice-jev');
     const address = await within(tile).findByLabelText(enMu.judges.baseUrl);
     // Empty: the problem, in the choice, the one place the address is typed.

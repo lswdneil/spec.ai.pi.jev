@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/renderer/ui/button';
-import { Dropdown, Menu } from '@arco-design/web-react';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Menu } from '@/renderer/ui/menu';
 import { Input } from '@/renderer/ui/input';
 import { Close, Earth, FullScreen, Left, Loading, OffScreen, Plus, Refresh, Right } from '@icon-park/react';
 import type { TFunction } from 'i18next';
@@ -82,6 +83,7 @@ export default function BrowserChrome({
   const where = navigation?.url ?? active?.url ?? '';
   const address = where === BROWSER_BLANK_URL ? '' : where;
   const [draft, setDraft] = useState<string | null>(null);
+  const [openMenuTabId, setOpenMenuTabId] = useState<string | null>(null);
   const pageRow = useRef<HTMLDivElement>(null);
   // Another page in front: the field shows where that one is, and its tab comes into view in the row (the row
   // scrolls by itself: `scrollIntoView` would also shift the work panel and the page around it).
@@ -109,10 +111,12 @@ export default function BrowserChrome({
 
   const maximizeLabel = maximized ? t('preview.restorePanel') : t('preview.maximizePanel');
 
-  // A page's right-click menu. The Menu is the droplist's direct child, or Arco gives it the tall navigation look.
+  // A page's right-click menu.
   const pageMenu = (tab: BrowserTab) => (
     <Menu
+      role='none'
       onClickMenuItem={(key) => {
+        setOpenMenuTabId(null);
         if (key === 'close') onClose(tab.id);
         else if (key === 'closeOthers') onCloseOthers(tab.id);
         else if (key === 'copyAddress') onCopyAddress(tab.id);
@@ -148,7 +152,14 @@ export default function BrowserChrome({
               const selected = tab.id === activeTabId;
               const title = browserPageTitle(tab, t);
               return (
-                <Dropdown key={tab.id} trigger='contextMenu' position='bl' droplist={pageMenu(tab)}>
+                <Dropdown
+                  key={tab.id}
+                  trigger='contextMenu'
+                  position='bl'
+                  open={openMenuTabId === tab.id}
+                  onOpenChange={(next) => setOpenMenuTabId(next ? tab.id : null)}
+                  droplist={pageMenu(tab)}
+                >
                   <div className={styles.page} data-active={selected ? 'true' : 'false'}>
                     <Button
                       type='text'

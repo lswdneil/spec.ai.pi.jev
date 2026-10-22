@@ -234,8 +234,6 @@ describe('a settings section as its own page', () => {
     const tiers = await screen.findByTestId('mu-judge-tiers');
     expect(screen.getByRole('heading', { name: 'Judge order' })).toBeInTheDocument();
     expect(within(tiers).getByRole('combobox', { name: 'Order' })).toBeInTheDocument();
-    // Its typing input, which takes the focus, says the same.
-    expect(within(tiers).getByRole('textbox', { name: 'Order' })).toBeInTheDocument();
     // Laya, the one judge here, needs nothing in the order: the choice on the judges page installs and starts it.
     const laya = within(tiers).getByTestId('mu-judge-tier-0');
     expect(laya).toHaveTextContent('Tier 1: Local Laya');
@@ -367,7 +365,7 @@ describe('the first-run guide', () => {
     fireEvent.click(screen.getByTestId('mu-judge-choice-jev'));
     fireEvent.click(screen.getByTestId('mu-welcome-judge-more'));
     fireEvent.click(screen.getByLabelText('Service'));
-    fireEvent.click(await screen.findByText('Vercel AI Gateway', { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'Vercel AI Gateway' }));
     fireEvent.change(await screen.findByLabelText('Vercel AI Gateway API key'), { target: { value: 'gateway-key' } });
     fireEvent.click(screen.getByTestId('mu-welcome-next'));
     await screen.findByTestId('mu-welcome-step-done');
@@ -1004,8 +1002,8 @@ describe('pasting an API key', () => {
 
     // Only the two services the key can be from are offered.
     fireEvent.click(screen.getByLabelText('Service'));
-    const deepseek = await screen.findByText('DeepSeek', { selector: '.arco-select-option' });
-    expect([...document.querySelectorAll('.arco-select-option')].map((option) => option.textContent)).toEqual([
+    const deepseek = await screen.findByRole('option', { name: 'DeepSeek' });
+    expect([...screen.queryAllByRole('option')].map((option) => option.textContent)).toEqual([
       'DeepSeek',
       'Qwen (Alibaba Cloud Model Studio)',
     ]);
@@ -1055,7 +1053,7 @@ describe('pasting an API key', () => {
     bridge.testProvider.mockResolvedValue(listing(['qwen3:8b', 'llama3.3']));
     await toKeyTile();
     fireEvent.click(screen.getByLabelText('Service'));
-    fireEvent.click(await screen.findByText('Ollama (this computer)', { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'Ollama (this computer)' }));
     await said('Ollama is running on this computer.');
     expect(bridge.testProvider).toHaveBeenCalledTimes(1);
     expect(bridge.testProvider.mock.calls[0][0]).toEqual({
@@ -1082,7 +1080,7 @@ describe('pasting an API key', () => {
     });
     await toKeyTile();
     fireEvent.click(screen.getByLabelText('Service'));
-    fireEvent.click(await screen.findByText('Ollama (this computer)', { selector: '.arco-select-option' }));
+    fireEvent.click(await screen.findByRole('option', { name: 'Ollama (this computer)' }));
     await said("Ollama isn't responding on this computer. Start it, then check again.");
     fireEvent.click(screen.getByTestId('mu-welcome-next'));
     expect(screen.getByTestId('mu-welcome-step-model')).toBeInTheDocument();

@@ -8,10 +8,11 @@ Strategy: a small compatibility layer that mirrors the Arco APIs we actually use
 
 ## Status (2026-10-22)
 
-- Renderer `.tsx`/`.ts` files importing `@arco-design/web-react` (components or types): **3**, down from 217.
+- Renderer `.tsx`/`.ts` files importing `@arco-design/web-react` (components or types): **0**, down from 217.
 - Done: tokens, Dense shell, settings, forms, welcome, dialogs, and the primitives in `ui/` — Alert, AutoComplete, Avatar, Badge, Button, Card, Checkbox, Collapse, Dialog/Modal (`confirm`/`useModal`), Dropdown (Radix), Empty, Form, Image, Input, InputNumber, InputTag, Layout, Link/Space/Result/Progress, menu aliases, Pagination, Popover, Popconfirm, Radio, Select, Spinner, Steps, Switch, Tabs, Tag, TimePicker, toast/AppToaster, Tooltip, Tree, Trigger, Typography.
-- Remaining: only `main.tsx` (ConfigProvider + locales + Arco CSS, kept for `MuSelect`), `components/base/MuSelect.tsx` (the last Arco component), and `pages/conversation/Preview/browser/BrowserChrome.tsx` (its tab strip/context menu still uses Arco's Dropdown).
-- Last full desktop suite: **6664 passed / 49 failed in 11 files**, all the known environment/`nativeHost` failures (piRpc/errorLog, NativeConversations, git/folders, the emoji regex); the native sidebar menu tests now pass.
+- Done since the last update: `MuSelect` now wraps the Dense Select; `BrowserChrome` uses the Dense Dropdown and Menu; `main.tsx` has no ConfigProvider, Arco locales, adapter or `arco.css`.
+- Remaining: test-only Arco imports and mocks, the `@arco-design/web-react` package, and the Arco-derived CSS/variables (`arco-override.css`, `mu-arco.css`, `themes/index.css`). None are imported by renderer source.
+- Last full desktop suite: **6711 passed / 0 failed** (116 skipped); `tsc`, lint and `package` pass.
 
 ---
 

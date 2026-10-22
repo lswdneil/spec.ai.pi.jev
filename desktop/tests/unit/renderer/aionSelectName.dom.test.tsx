@@ -1,11 +1,9 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
-import type { SelectHandle } from '@arco-design/web-react/es/Select/interface';
-import MuSelect from '@/renderer/components/base/MuSelect';
+import MuSelect, { type MuSelectHandle } from '@/renderer/components/base/MuSelect';
 
-// A multiple select's focus goes to Arco's typing input among its tags, which had no name: the judges page's order
-// field read as "text field" alone.
+// A multiple select is one named picker: the judges page's order field must not read as an unnamed field.
 
 afterEach(cleanup);
 
@@ -15,15 +13,15 @@ const options = [
 ];
 
 describe('a multiple select', () => {
-  it('gives its typing input the select’s own name', () => {
+  it('gives the picker the select’s own name', () => {
     render(<MuSelect mode='multiple' aria-label='Judge order' options={options} value={['jev']} />);
-    expect(screen.getByRole('textbox', { name: 'Judge order' })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: 'Judge order' })).toBeInTheDocument();
   });
 
   it('still hands its owner the select itself', () => {
-    const ref = React.createRef<SelectHandle>();
+    const ref = React.createRef<MuSelectHandle>();
     render(<MuSelect ref={ref} aria-label='Language' options={options} value='jev' />);
-    expect(ref.current?.dom).toBeInstanceOf(HTMLElement);
+    expect(ref.current?.dom).toBeInstanceOf(HTMLButtonElement);
     expect(typeof ref.current?.blur).toBe('function');
   });
 });
