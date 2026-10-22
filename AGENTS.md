@@ -15,7 +15,8 @@
 ## Ask, Do Not Guess
 
 - When a requirement is ambiguous, a decision has more than one reasonable answer, or an action is irreversible or leaves the machine (push, publish, release, delete user data), ask the user first. Do not pick a product name, protocol, publish target or deletion policy on the user's behalf.
-- Local, reversible edits may be made directly. Commits, pushes and publishing need an explicit instruction; uploading to GitHub needs explicit authorization for that upload.
+- Local, reversible edits may be made directly. Pushes and publishing need an explicit instruction; uploading to GitHub needs explicit authorization for that upload.
+- Project override (2026-10-22): after each round of changes, automatically create a **local** commit once verification passes. Never push. This makes every round reversible.
 - State the assumption when one is unavoidable, and mark what remains undecided.
 
 ## Build on What Exists
@@ -49,7 +50,7 @@
 - For `packages/coding-agent/test/suite/`, use `test/suite/harness.ts` + the faux provider. No real provider APIs, keys, or paid tokens.
 - When regressions tests for fixing a github issue, add a comment with the github issue number next to the test.
 - For ad-hoc scripts, `write` them to a temp file (e.g. `/tmp`), run, edit if needed, remove when done. Don't embed multi-line scripts in `bash` commands.
-- Never commit unless the user asks.
+- Never commit unless the user asks. This project's standing instruction asks for a local commit after every round; that does not authorize a push.
 
 ## Dependency and Install Security
 
