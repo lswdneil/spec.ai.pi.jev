@@ -275,6 +275,7 @@ html[data-sv-ui="dense"] .settings-sider__group-header {
   height: 20px;
   align-items: center;
   padding-bottom: 0;
+  font-family: var(--sv-font-ui);
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -290,6 +291,7 @@ html[data-sv-ui="dense"] .settings-sider__item[aria-current='page'] {
 }
 
 html[data-sv-ui="dense"] .settings-sider__item-label {
+  font-family: var(--sv-font-ui);
   font-size: 12px;
   line-height: 20px;
 }

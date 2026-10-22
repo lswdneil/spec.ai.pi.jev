@@ -48,6 +48,7 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | Check | Reference | Status |
 | --- | --- | --- |
 | Settings nav row | 27 high, 11, radius 5 | PASS |
+| Settings rail typeface | group headers and page rows both use `--sv-font-ui` | FIXED |
 | Settings nav padding | 16 / 8 | PASS |
 | Settings main padding | 18 / 22 / 28 | FIXED |
 | Settings heading | 20 | PASS |
