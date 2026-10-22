@@ -26,6 +26,7 @@ export const Switch: React.FC<SwitchProps> = ({
   onChange,
   onCheckedChange,
   className,
+  style,
   'aria-label': ariaLabel,
   ...props
 }) => (
@@ -35,6 +36,7 @@ export const Switch: React.FC<SwitchProps> = ({
     disabled={disabled}
     aria-label={ariaLabel}
     {...props}
+    style={{ width: 32, height: 18, padding: 0, ...style }}
     onCheckedChange={(next) => {
       onChange?.(next);
       onCheckedChange?.(next);
@@ -44,6 +46,6 @@ export const Switch: React.FC<SwitchProps> = ({
       className
     )}
   >
-    <SwitchPrimitive.Thumb className='block h-[14px] w-[14px] translate-x-[2px] rounded-full bg-sv-text transition-transform data-[state=checked]:translate-x-[16px] data-[state=checked]:bg-sv-on-brand' />
+    <SwitchPrimitive.Thumb className='absolute left-[2px] top-[1px] block h-[14px] w-[14px] rounded-full bg-sv-text transition-[left] data-[state=checked]:left-[16px] data-[state=checked]:bg-sv-on-brand' />
   </SwitchPrimitive.Root>
 );
