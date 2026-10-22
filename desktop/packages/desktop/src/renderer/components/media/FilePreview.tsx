@@ -10,7 +10,8 @@ import { useTranslation } from 'react-i18next';
 import { formatByteSize } from '@/renderer/services/i18n/format';
 import { getFileExtension } from '@/renderer/services/FileService';
 import { ipcBridge } from '@/common';
-import { Image, Tooltip } from '@arco-design/web-react';
+import { Image } from '@/renderer/ui/image';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import fileIcon from '@/renderer/assets/icons/file-icon.svg';
 
 const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg']);

@@ -18,6 +18,7 @@ export interface RadioGroupProps {
   onChange?: (value: string) => void;
   disabled?: boolean;
   type?: 'radio' | 'button';
+  direction?: 'horizontal' | 'vertical';
   size?: RadioSize;
   className?: string;
   'aria-label'?: string;
@@ -25,7 +26,7 @@ export interface RadioGroupProps {
 }
 
 const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(function RadioGroup(
-  { value, defaultValue, onChange, disabled, type = 'radio', size = 'default', className, children, ...props },
+  { value, defaultValue, onChange, disabled, type = 'radio', direction = 'horizontal', size = 'default', className, children, ...props },
   ref
 ) {
   return (
@@ -36,7 +37,12 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(function Ra
         defaultValue={defaultValue}
         disabled={disabled}
         onValueChange={onChange}
-        className={cn('flex items-center gap-2', type === 'button' && 'gap-1', className)}
+        className={cn(
+          'flex gap-2',
+          direction === 'vertical' ? 'flex-col items-start' : 'items-center',
+          type === 'button' && 'gap-1',
+          className
+        )}
         {...props}
       >
         {children}

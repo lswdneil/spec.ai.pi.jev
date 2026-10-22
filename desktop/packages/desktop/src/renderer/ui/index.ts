@@ -18,6 +18,7 @@ export {
 } from './dialog';
 export { Dropdown, Menu, MenuItem, type DropdownItem, type DropdownProps } from './dropdown';
 export { Empty, type EmptyProps } from './empty';
+export { Image, type ImageProps, type ImagePreviewGroupProps } from './image';
 export { Input, Textarea, type InputProps, type TextareaProps } from './input';
 export { Popover, type PopoverProps, type PopoverPosition } from './popover';
 export { Popconfirm, type PopconfirmProps, type PopconfirmPosition } from './popconfirm';

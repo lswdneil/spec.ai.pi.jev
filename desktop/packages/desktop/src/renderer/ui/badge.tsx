@@ -19,7 +19,13 @@ const dot: Record<BadgeStatus, string> = {
 
 /** A status dot and its word. */
 export const Badge: React.FC<BadgeProps> = ({ status = 'default', text, className }) => (
-  <span className={cn('inline-flex items-center gap-1.5 text-[12px] text-sv-muted', className)}>
+  <span
+    className={cn(
+      'inline-flex items-center gap-1.5 text-[12px] text-sv-muted',
+      `arco-badge arco-badge-status arco-badge-status-${status}`,
+      className
+    )}
+  >
     <span className={cn('h-1.5 w-1.5 rounded-full', dot[status])} aria-hidden='true' />
     {text}
   </span>

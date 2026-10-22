@@ -19,6 +19,7 @@ export interface AlertProps {
   content?: React.ReactNode;
   children?: React.ReactNode;
   action?: React.ReactNode;
+  icon?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
   showIcon?: boolean;
@@ -32,6 +33,7 @@ export const Alert: React.FC<AlertProps> = ({
   content,
   children,
   action,
+  icon,
   className,
   style,
   showIcon = true,
@@ -40,7 +42,9 @@ export const Alert: React.FC<AlertProps> = ({
   const Icon = config.icon;
   return (
     <div role={(tone ?? type) === 'error' ? 'alert' : 'status'} className={cn('flex gap-2.5 rounded-[var(--sv-r-control)] border p-3', config.box, className)} style={style}>
-      {showIcon ? <Icon className={cn('mt-0.5 h-4 w-4 shrink-0', config.iconColor)} aria-hidden='true' /> : null}
+      {showIcon ? (
+        icon ?? <Icon className={cn('mt-0.5 h-4 w-4 shrink-0', config.iconColor)} aria-hidden='true' />
+      ) : null}
       <div className='min-w-0 flex-1'>
         {title ? <p className='text-[13px] font-medium text-sv-text'>{title}</p> : null}
         {content ?? children ? (

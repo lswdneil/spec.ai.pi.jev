@@ -19,7 +19,7 @@ import { getChatSurfaceWidthClass } from '@/renderer/pages/conversation/utils/ch
 import { iconColors } from '@/renderer/styles/colors';
 import { CHAT_MESSAGE_JUMP_EVENT, type ChatMessageJumpDetail } from '@/renderer/utils/chat/chatMinimapEvents';
 import { collectAiCopyRows, type TurnCopyItem } from '@/renderer/utils/chat/turnCopy';
-import { Image } from '@arco-design/web-react';
+import { Image } from '@/renderer/ui/image';
 import { Down } from '@icon-park/react';
 import MessageAcpPermission from '@renderer/pages/conversation/Messages/acp/MessageAcpPermission';
 import MessageQuestion from './MessageQuestion';

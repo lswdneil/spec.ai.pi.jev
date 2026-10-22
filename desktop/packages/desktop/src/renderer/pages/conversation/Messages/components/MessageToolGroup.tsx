@@ -7,7 +7,13 @@
 import { ipcBridge } from '@/common';
 import type { IMessageToolGroup } from '@/common/chat/chatLib';
 import { iconColors } from '@/renderer/styles/colors';
-import { Alert, Button, Image, Message, Radio, Tag, Tooltip } from '@arco-design/web-react';
+import { Alert } from '@/renderer/ui/alert';
+import { Button } from '@/renderer/ui/button';
+import { Image } from '@/renderer/ui/image';
+import { Message } from '@/renderer/ui/toast';
+import { Radio } from '@/renderer/ui/radio';
+import { Tag } from '@/renderer/ui/tag';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Copy, Download, LoadingOne } from '@icon-park/react';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -202,7 +208,12 @@ const ConfirmationDetails: React.FC<{
       {content.status === 'Confirming' && (
         <>
           <div className='mt-10px text-t-primary'>{question}</div>
-          <Radio.Group direction='vertical' size='mini' value={selected} onChange={setSelected}>
+          <Radio.Group
+            direction='vertical'
+            size='mini'
+            value={selected}
+            onChange={(value) => setSelected(value as ToolConfirmationOutcome)}
+          >
             {options.map((item) => {
               return (
                 <Radio key={item.value} value={item.value}>

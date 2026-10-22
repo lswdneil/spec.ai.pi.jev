@@ -6,7 +6,7 @@
 
 import { ipcBridge } from '@/common';
 import type { ChatFileRef } from '@/common/types/chatFile';
-import { Image } from '@arco-design/web-react';
+import { Image } from '@/renderer/ui/image';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -90,7 +90,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({ fileRef, file_path, content
       <Image
         src={imageSrc}
         alt={file_name || file_path || t('preview.tabTitle.image')}
-        className='w-full h-full flex items-center justify-center [&_.arco-image-img]:w-full [&_.arco-image-img]:h-full [&_.arco-image-img]:object-contain'
+        className='w-full h-full object-contain'
         preview={!!imageSrc}
       />
     );
