@@ -10,10 +10,10 @@ import FlexFullContainer from '@/renderer/components/layout/FlexFullContainer';
 import { usePresetAssistantInfo } from '@/renderer/hooks/agent/usePresetAssistantInfo';
 import { CronJobIndicator } from '@/renderer/pages/cron';
 import { resolveConversationLeadingMark } from '@/renderer/pages/conversation/utils/conversationAssistantIdentity';
-import { cleanupSiderTooltips, getSiderTooltipProps } from '@/renderer/utils/ui/siderTooltip';
+import { cleanupSiderTooltips } from '@/renderer/utils/ui/siderTooltip';
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { useMenuKeyboard } from '@/renderer/hooks/ui/useMenuKeyboard';
-import { Checkbox, Dropdown, Menu, Spin, Tooltip } from '@arco-design/web-react';
+import { Checkbox, Dropdown, MenuItem, Spinner, Tooltip } from '@/renderer/ui';
 import { Attention, EditOne, Export, FolderClose, Inbox, MoreOne, Pushpin, Timer } from '@icon-park/react';
 import ForkBranchIcon from '@renderer/components/base/ForkBranchIcon';
 import classNames from 'classnames';
@@ -69,7 +69,6 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
     ? props.resolveConversationName?.(forkLineage.parent_conversation_id)
     : undefined;
   const cronStatus = getJobStatus(conversation.id);
-  const siderTooltipProps = getSiderTooltipProps(tooltipEnabled);
   const inlineNameTooltipEnabled = !collapsed && !isMobile && !!conversation.name;
   const leadingMark = resolveConversationLeadingMark(conversation, assistantInfo, logos);
   // Only a real avatar leads a row. An assistant without one goes by its title alone: no stand-in robot or chat
@@ -103,7 +102,7 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
         data-testid={`conversation-waiting-confirmation-${conversation.id}`}
       />
     ) : (
-      <Spin size={size} />
+      <Spinner size={size >= 16 ? 'md' : 'sm'} />
     );
 
   const renderLeadingIcon = () => {
@@ -214,7 +213,7 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
   };
 
   return (
-    <Tooltip key={conversation.id} {...siderTooltipProps} content={displayName} position='right'>
+    <Tooltip key={conversation.id} content={displayName} position='right' disabled={!tooltipEnabled}>
       <div
         id={'c-' + conversation.id}
         className={classNames(
@@ -273,15 +272,7 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
           </span>
         )}
         <FlexFullContainer className='h-24px min-w-0 flex-1 collapsed-hidden'>
-          <Tooltip
-            content={conversation.name}
-            disabled={!inlineNameTooltipEnabled}
-            trigger='hover'
-            popupVisible={inlineNameTooltipEnabled ? undefined : false}
-            unmountOnExit
-            popupHoverStay={false}
-            position='top'
-          >
+          <Tooltip content={conversation.name} disabled={!inlineNameTooltipEnabled} position='top'>
             <div className='chat-history__item-name overflow-hidden text-ellipsis flex items-center gap-4px w-full text-14px font-[500] lh-24px whitespace-nowrap min-w-0 text-t-primary'>
               <span className='block overflow-hidden text-ellipsis whitespace-nowrap min-w-0'>{displayName}</span>
               {forkLineage && (
@@ -335,84 +326,55 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
             }}
           >
             <Dropdown
+              open={menuVisible}
+              onOpenChange={(visible) => onMenuVisibleChange(conversation.id, visible)}
+              contentRef={menuKeyboard.menuRef}
+              onContentKeyDownCapture={menuKeyboard.onMenuKeyDown}
+              align='end'
               droplist={
-                <Menu
-                  ref={menuKeyboard.menuRef}
-                  onKeyDown={menuKeyboard.onMenuKeyDown}
-                  onClickMenuItem={(key) => {
-                    if (key === 'pin') {
-                      onTogglePin(conversation);
-                      return;
-                    }
-                    if (key === 'toggleManualUnread') {
-                      onToggleManualUnread(conversation);
-                      return;
-                    }
-                    if (key === 'rename') {
-                      onEditStart(conversation);
-                      return;
-                    }
-                    if (key === 'createCronTask') {
-                      onCreateCronTask(conversation);
-                      return;
-                    }
-                    if (key === 'export') {
-                      onExport?.(conversation);
-                      return;
-                    }
-                    if (key === 'archive') {
-                      onArchive(conversation);
-                    }
-                  }}
-                >
-                  <Menu.Item key='pin'>
+                <>
+                  <MenuItem onClick={() => onTogglePin(conversation)}>
                     <div className='flex items-center gap-8px'>
                       <Pushpin theme='outline' size='14' />
                       <span>{isPinned ? t('conversation.history.unpin') : t('conversation.history.pin')}</span>
                     </div>
-                  </Menu.Item>
-                  <Menu.Item key='toggleManualUnread'>
+                  </MenuItem>
+                  <MenuItem onClick={() => onToggleManualUnread(conversation)}>
                     <div className='flex items-center gap-8px'>
                       <Inbox theme='outline' size='14' />
                       <span>
                         {isManualUnread ? t('conversation.history.markAsRead') : t('conversation.history.markAsUnread')}
                       </span>
                     </div>
-                  </Menu.Item>
-                  <Menu.Item key='rename'>
+                  </MenuItem>
+                  <MenuItem onClick={() => onEditStart(conversation)}>
                     <div className='flex items-center gap-8px'>
                       <EditOne theme='outline' size='14' />
                       <span>{t('conversation.history.rename')}</span>
                     </div>
-                  </Menu.Item>
-                  <Menu.Item key='createCronTask'>
+                  </MenuItem>
+                  <MenuItem onClick={() => onCreateCronTask(conversation)}>
                     <div className='flex items-center gap-8px'>
                       <Timer theme='outline' size='14' />
                       <span>{t('conversation.history.createCronTask')}</span>
                     </div>
-                  </Menu.Item>
+                  </MenuItem>
                   {onExport && (
-                    <Menu.Item key='export'>
+                    <MenuItem onClick={() => onExport?.(conversation)}>
                       <div className='flex items-center gap-8px'>
                         <Export theme='outline' size='14' />
                         <span>{t('conversation.history.export')}</span>
                       </div>
-                    </Menu.Item>
+                    </MenuItem>
                   )}
-                  <Menu.Item key='archive'>
+                  <MenuItem onClick={() => onArchive(conversation)}>
                     <div className='flex items-center gap-8px'>
                       <FolderClose theme='outline' size='14' />
                       <span>{t('conversation.history.archive')}</span>
                     </div>
-                  </Menu.Item>
-                </Menu>
+                  </MenuItem>
+                </>
               }
-              trigger='click'
-              position='br'
-              popupVisible={menuVisible}
-              onVisibleChange={(visible) => onMenuVisibleChange(conversation.id, visible)}
-              getPopupContainer={() => document.body}
-              unmountOnExit={false}
             >
               <span
                 ref={menuKeyboard.buttonRef}
@@ -431,7 +393,6 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                 )}
                 onClick={(event) => {
                   event.stopPropagation();
-                  onOpenMenu(conversation);
                 }}
                 onKeyDown={menuKeyboard.onButtonKeyDown}
               >

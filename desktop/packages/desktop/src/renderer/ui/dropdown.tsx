@@ -20,13 +20,33 @@ export interface DropdownProps {
   droplist?: React.ReactNode;
   align?: 'start' | 'center' | 'end';
   className?: string;
+  /** Controlled open, for callers that keep the menu's state. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  contentRef?: React.Ref<HTMLDivElement>;
+  onContentKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
+  onContentKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({ children, items, droplist, align = 'start', className }) => (
-  <DropdownMenuPrimitive.Root>
+export const Dropdown: React.FC<DropdownProps> = ({
+  children,
+  items,
+  droplist,
+  align = 'start',
+  className,
+  open,
+  onOpenChange,
+  contentRef,
+  onContentKeyDown,
+  onContentKeyDownCapture,
+}) => (
+  <DropdownMenuPrimitive.Root open={open} onOpenChange={onOpenChange}>
     <DropdownMenuPrimitive.Trigger asChild>{children}</DropdownMenuPrimitive.Trigger>
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
+        ref={contentRef}
+        onKeyDown={onContentKeyDown}
+        onKeyDownCapture={onContentKeyDownCapture}
         align={align}
         sideOffset={6}
         className={cn(

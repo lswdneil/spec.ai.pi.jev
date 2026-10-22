@@ -7,7 +7,13 @@ const OPEN_KEYS = new Set(['Enter', ' ', 'ArrowDown']);
 const FOCUS_ATTEMPTS = 10;
 
 const menuItems = (menu: HTMLElement | null): HTMLElement[] =>
-  menu ? Array.from(menu.querySelectorAll<HTMLElement>('[role="menuitem"]')).filter((item) => item.tabIndex >= 0) : [];
+  menu
+    ? Array.from(menu.querySelectorAll<HTMLElement>('[role="menuitem"]')).filter(
+        // Radix keeps one item in the Tab order and the rest at -1; Arco leaves them all at 0. What matters is that
+        // the item can take focus, not its resting Tab index.
+        (item) => !item.hasAttribute('disabled') && item.getAttribute('aria-disabled') !== 'true'
+      )
+    : [];
 
 /**
  * What a menu opened from a button needs for the keyboard. Arco's Dropdown leaves the focus on the button and puts

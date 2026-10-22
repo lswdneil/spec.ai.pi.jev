@@ -1,6 +1,7 @@
 export { Alert, type AlertProps, type AlertTone } from './alert';
 export { Button, type ButtonProps } from './button';
 export { Card, type CardProps } from './card';
+export { Checkbox, type CheckboxProps } from './checkbox';
 export { cn } from './cn';
 export {
   Dialog,
