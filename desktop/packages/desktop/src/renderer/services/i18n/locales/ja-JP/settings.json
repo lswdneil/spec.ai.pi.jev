@@ -1080,8 +1080,6 @@
   "aboutCompany": "玄同未来（上海）人工知能科技有限公司-内部テスト版",
   "aboutQuote": "遠くへ行く危険を冒す者だけが、どこまで行けるかを知ることができる。",
   "aboutQuoteAuthor": "T. S. エリオット",
-  "aboutQuoteOriginalLabel": "英語原文：",
-  "aboutQuoteOriginal": "Only those who will risk going too far can possibly find out how far one can go.",
   "developer": {
     "title": "開発者",
     "description": "開発者ツールと、外部ツールがアプリ内ブラウザーに接続するためのポートと MCP 設定。",

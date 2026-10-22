@@ -1079,8 +1079,6 @@
   "aboutCompany": "Xuantong Future (Shanghai) AI Technology Co., Ltd. - Internal test build",
   "aboutQuote": "Only those who will risk going too far can possibly find out how far one can go.",
   "aboutQuoteAuthor": "T. S. Eliot",
-  "aboutQuoteOriginalLabel": "Original English:",
-  "aboutQuoteOriginal": "Only those who will risk going too far can possibly find out how far one can go.",
   "developer": {
     "title": "Developer",
     "description": "Developer tools, plus the port and MCP configurations other tools use to reach the in-app browser.",

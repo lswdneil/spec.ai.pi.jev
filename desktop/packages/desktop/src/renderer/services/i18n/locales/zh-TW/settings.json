@@ -1080,8 +1080,6 @@
   "aboutCompany": "玄同未來（上海）人工智能科技有限公司-內部測試版",
   "aboutQuote": "只有那些敢於冒險走得太遠的人，才有可能知道自己能走多遠。",
   "aboutQuoteAuthor": "T. S. 艾略特",
-  "aboutQuoteOriginalLabel": "英文原版：",
-  "aboutQuoteOriginal": "Only those who will risk going too far can possibly find out how far one can go.",
   "developer": {
     "title": "開發者",
     "description": "開發者工具，以及外部工具連線應用內瀏覽器用的連接埠和 MCP 設定。",

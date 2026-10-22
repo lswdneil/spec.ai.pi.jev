@@ -36,7 +36,6 @@ const AboutModalContent: React.FC = () => {
   const viewMode = useSettingsViewMode();
   const isPageMode = viewMode === 'page';
   const isElectron = isElectronDesktop();
-  const isEnglish = i18n.language.toLowerCase().startsWith('en');
 
   const { state: update, run } = useUpdateState();
 
@@ -210,11 +209,6 @@ const AboutModalContent: React.FC = () => {
         <footer className='text-[11.5px] leading-[18px] text-t-secondary'>
           — {t('settings.aboutQuoteAuthor')}
         </footer>
-        {isEnglish ? null : (
-          <p className='m-0 text-[11.5px] leading-[18px] text-t-tertiary'>
-            <span>{t('settings.aboutQuoteOriginalLabel')}</span> {t('settings.aboutQuoteOriginal')}
-          </p>
-        )}
       </blockquote>
     </div>
   );

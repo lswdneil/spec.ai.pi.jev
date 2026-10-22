@@ -1080,8 +1080,6 @@
   "aboutCompany": "현동미래(상하이) 인공지능과기유한공사-내부 테스트 버전",
   "aboutQuote": "너무 멀리 갈 위험을 감수하는 사람만이 얼마나 멀리 갈 수 있는지 알 수 있다.",
   "aboutQuoteAuthor": "T. S. 엘리엇",
-  "aboutQuoteOriginalLabel": "영어 원문:",
-  "aboutQuoteOriginal": "Only those who will risk going too far can possibly find out how far one can go.",
   "developer": {
     "title": "개발자",
     "description": "개발자 도구, 그리고 외부 도구가 앱 내 브라우저에 연결할 때 쓰는 포트와 MCP 설정입니다.",

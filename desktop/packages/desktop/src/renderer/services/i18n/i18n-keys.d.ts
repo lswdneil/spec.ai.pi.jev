@@ -3412,8 +3412,6 @@ export type I18nKey =
   | 'settings.aboutDescription'
   | 'settings.aboutQuote'
   | 'settings.aboutQuoteAuthor'
-  | 'settings.aboutQuoteOriginal'
-  | 'settings.aboutQuoteOriginalLabel'
   | 'settings.addCustomAgent'
   | 'settings.addCustomAgentTitle'
   | 'settings.addEnvVar'

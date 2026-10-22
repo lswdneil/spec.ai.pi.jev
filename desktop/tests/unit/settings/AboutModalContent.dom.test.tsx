@@ -105,12 +105,12 @@ describe('AboutModalContent', () => {
     expect(screen.getByTestId('about-company')).toHaveTextContent('settings.aboutCompany');
   });
 
-  it('shows the closing quote, its author and the English original', async () => {
+  it('shows the closing quote and its author', async () => {
     await renderAbout();
     const quote = screen.getByTestId('about-quote');
     expect(quote).toHaveTextContent('settings.aboutQuote');
     expect(quote).toHaveTextContent('settings.aboutQuoteAuthor');
-    expect(quote).toHaveTextContent('settings.aboutQuoteOriginalLabel');
+    expect(quote).not.toHaveTextContent('settings.aboutQuoteOriginal');
   });
 
   it('opens the website, repository and releases pages', async () => {
