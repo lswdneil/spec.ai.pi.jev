@@ -16,7 +16,12 @@
  * reveal / explicit add-to-chat; see {@link SearchPanel}).
  */
 
-import { Button, Input, Message, Modal, Spin, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
+import { Message } from '@/renderer/ui/toast';
+import { Modal } from '@/renderer/ui/dialog';
+import { Spin } from '@/renderer/ui/spinner';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { FoldUpOne, FolderPlus, Refresh } from '@icon-park/react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

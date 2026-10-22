@@ -49,8 +49,8 @@ vi.mock('@/common', () => ({
   },
 }));
 
-vi.mock('@arco-design/web-react', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@arco-design/web-react')>();
+vi.mock('@/renderer/ui/toast', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/renderer/ui/toast')>();
   return {
     ...actual,
     Message: {
@@ -59,10 +59,14 @@ vi.mock('@arco-design/web-react', async (importOriginal) => {
       success: mocks.messageSuccess,
       warning: mocks.messageWarning,
     },
-    Modal: {
-      ...actual.Modal,
-      confirm: mocks.modalConfirm,
-    },
+  };
+});
+
+vi.mock('@/renderer/ui/dialog', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/renderer/ui/dialog')>();
+  return {
+    ...actual,
+    Modal: { ...actual.Modal, confirm: mocks.modalConfirm },
   };
 });
 

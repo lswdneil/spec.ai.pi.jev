@@ -25,6 +25,11 @@ const outside = vi.hoisted(() => ({ open: vi.fn(), copy: vi.fn(), copied: vi.fn(
 vi.mock('@/renderer/utils/platform', () => ({ openExternalUrl: outside.open }));
 vi.mock('@/renderer/utils/ui/clipboard', () => ({ copyText: outside.copy }));
 // The real toast renders with the legacy ReactDOM.render, which this React has not.
+vi.mock('@/renderer/ui/toast', async (actual) => ({
+  ...(await actual<typeof import('@/renderer/ui/toast')>()),
+  Message: { success: outside.copied, error: vi.fn() },
+}));
+
 vi.mock('@arco-design/web-react', async (actual) => ({
   ...(await actual<typeof import('@arco-design/web-react')>()),
   Message: { success: outside.copied, error: vi.fn() },

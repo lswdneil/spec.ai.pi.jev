@@ -1,7 +1,10 @@
 import { ipcBridge } from '@/common';
 import type { Assistant } from '@/common/types/agent/assistantTypes';
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
-import { Button, Checkbox, Message, Modal } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Checkbox } from '@/renderer/ui/checkbox';
+import { Message } from '@/renderer/ui/toast';
+import { Modal } from '@/renderer/ui/dialog';
 import { Delete, Help, Lightning, Puzzle } from '@icon-park/react';
 import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';

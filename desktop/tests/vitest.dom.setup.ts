@@ -4,6 +4,20 @@
  */
 
 import '@testing-library/jest-dom/vitest';
+import { afterEach } from 'vitest';
+import { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Toaster, toast } from 'sonner';
+
+// A real toaster for every DOM test: components call the Dense toast facade,
+// and assertions look for the words it showed.
+if (typeof document !== 'undefined') {
+  const host = document.createElement('div');
+  host.setAttribute('data-test-toaster', '');
+  document.body.appendChild(host);
+  createRoot(host).render(createElement(Toaster, { position: 'bottom-right', closeButton: true }));
+  afterEach(() => toast.dismiss());
+}
 
 // Make this a module
 

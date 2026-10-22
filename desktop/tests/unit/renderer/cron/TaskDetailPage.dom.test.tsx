@@ -47,27 +47,29 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-vi.mock('@arco-design/web-react', async () => {
-  const actual = await vi.importActual<typeof import('@arco-design/web-react')>('@arco-design/web-react');
+vi.mock('@/renderer/ui/dialog', async () => {
+  const actual = await vi.importActual<typeof import('@/renderer/ui/dialog')>('@/renderer/ui/dialog');
   const Modal = Object.assign(actual.Modal, {
     confirm: vi.fn((config: { onOk?: () => unknown }) => {
       void config.onOk?.();
       return {
-        close: vi.fn(),
-        update: vi.fn(),
+        destroy: vi.fn(),
       };
     }),
   });
   return {
     ...actual,
     Modal,
-    Message: {
-      success: vi.fn(),
-      error: vi.fn(),
-      warning: vi.fn(),
-    },
   };
 });
+
+vi.mock('@/renderer/ui/toast', () => ({
+  Message: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+  },
+}));
 
 vi.mock('@/common', () => ({
   ipcBridge: {
@@ -107,7 +109,7 @@ vi.mock('@renderer/pages/conversation/utils/conversationCreateError', () => ({
   normalizeConversationRuntimeWorkspaceErrorCode: () => undefined,
 }));
 
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import TaskDetailPage from '@/renderer/pages/cron/ScheduledTasksPage/TaskDetailPage';
 
 describe('TaskDetailPage', () => {

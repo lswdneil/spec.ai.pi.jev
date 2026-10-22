@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { render, screen, cleanup, fireEvent, waitFor } from '@testing-library/react';
-import { Message } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
 import { SWRConfig } from 'swr';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -261,7 +261,7 @@ describe('ExplorerContainer attach/remove', () => {
     await waitFor(() => expect(openPreview).toHaveBeenCalled());
     const [content, type, metadata] = openPreview.mock.calls[0];
     expect(content).toBe('hello');
-    expect(type).toBe('markdown'); // readme.md â†’ markdown
+    expect(type).toBe('markdown'); // readme.md â†?markdown
     // Carries the Project ref so preview I/O addresses the file by pe identity.
     expect(metadata.fileRef).toEqual({ kind: 'project', pe_id: 'peA', relative_path: 'docs/readme.md' });
   });
@@ -324,7 +324,7 @@ describe('ExplorerContainer attach/remove', () => {
     expect(collapseSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('hides Collapse all on the Changes tab â€” there is no tree to collapse there', async () => {
+  it('hides Collapse all on the Changes tab â€?there is no tree to collapse there', async () => {
     renderIt();
     await screen.findByTestId('roots');
     // Switch to the Changes tab (react-i18next `t` is mocked to echo the key).
@@ -356,7 +356,7 @@ describe('ExplorerContainer add-to-chat', () => {
         chatRef: { kind: 'project', pe_id: 'peA', relative_path: 'src/main.ts' },
       },
     ];
-    // Every prefix carries the target id 'c1' â€” only the box whose conversation
+    // Every prefix carries the target id 'c1' â€?only the box whose conversation
     // matches consumes it (ids are unique), so same-type team peers don't leak.
     expect(emit).toHaveBeenCalledWith('acp.selected.file.append', payload, 'c1');
     expect(emit).toHaveBeenCalledWith('codex.selected.file.append', payload, 'c1');
@@ -378,7 +378,7 @@ describe('ExplorerContainer A-paste import', () => {
     await waitFor(() => expect(Message.success).toHaveBeenCalled());
   });
 
-  it('warns (does not silently drop) when some files fail â€” name conflicts or unsupported', async () => {
+  it('warns (does not silently drop) when some files fail â€?name conflicts or unsupported', async () => {
     copyFiles.mockResolvedValue({
       copied_files: ['/ws/sub/a.txt'],
       failed_files: [{ path: '/os/b.txt', reason: 'exists' }],
@@ -389,7 +389,7 @@ describe('ExplorerContainer A-paste import', () => {
     expect(Message.success).not.toHaveBeenCalled();
   });
 
-  it('errors (not warns) when every file fails â€” nothing was imported', async () => {
+  it('errors (not warns) when every file fails â€?nothing was imported', async () => {
     copyFiles.mockResolvedValue({
       copied_files: [],
       failed_files: [
@@ -418,11 +418,11 @@ describe('ExplorerContainer A-paste import', () => {
     await waitFor(() => expect(Message.success).toHaveBeenCalledWith('conversation.explorer.pathCopied'));
   });
 
-  it('copy relative path: a pe-root (relative_path "") copies "." â€” not an empty string nor the node name', async () => {
+  it('copy relative path: a pe-root (relative_path "") copies "." â€?not an empty string nor the node name', async () => {
     renderIt();
     fireEvent.click(await screen.findByTestId('do-copy-rel-root'));
     await waitFor(() => expect(copyText).toHaveBeenCalledWith('.'));
-    // `name` may be a custom label or the internal pe_id â€” never copy it as a path.
+    // `name` may be a custom label or the internal pe_id â€?never copy it as a path.
     expect(copyText).not.toHaveBeenCalledWith('');
     expect(copyText).not.toHaveBeenCalledWith('Root');
   });
@@ -434,7 +434,7 @@ describe('ExplorerContainer A-paste import', () => {
     await waitFor(() => expect(Message.error).toHaveBeenCalledWith('conversation.explorer.copyFailed'));
   });
 
-  it('copy absolute path: calls the backend copy endpoint (which writes the clipboard) + success toast â€” front end never touches the abs', async () => {
+  it('copy absolute path: calls the backend copy endpoint (which writes the clipboard) + success toast â€?front end never touches the abs', async () => {
     renderIt();
     fireEvent.click(await screen.findByTestId('do-copy-abs'));
     await waitFor(() => expect(copyAbsolutePath).toHaveBeenCalledWith({ pe_id: 'peA', relative_path: 'src/main.ts' }));
@@ -484,7 +484,7 @@ describe('ExplorerContainer new file / new folder', () => {
     );
   });
 
-  it('new file at a pe-root (targetDir "") joins to a bare name â€” no leading slash', async () => {
+  it('new file at a pe-root (targetDir "") joins to a bare name â€?no leading slash', async () => {
     renderIt();
     fireEvent.click(await screen.findByTestId('do-new-file-root'));
     type(await nameInput(), 'top.ts');
@@ -500,7 +500,7 @@ describe('ExplorerContainer new file / new folder', () => {
     await nameInput(); // dialog is open with an empty default
     clickCreate(); // submit with the empty default
     // The builder returns null on a blank name, so submit bails before any await:
-    // nothing goes over the wire and no failure surfaces â€” a clean dismissal, not
+    // nothing goes over the wire and no failure surfaces â€?a clean dismissal, not
     // an error. (Assert on behavior: Arco keeps the modal mounted-but-hidden.)
     expect(fsRead).not.toHaveBeenCalled();
     expect(Message.error).not.toHaveBeenCalled();

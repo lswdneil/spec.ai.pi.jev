@@ -7,7 +7,15 @@
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Message, Switch, Popconfirm, Spin, Empty, Tooltip, Checkbox, Modal } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
+import { Switch } from '@/renderer/ui/switch';
+import { Popconfirm } from '@/renderer/ui/popconfirm';
+import { Spin } from '@/renderer/ui/spinner';
+import { Empty } from '@/renderer/ui/empty';
+import { Tooltip } from '@/renderer/ui/tooltip';
+import { Checkbox } from '@/renderer/ui/checkbox';
+import { Modal } from '@/renderer/ui/dialog';
 import { Left, Delete, Write, Attention, Robot } from '@icon-park/react';
 import { ipcBridge } from '@/common';
 import type { ICronJob } from '@/common/adapter/ipcBridge';

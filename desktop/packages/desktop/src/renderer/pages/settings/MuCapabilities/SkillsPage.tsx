@@ -1,5 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { Alert, Button, Input, Message, Modal, Spin } from '@arco-design/web-react';
+import { Alert } from '@/renderer/ui/alert';
+import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
+import { Message } from '@/renderer/ui/toast';
+import { Modal } from '@/renderer/ui/dialog';
+import { Spin } from '@/renderer/ui/spinner';
 import { Search } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import { ipcBridge } from '@/common';

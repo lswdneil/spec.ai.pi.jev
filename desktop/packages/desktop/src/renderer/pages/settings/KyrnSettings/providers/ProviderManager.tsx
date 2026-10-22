@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Modal, Tag } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Modal } from '@/renderer/ui/dialog';
+import { Tag } from '@/renderer/ui/tag';
 import { Plus } from '@icon-park/react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';

@@ -23,7 +23,7 @@
  *     outcome returned here exists solely to phrase the message.
  */
 
-import { Modal } from '@arco-design/web-react';
+import { Modal } from '@/renderer/ui/dialog';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatNameList } from '@/renderer/services/i18n/list';

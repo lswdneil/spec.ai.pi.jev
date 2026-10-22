@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Alert, Button, Message, Modal, Spin, Switch, Tooltip } from '@arco-design/web-react';
+import { Alert } from '@/renderer/ui/alert';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
+import { Modal } from '@/renderer/ui/dialog';
+import { Spin } from '@/renderer/ui/spinner';
+import { Switch } from '@/renderer/ui/switch';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import { kyrnBridge, unwrap } from '@/common/kyrn/bridge';
 import { MCP_SOURCES, type MuMcpServer, type MuMcpServers } from '@/common/kyrn/capabilities';

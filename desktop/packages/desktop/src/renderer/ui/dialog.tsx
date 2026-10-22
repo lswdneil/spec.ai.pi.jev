@@ -1,6 +1,7 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import * as React from 'react';
+import { createRoot } from 'react-dom/client';
 import { Button } from './button';
 import { cn } from './cn';
 
@@ -71,11 +72,13 @@ export interface ModalProps {
   maskStyle?: React.CSSProperties;
   afterClose?: () => void;
   escToExit?: boolean;
+  autoFocus?: boolean;
+  focusLock?: boolean;
   'data-testid'?: string;
 }
 
 /** Arco-shaped modal: `visible`, `onCancel`, `onOk`, `footer`, `width`. */
-export const Modal: React.FC<ModalProps> = ({
+const ModalBase: React.FC<ModalProps> = ({
   visible,
   open,
   onCancel,
@@ -163,3 +166,146 @@ export const Modal: React.FC<ModalProps> = ({
     </DialogPrimitive.Root>
   );
 };
+
+export interface ModalConfirmConfig {
+  title?: React.ReactNode;
+  content?: React.ReactNode | (() => React.ReactNode);
+  icon?: React.ReactNode;
+  okText?: React.ReactNode;
+  cancelText?: React.ReactNode;
+  okButtonProps?: { disabled?: boolean; status?: 'normal' | 'success' | 'warning' | 'danger' };
+  cancelButtonProps?: { disabled?: boolean };
+  onOk?: () => void | boolean | Promise<unknown>;
+  onCancel?: () => void;
+  footer?: React.ReactNode;
+  closable?: boolean;
+  width?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  wrapClassName?: string;
+  alignCenter?: boolean;
+  getPopupContainer?: (node: HTMLElement) => HTMLElement;
+  maskStyle?: React.CSSProperties;
+  mountOnEnter?: boolean;
+  unmountOnExit?: boolean;
+}
+
+export interface ModalController {
+  destroy: () => void;
+}
+
+type ConfirmKind = 'confirm' | 'info' | 'success' | 'warning' | 'error';
+
+const ConfirmDialog: React.FC<{
+  config: ModalConfirmConfig;
+  kind: ConfirmKind;
+  onClosed: () => void;
+}> = ({ config, kind, onClosed }) => {
+  const [open, setOpen] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
+  const close = () => {
+    setOpen(false);
+    onClosed();
+  };
+  const cancel = () => {
+    config.onCancel?.();
+    close();
+  };
+  const content = typeof config.content === 'function' ? config.content() : config.content;
+  const notice = kind !== 'confirm';
+  return (
+    <DialogPrimitive.Root
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) cancel();
+      }}
+    >
+      <DialogContent
+        style={{ '--sv-modal-width': `${config.width ?? 420}px`, ...config.style } as React.CSSProperties}
+        className={config.className}
+      >
+        <div className='flex items-start gap-3'>
+          {config.icon ? <div className='shrink-0 text-sv-warn'>{config.icon}</div> : null}
+          <div className='min-w-0 flex-1'>
+            {config.title ? <DialogTitle>{config.title}</DialogTitle> : null}
+            {content ? <div className='mt-2 text-[13px] leading-[1.65] text-sv-muted'>{content}</div> : null}
+          </div>
+          {config.closable !== false ? (
+            <DialogPrimitive.Close
+              aria-label='Close'
+              className='-mr-1 -mt-1 rounded-[8px] p-1 text-sv-faint outline-none hover:bg-sv-surface hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
+            >
+              <X className='h-4 w-4' />
+            </DialogPrimitive.Close>
+          ) : null}
+        </div>
+        {config.footer === undefined || notice ? (
+          <div className='mt-5 flex items-center justify-end gap-2'>
+            {!notice ? (
+              <Button onClick={cancel} disabled={config.cancelButtonProps?.disabled}>
+                {config.cancelText ?? 'Cancel'}
+              </Button>
+            ) : null}
+            <Button
+              type='primary'
+              status={config.okButtonProps?.status}
+              disabled={config.okButtonProps?.disabled}
+              loading={loading}
+              onClick={async () => {
+                try {
+                  setLoading(true);
+                  const result = await config.onOk?.();
+                  if (result === false) return;
+                  close();
+                } catch {
+                  // Keep the dialog open so the caller can show the reason.
+                } finally {
+                  setLoading(false);
+                }
+              }}
+            >
+              {config.okText ?? 'OK'}
+            </Button>
+          </div>
+        ) : (
+          <div className='mt-5'>{config.footer}</div>
+        )}
+      </DialogContent>
+    </DialogPrimitive.Root>
+  );
+};
+
+const liveRoots = new Set<ReturnType<typeof createRoot>>();
+
+const openConfirm = (config: ModalConfirmConfig, kind: ConfirmKind): ModalController => {
+  if (typeof document === 'undefined') return { destroy: () => undefined };
+  const host = document.createElement('div');
+  document.body.appendChild(host);
+  const root = createRoot(host);
+  liveRoots.add(root);
+  const destroy = () => {
+    liveRoots.delete(root);
+    root.unmount();
+    host.remove();
+  };
+  root.render(<ConfirmDialog config={config} kind={kind} onClosed={destroy} />);
+  return { destroy };
+};
+
+const confirm = (config: ModalConfirmConfig) => openConfirm(config, 'confirm');
+const info = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'info');
+const success = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'success');
+const warning = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'warning');
+const error = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'error');
+const destroyAll = () => liveRoots.forEach((root) => root.unmount());
+
+const modalApi = { confirm, info, success, warning, error, destroyAll };
+
+type ModalComponent = typeof ModalBase & typeof modalApi & {
+  useModal: (config?: { maxCount?: number }) => [typeof modalApi, React.ReactNode];
+};
+
+export const Modal = Object.assign(ModalBase, {
+  ...modalApi,
+  useModal: (_config?: { maxCount?: number }): [typeof modalApi, React.ReactNode] => [modalApi, null],
+}) as ModalComponent;

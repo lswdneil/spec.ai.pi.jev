@@ -48,11 +48,22 @@ export const Tooltip: React.FC<TooltipProps> = ({
   className,
   popupVisible,
 }) => {
+  const [hovered, setHovered] = React.useState(false);
   if (!content || disabled || !React.isValidElement(children)) return <>{children}</>;
+  const child = React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
+    onMouseEnter: (event: React.MouseEvent) => {
+      (children.props as { onMouseEnter?: (event: React.MouseEvent) => void }).onMouseEnter?.(event);
+      setHovered(true);
+    },
+    onMouseLeave: (event: React.MouseEvent) => {
+      (children.props as { onMouseLeave?: (event: React.MouseEvent) => void }).onMouseLeave?.(event);
+      setHovered(false);
+    },
+  });
   return (
     <TooltipPrimitive.Provider delayDuration={250} skipDelayDuration={100}>
-      <TooltipPrimitive.Root open={popupVisible}>
-        <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
+      <TooltipPrimitive.Root open={popupVisible ?? hovered}>
+        <TooltipPrimitive.Trigger asChild>{child}</TooltipPrimitive.Trigger>
         <TooltipPrimitive.Portal>
           <TooltipPrimitive.Content
             side={sideFor(position)}

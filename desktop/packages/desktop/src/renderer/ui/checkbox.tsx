@@ -72,7 +72,7 @@ const CheckboxBase = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.
     const inGroup = group.value !== undefined && value !== undefined;
     const isChecked = inGroup ? group.value!.includes(value!) : checked;
     return (
-      <span className={cn('inline-flex items-center gap-2', className)}>
+      <label className={cn('inline-flex items-center gap-2', className)}>
         <CheckboxPrimitive.Root
           ref={ref}
           checked={indeterminate ? 'indeterminate' : isChecked}
@@ -103,7 +103,7 @@ const CheckboxBase = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.
           </CheckboxPrimitive.Indicator>
         </CheckboxPrimitive.Root>
         {children}
-      </span>
+      </label>
     );
   }
 );

@@ -6,7 +6,11 @@
 
 import { ipcBridge } from '@/common';
 import { notifyManualRestartRequired } from '@/renderer/utils/appRestart';
-import { Alert, Button, Message, Modal, Switch } from '@arco-design/web-react';
+import { Alert } from '@/renderer/ui/alert';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
+import { Modal } from '@/renderer/ui/dialog';
+import { Switch } from '@/renderer/ui/switch';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useSWR, { mutate } from 'swr';

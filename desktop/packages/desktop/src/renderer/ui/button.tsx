@@ -90,6 +90,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       aria-busy={loading || undefined}
       className={cn(
         buttonVariants({ variant: variant ?? variantFor(type, status), size: sizeFor(size) }),
+        loading && 'arco-btn-loading',
         long && 'w-full',
         shape === 'circle' || shape === 'round' ? 'rounded-full' : null,
         className
