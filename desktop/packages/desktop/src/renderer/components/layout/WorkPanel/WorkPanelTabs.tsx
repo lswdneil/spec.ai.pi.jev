@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Button, Dropdown, Menu, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import {
   ArrowLeft,
   Bee,
@@ -186,23 +188,22 @@ export default function WorkPanelTabs({
         })}
         {more.length ? (
           <Dropdown
-            trigger='click'
-            position='br'
-            droplist={
-              <Menu onClickMenuItem={(key) => onSelect(key as WorkPanelTab)}>
-                {more.map((tab) => {
-                  const Icon = TAB_ICONS[tab];
-                  return (
-                    <Menu.Item key={tab} data-testid='work-panel-more-tab' data-tab={tab}>
-                      <span className='inline-flex items-center gap-8px'>
-                        <Icon theme='outline' size={14} strokeWidth={3} fill='currentColor' />
-                        {t(`common.workPanel.tabs.${tab}`)}
-                      </span>
-                    </Menu.Item>
-                  );
-                })}
-              </Menu>
-            }
+            align='end'
+            items={more.map((tab) => {
+              const Icon = TAB_ICONS[tab];
+              return {
+                key: tab,
+                label: (
+                  <span className='inline-flex items-center gap-2'>
+                    <Icon theme='outline' size={14} strokeWidth={3} fill='currentColor' />
+                    {t(`common.workPanel.tabs.${tab}`)}
+                  </span>
+                ),
+                'data-testid': 'work-panel-more-tab',
+                'data-tab': tab,
+                onSelect: () => onSelect(tab),
+              };
+            })}
           >
             <Tooltip content={t('common.more')} position='bottom' mini disabled={labelsFit}>
               <Button

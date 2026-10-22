@@ -1,5 +1,8 @@
 import type { IMcpServer } from '@/common/config/storage';
-import { Button, Dropdown, Menu, Popover, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Popover } from '@/renderer/ui/popover';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Check, CloseSmall, Info, LoadingOne, Refresh, Write, DeleteFour, SettingOne, Login } from '@icon-park/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -195,22 +198,28 @@ const McpServerHeader: React.FC<McpServerHeaderProps> = ({
           {!server.builtin && (
             <Dropdown
               trigger='hover'
-              droplist={
-                <Menu>
-                  <Menu.Item key='edit' onClick={() => onEditServer(server)}>
-                    <div className='flex items-center gap-2'>
-                      <Write size={'14'} />
+              items={[
+                {
+                  key: 'edit',
+                  label: (
+                    <span className='flex items-center gap-2'>
+                      <Write size={14} />
                       {t('settings.mcpEditServer')}
-                    </div>
-                  </Menu.Item>
-                  <Menu.Item key='delete' onClick={() => onDeleteServer(server.id)}>
-                    <div className='flex items-center gap-2 text-red-500'>
-                      <DeleteFour size={'14'} />
+                    </span>
+                  ),
+                  onSelect: () => onEditServer(server),
+                },
+                {
+                  key: 'delete',
+                  label: (
+                    <span className='flex items-center gap-2 text-sv-danger'>
+                      <DeleteFour size={14} />
                       {t('settings.mcpDeleteServer')}
-                    </div>
-                  </Menu.Item>
-                </Menu>
-              }
+                    </span>
+                  ),
+                  onSelect: () => onDeleteServer(server.id),
+                },
+              ]}
             >
               <Button size='mini' icon={<SettingOne size={'14'} />} aria-label={t('common.more')} />
             </Dropdown>
