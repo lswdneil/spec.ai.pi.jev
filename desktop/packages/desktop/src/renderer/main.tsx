@@ -28,7 +28,7 @@ import { useTranslation } from 'react-i18next';
 
 // Styles
 import 'uno.css';
-import './styles/arco-override.css';
+import './styles/legacy-overrides.css';
 import './styles/themes/index.css';
 import './styles/specjev/tokens.css';
 import './styles/specjev/dense.css';

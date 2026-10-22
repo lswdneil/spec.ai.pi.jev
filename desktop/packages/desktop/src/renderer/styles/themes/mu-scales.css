@@ -67,7 +67,7 @@
   --border-radius-medium: 8px;
   --border-radius-large: 12px;
 
-  /* Tooltips, popovers and popconfirms (arco-override.css paints them from these). */
+  /* Tooltips, popovers and popconfirms (legacy-overrides.css paints them from these). */
   --aion-overlay-shadow: var(--mu-shadow-2);
 }
 
@@ -158,7 +158,7 @@
   stroke: currentColor;
 }
 
-/* arco-override.css greys a disabled primary button out with aou-2; Arco's white text would vanish on it. */
+/* legacy-overrides.css greys a disabled primary button out with aou-2; Arco's white text would vanish on it. */
 [data-color-scheme='mu'] .arco-btn-primary.arco-btn-disabled:not([class*='arco-btn-status']) {
   color: var(--mu-accent-on-disabled);
 }
@@ -360,7 +360,7 @@
   background-color: var(--mu-accent-border);
 }
 
-/* arco-override.css paints these two with upstream's pale blue. */
+/* legacy-overrides.css paints these two with upstream's pale blue. */
 [data-color-scheme='mu'] .mu-steps .arco-steps-item-finish .arco-steps-item-icon {
   background-color: var(--mu-violet-2) !important;
   border-color: var(--mu-violet-2) !important;

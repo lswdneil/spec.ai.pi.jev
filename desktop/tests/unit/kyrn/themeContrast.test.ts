@@ -5,7 +5,7 @@ import { PAIRS, SCHEME_FILE, contrast, luminance, rgb, table, tokens } from '../
 
 const THEMES = resolve(__dirname, '../../../packages/desktop/src/renderer/styles/themes');
 const scheme = readFileSync(SCHEME_FILE, 'utf8');
-const arco = readFileSync(resolve(THEMES, 'mu-arco.css'), 'utf8');
+const arco = readFileSync(resolve(THEMES, 'mu-scales.css'), 'utf8');
 const upstream = readFileSync(resolve(THEMES, 'default-color-scheme.css'), 'utf8');
 
 /** Custom property names declared in the first rule that lists `selector`. */

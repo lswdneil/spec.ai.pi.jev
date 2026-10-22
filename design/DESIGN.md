@@ -209,7 +209,7 @@ Forms add untouched / dirty-valid / submitted-pending; validate on blur, then li
 3. Components use semantic tokens, never palette names (`--sv-brand`, not `--green`).
 4. UnoCSS is the utility layer already in the project; new primitives use Uno utilities plus `--sv-*` values. No Tailwind install.
 5. One accent; if a screen needs a second emphasis, use weight/surface, not a new color.
-6. When Arco is removed, delete `arco-override.css` and the Arco variables.
+6. Arco imports and the package are gone; remaining legacy variables live in `legacy-overrides.css` and `mu-scales.css`. New work uses `--sv-*` only.
 7. Any new component must document its five states and its mobile behavior.
 
 ## 13. Decisions

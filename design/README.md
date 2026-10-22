@@ -28,7 +28,7 @@ URL parameters: `?screen=conversation|appearance|mobile&mode=dark|light|auto`.
 | `tokens.json` | Source of truth for color, type, space, radius, motion. |
 | `tokens.css` | Runtime CSS variables; no raw hex outside this file. |
 | `INVENTORY.md` | What exists (887 renderer files), what to keep, what to replace, waves. |
-| `ARCO-MIGRATION.md` | Compatibility-layer plan to remove Arco without rewriting 210 files. |
+| `ARCO-MIGRATION.md` | The completed Arco removal record and its remaining legacy CSS. |
 | `preview/template.html` | Shared markup for the three directions. |
 | `preview/preview.css` | Shared shell + per-direction overrides. |
 | `preview/preview.js` | Theme and screen switching. |

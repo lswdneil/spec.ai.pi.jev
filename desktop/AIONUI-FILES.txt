@@ -877,7 +877,7 @@ packages/desktop/src/renderer/services/registerPwa.ts
 packages/desktop/src/renderer/services/runtime/deferredNodeRuntime.ts
 packages/desktop/src/renderer/services/runtime/runtimeInstallationReconciler.ts
 packages/desktop/src/renderer/styles/MIGRATION.md
-packages/desktop/src/renderer/styles/arco-override.css
+packages/desktop/src/renderer/styles/legacy-overrides.css
 packages/desktop/src/renderer/styles/colors.ts
 packages/desktop/src/renderer/styles/layout.css
 packages/desktop/src/renderer/styles/markdown.css

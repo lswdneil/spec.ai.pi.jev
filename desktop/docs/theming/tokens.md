@@ -122,7 +122,7 @@ Layered surface scale — higher number = stronger/darker separation in light mo
 
 Arco Design components read their own `--color-*` variables (e.g. `--color-bg-1`, `--color-primary`,
 `--color-primary-light-1..3`, `--color-border`, `--color-fill`). The built-in/decorative presets map
-these to the semantic tokens above (see `presets/default.css` and `styles/arco-override.css`). A full
+these to the semantic tokens above (see `presets/default.css` and `styles/legacy-overrides.css`). A full
 token theme that wants Arco components to follow it should also set the relevant `--color-*` aliases.
 
 ## How tokens are consumed in the codebase / 代码里如何使用

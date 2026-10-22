@@ -106,7 +106,7 @@ Rewriting them would multiply cost without changing the perceived design.
 
 - Settings nav + forms through `ui/`.
 - Replace Table/Tree/DatePicker/Upload/Form.
-- Remove `@arco-design/web-react`, `arco-override.css`, Arco theme variables.
+- Arco package removed; migrate the remaining legacy overrides and named variables to `--sv-*`.
 - Delete dead CSS.
 
 ### Wave 5 — validation (3–4 days)

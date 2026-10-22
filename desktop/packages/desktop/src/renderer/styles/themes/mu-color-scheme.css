@@ -119,7 +119,7 @@
   --mu-radius-lg: 14px;
   --mu-radius-xl: 20px;
 
-  /* Motion: short and eased. prefers-reduced-motion turns it off in mu-arco.css. */
+  /* Motion: short and eased. prefers-reduced-motion turns it off in mu-scales.css. */
   --mu-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --mu-duration: 160ms;
 
@@ -349,7 +349,7 @@
   --fill: #121217;
   --inverse: #ffffff;
 
-  /* The card surface, a shade above the page; arco-override.css draws the hairline round it. */
+  /* The card surface, a shade above the page; legacy-overrides.css draws the hairline round it. */
   --dialog-fill-0: #121217;
   --text-0: #ededf2;
   --text-white: #ffffff;

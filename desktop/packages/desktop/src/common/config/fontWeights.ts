@@ -11,7 +11,7 @@
  * CSS custom property that `applyFontWeights` writes onto the document root,
  * plus a persisted config key under `ui.fontWeight.*`. An empty value means "no
  * override — inherit the surrounding weight": the property is removed so the
- * CSS fallback declared in arco-override.css / markdown.css takes over, keeping
+ * CSS fallback declared in legacy-overrides.css / markdown.css takes over, keeping
  * default rendering byte-for-byte identical to before this feature.
  *
  * Unlike font families, weights are a small fixed set of standard tiers
@@ -26,7 +26,7 @@ export type FontWeightSpec = {
 };
 
 /**
- * `code` drives a dedicated `--code-font-weight`; arco-override.css defines
+ * `code` drives a dedicated `--code-font-weight`; legacy-overrides.css defines
  * `--font-mono-weight: var(--code-font-weight, inherit)`, mirroring `--font-mono`.
  * Every `var(--font-mono)` call site declares `var(--font-mono-weight)` next to
  * it, so the code-region weight follows the selection with no per-site value.

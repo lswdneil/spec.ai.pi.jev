@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 const renderer = resolve(__dirname, '../../../packages/desktop/src/renderer');
 const read = (path: string): string => readFileSync(resolve(renderer, path), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 const scheme = read('styles/themes/mu-color-scheme.css');
-const arco = read('styles/arco-override.css');
+const arco = read('styles/legacy-overrides.css');
 const fileList = readFileSync(resolve(renderer, 'components/media/HorizontalFileList.tsx'), 'utf8');
 
 /** The body of the first rule whose selector list names exactly `selector`. */

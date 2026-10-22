@@ -521,7 +521,7 @@ the permission menu, the attachment chips, the person's row after the send (the 
 out") and the `@` menu. The menus were pictured while they faded in. In its picture the level submenu ended at the
 window's bottom edge with its last levels out of sight: Arco caps a dropdown menu at 200 px and scrolls the rest, and
 the note above the levels (spec.jev's) took a fifth of that, so a model with five levels showed the note and four (the test
-clicked "high", the fourth). The flyout is no longer capped (`.model-level-note` in `arco-override.css`, which the
+clicked "high", the fourth). The flyout is no longer capped (`.model-level-note` in `legacy-overrides.css`, which the
 classic conversation's chip shares), and the step checks that every level is inside the window; run at 1440×900 and
 1100×640 (`MU_E2E_WINDOW`).
 

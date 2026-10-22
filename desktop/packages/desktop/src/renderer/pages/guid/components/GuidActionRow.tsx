@@ -39,7 +39,7 @@ import styles from '../index.module.css';
 /**
  * Shared shell for the skills / MCP submenu popups: an optional pinned search
  * box on top and a single scroll container below (`.dropdown-search-scroll`,
- * see arco-override.css), mirroring RuntimeSelectorModelList's layout so the
+ * see legacy-overrides.css), mirroring RuntimeSelectorModelList's layout so the
  * search box never scrolls away with the list.
  */
 const SubmenuSearchList: React.FC<{

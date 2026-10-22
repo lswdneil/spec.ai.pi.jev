@@ -12,8 +12,9 @@ Strategy: a small compatibility layer that mirrors the Arco APIs we actually use
 - Done: tokens, Dense shell, settings, forms, welcome, dialogs, and the primitives in `ui/` — Alert, AutoComplete, Avatar, Badge, Button, Card, Checkbox, Collapse, Dialog/Modal (`confirm`/`useModal`), Dropdown (Radix), Empty, Form, Image, Input, InputNumber, InputTag, Layout, Link/Space/Result/Progress, menu aliases, Pagination, Popover, Popconfirm, Radio, Select, Spinner, Steps, Switch, Tabs, Tag, TimePicker, toast/AppToaster, Tooltip, Tree, Trigger, Typography.
 - Done since the last update: `MuSelect` now wraps the Dense Select; `BrowserChrome` uses the Dense Dropdown and Menu; `main.tsx` has no ConfigProvider, Arco locales, adapter or `arco.css`.
 - Test imports and `vi.mock('@arco-design/web-react')` blocks are gone; `@arco-design/web-react` was removed from `desktop/package.json`, `desktop/kyrn/package.json`, `bun.lock` and the Electron-Vite chunk config.
-- Remaining: CSS file names and variables inherited from Arco (`arco-override.css`, `mu-arco.css`, `themes/index.css`). They hold the app's font tokens and the full status-colour scales; renaming them is cosmetic cleanup, not an Arco dependency.
-- Last full desktop suite: **6711 passed / 0 failed** (116 skipped); `tsc`, lint and `package` pass.
+- The CSS files are renamed to `legacy-overrides.css` and `mu-scales.css`; no tracked file name says Arco. They keep the app's font tokens and full status-colour scales.
+- `tests/unit/renderer/noArcoImports.test.ts` guards renderer source, tests, `package.json` and `bun.lock` against reintroducing the package.
+- Last full desktop suite: **6713 passed / 0 failed** (116 skipped); `tsc`, lint and `package` pass.
 
 ---
 
@@ -87,7 +88,7 @@ Rules:
    + toast.success('Saved');
    ```
    The `toast` facade keeps `success/error/info/warning/loading` and returns a dismiss function.
-4. Remove global Arco CSS imports and `arco-override.css` only after the last import is gone.
+4. Remove global Arco CSS imports and `legacy-overrides.css` only after the last import is gone.
 
 Expected result: ~70–80% of the 210 files compile after the import swap; the rest are complex widgets or prop mismatches.
 

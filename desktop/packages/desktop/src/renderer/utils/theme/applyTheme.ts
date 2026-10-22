@@ -47,7 +47,7 @@ async function publishThemeToElectron(theme: Theme, followsSystem: boolean): Pro
  * Write the two appearance attributes as one coupled unit:
  *  - `data-theme` on `<html>` drives our own design tokens
  *  - `arco-theme` on `<body>` drives Arco's color scales and the
- *    `body[arco-theme='dark']` overrides in arco-override.css
+ *    `body[arco-theme='dark']` overrides in legacy-overrides.css
  *
  * Both must stay in sync or dark mode splits (our tokens go dark while Arco
  * stays light). `<html>` always exists; `<body>` can be null during early boot

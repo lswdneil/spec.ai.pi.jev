@@ -58,7 +58,7 @@ export interface MuStepsProps extends StepsProps {
  * </MuSteps>
  * ```
  *
- * @see arco-override.css for custom styles (.mu-steps)
+ * @see legacy-overrides.css for custom styles (.mu-steps)
  */
 const MuSteps: React.FC<MuStepsProps> & { Step: typeof Steps.Step } = ({ className, ...props }) => {
   return <Steps {...props} className={classNames('mu-steps', className)} />;

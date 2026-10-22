@@ -18,7 +18,7 @@ const ComponentsShowcase: React.FC = () => {
 
       <div>
         <h1 className='text-3xl font-bold mb-2'>mu 自定义组件样式展示</h1>
-        <p className='text-t-secondary'>展示所有在 arco-override.css 中自定义的组件样式</p>
+        <p className='text-t-secondary'>展示所有在 legacy-overrides.css 中自定义的组件样式</p>
       </div>
 
       {/* Message */}

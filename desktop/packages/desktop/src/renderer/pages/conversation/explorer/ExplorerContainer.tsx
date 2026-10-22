@@ -559,13 +559,13 @@ export const ExplorerContainer: React.FC<ExplorerContainerProps> = ({ projectId,
           widths.
 
           左内边距 12px 是本面板的对齐基准线，三处必须一致（见下方 SearchPanel 与
-          arco-override.css 的 .workspace-tree 规则）：外框一律从 12px 起，框内内容
+          legacy-overrides.css 的 .workspace-tree 规则）：外框一律从 12px 起，框内内容
           （tab 文字 / 搜索图标 / 树箭头）一律从 20px 起。12px 不是随手取的——侧栏
           的拖宽把手正好盖住最左 12px 且层级更高，任何落在其左侧的东西都点不到。
 
           The 12px left padding is this panel's alignment baseline and must match in
           all three places (see SearchPanel below and the .workspace-tree rules in
-          arco-override.css): outer boxes start at 12px, their inner content (tab
+          legacy-overrides.css): outer boxes start at 12px, their inner content (tab
           text / search icon / tree arrow) starts at 20px. 12px is not arbitrary —
           the sider's resize handle covers the leftmost 12px and sits above this
           content, so anything placed to its left cannot be clicked. */}
@@ -640,11 +640,11 @@ export const ExplorerContainer: React.FC<ExplorerContainerProps> = ({ projectId,
           container no longer sets overflow.
 
           没有左内边距是刻意的：搜索框和文件树各自对齐到 12px 基准线（前者靠自身
-          padding，后者靠 arco-override.css 里的 .workspace-tree 规则），在这里再加
+          padding，后者靠 legacy-overrides.css 里的 .workspace-tree 规则），在这里再加
           一层会把两者一起推离基准线。
           Deliberately no left padding: the search box and the tree each align to
           the 12px baseline on their own (the former via its own padding, the latter
-          via the .workspace-tree rules in arco-override.css). Adding a layer here
+          via the .workspace-tree rules in legacy-overrides.css). Adding a layer here
           would push both off that baseline. */}
       <div className='flex-1 min-h-0' style={activeTab === 'files' ? undefined : { display: 'none' }}>
         <SearchPanel

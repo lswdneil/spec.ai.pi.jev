@@ -390,7 +390,7 @@ export const ExplorerPanel: React.FC<ExplorerPanelProps> = ({
 
       const renderMenu = () => (
         // `explorer-context-menu` opts this menu out of Arco's 200px dropdown
-        // height cap (arco-override.css) so all items show without a scrollbar.
+        // height cap (legacy-overrides.css) so all items show without a scrollbar.
         // Sections are separated by a plain `<div role='separator'>`: arco passes
         // non-menu HTML children through untouched, and flatMenuGroup ignores them,
         // so the divider never disturbs keyboard nav or first/last-child styling.
@@ -515,7 +515,7 @@ export const ExplorerPanel: React.FC<ExplorerPanelProps> = ({
   return (
     <div className='h-full' tabIndex={-1} ref={containerRef} {...containerProps}>
       {/* `workspace-tree` opts into the full-row VSCode-style hover + selected
-          backgrounds in arco-override.css (selected = --color-fill-3), so a
+          backgrounds in legacy-overrides.css (selected = --color-fill-3), so a
           revealed/selected node has a clearly visible highlight. */}
       <Tree
         className='workspace-tree'
@@ -525,13 +525,13 @@ export const ExplorerPanel: React.FC<ExplorerPanelProps> = ({
         /* 让节点标题块（arco 的点击目标 .arco-tree-node-title）铺满整行剩余宽度：
            blockNode 给它加 .arco-tree-node-title-block { flex: 1 }，于是箭头右侧
            那片空白也成为有效点击区域，而不是只有图标+文字那一小段。行的
-           hover/选中背景本就画在整行（.arco-tree-node，见 arco-override.css），
+           hover/选中背景本就画在整行（.arco-tree-node，见 legacy-overrides.css），
            这里补齐的是「可点击/可右键的命中区域」。
            Make the node's title block (arco's click target, .arco-tree-node-title)
            fill the row: blockNode adds .arco-tree-node-title-block { flex: 1 }, so
            the blank space right of the arrow becomes part of the clickable area
            instead of just the icon+label. The full-row hover/selected backgrounds
-           already live on .arco-tree-node (arco-override.css); this fills in the
+           already live on .arco-tree-node (legacy-overrides.css); this fills in the
            hit area to match. */
         blockNode
         /* 点一整行就展开/收起文件夹，不必精准点中前面那个小箭头（arco 默认只有

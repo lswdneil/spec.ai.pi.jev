@@ -104,7 +104,7 @@ describe('ExplorerPanel reveal highlight + scroll-into-view', () => {
     );
     await screen.findByText('a.ts');
     // The `workspace-tree` class enables the full-row selected background
-    // (arco-override.css → --color-fill-3).
+    // (legacy-overrides.css → --color-fill-3).
     expect(container.querySelector('.workspace-tree')).toBeTruthy();
   });
 

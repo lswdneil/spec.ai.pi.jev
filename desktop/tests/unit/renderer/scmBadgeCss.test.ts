@@ -109,7 +109,7 @@ describe('every badge class actually produces a CSS rule', () => {
     // whole declaration would be invalid and the border would simply not paint.
     // So follow the chain in the app's Arco-derived stylesheet to its end and require numbers.
     const arco = readFileSync(
-      path.join(__dirname, '../../../packages/desktop/src/renderer/styles/themes/mu-arco.css'),
+      path.join(__dirname, '../../../packages/desktop/src/renderer/styles/themes/mu-scales.css'),
       'utf8'
     );
     const define = (name: string): string | undefined => arco.match(new RegExp(`--${name}:\\s*([^;]+);`))?.[1]?.trim();
@@ -160,7 +160,7 @@ describe('every badge class actually produces a CSS rule', () => {
     // dark values while this chip silently kept its light-pink background on a dark
     // panel. Hence this assertion is on the pairing, not on one selector.
     const arco = readFileSync(
-      path.join(__dirname, '../../../packages/desktop/src/renderer/styles/themes/mu-arco.css'),
+      path.join(__dirname, '../../../packages/desktop/src/renderer/styles/themes/mu-scales.css'),
       'utf8'
     );
     // Arco defines the scale twice: once under `body`, once under `body[arco-theme='dark']`.

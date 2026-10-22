@@ -236,7 +236,7 @@ existing compression threshold was not lowered just to manufacture a result.
 - The renderer draws the same PNG (`assets/logos/brand/app.png`) and `assets/logo.svg` carries it as a data
   URI; `tests/unit/kyrn/brandMark.test.ts` keeps the two equal.
 - The look is a second colour scheme, `data-color-scheme='mu'` on `<html>`
-  (`styles/themes/mu-color-scheme.css`, `mu-arco.css`, `mu-shell.css`). It keeps the
+  (`styles/themes/mu-color-scheme.css`, `mu-scales.css`, `mu-shell.css`). It keeps the
   upstream specificity, so theme tokens and custom CSS themes still win; setting the
   attribute back to `default` restores the upstream colours untouched.
 - Since 2026-09-22 (the user: the pink and purple all over looked bad) the page is

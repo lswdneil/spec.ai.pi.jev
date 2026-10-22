@@ -11,7 +11,7 @@
  * custom property that `applyFontFamilies` writes onto the document root, plus a
  * persisted config key under `ui.fontFamily.*`. An empty value means "no
  * override — use the built-in default stack": the property is removed so the
- * CSS fallback declared in arco-override.css / markdown.css takes over, keeping
+ * CSS fallback declared in legacy-overrides.css / markdown.css takes over, keeping
  * default rendering byte-for-byte identical to before this feature.
  */
 export type FontFamilyKey = 'app' | 'chat' | 'markdown' | 'code';
@@ -28,7 +28,7 @@ export type FontFamilySpec = {
 };
 
 /**
- * `code` drives a dedicated `--code-font-family`; arco-override.css defines
+ * `code` drives a dedicated `--code-font-family`; legacy-overrides.css defines
  * `--font-mono: var(--code-font-family, <mono stack>)`, so every existing
  * `var(--font-mono)` site (markdown code, editors, chat shadow) follows the
  * selection without editing those call sites.

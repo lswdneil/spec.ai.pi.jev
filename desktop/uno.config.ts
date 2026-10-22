@@ -284,10 +284,10 @@ export default defineConfig({
       ...specjevColors,
     },
     fontFamily: {
-      // Reference the centralized --font-mono token (defined in arco-override.css)
+      // Reference the centralized --font-mono token (defined in legacy-overrides.css)
       // so the `font-mono` utility follows the user's code-font selection too.
       // --font-mono itself falls back to the built-in monospace stack.
-      // 引用集中的 --font-mono token（定义在 arco-override.css），使 font-mono
+      // 引用集中的 --font-mono token（定义在 legacy-overrides.css），使 font-mono
       // 工具类同样跟随用户选择的代码字体；--font-mono 自身回退到内置等宽字体栈。
       mono: 'var(--font-mono)',
     },

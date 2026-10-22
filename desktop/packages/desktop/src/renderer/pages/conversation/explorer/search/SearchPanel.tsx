@@ -115,11 +115,11 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({ roots, peNames, onReve
           showing the tree (never a blank pane) even though our query is non-empty
           — the user re-owns by typing in the box again.
 
-          ps-12px 把树的行外框放到面板基准线上；行内箭头再由 arco-override.css 的
+          ps-12px 把树的行外框放到面板基准线上；行内箭头再由 legacy-overrides.css 的
           .workspace-tree 规则补 8px，落到 20px。
           ps-12px puts the tree's row boxes on the panel baseline; the arrow inside
           is then offset a further 8px by the .workspace-tree rules in
-          arco-override.css, landing at 20px. */}
+          legacy-overrides.css, landing at 20px. */}
       <div className='flex-1 min-h-0 overflow-auto ps-12px' style={active && owned ? { display: 'none' } : undefined}>
         {children}
       </div>
