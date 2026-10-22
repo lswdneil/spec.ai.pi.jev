@@ -115,6 +115,7 @@ Editorial direction: serif for display/headings only; UI controls stay sans. Den
 - Spacing scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64. Layout uses 12/16/24; section gaps 24–32.
 - Radius (Dense): small **8**, control **8**, chrome/popup **10**, composer/dialog **12**, pill 999.
 - Motion: instant 80ms, fast 120ms, base 160ms, enter 220ms; ease `cubic-bezier(.2,.7,.2,1)`.
+- Interactive list rows (menus, selects, trees, palettes, history, settings rail) show a 2px brand leading bar on hover/selection.
 - Animate only navigation, expansion, progress, gesture follow-through. No looping decorative motion.
 - Honor `prefers-reduced-motion`; all durations become 0.
 - No shadows. Optional squircle (`corner-shape`) is a progressive enhancement for Chromium only.

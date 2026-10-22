@@ -64,6 +64,14 @@ describe('Dense theme and type tokens', () => {
     expect(read('styles/specjev/dense.css')).toContain('html[data-sv-ui="dense"][data-theme] {');
   });
 
+  it('marks highlighted list rows with one brand-coloured leading bar', () => {
+    const dense = read('styles/specjev/dense.css');
+    expect(dense).toContain("[role='option'][aria-selected='true']::before");
+    expect(dense).toContain("[role='menuitem'][data-highlighted]::before");
+    expect(dense).toContain("[role='treeitem'][aria-selected='true']::before");
+    expect(dense).toMatch(/background: var\(--sv-brand\);/);
+  });
+
   it('uses the UI typeface for every non-code label', () => {
     for (const path of [
       'components/kernel/MuHero.module.css',
