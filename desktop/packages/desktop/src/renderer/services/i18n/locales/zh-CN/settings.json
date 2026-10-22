@@ -1078,6 +1078,10 @@
   "conversationsDescription": "超时时间、预览大小上限、上传文件的去处，以及对话之间的消息。",
   "aboutDescription": "当前的 spec.jev 版本、更新，以及日志文件夹的入口。",
   "aboutCompany": "玄同未来（上海）人工智能科技有限公司-内部测试版",
+  "aboutQuote": "只有那些敢于冒险走得太远的人，才有可能知道自己能走多远。",
+  "aboutQuoteAuthor": "T. S. 艾略特",
+  "aboutQuoteOriginalLabel": "英文原版：",
+  "aboutQuoteOriginal": "Only those who will risk going too far can possibly find out how far one can go.",
   "developer": {
     "title": "开发者",
     "description": "开发者工具，以及外部工具连接应用内浏览器用的端口和 MCP 配置。",

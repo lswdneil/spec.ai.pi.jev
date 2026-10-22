@@ -36,6 +36,7 @@ const AboutModalContent: React.FC = () => {
   const viewMode = useSettingsViewMode();
   const isPageMode = viewMode === 'page';
   const isElectron = isElectronDesktop();
+  const isEnglish = i18n.language.toLowerCase().startsWith('en');
 
   const { state: update, run } = useUpdateState();
 
@@ -200,6 +201,21 @@ const AboutModalContent: React.FC = () => {
           </div>
         ))}
       </div>
+
+      <blockquote
+        className='mx-auto mt-10 flex max-w-[560px] flex-col items-center gap-2 border-t border-sv-line pt-8 text-center'
+        data-testid='about-quote'
+      >
+        <p className='m-0 text-13px leading-22px text-t-primary'>{t('settings.aboutQuote')}</p>
+        <footer className='text-[11.5px] leading-[18px] text-t-secondary'>
+          — {t('settings.aboutQuoteAuthor')}
+        </footer>
+        {isEnglish ? null : (
+          <p className='m-0 text-[11.5px] leading-[18px] text-t-tertiary'>
+            <span>{t('settings.aboutQuoteOriginalLabel')}</span> {t('settings.aboutQuoteOriginal')}
+          </p>
+        )}
+      </blockquote>
     </div>
   );
 };

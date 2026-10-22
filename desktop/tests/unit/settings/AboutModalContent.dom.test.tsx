@@ -105,6 +105,14 @@ describe('AboutModalContent', () => {
     expect(screen.getByTestId('about-company')).toHaveTextContent('settings.aboutCompany');
   });
 
+  it('shows the closing quote, its author and the English original', async () => {
+    await renderAbout();
+    const quote = screen.getByTestId('about-quote');
+    expect(quote).toHaveTextContent('settings.aboutQuote');
+    expect(quote).toHaveTextContent('settings.aboutQuoteAuthor');
+    expect(quote).toHaveTextContent('settings.aboutQuoteOriginalLabel');
+  });
+
   it('opens the website, repository and releases pages', async () => {
     await renderAbout();
     fireEvent.click(screen.getByRole('link', { name: 'www.spec-ai.cn' }));
