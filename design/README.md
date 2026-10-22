@@ -76,11 +76,11 @@ With the flag on, the app uses the Dense chrome:
 - Message body: the shadow Markdown view reads `--chat-line-height` and
   `--chat-paragraph-margin`, so Dense replies get the 1.65 rhythm while the person's own
   chat font size still applies; user bubbles are flat with an 8/2px corner.
-- Composer: flat field, 18px radius, 13px input, sage send button.
-- Command palette: 14px popup, 40px query, 28px rows and 12px labels when Dense is on.
+- Composer: flat field, 12px radius, 12.5px input, 26px sage send button.
+- Command palette: 10px popup, 40px query, 28px rows and 11.5px labels when Dense is on.
 - Sidebar width uses `sider-width-px-v2`, separate from the old 260px preference.
 - Welcome: the hero stays, the violet glow/dot grid goes, and the new-conversation card is a
-  flat 18px field like the composer.
+  flat 12px field like the composer.
 
 Still old in this slice: the settings rail markup (it already uses 32px rows and 13px labels)
 and the ACP tool/terminal cards.

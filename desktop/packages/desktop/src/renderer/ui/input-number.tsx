@@ -78,7 +78,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-[6px] border border-sv-line bg-sv-surface px-2 text-sv-text focus-within:border-sv-line-strong',
+        'inline-flex items-center gap-1 rounded-[var(--sv-r-control)] border border-sv-line bg-sv-surface px-2 text-sv-text focus-within:border-sv-line-strong',
         small ? 'h-7 text-[12px]' : 'h-8 text-[12px]',
         disabled && 'opacity-50',
         className

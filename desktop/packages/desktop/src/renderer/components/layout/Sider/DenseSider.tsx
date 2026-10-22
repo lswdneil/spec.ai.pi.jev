@@ -110,7 +110,7 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
         aria-label={short ? label : undefined}
         aria-current={active ? 'page' : undefined}
         className={cn(
-          'flex h-[27px] shrink-0 items-center gap-2 rounded-[5px] px-2 text-[12px] transition-colors',
+          'flex h-[27px] shrink-0 items-center gap-2 rounded-[5px] px-2 text-[11.5px] transition-colors',
           active ? 'bg-sv-selected text-sv-text' : 'text-sv-muted hover:bg-sv-surface hover:text-sv-text',
           short && 'justify-center px-0'
         )}
@@ -143,7 +143,7 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
                 )}
               >
                 <Plus className='h-3.5 w-3.5' strokeWidth={1.75} />
-                {short ? null : <span className='text-[12px]'>{t('conversation.welcome.newConversation')}</span>}
+                {short ? null : <span className='text-[11.5px]'>{t('conversation.welcome.newConversation')}</span>}
               </Button>
             </Tooltip>
 

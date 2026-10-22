@@ -72,13 +72,13 @@
   --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, "Noto Serif SC", "Songti SC", serif;
   --font-mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", "Noto Sans Mono", monospace;
 
-  --fs-caption: 11.5px;
-  --fs-small: 12.5px;
-  --fs-meta: 13px;
-  --fs-body: 14px;
-  --fs-body-lg: 15px;
-  --fs-title: 18px;
-  --fs-h1: 26px;
+  --fs-caption: 10.5px;
+  --fs-small: 11.5px;
+  --fs-meta: 12px;
+  --fs-body: 13px;
+  --fs-body-lg: 14px;
+  --fs-title: 16px;
+  --fs-h1: 20px;
   --fs-display: 34px;
 
   --lh-display: 1.35;
@@ -103,11 +103,11 @@
   --space-16: 64px;
 
   --r-small: 8px;
-  --r-control: 14px;
-  --r-chrome: 18px;
-  --r-popup: 18px;
-  --r-composer: 24px;
-  --r-dialog: 24px;
+  --r-control: 8px;
+  --r-chrome: 10px;
+  --r-popup: 10px;
+  --r-composer: 12px;
+  --r-dialog: 12px;
   --r-pill: 999px;
 
   --t-instant: 80ms;
@@ -117,9 +117,9 @@
   --t-exit: 160ms;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
-  --sidebar: 248px;
-  --rail: 272px;
-  --topbar: 52px;
+  --sidebar: 208px;
+  --rail: 300px;
+  --topbar: 40px;
   --thread-max: 820px;
   --phone: 390px;
   --touch: 44px;

@@ -58,7 +58,7 @@ const MobileTabBar: React.FC = () => {
 
   const itemClass = (active: boolean) =>
     cn(
-      'flex min-w-0 flex-1 flex-col items-center justify-center gap-1 pt-2 pb-1 text-[10px] transition-colors',
+      'flex min-w-0 flex-1 flex-col items-center justify-center gap-1 pt-2 pb-1 text-[9px] transition-colors',
       active ? 'text-sv-text' : 'text-sv-muted'
     );
 

@@ -36,7 +36,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         aria-label='Previous page'
         disabled={current <= 1}
         onClick={() => go(current - 1)}
-        className='flex h-6 w-6 items-center justify-center rounded-[6px] border border-sv-line text-sv-muted outline-none transition-colors hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-40'
+        className='flex h-6 w-6 items-center justify-center rounded-[var(--sv-r-control)] border border-sv-line text-sv-muted outline-none transition-colors hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-40'
       >
         <ChevronLeft className='h-3.5 w-3.5' strokeWidth={1.75} />
       </button>
@@ -52,7 +52,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         aria-label='Next page'
         disabled={current >= pages}
         onClick={() => go(current + 1)}
-        className='flex h-6 w-6 items-center justify-center rounded-[6px] border border-sv-line text-sv-muted outline-none transition-colors hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-40'
+        className='flex h-6 w-6 items-center justify-center rounded-[var(--sv-r-control)] border border-sv-line text-sv-muted outline-none transition-colors hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-40'
       >
         <ChevronRight className='h-3.5 w-3.5' strokeWidth={1.75} />
       </button>

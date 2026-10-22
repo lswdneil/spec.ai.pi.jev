@@ -46,14 +46,6 @@
   }
 }
 
-/* Workspace open button dropdown styles */
-.workspace-open-dropdown {
-  background-color: var(--color-bg-2);
-  border-radius: 4px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  color: var(--color-text-1);
-}
-
 /* Header model pill — only cap width on mobile, where the titlebar slot has
    limited horizontal room. Desktop lets the pill grow to fit the full name. */
 @media (max-width: 767px) {

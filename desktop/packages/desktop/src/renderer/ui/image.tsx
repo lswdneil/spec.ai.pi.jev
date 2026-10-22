@@ -45,13 +45,13 @@ const ImageBase = React.forwardRef<HTMLImageElement, ImageProps>(function Image(
               role='dialog'
               aria-modal='true'
               aria-label='Image preview'
-              className='fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-6'
+              className='fixed inset-0 z-[100] flex items-center justify-center bg-[var(--sv-scrim)] p-6'
               onClick={() => setOpen(false)}
             >
               <button
                 type='button'
                 aria-label='Close preview'
-                className='absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-white outline-none hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
+                className='absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-sv-line-strong text-sv-text outline-none hover:bg-sv-raised focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus'
                 onClick={() => setOpen(false)}
               >
                 <X className='h-4 w-4' strokeWidth={1.75} />

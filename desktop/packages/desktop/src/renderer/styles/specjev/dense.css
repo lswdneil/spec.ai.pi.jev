@@ -115,6 +115,7 @@ html[data-sv-ui="dense"] {
 
   /* Message bodies follow the Dense rhythm without hard-coding their size: the
      person's own chat font-size setting still wins. */
+  --chat-font-size: 12.5px;
   --chat-line-height: 1.65;
   --chat-paragraph-margin: 10px;
 
@@ -167,27 +168,43 @@ html[data-sv-ui="dense"] .layout-sider .text-14px {
   font-size: 13px;
 }
 
-html[data-sv-ui="dense"] .layout-sider [data-testid="sider-new-chat"],
+html[data-sv-ui="dense"] .layout-sider [data-testid="sider-new-chat"] {
+  height: 28px;
+}
+
 html[data-sv-ui="dense"] .layout-sider [data-testid="sider-search"],
 html[data-sv-ui="dense"] .layout-sider [data-testid="sider-scheduled"] {
-  height: 32px;
+  height: 27px;
 }
 
 html[data-sv-ui="dense"] .layout-sider .chat-history__item {
-  height: 28px;
+  height: 27px;
   border-radius: 5px;
 }
 
+html[data-sv-ui="dense"] .layout-sider .chat-history__item[aria-current="page"]::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  width: 2px;
+  height: 11px;
+  border-radius: 999px;
+  background: var(--sv-brand);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
 html[data-sv-ui="dense"] .layout-sider .chat-history__item-name {
-  font-size: 12px;
-  line-height: 20px;
+  font-size: 11px;
+  line-height: 16px;
 }
 
 html[data-sv-ui="dense"] .message-user-bubble {
   background-color: var(--sv-surface-2) !important;
   border: 1px solid var(--sv-line);
   border-radius: 8px 8px 2px 8px !important;
-  padding: 8px 12px !important;
+  padding: 8px 10px !important;
 }
 
 html[data-sv-ui="dense"] .sv-dense-tool-summary {
@@ -322,11 +339,16 @@ html[data-sv-ui="dense"] .arco-form-item-label-col > label {
 }
 
 /* Flat chrome: the Dense reference has no shadows. */
-html[data-sv-ui="dense"] .arco-modal,
+html[data-sv-ui="dense"] .arco-modal {
+  border: 1px solid var(--sv-line);
+  border-radius: var(--sv-r-dialog);
+  box-shadow: none;
+}
+
 html[data-sv-ui="dense"] .arco-dropdown,
 html[data-sv-ui="dense"] .arco-popover-content {
   border: 1px solid var(--sv-line);
-  border-radius: 14px;
+  border-radius: var(--sv-r-popup);
   box-shadow: none;
 }
 
@@ -376,14 +398,24 @@ html[data-sv-ui="dense"] .sendbox-panel--active {
 }
 
 html[data-sv-ui="dense"] .sendbox-panel {
-  padding: 10px 12px !important;
-  border-radius: 18px !important;
+  padding: 7px 9px 5px !important;
+  border-radius: 12px !important;
+}
+
+html[data-sv-ui="dense"] .sendbox-panel .send-button-custom,
+html[data-sv-ui="dense"] .sendbox-panel .send-button-custom.arco-btn,
+html[data-sv-ui="dense"] .sendbox-panel .send-button-custom.arco-btn-primary {
+  width: 26px !important;
+  min-width: 26px !important;
+  height: 26px !important;
+  min-height: 26px !important;
+  flex-basis: 26px !important;
 }
 
 html[data-sv-ui="dense"] .sendbox-panel textarea,
 html[data-sv-ui="dense"] .sendbox-highlight-layer {
-  font-size: 13px !important;
-  line-height: 20px !important;
+  font-size: 12.5px !important;
+  line-height: 18px !important;
 }
 
 html[data-sv-ui="dense"] .sendbox-toolbar {

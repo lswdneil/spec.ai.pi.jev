@@ -57,7 +57,7 @@ export const InputTag = React.forwardRef<HTMLInputElement, InputTagProps>(functi
   return (
     <span
       className={cn(
-        'flex min-h-8 w-full flex-wrap items-center gap-1 rounded-[6px] border border-sv-line bg-sv-surface px-1.5 py-1 text-[12px] text-sv-text focus-within:border-sv-line-strong',
+        'flex min-h-8 w-full flex-wrap items-center gap-1 rounded-[var(--sv-r-control)] border border-sv-line bg-sv-surface px-1.5 py-1 text-[12px] text-sv-text focus-within:border-sv-line-strong',
         small && 'min-h-7 text-[11.5px]',
         disabled && 'opacity-50',
         className

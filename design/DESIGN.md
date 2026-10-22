@@ -98,7 +98,7 @@ Usage notes:
 --font-mono:  "Cascadia Code", "SFMono-Regular", Consolas, "Noto Sans Mono", monospace
 ```
 
-- UI base **14px**; small 12.5; caption 11.5; meta 13; title 18; h1 26; display 34.
+- Dense (approved direction): UI base **13px**; small 11.5; caption 10.5; meta 12; h1 20. Editorial alternatives may use 14/26.
 - Line-height: body **1.65** (CJK 1.7–1.8), headings **1.35** (CJK 1.35–1.4), small 1.5.
 - Weights: 400 / 500 / 600 only. No 700 body.
 - Numbers in tables and timing: `font-variant-numeric: tabular-nums`.
@@ -112,7 +112,7 @@ Editorial direction: serif for display/headings only; UI controls stay sans. Den
 ## 5. Space, radius, motion
 
 - Spacing scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64. Layout uses 12/16/24; section gaps 24–32.
-- Radius: control **14**, chrome/popup **18**, composer/dialog **24**, small **8**, pill 999.
+- Radius (Dense): small **8**, control **8**, chrome/popup **10**, composer/dialog **12**, pill 999.
 - Motion: instant 80ms, fast 120ms, base 160ms, enter 220ms; ease `cubic-bezier(.2,.7,.2,1)`.
 - Animate only navigation, expansion, progress, gesture follow-through. No looping decorative motion.
 - Honor `prefers-reduced-motion`; all durations become 0.
@@ -122,9 +122,9 @@ Editorial direction: serif for display/headings only; UI controls stay sans. Den
 
 | Surface | Rule |
 | --- | --- |
-| Desktop ≥ 1280 | sidebar 248 + thread (max 820) + judge rail 272 |
-| 1024–1279 | rail collapses; sidebar remains |
-| 768–1023 | sidebar hidden behind a menu; single column |
+| Desktop 1280+ | sidebar 208 + thread + judge rail 300 |
+| 1024-1279 | rail collapses; sidebar remains |
+| 768-1023 | sidebar hidden behind a menu; single column |
 | < 768 | mobile shell: top bar 44, bottom nav 50 + safe area; composer above nav |
 | Web | same renderer via `web-host`; responsive rules above |
 | Android/iOS | same renderer in Capacitor/PWA; remote host; 44px targets, `dvh`, `env(safe-area-inset-*)` |
@@ -141,15 +141,15 @@ Editorial direction: serif for display/headings only; UI controls stay sans. Den
 | --- | --- |
 | Button | 32/36/44 heights; primary = brand fill + on-brand; secondary = transparent + `--line`; ghost = text + hover surface. No shadow. |
 | Icon button | 30×30 desktop, 44×44 mobile; 16px icon; `aria-label` always. |
-| Input / textarea | `--input` surface, 1px `--line`, 10–14 radius; focus changes border to `--line-strong` and shows ring; label is always visible. |
+| Input / textarea | `--input` surface, 1px `--line`, 8px radius; focus changes border to `--line-strong` and shows ring; label is always visible. |
 | Chip / tag | 24–28 height, pill; neutral by default; brand only for the current state. |
-| Card | `--surface`, 1px `--line`, 14–18 radius, 12–16 padding. No left-border accent. |
-| Message | user: `--surface-2`, right aligned, radius 16/16/4/16; agent: no bubble, 28px mark + body. |
-| Tool call | 1px card, header 34px with icon + command + status, monospace body; exit status uses `--ok`/`--danger`. |
-| Composer | 24 radius, `--surface`, textarea + control row; send is the only brand fill on the screen. |
+| Card | `--surface`, 1px `--line`, 10px radius, 12-16 padding. No left-border accent. |
+| Message | user: `--surface-2`, right aligned, radius 8/8/2/8; agent: no bubble, 22px mark + body. |
+| Tool call | 1px card, header 26px with icon + command + status, monospace body; exit status uses `--ok`/`--danger`. |
+| Composer | 12px radius, `--surface`, textarea + control row; send is the only brand fill on the screen. |
 | Judge verdict | neutral card with a dot; score right-aligned mono; no green flood. |
 | Settings card | 3 theme cards, mini preview, selected ring in brand; no shadows. |
-| Dialog / sheet | `--popover`, 18–24 radius, scrim; mobile uses a bottom sheet (vaul). |
+| Dialog / sheet | `--popover`, 12px radius, scrim; mobile uses a bottom sheet (vaul). |
 | Empty state | headline + one plain sentence + primary action; no illustration required. |
 | Toast | sonner, bottom-right desktop, top mobile; one line + action; no auto-dismiss for errors. |
 
@@ -219,6 +219,6 @@ Chosen on 2026-10-22:
 1. **Direction: Dense.** 13px UI, tight rows, judge rail visible on wide screens.
 2. **Mobile: remote host client.** The renderer is the same; the agent stays on the desktop/web host.
 3. **Arco: compatibility layer + codemod.** Wrap the top components, batch-change imports, replace complex widgets one by one.
-4. **Judge rail: hybrid.** Expanded ≥1280px, auto-collapsed 1024–1279px, hidden <1024px with a manual toggle and a remembered preference.
+4. **Judge rail: hybrid.** Expanded at 300px, auto-collapsed 1024-1279px, hidden <1024px with a manual toggle and a remembered preference.
 
 Still open: the final window width at which the rail auto-collapses (1180 vs 1280) and whether the mobile client is a PWA first or a Capacitor wrapper first.

@@ -205,7 +205,7 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
           data-testid={testId}
           disabled={disabled}
           className={cn(
-            'inline-flex min-w-0 max-w-full items-center gap-1 rounded-[6px] border border-sv-line bg-sv-surface px-2 text-left text-[12px] text-sv-text outline-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-50',
+            'inline-flex min-w-0 max-w-full items-center gap-1 rounded-[var(--sv-r-control)] border border-sv-line bg-sv-surface px-2 text-left text-[12px] text-sv-text outline-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-50',
             'arco-select',
             disabled && 'arco-select-disabled',
             small ? 'h-7' : 'h-8',

@@ -41,7 +41,7 @@ export const TimePicker = React.forwardRef<HTMLInputElement, TimePickerProps>(fu
         onChange?.(next, { format: () => next });
       }}
       className={cn(
-        'h-8 rounded-[6px] border border-sv-line bg-sv-surface px-2 text-[12px] text-sv-text outline-none transition-colors focus:border-sv-line-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-50',
+        'h-8 rounded-[var(--sv-r-control)] border border-sv-line bg-sv-surface px-2 text-[12px] text-sv-text outline-none transition-colors focus:border-sv-line-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
       style={style}
