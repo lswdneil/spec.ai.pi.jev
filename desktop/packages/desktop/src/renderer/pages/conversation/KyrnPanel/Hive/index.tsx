@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Collapse, Empty, Pagination, Select, Tabs, Tag } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Collapse } from '@/renderer/ui/collapse';
+import { Empty } from '@/renderer/ui/empty';
+import { Tabs } from '@/renderer/ui/tabs-legacy';
+import { Tag } from '@/renderer/ui/tag';
+import { Pagination, Select } from '@arco-design/web-react';
 import { ArrowRight, Bee } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import type { Activity } from '@/common/kyrn/types';

@@ -4,7 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Button, Empty, Popover, Tabs } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Empty } from '@/renderer/ui/empty';
+import { Popover } from '@/renderer/ui/popover';
+import { Tabs } from '@/renderer/ui/tabs-legacy';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
