@@ -12,7 +12,7 @@ import { useCronJobsMap } from '@/renderer/pages/cron';
 import { restrictToVerticalAxis } from '@/renderer/utils/ui/dndModifiers';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Button, Dropdown, Empty, Input, Menu, Modal, Tooltip } from '@arco-design/web-react';
+import { Button, Dropdown, Empty, Input, MenuItem, Modal, Tooltip } from '@/renderer/ui';
 import { FolderClose, MoreOne, Plus, Right } from '@icon-park/react';
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useMemo } from 'react';
@@ -300,21 +300,29 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
       <Modal
         title={t('conversation.history.renameTitle')}
         visible={renameModalVisible}
-        onOk={handleRenameConfirm}
         onCancel={handleRenameCancel}
-        okText={t('conversation.history.saveName')}
-        cancelText={t('conversation.history.cancelEdit')}
-        confirmLoading={renameLoading}
-        okButtonProps={{ disabled: !renameModalName.trim() }}
-        style={{ borderRadius: '12px' }}
-        alignCenter
-        getPopupContainer={() => document.body}
+        footer={
+          <>
+            <Button onClick={handleRenameCancel}>{t('conversation.history.cancelEdit')}</Button>
+            <Button
+              type='primary'
+              loading={renameLoading}
+              disabled={!renameModalName.trim()}
+              onClick={() => void handleRenameConfirm()}
+            >
+              {t('conversation.history.saveName')}
+            </Button>
+          </>
+        }
       >
         <Input
           autoFocus
           value={renameModalName}
-          onChange={setRenameModalName}
-          onPressEnter={handleRenameConfirm}
+          onChange={(event) => setRenameModalName(event.target.value)}
+          onClear={() => setRenameModalName('')}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') void handleRenameConfirm();
+          }}
           placeholder={t('conversation.history.renamePlaceholder')}
           allowClear
         />
@@ -329,7 +337,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
             <div className='grid grid-cols-2 gap-6px'>
               <Button
                 className='!w-full !justify-center !min-w-0 !h-30px !px-8px !text-12px whitespace-nowrap'
-                size='mini'
+                size='sm'
                 type='secondary'
                 onClick={handleToggleSelectAll}
               >
@@ -337,7 +345,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
               </Button>
               <Button
                 className='!w-full !justify-center !min-w-0 !h-30px !px-8px !text-12px whitespace-nowrap'
-                size='mini'
+                size='sm'
                 type='primary'
                 onClick={handleBatchArchive}
               >
@@ -470,20 +478,18 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
             {!collapsedSections.has('projects') &&
               projectGroups.map((group) => {
                 const projectMenu = (
-                  <Menu
-                    onClickMenuItem={(key) => {
-                      if (key === 'archive') {
+                  <>
+                    <MenuItem
+                      onClick={() => {
                         handleArchiveProject(group.displayName, group.conversations);
-                      }
-                    }}
-                  >
-                    <Menu.Item key='archive'>
+                      }}
+                    >
                       <span className='flex items-center gap-8px'>
                         <FolderClose theme='outline' size='14' />
                         {t('conversation.history.archiveProject')}
                       </span>
-                    </Menu.Item>
-                  </Menu>
+                    </MenuItem>
+                  </>
                 );
                 return (
                   <div key={group.workspace} className='min-w-0'>
@@ -526,13 +532,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                               <Plus theme='outline' size='14' fill='currentColor' className='block leading-none' />
                             </span>
                           </Tooltip>
-                          <Dropdown
-                            droplist={projectMenu}
-                            trigger='click'
-                            position='br'
-                            getPopupContainer={() => document.body}
-                            unmountOnExit={false}
-                          >
+                          <Dropdown droplist={projectMenu} align='end'>
                             <span
                               aria-label={t('conversation.history.projectActions')}
                               className={classNames(
