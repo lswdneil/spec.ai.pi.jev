@@ -3,7 +3,7 @@
  */
 import type { AssistantListItem } from './types';
 import AssistantAvatar from './AssistantAvatar';
-import { Modal } from '@arco-design/web-react';
+import { Modal } from '@/renderer/ui/dialog';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

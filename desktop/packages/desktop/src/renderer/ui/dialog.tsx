@@ -1,6 +1,7 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import * as React from 'react';
+import { Button } from './button';
 import { cn } from './cn';
 
 export const Dialog = DialogPrimitive.Root;
@@ -46,6 +47,7 @@ export interface ModalProps {
   visible?: boolean;
   open?: boolean;
   onCancel?: () => void;
+  onOk?: () => void;
   onOpenChange?: (open: boolean) => void;
   title?: React.ReactNode;
   description?: React.ReactNode;
@@ -54,13 +56,29 @@ export interface ModalProps {
   width?: number;
   maskClosable?: boolean;
   className?: string;
+  style?: React.CSSProperties;
+  okText?: React.ReactNode;
+  cancelText?: React.ReactNode;
+  confirmLoading?: boolean;
+  okButtonProps?: { disabled?: boolean; status?: 'normal' | 'success' | 'warning' | 'danger' };
+  cancelButtonProps?: { disabled?: boolean };
+  /** Arco compatibility; the Dense dialog is always centred. */
+  alignCenter?: boolean;
+  closable?: boolean;
+  getPopupContainer?: (node: HTMLElement) => HTMLElement;
+  wrapClassName?: string;
+  wrapStyle?: React.CSSProperties;
+  maskStyle?: React.CSSProperties;
+  afterClose?: () => void;
+  'data-testid'?: string;
 }
 
-/** Arco-shaped modal: `visible`, `onCancel`, `footer`, `width`. */
+/** Arco-shaped modal: `visible`, `onCancel`, `onOk`, `footer`, `width`. */
 export const Modal: React.FC<ModalProps> = ({
   visible,
   open,
   onCancel,
+  onOk,
   onOpenChange,
   title,
   description,
@@ -69,8 +87,41 @@ export const Modal: React.FC<ModalProps> = ({
   width = 520,
   maskClosable = true,
   className,
+  style,
+  okText,
+  cancelText,
+  confirmLoading = false,
+  okButtonProps,
+  cancelButtonProps,
+  closable = true,
+  afterClose,
+  'data-testid': testId,
 }) => {
   const isOpen = visible ?? open ?? false;
+  const wasOpen = React.useRef(isOpen);
+  React.useEffect(() => {
+    if (wasOpen.current && !isOpen) afterClose?.();
+    wasOpen.current = isOpen;
+  }, [afterClose, isOpen]);
+  const defaultFooter =
+    footer === undefined && (onOk || okText !== undefined || cancelText !== undefined) ? (
+      <>
+        <Button onClick={onCancel} disabled={cancelButtonProps?.disabled}>
+          {cancelText ?? 'Cancel'}
+        </Button>
+        <Button
+          type='primary'
+          status={okButtonProps?.status}
+          loading={confirmLoading}
+          disabled={okButtonProps?.disabled}
+          onClick={() => onOk?.()}
+        >
+          {okText ?? 'OK'}
+        </Button>
+      </>
+    ) : (
+      footer
+    );
   return (
     <DialogPrimitive.Root
       open={isOpen}
@@ -80,26 +131,29 @@ export const Modal: React.FC<ModalProps> = ({
       }}
     >
       <DialogContent
-        style={{ '--sv-modal-width': `${width}px` } as React.CSSProperties}
+        style={{ '--sv-modal-width': `${width}px`, ...style } as React.CSSProperties}
         onInteractOutside={(event) => {
           if (!maskClosable) event.preventDefault();
         }}
         className={className}
+        data-testid={testId}
       >
         <div className='flex items-start gap-4'>
           <div className='min-w-0 flex-1'>
             {title ? <DialogTitle>{title}</DialogTitle> : null}
             {description ? <DialogDescription>{description}</DialogDescription> : null}
           </div>
-          <DialogPrimitive.Close
-            aria-label='Close'
-            className='-mr-1 -mt-1 rounded-[8px] p-1 text-sv-faint outline-none hover:bg-sv-surface hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
-          >
-            <X className='h-4 w-4' />
-          </DialogPrimitive.Close>
+          {closable ? (
+            <DialogPrimitive.Close
+              aria-label='Close'
+              className='-mr-1 -mt-1 rounded-[8px] p-1 text-sv-faint outline-none hover:bg-sv-surface hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
+            >
+              <X className='h-4 w-4' />
+            </DialogPrimitive.Close>
+          ) : null}
         </div>
         {children ? <div className='mt-4 text-[13px] leading-[1.65] text-sv-muted'>{children}</div> : null}
-        {footer ? <div className='mt-5 flex items-center justify-end gap-2'>{footer}</div> : null}
+        {defaultFooter ? <div className='mt-5 flex items-center justify-end gap-2'>{defaultFooter}</div> : null}
       </DialogContent>
     </DialogPrimitive.Root>
   );

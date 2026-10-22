@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Tag } from '@arco-design/web-react';
+import { Tag } from '@/renderer/ui/tag';
 import { useTranslation } from 'react-i18next';
 import type { ICronJob } from '@/common/adapter/ipcBridge';
 

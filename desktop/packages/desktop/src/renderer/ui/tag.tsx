@@ -16,6 +16,8 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   tone?: TagTone;
   /** Arco compatibility: a named colour. */
   color?: 'gray' | 'green' | 'red' | 'orange' | 'blue' | 'arcoblue' | 'purple';
+  size?: 'small' | 'default' | 'medium' | 'large';
+  bordered?: boolean;
 }
 
 const arcoTones: Record<NonNullable<TagProps['color']>, TagTone> = {
@@ -28,7 +30,15 @@ const arcoTones: Record<NonNullable<TagProps['color']>, TagTone> = {
   purple: 'brand',
 };
 
-export const Tag: React.FC<TagProps> = ({ tone, color, className, children, ...props }) => (
+export const Tag: React.FC<TagProps> = ({
+  tone,
+  color,
+  className,
+  children,
+  size: _size,
+  bordered: _bordered,
+  ...props
+}) => (
   <span
     className={cn(
       'inline-flex h-[22px] items-center rounded-full border px-2 text-[10.5px] font-medium leading-none',
