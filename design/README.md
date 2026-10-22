@@ -85,6 +85,9 @@ With the flag on, the app uses the Dense chrome:
 Still old in this slice: the settings rail markup (it already uses 32px rows and 13px labels)
 and the ACP tool/terminal cards.
 
+The shell's command palette, sidebar footer, settings rail, update notice and message search
+no longer import Arco; the conversation history, `MuModal` and the Arco layout remain.
+
 ## Build and verify
 
 ```bash
