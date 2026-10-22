@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radio } from '@arco-design/web-react';
+import { Radio } from '@/renderer/ui/radio';
 import { useTranslation } from 'react-i18next';
 import MuSelect from '@/renderer/components/base/MuSelect';
 import type { LoginStatus } from '@/common/kyrn/login';
