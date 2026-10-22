@@ -111,6 +111,11 @@ html[data-sv-ui="dense"] .app-titlebar--desktop:not(.app-titlebar--mac) {
   min-height: 40px;
 }
 
+html[data-sv-ui="dense"] .app-titlebar--mobile {
+  height: 44px;
+  min-height: 44px;
+}
+
 html[data-sv-ui="dense"] .layout-sider {
   font-size: 12px;
 }
@@ -183,6 +188,22 @@ html[data-sv-ui="dense"] .settings-sider__item-label {
   line-height: 20px;
 }
 
+@media (max-width: 767px) {
+  html[data-sv-ui="dense"] .settings-mobile-top-nav {
+    gap: 6px;
+    padding-top: 10px;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+
+  html[data-sv-ui="dense"] .settings-mobile-top-nav__item {
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+}
+
 /* Arco primary buttons: sage fill, dark ink, no blue. */
 html[data-sv-ui="dense"] .arco-btn-primary:not(.arco-btn-disabled) {
   background-color: var(--sv-brand);
@@ -215,6 +236,17 @@ html[data-sv-ui="dense"] .arco-popover-content {
   border: 1px solid var(--sv-line);
   border-radius: 14px;
   box-shadow: none;
+}
+
+html[data-sv-ui="dense"] .arco-card {
+  border-color: var(--sv-line);
+  border-radius: 8px;
+  background: var(--sv-surface);
+  box-shadow: none;
+}
+
+html[data-sv-ui="dense"] .arco-card-header {
+  border-bottom-color: var(--sv-line);
 }
 
 /* The settings pages are flat in Dense: no glow, no dot grid. */
