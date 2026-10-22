@@ -10,7 +10,8 @@ import { getBaseUrl, isBackendHttpError } from '@/common/adapter/httpBridge';
 import WebviewHost from '@/renderer/components/media/WebviewHost';
 import { openExternalUrl } from '@/renderer/utils/platform';
 import { isElectronDesktop } from '@/renderer/utils/platform';
-import { Button, Spin } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Spin } from '@/renderer/ui/spinner';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

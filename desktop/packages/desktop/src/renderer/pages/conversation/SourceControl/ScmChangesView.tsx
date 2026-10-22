@@ -19,7 +19,8 @@
  */
 
 import { Down, Minus, Plus, Right, Undo } from '@icon-park/react';
-import { Button, Spin } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Spin } from '@/renderer/ui/spinner';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScmResourceRow } from './ScmResourceRow';

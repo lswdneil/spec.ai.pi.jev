@@ -6,7 +6,8 @@
  * in no repository, the tab says so.
  */
 import React, { useState } from 'react';
-import { Button, Spin } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Spin } from '@/renderer/ui/spinner';
 import { BranchTwo, Refresh } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import { unwrap } from '@/common/kyrn/bridge';

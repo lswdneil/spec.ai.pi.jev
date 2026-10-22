@@ -1,5 +1,6 @@
 import { ipcBridge } from '@/common';
-import { Message, Spin } from '@arco-design/web-react';
+import { Message } from '@/renderer/ui/toast';
+import { Spin } from '@/renderer/ui/spinner';
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';

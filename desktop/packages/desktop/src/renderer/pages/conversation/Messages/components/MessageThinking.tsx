@@ -6,7 +6,8 @@
 
 import type { IMessageThinking } from '@/common/chat/chatLib';
 import { formatDuration } from '@/renderer/services/i18n/format';
-import { Button, Spin } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Spin } from '@/renderer/ui/spinner';
 import { Brain, Right } from '@icon-park/react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
