@@ -136,6 +136,8 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
   const groups = useSettingsNav();
   const rail = useRef<HTMLElement>(null);
   const [query, setQuery] = useState('');
+  const [scrolling, setScrolling] = useState(false);
+  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searching = !collapsed && query.trim() !== '';
   const manifest = useSearchManifest(searching);
   const native = useNativeEnabled() === true;
@@ -147,6 +149,19 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
   useEffect(() => {
     rail.current?.querySelector('[aria-current="page"]')?.scrollIntoView?.({ block: 'nearest' });
   }, [pathname, groups]);
+
+  useEffect(
+    () => () => {
+      if (scrollTimer.current) clearTimeout(scrollTimer.current);
+    },
+    []
+  );
+
+  const handleScroll = () => {
+    setScrolling(true);
+    if (scrollTimer.current) clearTimeout(scrollTimer.current);
+    scrollTimer.current = setTimeout(() => setScrolling(false), 650);
+  };
 
   const go = (path: string) => {
     Promise.resolve(navigate(path, { replace: true })).catch((error) => {
@@ -176,9 +191,14 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
       )}
       <nav
         ref={rail}
-        className={classNames('flex-1 min-h-0 settings-sider flex flex-col overflow-y-auto overflow-x-hidden pb-8px', {
-          'settings-sider--collapsed': collapsed,
-        })}
+        className={classNames(
+          'sv-sider-scroll flex-1 min-h-0 settings-sider flex flex-col overflow-y-auto overflow-x-hidden pb-8px',
+          {
+            'settings-sider--collapsed': collapsed,
+          }
+        )}
+        data-scrolling={scrolling ? 'true' : undefined}
+        onScroll={handleScroll}
         aria-label={t('settings.title')}
       >
         {searching ? (

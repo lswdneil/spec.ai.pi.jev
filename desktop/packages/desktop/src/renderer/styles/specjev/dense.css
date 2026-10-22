@@ -438,3 +438,30 @@ html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled:not(:disabl
   border-color: var(--sv-brand-1) !important;
   color: var(--sv-on-brand) !important;
 }
+
+/* The conversation list keeps its scrollbar out of sight until the wheel or a drag moves it. */
+.sv-sider-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.sv-sider-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sv-sider-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sv-sider-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: transparent;
+}
+
+.sv-sider-scroll[data-scrolling='true'] {
+  scrollbar-color: var(--sv-line-strong) transparent;
+}
+
+.sv-sider-scroll[data-scrolling='true']::-webkit-scrollbar-thumb {
+  background: var(--sv-line-strong);
+}

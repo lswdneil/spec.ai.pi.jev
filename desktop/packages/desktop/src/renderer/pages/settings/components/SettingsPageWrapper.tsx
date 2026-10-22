@@ -44,7 +44,7 @@ const SettingsPageWrapper: React.FC<SettingsPageWrapperProps> = ({ children, cla
   // with top padding would otherwise stick that far down, letting content peek
   // through the gap above it.
   const containerClass = classNames(
-    'settings-page-wrapper w-full min-h-full box-border overflow-y-auto',
+    'settings-page-wrapper w-full min-h-full box-border overflow-y-auto bg-sv-bg',
     isMobile ? 'px-16px' : SETTINGS_PAGE_GUTTER,
     className
   );

@@ -2,6 +2,7 @@ import { ArrowUp, Check, Paperclip } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { SettingsPage } from '../components/SettingsPageHeader';
 import { DARK_THEME_ID, LIGHT_THEME_ID, SYSTEM_THEME_ID } from '@/common/theme/constants';
 import { useThemeContext } from '@renderer/hooks/context/ThemeContext';
 import { cn } from '@renderer/ui/cn';
@@ -82,17 +83,9 @@ const AppearanceV2: React.FC = () => {
   const modeLabel = t(theme === 'dark' ? 'settings.darkMode' : 'settings.lightMode');
 
   return (
-    <div className='h-full overflow-auto bg-sv-bg text-sv-text' style={{ fontFamily: 'var(--sv-font-ui)' }}>
-      <div className='mx-auto max-w-[820px] px-8 py-8'>
-        <header>
-          <p className='text-[10px] uppercase tracking-[0.1em] text-sv-faint'>Settings</p>
-          <h1 className='mt-2 text-[26px] font-semibold leading-[1.35] tracking-[-0.02em]'>
-            {t('settings.appearancePanel')}
-          </h1>
-          <p className='mt-1 text-[13px] text-sv-muted'>{t('settings.appearanceDescription')}</p>
-        </header>
-
-        <section className='mt-8' aria-labelledby='appearance-theme'>
+    <SettingsPage title={t('settings.appearancePanel')} description={t('settings.appearanceDescription')}>
+      <div className='flex flex-col gap-6' data-testid='appearance-v2'>
+        <section aria-labelledby='appearance-theme'>
           <h2 id='appearance-theme' className='text-[13px] font-medium'>
             {t('settings.theme')}
           </h2>
@@ -122,7 +115,7 @@ const AppearanceV2: React.FC = () => {
           </div>
         </section>
 
-        <section className='mt-6 overflow-hidden rounded-[var(--sv-r-control)] border border-sv-line bg-sv-surface'>
+        <section className='overflow-hidden rounded-[var(--sv-r-control)] border border-sv-line bg-sv-surface'>
           <div className='flex items-center gap-2 border-b border-sv-line px-3 py-2.5'>
             <h2 className='text-[12px] font-medium'>{t('settings.appearancePreview')}</h2>
             <span className='ml-auto font-mono text-[10px] text-sv-faint'>{t('settings.appearancePreviewLive')}</span>
@@ -147,7 +140,7 @@ const AppearanceV2: React.FC = () => {
           </div>
         </section>
 
-        <div className='mt-4 flex items-center gap-4'>
+        <div className='flex items-center gap-4'>
           <p className='text-[10.5px] text-sv-faint'>{t('settings.appearanceFixedPalette')}</p>
           <Link
             to='/design-system'
@@ -157,7 +150,7 @@ const AppearanceV2: React.FC = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </SettingsPage>
   );
 };
 

@@ -36,6 +36,8 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
   const { closePreview } = usePreviewContext();
   const { theme, setTheme } = useThemeContext();
   const [batchMode, setBatchMode] = useState(false);
+  const [scrolling, setScrolling] = useState(false);
+  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isSettings = pathname.startsWith('/settings');
   const lastNonSettingsPath = useRef('/guid');
   const short = collapsed && !isMobile;
@@ -45,6 +47,19 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
   useEffect(() => {
     if (!isSettings) lastNonSettingsPath.current = `${pathname}${search}${hash}`;
   }, [hash, isSettings, pathname, search]);
+
+  useEffect(
+    () => () => {
+      if (scrollTimer.current) clearTimeout(scrollTimer.current);
+    },
+    []
+  );
+
+  const handleHistoryScroll = () => {
+    setScrolling(true);
+    if (scrollTimer.current) clearTimeout(scrollTimer.current);
+    scrollTimer.current = setTimeout(() => setScrolling(false), 650);
+  };
 
   const finishNavigation = () => {
     cleanupSiderTooltips();
@@ -183,7 +198,11 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
             {short ? null : (
               <>
                 <div className='my-0.5 h-px shrink-0 bg-sv-line' />
-                <div className='min-h-0 flex-1 overflow-y-auto'>
+                <div
+                  className='sv-sider-scroll min-h-0 flex-1 overflow-y-auto'
+                  data-scrolling={scrolling ? 'true' : undefined}
+                  onScroll={handleHistoryScroll}
+                >
                   <Suspense fallback={<div className='min-h-[160px]' />}>
                     <WorkspaceGroupedHistory {...historyProps} />
                   </Suspense>
