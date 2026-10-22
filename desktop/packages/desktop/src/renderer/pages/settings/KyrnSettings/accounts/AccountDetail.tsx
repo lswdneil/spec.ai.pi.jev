@@ -1,5 +1,7 @@
 import React from 'react';
-import { Button, Popconfirm, Tag } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Popconfirm } from '@/renderer/ui/popconfirm';
+import { Tag } from '@/renderer/ui/tag';
 import { useTranslation } from 'react-i18next';
 import type { SubscriptionProvider } from '@/common/kyrn/login';
 import ProviderMark from '@renderer/components/brand/ProviderMark';

@@ -11,7 +11,10 @@ import { revalidateAcpConfigOptions } from '@/renderer/hooks/agent/useAcpConfigO
 import { useConversationRuntimeView } from '@/renderer/pages/conversation/runtime/useConversationRuntimeView';
 import { getConversationOrNull } from '@/renderer/pages/conversation/utils/conversationCache';
 import { iconColors } from '@/renderer/styles/colors';
-import { Button, Message, Popconfirm, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Message } from '@/renderer/ui/toast';
+import { Popconfirm } from '@/renderer/ui/popconfirm';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Refresh } from '@icon-park/react';
 import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

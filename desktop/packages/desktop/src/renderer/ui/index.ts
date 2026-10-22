@@ -20,6 +20,7 @@ export { Dropdown, Menu, MenuItem, type DropdownItem, type DropdownProps } from 
 export { Empty, type EmptyProps } from './empty';
 export { Input, Textarea, type InputProps, type TextareaProps } from './input';
 export { Popover, type PopoverProps, type PopoverPosition } from './popover';
+export { Popconfirm, type PopconfirmProps, type PopconfirmPosition } from './popconfirm';
 export { Radio, type RadioProps, type RadioGroupProps } from './radio';
 export { Spinner, Spin, type SpinnerProps } from './spinner';
 export { Slider, type SliderProps } from './slider';

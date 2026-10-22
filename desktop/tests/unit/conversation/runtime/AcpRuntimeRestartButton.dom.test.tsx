@@ -75,7 +75,7 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
-vi.mock('@arco-design/web-react', () => ({
+vi.mock('@/renderer/ui/button', () => ({
   Button: ({
     disabled,
     icon,
@@ -95,6 +95,9 @@ vi.mock('@arco-design/web-react', () => ({
       {icon}
     </button>
   ),
+}));
+
+vi.mock('@/renderer/ui/popconfirm', () => ({
   Popconfirm: ({ children, onOk }: { children?: React.ReactNode; onOk?: () => void }) => (
     <div>
       {children}
@@ -103,7 +106,13 @@ vi.mock('@arco-design/web-react', () => ({
       </button>
     </div>
   ),
+}));
+
+vi.mock('@/renderer/ui/tooltip', () => ({
   Tooltip: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
+}));
+
+vi.mock('@/renderer/ui/toast', () => ({
   Message: {
     success: mocks.messageSuccess,
     error: mocks.messageError,
