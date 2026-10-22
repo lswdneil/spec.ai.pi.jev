@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Slider } from '@arco-design/web-react';
+import React, { useMemo, useState } from 'react';
+import { Button } from '@/renderer/ui/button';
+import { Slider } from '@/renderer/ui/slider';
 import { useTranslation } from 'react-i18next';
 import { useThemeContext } from '@renderer/hooks/context/ThemeContext';
 import { formatNumber } from '@/renderer/services/i18n/format';
@@ -53,44 +54,23 @@ const ScaleControl: React.FC = () => {
 
   // Arco draws the slider's handle (role=slider) with no name of its own and takes none from its props: it is given
   // the row's word, so a screen reader says "Scale, slider, 95%" rather than "slider, 0.95".
-  const sliderRef = useRef<HTMLDivElement>(null);
   const scaleLabel = t('settings.scale');
-  useEffect(() => {
-    sliderRef.current?.querySelector('[role="slider"]')?.setAttribute('aria-label', scaleLabel);
-  }, [scaleLabel]);
 
   // 默认标记（100%位置）/ Default mark (100% position)
-  const defaultMarks = useMemo(
-    () => ({
-      1: (
-        <span
-          className='font-scale-default-mark'
-          aria-hidden='true'
-          title={formatScalePercent(1, i18n.language)}
-        ></span>
-      ),
-    }),
-    [i18n.language]
-  );
-
   /**
    * 拖动过程中只更新临时显示值，不触发缩放 / While dragging, only update the transient value — no scaling
    * @param value - 新的缩放值 / New scale value
    */
-  const handleSliderChange = (value: number | number[]) => {
-    if (typeof value === 'number') {
-      setDraggingValue(clamp(Number(value.toFixed(2))));
-    }
+  const handleSliderChange = (value: number) => {
+    setDraggingValue(clamp(Number(value.toFixed(2))));
   };
 
   /**
    * 松开滑块时才真正应用缩放 / Apply the scale only when the slider is released
    * @param value - 最终的缩放值 / Final scale value
    */
-  const handleSliderAfterChange = (value: number | number[]) => {
-    if (typeof value === 'number') {
-      void setFontScale(clamp(Number(value.toFixed(2))));
-    }
+  const handleSliderAfterChange = (value: number) => {
+    void setFontScale(clamp(Number(value.toFixed(2))));
     setDraggingValue(null);
   };
 
@@ -116,10 +96,9 @@ const ScaleControl: React.FC = () => {
       <div className='flex items-center flex-wrap gap-x-12px gap-y-10px w-full'>
         <div className='flex items-center gap-8px flex-1 min-w-240px'>
           <Button
-            size='mini'
+            size='sm'
             type='secondary'
-            shape='circle'
-            className='w-28px h-28px !min-w-28px flex items-center justify-center p-0'
+            className='w-28px h-28px !min-w-28px rounded-full flex items-center justify-center p-0'
             onClick={() => handleStep(-FONT_SCALE_STEP)}
             disabled={fontScale <= FONT_SCALE_MIN + EPSILON}
             aria-label={t('common.menu.zoomOut')}
@@ -129,24 +108,20 @@ const ScaleControl: React.FC = () => {
           </Button>
           {/* 滑杆覆盖 80%-150% 区间，随值写入配置 / Slider covers 80%-150% range and persists value */}
           <Slider
-            ref={sliderRef}
             className='flex-1 min-w-180px font-scale-slider p-0 m-0'
-            showTicks
             min={FONT_SCALE_MIN}
             max={FONT_SCALE_MAX}
             step={FONT_SCALE_STEP}
             value={displayValue}
             onChange={handleSliderChange}
             onAfterChange={handleSliderAfterChange}
-            marks={defaultMarks}
-            // The handle's tooltip and its value for a screen reader (aria-valuetext) as the percentage shown beside it.
-            formatTooltip={(value) => formatScalePercent(value, i18n.language)}
+            formatValue={(value) => formatScalePercent(value, i18n.language)}
+            aria-label={scaleLabel}
           />
           <Button
-            size='mini'
+            size='sm'
             type='secondary'
-            shape='circle'
-            className='w-28px h-28px !min-w-28px flex items-center justify-center p-0'
+            className='w-28px h-28px !min-w-28px rounded-full flex items-center justify-center p-0'
             onClick={() => handleStep(FONT_SCALE_STEP)}
             disabled={fontScale >= FONT_SCALE_MAX - EPSILON}
             aria-label={t('common.menu.zoomIn')}
@@ -160,7 +135,7 @@ const ScaleControl: React.FC = () => {
             {formattedValue}
           </span>
           <Button
-            size='small'
+            size='sm'
             type='text'
             className='px-4px h-28px'
             onClick={handleReset}

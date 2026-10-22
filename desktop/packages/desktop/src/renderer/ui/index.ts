@@ -17,6 +17,7 @@ export { Dropdown, Menu, MenuItem, type DropdownItem, type DropdownProps } from 
 export { Empty, type EmptyProps } from './empty';
 export { Input, Textarea, type InputProps, type TextareaProps } from './input';
 export { Spinner, type SpinnerProps } from './spinner';
+export { Slider, type SliderProps } from './slider';
 export { Switch, type SwitchProps } from './switch';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Tag, type TagProps, type TagTone } from './tag';
