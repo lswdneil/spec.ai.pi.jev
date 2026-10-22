@@ -99,6 +99,11 @@ describe('AboutModalContent', () => {
     expect(screen.queryByRole('switch')).not.toBeInTheDocument();
   });
 
+  it('names the company and the internal test build', async () => {
+    await renderAbout();
+    expect(screen.getByTestId('about-company')).toHaveTextContent('settings.aboutCompany');
+  });
+
   it('shows the build version until the main process answers', () => {
     mocks.getState.mockReturnValue(new Promise(() => undefined));
     render(<AboutModalContent />);

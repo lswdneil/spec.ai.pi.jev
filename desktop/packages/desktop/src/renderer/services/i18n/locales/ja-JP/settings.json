@@ -1077,6 +1077,7 @@
   "systemDescription": "起動時の自動起動、ウィンドウを閉じた後も動き続けること、通知、spec.jev の作業フォルダとログフォルダ。",
   "conversationsDescription": "タイムアウト、プレビューのサイズ上限、アップロードの保存先、会話間メッセージ。",
   "aboutDescription": "spec.jev のバージョン、アップデート、ログフォルダへの入口。",
+  "aboutCompany": "玄同未来（上海）人工知能科技有限公司-内部テスト版",
   "developer": {
     "title": "開発者",
     "description": "開発者ツールと、外部ツールがアプリ内ブラウザーに接続するためのポートと MCP 設定。",

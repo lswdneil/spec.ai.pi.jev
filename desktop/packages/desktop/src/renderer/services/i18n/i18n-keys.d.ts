@@ -3408,6 +3408,7 @@ export type I18nKey =
   | 'preview.zoomOut'
   | 'preview.zoomReset'
   | 'settings.about'
+  | 'settings.aboutCompany'
   | 'settings.aboutDescription'
   | 'settings.addCustomAgent'
   | 'settings.addCustomAgentTitle'

@@ -1076,6 +1076,7 @@
   "systemDescription": "Launch at login, behavior when the window closes, notifications and the folders spec.jev uses for work and logs.",
   "conversationsDescription": "Timeouts, preview size, where uploads go and messages between conversations.",
   "aboutDescription": "Your version of spec.jev, updates and logs.",
+  "aboutCompany": "Xuantong Future (Shanghai) AI Technology Co., Ltd. - Internal test build",
   "developer": {
     "title": "Developer",
     "description": "Developer tools, plus the port and MCP configurations other tools use to reach the in-app browser.",

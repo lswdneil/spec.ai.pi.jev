@@ -107,6 +107,9 @@ const AboutModalContent: React.FC = () => {
             )}
           </div>
           <span className='text-13px text-t-secondary'>{t('common.kyrn.brand.tagline')}</span>
+          <span className='text-[11.5px] leading-[18px] text-t-tertiary' data-testid='about-company'>
+            {t('settings.aboutCompany')}
+          </span>
         </div>
       </div>
 

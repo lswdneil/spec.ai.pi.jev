@@ -1077,6 +1077,7 @@
   "systemDescription": "시작 시 자동 실행, 창을 닫은 뒤에도 계속 실행, 알림, 그리고 spec.jev가 작업하고 로그를 남기는 폴더.",
   "conversationsDescription": "시간 제한, 미리보기 크기 한도, 업로드 저장 위치, 대화 간 메시지.",
   "aboutDescription": "spec.jev의 버전, 업데이트, 그리고 로그 폴더로 가는 길.",
+  "aboutCompany": "현동미래(상하이) 인공지능과기유한공사-내부 테스트 버전",
   "developer": {
     "title": "개발자",
     "description": "개발자 도구, 그리고 외부 도구가 앱 내 브라우저에 연결할 때 쓰는 포트와 MCP 설정입니다.",

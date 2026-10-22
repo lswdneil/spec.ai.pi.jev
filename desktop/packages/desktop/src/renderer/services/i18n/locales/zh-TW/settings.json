@@ -1077,6 +1077,7 @@
   "systemDescription": "開機啟動、關閉視窗後繼續執行、通知，以及 spec.jev 的工作目錄和日誌目錄。",
   "conversationsDescription": "逾時時間、預覽大小上限、上傳檔案的去處，以及對話之間的訊息。",
   "aboutDescription": "目前的 spec.jev 版本、更新，以及日誌資料夾的入口。",
+  "aboutCompany": "玄同未來（上海）人工智能科技有限公司-內部測試版",
   "developer": {
     "title": "開發者",
     "description": "開發者工具，以及外部工具連線應用內瀏覽器用的連接埠和 MCP 設定。",
