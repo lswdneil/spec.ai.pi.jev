@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Tooltip } from '@arco-design/web-react';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import type { Activity } from '@/common/kyrn/types';
 import { formatNumber } from '@/renderer/services/i18n/format';

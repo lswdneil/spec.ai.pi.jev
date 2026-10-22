@@ -9,7 +9,7 @@ import zh from '@/renderer/services/i18n/locales/zh-CN/common.json';
 import GaugeRow from '@/renderer/pages/conversation/KyrnPanel/Board/GaugeRow';
 
 // A tooltip's words stay on its trigger, where a test can read them without hovering.
-vi.mock('@arco-design/web-react', () => ({
+vi.mock('@/renderer/ui/tooltip', () => ({
   Tooltip: ({ content, children }: { content?: React.ReactNode; children?: React.ReactNode }) => (
     <span data-tooltip={typeof content === 'string' ? content : ''}>{children}</span>
   ),

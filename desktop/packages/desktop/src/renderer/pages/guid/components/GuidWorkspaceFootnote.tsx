@@ -7,7 +7,7 @@
 import { ipcBridge } from '@/common';
 import { addRecentWorkspace, getRecentWorkspaces } from '@/renderer/components/workspace';
 import { MuInlineSearchInput } from '@/renderer/components/base';
-import { Tooltip } from '@arco-design/web-react';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Close, Down } from '@icon-park/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';

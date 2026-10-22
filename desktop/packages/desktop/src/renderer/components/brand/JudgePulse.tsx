@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip } from '@arco-design/web-react';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import styles from './Brand.module.css';
 

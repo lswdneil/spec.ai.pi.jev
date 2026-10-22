@@ -13,7 +13,7 @@
 import type { Assistant } from '@/common/types/agent/assistantTypes';
 import { resolveLocaleKey } from '@/common/utils';
 import AssistantAvatar from '@/renderer/pages/settings/AssistantSettings/AssistantAvatar';
-import { Tooltip } from '@arco-design/web-react';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatNameList } from '@/renderer/services/i18n/list';
