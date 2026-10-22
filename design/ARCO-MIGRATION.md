@@ -8,10 +8,10 @@ Strategy: a small compatibility layer that mirrors the Arco APIs we actually use
 
 ## Status (2026-10-22)
 
-- Renderer `.tsx` files importing `@arco-design/web-react`: **50**, down from 217.
-- Done: tokens, Dense shell, settings surfaces, and the primitives in `ui/` — Alert, Avatar, Badge, Button, Card, Checkbox, Collapse, Dialog/Modal (`confirm`/`useModal`), Dropdown (Radix), Empty, Image, Input, InputNumber, Link/Space/Result/Progress, menu aliases, Popover, Popconfirm, Radio, Select, Spinner, Switch, Tabs, Tag, toast/AppToaster, Tooltip, Typography.
-- Remaining component families, in order: **Dropdown/Menu** (~20 files, Arco's imperative `Menu`/`SubMenu`; the Radix aliases do not cover it), **Form** (4 files), **Tree** (2), **Layout** (2), **Select** leftovers (3), **Steps/Pagination/InputTag/AutoComplete/TimePicker** (one each), plus type-only imports and `@arco-design/web-react/icon`.
-- Known desktop test failures at this point are environment/`nativeHost` ones (piRpc/errorLog, NativeConversations, git/folders, the native sidebar menu, the emoji regex) rather than the migrated settings and composer surfaces.
+- Renderer `.tsx`/`.ts` files importing `@arco-design/web-react` (components or types): **27**, down from 217.
+- Done: tokens, Dense shell, settings, forms, welcome, dialogs, and the primitives in `ui/` — Alert, AutoComplete, Avatar, Badge, Button, Card, Checkbox, Collapse, Dialog/Modal (`confirm`/`useModal`), Dropdown (Radix), Empty, Form, Image, Input, InputNumber, InputTag, Layout, Link/Space/Result/Progress, menu aliases, Pagination, Popover, Popconfirm, Radio, Select, Spinner, Steps, Switch, Tabs, Tag, TimePicker, toast/AppToaster, Tooltip, Tree, Trigger, Typography.
+- Remaining: **Dropdown/Menu** (~18 files, Arco's imperative `Menu`/`SubMenu`; the Radix aliases do not match its rendering/portal timing) plus two Select call sites (`DefaultsSection`, `OneClickImportModal`), `MuSelect`, `ExplorerPanel` (Tree + context menu), `BrowserChrome` (Menu), and the two `ConfigProvider` roots (`main.tsx`, `GuidPage`) that must stay until the last Arco child is gone.
+- Last full desktop suite: **6656 passed / 57 failed in 11 files**, all the known environment/`nativeHost` failures (piRpc/errorLog, NativeConversations, git/folders, the native sidebar menu, the emoji regex).
 
 ---
 
