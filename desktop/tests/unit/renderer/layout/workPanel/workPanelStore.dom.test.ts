@@ -16,7 +16,7 @@ import {
 } from '@/renderer/components/layout/WorkPanel/workPanelStore';
 import { renderHook } from '@testing-library/react';
 
-const STORAGE_KEY = 'mu-work-panel';
+const STORAGE_KEY = 'mu-work-panel-v2';
 
 beforeEach(() => {
   localStorage.clear();
@@ -34,9 +34,9 @@ describe('what the work panel remembers', () => {
     expect(WORK_PANEL_TABS).toEqual(['board', 'judge', 'hive', 'lessons', 'files', 'preview', 'source', 'browser']);
   });
 
-  it('starts closed on the board, 360px wide', () => {
-    expect(readWorkPanelMemory('conv-1')).toEqual({ open: false, tab: 'board', width: 360 });
-    expect(readWorkPanelMemory(null)).toEqual({ open: false, tab: 'board', width: 360 });
+  it('starts closed on the judge tab, 300px wide', () => {
+    expect(readWorkPanelMemory('conv-1')).toEqual({ open: false, tab: 'judge', width: 300 });
+    expect(readWorkPanelMemory(null)).toEqual({ open: false, tab: 'judge', width: 300 });
   });
 
   it('remembers open, tab and width per conversation, and starts a new one from the last choice', () => {
@@ -51,14 +51,14 @@ describe('what the work panel remembers', () => {
     expect(readWorkPanelMemory('conv-2')).toEqual({ open: false, tab: 'judge', width: 420 });
   });
 
-  it('starts a new conversation on the board when the last tab was one only some conversations use', () => {
+  it('starts a new conversation on the judge tab when the last tab was one only some conversations use', () => {
     rememberWorkPanel('conv-1', { open: true, tab: 'browser', width: 480 });
     // Open and as wide as left, but not on an empty browser.
-    expect(readWorkPanelMemory('conv-2')).toEqual({ open: true, tab: 'board', width: 480 });
+    expect(readWorkPanelMemory('conv-2')).toEqual({ open: true, tab: 'judge', width: 480 });
     // One object while the last choice holds, so a snapshot read twice is the same.
     expect(readWorkPanelMemory('conv-2')).toBe(readWorkPanelMemory('conv-3'));
     rememberWorkPanel('conv-1', { tab: 'hive' });
-    expect(readWorkPanelMemory('conv-2')).toEqual({ open: true, tab: 'board', width: 480 });
+    expect(readWorkPanelMemory('conv-2')).toEqual({ open: true, tab: 'judge', width: 480 });
     rememberWorkPanel('conv-1', { tab: 'files' });
     expect(readWorkPanelMemory('conv-2')).toEqual({ open: true, tab: 'files', width: 480 });
     expect(readWorkPanelMemory('conv-1')).toEqual({ open: true, tab: 'files', width: 480 });
@@ -111,14 +111,14 @@ describe('what the work panel remembers', () => {
 
     localStorage.setItem(STORAGE_KEY, '{not json');
     resetWorkPanelStoreForTest();
-    expect(readWorkPanelMemory('conv-1')).toEqual({ open: false, tab: 'board', width: 360 });
+    expect(readWorkPanelMemory('conv-1')).toEqual({ open: false, tab: 'judge', width: 300 });
 
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({ conversations: { 'conv-1': { open: true, tab: 'somewhere', width: 'wide' } } })
     );
     resetWorkPanelStoreForTest();
-    expect(readWorkPanelMemory('conv-1')).toEqual({ open: true, tab: 'board', width: 360 });
+    expect(readWorkPanelMemory('conv-1')).toEqual({ open: true, tab: 'judge', width: 300 });
   });
 
   it('forgets the least recently changed conversations beyond 200', () => {

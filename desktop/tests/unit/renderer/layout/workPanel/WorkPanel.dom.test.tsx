@@ -341,7 +341,7 @@ describe('the work panel', () => {
       expect(handled).toBe(true);
       expect(panel()).toHaveAttribute('data-open', 'true');
       expect(panel()).not.toHaveAttribute('inert');
-      expect(panel().style.width).toBe('360px');
+      expect(panel().style.width).toBe('300px');
 
       const chord = shortcut('j');
       expect(chord.defaultPrevented).toBe(true);
@@ -365,7 +365,7 @@ describe('the work panel', () => {
     });
     fireEvent.click(tab('Judge'));
     fireEvent.keyDown(screen.getByTestId('work-panel-resize'), { key: 'ArrowLeft' });
-    expect(panel().style.width).toBe('376px');
+    expect(panel().style.width).toBe('316px');
 
     // A conversation it was never used in starts from that choice; closing it there changes only that one.
     act(() => setCurrentConversation('conv-2'));
@@ -379,7 +379,7 @@ describe('the work panel', () => {
     await settle();
     expect(panel()).toHaveAttribute('data-open', 'true');
     expect(selected()).toHaveTextContent('Judge');
-    expect(panel().style.width).toBe('376px');
+    expect(panel().style.width).toBe('316px');
 
     act(() => setCurrentConversation('conv-2'));
     await settle();
@@ -388,8 +388,8 @@ describe('the work panel', () => {
 
     // And after a restart.
     resetWorkPanelStoreForTest();
-    expect(readWorkPanelMemory('conv-1')).toEqual({ open: true, tab: 'judge', width: 376 });
-    expect(readWorkPanelMemory('conv-2')).toEqual({ open: false, tab: 'hive', width: 376 });
+    expect(readWorkPanelMemory('conv-1')).toEqual({ open: true, tab: 'judge', width: 316 });
+    expect(readWorkPanelMemory('conv-2')).toEqual({ open: false, tab: 'hive', width: 316 });
   });
 
   it('puts a dot on a tab with a new board update until it is looked at', async () => {
@@ -468,7 +468,8 @@ describe('the work panel', () => {
     fireEvent.click(tab('Lessons'));
     await settle();
     expect(dots()).toEqual([]);
-    expect(wires.lessonReads).toEqual(['conv-1']);
+    // The panel opened on Judge, whose log names lessons; opening Lessons reads its file as well.
+    expect(wires.lessonReads).toEqual(['conv-1', 'conv-1']);
     // An app conversation's lessons are read by the conversation, as before the native host: never by a folder.
     expect(wires.folderLessonReads).toEqual([]);
     expect(screen.getByTestId('mu-lessons')).toHaveTextContent('Run vitest with Node 24.');
@@ -693,11 +694,12 @@ describe('the work panel', () => {
     act(() => {
       dispatchWorkspaceToggleEvent();
     });
-    fireEvent.keyDown(tab('Board'), { key: 'ArrowRight' });
+    // Dense starts on Judge; the next tab in the strip is Files.
+    const judge = tab('Judge');
+    judge.focus();
     expect(selected()).toHaveTextContent('Judge');
-    expect(document.activeElement).toBe(tab('Judge'));
-    // Hive and lessons, not used here, wait under 更多: the next tab is files.
-    fireEvent.keyDown(tab('Judge'), { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(judge);
+    fireEvent.keyDown(judge, { key: 'ArrowRight' });
     expect(selected()).toHaveTextContent('Files');
     expect(document.activeElement).toBe(tab('Files'));
     fireEvent.keyDown(tab('Files'), { key: 'Home' });
@@ -726,10 +728,10 @@ describe('the work panel', () => {
     fireEvent.pointerDown(handle, { clientX: 1_000, button: 0, pointerId: 1 });
     fireEvent.pointerMove(window, { clientX: 900 });
     await frame();
-    expect(panel().style.width).toBe('460px');
-    expect(readWorkPanelMemory('conv-1').width).toBe(360);
+    expect(panel().style.width).toBe('400px');
+    expect(readWorkPanelMemory('conv-1').width).toBe(300);
     fireEvent.pointerUp(window);
-    expect(readWorkPanelMemory('conv-1').width).toBe(460);
+    expect(readWorkPanelMemory('conv-1').width).toBe(400);
 
     // Never wider than 60% of the window (jsdom's is 1024px wide), nor narrower than 270px.
     fireEvent.pointerDown(handle, { clientX: 1_000, button: 0, pointerId: 1 });
@@ -742,7 +744,7 @@ describe('the work panel', () => {
     expect(readWorkPanelMemory('conv-1').width).toBe(270);
     // A double click goes back to the default.
     fireEvent.doubleClick(handle);
-    expect(readWorkPanelMemory('conv-1').width).toBe(360);
+    expect(readWorkPanelMemory('conv-1').width).toBe(300);
   });
 
   it('is a sheet over the chat on a phone, closed by its backdrop', async () => {

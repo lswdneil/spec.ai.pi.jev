@@ -46,20 +46,13 @@ The Dense foundation is now in `desktop/packages/desktop/src/renderer`:
 - `pages/DesignSystem` — internal gallery with a static Dense shell, primitives and states.
 - `pages/settings/AppearanceSettings/AppearanceV2.tsx` — the three-mode Appearance page.
 
-Enable the preview (feature flag):
+The Dense shell is the default. Open `?ui=v1` to use the legacy shell; `?ui=v2` clears that choice and returns to Dense.
 
-```js
-localStorage.setItem('specjev.ui.v2', '1')
-```
+The gallery stays a static reference.
 
-Then reload and open Settings → Appearance, or go to `#/design-system`.
-Disable with `localStorage.removeItem('specjev.ui.v2')` or `?ui=v1`.
+### Phase 2: Dense shell (default)
 
-The gallery stays a static reference; the real shell is wired behind the flag.
-
-### Phase 2: Dense shell (in progress)
-
-With the flag on, the app uses the Dense chrome:
+By default, the app uses the Dense chrome:
 
 - `components/layout/Sider/DenseSider.tsx` — new 208px sidebar: brand row, New session,
   Search, Scheduled tasks, Skills, batch selection, then the existing conversation history

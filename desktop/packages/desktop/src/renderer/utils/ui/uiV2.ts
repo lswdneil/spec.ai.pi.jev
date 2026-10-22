@@ -1,9 +1,6 @@
 /**
- * Phase 1 feature flag for the Dense shell work.
- *
- * Enable: open the app with `?ui=v2`, or run
- * `localStorage.setItem('specjev.ui.v2', '1')` in DevTools and reload.
- * Disable: `?ui=v1` or remove the key.
+ * The Dense UI is the default. Open the app with `?ui=v1` (or store `'0'` under the key)
+ * to use the legacy shell; `?ui=v2` clears that choice.
  */
 const KEY = 'specjev.ui.v2';
 
@@ -15,15 +12,15 @@ export function isUiV2Enabled(): boolean {
     const hashQuery = hash.includes('?') ? new URLSearchParams(hash.slice(hash.indexOf('?') + 1)) : null;
     const mode = query.get('ui') ?? hashQuery?.get('ui');
     if (mode === 'v2') {
-      localStorage.setItem(KEY, '1');
+      localStorage.removeItem(KEY);
       return true;
     }
     if (mode === 'v1') {
-      localStorage.removeItem(KEY);
+      localStorage.setItem(KEY, '0');
       return false;
     }
-    return localStorage.getItem(KEY) === '1';
+    return localStorage.getItem(KEY) !== '0';
   } catch {
-    return false;
+    return true;
   }
 }

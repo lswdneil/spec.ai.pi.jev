@@ -14,7 +14,8 @@ Strategy: a small compatibility layer that mirrors the Arco APIs we actually use
 - Test imports and `vi.mock('@arco-design/web-react')` blocks are gone; `@arco-design/web-react` was removed from `desktop/package.json`, `desktop/kyrn/package.json`, `bun.lock` and the Electron-Vite chunk config.
 - The CSS files are renamed to `legacy-overrides.css` and `mu-scales.css`; no tracked file name says Arco. They keep the app's font tokens and full status-colour scales.
 - `tests/unit/renderer/noArcoImports.test.ts` guards renderer source, tests, `package.json` and `bun.lock` against reintroducing the package.
-- Last full desktop suite: **6713 passed / 0 failed** (116 skipped); `tsc`, lint and `package` pass.
+- The Dense shell is the default; `?ui=v1` keeps the legacy shell, and `?ui=v2` clears that choice.
+- Last full desktop suite: **6715 passed / 0 failed** (116 skipped); `tsc`, lint and `package` pass.
 
 ---
 
