@@ -83,6 +83,7 @@ Native `<button>` paints a light system background unless reset. Each surface be
 | Check | Status |
 | --- | --- |
 | Text fields and settings search focus | FIXED (strong hairline only; no ring or accent bar) |
+| Focus after closing the command palette | FIXED (inset sage hairline; no clipped purple bar) |
 | Popovers above the welcome screen | FIXED (`screen` z 50, popovers 60/70) |
 | Language menu opens and switches language | FIXED |
 | API key service menu is selectable | FIXED |

@@ -179,6 +179,18 @@ html[data-sv-ui="dense"] .layout-sider [data-testid="sider-scheduled"] {
   height: 27px;
 }
 
+/* Keyboard focus stays inside the row. The old MU ring was lavender and offset 2px,
+   so the sidebar's overflow clipped it into a purple bar above the focus target. */
+html[data-sv-ui="dense"] .arco-btn:focus-visible,
+html[data-sv-ui="dense"] [role='button']:focus-visible,
+html[data-sv-ui="dense"] [role='radio']:focus-visible,
+html[data-sv-ui="dense"] [role='switch']:focus-visible,
+html[data-sv-ui="dense"] a:focus-visible {
+  outline: 1px solid var(--sv-focus);
+  outline-offset: -1px;
+  box-shadow: none;
+}
+
 html[data-sv-ui="dense"] .layout-sider .chat-history__item {
   height: 27px;
   border-radius: 5px;

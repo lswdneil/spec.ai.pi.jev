@@ -18,4 +18,10 @@ describe('field focus surfaces', () => {
     expect(dense).toMatch(/\.settings-sider__search input:focus-visible\s*\{[^}]*outline: none;/);
     expect(dense).toMatch(/\.settings-sider__search input:focus-visible\s*\{[^}]*box-shadow: none;/);
   });
+
+  it('keeps keyboard focus inside sidebar rows instead of clipping a legacy ring', () => {
+    expect(dense).toMatch(
+      /\[role='button'\]:focus-visible[\s\S]*?\{[^}]*outline: 1px solid var\(--sv-focus\);[^}]*outline-offset: -1px;/
+    );
+  });
 });
