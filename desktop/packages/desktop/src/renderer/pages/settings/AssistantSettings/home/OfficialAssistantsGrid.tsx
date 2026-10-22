@@ -8,7 +8,9 @@ import type { AssistantListItem } from '../types';
 import { type AssistantEnabledFilter, filterByEnabled } from '../assistantUtils';
 import AssistantAvatar from '../AssistantAvatar';
 import RuntimeBadge from './RuntimeBadge';
-import { Button, Dropdown, Menu, Switch } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Switch } from '@/renderer/ui/switch';
 import { AllApplication, Down, MoreOne } from '@icon-park/react';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -46,17 +48,14 @@ const OfficialAssistantsGrid: React.FC<OfficialAssistantsGridProps> = ({
     return filterByEnabled(builtins, filter);
   }, [assistants, filter]);
 
-  const filterMenu = (
-    <Menu onClickMenuItem={(key) => setFilter(key as AssistantEnabledFilter)}>
-      {FILTER_OPTIONS.map((option) => (
-        <Menu.Item key={option} data-testid={`official-filter-option-${option}`}>
-          {t(`settings.assistantFilter.${option}`, {
-            defaultValue: option === 'all' ? 'All' : option === 'enabled' ? 'Enabled' : 'Disabled',
-          })}
-        </Menu.Item>
-      ))}
-    </Menu>
-  );
+  const filterItems = FILTER_OPTIONS.map((option) => ({
+    key: option,
+    label: t(`settings.assistantFilter.${option}`, {
+      defaultValue: option === 'all' ? 'All' : option === 'enabled' ? 'Enabled' : 'Disabled',
+    }),
+    'data-testid': `official-filter-option-${option}`,
+    onSelect: () => setFilter(option as AssistantEnabledFilter),
+  }));
 
   return (
     <div data-testid='official-assistants-pane'>
@@ -76,7 +75,7 @@ const OfficialAssistantsGrid: React.FC<OfficialAssistantsGridProps> = ({
             })}
           </span>
         </span>
-        <Dropdown droplist={filterMenu} trigger='click' position='br'>
+        <Dropdown align='end' items={filterItems}>
           <Button size='mini' data-testid='official-enabled-filter' className='!flex !shrink-0 !items-center !gap-4px'>
             <span>
               {t(`settings.assistantFilter.${filter}`, {
@@ -99,26 +98,18 @@ const OfficialAssistantsGrid: React.FC<OfficialAssistantsGridProps> = ({
         {officialAssistants.map((assistant) => {
           const enabled = assistant.enabled !== false;
           const name = assistant.name_i18n?.[localeKey] || assistant.name;
-          const actionMenu = (
-            <Menu
-              onClickMenuItem={(key) => {
-                if (key === 'settings') onOpenSettings(assistant);
-                if (key === 'duplicate') onDuplicate(assistant);
-              }}
-            >
-              <Menu.Item key='settings'>
-                <span data-testid={`menu-settings-${assistant.id}`}>
-                  {t('common.settings', { defaultValue: 'Settings' })}
-                </span>
-              </Menu.Item>
-              <Menu.Item key='duplicate'>
-                <span data-testid={`menu-duplicate-${assistant.id}`}>
-                  {t('settings.duplicateAssistant', { defaultValue: 'Duplicate as my assistant' })}
-                </span>
-              </Menu.Item>
-            </Menu>
-          );
-
+          const actionItems = [
+            {
+              key: 'settings',
+              label: <span data-testid={`menu-settings-${assistant.id}`}>{t('common.settings', { defaultValue: 'Settings' })}</span>,
+              onSelect: () => onOpenSettings(assistant),
+            },
+            {
+              key: 'duplicate',
+              label: <span data-testid={`menu-duplicate-${assistant.id}`}>{t('settings.duplicateAssistant', { defaultValue: 'Duplicate as my assistant' })}</span>,
+              onSelect: () => onDuplicate(assistant),
+            },
+          ];
           return (
             <div
               key={assistant.id}
@@ -166,7 +157,7 @@ const OfficialAssistantsGrid: React.FC<OfficialAssistantsGridProps> = ({
                       {t('settings.assistantGoChat', { defaultValue: 'Chat' })}
                     </Button>
                   ) : null}
-                  <Dropdown droplist={actionMenu} trigger='click' position='br' getPopupContainer={() => document.body}>
+                  <Dropdown items={actionItems} align='end'>
                     <Button
                       type='text'
                       size='small'

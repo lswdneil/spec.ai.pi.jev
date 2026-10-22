@@ -11,6 +11,7 @@ export interface DropdownItem {
   disabled?: boolean;
   checked?: boolean;
   separator?: boolean;
+  'data-testid'?: string;
 }
 
 export interface DropdownProps {
@@ -23,6 +24,7 @@ export interface DropdownProps {
   /** Controlled open, for callers that keep the menu's state. */
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  disabled?: boolean;
   contentRef?: React.Ref<HTMLDivElement>;
   onContentKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
   onContentKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
@@ -37,23 +39,50 @@ export const Dropdown: React.FC<DropdownProps> = ({
   open,
   onOpenChange,
   contentRef,
+  disabled,
   onContentKeyDown,
   onContentKeyDownCapture,
-}) => (
-  <DropdownMenuPrimitive.Root open={open} onOpenChange={onOpenChange}>
-    <DropdownMenuPrimitive.Trigger asChild>{children}</DropdownMenuPrimitive.Trigger>
-    <DropdownMenuPrimitive.Portal>
-      <DropdownMenuPrimitive.Content
-        ref={contentRef}
-        onKeyDown={onContentKeyDown}
-        onKeyDownCapture={onContentKeyDownCapture}
-        align={align}
-        sideOffset={6}
-        className={cn(
-          'z-[60] min-w-[180px] rounded-[var(--sv-r-popup)] border border-sv-line bg-sv-popover p-1 text-[12px] text-sv-text outline-none',
-          className
-        )}
-      >
+}) => {
+  const [internalOpen, setInternalOpen] = React.useState(false);
+  const isOpen = open ?? internalOpen;
+  const pointerDownAt = React.useRef(0);
+  const setOpen = (next: boolean) => {
+    if (disabled) return;
+    if (open === undefined) setInternalOpen(next);
+    onOpenChange?.(next);
+  };
+  const trigger = React.isValidElement(children)
+    ? React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
+        onPointerDown: (event: React.PointerEvent) => {
+          pointerDownAt.current = Date.now();
+          (children.props as { onPointerDown?: (event: React.PointerEvent) => void }).onPointerDown?.(event);
+        },
+        onClick: (event: React.MouseEvent) => {
+          (children.props as { onClick?: (event: React.MouseEvent) => void }).onClick?.(event);
+          if (event.defaultPrevented) return;
+          // Pointer-driven browsers already toggle on pointerdown; a bare click
+          // (keyboard activation, tests) opens here.
+          if (Date.now() - pointerDownAt.current < 500) return;
+          setOpen(!isOpen);
+        },
+      })
+    : children;
+  if (disabled) return <>{children}</>;
+  return (
+    <DropdownMenuPrimitive.Root open={isOpen} onOpenChange={setOpen}>
+      <DropdownMenuPrimitive.Trigger asChild>{trigger}</DropdownMenuPrimitive.Trigger>
+      <DropdownMenuPrimitive.Portal>
+        <DropdownMenuPrimitive.Content
+          ref={contentRef}
+          onKeyDown={onContentKeyDown}
+          onKeyDownCapture={onContentKeyDownCapture}
+          align={align}
+          sideOffset={6}
+          className={cn(
+            'z-[60] min-w-[180px] rounded-[var(--sv-r-popup)] border border-sv-line bg-sv-popover p-1 text-[12px] text-sv-text outline-none',
+            className
+          )}
+        >
         {droplist}
         {items?.map((item, index) =>
           item.separator ? (
@@ -62,6 +91,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             <DropdownMenuPrimitive.Item
               key={item.key ?? index}
               disabled={item.disabled}
+              data-testid={item['data-testid']}
               onSelect={item.onSelect}
               className={cn(
                 'flex h-7 cursor-default select-none items-center gap-2 rounded-[6px] px-2 outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
@@ -77,7 +107,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
       </DropdownMenuPrimitive.Content>
     </DropdownMenuPrimitive.Portal>
   </DropdownMenuPrimitive.Root>
-);
+  );
+};
 
 /** Arco compatibility aliases; put them inside `droplist`. */
 export const Menu: React.FC<{ children: React.ReactNode }> = ({ children }) => <>{children}</>;
@@ -86,7 +117,7 @@ export const MenuItem: React.FC<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & { onClick?: () => void }
 > = ({ children, onClick, ...props }) => (
   <DropdownMenuPrimitive.Item
-    onSelect={onClick}
+    onClick={() => onClick?.()}
     className='flex h-7 cursor-default select-none items-center rounded-[6px] px-2 text-sv-text outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 data-[highlighted]:bg-sv-surface'
     {...props}
   >

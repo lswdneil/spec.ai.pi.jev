@@ -112,10 +112,12 @@ describe('MyAssistantCard', () => {
 
   it('offers a delete action for user assistants but not for generated CLI ones', () => {
     renderCard(makeAssistant({ id: 'user-a', source: 'user' }));
+    fireEvent.click(screen.getByTestId('btn-assistant-more-user-a'));
     expect(screen.getByTestId('menu-edit-user-a')).toBeInTheDocument();
     expect(screen.getByTestId('menu-delete-user-a')).toBeInTheDocument();
 
     renderCard(makeAssistant({ id: 'cli-a', source: 'generated' }));
+    fireEvent.click(screen.getByTestId('btn-assistant-more-cli-a'));
     expect(screen.getByTestId('menu-edit-cli-a')).toBeInTheDocument();
     expect(screen.queryByTestId('menu-delete-cli-a')).not.toBeInTheDocument();
   });
@@ -155,6 +157,7 @@ describe('MyAssistantCard', () => {
 
   it('routes the delete menu item to onDelete', () => {
     const { onDelete } = renderCard(makeAssistant({ id: 'card-1', source: 'user' }));
+    fireEvent.click(screen.getByTestId('btn-assistant-more-card-1'));
     fireEvent.click(screen.getByTestId('menu-delete-card-1'));
     expect(onDelete).toHaveBeenCalledWith(expect.objectContaining({ id: 'card-1' }));
   });

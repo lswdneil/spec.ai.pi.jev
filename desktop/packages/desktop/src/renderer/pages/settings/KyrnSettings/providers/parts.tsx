@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Dropdown, Menu } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
 import { Cube, More } from '@icon-park/react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -66,16 +67,16 @@ export function RemoveMenu({
   const { t } = useTranslation();
   return (
     <Dropdown
-      trigger='click'
-      position='br'
+      align='end'
       disabled={disabled}
-      droplist={
-        <Menu onClickMenuItem={(key) => key === 'remove' && onRemove()}>
-          <Menu.Item key='remove' data-testid={`${testId}-remove`}>
-            <span className={styles.danger}>{t('mu.providers.removeProvider')}</span>
-          </Menu.Item>
-        </Menu>
-      }
+      items={[
+        {
+          key: 'remove',
+          'data-testid': `${testId}-remove`,
+          label: <span className={styles.danger}>{t('mu.providers.removeProvider')}</span>,
+          onSelect: onRemove,
+        },
+      ]}
     >
       <Button
         size='small'

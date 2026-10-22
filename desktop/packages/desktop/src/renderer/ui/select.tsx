@@ -100,7 +100,7 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
     renderFormat,
     dropdownRender,
     onVisibleChange,
-    getPopupContainer: _getPopupContainer,
+    getPopupContainer,
     options,
     children,
     'aria-label': ariaLabel,
@@ -109,6 +109,8 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
   ref
 ) {
   const [open, setOpen] = React.useState(false);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const portalContainer = getPopupContainer && triggerRef.current ? getPopupContainer(triggerRef.current) : undefined;
   const parsed: ParsedOption[] = [];
   const groups: { label: React.ReactNode; options: ParsedOption[] }[] = [];
   walk(children, parsed, groups);
@@ -185,7 +187,11 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
     >
       <PopoverPrimitive.Trigger asChild disabled={disabled}>
         <button
-          ref={ref}
+          ref={(node) => {
+            triggerRef.current = node;
+            if (typeof ref === 'function') ref(node);
+            else if (ref) ref.current = node;
+          }}
           type='button'
           role='combobox'
           aria-expanded={open}
@@ -218,7 +224,7 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
           <ChevronDown className='h-3 w-3 shrink-0 text-sv-muted' aria-hidden='true' />
         </button>
       </PopoverPrimitive.Trigger>
-      <PopoverPrimitive.Portal>
+      <PopoverPrimitive.Portal container={portalContainer}>
         <PopoverPrimitive.Content
           side='bottom'
           align='start'

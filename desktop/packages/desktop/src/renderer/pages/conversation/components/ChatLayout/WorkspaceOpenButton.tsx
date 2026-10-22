@@ -2,7 +2,9 @@ import { ipcBridge } from '@/common';
 import { isElectronDesktop } from '@/renderer/utils/platform';
 import { useOptionalPreviewContext } from '@/renderer/pages/conversation/Preview/context/PreviewContext';
 import { Browser, Command, Down, FolderOpen, Terminal } from '@icon-park/react';
-import { Button, Dropdown, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -182,27 +184,20 @@ const WorkspaceOpenButton: React.FC<WorkspaceOpenButtonProps> = ({ workspacePath
   // than a button that does nothing when clicked.
   if (availableOptions.length === 0) return null;
 
-  const dropdownList = (
-    <div className='workspace-open-dropdown p-4px'>
-      {availableOptions.map((option, index) => (
-        <React.Fragment key={option.key}>
-          {/* 分隔线：应用内浏览器与"拉起外部程序"是两类行为
-              Divider: the in-app browser behaves differently from launching external programs */}
-          {option.key === 'browser' && index > 0 && <div className='my-4px mx-8px h-1px bg-[var(--color-border-2)]' />}
-          <div
-            className={`workspace-open-dropdown-item flex items-center gap-8px px-12px py-8px cursor-pointer hover:bg-[var(--color-fill-2)] rounded-4px transition-colors ${
-              currentTool === option.key ? 'bg-[var(--color-fill-2)]' : ''
-            }`}
-            onClick={() => handleOpenWith(option.key)}
-          >
-            <span className='flex items-center justify-center w-20px h-20px'>{option.icon}</span>
-            <span className='text-14px'>{option.label}</span>
-            {currentTool === option.key && <span className='ms-auto text-12px text-[var(--color-text-3)]'>✓</span>}
-          </div>
-        </React.Fragment>
-      ))}
-    </div>
-  );
+  const dropdownItems = availableOptions.flatMap((option, index) => [
+    ...(option.key === 'browser' && index > 0 ? [{ separator: true, key: `sep-${index}` }] : []),
+    {
+      key: option.key,
+      label: (
+        <span className='flex items-center gap-2'>
+          <span className='flex h-5 w-5 items-center justify-center'>{option.icon}</span>
+          <span className='text-[13px]'>{option.label}</span>
+          {currentTool === option.key ? <span className='ms-auto text-[11px] text-sv-muted'>?</span> : null}
+        </span>
+      ),
+      onSelect: () => handleOpenWith(option.key),
+    },
+  ]);
 
   return (
     <div className='workspace-open-button flex items-center'>
@@ -219,13 +214,7 @@ const WorkspaceOpenButton: React.FC<WorkspaceOpenButtonProps> = ({ workspacePath
         </Button>
       </Tooltip>
 
-      <Dropdown
-        trigger='click'
-        position='br'
-        popupVisible={dropdownOpen}
-        onVisibleChange={setDropdownOpen}
-        droplist={dropdownList}
-      >
+      <Dropdown align='end' open={dropdownOpen} onOpenChange={setDropdownOpen} items={dropdownItems}>
         <Button
           type='text'
           size='small'

@@ -8,7 +8,8 @@ import type { AssistantListItem } from '../types';
 import { type AssistantEnabledFilter, filterByEnabled, groupMyAssistants } from '../assistantUtils';
 import MyAssistantCard from './MyAssistantCard';
 import { useTalkToButler } from '@/renderer/hooks/assistant/useTalkToButler';
-import { Dropdown, Menu, Button } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
 import { AllApplication, Down } from '@icon-park/react';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -66,17 +67,14 @@ const MyAssistantsList: React.FC<MyAssistantsListProps> = ({
     return groupMyAssistants(filtered);
   }, [assistants, filter]);
 
-  const filterMenu = (
-    <Menu onClickMenuItem={(key) => setFilter(key as AssistantEnabledFilter)}>
-      {FILTER_OPTIONS.map((option) => (
-        <Menu.Item key={option} data-testid={`filter-option-${option}`}>
-          {t(`settings.assistantFilter.${option}`, {
-            defaultValue: option === 'all' ? 'All' : option === 'enabled' ? 'Enabled' : 'Disabled',
-          })}
-        </Menu.Item>
-      ))}
-    </Menu>
-  );
+  const filterItems = FILTER_OPTIONS.map((option) => ({
+    key: option,
+    label: t(`settings.assistantFilter.${option}`, {
+      defaultValue: option === 'all' ? 'All' : option === 'enabled' ? 'Enabled' : 'Disabled',
+    }),
+    'data-testid': `filter-option-${option}`,
+    onSelect: () => setFilter(option as AssistantEnabledFilter),
+  }));
 
   const renderCardGrid = (list: AssistantListItem[]) => (
     <div className='grid grid-cols-1 gap-14px sm:grid-cols-2 lg:grid-cols-3'>
@@ -139,7 +137,7 @@ const MyAssistantsList: React.FC<MyAssistantsListProps> = ({
             })}
           </span>
         </span>
-        <Dropdown droplist={filterMenu} trigger='click' position='br'>
+        <Dropdown align='end' items={filterItems}>
           <Button size='mini' data-testid='assistant-enabled-filter' className='!flex !shrink-0 !items-center !gap-4px'>
             <span>
               {t(`settings.assistantFilter.${filter}`, {

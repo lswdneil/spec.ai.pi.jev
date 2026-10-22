@@ -7,7 +7,10 @@
 import type { AssistantListItem } from '../types';
 import AssistantAvatar from '../AssistantAvatar';
 import RuntimeBadge from './RuntimeBadge';
-import { Button, Dropdown, Menu, Switch, Tooltip } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
+import { Switch } from '@/renderer/ui/switch';
+import { Tooltip } from '@/renderer/ui/tooltip';
 import { Attention, MoreOne } from '@icon-park/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -40,25 +43,26 @@ const MyAssistantCard: React.FC<MyAssistantCardProps> = ({
   const canDelete = assistant.source === 'user';
   const name = assistant.name_i18n?.[localeKey] || assistant.name;
 
-  const actionMenu = (
-    <Menu
-      onClickMenuItem={(key) => {
-        if (key === 'edit') onOpenDetail(assistant);
-        if (key === 'delete') onDelete(assistant);
-      }}
-    >
-      <Menu.Item key='edit'>
-        <span data-testid={`menu-edit-${assistant.id}`}>{t('common.settings', { defaultValue: 'Settings' })}</span>
-      </Menu.Item>
-      {canDelete ? (
-        <Menu.Item key='delete'>
-          <span data-testid={`menu-delete-${assistant.id}`} className='text-[rgb(var(--danger-6))]'>
-            {t('common.delete', { defaultValue: 'Delete' })}
-          </span>
-        </Menu.Item>
-      ) : null}
-    </Menu>
-  );
+  const actionItems = [
+    {
+      key: 'edit',
+      label: <span data-testid={`menu-edit-${assistant.id}`}>{t('common.settings', { defaultValue: 'Settings' })}</span>,
+      onSelect: () => onOpenDetail(assistant),
+    },
+    ...(canDelete
+      ? [
+          {
+            key: 'delete',
+            label: (
+              <span data-testid={`menu-delete-${assistant.id}`} className='text-[rgb(var(--danger-6))]'>
+                {t('common.delete', { defaultValue: 'Delete' })}
+              </span>
+            ),
+            onSelect: () => onDelete(assistant),
+          },
+        ]
+      : []),
+  ];
 
   return (
     <div
@@ -126,7 +130,7 @@ const MyAssistantCard: React.FC<MyAssistantCardProps> = ({
               {t('settings.assistantGoChat', { defaultValue: 'Chat' })}
             </Button>
           ) : null}
-          <Dropdown droplist={actionMenu} trigger='click' position='br' getPopupContainer={() => document.body}>
+          <Dropdown items={actionItems} align='end'>
             <Button
               type='text'
               size='small'

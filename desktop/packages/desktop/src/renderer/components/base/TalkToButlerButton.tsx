@@ -5,7 +5,8 @@
  */
 
 import { useTalkToButler } from '@/renderer/hooks/assistant/useTalkToButler';
-import { Button, Dropdown, Menu } from '@arco-design/web-react';
+import { Button } from '@/renderer/ui/button';
+import { Dropdown } from '@/renderer/ui/dropdown';
 import { Down } from '@icon-park/react';
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
@@ -88,26 +89,33 @@ const TalkToButlerButton: React.FC<TalkToButlerButtonProps> = ({
     [onChat, talkToButler, prompt, files, onManual, extraActions]
   );
 
-  const droplist = (
-    <Menu onClickMenuItem={handleSelect}>
-      <Menu.Item key={CHAT_KEY} data-testid={testId ? `${testId}-chat` : undefined}>
-        {chatLabel}
-      </Menu.Item>
-      {extraActions?.map((action) => (
-        <Menu.Item key={action.key} data-testid={testId ? `${testId}-${action.key}` : undefined}>
-          {action.label}
-        </Menu.Item>
-      ))}
-      {onManual && manualLabel ? (
-        <Menu.Item key={MANUAL_KEY} data-testid={testId ? `${testId}-manual` : undefined}>
-          {manualLabel}
-        </Menu.Item>
-      ) : null}
-    </Menu>
-  );
+  const items = [
+    {
+      key: CHAT_KEY,
+      label: chatLabel,
+      'data-testid': testId ? `${testId}-chat` : undefined,
+      onSelect: () => handleSelect(CHAT_KEY),
+    },
+    ...(extraActions ?? []).map((action) => ({
+      key: action.key,
+      label: action.label,
+      'data-testid': testId ? `${testId}-${action.key}` : undefined,
+      onSelect: () => handleSelect(action.key),
+    })),
+    ...(onManual && manualLabel
+      ? [
+          {
+            key: MANUAL_KEY,
+            label: manualLabel,
+            'data-testid': testId ? `${testId}-manual` : undefined,
+            onSelect: () => handleSelect(MANUAL_KEY),
+          },
+        ]
+      : []),
+  ];
 
   return (
-    <Dropdown trigger='click' droplist={droplist} position='br'>
+    <Dropdown align='end' items={items}>
       <Button
         type={type}
         size={size}
