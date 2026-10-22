@@ -6,6 +6,15 @@ Strategy: a small compatibility layer that mirrors the Arco APIs we actually use
 
 ---
 
+## Status (2026-10-22)
+
+- Renderer `.tsx` files importing `@arco-design/web-react`: **50**, down from 217.
+- Done: tokens, Dense shell, settings surfaces, and the primitives in `ui/` — Alert, Avatar, Badge, Button, Card, Checkbox, Collapse, Dialog/Modal (`confirm`/`useModal`), Dropdown (Radix), Empty, Image, Input, InputNumber, Link/Space/Result/Progress, menu aliases, Popover, Popconfirm, Radio, Select, Spinner, Switch, Tabs, Tag, toast/AppToaster, Tooltip, Typography.
+- Remaining component families, in order: **Dropdown/Menu** (~20 files, Arco's imperative `Menu`/`SubMenu`; the Radix aliases do not cover it), **Form** (4 files), **Tree** (2), **Layout** (2), **Select** leftovers (3), **Steps/Pagination/InputTag/AutoComplete/TimePicker** (one each), plus type-only imports and `@arco-design/web-react/icon`.
+- Known desktop test failures at this point are environment/`nativeHost` ones (piRpc/errorLog, NativeConversations, git/folders, the native sidebar menu, the emoji regex) rather than the migrated settings and composer surfaces.
+
+---
+
 ## 1. Target stack
 
 | Need | Choice | Licence |
