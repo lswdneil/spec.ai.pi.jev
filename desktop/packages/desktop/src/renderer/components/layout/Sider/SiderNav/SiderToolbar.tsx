@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tooltip } from '@arco-design/web-react';
+import { Tooltip } from '@/renderer/ui';
 import { ListCheckbox, Plus } from '@icon-park/react';
 import classNames from 'classnames';
 import { rowButtonProps } from '@renderer/utils/ui/rowButton';
@@ -35,7 +35,7 @@ const SiderToolbar: React.FC<SiderToolbarProps> = ({
   if (collapsed) {
     return (
       <div className='shrink-0 flex flex-col items-center gap-2px w-full'>
-        <Tooltip {...siderTooltipProps} content={t('conversation.welcome.newConversation')} position='right'>
+        <Tooltip disabled={Boolean(siderTooltipProps.disabled)} content={t('conversation.welcome.newConversation')} position='right'>
           <div
             data-testid='sider-new-chat'
             aria-label={t('conversation.welcome.newConversation')}
@@ -60,7 +60,7 @@ const SiderToolbar: React.FC<SiderToolbarProps> = ({
 
   return (
     <div className='shrink-0 flex items-center gap-8px'>
-      <Tooltip {...siderTooltipProps} content={t('conversation.welcome.newConversation')} position='right'>
+      <Tooltip disabled={Boolean(siderTooltipProps.disabled)} content={t('conversation.welcome.newConversation')} position='right'>
         <div
           data-testid='sider-new-chat'
           className={classNames(
@@ -85,7 +85,7 @@ const SiderToolbar: React.FC<SiderToolbarProps> = ({
         </div>
       </Tooltip>
       <Tooltip
-        {...siderTooltipProps}
+        disabled={Boolean(siderTooltipProps.disabled)}
         content={isBatchMode ? t('conversation.history.batchModeExit') : t('conversation.history.batchManage')}
         position='right'
       >

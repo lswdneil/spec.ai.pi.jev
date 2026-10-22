@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Tooltip } from '@arco-design/web-react';
+import { Tooltip } from '@/renderer/ui';
 import { Search } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
@@ -32,7 +32,7 @@ const SiderSearchEntry: React.FC<SiderSearchEntryProps> = ({ isMobile, collapsed
 
   if (collapsed) {
     return (
-      <Tooltip {...siderTooltipProps} content={tooltip} position='right'>
+      <Tooltip content={tooltip} position='right' disabled={Boolean(siderTooltipProps.disabled)}>
         <div
           data-testid='sider-search'
           aria-label={label}
@@ -52,7 +52,7 @@ const SiderSearchEntry: React.FC<SiderSearchEntryProps> = ({ isMobile, collapsed
   }
 
   return (
-    <Tooltip {...siderTooltipProps} content={tooltip} position='right'>
+    <Tooltip content={tooltip} position='right' disabled={Boolean(siderTooltipProps.disabled)}>
       <div
         data-testid='sider-search'
         className={classNames(

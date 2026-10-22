@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tooltip } from '@arco-design/web-react';
+import { Tooltip } from '@/renderer/ui';
 import { ArrowCircleLeft, Moon, SettingTwo, SunOne } from '@icon-park/react';
 import classNames from 'classnames';
 import UpdateNotice from '@renderer/components/settings/UpdateNotice';
@@ -61,7 +61,11 @@ const SiderFooter: React.FC<SiderFooterProps> = ({
     <div className='shrink-0 sider-footer mt-auto pt-8px pb-8px border-t border-solid border-[var(--color-border-2)] border-s-0 border-e-0 border-b-0'>
       <UpdateNotice collapsed={collapsed} siderTooltipProps={siderTooltipProps} />
       <div className={classNames('flex', collapsed ? 'flex-col gap-2px' : 'items-center gap-2px')}>
-        <Tooltip {...siderTooltipProps} content={isSettings ? t('common.back') : t('common.settings')} position='right'>
+        <Tooltip
+          content={isSettings ? t('common.back') : t('common.settings')}
+          position='right'
+          disabled={Boolean(siderTooltipProps.disabled)}
+        >
           <div
             {...rowButtonProps(onSettingsClick)}
             data-testid='sider-settings'
@@ -80,7 +84,7 @@ const SiderFooter: React.FC<SiderFooterProps> = ({
           </div>
         </Tooltip>
         {/* The theme, wherever you are: the shell is white or black, and this is the switch. */}
-        <Tooltip {...siderTooltipProps} content={themeTooltip} position='right'>
+        <Tooltip content={themeTooltip} position='right' disabled={Boolean(siderTooltipProps.disabled)}>
           <div
             {...rowButtonProps(onThemeToggle)}
             data-testid='theme-toggle'

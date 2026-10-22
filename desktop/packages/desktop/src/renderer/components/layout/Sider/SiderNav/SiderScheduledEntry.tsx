@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tooltip } from '@arco-design/web-react';
+import { Tooltip } from '@/renderer/ui';
 import { AlarmClock } from '@icon-park/react';
 import classNames from 'classnames';
 import { rowButtonProps } from '@renderer/utils/ui/rowButton';
@@ -31,7 +31,7 @@ const SiderScheduledEntry: React.FC<SiderScheduledEntryProps> = ({
 
   if (collapsed) {
     return (
-      <Tooltip {...siderTooltipProps} content={t('cron.scheduledTasks')} position='right'>
+      <Tooltip content={t('cron.scheduledTasks')} position='right' disabled={Boolean(siderTooltipProps.disabled)}>
         <div
           data-testid='sider-scheduled'
           aria-label={t('cron.scheduledTasks')}
@@ -55,7 +55,7 @@ const SiderScheduledEntry: React.FC<SiderScheduledEntryProps> = ({
   }
 
   return (
-    <Tooltip {...siderTooltipProps} content={t('cron.scheduledTasks')} position='right'>
+    <Tooltip content={t('cron.scheduledTasks')} position='right' disabled={Boolean(siderTooltipProps.disabled)}>
       <div
         data-testid='sider-scheduled'
         aria-current={isActive ? 'page' : undefined}
