@@ -74,4 +74,14 @@ The remaining scan hits (29 files / 36 lines at the time of writing) are content
 
 The guard covers the shell, composer, messages, settings and settings dialogs, preview, agent, history, media, source control, native host, scheduled tasks, platform composers, workspace, Guid, Markdown, Kyrn, base components, explorer, design-system preview, chat chrome, conversation panels, and icon-bearing UI primitives.
 
+## Visual regression
+
+`desktop/tests/e2e/features/visual/icon-scale.e2e.ts` launches the real app, skips onboarding, opens the home page at 1280×800, toggles dark and light, and measures every visible `sv-icon-*` element. It asserts:
+
+- taskbar icons (`sv-icon-sider`) and titlebar icons (`sv-icon-titlebar`) are present;
+- every visible icon class paints at its token size, including icon-park wrappers;
+- both themes pass.
+
+It writes `icon-scale-dark.png` and `icon-scale-light.png` to the Playwright test output for visual inspection. Run it against a dev server with `E2E_DEV=1`; CI uses the freshly packaged app.
+
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.
