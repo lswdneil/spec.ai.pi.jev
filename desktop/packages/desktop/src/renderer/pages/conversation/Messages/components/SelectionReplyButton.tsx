@@ -195,7 +195,7 @@ const SelectionReplyButton: React.FC<{ messages: TMessage[] }> = ({ messages }) 
           dismiss();
         }}
       >
-        <Quote theme='outline' size='14' fill='currentColor' />
+        <Quote theme='outline' className='sv-icon-sm' fill='currentColor' />
         <span className='text-12px font-medium'>{t('common.reply', { defaultValue: 'Reply' })}</span>
       </div>
       {url && preview && (
@@ -207,7 +207,7 @@ const SelectionReplyButton: React.FC<{ messages: TMessage[] }> = ({ messages }) 
             dismiss();
           }}
         >
-          <Browser theme='outline' size='14' fill='currentColor' />
+          <Browser theme='outline' className='sv-icon-sm' fill='currentColor' />
           <span className='text-12px font-medium'>{t('common.openInBuiltinBrowser')}</span>
         </div>
       )}
@@ -220,7 +220,7 @@ const SelectionReplyButton: React.FC<{ messages: TMessage[] }> = ({ messages }) 
             dismiss();
           }}
         >
-          <Earth theme='outline' size='14' fill='currentColor' />
+          <Earth theme='outline' className='sv-icon-sm' fill='currentColor' />
           <span className='text-12px font-medium'>{t('common.openInSystemBrowser')}</span>
         </div>
       )}

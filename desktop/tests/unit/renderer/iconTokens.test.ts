@@ -1,10 +1,15 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 const desktop = fileURLToPath(new URL('../../../', import.meta.url));
 const read = (path: string) => readFileSync(join(desktop, 'packages/desktop/src/renderer', path), 'utf8');
+const walk = (dir: string): string[] =>
+  readdirSync(join(desktop, 'packages/desktop/src/renderer', dir), { withFileTypes: true }).flatMap((entry) => {
+    const path = `${dir}/${entry.name}`;
+    return entry.isDirectory() ? walk(path) : entry.name.endsWith('.tsx') ? [path] : [];
+  });
 
 const shell = [
   'components/layout/Layout.tsx',
@@ -41,6 +46,12 @@ describe('the shared shell icon scale', () => {
     for (const path of shell) {
       const source = read(path);
       expect(source, path).not.toMatch(/(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/);
+    }
+  });
+
+  it('keeps the message surface on the icon scale', () => {
+    for (const path of walk('pages/conversation/Messages')) {
+      expect(read(path), path).not.toMatch(/(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/);
     }
   });
 

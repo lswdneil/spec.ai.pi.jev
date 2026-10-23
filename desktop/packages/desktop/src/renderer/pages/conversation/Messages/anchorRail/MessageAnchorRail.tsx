@@ -319,7 +319,7 @@ const MessageAnchorRail: React.FC = () => {
           title={t('messages.anchorRail.searchAria')}
           onClick={openSearchPanel}
         >
-          <Search size={14} className={styles.searchIcon} />
+          <Search className={`${styles.searchIcon} sv-icon-sm`} />
         </button>
       )}
 

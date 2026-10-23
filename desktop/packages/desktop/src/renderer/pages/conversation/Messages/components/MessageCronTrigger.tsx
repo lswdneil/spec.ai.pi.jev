@@ -55,9 +55,8 @@ const MessageCronTrigger: React.FC<{ artifact: ICronTriggerArtifact }> = ({ arti
       >
         <AlarmClock
           theme='outline'
-          size={18}
           fill={iconColors.secondary}
-          className='block leading-none shrink-0'
+          className='sv-icon-lg block leading-none shrink-0'
           style={{ lineHeight: 0 }}
         />
         <span className='flex-1 text-14px truncate text-t-primary'>
@@ -65,9 +64,8 @@ const MessageCronTrigger: React.FC<{ artifact: ICronTriggerArtifact }> = ({ arti
         </span>
         <Right
           theme='outline'
-          size={16}
           fill={iconColors.secondary}
-          className='block leading-none shrink-0'
+          className='sv-icon-md block leading-none shrink-0'
           style={{ lineHeight: 0 }}
         />
       </div>

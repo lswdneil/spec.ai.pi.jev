@@ -25,10 +25,10 @@ import { findMuTurnError, muTurnErrorKey, noModelDetail } from '@/renderer/utils
 // icon — a backend that deliberately downgrades a notice to Info still reached
 // the user as a warning.
 export const icon = {
-  success: <CheckOne theme='filled' size='16' fill={iconColors.success} className='m-t-2px' />,
-  info: <Info theme='filled' size='16' strokeLinejoin='bevel' className='m-t-2px' fill={iconColors.brand} />,
-  warning: <Attention theme='filled' size='16' strokeLinejoin='bevel' className='m-t-2px' fill={iconColors.warning} />,
-  error: <Attention theme='filled' size='16' strokeLinejoin='bevel' className='m-t-2px' fill={iconColors.danger} />,
+  success: <CheckOne theme='filled' fill={iconColors.success} className='sv-icon-md m-t-2px' />,
+  info: <Info theme='filled' strokeLinejoin='bevel' className='sv-icon-md m-t-2px' fill={iconColors.brand} />,
+  warning: <Attention theme='filled' strokeLinejoin='bevel' className='sv-icon-md m-t-2px' fill={iconColors.warning} />,
+  error: <Attention theme='filled' strokeLinejoin='bevel' className='sv-icon-md m-t-2px' fill={iconColors.danger} />,
 };
 
 const useFormatContent = (content: string) => {

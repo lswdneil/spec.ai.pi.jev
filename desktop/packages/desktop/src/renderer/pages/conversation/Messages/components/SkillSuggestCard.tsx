@@ -71,7 +71,7 @@ const SkillSuggestCard: React.FC<SkillSuggestCardProps> = ({
       style={{ borderColor: 'color-mix(in srgb, var(--color-border-2) 70%, transparent)' }}
     >
       <div className='flex items-center gap-6px mb-8px'>
-        <Lightning theme='filled' size={16} fill={iconColors.warning} />
+        <Lightning theme='filled' className='sv-icon-md' fill={iconColors.warning} />
         <span className='font-500 text-14px'>{t('cron.skill.turnIntoSkill')}</span>
       </div>
       <div className='text-t-primary text-13px mb-4px'>{suggestion.name}</div>
@@ -82,7 +82,7 @@ const SkillSuggestCard: React.FC<SkillSuggestCardProps> = ({
         className='flex items-center gap-4px text-12px text-t-secondary cursor-pointer hover:text-t-primary mb-8px select-none'
         onClick={() => setExpanded(!expanded)}
       >
-        {expanded ? <Up size={12} /> : <Down size={12} />}
+        {expanded ? <Up className='sv-icon-xs' /> : <Down className='sv-icon-xs' />}
         <span>{t('cron.skill.preview')}</span>
       </div>
       {expanded && (

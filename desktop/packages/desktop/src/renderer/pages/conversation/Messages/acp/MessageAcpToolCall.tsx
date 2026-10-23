@@ -185,7 +185,7 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
                   type='secondary'
                   size='mini'
                   shape='circle'
-                  icon={<Download theme='outline' size='14' />}
+                  icon={<Download theme='outline' className='sv-icon-sm' />}
                   onClick={() => void handleDownloadImage(imagePath)}
                 />
               </Tooltip>

@@ -363,7 +363,7 @@ const ImageDisplay: React.FC<{
   if (loading) {
     return (
       <div className='flex items-center gap-8px my-8px'>
-        <LoadingOne className='loading' theme='outline' size='14' fill={iconColors.primary} />
+        <LoadingOne className='sv-icon-sm loading' theme='outline' fill={iconColors.primary} />
         <span className='text-t-secondary text-sm'>{t('common.loading', { defaultValue: 'Loading...' })}</span>
       </div>
     );
@@ -406,7 +406,7 @@ const ImageDisplay: React.FC<{
               type='secondary'
               size='small'
               shape='circle'
-              icon={<Copy theme='outline' size='14' fill={iconColors.primary} />}
+              icon={<Copy theme='outline' className='sv-icon-sm' fill={iconColors.primary} />}
               onClick={handleCopy}
             />
           </Tooltip>
@@ -415,7 +415,7 @@ const ImageDisplay: React.FC<{
               type='secondary'
               size='small'
               shape='circle'
-              icon={<Download theme='outline' size='14' fill={iconColors.primary} />}
+              icon={<Download theme='outline' className='sv-icon-sm' fill={iconColors.primary} />}
               onClick={handleDownload}
             />
           </Tooltip>
@@ -561,7 +561,7 @@ const MessageToolGroup: React.FC<IMessageToolGroupProps> = ({ message }) => {
               }
               icon={
                 isLoading && (
-                  <LoadingOne theme='outline' size='12' fill={iconColors.primary} className='loading lh-[1] flex' />
+                  <LoadingOne theme='outline' fill={iconColors.primary} className='sv-icon-xs loading lh-[1] flex' />
                 )
               }
               content={

@@ -27,16 +27,19 @@ First content batch:
 - Markdown CodeBlock, MermaidBlock, WavedromBlock
 - home GuidActionRow
 
-Their literal `size` / `h-3.5` / `h-4` / `h-5` values were replaced by scale classes, and `iconTokens.test.ts` now covers them.
+Second content batch:
+
+- Conversation message surface: MessageThinking, MessageToolCall, MessageToolGroup, MessageToolGroupSummary, MessageTips, MessageMuNotice, PermissionRequestPanel, SelectionReplyButton, SkillSuggestCard, MessageText, MessageList, MessageQuestion, MessageCronBadge/Trigger, ToolKindIcon, TeammateMessageAvatar, ActionRail search.
+
+The literal `size` / `h-3.5` / `h-4` / `h-5` values were replaced by scale classes. `iconTokens.test.ts` now scans the whole `pages/conversation/Messages` tree as well as the first batch.
 
 ## Remaining
 
 Scan the renderer for literal icon sizes; remaining files are mostly:
 
-1. Message/tool/permission cards
-2. Settings business pages
-3. Preview and Markdown auxiliary panels
-4. Agent and mode selectors
-5. Small inline metadata icons
+1. Settings business pages
+2. Preview auxiliary panels
+3. Agent and mode selectors
+4. Small inline metadata icons
 
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.

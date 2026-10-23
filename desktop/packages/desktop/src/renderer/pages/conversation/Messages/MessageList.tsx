@@ -1168,7 +1168,7 @@ const MessageList: React.FC<{
             aria-label={t('messages.scrollToBottom')}
           >
             {t('messages.scrollToBottom')}
-            <Down theme='outline' size='12' fill={iconColors.secondary} style={{ display: 'block' }} />
+            <Down theme='outline' className='sv-icon-xs' fill={iconColors.secondary} style={{ display: 'block' }} />
           </button>
         </div>
       )}

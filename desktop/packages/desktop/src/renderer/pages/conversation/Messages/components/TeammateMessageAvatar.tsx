@@ -36,7 +36,7 @@ const TeammateMessageAvatar: React.FC<Props> = ({ senderName, senderConversation
     if (presetInfo.isFallback) {
       return (
         <span className='w-20px h-20px rounded-full flex items-center justify-center text-12px leading-none bg-fill-2'>
-          <Robot theme='outline' size={12} />
+          <Robot theme='outline' className='sv-icon-xs' />
         </span>
       );
     }
@@ -58,7 +58,7 @@ const TeammateMessageAvatar: React.FC<Props> = ({ senderName, senderConversation
 
   return (
     <div className='w-20px h-20px rounded-full bg-fill-3 flex items-center justify-center text-10px text-t-secondary font-medium'>
-      <Robot theme='outline' size={12} />
+      <Robot theme='outline' className='sv-icon-xs' />
     </div>
   );
 };

@@ -22,15 +22,15 @@ function Mark({ notice }: { notice: MuNotice }) {
   if (notice.code === 'to_model' && notice.kind === 'kyrn.nudge')
     return <span className={styles.dot} data-mark='judge' aria-hidden='true' />;
   if (notice.code === 'stopped')
-    return <PauseOne theme='outline' size='14' className='flex-none text-t-secondary' aria-hidden='true' />;
+    return <PauseOne theme='outline' className='sv-icon-sm flex-none text-t-secondary' aria-hidden='true' />;
   if (notice.code === 'to_model')
-    return <Remind theme='outline' size='14' className='flex-none text-t-secondary' aria-hidden='true' />;
+    return <Remind theme='outline' className='sv-icon-sm flex-none text-t-secondary' aria-hidden='true' />;
   if (notice.code === 'free_jev' || (!notice.code && notice.level === 'info'))
-    return <Info theme='outline' size='14' className='flex-none text-t-secondary' aria-hidden='true' />;
+    return <Info theme='outline' className='sv-icon-sm flex-none text-t-secondary' aria-hidden='true' />;
   return notice.level === 'error' ? (
-    <Attention theme='outline' size='14' className='flex-none' style={{ color: 'var(--danger)' }} aria-hidden='true' />
+    <Attention theme='outline' className='sv-icon-sm flex-none' style={{ color: 'var(--danger)' }} aria-hidden='true' />
   ) : (
-    <Attention theme='outline' size='14' className='flex-none text-warning' aria-hidden='true' />
+    <Attention theme='outline' className='sv-icon-sm flex-none text-warning' aria-hidden='true' />
   );
 }
 

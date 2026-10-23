@@ -36,7 +36,7 @@ export const toolKind = (name: string): Kind => {
   return 'other';
 };
 
-const ICONS: Record<Kind, React.ComponentType<{ size?: number | string; theme?: 'outline' }>> = {
+const ICONS: Record<Kind, React.ComponentType<{ className?: string; theme?: 'outline' }>> = {
   read: FileText,
   edit: Editor,
   shell: Terminal,
@@ -50,7 +50,7 @@ const ToolKindIcon: React.FC<{ name: string }> = ({ name }) => {
   const Icon = ICONS[toolKind(name)];
   return (
     <span className={styles.kindIcon} aria-hidden='true'>
-      <Icon size={12} theme='outline' />
+      <Icon className='sv-icon-xs' theme='outline' />
     </span>
   );
 };

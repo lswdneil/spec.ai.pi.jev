@@ -196,7 +196,7 @@ const MessageQuestion: React.FC<MessageQuestionProps> = React.memo(({ message })
             aria-live='polite'
             data-testid='message-question-status'
           >
-            <CheckOne theme='outline' size='16' aria-hidden='true' />
+            <CheckOne theme='outline' className='sv-icon-md' aria-hidden='true' />
             <span>{submitted === 'answered' ? t('messages.askAnswered') : t('messages.askDeclined')}</span>
           </div>
         )}

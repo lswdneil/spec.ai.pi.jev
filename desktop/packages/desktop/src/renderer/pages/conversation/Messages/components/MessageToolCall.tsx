@@ -93,7 +93,7 @@ const MessageToolCall: React.FC<{ message: IMessageToolCall }> = ({ message }) =
             className='flex-shrink-0 cursor-pointer hover:text-t-secondary transition-colors'
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+            {expanded ? <ChevronDown className='sv-icon-xs' /> : <ChevronRight className='sv-icon-xs' />}
           </span>
         )}
       </div>

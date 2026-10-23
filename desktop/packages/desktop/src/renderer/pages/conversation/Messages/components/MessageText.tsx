@@ -220,7 +220,7 @@ const MessageText: React.FC<{
         onClick={handleCopy}
         style={{ lineHeight: 0 }}
       >
-        <Copy theme='outline' size='16' fill={iconColors.secondary} />
+        <Copy theme='outline' className='sv-icon-md' fill={iconColors.secondary} />
       </div>
     </Tooltip>
   );
@@ -244,7 +244,7 @@ const MessageText: React.FC<{
         style={{ lineHeight: 0 }}
         data-testid='message-fork-button'
       >
-        <ForkBranchIcon size={16} fill={iconColors.secondary} />
+        <ForkBranchIcon className='sv-icon-md' fill={iconColors.secondary} />
       </div>
     </Tooltip>
   ) : null;

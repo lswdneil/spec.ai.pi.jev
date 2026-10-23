@@ -201,7 +201,7 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
           onClick={toggleExpanded}
         >
           {line}
-          {expanded ? <Down size={12} /> : <Right size={12} />}
+          {expanded ? <Down className='sv-icon-xs' /> : <Right className='sv-icon-xs' />}
         </Button>
       ) : (
         <div className={styles.callStatic}>{line}</div>
@@ -254,7 +254,7 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
               type='secondary'
               size='mini'
               shape='circle'
-              icon={<Download theme='outline' size='14' />}
+              icon={<Download theme='outline' className='sv-icon-sm' />}
               onClick={() => void handleDownloadImage(item.imagePath)}
             />
           </Tooltip>
@@ -312,7 +312,7 @@ const ToolActivityGroup: React.FC<{ tools: NormalizedToolCall[]; language?: stri
           className={summary.status === 'running' ? styles.breathing : undefined}
         />
         <span className={styles.activitySummary}>{headline}</span>
-        {expanded ? <Down size={12} /> : <Right size={12} />}
+        {expanded ? <Down className='sv-icon-xs' /> : <Right className='sv-icon-xs' />}
       </Button>
       {!expanded &&
         errors.map((error) => (

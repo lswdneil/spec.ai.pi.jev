@@ -29,7 +29,7 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | Sidebar brand height | 26 | PASS |
 | Sidebar fold control | expanded: brand row right; collapsed: below the mark, on the rail icon column; 18px icon in both states | FIXED |
 | Theme switch | titlebar top-left, 40px control aligned with the window controls; not in the sidebar footer | FIXED |
-| Icon scale | `--sv-icon-xs/sm/md/lg/xl`, plus sider/titlebar aliases; shell and first content batch use classes, no literal sizes | FIXED |
+| Icon scale | `--sv-icon-xs/sm/md/lg/xl`, plus sider/titlebar aliases; shell plus composer/message content batches use classes, no literal sizes | FIXED |
 | Collapsed rail | 48px wide; expanded and collapsed share the same 18px taskbar icons, never wider than the 20px mark | FIXED |
 | New session | 28 high, 13 label | UPDATED for readability |
 | Nav rows | 27 high, 13, radius 5 | UPDATED for readability |

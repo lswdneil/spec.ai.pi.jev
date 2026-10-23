@@ -79,7 +79,7 @@ const ThoughtHistory: React.FC<ThoughtHistoryProps> = ({ messages }) => {
         onClick={() => setExpanded((value) => !value)}
       >
         <span className={styles.headerIcon}>
-          <Brain theme='outline' size='14' />
+          <Brain theme='outline' className='sv-icon-sm' />
         </span>
         <span className={styles.summary}>
           {total === undefined
@@ -87,7 +87,7 @@ const ThoughtHistory: React.FC<ThoughtHistoryProps> = ({ messages }) => {
             : t('conversation.thinking.thoughtFor', { time: formatThinkingTime(total, language) })}
         </span>
         <span className={`${styles.arrow} ${expanded ? styles.arrowExpanded : ''}`}>
-          <Right theme='outline' size='12' />
+          <Right theme='outline' className='sv-icon-xs' />
         </span>
       </Button>
       {expanded && (
@@ -182,10 +182,10 @@ const MessageThinking: React.FC<MessageThinkingProps> = ({ message, active, expa
         type='text'
         onClick={toggleExpanded}
       >
-        <span className={styles.headerIcon}>{isActive ? <Spin size={12} /> : <Brain theme='outline' size='14' />}</span>
+        <span className={styles.headerIcon}>{isActive ? <Spin className='sv-icon-xs' /> : <Brain theme='outline' className='sv-icon-sm' />}</span>
         <span className={styles.summary}>{summaryText}</span>
         <span className={`${styles.arrow} ${isExpanded ? styles.arrowExpanded : ''}`}>
-          <Right theme='outline' size='12' />
+          <Right theme='outline' className='sv-icon-xs' />
         </span>
       </Button>
       {tail && (

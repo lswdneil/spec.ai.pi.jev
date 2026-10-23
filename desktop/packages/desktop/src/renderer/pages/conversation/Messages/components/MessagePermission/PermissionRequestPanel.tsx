@@ -197,7 +197,7 @@ export const PermissionRequestPanel: React.FC<PermissionRequestPanelProps> = ({
                 aria-live='assertive'
                 data-testid={`${testIdPrefix}-error`}
               >
-                <Attention theme='outline' size='16' aria-hidden='true' />
+                <Attention theme='outline' className='sv-icon-md' aria-hidden='true' />
                 <span>{t('messages.permissionResponseFailed')}</span>
               </div>
             )}
@@ -206,7 +206,7 @@ export const PermissionRequestPanel: React.FC<PermissionRequestPanelProps> = ({
 
         {isGone && (
           <div className={styles.feedback} role='status' aria-live='polite' data-testid={`${testIdPrefix}-gone`}>
-            <Info theme='outline' size='16' aria-hidden='true' />
+            <Info theme='outline' className='sv-icon-md' aria-hidden='true' />
             <span>{t('messages.permissionNoLongerPending')}</span>
           </div>
         )}
@@ -221,9 +221,9 @@ export const PermissionRequestPanel: React.FC<PermissionRequestPanelProps> = ({
             data-outcome={outcomeOf(answered)}
           >
             {outcomeOf(answered) === 'deny' ? (
-              <Forbid theme='outline' size='16' aria-hidden='true' />
+              <Forbid theme='outline' className='sv-icon-md' aria-hidden='true' />
             ) : (
-              <CheckOne theme='outline' size='16' aria-hidden='true' />
+              <CheckOne theme='outline' className='sv-icon-md' aria-hidden='true' />
             )}
             <span className={styles.decision}>
               {decision?.(answered) ?? t('messages.permissionAnswered', { option: answered.label })}
