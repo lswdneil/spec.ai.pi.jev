@@ -12,6 +12,7 @@ const history = vi.hoisted(() => ({
   value: null as null | { canBack: boolean; canForward: boolean; back: () => void; forward: () => void },
   mobile: false,
 }));
+const appearance = vi.hoisted(() => ({ theme: 'light', setTheme: vi.fn() }));
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
@@ -32,6 +33,9 @@ vi.mock('@/renderer/hooks/context/LayoutContext', () => ({
 vi.mock('@/renderer/hooks/context/NavigationHistoryContext', () => ({
   useNavigationHistory: () => history.value,
 }));
+vi.mock('@/renderer/hooks/context/ThemeContext', () => ({
+  useThemeContext: () => ({ theme: appearance.theme, setTheme: appearance.setTheme }),
+}));
 vi.mock('@/renderer/utils/platform', () => ({
   isElectronDesktop: () => true,
   isMacOS: () => true,
@@ -47,6 +51,16 @@ describe('Titlebar history arrows', () => {
   beforeEach(() => {
     history.value = null;
     history.mobile = false;
+    appearance.theme = 'light';
+    appearance.setTheme.mockClear();
+  });
+
+  it('puts the light/dark switch first at the top-left', () => {
+    render(<Titlebar workspaceAvailable />);
+    const toggle = screen.getByRole('button', { name: 'settings.darkMode' });
+    expect(toggle).toBeInTheDocument();
+    fireEvent.click(toggle);
+    expect(appearance.setTheme).toHaveBeenCalledWith('dark');
   });
 
   it('are hidden while there is no history in either direction', () => {

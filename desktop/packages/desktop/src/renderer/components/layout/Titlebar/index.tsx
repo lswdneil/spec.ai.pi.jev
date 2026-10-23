@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { ArrowCircleLeft, ArrowLeft, ArrowRight, ExpandLeft, ExpandRight } from '@icon-park/react';
+import { Moon, Sun } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -11,6 +12,7 @@ import { WORKSPACE_STATE_EVENT, dispatchWorkspaceToggleEvent } from '@renderer/u
 import type { WorkspaceStateDetail } from '@renderer/utils/workspace/workspaceEvents';
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { useNavigationHistory } from '@/renderer/hooks/context/NavigationHistoryContext';
+import { useThemeContext } from '@/renderer/hooks/context/ThemeContext';
 import { isElectronDesktop, isMacOS } from '@/renderer/utils/platform';
 import './titlebar.css';
 
@@ -54,6 +56,7 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
   const [mobileCenterTitle, setMobileCenterTitle] = useState(appTitle);
   const [mobileCenterOffset, setMobileCenterOffset] = useState(0);
   const layout = useLayoutContext();
+  const { theme, setTheme } = useThemeContext();
   const navigationHistory = useNavigationHistory();
   const location = useLocation();
   const navigate = useNavigate();
@@ -98,6 +101,7 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
   // 统一在标题栏左侧展示主侧栏开关 / Always expose sidebar toggle on titlebar left side
   // Desktop folds from the sidebar's brand row; the titlebar keeps the toggle only for the phone overlay.
   const showSiderToggle = Boolean(layout?.setSiderCollapsed) && Boolean(layout?.isMobile) && !isSettingsRoute;
+  const themeLabel = theme === 'dark' ? t('settings.lightMode') : t('settings.darkMode');
   const showBackToChatButton = Boolean(layout?.isMobile && isSettingsRoute);
   const siderTooltip = layout?.siderCollapsed ? t('common.expandSidebar') : t('common.collapseSidebar');
   // 前进/后退仅在桌面端显示（移动端空间有限，保留原有的返回到聊天按钮）
@@ -236,6 +240,19 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
       })}
     >
       <div ref={menuRef} className='app-titlebar__menu' style={menuStyle}>
+        <button
+          type='button'
+          className='app-titlebar__button'
+          onClick={() => void setTheme(theme === 'dark' ? 'light' : 'dark')}
+          aria-label={themeLabel}
+          title={themeLabel}
+        >
+          {theme === 'dark' ? (
+            <Sun className='h-[18px] w-[18px]' strokeWidth={1.75} />
+          ) : (
+            <Moon className='h-[18px] w-[18px]' strokeWidth={1.75} />
+          )}
+        </button>
         {showBackToChatButton && (
           <button
             type='button'

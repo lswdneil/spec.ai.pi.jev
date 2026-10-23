@@ -28,6 +28,7 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | Sidebar padding / gap | 8 / 8 | PASS |
 | Sidebar brand height | 26 | PASS |
 | Sidebar fold control | expanded: brand row right; collapsed: below the mark, on the rail icon column; 20px icon in both states | FIXED |
+| Theme switch | titlebar top-left, 40px control aligned with the window controls; not in the sidebar footer | FIXED |
 | Collapsed rail | 48px wide; icons 20px, never wider than the 20px mark | FIXED |
 | New session | 28 high, 13 label | UPDATED for readability |
 | Nav rows | 27 high, 13, radius 5 | UPDATED for readability |

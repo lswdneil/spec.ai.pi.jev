@@ -5,7 +5,6 @@ import { usePreviewContext } from '@renderer/pages/conversation/Preview/context/
 import { cleanupSiderTooltips, getSiderTooltipProps } from '@renderer/utils/ui/siderTooltip';
 import { useLayoutContext } from '@renderer/hooks/context/LayoutContext';
 import { blurActiveElement } from '@renderer/utils/ui/focus';
-import { useThemeContext } from '@renderer/hooks/context/ThemeContext';
 import NativeSiderGroup from '@renderer/pages/native/components/NativeSiderGroup';
 import { useNativeEnabled } from '@renderer/pages/native/hooks/useNativeConversations';
 import { SETTINGS_HOME } from '@renderer/pages/settings/settingsNav';
@@ -24,7 +23,7 @@ interface SiderProps {
 
 /**
  * The sidebar: three ways in — a new conversation, search, scheduled tasks — and then the
- * conversations themselves. Settings and the theme are in the footer. Nothing else lives here:
+ * conversations themselves. Settings are in the footer; the theme switch lives in the titlebar. Nothing else lives here:
  * assistants are settings (技能与工具), and so is everything that used to have its own row.
  */
 const Sider: React.FC<SiderProps> = ({ onSessionClick, collapsed = false }) => {
@@ -35,7 +34,6 @@ const Sider: React.FC<SiderProps> = ({ onSessionClick, collapsed = false }) => {
 
   const navigate = useNavigate();
   const { closePreview } = usePreviewContext();
-  const { theme, setTheme } = useThemeContext();
   const [isBatchMode, setIsBatchMode] = useState(false);
   const isSettings = pathname.startsWith('/settings');
   const lastNonSettingsPathRef = useRef('/guid');
@@ -106,10 +104,6 @@ const Sider: React.FC<SiderProps> = ({ onSessionClick, collapsed = false }) => {
     }
   };
 
-  const handleQuickThemeToggle = () => {
-    void setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
-
   const tooltipEnabled = collapsed && !isMobile;
   const siderTooltipProps = getSiderTooltipProps(tooltipEnabled);
   // Collapsed on a desktop, the sidebar is a rail: its ways in and its footer, each an icon with a tooltip, and no
@@ -175,15 +169,13 @@ const Sider: React.FC<SiderProps> = ({ onSessionClick, collapsed = false }) => {
       </div>
       {/* Cmd/Ctrl+K on every page, the settings included, which is why it lives here and not in the search entry. */}
       <CommandPalette onNavigate={handlePaletteNavigate} />
-      {/* Footer: settings (or back out of them), and the theme. */}
+      {/* Footer: the way into the settings, or back out of them. */}
       <SiderFooter
         isMobile={isMobile}
         isSettings={isSettings}
         collapsed={collapsed}
-        theme={theme}
         siderTooltipProps={siderTooltipProps}
         onSettingsClick={handleSettingsClick}
-        onThemeToggle={handleQuickThemeToggle}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { ArrowLeft, Moon, Settings2, Sun } from 'lucide-react';
+import { ArrowLeft, Settings2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Tooltip, cn } from '@/renderer/ui';
@@ -10,10 +10,8 @@ type DenseSiderFooterProps = {
   isMobile: boolean;
   isSettings: boolean;
   collapsed?: boolean;
-  theme: string;
   siderTooltipProps: SiderTooltipProps;
   onSettingsClick: () => void;
-  onThemeToggle: () => void;
 };
 
 /**
@@ -24,14 +22,11 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
   isMobile,
   isSettings,
   collapsed = false,
-  theme,
   siderTooltipProps,
   onSettingsClick,
-  onThemeToggle,
 }) => {
   const { t } = useTranslation();
   const settingsLabel = isSettings ? t('common.back') : t('common.settings');
-  const themeLabel = theme === 'dark' ? t('settings.lightMode') : t('settings.darkMode');
   const iconOnly = collapsed && !isMobile;
   const railIconClass = iconOnly ? 'h-5 w-5 shrink-0' : 'h-3.5 w-3.5 shrink-0';
   const [userName, setUserName] = useState('');
@@ -79,22 +74,6 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
               <Settings2 className={railIconClass} strokeWidth={1.75} />
             )}
             {iconOnly ? null : <span className='truncate text-[11.5px]'>{settingsLabel}</span>}
-          </Button>
-        </Tooltip>
-        <Tooltip content={themeLabel} position='right' disabled={!iconOnly}>
-          <Button
-            variant='ghost'
-            size='icon'
-            onClick={onThemeToggle}
-            data-testid='theme-toggle'
-            aria-label={themeLabel}
-            className='text-sv-muted hover:bg-sv-surface hover:text-sv-text'
-          >
-            {theme === 'dark' ? (
-              <Sun className={railIconClass} strokeWidth={1.75} />
-            ) : (
-              <Moon className={railIconClass} strokeWidth={1.75} />
-            )}
           </Button>
         </Tooltip>
       </div>

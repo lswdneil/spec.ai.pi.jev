@@ -25,6 +25,9 @@ vi.mock('@/renderer/hooks/context/LayoutContext', () => ({
 vi.mock('@/renderer/hooks/context/NavigationHistoryContext', () => ({
   useNavigationHistory: () => null,
 }));
+vi.mock('@/renderer/hooks/context/ThemeContext', () => ({
+  useThemeContext: () => ({ theme: 'light', setTheme: vi.fn() }),
+}));
 vi.mock('@/renderer/utils/platform', () => ({
   isElectronDesktop: () => platform.desktop,
   isMacOS: () => platform.mac,

@@ -77,7 +77,7 @@ describe('sidebar entries', () => {
 
   it('collapsed on the desktop, is a rail of its ways in and its footer, without the conversations', () => {
     render(<Sider collapsed />);
-    for (const id of ['sider-new-chat', 'sider-search', 'sider-scheduled', 'sider-settings', 'theme-toggle'])
+    for (const id of ['sider-new-chat', 'sider-search', 'sider-scheduled', 'sider-settings'])
       expect(screen.getByTestId(id)).toBeInTheDocument();
     // Each icon keeps a name for whoever cannot see its tooltip.
     expect(screen.getByTestId('sider-new-chat')).toHaveAttribute('aria-label', 'conversation.welcome.newConversation');
@@ -99,10 +99,10 @@ describe('sidebar entries', () => {
     expect(screen.getByTestId('sider-search')).toBeInTheDocument();
   });
 
-  it('has a footer of exactly two things: the settings and the theme', () => {
+  it('keeps only the settings in the footer; the theme switch lives in the titlebar', () => {
     renderSider();
     expect(screen.getByTestId('sider-settings')).toHaveTextContent('common.settings');
-    expect(screen.getByTestId('theme-toggle')).toBeInTheDocument();
+    expect(screen.queryByTestId('theme-toggle')).not.toBeInTheDocument();
   });
 
   it('opens the settings on the providers, the first page of the models group', () => {
@@ -121,12 +121,6 @@ describe('sidebar entries', () => {
     expect(screen.queryByTestId('history')).not.toBeInTheDocument();
     fireEvent.click(screen.getByTestId('sider-settings'));
     expect(navigate).toHaveBeenCalledWith('/guid');
-  });
-
-  it('switches the theme from the footer wherever you are', () => {
-    renderSider();
-    fireEvent.click(screen.getByTestId('theme-toggle'));
-    expect(setTheme).toHaveBeenCalledWith('dark');
   });
 
   it('goes to the scheduled tasks from the third row', () => {
@@ -160,7 +154,6 @@ describe('sidebar entries', () => {
     expect(await tab()).toBe('sider-search');
     expect(await tab()).toBe('sider-scheduled');
     expect(await tab()).toBe('sider-settings');
-    expect(await tab()).toBe('theme-toggle');
   });
 
   it('presses a row with Enter or Space, as a click would, and ignores other keys', () => {
@@ -177,8 +170,6 @@ describe('sidebar entries', () => {
 
     fireEvent.keyDown(screen.getByTestId('sider-scheduled'), { key: 'Enter' });
     expect(navigate).toHaveBeenCalledWith('/scheduled');
-    fireEvent.keyDown(screen.getByTestId('theme-toggle'), { key: ' ' });
-    expect(setTheme).toHaveBeenCalledWith('dark');
   });
 
   it('keeps the palette mounted in the settings, where the search row gives way', () => {

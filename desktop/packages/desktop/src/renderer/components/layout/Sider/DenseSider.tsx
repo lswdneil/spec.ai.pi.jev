@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Tooltip, cn } from '@/renderer/ui';
 import { useLayoutContext } from '@renderer/hooks/context/LayoutContext';
-import { useThemeContext } from '@renderer/hooks/context/ThemeContext';
 import { usePreviewContext } from '@renderer/pages/conversation/Preview/context/PreviewContext';
 import NativeSiderGroup from '@renderer/pages/native/components/NativeSiderGroup';
 import { useNativeEnabled } from '@renderer/pages/native/hooks/useNativeConversations';
@@ -34,7 +33,6 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
   const navigate = useNavigate();
   const { pathname, search, hash } = useLocation();
   const { closePreview } = usePreviewContext();
-  const { theme, setTheme } = useThemeContext();
   const [batchMode, setBatchMode] = useState(false);
   const [scrolling, setScrolling] = useState(false);
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -219,10 +217,8 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
         isMobile={isMobile}
         isSettings={isSettings}
         collapsed={collapsed}
-        theme={theme}
         siderTooltipProps={siderTooltipProps}
         onSettingsClick={handleSettings}
-        onThemeToggle={() => void setTheme(theme === 'dark' ? 'light' : 'dark')}
       />
     </div>
   );

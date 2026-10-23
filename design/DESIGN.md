@@ -129,7 +129,7 @@ Editorial direction: serif for display/headings only; UI controls stay sans. Den
 
 | Surface | Rule |
 | --- | --- |
-| Desktop 1280+ | sidebar 208 + thread + judge rail 300; brand and sidebar fold live in the sidebar header; collapsed to a 48px rail, the expand control drops below the 20px mark onto the rail icon column; rail icons are 20px, never wider than the mark |
+| Desktop 1280+ | sidebar 208 + thread + judge rail 300; brand and sidebar fold live in the sidebar header; collapsed to a 48px rail, the expand control drops below the 20px mark onto the rail icon column; rail icons are 20px, never wider than the mark. The light/dark switch sits at the titlebar top-left, aligned with the other titlebar controls. |
 | 1024-1279 | rail collapses; sidebar remains |
 | 768-1023 | sidebar hidden behind a menu; single column |
 | < 768 | mobile shell: top bar 44, bottom nav 50 + safe area; composer above nav |

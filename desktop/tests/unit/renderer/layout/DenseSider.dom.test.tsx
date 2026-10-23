@@ -119,11 +119,10 @@ describe('Dense sidebar', () => {
     expect(navigate).toHaveBeenCalledWith('/guid');
   });
 
-  it('keeps the footer to the settings and the theme', () => {
+  it('keeps the footer to the settings; the theme switch lives in the titlebar', () => {
     render(<DenseSider />);
     expect(screen.getByTestId('sider-settings')).toHaveTextContent('common.settings');
-    fireEvent.click(screen.getByTestId('theme-toggle'));
-    expect(setTheme).toHaveBeenCalledWith('dark');
+    expect(screen.queryByTestId('theme-toggle')).not.toBeInTheDocument();
   });
 
   it('presses rows with Enter or Space, as a click would', () => {
