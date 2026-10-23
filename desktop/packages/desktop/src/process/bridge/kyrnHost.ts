@@ -4,7 +4,9 @@ import { createServer } from 'node:http';
 import { join } from 'node:path';
 import { app } from 'electron';
 import { WebSocketServer, type WebSocket } from 'ws';
+import { isKyrnMethodAllowed } from '../../common/kyrn/remoteScope';
 import { invokeLocal } from '../../common/platform/bridge';
+import type { WebUiDeviceScope } from '../../common/webui/scopes';
 import { muHome } from '../agent/kyrn/naming';
 import { pathCarriesToken } from '../services/muBrowser/protocol';
 
@@ -53,11 +55,13 @@ async function start(): Promise<void> {
       socket.end('HTTP/1.1 404 Not Found\r\nConnection: close\r\nContent-Length: 0\r\n\r\n');
       return;
     }
+    const offeredScope = request.headers['x-specjev-scope'];
+    const scope: WebUiDeviceScope = offeredScope === 'read' ? 'read' : 'control';
     wss.handleUpgrade(request, socket, head, (ws) => {
       sockets.add(ws);
       ws.on('message', (data, isBinary) => {
         if (isBinary) return;
-        void answer(ws, data.toString());
+        void answer(ws, data.toString(), scope);
       });
       const end = () => sockets.delete(ws);
       ws.on('close', end);
@@ -93,7 +97,7 @@ async function start(): Promise<void> {
   });
 }
 
-async function answer(ws: WebSocket, raw: string): Promise<void> {
+async function answer(ws: WebSocket, raw: string, scope: WebUiDeviceScope): Promise<void> {
   let request: HostRequest;
   try {
     request = JSON.parse(raw) as HostRequest;
@@ -106,6 +110,16 @@ async function answer(ws: WebSocket, raw: string): Promise<void> {
   const name = typeof request.name === 'string' ? request.name : '';
   if (!id || !name.startsWith('kyrn.')) {
     ws.send(JSON.stringify({ id, error: 'Invalid KyRN request' }));
+    return;
+  }
+  if (!isKyrnMethodAllowed(scope, name)) {
+    ws.send(
+      JSON.stringify({
+        id,
+        error: 'This device is read-only',
+        code: 'permissionDenied',
+      })
+    );
     return;
   }
 

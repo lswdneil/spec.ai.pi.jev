@@ -15,6 +15,7 @@
 import type { IConfirmation } from '@/common/chat/chatLib';
 import type { AcpSlashCommandApiItem } from '@/common/chat/slash/types';
 import { bridge } from '@/common/platform/bridge';
+import type { WebUiDeviceScope } from '@/common/webui/scopes';
 import { buildListTasksPath } from './teamTaskPath';
 import { splitDeferredRuntimeFailures } from './nodeRuntimeDeferral';
 import type { OpenDialogOptions } from 'electron';
@@ -662,6 +663,7 @@ export interface IWebUiPendingPairing {
 export interface IWebUiDevice {
   id: string;
   name: string;
+  scope: WebUiDeviceScope;
   createdAt: number;
   lastSeenAt: number;
   expiresAt: number;
@@ -775,9 +777,10 @@ export const application = {
   stopWebUi: bridge.buildProvider<IBridgeResponse<IWebUiStatus>, void>('webui.stop'),
   getWebUiAccess: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, void>('webui.get-access'),
   rotateWebUiCode: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, void>('webui.rotate-code'),
-  approveWebUiPairing: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>(
-    'webui.approve-pairing'
-  ),
+  approveWebUiPairing: bridge.buildProvider<
+    IBridgeResponse<IWebUiAccessState>,
+    { id: string; scope: WebUiDeviceScope }
+  >('webui.approve-pairing'),
   rejectWebUiPairing: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>(
     'webui.reject-pairing'
   ),

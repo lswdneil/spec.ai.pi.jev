@@ -1,6 +1,7 @@
 import { createHash, randomBytes, randomInt, timingSafeEqual } from 'node:crypto';
 import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
+import type { WebUiDeviceScope } from '@/common/webui/scopes';
 
 export const WEBUI_DEVICE_COOKIE = 'specjev_device';
 
@@ -14,6 +15,7 @@ const DEVICE_LIFETIME_MS = 30 * 24 * 60 * 60_000;
 type DeviceRecord = {
   id: string;
   name: string;
+  scope: WebUiDeviceScope;
   tokenHash: string;
   createdAt: number;
   lastSeenAt: number;
@@ -79,6 +81,7 @@ const isDeviceRecord = (value: unknown): value is DeviceRecord => {
     typeof device.name === 'string' &&
     typeof device.tokenHash === 'string' &&
     /^[a-f0-9]{64}$/.test(device.tokenHash) &&
+    (device.scope === 'read' || device.scope === 'control') &&
     typeof device.createdAt === 'number' &&
     typeof device.lastSeenAt === 'number' &&
     typeof device.expiresAt === 'number' &&
@@ -218,7 +221,10 @@ export class WebUiAccessManager {
     return { status: 'pending' };
   }
 
-  approve(requestId: string): { ok: true } | { ok: false; error: string } {
+  approve(
+    requestId: string,
+    scope: WebUiDeviceScope = 'read'
+  ): { ok: true } | { ok: false; error: string } {
     const record = this.pending.get(requestId);
     if (!record || record.status !== 'pending') return { ok: false, error: 'request_not_found' };
     if (this.now() >= record.expiresAt) {
@@ -233,6 +239,7 @@ export class WebUiAccessManager {
     this.devices.set(id, {
       id,
       name: record.name,
+      scope,
       tokenHash: hashToken(token),
       createdAt: now,
       lastSeenAt: now,
@@ -244,7 +251,7 @@ export class WebUiAccessManager {
     record.deliveryToken = token;
     record.deliveryExpiresAt = now + this.deliveryTtlMs;
     this.persist();
-    this.audit('pair.approved', { requestId, deviceId: id, name: record.name, ip: record.ip });
+    this.audit('pair.approved', { requestId, deviceId: id, name: record.name, scope, ip: record.ip });
     return { ok: true };
   }
 
@@ -267,7 +274,7 @@ export class WebUiAccessManager {
     return { ok: true };
   }
 
-  verifyCookie(cookieHeader: string | undefined): { deviceId: string } | null {
+  verifyCookie(cookieHeader: string | undefined): { deviceId: string; scope: WebUiDeviceScope } | null {
     const token = readCookie(cookieHeader, WEBUI_DEVICE_COOKIE);
     if (!token) return null;
     const separator = token.indexOf('.');
@@ -286,7 +293,7 @@ export class WebUiAccessManager {
     if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) return null;
     device.lastSeenAt = this.now();
     this.schedulePersist();
-    return { deviceId };
+    return { deviceId, scope: device.scope };
   }
 
   onRevoke(listener: (deviceId: string) => void): () => void {

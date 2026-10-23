@@ -15,9 +15,11 @@ import { networkInterfaces } from 'node:os';
 import net, { type Socket } from 'node:net';
 import serveHandler from 'serve-handler';
 
+export type WebUiDeviceScope = 'read' | 'control';
+
 export type WebUiAccess = {
   /** A device cookie that maps to a live paired device, or null. */
-  verify: (cookieHeader: string | undefined) => { deviceId: string } | null;
+  verify: (cookieHeader: string | undefined) => { deviceId: string; scope: WebUiDeviceScope } | null;
   /** Handles public pairing routes under `/api/pair/*`. */
   handlePublicRequest: (request: IncomingMessage, response: ServerResponse) => Promise<boolean>;
   /** Notifies the server when a device is revoked so its sockets can be closed. */
@@ -55,6 +57,39 @@ export type StaticServerHandle = {
 };
 
 const DEFAULT_PORT = 25808;
+
+/**
+ * Read-only devices may use these POST endpoints because they only read state.
+ * Everything else that is not GET/HEAD is treated as a mutation and refused.
+ * Keep this list narrow: allowing an unknown POST here is the same as giving a
+ * read-only device a write primitive.
+ */
+const READ_ONLY_POST_PATHS: ReadonlySet<string> = new Set([
+  '/api/auth/refresh',
+  '/api/fs/dir',
+  '/api/fs/list',
+  '/api/fs/read',
+  '/api/fs/content',
+  '/api/fs/content/metadata',
+  '/api/fs/metadata',
+  '/api/fs/image-base64',
+  '/api/skills/builtin-rule',
+  '/api/skills/builtin-skill',
+  '/api/skills/assistant-rule/read',
+  '/api/skills/info',
+  '/api/skills/scan',
+  '/api/extensions/i18n',
+  '/api/extensions/permissions',
+  '/api/extensions/risk-level',
+  '/api/mcp/oauth/check-status',
+  '/api/shell/check-tool-installed',
+  '/api/hub/check-updates',
+]);
+
+function isReadOnlyApiRequest(method: string, pathname: string): boolean {
+  if (method === 'GET' || method === 'HEAD') return true;
+  return method === 'POST' && READ_ONLY_POST_PATHS.has(pathname);
+}
 
 // Ranges that are non-internal IPv4 yet never a reachable LAN address, so we
 // must never advertise them as the WebUI access URL even when they are the only
@@ -240,14 +275,22 @@ function isSameOriginUpgrade(head: string): boolean {
   return origin === `http://${host}` || origin === `https://${host}`;
 }
 
-/** Rewrite `GET /kyrn` to the KyRN host's token path, preserving the HTTP version and body. */
-function rewriteKyrnRequest(head: Buffer, tokenPath: string): Buffer {
+/**
+ * Rewrite `GET /kyrn` to the KyRN host's token path, preserving the HTTP version
+ * and body. The device scope travels as a header the host checks per method;
+ * any client-supplied scope header is stripped first.
+ */
+function rewriteKyrnRequest(head: Buffer, tokenPath: string, scope: WebUiDeviceScope): Buffer {
   const lineEnd = head.indexOf(0x0a);
   if (lineEnd < 0) return head;
   const line = head.subarray(0, lineEnd).toString('ascii').replace(/\r$/, '');
   const [method, , version] = line.split(' ');
-  const rewritten = Buffer.from(`${method} ${tokenPath} ${version}\r\n`, 'ascii');
-  return Buffer.concat([rewritten, head.subarray(lineEnd + 1)]);
+  const rest = head
+    .subarray(lineEnd + 1)
+    .toString('latin1')
+    .replace(/^x-specjev-scope:.*\r?\n/gim, '');
+  const rewritten = Buffer.from(`${method} ${tokenPath} ${version}\r\nX-Specjev-Scope: ${scope}\r\n`, 'ascii');
+  return Buffer.concat([rewritten, Buffer.from(rest, 'latin1')]);
 }
 
 export async function startStaticServer(opts: StaticServerOptions): Promise<StaticServerHandle> {
@@ -298,6 +341,14 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
         }
 
         const device = opts.access.verify(req.headers.cookie);
+        if (device?.scope === 'read' && !isReadOnlyApiRequest(req.method, pathname)) {
+          res.writeHead(403, {
+            'content-type': 'application/json; charset=utf-8',
+            'cache-control': 'no-store',
+          });
+          res.end(JSON.stringify({ error: 'READ_ONLY_DEVICE' }));
+          return;
+        }
         if (!device) {
           if (pathname.startsWith('/api/') || pathname === '/login' || pathname === '/logout') {
             res.writeHead(401, {
@@ -386,6 +437,7 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
       const headerEnd = peeked.indexOf('\r\n\r\n');
       const head = headerEnd >= 0 ? peeked.subarray(0, headerEnd).toString('latin1') : '';
 
+      let deviceScope: WebUiDeviceScope = 'control';
       if (decision === 'backend' || decision === 'kyrn') {
         if (opts.access) {
           const device = opts.access.verify(headerValue(head, 'cookie') ?? undefined);
@@ -397,6 +449,7 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
             rejectUpgrade(client, 403, 'Forbidden');
             return;
           }
+          deviceScope = device.scope;
           socketDevices.set(client, device.deviceId);
         } else if (decision === 'kyrn' && !isSameOriginUpgrade(head)) {
           rejectUpgrade(client, 403, 'Forbidden');
@@ -412,7 +465,7 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
         spliceToTcpEndpoint(
           client,
           kyrnTarget.port,
-          rewriteKyrnRequest(peeked, kyrnTarget.tokenPath),
+          rewriteKyrnRequest(peeked, kyrnTarget.tokenPath, deviceScope),
           kyrnTarget.host
         );
         return;

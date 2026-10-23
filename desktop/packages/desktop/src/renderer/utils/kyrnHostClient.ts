@@ -42,8 +42,36 @@ const REMOTE_METHODS = [
 
 const FOLDER_METHODS = ['lessons', 'lessonsChange', 'files'] as const;
 
+/** Provider wire names that do not follow the client method name. */
+const REMOTE_WIRE_NAMES: Record<string, string> = {
+  loginStart: 'kyrn.login.start',
+  loginState: 'kyrn.login.state',
+  loginAnswer: 'kyrn.login.answer',
+  loginCancel: 'kyrn.login.cancel',
+  loginStatus: 'kyrn.login.status',
+  loginLogout: 'kyrn.login.logout',
+  localJudgeState: 'kyrn.localJudge.state',
+  localJudgeRun: 'kyrn.localJudge.run',
+  clmCheck: 'kyrn.clm.check',
+  lessonsChange: 'kyrn.lessons.change',
+  importList: 'kyrn.import.list',
+  importRun: 'kyrn.import.run',
+  importHistory: 'kyrn.import.history',
+  skillAdd: 'kyrn.skills.add',
+  skillRemove: 'kyrn.skills.remove',
+  mcpServers: 'kyrn.mcp',
+  mcpAdd: 'kyrn.mcp.add',
+  mcpRemove: 'kyrn.mcp.remove',
+  mcpSwitch: 'kyrn.mcp.switch',
+  capabilityReveal: 'kyrn.capabilities.reveal',
+};
+
+const FOLDER_WIRE_NAMES: Record<string, string> = {
+  lessonsChange: 'kyrn.folder.lessons.change',
+};
+
 const loopback = new Set(['127.0.0.1', 'localhost', '[::1]', '::1']);
-const fail = (error: string): Result => ({ ok: false, code: 'runtimeOffline', error });
+const fail = (error: string, code = 'runtimeOffline'): Result => ({ ok: false, code, error });
 
 function hostUrl(): string | null {
   if (typeof window === 'undefined') return null;
@@ -121,14 +149,22 @@ export function installKyrnHostClient(): void {
     socket = new WebSocket(url);
     socket.addEventListener('message', (event) => {
       try {
-        const frame = JSON.parse(event.data as string) as { id?: unknown; result?: unknown; error?: unknown };
+        const frame = JSON.parse(event.data as string) as {
+          id?: unknown;
+          result?: unknown;
+          error?: unknown;
+          code?: unknown;
+        };
         if (typeof frame.id !== 'string') return;
         const request = pending.get(frame.id);
         if (!request) return;
         pending.delete(frame.id);
         window.clearTimeout(request.timer);
-        if (typeof frame.error === 'string') request.resolve(fail(frame.error));
-        else request.resolve(frame.result as Result);
+        if (typeof frame.error === 'string') {
+          request.resolve(fail(frame.error, typeof frame.code === 'string' ? frame.code : undefined));
+        } else {
+          request.resolve(frame.result as Result);
+        }
       } catch {
         // Ignore malformed frames; the request timeout answers.
       }
@@ -168,8 +204,10 @@ export function installKyrnHostClient(): void {
   };
 
   const bridge = kyrnBridge as unknown as Record<string, Invokable>;
-  for (const method of REMOTE_METHODS) install(bridge, method, `kyrn.${method}`);
+  for (const method of REMOTE_METHODS) install(bridge, method, REMOTE_WIRE_NAMES[method] ?? `kyrn.${method}`);
 
   const folders = kyrnFolderBridge as unknown as Record<string, Invokable>;
-  for (const method of FOLDER_METHODS) install(folders, method, `kyrn.folder.${method}`);
+  for (const method of FOLDER_METHODS) {
+    install(folders, method, FOLDER_WIRE_NAMES[method] ?? `kyrn.folder.${method}`);
+  }
 }

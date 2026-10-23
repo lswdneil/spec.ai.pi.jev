@@ -1120,6 +1120,9 @@
     "lastSeen": "Last seen {{time}}",
     "pairHint": "Open the HTTPS address on your phone and enter this code. The phone must be approved here before it can open the app.",
     "updateFailed": "Couldn't update remote access",
-    "unknownAddress": "Unknown address"
+    "unknownAddress": "Unknown address",
+    "readOnly": "Read only",
+    "fullAccess": "Full access",
+    "scopeHint": "Choose what this device may do before approving."
   }
 }

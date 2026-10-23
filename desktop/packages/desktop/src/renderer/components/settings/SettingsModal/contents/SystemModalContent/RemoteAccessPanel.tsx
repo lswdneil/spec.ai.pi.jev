@@ -1,5 +1,7 @@
 import { ipcBridge } from '@/common';
+import type { WebUiDeviceScope } from '@/common/webui/scopes';
 import { Button } from '@/renderer/ui/button';
+import { Select } from '@/renderer/ui/select';
 import { Message } from '@/renderer/ui/toast';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +26,7 @@ const RemoteAccessPanel: React.FC<{ running: boolean }> = ({ running }) => {
   const { t, i18n } = useTranslation();
   const [now, setNow] = useState(() => Date.now());
   const [busy, setBusy] = useState<string | null>(null);
+  const [scopeById, setScopeById] = useState<Record<string, WebUiDeviceScope>>({});
   const { data, mutate } = useSWR('webui.access', () => ipcBridge.application.getWebUiAccess.invoke(), {
     refreshInterval: running ? 2_000 : 0,
   });
@@ -97,6 +100,7 @@ const RemoteAccessPanel: React.FC<{ running: boolean }> = ({ running }) => {
         {running ? (
           <div>
             <div className='text-12px font-500 text-t-primary'>{t('settings.remoteAccess.pendingTitle')}</div>
+            <div className='mt-2px text-11px text-t-secondary'>{t('settings.remoteAccess.scopeHint')}</div>
             {pending.length === 0 ? (
               <div className='mt-4px text-12px text-t-secondary'>{t('settings.remoteAccess.pendingEmpty')}</div>
             ) : (
@@ -112,7 +116,20 @@ const RemoteAccessPanel: React.FC<{ running: boolean }> = ({ running }) => {
                         {item.ip || t('settings.remoteAccess.unknownAddress')}
                       </div>
                     </div>
-                    <div className='flex shrink-0 gap-6px'>
+                    <div className='flex shrink-0 items-center gap-6px'>
+                      <Select
+                        size='small'
+                        className='w-32'
+                        data-testid='pending-pairing-scope'
+                        value={scopeById[item.id] ?? 'read'}
+                        options={[
+                          { label: t('settings.remoteAccess.readOnly'), value: 'read' },
+                          { label: t('settings.remoteAccess.fullAccess'), value: 'control' },
+                        ]}
+                        onChange={(value: WebUiDeviceScope) =>
+                          setScopeById((current) => ({ ...current, [item.id]: value }))
+                        }
+                      />
                       <Button
                         size='sm'
                         variant='primary'
@@ -120,7 +137,10 @@ const RemoteAccessPanel: React.FC<{ running: boolean }> = ({ running }) => {
                         disabled={busy !== null}
                         onClick={() =>
                           void run(`approve-${item.id}`, () =>
-                            ipcBridge.application.approveWebUiPairing.invoke({ id: item.id })
+                            ipcBridge.application.approveWebUiPairing.invoke({
+                              id: item.id,
+                              scope: scopeById[item.id] ?? 'read',
+                            })
                           )
                         }
                       >
@@ -158,6 +178,8 @@ const RemoteAccessPanel: React.FC<{ running: boolean }> = ({ running }) => {
                   <div className='min-w-0'>
                     <div className='truncate text-13px text-t-primary'>{device.name}</div>
                     <div className='truncate text-11px text-t-secondary'>
+                      {t(device.scope === 'read' ? 'settings.remoteAccess.readOnly' : 'settings.remoteAccess.fullAccess')}
+                      {' · '}
                       {t('settings.remoteAccess.lastSeen', {
                         time: new Date(device.lastSeenAt).toLocaleString(locale),
                       })}

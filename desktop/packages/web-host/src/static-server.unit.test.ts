@@ -531,7 +531,8 @@ describe('static-server', () => {
     });
     stopBackend = backend.close;
     const access: WebUiAccess = {
-      verify: (cookie) => (cookie === 'specjev_device=good' ? { deviceId: 'device-1' } : null),
+      verify: (cookie) =>
+        cookie === 'specjev_device=good' ? { deviceId: 'device-1', scope: 'control' } : null,
       handlePublicRequest: async (req, res) => {
         res.writeHead(201, { 'content-type': 'application/json' });
         res.end(JSON.stringify({ requestId: 'request-1', method: req.method }));
@@ -569,6 +570,34 @@ describe('static-server', () => {
     expect(await allowed.json()).toEqual({ path: '/api/anything' });
   });
 
+  it('limits read-only devices to reads and a narrow read-only POST allowlist', async () => {
+    let calls = 0;
+    const backend = await startMockBackend((req, res) => {
+      calls += 1;
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ method: req.method, path: req.url }));
+    });
+    stopBackend = backend.close;
+    const access: WebUiAccess = {
+      verify: (cookie) => (cookie === 'specjev_device=read' ? { deviceId: 'device-1', scope: 'read' } : null),
+      handlePublicRequest: async () => true,
+    };
+    handle = await startStaticServer({ staticDir, backendPort: backend.port, port: 0, access });
+    const headers = { cookie: 'specjev_device=read' };
+
+    const read = await fetch(`${handle.localUrl}/api/settings`, { headers });
+    expect(read.status).toBe(200);
+
+    const blocked = await fetch(`${handle.localUrl}/api/settings`, { method: 'POST', headers });
+    expect(blocked.status).toBe(403);
+    expect(await blocked.json()).toEqual({ error: 'READ_ONLY_DEVICE' });
+    expect(calls).toBe(1);
+
+    const allowed = await fetch(`${handle.localUrl}/api/fs/read`, { method: 'POST', headers });
+    expect(allowed.status).toBe(200);
+    expect(await allowed.json()).toEqual({ method: 'POST', path: '/api/fs/read' });
+  });
+
   it('requires an authenticated same-origin WebSocket when access is configured', async () => {
     const { createHash } = await import('node:crypto');
     const httpMod = await import('node:http');
@@ -586,7 +615,8 @@ describe('static-server', () => {
     stopBackend = () => new Promise<void>((r) => backendServer.close(() => r()));
     const backendPort = (backendServer.address() as { port: number }).port;
     const access: WebUiAccess = {
-      verify: (cookie) => (cookie === 'specjev_device=good' ? { deviceId: 'device-1' } : null),
+      verify: (cookie) =>
+        cookie === 'specjev_device=good' ? { deviceId: 'device-1', scope: 'control' } : null,
       handlePublicRequest: async () => true,
     };
     handle = await startStaticServer({ staticDir, backendPort, port: 0, access });
@@ -625,7 +655,8 @@ describe('static-server', () => {
     };
     const revokeListeners: Array<(deviceId: string) => void> = [];
     const access: WebUiAccess = {
-      verify: (cookie) => (cookie === 'specjev_device=good' ? { deviceId: 'device-1' } : null),
+      verify: (cookie) =>
+        cookie === 'specjev_device=good' ? { deviceId: 'device-1', scope: 'control' } : null,
       handlePublicRequest: async () => true,
       onRevoke: (listener) => {
         revokeListeners.push(listener);

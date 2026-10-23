@@ -19,6 +19,7 @@ import * as path from 'path';
 import { initMainAdapterWithWindow } from './common/adapter/main';
 import { ipcBridge } from './common';
 import { initializeProcess } from './process';
+import { startWebUiIfEnabled } from './process/bridge/applicationBridge';
 import { startBackendOrExit } from './process/startup/backendStartup';
 import { planStartupNodeRuntime } from './process/startup/nodeRuntimeStartup';
 import { assertStartupArchitectureCompatible } from './process/startup/architectureCompatibility';
@@ -354,6 +355,7 @@ function markBackendReady(backendPort: number, source: string): void {
   // Backend is ready: tell the renderer to drop any "starting" view and show the App.
   broadcastBackendStartupState(null);
   scheduleBackendMigrations();
+  void startWebUiIfEnabled();
 }
 
 function resolveDebugBackendStartupFailure(): BackendStartupFailureInfo | null {

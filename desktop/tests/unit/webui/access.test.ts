@@ -21,7 +21,7 @@ function pair(manager: WebUiAccessManager): { requestId: string; code: string; t
   const code = state.code ?? '';
   const request = manager.requestPairing({ code, name: 'Phone', ip: '127.0.0.1', userAgent: 'test' });
   if (!request.ok) throw new Error(`pairing request failed: ${request.error}`);
-  expect(manager.approve(request.requestId)).toEqual({ ok: true });
+  expect(manager.approve(request.requestId, 'control')).toEqual({ ok: true });
   const polled = manager.poll(request.requestId);
   if (polled.status !== 'approved') throw new Error(`pairing not approved: ${polled.status}`);
   return { requestId: request.requestId, code, token: polled.token };
@@ -50,13 +50,14 @@ describe('WebUiAccessManager', () => {
     expect(pending).toHaveLength(1);
     expect(pending[0].name).toBe('My phone');
 
-    expect(manager.approve(request.requestId)).toEqual({ ok: true });
+    expect(manager.approve(request.requestId, 'control')).toEqual({ ok: true });
     const polled = manager.poll(request.requestId);
     expect(polled.status).toBe('approved');
     if (polled.status !== 'approved') return;
 
     expect(manager.verifyCookie(`${WEBUI_DEVICE_COOKIE}=${encodeURIComponent(polled.token)}`)).toEqual({
       deviceId: polled.token.split('.')[0],
+      scope: 'control',
     });
     expect(manager.poll(request.requestId).status).toBe('expired');
     expect(manager.listState().devices).toHaveLength(1);
@@ -95,7 +96,10 @@ describe('WebUiAccessManager', () => {
     const { manager, storePath } = makeManager();
     const { token } = pair(manager);
     const reloaded = new WebUiAccessManager({ storePath });
-    expect(reloaded.verifyCookie(`${WEBUI_DEVICE_COOKIE}=${token}`)).toEqual({ deviceId: token.split('.')[0] });
+    expect(reloaded.verifyCookie(`${WEBUI_DEVICE_COOKIE}=${token}`)).toEqual({
+      deviceId: token.split('.')[0],
+      scope: 'control',
+    });
   });
 
   it('expires a pending request and a pairing code', () => {

@@ -1,6 +1,6 @@
 # WebUI remote access: pairing and transport
 
-Status: service, same-origin proxy, and device pairing implemented, 2026-10-24.
+Status: service, same-origin proxy, device pairing with read/control scopes, and a persisted switch implemented, 2026-10-24.
 
 ## What exists
 
@@ -8,12 +8,14 @@ Status: service, same-origin proxy, and device pairing implemented, 2026-10-24.
 - The service binds `127.0.0.1` and uses a stable port (25808) when free, otherwise an ephemeral one.
 - Every page, AionCore API request, `/ws` socket, and `/kyrn` socket requires a paired device cookie. The only public surfaces are `/pair` and `/api/pair/*`.
 - The desktop shows a six-digit, single-use pairing code. A phone submits it, the desktop approves the device, and only then does the phone receive an HttpOnly device cookie.
-- Paired devices are listed with a last-seen time and can be revoked; revocation invalidates the cookie and closes the device's live sockets.
+- At approval, choose **Read only** or **Full access**. Read-only devices may use GET/HEAD, a narrow allowlist of read-only POST endpoints, and read-only KyRN methods; writes are refused before they reach AionCore or the KyRN host.
+- Paired devices are listed with their scope and last-seen time and can be revoked; revocation invalidates the cookie and closes the device's live sockets.
 - Device tokens are stored hashed, expire after 30 days, and rotate on re-pairing. The token never appears in a URL.
+- The Remote access switch is stored in `system.webuiEnabled`; a launch with it on starts the service after the backend is ready.
 - Pairing requests, approvals, rejections, revocations, and expirations are appended to `<userData>/webui-audit.jsonl`.
 - Web-host exposes **same-origin `/kyrn`** and forwards it to the loopback host. It rewrites the KyRN token path in-process, so the KyRN token never appears in the browser URL.
 - `/kyrn` and `/ws` require the browser's `Origin` to equal `Host`, blocking cross-site WebSocket hijacking.
-- The phone E2E pairs a real browser, approves it, calls `kyrn.settings` through `/kyrn`, revokes it, and asserts that the cookie no longer opens the app.
+- The phone E2E pairs a real browser as read-only, verifies GET succeeds and POST and `kyrn.save` are refused, revokes it, and asserts that the cookie no longer opens the app. It also checks the persisted switch value.
 
 > **Security gate:** the desktop backend runs in local mode, so AionCore's own login page is not a reliable remote gate. Pairing is now the app-level gate, but the transport should still be HTTPS or a private network. Do not expose port 25808 directly to a LAN or the internet. Reverse-proxy authentication remains useful as defense in depth.
 
@@ -95,9 +97,9 @@ A hosted relay holds the WebSocket and forwards encrypted frames.
 1. Desktop opens "Remote access" and generates a six-digit code, valid for five minutes and single use.
 2. Phone opens the HTTPS WebUI and is redirected to `/pair`, a standalone page that requires no AionCore session.
 3. Phone submits the code and a device name. The desktop shows the pending request with the device name and address.
-4. The person at the desktop approves or rejects it. Five wrong codes rotate the code and lock that attempt.
+4. The person at the desktop chooses Read only or Full access, then approves or rejects it. Five wrong codes rotate the code and lock that attempt.
 5. On approval, the phone polls and receives an HttpOnly, SameSite=Strict device cookie. The raw token is delivered once; only its SHA-256 hash is stored.
-6. Every page, API request, `/ws`, and `/kyrn` now needs that cookie. Web-host checks it before proxying to AionCore or the KyRN host.
+6. Every page, API request, `/ws`, and `/kyrn` now needs that cookie. Web-host checks it before proxying to AionCore or the KyRN host. Read-only devices are limited to read endpoints and read-only KyRN methods.
 7. The desktop lists paired devices with last-seen time. Revoking one deletes its hash, invalidates the next request, and closes its live sockets.
 8. Device tokens expire after 30 days. Pairing again issues a new token; there is no silent extension.
 
@@ -107,13 +109,16 @@ A hosted relay holds the WebSocket and forwards encrypted frames.
 2. **Add a single-origin KyRN proxy.** Done: same-origin `/kyrn`, token rewritten server-side, `Origin` check in place.
 3. **Add reverse-proxy/VPN support first.** Done for loopback-only service and setup notes above. App-native TLS is still out of scope.
 4. **Pairing and device approval.** Done: one-time code, approval, HttpOnly device token, device list, revocation, expiry, audit.
-5. **Cover host-backed pages in E2E:** providers, judges, skills, MCP, activity/lessons. The pairing E2E covers `kyrn.settings`; the rest still need page-level tests.
-6. **Scope the device token.** Today an approved device can use every WebUI page and every `kyrn.*` method. Split read/write and desktop-only actions before calling the remote surface least-privilege.
-7. **Persist the Remote access switch.** The listener still starts per session.
+5. **Scope the device token.** Done: read-only versus full access, enforced per KyRN method and at the AionCore HTTP boundary.
+6. **Persist the Remote access switch.** Done: `system.webuiEnabled` and startup restore.
+7. **Cover host-backed pages in E2E:** providers, judges, skills, MCP, activity/lessons. The pairing E2E covers `kyrn.settings` and a denied write; the rest still need page-level tests.
+8. **Show the phone-facing proxy URL** instead of only the loopback URL.
+9. **Host extension-contributed WebUI routes.** See `kyrn-webui-parity.md`.
+10. **Rotate a device token in place** without revoking and re-pairing.
 
 ## Non-goals for the first remote slice
 
 - Public internet exposure without user setup.
 - Passing provider keys to the browser.
-- Letting a paired phone open the desktop's file manager or install MCP servers without an explicit permission scope.
-- Per-method scopes. The current device cookie authorizes the whole WebUI and all `kyrn.*` methods.
+- Letting a paired phone open the desktop's file manager or install MCP servers without full access.
+- A general-purpose per-endpoint policy editor. The read-only allowlist is intentionally narrow; full access is still all-or-nothing.

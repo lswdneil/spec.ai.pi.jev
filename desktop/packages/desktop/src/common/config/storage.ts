@@ -48,6 +48,8 @@ export interface IConfigStorageRefer {
   'upload.saveToWorkspace'?: boolean;
   // 关闭窗口时最小化到系统托盘 / Minimize to system tray when closing window
   'system.closeToTray'?: boolean;
+  // Start the loopback WebUI service on launch / 启动时开启 WebUI 服务
+  'system.webuiEnabled'?: boolean;
   // 任务完成时显示系统通知 / Show system notification when task completes
   'system.notificationEnabled'?: boolean;
   // 定时任务完成时显示系统通知 / Show system notification when scheduled task completes

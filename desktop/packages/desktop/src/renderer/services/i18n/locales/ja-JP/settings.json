@@ -1121,6 +1121,9 @@
     "lastSeen": "最終使用 {{time}}",
     "pairHint": "スマートフォンで HTTPS アドレスを開き、このコードを入力してください。アプリを開く前にここで承認が必要です。",
     "updateFailed": "リモートアクセスを更新できませんでした",
-    "unknownAddress": "不明なアドレス"
+    "unknownAddress": "不明なアドレス",
+    "readOnly": "読み取り専用",
+    "fullAccess": "フルアクセス",
+    "scopeHint": "承認する前に、このデバイスに許可する操作を選択してください。"
   }
 }

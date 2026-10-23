@@ -1121,6 +1121,9 @@
     "lastSeen": "最近使用 {{time}}",
     "pairHint": "在手机上打开 HTTPS 地址并输入此配对码。手机必须在这里批准后才能打开应用。",
     "updateFailed": "更新远程访问失败",
-    "unknownAddress": "未知地址"
+    "unknownAddress": "未知地址",
+    "readOnly": "只读",
+    "fullAccess": "完全控制",
+    "scopeHint": "批准前选择这台设备可以做什么。"
   }
 }

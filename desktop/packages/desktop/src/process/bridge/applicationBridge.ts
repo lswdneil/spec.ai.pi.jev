@@ -55,7 +55,7 @@ function webUiStatus(error?: string): IWebUiStatus {
     : { running: false, ...(error ? { error } : {}) };
 }
 
-async function startWebUi(port?: number): Promise<IWebUiStatus> {
+async function startWebUi(port?: number, persist = true): Promise<IWebUiStatus> {
   if (webUi) return webUiStatus();
   if (webUiStarting) return webUiStarting;
 
@@ -88,6 +88,9 @@ async function startWebUi(port?: number): Promise<IWebUiStatus> {
         }
         webUi = { handle, url: handle.localUrl, port: handle.port };
         getWebUiAccess().beginSession();
+        if (persist) {
+          await ProcessConfig.set('system.webuiEnabled', true).catch((): undefined => undefined);
+        }
         return webUiStatus();
       } catch (error) {
         lastError = error;
@@ -99,13 +102,29 @@ async function startWebUi(port?: number): Promise<IWebUiStatus> {
   return webUiStarting;
 }
 
-async function stopWebUi(): Promise<IWebUiStatus> {
+async function stopWebUi(persist = true): Promise<IWebUiStatus> {
   webUiEpoch += 1;
   const current = webUi;
   webUi = null;
   webUiAccess?.endSession();
   if (current) await current.handle.stop().catch((): undefined => undefined);
+  if (persist) {
+    await ProcessConfig.set('system.webuiEnabled', false).catch((): undefined => undefined);
+  }
   return webUiStatus();
+}
+
+/**
+ * Called once the backend is ready. The Remote access switch writes
+ * `system.webuiEnabled`; a launch with it on brings the listener back without
+ * opening Settings.
+ */
+export async function startWebUiIfEnabled(): Promise<void> {
+  if (webUi || webUiStarting) return;
+  const enabled = await ProcessConfig.get('system.webuiEnabled').catch((): undefined => undefined);
+  if (!enabled) return;
+  const status = await startWebUi(undefined, false);
+  if (status.error) console.warn('[spec.jev] WebUI service did not start:', status.error);
 }
 
 const START_ON_BOOT_UNSUPPORTED_MESSAGE = 'Start on boot is only available in packaged macOS and Windows apps.';
@@ -393,9 +412,9 @@ export function initApplicationBridge(): void {
     success: true,
     data: getWebUiAccess().rotateCode(),
   }));
-  ipcBridge.application.approveWebUiPairing.provider(async ({ id }) => {
+  ipcBridge.application.approveWebUiPairing.provider(async ({ id, scope }) => {
     const access = getWebUiAccess();
-    const result = access.approve(id);
+    const result = access.approve(id, scope);
     if (result.ok === false) return { success: false, msg: result.error, data: access.listState() };
     return { success: true, data: access.listState() };
   });
@@ -411,6 +430,7 @@ export function initApplicationBridge(): void {
     return { success: true, data: access.listState() };
   });
   app.once('will-quit', () => {
-    void stopWebUi();
+    // Quitting is not the user turning the switch off; keep the preference.
+    void stopWebUi(false);
   });
 }

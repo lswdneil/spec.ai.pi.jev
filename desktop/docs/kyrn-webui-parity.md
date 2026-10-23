@@ -1,6 +1,6 @@
 # KyRN bridge: WebUI parity
 
-Status: loopback host, same-origin proxy, and device pairing implemented, 2026-10-24.
+Status: loopback host, same-origin proxy, device pairing, scoped devices, and persisted switch implemented, 2026-10-24.
 
 The WebUI boots with a read-only catalog provider and can call the desktop's KyRN providers over the same origin. The browser connects to `/kyrn`; web-host first checks the paired-device cookie, then rewrites the token path and forwards to a loopback-only host.
 
@@ -74,13 +74,14 @@ The phone E2E now opens Settings → Providers through this same-origin path, no
 - `/kyrn` and `/ws` reject an upgrade whose `Origin` does not equal `Host`, which blocks cross-site WebSocket hijacking.
 - The host does not expose arbitrary bridge methods; only `kyrn.*` names are accepted.
 - Revoking a device deletes its hash and closes its live sockets.
-- The current cookie is not per-method scoped: an approved device can use the whole WebUI and every `kyrn.*` method. Scope it before calling the remote surface least-privilege.
+- A device is approved as `read` or `control`. The web-host injects that scope into the `/kyrn` upgrade, and the host allows a read device only the methods in `common/kyrn/remoteScope.ts`; writes are refused with `permissionDenied`.
+- Read devices are also limited at the AionCore HTTP boundary: GET/HEAD plus a narrow read-only POST allowlist.
+- The Remote access switch writes `system.webuiEnabled`; the service starts after backend readiness on the next launch.
 
 ## Still missing
 
-1. Per-method scopes. The device cookie currently authorizes the whole WebUI and every `kyrn.*` method.
-2. A "show this on my phone" flow that displays the proxy URL rather than only the loopback URL.
-3. Persisting the Remote access switch across app restarts (it is per-session today).
-4. E2E coverage for every host-backed settings page, not just Providers and `kyrn.settings`.
-5. Hosting extension-contributed WebUI static assets and API routes. `webui.start` serves the renderer, AionCore, and `/kyrn`; it does not yet load `contributes.webui` from extension manifests, so `tests/e2e/specs/ext-webui-contrib.e2e.ts` still fails once the service is actually running.
-6. Rotating a device token without revoking and re-pairing the device. Re-pairing works, but it is not an in-place rotation.
+1. A "show this on my phone" flow that displays the proxy URL rather than only the loopback URL.
+2. E2E coverage for every host-backed settings page, not just Providers and `kyrn.settings`.
+3. Hosting extension-contributed WebUI static assets and API routes. `webui.start` serves the renderer, AionCore, and `/kyrn`; it does not yet load `contributes.webui` from extension manifests, so `tests/e2e/specs/ext-webui-contrib.e2e.ts` still fails once the service is actually running.
+4. Rotating a device token without revoking and re-pairing the device. Re-pairing works, but it is not an in-place rotation.
+5. A full per-endpoint AionCore policy. Read-only is intentionally a GET/narrow-POST allowlist; full access remains all-or-nothing.

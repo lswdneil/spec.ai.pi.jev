@@ -1121,6 +1121,9 @@
     "lastSeen": "最近使用 {{time}}",
     "pairHint": "在手機上開啟 HTTPS 位址並輸入此配對碼。手機必須在這裡批准後才能開啟應用程式。",
     "updateFailed": "更新遠端存取失敗",
-    "unknownAddress": "未知位址"
+    "unknownAddress": "未知位址",
+    "readOnly": "唯讀",
+    "fullAccess": "完全控制",
+    "scopeHint": "批准前選擇這台裝置可以做什麼。"
   }
 }
