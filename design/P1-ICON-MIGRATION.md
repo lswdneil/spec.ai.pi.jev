@@ -105,6 +105,16 @@ The test asserts the focused element is `judge-context-toggle` and that opening 
 
 ## Phone shell
 
-The 390px phone layout is not covered by these Electron tests. `Layout` returns `false` from `detectMobileViewportOrTouch` whenever `window.electronAPI` exists, so a narrow Electron window keeps the desktop rail by design. A real phone shell needs the browser/WebUI host or a device. The WebUI renderer reached its startup screen at 390px in Chrome, but the local web-host session did not finish loading settings during this pass; that path remains a separate task rather than a claimed pass.
+`desktop/tests/e2e/features/visual/phone-layout.e2e.ts` is the real-browser phone check:
+
+- It starts web-host's static server against the Electron test backend.
+- It opens Chrome with a 390×844 viewport, `isMobile`, and touch.
+- It stubs only the startup `kyrn.catalog` bridge response with an empty assistant list, because Electron's bridge normally answers that call.
+- It asserts `html[data-phone-layout]`, the bottom tab bar, the home hero, and no horizontal overflow.
+- It opens Settings, selects Appearance, and captures both screens.
+
+Screenshots: `phone-390-guid.png`, `phone-390-settings.png`.
+
+The phone check runs against the built renderer in `out/renderer`, so run `bun run package` first when the renderer changed. Electron itself still keeps the desktop rail at any window width; this test is the browser/WebUI path, not a resized Electron window.
 
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.
