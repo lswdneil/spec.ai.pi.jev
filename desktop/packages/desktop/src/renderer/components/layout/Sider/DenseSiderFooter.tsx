@@ -33,6 +33,7 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
   const settingsLabel = isSettings ? t('common.back') : t('common.settings');
   const themeLabel = theme === 'dark' ? t('settings.lightMode') : t('settings.darkMode');
   const iconOnly = collapsed && !isMobile;
+  const railIconClass = iconOnly ? 'h-5 w-5 shrink-0' : 'h-3.5 w-3.5 shrink-0';
   const [userName, setUserName] = useState('');
 
   useEffect(() => {
@@ -73,9 +74,9 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
             )}
           >
             {isSettings ? (
-              <ArrowLeft className='h-3.5 w-3.5 shrink-0' strokeWidth={1.75} />
+              <ArrowLeft className={railIconClass} strokeWidth={1.75} />
             ) : (
-              <Settings2 className='h-3.5 w-3.5 shrink-0' strokeWidth={1.75} />
+              <Settings2 className={railIconClass} strokeWidth={1.75} />
             )}
             {iconOnly ? null : <span className='truncate text-[11.5px]'>{settingsLabel}</span>}
           </Button>
@@ -90,9 +91,9 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
             className='text-sv-muted hover:bg-sv-surface hover:text-sv-text'
           >
             {theme === 'dark' ? (
-              <Sun className='h-3.5 w-3.5' strokeWidth={1.75} />
+              <Sun className={railIconClass} strokeWidth={1.75} />
             ) : (
-              <Moon className='h-3.5 w-3.5' strokeWidth={1.75} />
+              <Moon className={railIconClass} strokeWidth={1.75} />
             )}
           </Button>
         </Tooltip>

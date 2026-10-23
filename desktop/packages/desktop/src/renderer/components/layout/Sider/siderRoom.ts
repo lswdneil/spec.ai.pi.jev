@@ -7,7 +7,7 @@ const EDGE_PX = 1;
  * Collapsed on a desktop, the sidebar is a rail of its icons: the mark, a new conversation, search, the scheduled
  * tasks, the settings and the theme, each with its tooltip. On a phone it slides away entirely.
  */
-export const SIDER_RAIL_WIDTH = 56;
+export const SIDER_RAIL_WIDTH = 48;
 /** How much wider than needed the window must get before a sidebar that made room opens again. */
 export const SIDER_REOPEN_MARGIN_PX = 24;
 

@@ -517,9 +517,9 @@ const Layout: React.FC<{
                       )}
                     >
                       {collapsed ? (
-                        <PanelLeftOpen className='h-4 w-4' strokeWidth={1.75} />
+                        <PanelLeftOpen className='h-5 w-5' strokeWidth={1.75} />
                       ) : (
-                        <PanelLeftClose className='h-4 w-4' strokeWidth={1.75} />
+                        <PanelLeftClose className='h-5 w-5' strokeWidth={1.75} />
                       )}
                     </button>
                   </Tooltip>

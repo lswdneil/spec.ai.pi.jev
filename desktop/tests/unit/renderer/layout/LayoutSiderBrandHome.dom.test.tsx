@@ -270,8 +270,10 @@ describe('Layout sider brand Home button', () => {
     const toggle = screen.getByTestId('sider-collapse');
 
     expect(toggle).toBeVisible();
+    expect(toggle.querySelector('svg')).toHaveClass('h-5', 'w-5');
     fireEvent.click(toggle);
     expect(sider).toHaveClass('collapsed');
+    expect(screen.getByTestId('sider-collapse').querySelector('svg')).toHaveClass('h-5', 'w-5');
     fireEvent.click(screen.getByTestId('sider-collapse'));
     expect(sider).not.toHaveClass('collapsed');
   });
@@ -283,7 +285,7 @@ describe('Layout sider brand Home button', () => {
 
     act(() => shortcutMocks.params?.toggleSider());
     expect(sider).toHaveClass('collapsed');
-    expect(sider.style.width).toBe('56px');
+    expect(sider.style.width).toBe('48px');
     expect(screen.getByTestId('sider-brand-mark')).toBeVisible();
     // The sidebar's own content is still there, as a rail.
     expect(screen.getByText('sider')).toBeInTheDocument();
@@ -377,7 +379,7 @@ describe('Layout sider brand Home button', () => {
 
       resizeTo(500);
       expect(sider).toHaveClass('collapsed');
-      expect(sider.style.width).toBe('56px');
+      expect(sider.style.width).toBe('48px');
       // No phone layout in a desktop window, however narrow: no sheet, no scrim, no phone styles.
       expect(document.documentElement).not.toHaveAttribute('data-phone-layout');
 

@@ -43,6 +43,7 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
   const short = collapsed && !isMobile;
   const tooltipEnabled = short;
   const siderTooltipProps = getSiderTooltipProps(tooltipEnabled);
+  const railIconClass = short ? 'h-5 w-5' : 'h-3.5 w-3.5';
 
   useEffect(() => {
     if (!isSettings) lastNonSettingsPath.current = `${pathname}${search}${hash}`;
@@ -130,7 +131,7 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
           short && 'justify-center px-0'
         )}
       >
-        <span className='flex h-3.5 w-3.5 shrink-0 items-center justify-center'>{icon}</span>
+        <span className={cn('flex shrink-0 items-center justify-center', railIconClass)}>{icon}</span>
         {short ? null : <span className='truncate'>{label}</span>}
       </div>
     </Tooltip>
@@ -157,14 +158,14 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
                   short ? 'mx-auto' : 'w-full justify-start gap-2 px-2'
                 )}
               >
-                <Plus className='h-3.5 w-3.5' strokeWidth={1.75} />
+                <Plus className={railIconClass} strokeWidth={1.75} />
                 {short ? null : <span className='text-[13px]'>{t('conversation.welcome.newConversation')}</span>}
               </Button>
             </Tooltip>
 
             <nav className='flex flex-col gap-px' aria-label={t('common.sessions')}>
               {navRow(
-                <Search className='h-3.5 w-3.5' strokeWidth={1.75} />,
+                <Search className={railIconClass} strokeWidth={1.75} />,
                 t('conversation.historySearch.shortTitle'),
                 () => {
                   toggleCommandPalette();
@@ -174,20 +175,20 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
                 'sider-search'
               )}
               {navRow(
-                <Clock className='h-3.5 w-3.5' strokeWidth={1.75} />,
+                <Clock className={railIconClass} strokeWidth={1.75} />,
                 t('cron.scheduledTasks'),
                 handleScheduled,
                 pathname === '/scheduled',
                 'sider-scheduled'
               )}
               {navRow(
-                <Sparkles className='h-3.5 w-3.5' strokeWidth={1.75} />,
+                <Sparkles className={railIconClass} strokeWidth={1.75} />,
                 t('settings.skills'),
                 handleSkills,
                 pathname.startsWith('/settings/skills')
               )}
               {navRow(
-                <ListChecks className='h-3.5 w-3.5' strokeWidth={1.75} />,
+                <ListChecks className={railIconClass} strokeWidth={1.75} />,
                 batchMode ? t('conversation.history.batchModeExit') : t('conversation.history.batchManage'),
                 toggleBatch,
                 batchMode,
