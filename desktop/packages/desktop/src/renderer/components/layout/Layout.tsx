@@ -503,7 +503,7 @@ const Layout: React.FC<{
                 ) : (
                   <Tooltip
                     content={collapsed ? t('common.expandSidebar') : t('common.collapseSidebar')}
-                    position='bottom'
+                    position={collapsed ? 'right' : 'bottom'}
                   >
                     <button
                       type='button'
