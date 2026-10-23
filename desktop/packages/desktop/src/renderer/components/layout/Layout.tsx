@@ -442,7 +442,7 @@ const Layout: React.FC<{
                   'arco-layout-header flex items-center gap-12px layout-sider-header',
                   UI_V2 ? 'pt-1.5 pb-1.5' : 'pt-8px pb-8px',
                   collapsed && !isMobile
-                    ? 'justify-center px-0'
+                    ? 'justify-center px-1 !gap-1'
                     : UI_V2
                       ? 'justify-start ps-10px pe-8px'
                       : 'justify-start ps-18px pe-16px',
@@ -487,18 +487,38 @@ const Layout: React.FC<{
                     {UI_V2 ? 'spec.jev' : 'mu'}
                   </div>
                 )}
-                {isMobile && !collapsed && (
-                  <button
-                    type='button'
-                    className='app-titlebar__button app-titlebar__button--mobile'
-                    onClick={putAwayPhoneSider}
-                    title={t('common.collapseSidebar')}
-                    aria-label={t('common.collapseSidebar')}
+                {isMobile ? (
+                  !collapsed && (
+                    <button
+                      type='button'
+                      className='app-titlebar__button app-titlebar__button--mobile'
+                      onClick={putAwayPhoneSider}
+                      title={t('common.collapseSidebar')}
+                      aria-label={t('common.collapseSidebar')}
+                    >
+                      <SidebarIcon size={18} strokeWidth={2.5} />
+                    </button>
+                  )
+                ) : (
+                  <Tooltip
+                    content={collapsed ? t('common.expandSidebar') : t('common.collapseSidebar')}
+                    position='bottom'
                   >
-                    <SidebarIcon size={18} strokeWidth={2.5} />
-                  </button>
+                    <button
+                      type='button'
+                      data-testid='sider-collapse'
+                      aria-label={collapsed ? t('common.expandSidebar') : t('common.collapseSidebar')}
+                      aria-expanded={!collapsed}
+                      onClick={() => setSiderCollapsed(!collapsed)}
+                      className={classNames(
+                        'ms-auto inline-flex shrink-0 items-center justify-center rounded-[5px] bg-transparent text-t-secondary transition-colors hover:bg-fill-3 hover:text-t-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-sv-focus',
+                        collapsed ? 'h-5 w-5' : 'h-6 w-6'
+                      )}
+                    >
+                      <SidebarIcon size={16} strokeWidth={2.5} />
+                    </button>
+                  </Tooltip>
                 )}
-                {/* 侧栏折叠改由标题栏统一控制 / Sidebar folding handled by Titlebar toggle */}
               </header>
               <div className='arco-layout-content pt-0 px-8px pb-0 layout-sider-content'>
                 {React.isValidElement(sider)

@@ -263,6 +263,19 @@ describe('Layout sider brand Home button', () => {
     expect(sider).not.toHaveClass('collapsed');
   });
 
+  it('folds from the sidebar brand row on desktop', () => {
+    currentPathname = '/conversation/xyz';
+    const { container } = renderLayout();
+    const sider = container.querySelector('.layout-sider');
+    const toggle = screen.getByTestId('sider-collapse');
+
+    expect(toggle).toBeVisible();
+    fireEvent.click(toggle);
+    expect(sider).toHaveClass('collapsed');
+    fireEvent.click(screen.getByTestId('sider-collapse'));
+    expect(sider).not.toHaveClass('collapsed');
+  });
+
   it('collapses to a narrow rail on a desktop that keeps the mark, not to nothing', () => {
     currentPathname = '/conversation/xyz';
     const { container } = renderLayout();
