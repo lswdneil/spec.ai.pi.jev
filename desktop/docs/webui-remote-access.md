@@ -1,20 +1,21 @@
 # WebUI remote access: pairing and transport
 
-Status: service and same-origin proxy implemented, 2026-10-24. Pairing is still design.
+Status: service, same-origin proxy, and device pairing implemented, 2026-10-24.
 
 ## What exists
 
 - Settings → System → Remote access starts/stops the WebUI service (`webui.start` / `status` / `stop`).
 - The service binds `127.0.0.1` and uses a stable port (25808) when free, otherwise an ephemeral one.
-- The WebUI reaches AionCore over HTTP/WebSocket through web-host.
-- A loopback KyRN host lets the WebUI call the desktop's KyRN providers.
-- Web-host exposes **same-origin `/kyrn`** and forwards it to the loopback host. It rewrites the token path in-process, so the KyRN token never appears in the browser URL.
-- `/kyrn` requires the browser's `Origin` to equal `Host`, blocking cross-site WebSocket hijacking from a malicious page in the user's browser.
-- The phone E2E opens the plain web-host URL (no `?kyrnHost=`), calls a real KyRN provider through `/kyrn`, and asserts the result.
+- Every page, AionCore API request, `/ws` socket, and `/kyrn` socket requires a paired device cookie. The only public surfaces are `/pair` and `/api/pair/*`.
+- The desktop shows a six-digit, single-use pairing code. A phone submits it, the desktop approves the device, and only then does the phone receive an HttpOnly device cookie.
+- Paired devices are listed with a last-seen time and can be revoked; revocation invalidates the cookie and closes the device's live sockets.
+- Device tokens are stored hashed, expire after 30 days, and rotate on re-pairing. The token never appears in a URL.
+- Pairing requests, approvals, rejections, revocations, and expirations are appended to `<userData>/webui-audit.jsonl`.
+- Web-host exposes **same-origin `/kyrn`** and forwards it to the loopback host. It rewrites the KyRN token path in-process, so the KyRN token never appears in the browser URL.
+- `/kyrn` and `/ws` require the browser's `Origin` to equal `Host`, blocking cross-site WebSocket hijacking.
+- The phone E2E pairs a real browser, approves it, calls `kyrn.settings` through `/kyrn`, revokes it, and asserts that the cookie no longer opens the app.
 
-This is enough for a same-machine browser and for a reverse proxy in front of the loopback service. It is **not** a complete remote-access design: there is no device approval, scoped token, revocation, or app-level user auth for `/kyrn` yet.
-
-> **Security gate:** the desktop backend runs in local mode, so the WebUI's login page is not a reliable gate for remote access. Until pairing lands, the reverse proxy **must** authenticate the user (Tailscale/Cloudflare Access, Caddy `basic_auth`, a VPN, or equivalent). Do not expose port 25808 directly to a LAN or the internet.
+> **Security gate:** the desktop backend runs in local mode, so AionCore's own login page is not a reliable remote gate. Pairing is now the app-level gate, but the transport should still be HTTPS or a private network. Do not expose port 25808 directly to a LAN or the internet. Reverse-proxy authentication remains useful as defense in depth.
 
 ## What remote access must guarantee
 
@@ -29,9 +30,10 @@ This is enough for a same-machine browser and for a reverse proxy in front of th
 ## How to use today
 
 1. Open **Settings → System**, turn on **Remote access**, and copy the local URL (usually `http://127.0.0.1:25808`).
-2. Put an authenticating proxy in front of that loopback URL. The proxy must preserve `Host` and forward WebSocket upgrades.
-3. Open the proxy's HTTPS URL on the phone. The same-origin `/kyrn` path is proxied automatically; do not append a token.
-4. Turn the switch off to stop the listener. Stopping destroys live connections immediately.
+2. Put an HTTPS reverse proxy or private network in front of that loopback URL. The proxy must preserve `Host` and forward WebSocket upgrades.
+3. Open the proxy's HTTPS URL on the phone. It redirects to `/pair`; enter the code shown on the desktop.
+4. Approve the pending device in Settings. The phone then opens the WebUI with its device cookie.
+5. Revoke the device from the same panel when it is no longer trusted. Turning the switch off stops the listener and closes live connections.
 
 Caddy, with a password gate in front of the local service:
 
@@ -50,7 +52,7 @@ Tailscale Serve on a private tailnet:
 tailscale serve --bg 25808
 ```
 
-Cloudflare Tunnel: route the hostname to `http://127.0.0.1:25808` and add a Cloudflare Access policy. A quick tunnel without Access is a public URL and is not acceptable while `/kyrn` has no app-level user auth.
+Cloudflare Tunnel: route the hostname to `http://127.0.0.1:25808` and add a Cloudflare Access policy. A quick tunnel without Access is a public URL; pairing gates the app, but TLS and network access control still belong in front of it.
 
 ## Transport options
 
@@ -88,26 +90,30 @@ A hosted relay holds the WebSocket and forwards encrypted frames.
 - Requires an account/identity system, relay availability, abuse controls, and a clear data-retention policy.
 - It is a separate product, not a small desktop feature.
 
-## Pairing flow (for A or B)
+## Pairing flow (implemented)
 
-1. Desktop opens "Remote access" and generates a short-lived code (for example six digits, five minutes, single use).
-2. Phone opens the HTTPS WebUI, signs in to the existing WebUI session, and enters the code.
-3. Desktop shows the device name, IP, and requested scope; the person approves or rejects it.
-4. On approval, the desktop issues a device-bound, short-lived KyRN token. The token is stored in an HttpOnly/Secure cookie or a small signed session, never in a URL after pairing.
-5. Web-host forwards `/kyrn` to the loopback KyRN host with the device token, after verifying the device session.
-6. The desktop can list and revoke devices; revocation closes active sockets.
+1. Desktop opens "Remote access" and generates a six-digit code, valid for five minutes and single use.
+2. Phone opens the HTTPS WebUI and is redirected to `/pair`, a standalone page that requires no AionCore session.
+3. Phone submits the code and a device name. The desktop shows the pending request with the device name and address.
+4. The person at the desktop approves or rejects it. Five wrong codes rotate the code and lock that attempt.
+5. On approval, the phone polls and receives an HttpOnly, SameSite=Strict device cookie. The raw token is delivered once; only its SHA-256 hash is stored.
+6. Every page, API request, `/ws`, and `/kyrn` now needs that cookie. Web-host checks it before proxying to AionCore or the KyRN host.
+7. The desktop lists paired devices with last-seen time. Revoking one deletes its hash, invalidates the next request, and closes its live sockets.
+8. Device tokens expire after 30 days. Pairing again issues a new token; there is no silent extension.
 
 ## Near-term order
 
 1. **Wire the WebUI service into the app.** Done: `webui.start` / `status` / `stop` and a System settings switch.
 2. **Add a single-origin KyRN proxy.** Done: same-origin `/kyrn`, token rewritten server-side, `Origin` check in place.
-3. **Add reverse-proxy/VPN support first.** In progress: loopback-only service and setup notes above. Do not invent app TLS yet.
-4. **Then pairing and device approval.** One-time code, scoped token, device list, revocation. This is the next security milestone.
-5. **Then cover host-backed pages in E2E:** providers, judges, skills, MCP, activity/lessons. A page that only renders a header is not parity.
+3. **Add reverse-proxy/VPN support first.** Done for loopback-only service and setup notes above. App-native TLS is still out of scope.
+4. **Pairing and device approval.** Done: one-time code, approval, HttpOnly device token, device list, revocation, expiry, audit.
+5. **Cover host-backed pages in E2E:** providers, judges, skills, MCP, activity/lessons. The pairing E2E covers `kyrn.settings`; the rest still need page-level tests.
+6. **Scope the device token.** Today an approved device can use every WebUI page and every `kyrn.*` method. Split read/write and desktop-only actions before calling the remote surface least-privilege.
+7. **Persist the Remote access switch.** The listener still starts per session.
 
 ## Non-goals for the first remote slice
 
 - Public internet exposure without user setup.
 - Passing provider keys to the browser.
 - Letting a paired phone open the desktop's file manager or install MCP servers without an explicit permission scope.
-- Treating the current `?kyrnHost=` link as a production remote link.
+- Per-method scopes. The current device cookie authorizes the whole WebUI and all `kyrn.*` methods.

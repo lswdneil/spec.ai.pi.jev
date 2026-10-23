@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { promises as fs } from 'node:fs';
 import http from 'node:http';
-import nodeNet from 'node:net';
+import nodeNet, { type Socket } from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
 import type { AddressInfo } from 'node:net';
-import { startStaticServer, type StaticServerHandle } from './static-server.js';
+import { startStaticServer, type StaticServerHandle, type WebUiAccess } from './static-server.js';
 
 async function mkRendererFixture(): Promise<string> {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'ws-static-'));
@@ -28,13 +28,19 @@ async function startMockBackend(
 }
 
 /** Send a raw WebSocket upgrade and resolve with the response status line. */
-function rawUpgradeStatus(port: number, origin: string, path = '/kyrn'): Promise<string> {
+function rawUpgradeStatus(
+  port: number,
+  origin: string,
+  path = '/kyrn',
+  cookie?: string
+): Promise<string> {
   return new Promise((resolve, reject) => {
     const sock = nodeNet.connect({ host: '127.0.0.1', port }, () => {
       sock.write(
         `GET ${path} HTTP/1.1\r\n` +
           `Host: 127.0.0.1:${port}\r\n` +
           `Origin: ${origin}\r\n` +
+          (cookie ? `Cookie: ${cookie}\r\n` : '') +
           'Upgrade: websocket\r\n' +
           'Connection: Upgrade\r\n' +
           'Sec-WebSocket-Version: 13\r\n' +
@@ -516,6 +522,144 @@ describe('static-server', () => {
     expect(result).toBe('stopped');
     socket.destroy();
     handle = null;
+  });
+
+  it('gates pages and APIs behind a device cookie while keeping pairing public', async () => {
+    const backend = await startMockBackend((req, res) => {
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ path: req.url }));
+    });
+    stopBackend = backend.close;
+    const access: WebUiAccess = {
+      verify: (cookie) => (cookie === 'specjev_device=good' ? { deviceId: 'device-1' } : null),
+      handlePublicRequest: async (req, res) => {
+        res.writeHead(201, { 'content-type': 'application/json' });
+        res.end(JSON.stringify({ requestId: 'request-1', method: req.method }));
+        return true;
+      },
+    };
+    handle = await startStaticServer({
+      staticDir,
+      backendPort: backend.port,
+      port: 0,
+      access,
+      pairingPage: () => '<!doctype html><title>pair</title>',
+    });
+
+    const root = await fetch(`${handle.localUrl}/`, { redirect: 'manual' });
+    expect(root.status).toBe(302);
+    expect(root.headers.get('location')).toBe('/pair');
+
+    const pair = await fetch(`${handle.localUrl}/pair`);
+    expect(pair.status).toBe(200);
+    expect(await pair.text()).toContain('<title>pair</title>');
+
+    const blocked = await fetch(`${handle.localUrl}/api/anything`);
+    expect(blocked.status).toBe(401);
+    expect(await blocked.json()).toEqual({ error: 'PAIRING_REQUIRED' });
+
+    const pairing = await fetch(`${handle.localUrl}/api/pair/request`, { method: 'POST' });
+    expect(pairing.status).toBe(201);
+    expect(await pairing.json()).toEqual({ requestId: 'request-1', method: 'POST' });
+
+    const allowed = await fetch(`${handle.localUrl}/api/anything`, {
+      headers: { cookie: 'specjev_device=good' },
+    });
+    expect(allowed.status).toBe(200);
+    expect(await allowed.json()).toEqual({ path: '/api/anything' });
+  });
+
+  it('requires an authenticated same-origin WebSocket when access is configured', async () => {
+    const { createHash } = await import('node:crypto');
+    const httpMod = await import('node:http');
+    const backendServer = httpMod.createServer();
+    backendServer.on('upgrade', (req, socket) => {
+      const wsKey = (req.headers['sec-websocket-key'] as string) || '';
+      const accept = createHash('sha1')
+        .update(wsKey + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')
+        .digest('base64');
+      socket.write('HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n');
+      socket.write(`Sec-WebSocket-Accept: ${accept}\r\n\r\n`);
+      socket.end();
+    });
+    await new Promise<void>((r) => backendServer.listen(0, '127.0.0.1', () => r()));
+    stopBackend = () => new Promise<void>((r) => backendServer.close(() => r()));
+    const backendPort = (backendServer.address() as { port: number }).port;
+    const access: WebUiAccess = {
+      verify: (cookie) => (cookie === 'specjev_device=good' ? { deviceId: 'device-1' } : null),
+      handlePublicRequest: async () => true,
+    };
+    handle = await startStaticServer({ staticDir, backendPort, port: 0, access });
+
+    const origin = `http://127.0.0.1:${handle.port}`;
+    expect(await rawUpgradeStatus(handle.port, origin, '/ws')).toMatch(/HTTP\/1\.1 401/i);
+    expect(await rawUpgradeStatus(handle.port, 'http://evil.example', '/ws', 'specjev_device=good')).toMatch(
+      /HTTP\/1\.1 403/i
+    );
+    expect(await rawUpgradeStatus(handle.port, origin, '/ws', 'specjev_device=good')).toMatch(/HTTP\/1\.1 101/i);
+  });
+
+  it('closes a live WebSocket when its device is revoked', async () => {
+    const { createHash } = await import('node:crypto');
+    const httpMod = await import('node:http');
+    const kyrnServer = httpMod.createServer();
+    const kyrnSockets = new Set<Socket>();
+    kyrnServer.on('upgrade', (req, socket) => {
+      kyrnSockets.add(socket);
+      socket.once('close', () => kyrnSockets.delete(socket));
+      const wsKey = (req.headers['sec-websocket-key'] as string) || '';
+      const accept = createHash('sha1')
+        .update(wsKey + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')
+        .digest('base64');
+      socket.write('HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n');
+      socket.write(`Sec-WebSocket-Accept: ${accept}\r\n\r\n`);
+    });
+    await new Promise<void>((r) => kyrnServer.listen(0, '127.0.0.1', () => r()));
+    const kyrnPort = (kyrnServer.address() as { port: number }).port;
+    const backend = await startMockBackend((_req, res) => res.end());
+    stopBackend = async () => {
+      await backend.close();
+      for (const socket of kyrnSockets) socket.destroy();
+      kyrnSockets.clear();
+      await new Promise<void>((r) => kyrnServer.close(() => r()));
+    };
+    const revokeListeners: Array<(deviceId: string) => void> = [];
+    const access: WebUiAccess = {
+      verify: (cookie) => (cookie === 'specjev_device=good' ? { deviceId: 'device-1' } : null),
+      handlePublicRequest: async () => true,
+      onRevoke: (listener) => {
+        revokeListeners.push(listener);
+        return () => {};
+      },
+    };
+    handle = await startStaticServer({
+      staticDir,
+      backendPort: backend.port,
+      port: 0,
+      access,
+      kyrnHostUrl: `ws://127.0.0.1:${kyrnPort}/secret-token`,
+    });
+
+    const socket = nodeNet.connect({ host: '127.0.0.1', port: handle.port });
+    await new Promise<void>((resolve, reject) => {
+      socket.once('connect', () => {
+        socket.write(
+          `GET /kyrn HTTP/1.1\r\nHost: 127.0.0.1:${handle?.port}\r\nOrigin: http://127.0.0.1:${handle?.port}\r\n` +
+            'Cookie: specjev_device=good\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n' +
+            'Sec-WebSocket-Version: 13\r\nSec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\r\n'
+        );
+      });
+      socket.once('data', () => resolve());
+      socket.once('error', reject);
+    });
+
+    const closed = new Promise<void>((resolve) => socket.once('close', () => resolve()));
+    for (const listener of revokeListeners) listener('device-1');
+    await Promise.race([
+      closed,
+      new Promise<void>((_, reject) => setTimeout(() => reject(new Error('socket stayed open')), 1000).unref()),
+    ]);
+    socket.destroy();
   });
 
   it('network URL populated only when allowRemote=true', async () => {

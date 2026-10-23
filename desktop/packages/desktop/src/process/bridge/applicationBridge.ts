@@ -7,8 +7,15 @@
 import { join } from 'node:path';
 import type { BrowserWindow } from 'electron';
 import { app, session } from 'electron';
-import { startStaticServer, type StaticServerHandle } from '@mu/web-host';
+import {
+  renderPairingPage,
+  startStaticServer,
+  type StaticServerHandle,
+  type WebUiAccess,
+} from '@mu/web-host';
 import { ipcBridge } from '@/common';
+import { WebUiAccessManager } from '@process/services/webui/access';
+import { handlePairingRequest } from '@process/services/webui/pairingHttp';
 import { BROWSER_SESSION_PARTITION } from '@/common/config/constants';
 import { ProcessConfig } from '@process/utils/initStorage';
 import { getZoomFactor, setZoomFactor } from '@process/utils/zoom';
@@ -23,6 +30,24 @@ let mainWindowRef: BrowserWindow | null = null;
 let webUi: { handle: StaticServerHandle; url: string; port: number } | null = null;
 let webUiStarting: Promise<IWebUiStatus> | null = null;
 let webUiEpoch = 0;
+let webUiAccess: WebUiAccessManager | null = null;
+
+function getWebUiAccess(): WebUiAccessManager {
+  if (!webUiAccess) {
+    const dataDir = app.getPath('userData');
+    webUiAccess = new WebUiAccessManager({
+      storePath: join(dataDir, 'webui-devices.json'),
+      auditPath: join(dataDir, 'webui-audit.jsonl'),
+    });
+  }
+  return webUiAccess;
+}
+
+const webUiAccessAdapter: WebUiAccess = {
+  verify: (cookieHeader) => getWebUiAccess().verifyCookie(cookieHeader),
+  handlePublicRequest: (request, response) => handlePairingRequest(getWebUiAccess(), request, response),
+  onRevoke: (listener) => getWebUiAccess().onRevoke(listener),
+};
 
 function webUiStatus(error?: string): IWebUiStatus {
   return webUi
@@ -53,6 +78,8 @@ async function startWebUi(port?: number): Promise<IWebUiStatus> {
           // The reverse proxy is the only listener that should cross the machine boundary.
           allowRemote: false,
           kyrnHostUrl: (globalThis as typeof globalThis & { __kyrnHostUrl?: string }).__kyrnHostUrl,
+          access: webUiAccessAdapter,
+          pairingPage: renderPairingPage,
         });
         if (epoch !== webUiEpoch) {
           // The user turned the switch off while the listener was starting.
@@ -60,6 +87,7 @@ async function startWebUi(port?: number): Promise<IWebUiStatus> {
           return webUiStatus();
         }
         webUi = { handle, url: handle.localUrl, port: handle.port };
+        getWebUiAccess().beginSession();
         return webUiStatus();
       } catch (error) {
         lastError = error;
@@ -75,6 +103,7 @@ async function stopWebUi(): Promise<IWebUiStatus> {
   webUiEpoch += 1;
   const current = webUi;
   webUi = null;
+  webUiAccess?.endSession();
   if (current) await current.handle.stop().catch((): undefined => undefined);
   return webUiStatus();
 }
@@ -356,6 +385,31 @@ export function initApplicationBridge(): void {
     return status.error ? { success: false, msg: status.error, data: status } : { success: true, data: status };
   });
   ipcBridge.application.stopWebUi.provider(async () => ({ success: true, data: await stopWebUi() }));
+  ipcBridge.application.getWebUiAccess.provider(async () => ({
+    success: true,
+    data: getWebUiAccess().listState(),
+  }));
+  ipcBridge.application.rotateWebUiCode.provider(async () => ({
+    success: true,
+    data: getWebUiAccess().rotateCode(),
+  }));
+  ipcBridge.application.approveWebUiPairing.provider(async ({ id }) => {
+    const access = getWebUiAccess();
+    const result = access.approve(id);
+    if (result.ok === false) return { success: false, msg: result.error, data: access.listState() };
+    return { success: true, data: access.listState() };
+  });
+  ipcBridge.application.rejectWebUiPairing.provider(async ({ id }) => {
+    const access = getWebUiAccess();
+    access.reject(id);
+    return { success: true, data: access.listState() };
+  });
+  ipcBridge.application.revokeWebUiDevice.provider(async ({ id }) => {
+    const access = getWebUiAccess();
+    const result = access.revoke(id);
+    if (!result.ok) return { success: false, msg: 'device_not_found', data: access.listState() };
+    return { success: true, data: access.listState() };
+  });
   app.once('will-quit', () => {
     void stopWebUi();
   });

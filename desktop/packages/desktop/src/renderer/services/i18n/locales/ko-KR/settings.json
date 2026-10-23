@@ -1103,7 +1103,24 @@
   "appearancePreviewPlaceholder": "spec.jev에 질문…",
   "appearanceFixedPalette": "색상은 고정입니다. 표면, 세이지, 텍스트 대비는 제품의 일부입니다.",
   "webUi": "원격 접속",
-  "webUiDesc": "이 컴퓨터에서 WebUI를 시작합니다. 휴대폰에서 사용하기 전에 인증이 필요한 HTTPS 리버스 프록시 또는 사설 네트워크 뒤에 두세요.",
+  "webUiDesc": "이 컴퓨터에서 WebUI를 시작합니다. 각 휴대폰은 일회용 코드로 페어링하고 연결에는 HTTPS 또는 사설 네트워크를 사용하세요.",
   "webUiRunning": "로컬 주소: {{url}}",
-  "webUiFailed": "원격 접속을 시작하지 못했습니다"
+  "webUiFailed": "원격 접속을 시작하지 못했습니다",
+  "remoteAccess": {
+    "pairingCode": "페어링 코드",
+    "codeExpires": "{{time}} 후 만료",
+    "newCode": "새 코드",
+    "stoppedHint": "휴대폰을 페어링하려면 원격 접속을 시작하세요.",
+    "pendingTitle": "승인 대기",
+    "pendingEmpty": "대기 중인 기기가 없습니다.",
+    "devicesTitle": "페어링된 기기",
+    "devicesEmpty": "페어링된 기기가 없습니다.",
+    "approve": "승인",
+    "reject": "거절",
+    "revoke": "해지",
+    "lastSeen": "마지막 사용 {{time}}",
+    "pairHint": "휴대폰에서 HTTPS 주소를 열고 이 코드를 입력하세요. 앱을 열기 전에 여기에서 승인해야 합니다.",
+    "updateFailed": "원격 접속을 업데이트하지 못했습니다",
+    "unknownAddress": "알 수 없는 주소"
+  }
 }

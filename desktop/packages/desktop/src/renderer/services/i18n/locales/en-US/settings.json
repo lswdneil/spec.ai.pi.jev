@@ -1102,7 +1102,24 @@
   "appearancePreviewPlaceholder": "Ask spec.jev…",
   "appearanceFixedPalette": "The palette is fixed: surfaces, sage accent, and text contrast are part of the product.",
   "webUi": "Remote access",
-  "webUiDesc": "Start a WebUI on this machine. Before using it from a phone, put it behind an authenticated HTTPS reverse proxy or private network.",
+  "webUiDesc": "Start a WebUI on this machine. Pair each phone with a one-time code; use HTTPS or a private network for the connection.",
   "webUiRunning": "Local URL: {{url}}",
-  "webUiFailed": "Couldn't start remote access"
+  "webUiFailed": "Couldn't start remote access",
+  "remoteAccess": {
+    "pairingCode": "Pairing code",
+    "codeExpires": "Expires in {{time}}",
+    "newCode": "New code",
+    "stoppedHint": "Start remote access to pair a phone.",
+    "pendingTitle": "Waiting for approval",
+    "pendingEmpty": "No device is waiting.",
+    "devicesTitle": "Paired devices",
+    "devicesEmpty": "No paired devices.",
+    "approve": "Approve",
+    "reject": "Reject",
+    "revoke": "Revoke",
+    "lastSeen": "Last seen {{time}}",
+    "pairHint": "Open the HTTPS address on your phone and enter this code. The phone must be approved here before it can open the app.",
+    "updateFailed": "Couldn't update remote access",
+    "unknownAddress": "Unknown address"
+  }
 }

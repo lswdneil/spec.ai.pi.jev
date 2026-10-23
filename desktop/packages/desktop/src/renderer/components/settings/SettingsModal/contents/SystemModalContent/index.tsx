@@ -21,6 +21,7 @@ import useSWR from 'swr';
 import { useSettingsViewMode } from '../../settingsViewContext';
 import DirInputItem from './DirInputItem';
 import PreferenceRow from './PreferenceRow';
+import RemoteAccessPanel from './RemoteAccessPanel';
 
 /**
  * The machine underneath spec.jev: whether it starts with the computer and where it goes when closed, the graphics
@@ -370,6 +371,8 @@ const SystemModalContent: React.FC = () => {
               </div>
             ) : null}
           </div>
+
+          {isDesktop ? <RemoteAccessPanel running={webUi.running} /> : null}
 
           <Form form={form} layout='vertical' className='settings-list' onValuesChange={handleValuesChange}>
             <DirInputItem label={t('settings.workDir')} field='workDir' />

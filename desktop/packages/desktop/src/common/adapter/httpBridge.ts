@@ -254,6 +254,22 @@ export async function httpRequest<T>(
   // the original request — the WebUI half of the #4124 fix. refreshSession() is a
   // no-op outside browser mode and single-flights concurrent 401s into one POST.
   // The auth endpoints themselves are skipped to avoid recursion.
+  // The WebUI gate is not AionCore's session layer. A device cookie that was
+  // revoked or expired gets `PAIRING_REQUIRED`; send the page back to /pair
+  // instead of trying to refresh a session that does not exist.
+  if (response.status === 401 && typeof window !== 'undefined' && !(window as { electronAPI?: unknown }).electronAPI) {
+    let pairing: { error?: string } | null = null;
+    try {
+      pairing = (await response.clone().json()) as { error?: string } | null;
+    } catch {
+      pairing = null;
+    }
+    if (pairing?.error === 'PAIRING_REQUIRED') {
+      if (window.location.pathname !== '/pair') window.location.assign('/pair');
+      throw new BackendHttpError({ method, path, status: 401, body: pairing });
+    }
+  }
+
   if (response.status === 401 && !isAuthEndpoint(path)) {
     console.debug(`[httpBridge] ${method} ${path} → 401, attempting session refresh`);
     const refreshed = await refreshSession();

@@ -15,6 +15,15 @@ import { networkInterfaces } from 'node:os';
 import net, { type Socket } from 'node:net';
 import serveHandler from 'serve-handler';
 
+export type WebUiAccess = {
+  /** A device cookie that maps to a live paired device, or null. */
+  verify: (cookieHeader: string | undefined) => { deviceId: string } | null;
+  /** Handles public pairing routes under `/api/pair/*`. */
+  handlePublicRequest: (request: IncomingMessage, response: ServerResponse) => Promise<boolean>;
+  /** Notifies the server when a device is revoked so its sockets can be closed. */
+  onRevoke?: (listener: (deviceId: string) => void) => () => void;
+};
+
 export type StaticServerOptions = {
   staticDir: string;
   backendPort: number;
@@ -27,6 +36,13 @@ export type StaticServerOptions = {
    * the browser.
    */
   kyrnHostUrl?: string;
+  /**
+   * When set, every page, API request and WebSocket needs a paired device
+   * cookie. `/pair` and `/api/pair/*` stay public so a phone can pair.
+   */
+  access?: WebUiAccess;
+  /** The small standalone HTML page served at `/pair`. */
+  pairingPage?: (request: IncomingMessage) => string;
 };
 
 export type StaticServerHandle = {
@@ -256,6 +272,46 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
         return;
       }
 
+      const pathname = req.url.split('?')[0];
+      if (opts.access) {
+        // Pairing is the only public surface. The phone gets a small standalone
+        // page, not the app shell or any AionCore data.
+        if (pathname === '/pair' || pathname === '/pair/') {
+          if (!opts.pairingPage) {
+            res.writeHead(404).end();
+            return;
+          }
+          res.writeHead(200, {
+            'content-type': 'text/html; charset=utf-8',
+            'cache-control': 'no-store',
+            'x-frame-options': 'DENY',
+            'referrer-policy': 'no-referrer',
+            'content-security-policy':
+              "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
+          });
+          res.end(opts.pairingPage(req));
+          return;
+        }
+        if (pathname.startsWith('/api/pair/')) {
+          await opts.access.handlePublicRequest(req, res);
+          return;
+        }
+
+        const device = opts.access.verify(req.headers.cookie);
+        if (!device) {
+          if (pathname.startsWith('/api/') || pathname === '/login' || pathname === '/logout') {
+            res.writeHead(401, {
+              'content-type': 'application/json; charset=utf-8',
+              'cache-control': 'no-store',
+            });
+            res.end(JSON.stringify({ error: 'PAIRING_REQUIRED' }));
+          } else {
+            res.writeHead(302, { location: '/pair', 'cache-control': 'no-store' }).end();
+          }
+          return;
+        }
+      }
+
       // /api/* — reverse proxy to backend (includes /api/auth/*).
       // /login and /logout are AionCore's top-level auth endpoints: proxy them too
       // so WebUI browser clients reach the backend without a path-rewrite.
@@ -297,9 +353,18 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
   // server (everything else). Both routes use raw TCP splice — no reliance
   // on http.Server's upgrade event.
   const clients = new Set<Socket>();
+  const socketDevices = new Map<Socket, string>();
+  const disposeRevoke = opts.access?.onRevoke?.((deviceId) => {
+    for (const [socket, owner] of socketDevices) {
+      if (owner === deviceId) socket.destroy();
+    }
+  });
   const tcp_server = net.createServer((client: Socket) => {
     clients.add(client);
-    client.once('close', () => clients.delete(client));
+    client.once('close', () => {
+      clients.delete(client);
+      socketDevices.delete(client);
+    });
     let peeked = Buffer.alloc(0);
     let settled = false;
     const cleanup = (): void => {
@@ -313,19 +378,35 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
       peeked = Buffer.concat([peeked, chunk]);
       const decision = peekWsRoute(peeked);
       if (decision === null && peeked.length < PEEK_LIMIT_BYTES) return;
-      // KyRN needs the full header block to validate Origin.
-      if (decision === 'kyrn' && peeked.indexOf('\r\n\r\n') < 0 && peeked.length < PEEK_LIMIT_BYTES) return;
+      // Auth and the KyRN origin check both need the full header block.
+      const needsHeaders = decision === 'kyrn' || (decision === 'backend' && Boolean(opts.access));
+      if (needsHeaders && peeked.indexOf('\r\n\r\n') < 0 && peeked.length < PEEK_LIMIT_BYTES) return;
       cleanup();
+
+      const headerEnd = peeked.indexOf('\r\n\r\n');
+      const head = headerEnd >= 0 ? peeked.subarray(0, headerEnd).toString('latin1') : '';
+
+      if (decision === 'backend' || decision === 'kyrn') {
+        if (opts.access) {
+          const device = opts.access.verify(headerValue(head, 'cookie') ?? undefined);
+          if (!device) {
+            rejectUpgrade(client, 401, 'Unauthorized');
+            return;
+          }
+          if (!isSameOriginUpgrade(head)) {
+            rejectUpgrade(client, 403, 'Forbidden');
+            return;
+          }
+          socketDevices.set(client, device.deviceId);
+        } else if (decision === 'kyrn' && !isSameOriginUpgrade(head)) {
+          rejectUpgrade(client, 403, 'Forbidden');
+          return;
+        }
+      }
 
       if (decision === 'kyrn') {
         if (!kyrnTarget) {
           rejectUpgrade(client, 503, 'Service Unavailable');
-          return;
-        }
-        const headerEnd = peeked.indexOf('\r\n\r\n');
-        const head = headerEnd >= 0 ? peeked.subarray(0, headerEnd).toString('latin1') : '';
-        if (!head || !isSameOriginUpgrade(head)) {
-          rejectUpgrade(client, 403, 'Forbidden');
           return;
         }
         spliceToTcpEndpoint(
@@ -375,11 +456,13 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
     lanIP,
     stop: () =>
       new Promise<void>((resolve) => {
+        disposeRevoke?.();
         // A live WebSocket keeps the listener open indefinitely. The settings
         // switch must stop the service immediately, even while a phone page is
         // connected, so terminate the sockets before closing the listeners.
         for (const client of clients) client.destroy();
         clients.clear();
+        socketDevices.clear();
         tcp_server.close(() => {
           http_server.close(() => resolve());
         });

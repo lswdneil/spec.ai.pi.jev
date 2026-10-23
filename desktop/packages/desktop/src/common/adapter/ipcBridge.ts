@@ -650,6 +650,32 @@ export interface IWebUiStatus {
   error?: string;
 }
 
+export interface IWebUiPendingPairing {
+  id: string;
+  name: string;
+  ip: string;
+  userAgent: string;
+  createdAt: number;
+  expiresAt: number;
+}
+
+export interface IWebUiDevice {
+  id: string;
+  name: string;
+  createdAt: number;
+  lastSeenAt: number;
+  expiresAt: number;
+  ip: string;
+  userAgent: string;
+}
+
+export interface IWebUiAccessState {
+  code?: string;
+  codeExpiresAt?: number;
+  pending: IWebUiPendingPairing[];
+  devices: IWebUiDevice[];
+}
+
 export interface IStartOnBootStatus {
   supported: boolean;
   enabled: boolean;
@@ -747,6 +773,15 @@ export const application = {
   getWebUiStatus: bridge.buildProvider<IBridgeResponse<IWebUiStatus>, void>('webui.get-status'),
   startWebUi: bridge.buildProvider<IBridgeResponse<IWebUiStatus>, { port?: number }>('webui.start'),
   stopWebUi: bridge.buildProvider<IBridgeResponse<IWebUiStatus>, void>('webui.stop'),
+  getWebUiAccess: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, void>('webui.get-access'),
+  rotateWebUiCode: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, void>('webui.rotate-code'),
+  approveWebUiPairing: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>(
+    'webui.approve-pairing'
+  ),
+  rejectWebUiPairing: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>(
+    'webui.reject-pairing'
+  ),
+  revokeWebUiDevice: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>('webui.revoke-device'),
   getGpuStatus: bridge.buildProvider<IBridgeResponse<IGpuStatus>, void>('app.get-gpu-status'),
   setGpuOverride: bridge.buildProvider<IBridgeResponse<IGpuStatus>, { override: IGpuOverride | null }>(
     'app.set-gpu-override'

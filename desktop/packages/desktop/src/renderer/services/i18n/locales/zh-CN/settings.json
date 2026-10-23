@@ -1103,7 +1103,24 @@
   "appearancePreviewPlaceholder": "询问 spec.jev…",
   "appearanceFixedPalette": "配色固定：表面、品牌色和文字对比度属于产品本身。",
   "webUi": "远程访问",
-  "webUiDesc": "在本机启动 WebUI。用手机访问前，请把它放在需要身份验证的 HTTPS 反向代理或私有网络之后。",
+  "webUiDesc": "在本机启动 WebUI。每台手机需用一次性配对码批准；连接请使用 HTTPS 或私有网络。",
   "webUiRunning": "本机地址：{{url}}",
-  "webUiFailed": "启动远程访问失败"
+  "webUiFailed": "启动远程访问失败",
+  "remoteAccess": {
+    "pairingCode": "配对码",
+    "codeExpires": "{{time}} 后过期",
+    "newCode": "新配对码",
+    "stoppedHint": "启动远程访问后才能配对手机。",
+    "pendingTitle": "等待批准",
+    "pendingEmpty": "没有待批准的设备。",
+    "devicesTitle": "已配对设备",
+    "devicesEmpty": "还没有已配对设备。",
+    "approve": "批准",
+    "reject": "拒绝",
+    "revoke": "撤销",
+    "lastSeen": "最近使用 {{time}}",
+    "pairHint": "在手机上打开 HTTPS 地址并输入此配对码。手机必须在这里批准后才能打开应用。",
+    "updateFailed": "更新远程访问失败",
+    "unknownAddress": "未知地址"
+  }
 }

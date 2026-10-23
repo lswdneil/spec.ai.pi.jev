@@ -1103,7 +1103,24 @@
   "appearancePreviewPlaceholder": "詢問 spec.jev…",
   "appearanceFixedPalette": "配色固定：表面、品牌色和文字對比度屬於產品本身。",
   "webUi": "遠端存取",
-  "webUiDesc": "在本機啟動 WebUI。用手機存取前，請將它放在需要身分驗證的 HTTPS 反向代理或私有網路之後。",
+  "webUiDesc": "在本機啟動 WebUI。每台手機需用一次性配對碼批准；連線請使用 HTTPS 或私有網路。",
   "webUiRunning": "本機位址：{{url}}",
-  "webUiFailed": "啟動遠端存取失敗"
+  "webUiFailed": "啟動遠端存取失敗",
+  "remoteAccess": {
+    "pairingCode": "配對碼",
+    "codeExpires": "{{time}} 後過期",
+    "newCode": "新配對碼",
+    "stoppedHint": "啟動遠端存取後才能配對手機。",
+    "pendingTitle": "等待批准",
+    "pendingEmpty": "沒有待批准的裝置。",
+    "devicesTitle": "已配對裝置",
+    "devicesEmpty": "還沒有已配對裝置。",
+    "approve": "批准",
+    "reject": "拒絕",
+    "revoke": "撤銷",
+    "lastSeen": "最近使用 {{time}}",
+    "pairHint": "在手機上開啟 HTTPS 位址並輸入此配對碼。手機必須在這裡批准後才能開啟應用程式。",
+    "updateFailed": "更新遠端存取失敗",
+    "unknownAddress": "未知位址"
+  }
 }

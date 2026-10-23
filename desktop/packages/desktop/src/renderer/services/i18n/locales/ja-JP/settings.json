@@ -1103,7 +1103,24 @@
   "appearancePreviewPlaceholder": "spec.jev に質問…",
   "appearanceFixedPalette": "配色は固定です。面、セージ、文字コントラストは製品の一部です。",
   "webUi": "リモートアクセス",
-  "webUiDesc": "このマシンで WebUI を起動します。スマートフォンから使う前に、認証付きの HTTPS リバースプロキシまたはプライベートネットワークの内側に置いてください。",
+  "webUiDesc": "このマシンで WebUI を起動します。各スマートフォンは一度だけ有効なコードでペアリングし、接続には HTTPS またはプライベートネットワークを使用してください。",
   "webUiRunning": "ローカル URL: {{url}}",
-  "webUiFailed": "リモートアクセスを開始できませんでした"
+  "webUiFailed": "リモートアクセスを開始できませんでした",
+  "remoteAccess": {
+    "pairingCode": "ペアリングコード",
+    "codeExpires": "有効期限 {{time}}",
+    "newCode": "新しいコード",
+    "stoppedHint": "スマートフォンをペアリングするにはリモートアクセスを開始してください。",
+    "pendingTitle": "承認待ち",
+    "pendingEmpty": "承認待ちのデバイスはありません。",
+    "devicesTitle": "ペアリング済みデバイス",
+    "devicesEmpty": "ペアリング済みのデバイスはありません。",
+    "approve": "承認",
+    "reject": "拒否",
+    "revoke": "取り消す",
+    "lastSeen": "最終使用 {{time}}",
+    "pairHint": "スマートフォンで HTTPS アドレスを開き、このコードを入力してください。アプリを開く前にここで承認が必要です。",
+    "updateFailed": "リモートアクセスを更新できませんでした",
+    "unknownAddress": "不明なアドレス"
+  }
 }

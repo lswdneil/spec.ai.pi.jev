@@ -73,6 +73,21 @@ vi.mock('@/common', () => ({
       getWebUiStatus: { invoke: vi.fn(() => Promise.resolve({ success: true, data: { running: false } })) },
       startWebUi: { invoke: vi.fn(() => Promise.resolve({ success: true, data: { running: true } })) },
       stopWebUi: { invoke: vi.fn(() => Promise.resolve({ success: true, data: { running: false } })) },
+      getWebUiAccess: {
+        invoke: vi.fn(() => Promise.resolve({ success: true, data: { pending: [], devices: [] } })),
+      },
+      rotateWebUiCode: {
+        invoke: vi.fn(() => Promise.resolve({ success: true, data: { pending: [], devices: [] } })),
+      },
+      approveWebUiPairing: {
+        invoke: vi.fn(() => Promise.resolve({ success: true, data: { pending: [], devices: [] } })),
+      },
+      rejectWebUiPairing: {
+        invoke: vi.fn(() => Promise.resolve({ success: true, data: { pending: [], devices: [] } })),
+      },
+      revokeWebUiDevice: {
+        invoke: vi.fn(() => Promise.resolve({ success: true, data: { pending: [], devices: [] } })),
+      },
     },
     systemSettings: {
       getCloseToTray: { invoke: vi.fn(() => Promise.resolve(false)) },

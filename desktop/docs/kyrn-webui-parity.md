@@ -1,16 +1,17 @@
 # KyRN bridge: WebUI parity
 
-Status: loopback host + same-origin proxy implemented, 2026-10-24.
+Status: loopback host, same-origin proxy, and device pairing implemented, 2026-10-24.
 
-The WebUI boots with a read-only catalog provider and can call the desktop's KyRN providers over the same origin. The browser connects to `/kyrn`; web-host rewrites the token path and forwards to a loopback-only host. Remote pairing is not implemented yet.
+The WebUI boots with a read-only catalog provider and can call the desktop's KyRN providers over the same origin. The browser connects to `/kyrn`; web-host first checks the paired-device cookie, then rewrites the token path and forwards to a loopback-only host.
 
 ## Current shape
 
 ```text
-WebUI renderer
-  -> AionCore for app data (HTTP/WS)
-  -> /kyrn on its own origin
-       -> web-host (Origin check, token rewrite)
+Phone browser
+  -> /pair (public) -> desktop approval -> HttpOnly device cookie
+  -> WebUI + AionCore API/WS (cookie required)
+  -> /kyrn on its own origin (cookie + Origin check)
+       -> web-host (token rewrite)
             -> KyRN host (127.0.0.1, token in the upstream path)
                  -> Electron main provider handlers
 ```
@@ -66,17 +67,20 @@ The phone E2E now opens Settings → Providers through this same-origin path, no
 ## Security boundary
 
 - The KyRN host is loopback-only. Web-host is loopback-only too; a reverse proxy is the only listener that may cross the machine boundary.
-- The token lives in the upstream request line and the advert file, never in the browser URL.
-- `/kyrn` rejects an upgrade whose `Origin` does not equal `Host`, which blocks cross-site WebSocket hijacking from an arbitrary page in the user's browser.
+- Every page, API request, `/ws` and `/kyrn` requires a paired-device cookie. `/pair` and `/api/pair/*` are the only public routes.
+- The pairing code is six digits, valid for five minutes, single use, and rotates after five wrong attempts.
+- The device token is 256 bits, stored only as a SHA-256 hash, delivered once in an HttpOnly/SameSite=Strict cookie, and expires after 30 days.
+- The KyRN token lives in the upstream request line and is rewritten in-process; it never appears in the browser URL.
+- `/kyrn` and `/ws` reject an upgrade whose `Origin` does not equal `Host`, which blocks cross-site WebSocket hijacking.
 - The host does not expose arbitrary bridge methods; only `kyrn.*` names are accepted.
-- There is no app-level user auth on `/kyrn` yet. Until pairing lands, the reverse proxy must authenticate (Tailscale, Cloudflare Access, Caddy basic auth, or a VPN). See `webui-remote-access.md`.
-- A browser page that can open `/kyrn` still controls the local desktop's settings and keys. Do not expose the service without an authenticating proxy.
+- Revoking a device deletes its hash and closes its live sockets.
+- The current cookie is not per-method scoped: an approved device can use the whole WebUI and every `kyrn.*` method. Scope it before calling the remote surface least-privilege.
 
 ## Still missing
 
-1. Pairing: one-time code, device approval, scoped token, rotation, revocation.
+1. Per-method scopes. The device cookie currently authorizes the whole WebUI and every `kyrn.*` method.
 2. A "show this on my phone" flow that displays the proxy URL rather than only the loopback URL.
 3. Persisting the Remote access switch across app restarts (it is per-session today).
 4. E2E coverage for every host-backed settings page, not just Providers and `kyrn.settings`.
-5. A decision on whether desktop-only actions such as opening a file manager or local judge setup should be allowed from a remote browser.
-6. Hosting extension-contributed WebUI static assets and API routes. `webui.start` serves the renderer, AionCore, and `/kyrn`; it does not yet load `contributes.webui` from extension manifests, so `tests/e2e/specs/ext-webui-contrib.e2e.ts` still fails once the service is actually running.
+5. Hosting extension-contributed WebUI static assets and API routes. `webui.start` serves the renderer, AionCore, and `/kyrn`; it does not yet load `contributes.webui` from extension manifests, so `tests/e2e/specs/ext-webui-contrib.e2e.ts` still fails once the service is actually running.
+6. Rotating a device token without revoking and re-pairing the device. Re-pairing works, but it is not an in-place rotation.
