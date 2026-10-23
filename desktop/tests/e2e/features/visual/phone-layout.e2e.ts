@@ -4,9 +4,8 @@
  * Electron's desktop window always reports itself as desktop, so the phone
  * layout cannot be reached by resizing it. This test serves the built renderer
  * through web-host and opens it in Chrome with a phone viewport and touch.
- * Only the catalog bridge call is answered locally: it is the one startup call
- * the web bridge does not provide, and an empty assistant list is enough to
- * paint the phone shell.
+ * It uses the real read-only WebUI catalog provider, so no bridge call is
+ * stubbed.
  */
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
@@ -90,25 +89,6 @@ test('renders the phone shell at 390px', async ({ page: electronPage, browser },
       } catch {
         // A browser without storage still paints the shell.
       }
-
-      const originalSend = WebSocket.prototype.send;
-      WebSocket.prototype.send = function (data) {
-        originalSend.call(this, data);
-        try {
-          const frame = JSON.parse(data) as { name?: string; data?: { id?: string } };
-          if (frame.name !== 'subscribe-kyrn.catalog') return;
-          const id = frame.data?.id;
-          const response = {
-            name: `subscribe.callback-kyrn.catalog${id}`,
-            data: { ok: true, data: { assistants: [] } },
-          };
-          setTimeout(() => {
-            this.dispatchEvent(new MessageEvent('message', { data: JSON.stringify(response) }));
-          }, 50);
-        } catch {
-          // Not a JSON bridge frame.
-        }
-      };
     });
 
     await webPage.goto(`${server.url}/#/guid`, { waitUntil: 'domcontentloaded' });

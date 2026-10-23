@@ -109,12 +109,14 @@ The test asserts the focused element is `judge-context-toggle` and that opening 
 
 - It starts web-host's static server against the Electron test backend.
 - It opens Chrome with a 390×844 viewport, `isMobile`, and touch.
-- It stubs only the startup `kyrn.catalog` bridge response with an empty assistant list, because Electron's bridge normally answers that call.
+- It uses the real read-only WebUI catalog provider: `renderer/utils/kyrnWebCatalog.ts` reads `/api/agents/management` and `/api/assistants` through the web HTTP bridge. It never registers or disables agents.
 - It asserts `html[data-phone-layout]`, the bottom tab bar, the home hero, and no horizontal overflow.
 - It opens Settings, selects Appearance, and captures both screens.
 
 Screenshots: `phone-390-guid.png`, `phone-390-settings.png`.
 
 The phone check runs against the built renderer in `out/renderer`, so run `bun run package` first when the renderer changed. Electron itself still keeps the desktop rail at any window width; this test is the browser/WebUI path, not a resized Electron window.
+
+The WebUI catalog provider is read-only on purpose. The desktop's `initializeKyrn` also registers spec.jev and disables other runtimes; a browser opening a phone view must not mutate the machine's agent registrations. Unit coverage: `tests/unit/renderer/kyrnWebCatalog.dom.test.ts`.
 
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.

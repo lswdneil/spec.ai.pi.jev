@@ -9,6 +9,8 @@ import './utils/ui/runtimePatches';
 
 // Browser adapter setup
 import '@/common/adapter/browser';
+import { installWebKyrnCatalog } from './utils/kyrnWebCatalog';
+installWebKyrnCatalog();
 
 // React and core dependencies
 import type { PropsWithChildren } from 'react';
