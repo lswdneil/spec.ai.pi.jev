@@ -60,7 +60,7 @@ const ThemeCard: React.FC<{
         <span className='block text-[12.5px] font-medium text-sv-text'>{title}</span>
         <span className='mt-0.5 block text-[10.5px] leading-[1.4] text-sv-faint'>{description}</span>
       </span>
-      <Check className={cn('mt-0.5 h-3.5 w-3.5 text-sv-brand-ink', active ? 'opacity-100' : 'opacity-0')} />
+      <Check className={cn('sv-icon-sm mt-0.5 text-sv-brand-ink', active ? 'opacity-100' : 'opacity-0')} />
     </span>
   </button>
 );
@@ -131,10 +131,10 @@ const AppearanceV2: React.FC = () => {
               {t('settings.appearancePreviewAnswer')}
             </div>
             <div className='mt-1 flex items-center gap-2 rounded-[var(--sv-r-composer)] border border-sv-line bg-sv-bg px-3 py-2 text-[12px] text-sv-placeholder'>
-              <Paperclip className='h-3.5 w-3.5' />
+              <Paperclip className='sv-icon-sm' />
               <span className='flex-1'>{t('settings.appearancePreviewPlaceholder')}</span>
               <span className='flex h-6 w-6 items-center justify-center rounded-full bg-sv-brand text-sv-on-brand'>
-                <ArrowUp className='h-3.5 w-3.5' />
+                <ArrowUp className='sv-icon-sm' />
               </span>
             </div>
           </div>

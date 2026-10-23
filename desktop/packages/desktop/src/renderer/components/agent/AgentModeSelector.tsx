@@ -262,7 +262,7 @@ const AgentModeSelector: React.FC<AgentModeSelectorProps> = ({
                 {current_mode === mode.value ? (
                   '✓'
                 ) : pendingMode === mode.value ? (
-                  <Time theme='outline' size='12' data-testid='mode-pending-mark' />
+                  <Time theme='outline' className='sv-icon-xs' data-testid='mode-pending-mark' />
                 ) : null}
               </span>
               {mode.description ? (
@@ -322,7 +322,7 @@ const AgentModeSelector: React.FC<AgentModeSelectorProps> = ({
               {showLogoInCompact && <span className='shrink-0 inline-flex items-center'>{renderLogo()}</span>}
             </>
           }
-          trailing={canInteract ? <Down size={12} className='text-t-tertiary shrink-0' /> : null}
+          trailing={canInteract ? <Down className='sv-icon-xs text-t-tertiary shrink-0' /> : null}
           loading={isSetting}
           disabled={isSetting}
           onClick={canInteract ? () => !isSetting && setDropdownVisible((visible) => !visible) : undefined}
@@ -365,7 +365,7 @@ const AgentModeSelector: React.FC<AgentModeSelectorProps> = ({
       {canInteract && (
         <>
           {current_mode !== defaultMode && <span className='text-xs text-t-tertiary'>({getCurrentModeLabel()})</span>}
-          <Down size={12} className='text-t-tertiary' />
+          <Down className='sv-icon-xs text-t-tertiary' />
         </>
       )}
     </div>

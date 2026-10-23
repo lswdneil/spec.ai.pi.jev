@@ -288,14 +288,14 @@ const OneClickImportModal: React.FC<OneClickImportModalProps> = ({
       {loadingImport ? (
         <div className='py-8'>
           <div className='flex items-center gap-3'>
-            <Spin size={20} />
+            <Spin />
             <div className='text-t-secondary text-sm'>{t('settings.mcpLoadingTools')}</div>
           </div>
         </div>
       ) : fetchedServers.length > 0 ? (
         <div>
           <div className='mb-3 flex items-center gap-2'>
-            <Check theme='filled' size={20} fill={iconColors.success} />
+            <Check theme='filled' className='sv-icon-xl' fill={iconColors.success} />
             <span className='text-t-primary'>{t('settings.mcpToolsLoaded', { count: fetchedServers.length })}</span>
           </div>
           <div className='mb-3 flex flex-wrap gap-2'>
@@ -315,7 +315,7 @@ const OneClickImportModal: React.FC<OneClickImportModalProps> = ({
     <div>
       <div>
         <div className='mb-3 flex items-center gap-2'>
-          <Check theme='filled' size={20} fill={iconColors.success} />
+          <Check theme='filled' className='sv-icon-xl' fill={iconColors.success} />
           <span className='text-t-primary'>{t('settings.mcpImportedSuccess', { count: importedServers.length })}</span>
         </div>
         <div className='mb-3 flex flex-wrap gap-2'>

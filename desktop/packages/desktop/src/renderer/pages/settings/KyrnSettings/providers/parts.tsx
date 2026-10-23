@@ -84,7 +84,7 @@ export function RemoveMenu({
         disabled={disabled}
         aria-label={t('mu.providers.more')}
         data-testid={testId}
-        icon={<More theme='outline' size='18' fill='currentColor' />}
+        icon={<More theme='outline' className='sv-icon-lg' fill='currentColor' />}
       />
     </Dropdown>
   );

@@ -180,7 +180,7 @@ export default function DetailsSection({
                       >
                         <span className={styles.featureOpen}>
                           {t('mu.features.options')}
-                          <Right theme='outline' size='12' className='rtl-mirror' />
+                          <Right theme='outline' className='sv-icon-xs rtl-mirror' />
                         </span>
                       </Button>
                     ) : null}

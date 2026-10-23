@@ -71,7 +71,7 @@ export default function ModelRows({ models, onChange, suggestions, facts = {}, d
           className={styles.iconButton}
           disabled={disabled}
           data-testid='mu-model-add'
-          icon={<Plus theme='outline' size='12' />}
+          icon={<Plus theme='outline' className='sv-icon-xs' />}
           onClick={() => add()}
         >
           {t('mu.models.add')}
@@ -108,7 +108,7 @@ export default function ModelRows({ models, onChange, suggestions, facts = {}, d
                   aria-label={toggle}
                   title={toggle}
                   data-testid={`mu-model-edit-${index}`}
-                  icon={editing ? <Check theme='outline' size='14' /> : <Edit theme='outline' size='14' />}
+                  icon={editing ? <Check theme='outline' className='sv-icon-sm' /> : <Edit theme='outline' className='sv-icon-sm' />}
                   onClick={() => setOpen(editing ? undefined : index)}
                 />
                 <Button
@@ -119,7 +119,7 @@ export default function ModelRows({ models, onChange, suggestions, facts = {}, d
                   aria-label={t('mu.models.removeNamed', { name })}
                   title={t('mu.models.removeNamed', { name })}
                   data-testid={`mu-model-remove-${index}`}
-                  icon={<Delete theme='outline' size='14' />}
+                  icon={<Delete theme='outline' className='sv-icon-sm' />}
                   onClick={() => remove(index)}
                 />
               </div>
@@ -217,7 +217,7 @@ export default function ModelRows({ models, onChange, suggestions, facts = {}, d
               key={id}
               size='small'
               className='cursor-pointer'
-              icon={<Plus theme='outline' size='10' />}
+              icon={<Plus theme='outline' className='sv-icon-xs' />}
               title={t('mu.models.addListed', { name: id })}
               data-testid={`mu-model-offer-${id}`}
               onClick={() => add(id)}

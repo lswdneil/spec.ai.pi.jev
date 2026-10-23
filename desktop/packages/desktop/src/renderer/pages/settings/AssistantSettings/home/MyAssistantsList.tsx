@@ -126,9 +126,8 @@ const MyAssistantsList: React.FC<MyAssistantsListProps> = ({
         <span className='inline-flex min-w-0 items-center gap-6px text-12px text-t-tertiary'>
           <AllApplication
             theme='outline'
-            size={14}
             fill='currentColor'
-            className='block shrink-0 leading-none text-t-quaternary'
+            className='sv-icon-sm block shrink-0 leading-none text-t-quaternary'
             style={{ lineHeight: 0 }}
           />
           <span className='truncate'>
@@ -144,7 +143,7 @@ const MyAssistantsList: React.FC<MyAssistantsListProps> = ({
                 defaultValue: filter === 'all' ? 'All' : filter === 'enabled' ? 'Enabled' : 'Disabled',
               })}
             </span>
-            <Down theme='outline' size={12} fill='currentColor' />
+            <Down theme='outline' className='sv-icon-xs' fill='currentColor' />
           </Button>
         </Dropdown>
       </div>

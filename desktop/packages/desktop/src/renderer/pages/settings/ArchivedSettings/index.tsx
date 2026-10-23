@@ -136,9 +136,9 @@ const ArchivedSettings: React.FC = () => {
         );
       }
       if (leadingMark.kind === 'assistant_fallback') {
-        return <Robot theme='outline' size='16' className='block leading-none text-t-secondary' />;
+        return <Robot theme='outline' className='sv-icon-md block leading-none text-t-secondary' />;
       }
-      return <MessageOne theme='outline' size='16' className='block leading-none text-t-secondary' />;
+      return <MessageOne theme='outline' className='sv-icon-md block leading-none text-t-secondary' />;
     };
 
     // Resolve a sidebar item to a row, deduped across groups. Returns null when
@@ -166,7 +166,7 @@ const ArchivedSettings: React.FC = () => {
         item_type: 'team',
         item_id: item.team_id,
         name: item.name,
-        icon: <Peoples theme='outline' size='16' className='block leading-none text-t-secondary' />,
+        icon: <Peoples theme='outline' className='sv-icon-md block leading-none text-t-secondary' />,
         updatedAt: item.updated_at,
       };
     };
@@ -447,7 +447,7 @@ const ArchivedSettings: React.FC = () => {
             type='text'
             size='small'
             status='danger'
-            icon={<DeleteOne theme='outline' size='14' />}
+            icon={<DeleteOne theme='outline' className='sv-icon-sm' />}
             aria-label={t('settings.archived.delete')}
             title={t('settings.archived.delete')}
             onClick={() => handleDelete(row)}
@@ -492,7 +492,7 @@ const ArchivedSettings: React.FC = () => {
                 <Button
                   size='small'
                   type='secondary'
-                  icon={<ListCheckbox theme='outline' size='14' />}
+                  icon={<ListCheckbox theme='outline' className='sv-icon-sm' />}
                   onClick={() => setSelectionMode(true)}
                 >
                   {t('settings.archived.multiSelect')}
@@ -529,7 +529,7 @@ const ArchivedSettings: React.FC = () => {
                         onChange={(checked) => setBlockSelected(block, checked)}
                       />
                     ) : null}
-                    <FolderClose theme='outline' size='16' className='shrink-0 text-t-secondary' />
+                    <FolderClose theme='outline' className='sv-icon-md shrink-0 text-t-secondary' />
                     <h2 className='m-0 min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-13px font-[600] text-t-primary'>
                       {block.name}
                     </h2>

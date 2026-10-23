@@ -135,7 +135,7 @@ const CssThemeModal: React.FC<CssThemeModalProps> = ({ visible, theme, onClose, 
           <div className='flex justify-between items-center'>
             <div>
               {onDelete && (
-                <Button type='text' status='danger' icon={<Delete theme='outline' size='14' />} onClick={onDelete}>
+                <Button type='text' status='danger' icon={<Delete theme='outline' className='sv-icon-sm' />} onClick={onDelete}>
                   {t('common.delete')}
                 </Button>
               )}
@@ -172,7 +172,7 @@ const CssThemeModal: React.FC<CssThemeModalProps> = ({ visible, theme, onClose, 
                 <img src={cover} alt={t('settings.cssTheme.previewCover')} className='w-full h-full object-cover' />
               ) : (
                 <>
-                  <Plus theme='outline' size='20' fill={iconColors.secondary} />
+                  <Plus theme='outline' className='sv-icon-xl' fill={iconColors.secondary} />
                   <span className='text-12px text-t-secondary mt-4px'>{t('common.upload')}</span>
                 </>
               )}

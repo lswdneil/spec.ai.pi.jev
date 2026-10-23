@@ -51,7 +51,7 @@ function PageIcon({ favicon }: { favicon?: string }) {
   useEffect(() => setBroken(false), [favicon]);
   if (favicon && !broken)
     return <img src={favicon} alt='' className={styles.favicon} draggable={false} onError={() => setBroken(true)} />;
-  return <Earth theme='outline' size={14} fill='currentColor' className={styles.globe} aria-hidden='true' />;
+  return <Earth theme='outline' fill='currentColor' className={`${styles.globe} sv-icon-sm`} aria-hidden='true' />;
 }
 
 /**
@@ -185,7 +185,7 @@ export default function BrowserChrome({
                       type='text'
                       size='mini'
                       className={styles.pageClose}
-                      icon={<Close size={12} />}
+                      icon={<Close className='sv-icon-xs' />}
                       aria-label={t('preview.browser.closeTab', { title })}
                       title={t('preview.browser.closeTab', { title })}
                       onClick={() => onClose(tab.id)}
@@ -198,7 +198,7 @@ export default function BrowserChrome({
               type='text'
               size='mini'
               className={styles.newPage}
-              icon={<Plus size={14} />}
+              icon={<Plus className='sv-icon-sm' />}
               aria-label={t('preview.browser.newTab')}
               title={t('preview.browser.newTab')}
               onClick={onNewPage}
@@ -211,7 +211,7 @@ export default function BrowserChrome({
             type='text'
             size='small'
             className={styles.navButton}
-            icon={<Left size={16} />}
+            icon={<Left className='sv-icon-md' />}
             aria-label={t('common.historyBack')}
             title={t('common.historyBack')}
             disabled={!navigation?.canGoBack}
@@ -221,7 +221,7 @@ export default function BrowserChrome({
             type='text'
             size='small'
             className={styles.navButton}
-            icon={<Right size={16} />}
+            icon={<Right className='sv-icon-md' />}
             aria-label={t('common.forward')}
             title={t('common.forward')}
             disabled={!navigation?.canGoForward}
@@ -231,7 +231,7 @@ export default function BrowserChrome({
             type='text'
             size='small'
             className={styles.navButton}
-            icon={navigation?.loading ? <Loading size={16} className={styles.spin} /> : <Refresh size={16} />}
+            icon={navigation?.loading ? <Loading className={`${styles.spin} sv-icon-md`} /> : <Refresh className='sv-icon-md' />}
             aria-label={t('common.refresh')}
             title={t('common.refresh')}
             disabled={!active}
@@ -264,7 +264,7 @@ export default function BrowserChrome({
               type='text'
               size='mini'
               className={styles.actionButton}
-              icon={maximized ? <OffScreen size={14} /> : <FullScreen size={14} />}
+              icon={maximized ? <OffScreen className='sv-icon-sm' /> : <FullScreen className='sv-icon-sm' />}
               aria-label={maximizeLabel}
               title={maximizeLabel}
               aria-pressed={maximized}

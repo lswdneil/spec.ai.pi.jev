@@ -203,7 +203,7 @@ const McpServerHeader: React.FC<McpServerHeaderProps> = ({
                   key: 'edit',
                   label: (
                     <span className='flex items-center gap-2'>
-                      <Write size={14} />
+                      <Write className='sv-icon-sm' />
                       {t('settings.mcpEditServer')}
                     </span>
                   ),
@@ -213,7 +213,7 @@ const McpServerHeader: React.FC<McpServerHeaderProps> = ({
                   key: 'delete',
                   label: (
                     <span className='flex items-center gap-2 text-sv-danger'>
-                      <DeleteFour size={14} />
+                      <DeleteFour className='sv-icon-sm' />
                       {t('settings.mcpDeleteServer')}
                     </span>
                   ),

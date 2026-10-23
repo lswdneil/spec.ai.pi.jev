@@ -43,7 +43,7 @@ const RuntimeBadge: React.FC<{
       {logo ? (
         <ThemedLogo src={logo} alt='' className='h-15px w-15px object-contain' />
       ) : (
-        <Robot theme='outline' size={13} fill='currentColor' />
+        <Robot theme='outline' className='sv-icon-xs' fill='currentColor' />
       )}
       {showName && backend ? <span className='max-w-112px truncate'>{backend}</span> : null}
     </span>

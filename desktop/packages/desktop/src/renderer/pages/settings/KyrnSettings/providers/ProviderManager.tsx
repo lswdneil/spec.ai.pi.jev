@@ -358,7 +358,7 @@ export default function ProviderManager(props: ProviderManagerProps) {
           className={styles.iconButton}
           disabled={readOnly}
           data-testid='mu-provider-add'
-          icon={<Plus theme='outline' size='12' />}
+          icon={<Plus theme='outline' className='sv-icon-xs' />}
           onClick={add}
         >
           {t('mu.providers.add')}

@@ -127,7 +127,7 @@ const DefaultsSection: React.FC<DefaultsSectionProps> = ({
     >
       <div className='space-y-16px'>
         <ConfigRow
-          icon={<LinkCloud theme='outline' size='14' />}
+          icon={<LinkCloud theme='outline' className='sv-icon-sm' />}
           label={t('settings.assistantDefaultModelLabel', { defaultValue: 'Model' })}
           hint={t('settings.assistantDefaultConfigHint', {
             defaultValue:
@@ -174,7 +174,7 @@ const DefaultsSection: React.FC<DefaultsSectionProps> = ({
         </ConfigRow>
 
         <ConfigRow
-          icon={<Shield theme='outline' size='14' />}
+          icon={<Shield theme='outline' className='sv-icon-sm' />}
           label={t('settings.assistantDefaultPermissionLabel', { defaultValue: 'Permission' })}
         >
           <Select
@@ -227,7 +227,7 @@ const DefaultsSection: React.FC<DefaultsSectionProps> = ({
 
         {showThoughtLevelDefault ? (
           <ConfigRow
-            icon={<Brain theme='outline' size='14' />}
+            icon={<Brain theme='outline' className='sv-icon-sm' />}
             label={t('settings.assistantDefaultThoughtLevelLabel', { defaultValue: 'Thought Level' })}
           >
             <Select
@@ -273,7 +273,7 @@ const DefaultsSection: React.FC<DefaultsSectionProps> = ({
 
         {showSkills ? (
           <ConfigRow
-            icon={<Lightning theme='outline' size='14' />}
+            icon={<Lightning theme='outline' className='sv-icon-sm' />}
             label={t('settings.assistantDefaultSkillsLabel', { defaultValue: 'Skills' })}
             hint={
               <Button
@@ -390,7 +390,7 @@ const DefaultsSection: React.FC<DefaultsSectionProps> = ({
         ) : null}
 
         <ConfigRow
-          icon={<Toolkit theme='outline' size='14' />}
+          icon={<Toolkit theme='outline' className='sv-icon-sm' />}
           label={t('settings.assistantDefaultMcpLabel', { defaultValue: 'MCP' })}
           hint={
             <Button

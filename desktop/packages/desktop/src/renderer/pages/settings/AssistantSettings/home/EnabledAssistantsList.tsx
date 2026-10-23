@@ -109,7 +109,7 @@ const EnabledAssistantRow: React.FC<EnabledAssistantRowProps> = ({
             {...attributes}
             {...listeners}
           >
-            <Drag size={16} fill='currentColor' />
+            <Drag className='sv-icon-md' fill='currentColor' />
           </Button>
         ) : null}
         {/* A row names its assistant; a picture only when it has one of its own, never a letter standing in. */}

@@ -102,7 +102,7 @@ export default function CoreFeaturesSection({ settings, manifest, onChange, onDe
                     >
                       <span className={styles.featureOpen}>
                         {t('mu.features.details')}
-                        <Right theme='outline' size='12' className='rtl-mirror' />
+                        <Right theme='outline' className='sv-icon-xs rtl-mirror' />
                       </span>
                     </Button>
                     <Switch
@@ -158,7 +158,7 @@ export function FeatureOptions({
     <div>
       <Button type='text' size='small' data-testid='mu-feature-back' onClick={onBack}>
         <span className={styles.featureOpen}>
-          <ArrowLeft theme='outline' size='14' className='rtl-mirror' />
+          <ArrowLeft theme='outline' className='sv-icon-sm rtl-mirror' />
           {backTitle}
         </span>
       </Button>
@@ -236,7 +236,7 @@ export function FeatureOptions({
             onClick={() => onPart?.(at - 1)}
           >
             <span className={styles.featureOpen}>
-              <Left theme='outline' size='12' className='rtl-mirror' />
+              <Left theme='outline' className='sv-icon-xs rtl-mirror' />
               {t('mu.features.previousPart')}
             </span>
           </Button>
@@ -249,7 +249,7 @@ export function FeatureOptions({
           >
             <span className={styles.featureOpen}>
               {t('mu.features.nextPart')}
-              <Right theme='outline' size='12' className='rtl-mirror' />
+              <Right theme='outline' className='sv-icon-xs rtl-mirror' />
             </span>
           </Button>
         </div>

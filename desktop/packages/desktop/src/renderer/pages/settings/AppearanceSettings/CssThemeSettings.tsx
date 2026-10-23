@@ -527,7 +527,7 @@ const CssThemeSettings: React.FC = () => {
                     title={t('settings.cssTheme.editTheme')}
                     onClick={(e) => handleEditTheme(theme, e)}
                   >
-                    <EditTwo theme='outline' size='16' fill='#fff' />
+                    <EditTwo theme='outline' className='sv-icon-md' fill='#fff' />
                   </div>
                 )}
               </div>
@@ -540,7 +540,7 @@ const CssThemeSettings: React.FC = () => {
                   style={{ boxShadow: '0 0 0 1.5px var(--bg-base)' }}
                   aria-hidden='true'
                 >
-                  <Check theme='outline' size='12' strokeWidth={5} fill='currentColor' />
+                  <Check theme='outline' className='sv-icon-xs' strokeWidth={5} fill='currentColor' />
                 </span>
               )}
             </div>

@@ -30,7 +30,7 @@ const AssistantEditorPage: React.FC<AssistantEditorPageProps> = ({ editor, activ
         <div className='flex min-w-0 items-center gap-10px'>
           <Button
             type='text'
-            icon={<ArrowLeft size={16} />}
+            icon={<ArrowLeft className='sv-icon-md' />}
             onClick={onBack}
             data-testid='btn-back-assistant-editor'
             className='!flex !items-center !gap-4px !px-6px !text-t-primary'

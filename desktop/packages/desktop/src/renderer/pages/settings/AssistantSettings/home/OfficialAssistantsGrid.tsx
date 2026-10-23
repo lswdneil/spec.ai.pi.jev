@@ -64,9 +64,8 @@ const OfficialAssistantsGrid: React.FC<OfficialAssistantsGridProps> = ({
         <span className='inline-flex min-w-0 items-center gap-6px text-12px text-t-tertiary'>
           <AllApplication
             theme='outline'
-            size={14}
             fill='currentColor'
-            className='block shrink-0 leading-none text-t-quaternary'
+            className='sv-icon-sm block shrink-0 leading-none text-t-quaternary'
             style={{ lineHeight: 0 }}
           />
           <span className='truncate'>
@@ -82,7 +81,7 @@ const OfficialAssistantsGrid: React.FC<OfficialAssistantsGridProps> = ({
                 defaultValue: filter === 'all' ? 'All' : filter === 'enabled' ? 'Enabled' : 'Disabled',
               })}
             </span>
-            <Down theme='outline' size={12} fill='currentColor' />
+            <Down theme='outline' className='sv-icon-xs' fill='currentColor' />
           </Button>
         </Dropdown>
       </div>
@@ -161,7 +160,7 @@ const OfficialAssistantsGrid: React.FC<OfficialAssistantsGridProps> = ({
                     <Button
                       type='text'
                       size='small'
-                      icon={<MoreOne theme='outline' size='16' fill='currentColor' />}
+                      icon={<MoreOne theme='outline' className='sv-icon-md' fill='currentColor' />}
                       aria-label={t('common.more', { defaultValue: 'More' })}
                       className='!flex !h-32px !w-36px !items-center !justify-center !rounded-6px !p-0 !text-t-tertiary hover:!bg-fill-2 hover:!text-t-primary'
                       data-testid={`btn-assistant-more-${assistant.id}`}

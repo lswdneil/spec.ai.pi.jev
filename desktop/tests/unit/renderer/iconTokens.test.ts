@@ -11,6 +11,10 @@ const walk = (dir: string): string[] =>
     return entry.isDirectory() ? walk(path) : entry.name.endsWith('.tsx') ? [path] : [];
   });
 
+/** Avatars, logos and spinners size themselves from content, not the icon scale. */
+const withoutContentSizedMarks = (source: string) =>
+  source.replace(/<(?:Avatar|AssistantAvatar|ProviderMark|EndpointMark|MuMark|ThemedLogo|Spin)\b[^>]*>/g, '');
+
 const shell = [
   'components/layout/Layout.tsx',
   'components/layout/Titlebar/index.tsx',
@@ -52,6 +56,16 @@ describe('the shared shell icon scale', () => {
   it('keeps the message surface on the icon scale', () => {
     for (const path of walk('pages/conversation/Messages')) {
       expect(read(path), path).not.toMatch(/(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/);
+    }
+  });
+
+  it('keeps settings, preview and agent icons on the icon scale', () => {
+    for (const dir of ['pages/settings', 'pages/conversation/Preview', 'components/agent']) {
+      for (const path of walk(dir)) {
+        expect(withoutContentSizedMarks(read(path)), path).not.toMatch(
+          /(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/
+        );
+      }
     }
   });
 

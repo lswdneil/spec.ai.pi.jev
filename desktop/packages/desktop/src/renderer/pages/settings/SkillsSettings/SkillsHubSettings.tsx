@@ -639,9 +639,9 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
           {isExtension || isAuto ? (
             <div className={`w-40px h-40px rd-8px bg-[rgba(var(--${accent}-6),0.08)] flex items-center justify-center`}>
               {isExtension ? (
-                <Puzzle theme='filled' size={20} fill='rgb(var(--primary-6))' />
+                <Puzzle theme='filled' className='sv-icon-xl' fill='rgb(var(--primary-6))' />
               ) : (
-                <Lightning theme='filled' size={20} fill='rgb(var(--success-6))' />
+                <Lightning theme='filled' className='sv-icon-xl' fill='rgb(var(--success-6))' />
               )}
             </div>
           ) : (
@@ -690,7 +690,7 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
         <span className='text-13px font-600 text-t-primary'>{title}</span>
         {hint ? (
           <span className='inline-flex shrink-0' title={typeof hint === 'string' ? hint : undefined}>
-            <Help theme='outline' size={14} className='text-t-tertiary hover:text-t-secondary cursor-help shrink-0' />
+            <Help theme='outline' className='sv-icon-sm text-t-tertiary hover:text-t-secondary cursor-help shrink-0' />
           </span>
         ) : null}
         <span className={`text-12px px-10px py-2px rd-[100px] font-medium ${countClass}`}>{count}</span>
@@ -871,7 +871,7 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
                     }}
                     title={t('common.delete', { defaultValue: 'Delete' })}
                   >
-                    <Delete size={16} />
+                    <Delete className='sv-icon-md' />
                   </button>
                 </div>
               )}
@@ -926,7 +926,7 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
       {extensionSkills.length > 0 &&
         readonlySection(
           'extension-skills-section',
-          <Puzzle theme='filled' size={18} fill='var(--color-primary-6)' />,
+          <Puzzle theme='filled' className='sv-icon-lg' fill='var(--color-primary-6)' />,
           t('settings.extensionSkills', { defaultValue: 'Extension Skills' }),
           extensionSkills.length,
           'bg-[rgba(var(--primary-6),0.08)] text-primary-6',
@@ -937,7 +937,7 @@ const SkillsHubSettings: React.FC<SkillsHubSettingsProps> = ({ withWrapper = tru
       {builtinAutoSkills.length > 0 &&
         readonlySection(
           'auto-skills-section',
-          <Lightning theme='filled' size={18} fill='var(--color-success-6)' />,
+          <Lightning theme='filled' className='sv-icon-lg' fill='var(--color-success-6)' />,
           t('settings.autoInjectedSkills'),
           builtinAutoSkills.length,
           'bg-[rgba(var(--success-6),0.08)] text-[rgb(var(--success-6))]',

@@ -239,7 +239,7 @@ const PreviewTabs: React.FC<PreviewTabsProps> = ({
                     onCloseTab(tab.id);
                   }}
                 >
-                  <Close theme='outline' size='12' fill={iconColors.secondary} className='hover:fill-primary' />
+                  <Close theme='outline' className='sv-icon-xs hover:fill-primary' fill={iconColors.secondary} />
                 </span>
               </div>
             ))
@@ -260,9 +260,9 @@ const PreviewTabs: React.FC<PreviewTabsProps> = ({
                 title={isMaximized ? t('preview.restorePanel') : t('preview.maximizePanel')}
               >
                 {isMaximized ? (
-                  <Minimize2 size={14} style={{ color: iconColors.secondary }} />
+                  <Minimize2 className='sv-icon-sm' style={{ color: iconColors.secondary }} />
                 ) : (
-                  <Maximize2 size={14} style={{ color: iconColors.secondary }} />
+                  <Maximize2 className='sv-icon-sm' style={{ color: iconColors.secondary }} />
                 )}
               </div>
             )}
@@ -272,7 +272,7 @@ const PreviewTabs: React.FC<PreviewTabsProps> = ({
                 onClick={onClosePanel}
                 title={t('preview.collapsePanel')}
               >
-                <Shrink size={14} style={{ color: iconColors.secondary }} />
+                <Shrink className='sv-icon-sm' style={{ color: iconColors.secondary }} />
               </div>
             )}
           </div>

@@ -108,7 +108,7 @@ const AcpRuntimeRestartButton: React.FC<{
       className='h-28px w-28px'
       loading={restarting}
       disabled={effectivelyDisabled || restarting}
-      icon={<Refresh theme='outline' size='14' fill={iconColors.secondary} />}
+      icon={<Refresh theme='outline' className='sv-icon-sm' fill={iconColors.secondary} />}
       aria-label={t('agent.runtimeRestart.tooltip')}
     />
   );

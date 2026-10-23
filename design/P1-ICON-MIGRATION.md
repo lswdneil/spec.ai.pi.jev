@@ -31,15 +31,16 @@ Second content batch:
 
 - Conversation message surface: MessageThinking, MessageToolCall, MessageToolGroup, MessageToolGroupSummary, MessageTips, MessageMuNotice, PermissionRequestPanel, SelectionReplyButton, SkillSuggestCard, MessageText, MessageList, MessageQuestion, MessageCronBadge/Trigger, ToolKindIcon, TeammateMessageAvatar, ActionRail search.
 
-The literal `size` / `h-3.5` / `h-4` / `h-5` values were replaced by scale classes. `iconTokens.test.ts` now scans the whole `pages/conversation/Messages` tree as well as the first batch.
+Third content batch:
+
+- Settings business pages: appearance, archived chats, assistants, providers/models, skills, imports, and MCP tools.
+- Preview chrome: browser navigation, step bar, preview tabs.
+- Agent controls: runtime restart and mode selector.
+
+The literal `size` / `h-3.5` / `h-4` / `h-5` values were replaced by scale classes. `iconTokens.test.ts` now scans the message tree and the settings, Preview, and agent trees. Avatars, provider marks, logos, and spinners are excluded because they are content-sized, not icons.
 
 ## Remaining
 
-Scan the renderer for literal icon sizes; remaining files are mostly:
-
-1. Settings business pages
-2. Preview auxiliary panels
-3. Agent and mode selectors
-4. Small inline metadata icons
+Scan the renderer for literal icon sizes; remaining files are mostly small inline metadata icons outside the covered trees.
 
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.

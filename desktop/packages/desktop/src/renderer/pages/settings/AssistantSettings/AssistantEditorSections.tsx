@@ -96,7 +96,7 @@ const AssistantEditorSections: React.FC<AssistantEditorSectionsProps> = ({ edito
         ) : avatar.kind === 'emoji' ? (
           <span className='text-14px leading-none'>{avatar.value}</span>
         ) : (
-          <Robot theme='outline' size='14' />
+          <Robot theme='outline' className='sv-icon-sm' />
         )}
       </Avatar>
     );
@@ -340,7 +340,7 @@ const AssistantEditorSections: React.FC<AssistantEditorSectionsProps> = ({ edito
       return <span className='text-20px'>{editAvatar}</span>;
     }
 
-    return <Robot theme='outline' size={20} />;
+    return <Robot theme='outline' className='sv-icon-xl' />;
   };
 
   return (
@@ -351,7 +351,7 @@ const AssistantEditorSections: React.FC<AssistantEditorSectionsProps> = ({ edito
           data-testid='assistant-builtin-readonly-banner'
         >
           <div className='flex items-start gap-8px'>
-            <Info theme='outline' size={16} className='mt-2px flex-shrink-0 text-primary-6' />
+            <Info theme='outline' className='sv-icon-md mt-2px flex-shrink-0 text-primary-6' />
             <div>
               <span>
                 {t('settings.assistantBuiltinReadonlyTip', {
@@ -388,7 +388,7 @@ const AssistantEditorSections: React.FC<AssistantEditorSectionsProps> = ({ edito
           data-testid='assistant-cli-readonly-banner'
         >
           <div className='flex items-start gap-8px'>
-            <Info theme='outline' size={16} className='mt-2px flex-shrink-0 text-primary-6' />
+            <Info theme='outline' className='sv-icon-md mt-2px flex-shrink-0 text-primary-6' />
             <div>
               {t('settings.assistantCliReadonlyTip', {
                 defaultValue:
@@ -449,7 +449,7 @@ const AssistantEditorSections: React.FC<AssistantEditorSectionsProps> = ({ edito
           <div className='w-86px flex-shrink-0 text-13px text-t-secondary'>
             <span className='flex items-center gap-6px leading-none'>
               <span className='inline-flex shrink-0 items-center text-t-tertiary'>
-                <Robot theme='outline' size='14' />
+                <Robot theme='outline' className='sv-icon-sm' />
               </span>
               <span>{t('settings.assistantMainAgent', { defaultValue: 'Agent' })}</span>
             </span>

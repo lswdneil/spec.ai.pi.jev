@@ -107,25 +107,25 @@ const StepBar: React.FC<{ run: BrowserRunState }> = ({ run }) => {
           className={styles.toggle}
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
-          icon={open ? <Up size='12' /> : <Down size='12' />}
+          icon={open ? <Up className='sv-icon-xs' /> : <Down className='sv-icon-xs' />}
         >
           {t('preview.muBrowser.steps', { total: run.steps.length })}
         </Button>
         {running && (
           <div className={styles.controls}>
             {run.paused ? (
-              <Button size='mini' type='primary' icon={<PlayOne size='12' />} onClick={() => send('resume')}>
+              <Button size='mini' type='primary' icon={<PlayOne className='sv-icon-xs' />} onClick={() => send('resume')}>
                 {t('preview.muBrowser.resume')}
               </Button>
             ) : (
-              <Button size='mini' icon={<Pause size='12' />} disabled={run.stopRequested} onClick={() => send('pause')}>
+              <Button size='mini' icon={<Pause className='sv-icon-xs' />} disabled={run.stopRequested} onClick={() => send('pause')}>
                 {t('preview.muBrowser.pause')}
               </Button>
             )}
             <Tooltip content={t('preview.muBrowser.takeoverTip')}>
               <Button
                 size='mini'
-                icon={<HandUp size='12' />}
+                icon={<HandUp className='sv-icon-xs' />}
                 disabled={run.stopRequested || run.pausedBy === 'takeover'}
                 onClick={() => send('takeover')}
               >
@@ -135,7 +135,7 @@ const StepBar: React.FC<{ run: BrowserRunState }> = ({ run }) => {
             <Button
               size='mini'
               status='danger'
-              icon={<Square size='12' />}
+              icon={<Square className='sv-icon-xs' />}
               disabled={run.stopRequested}
               onClick={() => send('stop')}
             >

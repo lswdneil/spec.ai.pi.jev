@@ -113,7 +113,7 @@ export default function MuSkillsPage() {
               size='small'
               allowClear
               className={styles.wide}
-              prefix={<Search theme='outline' size='14' />}
+              prefix={<Search theme='outline' className='sv-icon-sm' />}
               aria-label={t('mu.capabilities.skills.search')}
               placeholder={t('mu.capabilities.skills.search')}
               value={query}

@@ -105,7 +105,7 @@ const MyAssistantCard: React.FC<MyAssistantCardProps> = ({
               className='flex flex-shrink-0 items-center text-warning-6'
               data-testid={`assistant-agent-unavailable-${assistant.id}`}
             >
-              <Attention size={15} fill='currentColor' />
+              <Attention className='sv-icon-sm' fill='currentColor' />
             </span>
           </Tooltip>
         )}
@@ -134,7 +134,7 @@ const MyAssistantCard: React.FC<MyAssistantCardProps> = ({
             <Button
               type='text'
               size='small'
-              icon={<MoreOne theme='outline' size='16' fill='currentColor' />}
+              icon={<MoreOne theme='outline' className='sv-icon-md' fill='currentColor' />}
               aria-label={t('common.more', { defaultValue: 'More' })}
               className='!flex !h-32px !w-36px !items-center !justify-center !rounded-6px !p-0 !text-t-tertiary hover:!bg-fill-2 hover:!text-t-primary'
               data-testid={`btn-assistant-more-${assistant.id}`}

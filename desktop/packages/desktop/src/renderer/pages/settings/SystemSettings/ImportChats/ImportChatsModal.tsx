@@ -209,7 +209,7 @@ const ImportChatsModal: React.FC<Props> = ({ visible, onClose, stay = false }) =
     if (state.phase === 'loading')
       return (
         <div className='flex items-center gap-8px py-8px text-13px leading-20px text-t-secondary'>
-          <Spin size={16} />
+          <Spin className='sv-icon-md' />
           {t('mu.importChats.dialog.loading')}
         </div>
       );
