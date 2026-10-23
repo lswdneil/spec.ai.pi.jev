@@ -389,6 +389,17 @@
 }
 
 /* 移动端优化 */
+@media (max-width: 900px) {
+  .actionRow {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .actionSubmit {
+    flex: 1 0 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .guidLayout {
     width: calc(100% - 24px);
