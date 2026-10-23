@@ -121,7 +121,7 @@ export default function JudgeLog({
           type='text'
           size='mini'
           className={styles.toolButton}
-          icon={<SettingTwo size={14} />}
+          icon={<SettingTwo className='sv-icon-sm' />}
           aria-label={t('common.kyrn.settings')}
           title={t('common.kyrn.settings')}
           onClick={() => void navigate('/settings/judges')}
@@ -159,7 +159,7 @@ export default function JudgeLog({
         </ol>
       </div>
       {!following && items.length ? (
-        <Button size='mini' className={styles.latest} icon={<Down size={12} />} onClick={jumpToLatest}>
+        <Button size='mini' className={styles.latest} icon={<Down className='sv-icon-xs' />} onClick={jumpToLatest}>
           {t('common.kyrn.judgeView.log.latest')}
         </Button>
       ) : null}

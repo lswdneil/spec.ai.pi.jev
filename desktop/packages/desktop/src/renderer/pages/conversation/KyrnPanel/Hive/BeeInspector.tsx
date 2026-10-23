@@ -60,7 +60,7 @@ export default function BeeInspector({ bee, focus, events }: { bee: HiveBee; foc
       <div className={styles.current}>
         <div className={styles.sectionLabel}>{t('common.kyrn.hiveView.current')}</div>
         <div className='flex gap-6px items-start'>
-          {bee.tool && <Terminal size={16} />}
+          {bee.tool && <Terminal className='sv-icon-md' />}
           <span className={styles.wrap}>{bee.tool?.summary || status}</span>
         </div>
         {bee.said && <p className={styles.said}>{bee.said}</p>}

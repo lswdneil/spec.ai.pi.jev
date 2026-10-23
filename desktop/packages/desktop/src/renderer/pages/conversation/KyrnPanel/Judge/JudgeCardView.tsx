@@ -160,7 +160,7 @@ export default function JudgeCardView({
 
       <section className={styles.step}>
         <h4 className={styles.stepLabel}>
-          <Help size={12} />
+          <Help className='sv-icon-xs' />
           {t('common.kyrn.judgeView.question')}
         </h4>
         <div className={styles.stepBody}>{t(`${KEY}.questions.${card.stage}`)}</div>
@@ -169,7 +169,7 @@ export default function JudgeCardView({
             <span>{card.route.from || t('common.kyrn.judgeView.unreported')}</span>
             {card.route.to && (
               <>
-                <ArrowRight size={12} />
+                <ArrowRight className='sv-icon-xs' />
                 <span>{card.route.to}</span>
               </>
             )}
@@ -180,7 +180,7 @@ export default function JudgeCardView({
 
       <section className={styles.step}>
         <h4 className={styles.stepLabel}>
-          <ListCheckbox size={12} />
+          <ListCheckbox className='sv-icon-xs' />
           {t('common.kyrn.judgeView.result')}
         </h4>
         {facts.length > 0 ? (
@@ -200,7 +200,7 @@ export default function JudgeCardView({
 
       <section className={styles.step}>
         <h4 className={styles.stepLabel}>
-          <Lightning size={12} />
+          <Lightning className='sv-icon-xs' />
           {t('common.kyrn.judgeView.action')}
         </h4>
         <div className={styles.stepBody}>{t(`${KEY}.actions.${card.action}`)}</div>

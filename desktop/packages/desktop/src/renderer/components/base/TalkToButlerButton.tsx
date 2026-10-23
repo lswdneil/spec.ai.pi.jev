@@ -124,7 +124,7 @@ const TalkToButlerButton: React.FC<TalkToButlerButtonProps> = ({
       >
         <span className='flex items-center gap-6px'>
           {label}
-          <Down theme='outline' size={14} fill='currentColor' />
+          <Down theme='outline' className='sv-icon-sm' fill='currentColor' />
         </span>
       </Button>
     </Dropdown>

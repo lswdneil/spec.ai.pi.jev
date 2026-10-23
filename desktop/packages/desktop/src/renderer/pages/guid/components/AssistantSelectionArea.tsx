@@ -315,7 +315,7 @@ const AssistantSelectionArea: React.FC<AssistantSelectionAreaProps> = ({
                 onClick={() => setMoreVisible((visible) => !visible)}
               >
                 <span>{t('common.more', { defaultValue: 'More' })}</span>
-                <Down theme='outline' size={14} />
+                <Down theme='outline' className='sv-icon-sm' />
               </Button>
             ) : null}
           </div>

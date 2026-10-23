@@ -151,9 +151,8 @@ const WorkspaceFolderSelect: React.FC<WorkspaceFolderSelectProps> = ({
       >
         <FolderOpen
           theme='outline'
-          size='16'
           fill='currentColor'
-          className='block shrink-0 text-t-secondary'
+          className='sv-icon-md block shrink-0 text-t-secondary'
           style={{ transform: 'translateY(3px)' }}
         />
         {value ? (
@@ -168,11 +167,11 @@ const WorkspaceFolderSelect: React.FC<WorkspaceFolderSelectProps> = ({
             className='flex h-20px w-20px shrink-0 cursor-pointer items-center justify-center text-t-secondary transition-colors hover:text-t-primary'
             onClick={handleClear}
           >
-            <Close theme='outline' size='14' fill='currentColor' />
+            <Close theme='outline' className='sv-icon-sm' fill='currentColor' />
           </span>
         ) : (
           <span className='flex h-20px w-20px shrink-0 items-center justify-center text-t-secondary'>
-            <Down size='14' fill='currentColor' />
+            <Down className='sv-icon-sm' fill='currentColor' />
           </span>
         )}
       </div>
@@ -216,9 +215,8 @@ const WorkspaceFolderSelect: React.FC<WorkspaceFolderSelectProps> = ({
                   >
                     <FolderClose
                       theme='outline'
-                      size='16'
                       fill='currentColor'
-                      className={`block shrink-0 ${isSelected ? 'text-aou-6' : 'text-t-tertiary'}`}
+                      className={`sv-icon-md block shrink-0 ${isSelected ? 'text-aou-6' : 'text-t-tertiary'}`}
                       style={{ transform: 'translateY(3px)' }}
                     />
                     <div className='min-w-0 flex-1'>
@@ -227,7 +225,7 @@ const WorkspaceFolderSelect: React.FC<WorkspaceFolderSelectProps> = ({
                     </div>
                     {isSelected && (
                       <span className='flex h-20px w-20px shrink-0 items-center justify-center text-aou-6'>
-                        <Check size='14' fill='currentColor' />
+                        <Check className='sv-icon-sm' fill='currentColor' />
                       </span>
                     )}
                   </div>
@@ -243,9 +241,8 @@ const WorkspaceFolderSelect: React.FC<WorkspaceFolderSelectProps> = ({
           >
             <FolderOpen
               theme='outline'
-              size='16'
               fill='currentColor'
-              className='block shrink-0 text-t-tertiary'
+              className='sv-icon-md block shrink-0 text-t-tertiary'
               style={{ transform: 'translateY(3px)' }}
             />
             <span className='text-13px text-t-primary'>{chooseDifferentLabel}</span>

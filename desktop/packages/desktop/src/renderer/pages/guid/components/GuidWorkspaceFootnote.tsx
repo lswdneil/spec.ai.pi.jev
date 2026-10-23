@@ -21,10 +21,9 @@ type GuidWorkspaceFootnoteProps = {
   onClearWorkspace: () => void;
 };
 
-const FolderIcon = ({ size = 12 }: { size?: number }) => (
+const FolderIcon = ({ className }: { className?: string }) => (
   <svg
-    width={size}
-    height={size}
+    className={className}
     fill='none'
     stroke='currentColor'
     strokeWidth='1.8'
@@ -165,7 +164,7 @@ const GuidWorkspaceFootnote: React.FC<GuidWorkspaceFootnoteProps> = ({
                 className={`${styles.wsDropdownItem} ${isActive ? styles.wsDropdownItemActive : ''}`}
                 onClick={() => handleSelectPath(path)}
               >
-                <FolderIcon size={13} />
+                <FolderIcon className='sv-icon-xs' />
                 <span className={styles.wsDropdownItemName}>{name}</span>
                 {isActive && (
                   <svg
@@ -231,11 +230,11 @@ const GuidWorkspaceFootnote: React.FC<GuidWorkspaceFootnoteProps> = ({
                 className={styles.workspacePillMain}
                 onClick={toggleOpen}
               >
-                <FolderIcon size={14} />
+                <FolderIcon className='sv-icon-sm' />
                 <span className={styles.workspacePillName}>{workspaceName}</span>
                 <Down
                   theme='outline'
-                  size='12'
+                  className='sv-icon-xs'
                   fill='currentColor'
                   style={{ flexShrink: 0, transform: 'translateY(1px)' }}
                 />
@@ -249,7 +248,7 @@ const GuidWorkspaceFootnote: React.FC<GuidWorkspaceFootnoteProps> = ({
                   onClearWorkspace();
                 }}
               >
-                <Close theme='outline' size='10' fill='currentColor' />
+                <Close theme='outline' className='sv-icon-xs' fill='currentColor' />
               </span>
             </div>
           </Tooltip>
@@ -263,12 +262,12 @@ const GuidWorkspaceFootnote: React.FC<GuidWorkspaceFootnoteProps> = ({
             data-testid='workspace-selector-btn'
             onClick={recentWorkspaces.length > 0 ? toggleOpen : handleBrowseWorkspace}
           >
-            <FolderIcon size={14} />
+            <FolderIcon className='sv-icon-sm' />
             <span>{t('guid.workspace.workInProject')}</span>
             {recentWorkspaces.length > 0 && (
               <Down
                 theme='outline'
-                size='12'
+                className='sv-icon-xs'
                 fill='currentColor'
                 style={{ flexShrink: 0, transform: 'translateY(1px)' }}
               />

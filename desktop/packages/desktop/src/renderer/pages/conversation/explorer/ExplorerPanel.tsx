@@ -299,7 +299,7 @@ export const ExplorerPanel: React.FC<ExplorerPanelProps> = ({
           <span dir='ltr' className='overflow-hidden text-ellipsis whitespace-nowrap'>
             {name}
           </span>
-          {degraded && <Caution theme='outline' size='14' className='flex-shrink-0' />}
+          {degraded && <Caution theme='outline' className='sv-icon-sm flex-shrink-0' />}
         </span>
       );
       const removable = isRoot && data?.role ? canRemoveRoot(data.role, peId, workspacePeId) : false;
@@ -421,7 +421,7 @@ export const ExplorerPanel: React.FC<ExplorerPanelProps> = ({
                 size='mini'
                 className='flex-shrink-0'
                 aria-label={t('common.more')}
-                icon={<MoreOne theme='outline' size='16' />}
+                icon={<MoreOne theme='outline' className='sv-icon-md' />}
               />
             </Dropdown>
           </span>

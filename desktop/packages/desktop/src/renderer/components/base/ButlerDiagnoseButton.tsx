@@ -56,7 +56,7 @@ const ButlerDiagnoseButton: React.FC<ButlerDiagnoseButtonProps> = ({ errorText, 
     >
       {/* No pt offset: @icon-park's Robot glyph is vertically centered in its
           viewBox, so items-center alone lines it up with the text baseline. */}
-      <Robot theme='outline' size='14' fill='currentColor' className='flex-shrink-0' />
+      <Robot theme='outline' className='sv-icon-sm flex-shrink-0' fill='currentColor' />
       <span>{t('settings.talkToButler.solveWithButler')}</span>
     </button>
   );

@@ -94,7 +94,7 @@ const LocalFileLink: React.FC<LocalFileLinkProps> = ({ reference, children, onOp
           type='text'
           size='mini'
           className='markdown-local-file-copy !p-1px !w-20px !h-20px flex-shrink-0'
-          icon={<Copy theme='outline' size='14' fill={iconColors.secondary} />}
+          icon={<Copy theme='outline' className='sv-icon-sm' fill={iconColors.secondary} />}
           onClick={handleCopy}
         />
       </Tooltip>

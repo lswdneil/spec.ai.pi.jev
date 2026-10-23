@@ -47,7 +47,7 @@ const MuInlineSearchInput = forwardRef<HTMLInputElement, MuInlineSearchInputProp
 
   return (
     <div className={classNames(styles.searchbar, className)} style={style} data-testid={wrapTestId}>
-      <Search theme='outline' size='13' className={styles.icon} fill='currentColor' />
+      <Search theme='outline' className={`${styles.icon} sv-icon-xs`} fill='currentColor' />
       <input
         {...inputProps}
         ref={ref as Ref<HTMLInputElement>}

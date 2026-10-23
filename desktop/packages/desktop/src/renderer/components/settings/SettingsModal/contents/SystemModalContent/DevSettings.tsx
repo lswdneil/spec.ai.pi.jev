@@ -159,7 +159,7 @@ const DevSettings: React.FC = () => {
                     type='text'
                     size='small'
                     aria-label={t('settings.cdp.openInBrowser')}
-                    icon={<Link theme='outline' size='16' />}
+                    icon={<Link theme='outline' className='sv-icon-md' />}
                     onClick={openCdpUrl}
                   />
                 </Tooltip>
@@ -168,7 +168,7 @@ const DevSettings: React.FC = () => {
                     type='text'
                     size='small'
                     aria-label={t('common.copy')}
-                    icon={<Copy theme='outline' size='16' />}
+                    icon={<Copy theme='outline' className='sv-icon-md' />}
                     onClick={copyCdpUrl}
                   />
                 </Tooltip>
@@ -194,7 +194,7 @@ const DevSettings: React.FC = () => {
                             type='text'
                             size='small'
                             aria-label={t('settings.cdp.copyMcpConfig')}
-                            icon={<Copy theme='outline' size='16' />}
+                            icon={<Copy theme='outline' className='sv-icon-md' />}
                             onClick={(e) => {
                               e.stopPropagation();
                               copyMcpConfig();
@@ -202,8 +202,7 @@ const DevSettings: React.FC = () => {
                           />
                         </Tooltip>
                         <Down
-                          size='14'
-                          className={`text-t-tertiary shrink-0 transition-transform duration-200 ${expandedMcpKeys.includes('chrome-devtools') ? 'rotate-180' : ''}`}
+                          className={`sv-icon-sm text-t-tertiary shrink-0 transition-transform duration-200 ${expandedMcpKeys.includes('chrome-devtools') ? 'rotate-180' : ''}`}
                         />
                       </div>
                     }
@@ -239,7 +238,7 @@ const DevSettings: React.FC = () => {
                             type='text'
                             size='small'
                             aria-label={t('settings.cdp.copyMcpConfig')}
-                            icon={<Copy theme='outline' size='16' />}
+                            icon={<Copy theme='outline' className='sv-icon-md' />}
                             onClick={(e) => {
                               e.stopPropagation();
                               copyPlaywrightMcpConfig();
@@ -247,8 +246,7 @@ const DevSettings: React.FC = () => {
                           />
                         </Tooltip>
                         <Down
-                          size='14'
-                          className={`text-t-tertiary shrink-0 transition-transform duration-200 ${expandedMcpKeys.includes('playwright') ? 'rotate-180' : ''}`}
+                          className={`sv-icon-sm text-t-tertiary shrink-0 transition-transform duration-200 ${expandedMcpKeys.includes('playwright') ? 'rotate-180' : ''}`}
                         />
                       </div>
                     }

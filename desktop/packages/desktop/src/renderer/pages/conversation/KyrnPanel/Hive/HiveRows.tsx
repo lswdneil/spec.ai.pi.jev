@@ -74,9 +74,9 @@ function StatusMark({ status }: { status: HiveBeeStatus }) {
   return (
     <span className={styles.mark} data-shape={shape} aria-hidden='true'>
       {shape === 'done' ? (
-        <Check size={11} strokeWidth={4} />
+        <Check className='sv-icon-xs' strokeWidth={4} />
       ) : shape === 'failed' ? (
-        <Close size={11} strokeWidth={4} />
+        <Close className='sv-icon-xs' strokeWidth={4} />
       ) : null}
     </span>
   );

@@ -52,19 +52,19 @@ const AboutModalContent: React.FC = () => {
   const linkItems: LinkItem[] = [
     {
       title: t('common.github'),
-      icon: <Github theme='outline' size='16' />,
+      icon: <Github theme='outline' className='sv-icon-md' />,
       open: () => void openLink(MU_REPO_URL).catch((error) => console.error('Failed to open link:', error)),
     },
     {
       title: t('settings.updateLog'),
-      icon: <Right theme='outline' size='16' className='rtl-mirror' />,
+      icon: <Right theme='outline' className='sv-icon-md rtl-mirror' />,
       open: () => void openLink(MU_RELEASES_URL).catch((error) => console.error('Failed to open link:', error)),
     },
     ...(openLogFolder
       ? [
           {
             title: t('common.backendStartup.openLogs'),
-            icon: <FolderOpen theme='outline' size='16' />,
+            icon: <FolderOpen theme='outline' className='sv-icon-md' />,
             open: () => {
               void openLogFolder().catch(() => {
                 Message.error(t('common.backendStartup.openLogsFailed'));

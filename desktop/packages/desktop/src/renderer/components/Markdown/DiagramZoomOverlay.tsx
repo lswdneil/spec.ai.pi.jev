@@ -252,7 +252,7 @@ function DiagramZoomOverlay({ svg, onClose, ariaLabel, panelBackground }: Diagra
           style={toolbarButtonStyle}
           onClick={() => zoomBy(1 / BUTTON_ZOOM_FACTOR)}
         >
-          <ZoomOut theme='outline' size='16' fill='var(--text-secondary)' />
+          <ZoomOut theme='outline' className='sv-icon-md' fill='var(--text-secondary)' />
         </button>
         <button
           type='button'
@@ -261,7 +261,7 @@ function DiagramZoomOverlay({ svg, onClose, ariaLabel, panelBackground }: Diagra
           style={toolbarButtonStyle}
           onClick={() => zoomBy(BUTTON_ZOOM_FACTOR)}
         >
-          <ZoomIn theme='outline' size='16' fill='var(--text-secondary)' />
+          <ZoomIn theme='outline' className='sv-icon-md' fill='var(--text-secondary)' />
         </button>
         <button
           type='button'
@@ -270,7 +270,7 @@ function DiagramZoomOverlay({ svg, onClose, ariaLabel, panelBackground }: Diagra
           style={toolbarButtonStyle}
           onClick={resetView}
         >
-          <Refresh theme='outline' size='16' fill='var(--text-secondary)' />
+          <Refresh theme='outline' className='sv-icon-md' fill='var(--text-secondary)' />
         </button>
         <button
           type='button'
@@ -279,7 +279,7 @@ function DiagramZoomOverlay({ svg, onClose, ariaLabel, panelBackground }: Diagra
           style={toolbarButtonStyle}
           onClick={onClose}
         >
-          <Close theme='outline' size='16' fill='var(--text-secondary)' />
+          <Close theme='outline' className='sv-icon-md' fill='var(--text-secondary)' />
         </button>
       </div>
 

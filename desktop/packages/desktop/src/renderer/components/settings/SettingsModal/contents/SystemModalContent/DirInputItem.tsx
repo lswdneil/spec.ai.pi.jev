@@ -72,7 +72,7 @@ const DirInputItem: React.FC<{
                   aria-label={actionTooltip}
                   className='!h-30px !rounded-none'
                   style={{ borderInlineStart: '1px solid var(--border-base)' }}
-                  icon={<FolderOpen theme='outline' size='16' fill={iconColors.secondary} />}
+                  icon={<FolderOpen theme='outline' className='sv-icon-md' fill={iconColors.secondary} />}
                   onClick={(e) => {
                     e.stopPropagation();
                     handlePick();

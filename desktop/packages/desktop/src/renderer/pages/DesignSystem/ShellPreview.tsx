@@ -36,14 +36,14 @@ const ShellPreview: React.FC = () => (
     <div className='grid h-[580px] grid-cols-[208px_minmax(0,1fr)]'>
       <aside className='flex min-h-0 flex-col gap-2 border-r border-sv-line bg-sv-chrome p-2'>
         <div className='flex h-7 items-center gap-2 px-1 text-[12px] font-semibold'>
-          <span className='flex h-4 w-4 items-center justify-center rounded-[4px] bg-sv-brand text-[8px] text-sv-on-brand'>
+          <span className='flex size-16px items-center justify-center rounded-[4px] bg-sv-brand text-[8px] text-sv-on-brand'>
             s
           </span>
           spec.jev
           <kbd className='ml-auto rounded border border-sv-line px-1 font-mono text-[9px] text-sv-faint'>⌘K</kbd>
         </div>
         <button className='flex h-7 items-center gap-2 rounded-[5px] border border-sv-line px-2 text-[11.5px] text-sv-text hover:bg-sv-raised'>
-          <Plus className='h-3.5 w-3.5' /> New session
+          <Plus className='sv-icon-sm' /> New session
         </button>
         <nav className='flex flex-col gap-px text-[11.5px]'>
           {[
@@ -60,7 +60,7 @@ const ShellPreview: React.FC = () => (
                   : 'flex h-[27px] items-center gap-2 rounded-[5px] px-2 text-sv-muted hover:bg-sv-surface'
               }
             >
-              <Icon className='h-3.5 w-3.5' />
+              <Icon className='sv-icon-sm' />
               {label as string}
               {count ? <span className='ml-auto font-mono text-[9.5px] text-sv-faint'>{count as string}</span> : null}
             </span>
@@ -93,7 +93,7 @@ const ShellPreview: React.FC = () => (
             <ChevronDown className='ml-auto h-3 w-3 text-sv-faint' />
           </div>
           <div className='mt-0.5 flex h-[27px] items-center gap-2 rounded-[5px] px-2 text-[11px] text-sv-muted hover:bg-sv-surface'>
-            <Sliders className='h-3.5 w-3.5' /> Settings
+            <Sliders className='sv-icon-sm' /> Settings
           </div>
         </div>
       </aside>
@@ -200,11 +200,11 @@ const ShellPreview: React.FC = () => (
           <div className='rounded-[var(--sv-r-composer)] border border-sv-line bg-sv-surface px-2.5 py-1.5'>
             <div className='text-[12px] text-sv-placeholder'>询问 spec.jev，或输入 / 查看命令…</div>
             <div className='mt-1.5 flex items-center gap-2'>
-              <Paperclip className='h-3.5 w-3.5 text-sv-muted' />
+              <Paperclip className='sv-icon-sm text-sv-muted' />
               <span className='rounded-full border border-sv-line px-2 py-0.5 text-[9.5px] text-sv-muted'>Ask</span>
               <span className='ml-auto font-mono text-[9px] text-sv-faint'>128k</span>
               <span className='flex h-6 w-6 items-center justify-center rounded-full bg-sv-brand text-sv-on-brand'>
-                <ArrowUp className='h-3.5 w-3.5' />
+                <ArrowUp className='sv-icon-sm' />
               </span>
             </div>
           </div>

@@ -105,7 +105,7 @@ const FileChangesPanel: React.FC<FileChangesPanelProps> = ({
               className='flex items-center gap-4px text-12px text-t-secondary cursor-pointer rd-4px px-4px py-2px hover:bg-4'
               onClick={() => onFileClick?.(file)}
             >
-              <PreviewOpen className='line-height-8px' theme='outline' size='14' fill={iconColors.secondary} />
+              <PreviewOpen className='sv-icon-sm line-height-8px' theme='outline' fill={iconColors.secondary} />
               {t('preview.preview')}
             </span>
           </div>
@@ -136,9 +136,8 @@ const FileChangesPanel: React.FC<FileChangesPanelProps> = ({
         {/* 展开/收起箭头 / Expand/collapse arrow */}
         <Down
           theme='outline'
-          size='16'
           fill={iconColors.secondary}
-          className={classNames('transition-transform duration-200', expanded && 'rotate-180')}
+          className={classNames('sv-icon-md transition-transform duration-200', expanded && 'rotate-180')}
         />
       </div>
 
@@ -190,7 +189,7 @@ const FileChangesPanel: React.FC<FileChangesPanelProps> = ({
                     onFileClick?.(file);
                   }}
                 >
-                  <PreviewOpen className='line-height-8px' theme='outline' size='14' fill={iconColors.secondary} />
+                  <PreviewOpen className='sv-icon-sm line-height-8px' theme='outline' fill={iconColors.secondary} />
                   {t('preview.preview')}
                 </span>
               </div>

@@ -73,7 +73,7 @@ export default function Hive({ events, focus }: { events: Activity[]; focus?: Hi
         <>
           <div className={styles.cardHeader}>
             <span className={styles.brandIcon}>
-              <Bee size={22} />
+              <Bee className='sv-icon-xl' />
             </span>
             <div className='min-w-0 flex-1'>
               <h3 className={styles.beeName}>{t('common.kyrn.hiveView.title')}</h3>
@@ -167,7 +167,7 @@ export default function Hive({ events, focus }: { events: Activity[]; focus?: Hi
                       >
                         {delivery.from || t('common.kyrn.hiveView.unknownSource')}
                       </Button>
-                      <ArrowRight size={16} />
+                      <ArrowRight className='sv-icon-md' />
                       <Button
                         type='text'
                         size='mini'

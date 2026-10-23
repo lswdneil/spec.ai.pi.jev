@@ -560,7 +560,7 @@ const ToolsModalContent: React.FC = () => {
                   }
                 >
                   <span className='inline-flex shrink-0 cursor-help text-t-tertiary hover:text-t-secondary'>
-                    <Help theme='outline' size='14' fill='currentColor' />
+                    <Help theme='outline' className='sv-icon-sm' fill='currentColor' />
                   </span>
                 </Tooltip>
               </div>
@@ -608,7 +608,7 @@ const ToolsModalContent: React.FC = () => {
                           {t('settings.goToModelSettings')}
                           <Right
                             theme='outline'
-                            size={12}
+                            className='sv-icon-xs'
                             fill='currentColor'
                             data-testid='go-to-model-settings-chevron'
                           />

@@ -47,10 +47,21 @@ Fourth content batch:
 - Scheduled tasks: list, create dialog, and detail actions.
 - ACP/Aionrs composers and model selectors.
 
-The literal `size` / `h-3.5` / `h-4` / `h-5` values were replaced by scale classes. `iconTokens.test.ts` now scans all four batches. Avatars, provider marks, logos, spinners, cron status marks, and 24/28px illustration marks are excluded because they are content-sized, not five-step icons.
+Fifth content batch:
+
+- Settings dialogs: about, developer tools, tool settings, and directory input.
+- Workspace folder selector and Guid workspace footnote.
+- Guid model and assistant selection controls.
+- Markdown diagram zoom and local file link.
+- Kyrn hive, judge, and board.
+- Base dialogs, search inputs, file changes, and Butler controls.
+- Explorer container, files, and search panels.
+- Design-system shell preview.
+
+The literal `size` / `h-3.5` / `h-4` / `h-5` values were replaced by scale classes. `iconTokens.test.ts` now scans all five batches. Avatars, provider marks, logos, spinners, cron status marks, and 24/28px illustration marks are excluded because they are content-sized, not five-step icons.
 
 ## Remaining
 
-Scan the renderer for literal icon sizes; remaining files are mostly small inline metadata icons and one-off panels outside the covered trees. The guard now covers the shell, composer, messages, settings, preview, agent, history, media, source control, native host, scheduled tasks, and platform composers.
+Scan the renderer for literal icon sizes; remaining files are mostly small inline metadata icons and one-off panels outside the covered trees. The guard now covers the shell, composer, messages, settings and settings dialogs, preview, agent, history, media, source control, native host, scheduled tasks, platform composers, workspace, Guid, Markdown, Kyrn, base components, explorer, and the design-system preview.
 
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.

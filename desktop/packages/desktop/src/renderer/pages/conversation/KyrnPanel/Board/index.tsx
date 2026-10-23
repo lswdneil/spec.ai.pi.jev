@@ -220,7 +220,7 @@ function Current({ update, words, fresh }: { update: BoardUpdate; words: BoardWo
         data-state={state.ended ? state.outcome : 'working'}
       >
         <span className={styles.stateMark} data-mark={mark} aria-hidden='true'>
-          {mark === 'tick' ? <Check size={11} strokeWidth={4} /> : null}
+          {mark === 'tick' ? <Check className='sv-icon-xs' strokeWidth={4} /> : null}
         </span>
         {t(`common.kyrn.boardView.${boardStateKey(state)}`)}
       </span>

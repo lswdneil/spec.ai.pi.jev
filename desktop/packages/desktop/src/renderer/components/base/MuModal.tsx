@@ -400,7 +400,7 @@ const MuModal: React.FC<MuModalProps> = ({
           </div>
           {headerConfig.showClose && (
             <button onClick={onCancel} className={STD_CLOSE_BTN_CLASS} aria-label={t('common.close')}>
-              {headerConfig.closeIcon || <Close size={20} fill='currentColor' />}
+              {headerConfig.closeIcon || <Close className='sv-icon-xl' fill='currentColor' />}
             </button>
           )}
         </div>
@@ -420,7 +420,7 @@ const MuModal: React.FC<MuModalProps> = ({
         {headerConfig.title && <h3 className={TITLE_BASE_CLASS}>{headerConfig.title}</h3>}
         {headerConfig.showClose && (
           <button onClick={onCancel} className={CLOSE_BUTTON_CLASS} aria-label={t('common.close')}>
-            {headerConfig.closeIcon || <Close size={20} fill='var(--bg-6)' />}
+            {headerConfig.closeIcon || <Close className='sv-icon-xl' fill='var(--bg-6)' />}
           </button>
         )}
       </div>

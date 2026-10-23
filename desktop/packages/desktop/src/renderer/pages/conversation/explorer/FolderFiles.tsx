@@ -130,9 +130,9 @@ export default function FolderFiles({
                   <span className='inline-flex w-12px flex-shrink-0 text-t-tertiary'>
                     {entry.kind === 'dir' ? (
                       expanded ? (
-                        <Down size={12} />
+                        <Down className='sv-icon-xs' />
                       ) : (
-                        <Right size={12} className='rtl-mirror' />
+                        <Right className='sv-icon-xs rtl-mirror' />
                       )
                     ) : null}
                   </span>
@@ -179,7 +179,7 @@ export default function FolderFiles({
         <Button
           type='text'
           size='mini'
-          icon={<Refresh size={14} />}
+          icon={<Refresh className='sv-icon-sm' />}
           aria-label={t('mu.native.panel.files.refresh')}
           title={t('mu.native.panel.files.refresh')}
           data-testid='native-files-refresh'

@@ -137,7 +137,7 @@ export default function HiveToolCard({
         <span className={styles.agentsTitle}>{title}</span>
         {data.snapshot && bees && <HiveMiniature kind={data.snapshot.kind} bees={bees} latest={data.snapshot.latest} />}
         <span className={styles.agentsSummary}>{summary}</span>
-        <Right size={12} />
+        <Right className='sv-icon-xs' />
       </Button>
       {runTitle && (
         <div className={styles.agentsGoal} title={runTitle}>

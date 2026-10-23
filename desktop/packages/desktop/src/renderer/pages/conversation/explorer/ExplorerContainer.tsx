@@ -589,7 +589,7 @@ export const ExplorerContainer: React.FC<ExplorerContainerProps> = ({ projectId,
               type='text'
               size='small'
               className='flex items-center justify-center'
-              icon={<FolderPlus theme='outline' size='16' />}
+              icon={<FolderPlus theme='outline' className='sv-icon-md' />}
               aria-label={t('conversation.explorer.addFolder')}
               onClick={handleAddFolder}
             />
@@ -609,7 +609,7 @@ export const ExplorerContainer: React.FC<ExplorerContainerProps> = ({ projectId,
               size='small'
               className='flex items-center justify-center'
               loading={refreshing}
-              icon={<Refresh theme='outline' size='16' />}
+              icon={<Refresh theme='outline' className='sv-icon-md' />}
               aria-label={
                 activeTab === 'changes'
                   ? t('conversation.explorer.refreshChanges')
@@ -624,7 +624,7 @@ export const ExplorerContainer: React.FC<ExplorerContainerProps> = ({ projectId,
                 type='text'
                 size='small'
                 className='flex items-center justify-center'
-                icon={<FoldUpOne theme='outline' size='16' />}
+                icon={<FoldUpOne theme='outline' className='sv-icon-md' />}
                 aria-label={t('conversation.explorer.collapseAll')}
                 onClick={() => collapseAll()}
               />

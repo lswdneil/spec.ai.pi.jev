@@ -88,6 +88,23 @@ describe('the shared shell icon scale', () => {
     }
   });
 
+  it('keeps settings dialogs, workspace, guid, markdown, hive, base and explorer icons on the icon scale', () => {
+    for (const dir of [
+      'components/settings/SettingsModal',
+      'components/workspace',
+      'pages/DesignSystem',
+      'pages/guid/components',
+      'components/Markdown',
+      'pages/conversation/KyrnPanel',
+      'components/base',
+      'pages/conversation/explorer',
+    ]) {
+      for (const path of walk(dir)) {
+        expect(withoutContentSizedMarks(read(path)), path).not.toMatch(literalIconSize);
+      }
+    }
+  });
+
   it('uses one rail size for the sidebar in both states', () => {
     for (const path of [
       'components/layout/Sider/DenseSider.tsx',

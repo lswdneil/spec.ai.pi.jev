@@ -69,7 +69,7 @@ const MuSearchInput = forwardRef<HTMLInputElement, MuSearchInputProps>((props, r
 
   return (
     <div className={classNames(styles.searchbar, className)} style={style} data-testid={wrapTestId}>
-      <Search theme='outline' size='14' className={styles.icon} fill='currentColor' />
+      <Search theme='outline' className={`${styles.icon} sv-icon-sm`} fill='currentColor' />
       <input
         {...inputProps}
         ref={ref as Ref<HTMLInputElement>}
@@ -89,7 +89,7 @@ const MuSearchInput = forwardRef<HTMLInputElement, MuSearchInputProps>((props, r
           aria-label={t('common.clear', { defaultValue: 'Clear' })}
           tabIndex={-1}
         >
-          <CloseSmall theme='outline' size='14' fill='currentColor' />
+          <CloseSmall theme='outline' className='sv-icon-sm' fill='currentColor' />
         </button>
       ) : null}
     </div>
