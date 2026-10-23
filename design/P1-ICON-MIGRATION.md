@@ -84,4 +84,15 @@ The guard covers the shell, composer, messages, settings and settings dialogs, p
 
 It writes `icon-scale-dark.png` and `icon-scale-light.png` to the Playwright test output for visual inspection. Run it against a dev server with `E2E_DEV=1`; CI uses the freshly packaged app.
 
+`desktop/tests/e2e/features/visual/shell-states.e2e.ts` covers the shell shapes that move most often:
+
+- judge pulse stays on `--sv-jev-pink`, and the violet token remains defined;
+- command palette opens and closes with Escape;
+- sidebar folds to the rail and unfolds;
+- settings rail and Appearance page render;
+- dark and light appearance;
+- 900px and 780px desktop widths, with no horizontal overflow.
+
+It writes `home-dark.png`, `command-palette-dark.png`, `home-collapsed-dark.png`, `settings-dark.png`, `settings-light.png`, `home-900.png`, and `home-780.png` next to the test output.
+
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.
