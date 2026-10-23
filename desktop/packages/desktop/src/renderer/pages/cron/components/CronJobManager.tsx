@@ -113,7 +113,7 @@ const CronJobManager: React.FC<CronJobManagerProps> = ({ conversation_id, cron_j
           data-testid='cron-job-manager'
           className='inline-flex items-center gap-2px rounded-full px-8px py-2px bg-2'
         >
-          <AlarmClock theme='outline' size={16} fill={iconColors.primary} />
+          <AlarmClock theme='outline' className='sv-icon-md' fill={iconColors.primary} />
           <span
             className={`ms-4px w-8px h-8px rounded-full ${hasError ? 'bg-sv-danger' : isPaused ? 'bg-sv-warn' : 'bg-sv-ok'}`}
           />

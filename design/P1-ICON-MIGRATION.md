@@ -64,11 +64,14 @@ Sixth content batch:
 - Conversation title minimap, workspace collapse, plan bar, and history button.
 - Design-system shell chevrons.
 - Icon-bearing UI primitives: alert, button loader, checkbox mark, collapse, dialog, dropdown, empty, image, input, pagination, steps, select, and tree.
+- Settings update notice and the cron job manager header.
 
 The literal `h-3` / `h-3.5` / `h-4` / `h-5` / `size` values were replaced by scale classes. `iconTokens.test.ts` now scans all six batches. Avatars, provider marks, logos, spinners, cron status marks, control boxes, and 24/28px illustration marks are excluded because they are content-sized, not five-step icons.
 
 ## Remaining
 
-Scan the renderer for literal icon sizes; remaining files are mostly small inline metadata icons and one-off panels outside the covered trees. The guard now covers the shell, composer, messages, settings and settings dialogs, preview, agent, history, media, source control, native host, scheduled tasks, platform composers, workspace, Guid, Markdown, Kyrn, base components, explorer, design-system preview, chat chrome, conversation panels, and icon-bearing UI primitives.
+The remaining scan hits (29 files / 36 lines at the time of writing) are content-sized avatars, provider logos, MuMark, spinners, 24/28px illustration marks, cron status marks, and control-box dimensions in UI primitives. They are intentionally outside the five-step icon scale.
+
+The guard covers the shell, composer, messages, settings and settings dialogs, preview, agent, history, media, source control, native host, scheduled tasks, platform composers, workspace, Guid, Markdown, Kyrn, base components, explorer, design-system preview, chat chrome, conversation panels, and icon-bearing UI primitives.
 
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.

@@ -57,7 +57,7 @@ const UpdateNotice: React.FC<UpdateNoticeProps> = ({ collapsed = false, siderToo
           aria-label={headline ?? undefined}
           className='relative mb-2px h-32px w-full flex items-center justify-center rd-8px cursor-pointer text-t-secondary transition-colors hover:bg-fill-2 hover:text-t-primary'
         >
-          <UpdateRotation theme='outline' size='16' fill='currentColor' className='block leading-none' />
+          <UpdateRotation theme='outline' className='sv-icon-md block leading-none' fill='currentColor' />
           <span className='absolute top-6px end-12px size-6px rd-full bg-[var(--mu-accent-dot)]' />
         </div>
       </Tooltip>

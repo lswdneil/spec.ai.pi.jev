@@ -33,6 +33,7 @@ const shell = [
   'components/layout/Sider/SiderNav/SiderScheduledEntry.tsx',
   'components/layout/WorkPanel/WorkPanelTabs.tsx',
   'components/layout/Sider/CommandPalette/CommandPalettePanel.tsx',
+  'components/settings/UpdateNotice.tsx',
   'pages/settings/components/SettingsSider.tsx',
   'components/chat/SendBox/index.tsx',
   'components/chat/SendBox/SendArrowIcon.tsx',
@@ -79,6 +80,7 @@ describe('the shared shell icon scale', () => {
       'components/media',
       'pages/conversation/SourceControl',
       'pages/native',
+      'pages/cron/components',
       'pages/cron/ScheduledTasksPage',
       'pages/conversation/platforms',
     ]) {
