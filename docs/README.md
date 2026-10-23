@@ -20,6 +20,7 @@
 - [Contributing guide](../CONTRIBUTING.md): setup, checks, commits and pull requests.
 - [How spec.jev works](architecture.md): the pieces, a decision from end to end, and a map of the code.
 - [Adding a decision point](adding-a-decision-point.md): from the question to the pull request.
+- [Replatforming handbook](guides/mu-to-specjev-replatforming-handbook.md): how the MU/AionUi desktop became spec.jev's Dense UI, and the migration and verification rules to reuse.
 - [Translations](translations.md): the app's 5 languages, the kernel's catalog and the README.
 - [Writing style](writing-style.md): voice, rules of thumb and the glossary for spec.jev's English.
 - [Releasing](releasing.md): for maintainers.
