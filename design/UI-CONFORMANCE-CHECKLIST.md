@@ -27,10 +27,10 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | --- | --- | --- |
 | Sidebar padding / gap | 8 / 8 | PASS |
 | Sidebar brand height | 26 | PASS |
-| Sidebar fold control | expanded: brand row right; collapsed: below the mark, on the rail icon column; 18px icon in both states | FIXED |
+| Sidebar fold control | expanded: brand row right; collapsed: below the mark, on the rail icon column; 16px icon in both states | FIXED |
 | Theme switch | titlebar top-left, 40px control aligned with the window controls; not in the sidebar footer | FIXED |
 | Icon scale | `--sv-icon-xs/sm/md/lg/xl`, plus sider/titlebar aliases; shell icons use classes, no literal sizes | FIXED |
-| Collapsed rail | 48px wide; expanded and collapsed share the same 18px taskbar icons, never wider than the 20px mark | FIXED |
+| Collapsed rail | 48px wide; expanded and collapsed share the same 16px taskbar icons, never wider than the 20px mark | FIXED |
 | New session | 28 high, 13 label | UPDATED for readability |
 | Nav rows | 27 high, 13, radius 5 | UPDATED for readability |
 | Conversation rows | 27 high, 13, radius 5, pad 10/6 | UPDATED for readability |
