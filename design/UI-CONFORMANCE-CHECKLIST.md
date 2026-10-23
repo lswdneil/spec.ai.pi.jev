@@ -27,7 +27,7 @@ Status values: PASS = matches; FIXED = mismatch found and corrected; N/A = demo-
 | --- | --- | --- |
 | Sidebar padding / gap | 8 / 8 | PASS |
 | Sidebar brand height | 26 | PASS |
-| Sidebar fold control | desktop toggle sits in the brand row beside the wordmark | FIXED |
+| Sidebar fold control | expanded: brand row right; collapsed: below the mark, on the rail icon column | FIXED |
 | New session | 28 high, 13 label | UPDATED for readability |
 | Nav rows | 27 high, 13, radius 5 | UPDATED for readability |
 | Conversation rows | 27 high, 13, radius 5, pad 10/6 | UPDATED for readability |

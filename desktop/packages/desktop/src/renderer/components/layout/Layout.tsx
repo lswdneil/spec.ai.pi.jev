@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { setGlobalNavigate } from '@/renderer/utils/navigation';
 import { usePreviewContext } from '@renderer/pages/conversation/Preview';
 import WorkPanelHost, { panelGeometry } from '@renderer/components/layout/WorkPanel';
@@ -439,13 +440,13 @@ const Layout: React.FC<{
               <div className='arco-layout-sider-children'>
                 <header
                 className={classNames(
-                  'arco-layout-header flex items-center gap-12px layout-sider-header',
+                  'arco-layout-header flex layout-sider-header',
                   UI_V2 ? 'pt-1.5 pb-1.5' : 'pt-8px pb-8px',
                   collapsed && !isMobile
-                    ? 'justify-center px-1 !gap-1'
+                    ? 'flex-col items-center justify-center gap-1 px-0'
                     : UI_V2
-                      ? 'justify-start ps-10px pe-8px'
-                      : 'justify-start ps-18px pe-16px',
+                      ? 'items-center justify-start gap-12px ps-10px pe-8px'
+                      : 'items-center justify-start gap-12px ps-18px pe-16px',
                   isMobile && 'layout-sider-header--mobile',
                   {
                     'cursor-pointer group ': collapsed,
@@ -511,11 +512,15 @@ const Layout: React.FC<{
                       aria-expanded={!collapsed}
                       onClick={() => setSiderCollapsed(!collapsed)}
                       className={classNames(
-                        'ms-auto inline-flex shrink-0 items-center justify-center rounded-[5px] bg-transparent text-t-secondary transition-colors hover:bg-fill-3 hover:text-t-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-sv-focus',
-                        collapsed ? 'h-5 w-5' : 'h-6 w-6'
+                        'inline-flex shrink-0 items-center justify-center rounded-[5px] bg-transparent text-t-secondary transition-colors hover:bg-fill-3 hover:text-t-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-sv-focus',
+                        collapsed ? 'h-7 w-full' : 'ms-auto h-6 w-6'
                       )}
                     >
-                      <SidebarIcon size={16} strokeWidth={2.5} />
+                      {collapsed ? (
+                        <PanelLeftOpen className='h-4 w-4' strokeWidth={1.75} />
+                      ) : (
+                        <PanelLeftClose className='h-4 w-4' strokeWidth={1.75} />
+                      )}
                     </button>
                   </Tooltip>
                 )}
