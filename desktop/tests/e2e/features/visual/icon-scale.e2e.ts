@@ -22,9 +22,16 @@ test.describe('Icon scale', () => {
     test.setTimeout(120_000);
 
     await page.setViewportSize({ width: 1280, height: 800 });
-    await expect(page.getByTestId('mu-welcome')).toBeVisible({ timeout: 60_000 });
-    await page.getByTestId('mu-welcome').locator('footer button').first().click();
-    await page.waitForFunction(() => window.location.hash.includes('/guid'), undefined, { timeout: 15_000 });
+    const welcome = page.getByTestId('mu-welcome');
+    const onboardingSeen = await page.evaluate(() => Boolean(localStorage.getItem('mu.onboarding.v1')));
+    if (!onboardingSeen) {
+      await expect(welcome).toBeVisible({ timeout: 60_000 });
+      await welcome.locator('footer button').first().click();
+      await expect(welcome).toBeHidden({ timeout: 15_000 });
+    }
+    await page.evaluate(() => {
+      window.location.hash = '/guid';
+    });
     await expect(page.locator('.sv-icon-sider').first()).toBeVisible({ timeout: 15_000 });
 
     const themeButton = page.locator('.app-titlebar__button').first();

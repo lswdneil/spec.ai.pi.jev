@@ -95,6 +95,12 @@ test.describe('Shell visual states', () => {
     await setTheme('light');
     await capture('settings-light.png');
 
+    await page.locator('.settings-sider').first().evaluate((element) => {
+      element.scrollTop = element.scrollHeight;
+    });
+    await page.waitForTimeout(250);
+    await capture('settings-bottom-light.png');
+
     await page.evaluate(() => {
       window.location.hash = '/guid';
     });

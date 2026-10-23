@@ -93,6 +93,18 @@ It writes `icon-scale-dark.png` and `icon-scale-light.png` to the Playwright tes
 - dark and light appearance;
 - 900px and 780px desktop widths, with no horizontal overflow.
 
-It writes `home-dark.png`, `command-palette-dark.png`, `home-collapsed-dark.png`, `settings-dark.png`, `settings-light.png`, `home-900.png`, and `home-780.png` next to the test output.
+It writes `home-dark.png`, `command-palette-dark.png`, `home-collapsed-dark.png`, `settings-dark.png`, `settings-light.png`, `settings-bottom-light.png`, `home-900.png`, and `home-780.png` next to the test output. The bottom capture scrolls the settings rail to its last entries so the account footer is checked against the scrolled list.
+
+`desktop/tests/e2e/features/visual/conversation-judge.e2e.ts` opens a real persisted conversation, injects one file-change tool card and one failed-tool card through the existing ACP stream injector, then opens the work panel:
+
+- conversation with tool cards: `conversation-tool-cards-dark.png`
+- judge tab with the context toggle focused: `judge-focus-dark.png`
+- judge context panel open: `judge-context-dark.png`
+
+The test asserts the focused element is `judge-context-toggle` and that opening it sets `aria-expanded="true"`.
+
+## Phone shell
+
+The 390px phone layout is not covered by these Electron tests. `Layout` returns `false` from `detectMobileViewportOrTouch` whenever `window.electronAPI` exists, so a narrow Electron window keeps the desktop rail by design. A real phone shell needs the browser/WebUI host or a device. The WebUI renderer reached its startup screen at 390px in Chrome, but the local web-host session did not finish loading settings during this pass; that path remains a separate task rather than a claimed pass.
 
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.
