@@ -55,6 +55,7 @@
     "debug:mcp:validate": "bunx tsx scripts/debug-mcp.ts validate",
     "debug:custom-agent": "bunx tsx scripts/debug-custom-agent.ts",
     "test:e2e": "playwright test --config playwright.config.ts",
+    "test:visual": "playwright test --config playwright.config.ts tests/e2e/features/visual",
     "e2e:conversation": "node scripts/kyrn/e2e-conversation.mjs",
     "test:e2e:installer:error-codes": "node scripts/smoke-installer-failure-messagebox.js --all-scenarios --auto",
     "test:smoke:installer:failure-messagebox": "node scripts/smoke-installer-failure-messagebox.js",
