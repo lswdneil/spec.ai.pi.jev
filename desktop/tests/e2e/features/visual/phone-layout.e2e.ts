@@ -22,13 +22,14 @@ const bunBinary = (): string => {
   return existsSync(npmBun) ? npmBun : 'bun';
 };
 
-function startWebHost(backendPort: number): Promise<{ url: string; stop: () => void }> {
+function startWebHost(backendPort: number, kyrnHostUrl: string): Promise<{ url: string; stop: () => void }> {
   const script = [
     "import { startStaticServer } from './packages/web-host/src/static-server.ts';",
     'const server = await startStaticServer({',
     '  staticDir: process.env.RENDERER_DIR,',
     '  backendPort: Number(process.env.BACKEND_PORT),',
     '  port: 0,',
+    '  kyrnHostUrl: process.env.KYRN_HOST_URL,',
     '});',
     "console.log('WEBURL=' + server.localUrl);",
     "process.on('SIGTERM', async () => { await server.stop(); process.exit(0); });",
@@ -42,6 +43,7 @@ function startWebHost(backendPort: number): Promise<{ url: string; stop: () => v
         ...process.env,
         RENDERER_DIR: rendererDir,
         BACKEND_PORT: String(backendPort),
+        KYRN_HOST_URL: kyrnHostUrl,
       },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
@@ -78,7 +80,7 @@ test('renders the phone shell at 390px', async ({ electronApp, page: electronPag
   );
   if (!kyRnHostUrl) throw new Error('The desktop KyRN host did not start');
 
-  const server = await startWebHost(backendPort);
+  const server = await startWebHost(backendPort, kyRnHostUrl);
 
   try {
     const webPage = await browser.newPage({
@@ -96,14 +98,49 @@ test('renders the phone shell at 390px', async ({ electronApp, page: electronPag
       }
     });
 
-    await webPage.goto(
-      `${server.url}/?kyrnHost=${encodeURIComponent(kyRnHostUrl)}#/guid`,
-      { waitUntil: 'domcontentloaded' }
-    );
+    await webPage.goto(`${server.url}/#/guid`, { waitUntil: 'domcontentloaded' });
     await expect(webPage.locator('html')).toHaveAttribute('data-phone-layout', '', { timeout: 30_000 });
     await expect(webPage.getByTestId('mobile-tab-bar')).toBeVisible();
     await expect(webPage.getByTestId('tab-new')).toBeVisible();
     await expect(webPage.getByTestId('mu-hero')).toBeVisible({ timeout: 30_000 });
+
+    // The page must reach desktop KyRN providers through the same origin. A bare
+    // WebSocket request here proves the /kyrn proxy, the Origin check, and the
+    // loopback host all line up; a UI-only assertion could pass on a dead host.
+    const kyrn = await webPage.evaluate(
+      () =>
+        new Promise<{ ok?: boolean; error?: string }>((resolve) => {
+          const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+          const socket = new WebSocket(`${protocol}//${window.location.host}/kyrn`);
+          const timer = window.setTimeout(() => {
+            socket.close();
+            resolve({ error: 'timeout' });
+          }, 15_000);
+          socket.addEventListener('open', () => {
+            socket.send(JSON.stringify({ id: 'phone-e2e', name: 'kyrn.settings', data: null }));
+          });
+          socket.addEventListener('message', (event) => {
+            try {
+              const frame = JSON.parse(event.data as string) as {
+                id?: string;
+                result?: { ok?: boolean; error?: string };
+                error?: string;
+              };
+              if (frame.id !== 'phone-e2e') return;
+              window.clearTimeout(timer);
+              socket.close();
+              resolve(frame.error ? { error: frame.error } : (frame.result ?? { error: 'empty result' }));
+            } catch {
+              // Ignore malformed frames; the timeout answers.
+            }
+          });
+          socket.addEventListener('error', () => {
+            window.clearTimeout(timer);
+            resolve({ error: 'websocket error' });
+          });
+        })
+    );
+    expect(kyrn, '390px: same-origin KyRN host').toMatchObject({ ok: true });
 
     const overflow = await webPage.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow, '390px: horizontal overflow').toBeLessThanOrEqual(1);

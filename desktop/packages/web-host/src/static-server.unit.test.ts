@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { promises as fs } from 'node:fs';
 import http from 'node:http';
+import nodeNet from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
 import type { AddressInfo } from 'node:net';
@@ -24,6 +25,39 @@ async function startMockBackend(
     port,
     close: () => new Promise<void>((r) => server.close(() => r())),
   };
+}
+
+/** Send a raw WebSocket upgrade and resolve with the response status line. */
+function rawUpgradeStatus(port: number, origin: string, path = '/kyrn'): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const sock = nodeNet.connect({ host: '127.0.0.1', port }, () => {
+      sock.write(
+        `GET ${path} HTTP/1.1\r\n` +
+          `Host: 127.0.0.1:${port}\r\n` +
+          `Origin: ${origin}\r\n` +
+          'Upgrade: websocket\r\n' +
+          'Connection: Upgrade\r\n' +
+          'Sec-WebSocket-Version: 13\r\n' +
+          'Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n' +
+          '\r\n'
+      );
+    });
+    let buf = Buffer.alloc(0);
+    sock.on('data', (chunk) => {
+      buf = Buffer.concat([buf, chunk]);
+      const headEnd = buf.indexOf('\r\n\r\n');
+      if (headEnd >= 0 || buf.includes('\r\n')) {
+        const firstLine = buf.slice(0, buf.indexOf(0x0a)).toString('ascii').trim();
+        sock.destroy();
+        resolve(firstLine);
+      }
+    });
+    sock.on('error', reject);
+    setTimeout(() => {
+      sock.destroy();
+      reject(new Error('timeout waiting for upgrade response'));
+    }, 3000).unref();
+  });
 }
 
 describe('static-server', () => {
@@ -396,6 +430,92 @@ describe('static-server', () => {
     });
 
     expect(received).toBe(BODY_LEN);
+  });
+
+  it('proxies same-origin /kyrn to the loopback KyRN host with the token path rewritten', async () => {
+    const backend = await startMockBackend((_req, res) => res.end('nope'));
+    const kyrnServer = http.createServer();
+    let upstreamPath = '';
+    kyrnServer.on('upgrade', (req, socket) => {
+      upstreamPath = req.url ?? '';
+      socket.write('HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n\r\n');
+      socket.end();
+    });
+    await new Promise<void>((r) => kyrnServer.listen(0, '127.0.0.1', () => r()));
+    const kyrnPort = (kyrnServer.address() as AddressInfo).port;
+    stopBackend = async () => {
+      await backend.close();
+      await new Promise<void>((r) => kyrnServer.close(() => r()));
+    };
+
+    handle = await startStaticServer({
+      staticDir,
+      backendPort: backend.port,
+      port: 0,
+      kyrnHostUrl: `ws://127.0.0.1:${kyrnPort}/secret-token`,
+    });
+    const publicPort = handle.port;
+    const status = await rawUpgradeStatus(publicPort, `http://127.0.0.1:${publicPort}`);
+
+    expect(status).toMatch(/HTTP\/1\.1 101/i);
+    expect(upstreamPath).toBe('/secret-token');
+  });
+
+  it('rejects cross-origin /kyrn upgrades before they reach the KyRN host', async () => {
+    const backend = await startMockBackend((_req, res) => res.end('nope'));
+    const kyrnServer = http.createServer();
+    let upstreamHits = 0;
+    kyrnServer.on('upgrade', (_req, socket) => {
+      upstreamHits += 1;
+      socket.end('HTTP/1.1 101 Switching Protocols\r\n\r\n');
+    });
+    await new Promise<void>((r) => kyrnServer.listen(0, '127.0.0.1', () => r()));
+    const kyrnPort = (kyrnServer.address() as AddressInfo).port;
+    stopBackend = async () => {
+      await backend.close();
+      await new Promise<void>((r) => kyrnServer.close(() => r()));
+    };
+
+    handle = await startStaticServer({
+      staticDir,
+      backendPort: backend.port,
+      port: 0,
+      kyrnHostUrl: `ws://127.0.0.1:${kyrnPort}/secret-token`,
+    });
+    const status = await rawUpgradeStatus(handle.port, 'http://evil.example');
+
+    expect(status).toMatch(/HTTP\/1\.1 403/i);
+    expect(upstreamHits).toBe(0);
+  });
+
+  it('answers 503 for /kyrn when no KyRN host is configured', async () => {
+    const backend = await startMockBackend((_req, res) => res.end('nope'));
+    stopBackend = backend.close;
+    handle = await startStaticServer({ staticDir, backendPort: backend.port, port: 0 });
+
+    const status = await rawUpgradeStatus(handle.port, `http://127.0.0.1:${handle.port}`);
+    expect(status).toMatch(/HTTP\/1\.1 503/i);
+  });
+
+  it('stop closes live client connections instead of waiting for them', async () => {
+    const backend = await startMockBackend((_req, res) => res.end('nope'));
+    stopBackend = backend.close;
+    handle = await startStaticServer({ staticDir, backendPort: backend.port, port: 0 });
+
+    const socket = nodeNet.connect({ host: '127.0.0.1', port: handle.port });
+    await new Promise<void>((resolve, reject) => {
+      socket.once('connect', () => resolve());
+      socket.once('error', reject);
+    });
+
+    const stopped = handle.stop();
+    const result = await Promise.race([
+      stopped.then(() => 'stopped' as const),
+      new Promise<'timeout'>((resolve) => setTimeout(() => resolve('timeout'), 1000).unref()),
+    ]);
+    expect(result).toBe('stopped');
+    socket.destroy();
+    handle = null;
   });
 
   it('network URL populated only when allowRemote=true', async () => {

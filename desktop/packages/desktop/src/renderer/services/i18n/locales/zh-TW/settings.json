@@ -1101,5 +1101,9 @@
   "appearancePreviewQuestion": "這個主題在工作階段、設定和行動端都一致嗎？",
   "appearancePreviewAnswer": "是。同一套 token 驅動所有表面；只有資訊密度隨視窗變化。",
   "appearancePreviewPlaceholder": "詢問 spec.jev…",
-  "appearanceFixedPalette": "配色固定：表面、品牌色和文字對比度屬於產品本身。"
+  "appearanceFixedPalette": "配色固定：表面、品牌色和文字對比度屬於產品本身。",
+  "webUi": "遠端存取",
+  "webUiDesc": "在本機啟動 WebUI。用手機存取前，請將它放在需要身分驗證的 HTTPS 反向代理或私有網路之後。",
+  "webUiRunning": "本機位址：{{url}}",
+  "webUiFailed": "啟動遠端存取失敗"
 }

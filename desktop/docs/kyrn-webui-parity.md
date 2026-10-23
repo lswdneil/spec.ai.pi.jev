@@ -1,16 +1,18 @@
 # KyRN bridge: WebUI parity
 
-Status: loopback host implemented, 2026-10-23.
+Status: loopback host + same-origin proxy implemented, 2026-10-24.
 
-The WebUI now boots with a read-only catalog provider and, on the same machine, can call the desktop's KyRN providers over a token-gated loopback socket. Remote pairing/TLS is not implemented yet.
+The WebUI boots with a read-only catalog provider and can call the desktop's KyRN providers over the same origin. The browser connects to `/kyrn`; web-host rewrites the token path and forwards to a loopback-only host. Remote pairing is not implemented yet.
 
 ## Current shape
 
 ```text
 WebUI renderer
   -> AionCore for app data (HTTP/WS)
-  -> KyRN host for local KyRN providers (loopback WebSocket, token in the path)
-       -> Electron main provider handlers
+  -> /kyrn on its own origin
+       -> web-host (Origin check, token rewrite)
+            -> KyRN host (127.0.0.1, token in the upstream path)
+                 -> Electron main provider handlers
 ```
 
 The host is `desktop/packages/desktop/src/process/bridge/kyrnHost.ts`:
@@ -23,12 +25,13 @@ The host is `desktop/packages/desktop/src/process/bridge/kyrnHost.ts`:
 
 The renderer client is `renderer/utils/kyrnHostClient.ts`:
 
-- accepts `?kyrnHost=ws://127.0.0.1:<port>/<token>` (loopback) and `wss://` for a future remote host;
-- stores the pairing link in `sessionStorage` for the tab;
+- in a browser, defaults to same-origin `/kyrn` (`wss:` under HTTPS), so no token is in the address bar;
+- still accepts an explicit `?kyrnHost=ws://127.0.0.1:<port>/<token>` for local diagnostics, and `wss://` for a future remote host;
+- does nothing in the Electron renderer, which already owns the providers;
 - overrides the KyRN providers, leaving `kyrn.catalog` on its read-only web implementation;
 - gives up after 30 seconds with a visible failure result.
 
-The phone E2E now opens Settings → Providers through this host, not through a stub: `phone-390-providers.png`.
+The phone E2E now opens Settings → Providers through this same-origin path, not through a stub or a query token: `phone-390-providers.png`. It also sends a raw `kyrn.settings` request through `/kyrn` and asserts the provider result, so a page that only paints a header cannot pass.
 
 ## Classification
 
@@ -62,15 +65,18 @@ The phone E2E now opens Settings → Providers through this host, not through a 
 
 ## Security boundary
 
-- The host is loopback-only. It is not reachable from a phone on the LAN yet.
-- The token is the whole secret; it is in the URL and the advert file, never logged.
-- A remote host must use `wss://` and a pairing flow. A bare `ws://` is accepted only for loopback.
+- The KyRN host is loopback-only. Web-host is loopback-only too; a reverse proxy is the only listener that may cross the machine boundary.
+- The token lives in the upstream request line and the advert file, never in the browser URL.
+- `/kyrn` rejects an upgrade whose `Origin` does not equal `Host`, which blocks cross-site WebSocket hijacking from an arbitrary page in the user's browser.
 - The host does not expose arbitrary bridge methods; only `kyrn.*` names are accepted.
-- A WebUI page with the pairing link still controls the local desktop's settings and keys. Treat the link like a password, not like a normal URL.
+- There is no app-level user auth on `/kyrn` yet. Until pairing lands, the reverse proxy must authenticate (Tailscale, Cloudflare Access, Caddy basic auth, or a VPN). See `webui-remote-access.md`.
+- A browser page that can open `/kyrn` still controls the local desktop's settings and keys. Do not expose the service without an authenticating proxy.
 
 ## Still missing
 
-1. LAN/remote pairing: TLS, device approval, token rotation, revocation.
-2. A user-facing "open on phone" flow that generates the pairing link.
-3. E2E coverage for every host-backed settings page, not just Providers.
-4. A decision on whether desktop-only actions such as opening a file manager or local judge setup should be allowed from a remote browser.
+1. Pairing: one-time code, device approval, scoped token, rotation, revocation.
+2. A "show this on my phone" flow that displays the proxy URL rather than only the loopback URL.
+3. Persisting the Remote access switch across app restarts (it is per-session today).
+4. E2E coverage for every host-backed settings page, not just Providers and `kyrn.settings`.
+5. A decision on whether desktop-only actions such as opening a file manager or local judge setup should be allowed from a remote browser.
+6. Hosting extension-contributed WebUI static assets and API routes. `webui.start` serves the renderer, AionCore, and `/kyrn`; it does not yet load `contributes.webui` from extension manifests, so `tests/e2e/specs/ext-webui-contrib.e2e.ts` still fails once the service is actually running.

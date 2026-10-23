@@ -20,6 +20,13 @@ export type StaticServerOptions = {
   backendPort: number;
   port?: number;
   allowRemote?: boolean;
+  /**
+   * Loopback KyRN host URL (`ws://127.0.0.1:<port>/<token>`). When present, the
+   * same-origin `/kyrn` WebSocket path is proxied to it. The token stays in this
+   * process and is rewritten into the upstream request line, never exposed to
+   * the browser.
+   */
+  kyrnHostUrl?: string;
 };
 
 export type StaticServerHandle = {
@@ -110,7 +117,12 @@ const PEEK_LIMIT_BYTES = 4096;
  * from `client` during peek are replayed to the upstream as the first write,
  * so the endpoint sees the full HTTP request as-sent.
  */
-function spliceToTcpEndpoint(client: Socket, targetPort: number, initialBytes: Buffer): void {
+function spliceToTcpEndpoint(
+  client: Socket,
+  targetPort: number,
+  initialBytes: Buffer,
+  targetHost = '127.0.0.1'
+): void {
   client.setNoDelay(true);
   client.setKeepAlive(true);
   client.setTimeout(0);
@@ -123,7 +135,7 @@ function spliceToTcpEndpoint(client: Socket, targetPort: number, initialBytes: B
   // span multiple TCP segments) lose their tail bytes and the backend hangs
   // forever waiting for the missing Content-Length (issue #4058).
   client.pause();
-  const upstream = net.connect({ host: '127.0.0.1', port: targetPort });
+  const upstream = net.connect({ host: targetHost, port: targetPort });
   upstream.setNoDelay(true);
   upstream.setKeepAlive(true);
   upstream.once('connect', () => {
@@ -152,17 +164,81 @@ function spliceToTcpEndpoint(client: Socket, targetPort: number, initialBytes: B
  * Keeping the rule simple means we can decide after the first ~50 bytes
  * instead of waiting for the full header block.
  */
-function peekWsRoute(buf: Buffer): boolean | null {
+type RouteDecision = 'backend' | 'kyrn' | 'http';
+
+function peekWsRoute(buf: Buffer): RouteDecision | null {
   const newlineIdx = buf.indexOf(0x0a); // \n
   if (newlineIdx < 0) return null;
   const firstLine = buf.slice(0, newlineIdx).toString('ascii');
-  return /^GET\s+\/(?:ws|api\/stt\/stream)(?:\?[^\s]*)?\s+HTTP\/1\.[01]\r?$/.test(firstLine);
+  if (/^GET\s+\/kyrn(?:\?[^\s]*)?\s+HTTP\/1\.[01]\r?$/.test(firstLine)) return 'kyrn';
+  if (/^GET\s+\/(?:ws|api\/stt\/stream)(?:\?[^\s]*)?\s+HTTP\/1\.[01]\r?$/.test(firstLine)) {
+    return 'backend';
+  }
+  return 'http';
+}
+
+type KyrnTarget = { host: string; port: number; tokenPath: string };
+
+function parseKyrnTarget(raw: string | undefined): KyrnTarget | null {
+  if (!raw) return null;
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== 'ws:') return null;
+    if (parsed.hostname !== '127.0.0.1' && parsed.hostname !== 'localhost' && parsed.hostname !== '[::1]') {
+      return null;
+    }
+    const tokenPath = parsed.pathname;
+    if (!tokenPath || tokenPath === '/') return null;
+    const port = Number(parsed.port);
+    if (!Number.isInteger(port) || port <= 0) return null;
+    return { host: parsed.hostname, port, tokenPath };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Reject a WebSocket handshake without touching the upstream. Returning an
+ * HTTP response and closing the socket is enough; the browser reports a failed
+ * WebSocket connection.
+ */
+function rejectUpgrade(client: Socket, status: number, reason: string): void {
+  client.end(`HTTP/1.1 ${status} ${reason}\r\nConnection: close\r\nContent-Length: 0\r\n\r\n`);
+}
+
+function headerValue(headers: string, name: string): string | null {
+  const match = new RegExp(`^${name}:\\s*(.*)$`, 'im').exec(headers);
+  return match ? match[1].trim() : null;
+}
+
+/**
+ * A browser WebSocket always carries `Origin`. Requiring it to match `Host`
+ * blocks cross-site WebSocket hijacking: a malicious page can open a socket to
+ * `127.0.0.1`, but cannot forge the origin header. Non-browser clients that
+ * omit Origin are rejected rather than trusted.
+ */
+function isSameOriginUpgrade(head: string): boolean {
+  const host = headerValue(head, 'host');
+  const origin = headerValue(head, 'origin');
+  if (!host || !origin) return false;
+  return origin === `http://${host}` || origin === `https://${host}`;
+}
+
+/** Rewrite `GET /kyrn` to the KyRN host's token path, preserving the HTTP version and body. */
+function rewriteKyrnRequest(head: Buffer, tokenPath: string): Buffer {
+  const lineEnd = head.indexOf(0x0a);
+  if (lineEnd < 0) return head;
+  const line = head.subarray(0, lineEnd).toString('ascii').replace(/\r$/, '');
+  const [method, , version] = line.split(' ');
+  const rewritten = Buffer.from(`${method} ${tokenPath} ${version}\r\n`, 'ascii');
+  return Buffer.concat([rewritten, head.subarray(lineEnd + 1)]);
 }
 
 export async function startStaticServer(opts: StaticServerOptions): Promise<StaticServerHandle> {
   const port = opts.port ?? DEFAULT_PORT;
   const allowRemote = opts.allowRemote === true;
   const host = allowRemote ? '0.0.0.0' : '127.0.0.1';
+  const kyrnTarget = parseKyrnTarget(opts.kyrnHostUrl);
 
   // The HTTP server listens only on loopback — user traffic hits the outer
   // net.Server first. We route to this server for everything except WS
@@ -220,7 +296,10 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
   // route to either the backend (for /ws and /api/stt/stream upgrades) or the internal HTTP
   // server (everything else). Both routes use raw TCP splice — no reliance
   // on http.Server's upgrade event.
+  const clients = new Set<Socket>();
   const tcp_server = net.createServer((client: Socket) => {
+    clients.add(client);
+    client.once('close', () => clients.delete(client));
     let peeked = Buffer.alloc(0);
     let settled = false;
     const cleanup = (): void => {
@@ -234,8 +313,31 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
       peeked = Buffer.concat([peeked, chunk]);
       const decision = peekWsRoute(peeked);
       if (decision === null && peeked.length < PEEK_LIMIT_BYTES) return;
+      // KyRN needs the full header block to validate Origin.
+      if (decision === 'kyrn' && peeked.indexOf('\r\n\r\n') < 0 && peeked.length < PEEK_LIMIT_BYTES) return;
       cleanup();
-      const target = decision === true ? opts.backendPort : internalPort;
+
+      if (decision === 'kyrn') {
+        if (!kyrnTarget) {
+          rejectUpgrade(client, 503, 'Service Unavailable');
+          return;
+        }
+        const headerEnd = peeked.indexOf('\r\n\r\n');
+        const head = headerEnd >= 0 ? peeked.subarray(0, headerEnd).toString('latin1') : '';
+        if (!head || !isSameOriginUpgrade(head)) {
+          rejectUpgrade(client, 403, 'Forbidden');
+          return;
+        }
+        spliceToTcpEndpoint(
+          client,
+          kyrnTarget.port,
+          rewriteKyrnRequest(peeked, kyrnTarget.tokenPath),
+          kyrnTarget.host
+        );
+        return;
+      }
+
+      const target = decision === 'backend' ? opts.backendPort : internalPort;
       spliceToTcpEndpoint(client, target, peeked);
     };
     const onEarlyError = (): void => {
@@ -273,6 +375,11 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
     lanIP,
     stop: () =>
       new Promise<void>((resolve) => {
+        // A live WebSocket keeps the listener open indefinitely. The settings
+        // switch must stop the service immediately, even while a phone page is
+        // connected, so terminate the sockets before closing the listeners.
+        for (const client of clients) client.destroy();
+        clients.clear();
         tcp_server.close(() => {
           http_server.close(() => resolve());
         });

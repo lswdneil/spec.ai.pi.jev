@@ -643,6 +643,13 @@ export interface IRuntimeStatusEvent {
   status_code?: number;
 }
 
+export interface IWebUiStatus {
+  running: boolean;
+  port?: number;
+  url?: string;
+  error?: string;
+}
+
 export interface IStartOnBootStatus {
   supported: boolean;
   enabled: boolean;
@@ -737,6 +744,9 @@ export const application = {
   setStartOnBoot: bridge.buildProvider<IBridgeResponse<IStartOnBootStatus>, { enabled: boolean }>(
     'app.set-start-on-boot'
   ),
+  getWebUiStatus: bridge.buildProvider<IBridgeResponse<IWebUiStatus>, void>('webui.get-status'),
+  startWebUi: bridge.buildProvider<IBridgeResponse<IWebUiStatus>, { port?: number }>('webui.start'),
+  stopWebUi: bridge.buildProvider<IBridgeResponse<IWebUiStatus>, void>('webui.stop'),
   getGpuStatus: bridge.buildProvider<IBridgeResponse<IGpuStatus>, void>('app.get-gpu-status'),
   setGpuOverride: bridge.buildProvider<IBridgeResponse<IGpuStatus>, { override: IGpuOverride | null }>(
     'app.set-gpu-override'

@@ -1,5 +1,6 @@
 import { kyrnBridge } from '@/common/kyrn/bridge';
 import { kyrnFolderBridge } from '@/common/kyrn/folderBridge';
+import { isElectronDesktop } from './platform';
 
 type Result = { ok: true; data: unknown } | { ok: false; error: string; code?: string };
 
@@ -50,6 +51,19 @@ function hostUrl(): string | null {
   const hash = window.location.hash;
   const hashQuery = hash.includes('?') ? new URLSearchParams(hash.slice(hash.indexOf('?') + 1)) : null;
   const query = new URLSearchParams(search).get('kyrnHost') ?? hashQuery?.get('kyrnHost');
+  if (query) {
+    try {
+      const parsed = new URL(query);
+      if (parsed.protocol === 'wss:') return parsed.toString();
+      if (parsed.protocol === 'ws:' && loopback.has(parsed.hostname)) return parsed.toString();
+    } catch {
+      // Fall through to the same-origin path.
+    }
+  }
+
+  // A `wss://` link may survive in sessionStorage after the query is gone. A
+  // loopback link must not: the same-origin proxy is now the normal path, and a
+  // stale token would bypass it.
   const stored = (() => {
     try {
       return sessionStorage.getItem('specjev.kyrnHost');
@@ -57,16 +71,26 @@ function hostUrl(): string | null {
       return null;
     }
   })();
-  const raw = query ?? stored;
-  if (!raw) return null;
-  try {
-    const parsed = new URL(raw);
-    if (parsed.protocol === 'wss:') return parsed.toString();
-    if (parsed.protocol === 'ws:' && loopback.has(parsed.hostname)) return parsed.toString();
-  } catch {
-    return null;
+  if (stored) {
+    try {
+      const parsed = new URL(stored);
+      if (parsed.protocol === 'wss:') return parsed.toString();
+    } catch {
+      // Ignore malformed storage.
+    }
   }
-  return null;
+
+  // The web-host proxies `/kyrn` to the loopback KyRN host and rewrites the
+  // token in-process. A browser served by it can therefore use its own origin:
+  // no secret in the address bar, and the same URL works through an HTTPS
+  // reverse proxy. Electron has a real main process and must not install these
+  // overrides.
+  if (isElectronDesktop()) return null;
+  if (typeof window === 'undefined') return null;
+  if (window.location.protocol !== 'http:' && window.location.protocol !== 'https:') return null;
+  if (!window.location.host) return null;
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  return `${protocol}//${window.location.host}/kyrn`;
 }
 
 /**
@@ -75,6 +99,10 @@ function hostUrl(): string | null {
  * `ws://` is accepted; a remote host must be `wss://`.
  */
 export function installKyrnHostClient(): void {
+  // The Electron renderer already reaches the real providers through its
+  // preload bridge; never shadow them with a WebSocket client.
+  if (isElectronDesktop()) return;
+
   const url = hostUrl();
   if (!url) return;
 

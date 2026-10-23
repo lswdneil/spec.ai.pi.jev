@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { join } from 'node:path';
 import type { BrowserWindow } from 'electron';
 import { app, session } from 'electron';
+import { startStaticServer, type StaticServerHandle } from '@mu/web-host';
 import { ipcBridge } from '@/common';
 import { BROWSER_SESSION_PARTITION } from '@/common/config/constants';
 import { ProcessConfig } from '@process/utils/initStorage';
@@ -14,10 +16,68 @@ import { getCdpStatus, updateCdpConfig } from '@process/utils/configureChromium'
 import { getCdpBridgeHandle } from '@process/utils/cdpBridgeRegistry';
 import { getGpuStatus, setGpuUserOverride } from '@process/utils/gpuRecovery';
 import { initApplicationBridgeCore } from './applicationBridgeCore';
-import type { IStartOnBootStatus } from '@/common/adapter/ipcBridge';
+import type { IStartOnBootStatus, IWebUiStatus } from '@/common/adapter/ipcBridge';
 import { restartApplication } from './restartApplication';
 
 let mainWindowRef: BrowserWindow | null = null;
+let webUi: { handle: StaticServerHandle; url: string; port: number } | null = null;
+let webUiStarting: Promise<IWebUiStatus> | null = null;
+let webUiEpoch = 0;
+
+function webUiStatus(error?: string): IWebUiStatus {
+  return webUi
+    ? { running: true, port: webUi.port, url: webUi.url }
+    : { running: false, ...(error ? { error } : {}) };
+}
+
+async function startWebUi(port?: number): Promise<IWebUiStatus> {
+  if (webUi) return webUiStatus();
+  if (webUiStarting) return webUiStarting;
+
+  const backendPort = (globalThis as typeof globalThis & { __backendPort?: number }).__backendPort;
+  if (!backendPort) return { running: false, error: 'The local backend is not ready' };
+
+  const epoch = ++webUiEpoch;
+  webUiStarting = (async (): Promise<IWebUiStatus> => {
+    // Keep a stable port so a reverse-proxy config survives a restart. If the
+    // default is taken (another instance, or an unrelated process), fall back
+    // to an ephemeral port rather than refusing remote access.
+    const candidates = port === undefined ? [undefined, 0] : [port];
+    let lastError: unknown;
+    for (const candidate of candidates) {
+      try {
+        const handle = await startStaticServer({
+          staticDir: join(app.getAppPath(), 'out', 'renderer'),
+          backendPort,
+          port: candidate,
+          // The reverse proxy is the only listener that should cross the machine boundary.
+          allowRemote: false,
+          kyrnHostUrl: (globalThis as typeof globalThis & { __kyrnHostUrl?: string }).__kyrnHostUrl,
+        });
+        if (epoch !== webUiEpoch) {
+          // The user turned the switch off while the listener was starting.
+          await handle.stop();
+          return webUiStatus();
+        }
+        webUi = { handle, url: handle.localUrl, port: handle.port };
+        return webUiStatus();
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    return { running: false, error: lastError instanceof Error ? lastError.message : String(lastError) };
+  })();
+
+  return webUiStarting;
+}
+
+async function stopWebUi(): Promise<IWebUiStatus> {
+  webUiEpoch += 1;
+  const current = webUi;
+  webUi = null;
+  if (current) await current.handle.stop().catch((): undefined => undefined);
+  return webUiStatus();
+}
 
 const START_ON_BOOT_UNSUPPORTED_MESSAGE = 'Start on boot is only available in packaged macOS and Windows apps.';
 /** Failure code the settings page maps to its translated text (settings.startOnBootUnsupported). */
@@ -288,5 +348,15 @@ export function initApplicationBridge(): void {
     } catch (e) {
       return { success: false, msg: e.message || e.toString() };
     }
+  });
+
+  ipcBridge.application.getWebUiStatus.provider(async () => ({ success: true, data: webUiStatus() }));
+  ipcBridge.application.startWebUi.provider(async ({ port }) => {
+    const status = await startWebUi(port);
+    return status.error ? { success: false, msg: status.error, data: status } : { success: true, data: status };
+  });
+  ipcBridge.application.stopWebUi.provider(async () => ({ success: true, data: await stopWebUi() }));
+  app.once('will-quit', () => {
+    void stopWebUi();
   });
 }

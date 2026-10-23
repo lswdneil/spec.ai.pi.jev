@@ -1100,5 +1100,9 @@
   "appearancePreviewQuestion": "Does this theme hold across conversations, settings and mobile?",
   "appearancePreviewAnswer": "Yes. The same tokens drive every surface; only density changes with the window.",
   "appearancePreviewPlaceholder": "Ask spec.jev…",
-  "appearanceFixedPalette": "The palette is fixed: surfaces, sage accent, and text contrast are part of the product."
+  "appearanceFixedPalette": "The palette is fixed: surfaces, sage accent, and text contrast are part of the product.",
+  "webUi": "Remote access",
+  "webUiDesc": "Start a WebUI on this machine. Before using it from a phone, put it behind an authenticated HTTPS reverse proxy or private network.",
+  "webUiRunning": "Local URL: {{url}}",
+  "webUiFailed": "Couldn't start remote access"
 }

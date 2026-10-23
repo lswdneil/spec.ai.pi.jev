@@ -1101,5 +1101,9 @@
   "appearancePreviewQuestion": "이 테마가 대화, 설정, 모바일에서 동일하게 적용되나요?",
   "appearancePreviewAnswer": "예. 같은 token이 모든 표면을 구동하며, 정보 밀도만 창에 따라 달라집니다.",
   "appearancePreviewPlaceholder": "spec.jev에 질문…",
-  "appearanceFixedPalette": "색상은 고정입니다. 표면, 세이지, 텍스트 대비는 제품의 일부입니다."
+  "appearanceFixedPalette": "색상은 고정입니다. 표면, 세이지, 텍스트 대비는 제품의 일부입니다.",
+  "webUi": "원격 접속",
+  "webUiDesc": "이 컴퓨터에서 WebUI를 시작합니다. 휴대폰에서 사용하기 전에 인증이 필요한 HTTPS 리버스 프록시 또는 사설 네트워크 뒤에 두세요.",
+  "webUiRunning": "로컬 주소: {{url}}",
+  "webUiFailed": "원격 접속을 시작하지 못했습니다"
 }

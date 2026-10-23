@@ -1101,5 +1101,9 @@
   "appearancePreviewQuestion": "このテーマは会話・設定・モバイルで一貫しますか？",
   "appearancePreviewAnswer": "はい。同じ token がすべての面を駆動し、変わるのは情報密度だけです。",
   "appearancePreviewPlaceholder": "spec.jev に質問…",
-  "appearanceFixedPalette": "配色は固定です。面、セージ、文字コントラストは製品の一部です。"
+  "appearanceFixedPalette": "配色は固定です。面、セージ、文字コントラストは製品の一部です。",
+  "webUi": "リモートアクセス",
+  "webUiDesc": "このマシンで WebUI を起動します。スマートフォンから使う前に、認証付きの HTTPS リバースプロキシまたはプライベートネットワークの内側に置いてください。",
+  "webUiRunning": "ローカル URL: {{url}}",
+  "webUiFailed": "リモートアクセスを開始できませんでした"
 }

@@ -70,6 +70,9 @@ vi.mock('@/common', () => ({
       restart: { invoke: restartMock },
       getStartOnBootStatus: { invoke: vi.fn(() => Promise.resolve({ success: false })) },
       getGpuStatus: { invoke: vi.fn(() => Promise.resolve({ success: false })) },
+      getWebUiStatus: { invoke: vi.fn(() => Promise.resolve({ success: true, data: { running: false } })) },
+      startWebUi: { invoke: vi.fn(() => Promise.resolve({ success: true, data: { running: true } })) },
+      stopWebUi: { invoke: vi.fn(() => Promise.resolve({ success: true, data: { running: false } })) },
     },
     systemSettings: {
       getCloseToTray: { invoke: vi.fn(() => Promise.resolve(false)) },

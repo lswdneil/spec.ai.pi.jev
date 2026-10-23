@@ -35,6 +35,8 @@ export type WebHostOptions = {
   staticDir: string;
   port?: number;
   allowRemote?: boolean;
+  /** Loopback KyRN host to expose as the same-origin `/kyrn` WebSocket path. */
+  kyrnHostUrl?: string;
   dataDir?: string;
   logDir?: string;
   dirs?: BackendSystemDirs;

@@ -56,6 +56,7 @@ export async function startWebHost(opts: WebHostOptions): Promise<WebHostHandle>
       backendPort: backendHandle.port,
       port: opts.port,
       allowRemote: opts.allowRemote ?? false,
+      kyrnHostUrl: opts.kyrnHostUrl,
     });
   } catch (err) {
     // If static-server fails, clean up backend

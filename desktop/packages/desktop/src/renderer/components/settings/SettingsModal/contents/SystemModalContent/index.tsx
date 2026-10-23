@@ -5,7 +5,7 @@
  */
 
 import { ipcBridge } from '@/common';
-import type { IGpuStatus, IStartOnBootStatus } from '@/common/adapter/ipcBridge';
+import type { IGpuStatus, IStartOnBootStatus, IWebUiStatus } from '@/common/adapter/ipcBridge';
 import { configService } from '@/common/config/configService';
 import MuScrollArea from '@/renderer/components/base/MuScrollArea';
 import { notifyManualRestartRequired } from '@/renderer/utils/appRestart';
@@ -46,6 +46,7 @@ const SystemModalContent: React.FC = () => {
     platform: 'web',
   });
   const [closeToTray, setCloseToTray] = useState(false);
+  const [webUi, setWebUi] = useState<IWebUiStatus>({ running: false });
   const [gpuStatus, setGpuStatus] = useState<IGpuStatus | null>(null);
   const [notificationEnabled, setNotificationEnabled] = useState(true);
   const [cronNotificationEnabled, setCronNotificationEnabled] = useState(false);
@@ -70,6 +71,13 @@ const SystemModalContent: React.FC = () => {
         if (result.success && result.data) {
           setGpuStatus(result.data);
         }
+      })
+      .catch(() => {});
+
+    ipcBridge.application.getWebUiStatus
+      .invoke()
+      .then((result) => {
+        if (result.success && result.data) setWebUi(result.data);
       })
       .catch(() => {});
   }, [isDesktop]);
@@ -212,6 +220,28 @@ const SystemModalContent: React.FC = () => {
     }
   }, [systemInfo, form]);
 
+  const handleWebUiChange = useCallback(
+    async (checked: boolean) => {
+      const previous = webUi;
+      setWebUi({ running: checked });
+      try {
+        const result = checked
+          ? await ipcBridge.application.startWebUi.invoke({})
+          : await ipcBridge.application.stopWebUi.invoke();
+        if (result.success && result.data) {
+          setWebUi(result.data);
+        } else {
+          setWebUi(previous);
+          Message.error(t('settings.webUiFailed'));
+        }
+      } catch {
+        setWebUi(previous);
+        Message.error(t('settings.webUiFailed'));
+      }
+    },
+    [t, webUi]
+  );
+
   const preferenceItems = [
     {
       key: 'startOnBoot',
@@ -232,6 +262,24 @@ const SystemModalContent: React.FC = () => {
       label: isDesktop && isMacOS() ? t('settings.closeToMenuBar') : t('settings.closeToTray'),
       component: <Switch size='small' checked={closeToTray} onChange={handleCloseToTrayChange} />,
     },
+    ...(isDesktop
+      ? [
+          {
+            key: 'webUi',
+            label: t('settings.webUi'),
+            description:
+              webUi.running && webUi.url ? t('settings.webUiRunning', { url: webUi.url }) : t('settings.webUiDesc'),
+            component: (
+              <Switch
+                size='small'
+                checked={webUi.running}
+                onChange={handleWebUiChange}
+                data-testid='webui-toggle'
+              />
+            ),
+          },
+        ]
+      : []),
     ...(isDesktop && gpuStatus
       ? [
           {

@@ -1101,5 +1101,9 @@
   "appearancePreviewQuestion": "这个主题在会话、设置和移动端都一致吗？",
   "appearancePreviewAnswer": "是。同一套 token 驱动所有表面；只有信息密度随窗口变化。",
   "appearancePreviewPlaceholder": "询问 spec.jev…",
-  "appearanceFixedPalette": "配色固定：表面、品牌色和文字对比度属于产品本身。"
+  "appearanceFixedPalette": "配色固定：表面、品牌色和文字对比度属于产品本身。",
+  "webUi": "远程访问",
+  "webUiDesc": "在本机启动 WebUI。用手机访问前，请把它放在需要身份验证的 HTTPS 反向代理或私有网络之后。",
+  "webUiRunning": "本机地址：{{url}}",
+  "webUiFailed": "启动远程访问失败"
 }
