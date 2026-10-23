@@ -83,7 +83,7 @@
   --fs-body-lg: 15px;
   --fs-title: 18px;
   --fs-h1: 20px;
-  --fs-display: 34px;
+  --fs-display: clamp(26px, 3.4vw, 34px);
 
   --icon-xs: 12px;
   --icon-sm: 14px;

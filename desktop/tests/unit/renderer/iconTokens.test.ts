@@ -26,7 +26,7 @@ describe('the shared shell icon scale', () => {
   it('names the sizes once, in the token source', () => {
     const tokens = read('styles/specjev/tokens.css');
     for (const name of ['xs', 'sm', 'md', 'lg', 'xl']) expect(tokens).toContain(`--sv-icon-${name}:`);
-    expect(tokens).toContain('--sv-icon-sider: var(--sv-icon-md);');
+    expect(tokens).toContain('--sv-icon-sider: var(--sv-icon-lg);');
     expect(tokens).toContain('--sv-icon-titlebar: var(--sv-icon-lg);');
   });
 

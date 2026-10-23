@@ -1,6 +1,6 @@
 .guidLayout {
   position: relative;
-  width: clamp(var(--app-min-width, 360px), calc(100% - 32px), 760px);
+  width: min(760px, calc(100% - 32px));
   max-width: 100%;
   padding: 0 16px;
   box-sizing: border-box;
@@ -391,7 +391,7 @@
 /* 移动端优化 */
 @media (max-width: 768px) {
   .guidLayout {
-    width: clamp(var(--app-min-width, 360px), calc(100% - 24px), 100%);
+    width: calc(100% - 24px);
     padding: 0 12px;
     box-sizing: border-box;
   }
@@ -450,7 +450,7 @@
 /* 小屏手机再收窄一点安全边距，提升可操作面积 */
 @media (max-width: 420px) {
   .guidLayout {
-    width: clamp(var(--app-min-width, 360px), calc(100% - 20px), 100%);
+    width: calc(100% - 20px);
     padding: 0 10px;
   }
 }

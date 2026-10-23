@@ -78,14 +78,14 @@
   --sv-fs-body-lg: 15px;
   --sv-fs-title: 18px;
   --sv-fs-h1: 20px;
-  --sv-fs-display: 34px;
+  --sv-fs-display: clamp(26px, 3.4vw, 34px);
 
   --sv-icon-xs: 12px;
   --sv-icon-sm: 14px;
   --sv-icon-md: 16px;
   --sv-icon-lg: 18px;
   --sv-icon-xl: 20px;
-  --sv-icon-sider: var(--sv-icon-md);
+  --sv-icon-sider: var(--sv-icon-lg);
   --sv-icon-titlebar: var(--sv-icon-lg);
 
   --sv-lh-body: 1.65;
