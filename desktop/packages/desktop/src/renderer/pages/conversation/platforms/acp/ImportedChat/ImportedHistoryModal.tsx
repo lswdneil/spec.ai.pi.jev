@@ -88,7 +88,7 @@ const ImportedHistoryModal: React.FC<Props> = ({ conversationId, tool, visible, 
       <div className='max-h-[64vh] overflow-y-auto' data-testid='imported-history'>
         {state.phase === 'loading' ? (
           <div className='flex items-center gap-8px py-24px text-13px text-t-secondary'>
-            <Spin size={16} />
+            <Spin className='sv-icon-md' />
             {t('mu.importChats.history.loading')}
           </div>
         ) : state.phase === 'failed' ? (

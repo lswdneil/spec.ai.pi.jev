@@ -19,7 +19,7 @@ export const NativeAttachButton: React.FC<{ onClick: () => void }> = ({ onClick 
       <Button
         type='secondary'
         shape='circle'
-        icon={<Plus theme='outline' size='14' strokeWidth={2} fill={iconColors.primary} />}
+        icon={<Plus theme='outline' className='sv-icon-sm' strokeWidth={2} fill={iconColors.primary} />}
         onClick={onClick}
         data-testid='native-attach'
         aria-label={t('common.fileAttach.addFiles')}
@@ -53,14 +53,14 @@ export const NativeAttachmentList: React.FC<{ attachments: NativeAttachment[]; o
             />
           ) : (
             <span className='size-24px shrink-0 flex items-center justify-center rd-4px bg-fill-2'>
-              <FileText theme='outline' size='14' fill={iconColors.secondary} />
+              <FileText theme='outline' className='sv-icon-sm' fill={iconColors.secondary} />
             </span>
           )}
           <span className='min-w-0 truncate'>{attachment.name}</span>
           <Button
             type='text'
             size='mini'
-            icon={<CloseSmall theme='outline' size='14' fill={iconColors.secondary} />}
+            icon={<CloseSmall theme='outline' className='sv-icon-sm' fill={iconColors.secondary} />}
             onClick={() => onRemove(attachment.id)}
             data-testid='native-attachment-remove'
             aria-label={t('common.remove')}

@@ -119,8 +119,8 @@ const NativeModelChip: React.FC<{
         testId='native-model-pill'
         className='sendbox-model-btn agent-mode-compact-pill'
         label={label}
-        leading={<Brain theme='outline' size='14' fill={iconColors.secondary} className='shrink-0' />}
-        trailing={<Down size={12} className='text-t-tertiary shrink-0' />}
+        leading={<Brain theme='outline' className='sv-icon-sm shrink-0' fill={iconColors.secondary} />}
+        trailing={<Down className='sv-icon-xs text-t-tertiary shrink-0' />}
         loading={switching}
         disabled={disabled}
         onClick={() => setVisible((open) => !open)}

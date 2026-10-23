@@ -680,7 +680,7 @@ const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
                     ) : avatar.kind === 'emoji' ? (
                       <span className='text-14px leading-16px'>{avatar.value}</span>
                     ) : (
-                      <Robot size='16' />
+                      <Robot className='sv-icon-md' />
                     )}
                     <span>{name}</span>
                   </div>
@@ -702,7 +702,7 @@ const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
                       ) : avatar.kind === 'emoji' ? (
                         <span className='text-14px leading-16px'>{avatar.value}</span>
                       ) : (
-                        <Robot size='16' />
+                        <Robot className='sv-icon-md' />
                       )}
                       <span>{name}</span>
                       {disabled && (
@@ -984,9 +984,8 @@ const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
               >
                 <span className='flex items-center gap-6px text-14px font-medium text-t-primary'>
                   <Down
-                    size='14'
                     fill='currentColor'
-                    className={`shrink-0 transition-transform ${advancedOpen ? 'rotate-180' : ''}`}
+                    className={`sv-icon-sm shrink-0 transition-transform ${advancedOpen ? 'rotate-180' : ''}`}
                   />
                   <span>{t('cron.page.form.advancedSettings')}</span>
                 </span>

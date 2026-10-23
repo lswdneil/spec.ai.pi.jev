@@ -49,7 +49,7 @@ const SortableConversationRow: React.FC<ConversationRowProps> = (props) => {
       style={{ lineHeight: 0, background: 'var(--color-fill-3)', borderRadius: 4, touchAction: 'none' }}
       onClick={(event) => event.stopPropagation()}
     >
-      <Drag theme='outline' size='14' fill='currentColor' />
+      <Drag theme='outline' className='sv-icon-sm' fill='currentColor' />
     </span>
   );
 

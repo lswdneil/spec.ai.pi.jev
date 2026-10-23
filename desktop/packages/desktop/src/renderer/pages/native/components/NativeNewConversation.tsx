@@ -74,7 +74,7 @@ const NativeNewConversation: React.FC<{ recent: string[]; onCreated: (conversati
       <Button
         long
         loading={busy}
-        icon={<FolderOpen theme='outline' size='14' fill={iconColors.secondary} />}
+        icon={<FolderOpen theme='outline' className='sv-icon-sm' fill={iconColors.secondary} />}
         data-testid='native-project'
         onClick={() => void client.pickFolder().then(start, () => {})}
       >
@@ -109,7 +109,7 @@ const NativeNewConversation: React.FC<{ recent: string[]; onCreated: (conversati
       <Button
         type='text'
         size='mini'
-        icon={<Plus theme='outline' size='14' />}
+        icon={<Plus theme='outline' className='sv-icon-sm' />}
         aria-label={t('mu.native.sider.new')}
         title={t('mu.native.sider.new')}
         data-testid='native-new'

@@ -101,7 +101,7 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
 
   const hasSkills = skillNames.length > 0;
   const hasMcpServers = mcpStatuses.length > 0;
-  const plusIcon = <Plus theme='outline' size='14' strokeWidth={2} fill={iconColors.primary} />;
+  const plusIcon = <Plus theme='outline' className='sv-icon-sm' strokeWidth={2} fill={iconColors.primary} />;
 
   if (!hasSkills && !hasMcpServers) {
     return (
@@ -131,7 +131,7 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
       {skillNames.map((name) => (
         <MenuItem
           key={name}
-          icon={<Lightning theme='outline' size={15} strokeWidth={2.5} />}
+          icon={<Lightning theme='outline' className='sv-icon-sm' strokeWidth={2.5} />}
           label={name}
           onClick={() => handleSkillClick(name)}
           className='mx-6px'
@@ -153,7 +153,7 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
       {mcpStatuses.map((item) => (
         <MenuItem
           key={`${item.id}-${item.status}`}
-          icon={<Shield theme='outline' size={15} strokeWidth={2.5} />}
+          icon={<Shield theme='outline' className='sv-icon-sm' strokeWidth={2.5} />}
           label={item.name}
           suffix={
             item.status === 'loaded' ? undefined : (
@@ -186,7 +186,7 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
             })}
           </span>
           <span className='inline-flex h-12px w-12px flex-shrink-0 items-center justify-center'>
-            <Right theme='outline' size={12} strokeWidth={3} className='block' />
+            <Right theme='outline' className='sv-icon-xs block' strokeWidth={3} />
           </span>
         </Button>
       </div>
@@ -211,10 +211,10 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
               >
                 <div>
                   <MenuItem
-                    icon={<Shield theme='outline' size={15} strokeWidth={2.5} />}
+                    icon={<Shield theme='outline' className='sv-icon-sm' strokeWidth={2.5} />}
                     label={t('conversation.mcp.selectedWithCount', { count: mcpStatuses.length })}
                     suffix={
-                      <Right theme='outline' size={12} strokeWidth={3} style={{ color: 'var(--text-disabled)' }} />
+                      <Right theme='outline' className='sv-icon-xs' strokeWidth={3} style={{ color: 'var(--text-disabled)' }} />
                     }
                   />
                 </div>
@@ -234,10 +234,10 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
               >
                 <div>
                   <MenuItem
-                    icon={<Lightning theme='outline' size={15} strokeWidth={2.5} />}
+                    icon={<Lightning theme='outline' className='sv-icon-sm' strokeWidth={2.5} />}
                     label={t('common.selectedSkillsWithCount', { count: skillNames.length })}
                     suffix={
-                      <Right theme='outline' size={12} strokeWidth={3} style={{ color: 'var(--text-disabled)' }} />
+                      <Right theme='outline' className='sv-icon-xs' strokeWidth={3} style={{ color: 'var(--text-disabled)' }} />
                     }
                   />
                 </div>
@@ -251,7 +251,7 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
       {/* 文件操作最常用，在最下（离 + 最近） */}
       <div className='px-6px'>
         <MenuItem
-          icon={<Paperclip theme='outline' size={15} strokeWidth={2.5} />}
+          icon={<Paperclip theme='outline' className='sv-icon-sm' strokeWidth={2.5} />}
           label={t('common.fileAttach.addFiles', { defaultValue: 'Add files' })}
           onClick={() => {
             openFileSelector();

@@ -42,7 +42,7 @@ const WorkspacePanelHeader: React.FC<WorkspaceHeaderProps> = ({
           aria-label={t('conversation.workspace.togglePanel')}
           onClick={onToggle}
         >
-          {collapsed ? <ExpandRight size={16} /> : <ExpandLeft size={16} />}
+          {collapsed ? <ExpandRight className='sv-icon-md' /> : <ExpandLeft className='sv-icon-md' />}
         </button>
       )}
       <div className='flex-1 truncate'>{children}</div>
@@ -59,7 +59,7 @@ const WorkspacePanelHeader: React.FC<WorkspaceHeaderProps> = ({
           aria-label={t('conversation.workspace.togglePanel')}
           onClick={onToggle}
         >
-          {collapsed ? <ExpandRight size={16} /> : <ExpandLeft size={16} />}
+          {collapsed ? <ExpandRight className='sv-icon-md' /> : <ExpandLeft className='sv-icon-md' />}
         </button>
       )}
     </div>

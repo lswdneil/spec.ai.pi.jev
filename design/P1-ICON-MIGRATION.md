@@ -37,10 +37,20 @@ Third content batch:
 - Preview chrome: browser navigation, step bar, preview tabs.
 - Agent controls: runtime restart and mode selector.
 
-The literal `size` / `h-3.5` / `h-4` / `h-5` values were replaced by scale classes. `iconTokens.test.ts` now scans the message tree and the settings, Preview, and agent trees. Avatars, provider marks, logos, and spinners are excluded because they are content-sized, not icons.
+Fourth content batch:
+
+- Conversation history rows, search popover, sorting, and section toggles.
+- Chat layout workspace controls and panel header.
+- Media: file attach, preview, horizontal file list, image loading, upload progress, and webview chrome.
+- Source control: panel, changes view, resource rows, and sections.
+- Native host: header, notices, composer attachments/model/permission, sider, and source status.
+- Scheduled tasks: list, create dialog, and detail actions.
+- ACP/Aionrs composers and model selectors.
+
+The literal `size` / `h-3.5` / `h-4` / `h-5` values were replaced by scale classes. `iconTokens.test.ts` now scans all four batches. Avatars, provider marks, logos, spinners, cron status marks, and 24/28px illustration marks are excluded because they are content-sized, not five-step icons.
 
 ## Remaining
 
-Scan the renderer for literal icon sizes; remaining files are mostly small inline metadata icons outside the covered trees.
+Scan the renderer for literal icon sizes; remaining files are mostly small inline metadata icons and one-off panels outside the covered trees. The guard now covers the shell, composer, messages, settings, preview, agent, history, media, source control, native host, scheduled tasks, and platform composers.
 
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.

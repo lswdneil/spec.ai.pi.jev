@@ -132,7 +132,7 @@ const Row: React.FC<RowProps> = ({
       }}
     >
       {pinned ? (
-        <Pushpin theme='filled' size='12' className='shrink-0 text-t-tertiary' data-testid='native-sidebar-pinned' />
+        <Pushpin theme='filled' className='sv-icon-xs shrink-0 text-t-tertiary' data-testid='native-sidebar-pinned' />
       ) : null}
       <span className='min-w-0 flex-1 truncate text-14px font-[500] lh-24px text-t-primary'>{title}</span>
       <span className='shrink-0 max-w-40% truncate text-12px text-t-tertiary'>{folderName(conversation.cwd)}</span>
@@ -186,7 +186,7 @@ const Row: React.FC<RowProps> = ({
                     }}
                   >
                     <div className='flex items-center gap-8px'>
-                      <Pushpin theme='outline' size='14' />
+                      <Pushpin theme='outline' className='sv-icon-sm' />
                       <span>{pinned ? t('conversation.history.unpin') : t('conversation.history.pin')}</span>
                     </div>
                   </MenuItem>
@@ -200,7 +200,7 @@ const Row: React.FC<RowProps> = ({
                     }}
                   >
                     <div className='flex items-center gap-8px'>
-                      <Inbox theme='outline' size='14' />
+                      <Inbox theme='outline' className='sv-icon-sm' />
                       <span>
                         {unread ? t('conversation.history.markAsRead') : t('conversation.history.markAsUnread')}
                       </span>
@@ -215,7 +215,7 @@ const Row: React.FC<RowProps> = ({
                   }}
                 >
                   <div className='flex items-center gap-8px'>
-                    <EditOne theme='outline' size='14' />
+                    <EditOne theme='outline' className='sv-icon-sm' />
                     <span>{t('conversation.history.rename')}</span>
                   </div>
                 </MenuItem>
@@ -229,7 +229,7 @@ const Row: React.FC<RowProps> = ({
                       }}
                     >
                       <div className='flex items-center gap-8px'>
-                        <FolderOpen theme='outline' size='14' />
+                        <FolderOpen theme='outline' className='sv-icon-sm' />
                         <span>{t('settings.archived.restore')}</span>
                       </div>
                     </MenuItem>
@@ -242,7 +242,7 @@ const Row: React.FC<RowProps> = ({
                       }}
                     >
                       <div className='flex items-center gap-8px'>
-                        <FolderClose theme='outline' size='14' />
+                        <FolderClose theme='outline' className='sv-icon-sm' />
                         <span>{t('conversation.history.archive')}</span>
                       </div>
                     </MenuItem>
@@ -256,7 +256,7 @@ const Row: React.FC<RowProps> = ({
                   }}
                 >
                   <div className='flex items-center gap-8px text-danger'>
-                    <DeleteOne theme='outline' size='14' />
+                    <DeleteOne theme='outline' className='sv-icon-sm' />
                     <span>{t('conversation.history.deleteTitle')}</span>
                   </div>
                 </MenuItem>
@@ -271,7 +271,7 @@ const Row: React.FC<RowProps> = ({
               aria-expanded={menuOpen}
               data-testid='native-sidebar-item-menu'
             >
-              <MoreOne theme='outline' size='14' fill='currentColor' className='block leading-none' />
+              <MoreOne theme='outline' className='sv-icon-sm block leading-none' fill='currentColor' />
             </button>
           </Dropdown>
         </span>
@@ -420,8 +420,7 @@ const Group: React.FC<{ onSessionClick?: () => void }> = ({ onSessionClick }) =>
         <span className='ms-2px flex items-center justify-center opacity-0 group-hover/label:opacity-100 transition-opacity text-t-tertiary shrink-0'>
           <Right
             theme='outline'
-            size={12}
-            className={classNames('transition-transform duration-150', { 'rotate-90': !folded })}
+            className={classNames('sv-icon-xs transition-transform duration-150', { 'rotate-90': !folded })}
           />
         </span>
         {/* The popover's clicks bubble here through React's tree: they must not fold the group. */}
@@ -487,8 +486,7 @@ const Group: React.FC<{ onSessionClick?: () => void }> = ({ onSessionClick }) =>
               >
                 <Right
                   theme='outline'
-                  size={12}
-                  className={classNames('transition-transform duration-150', { 'rotate-90': shelfOpen })}
+                  className={classNames('sv-icon-xs transition-transform duration-150', { 'rotate-90': shelfOpen })}
                 />
                 {t('settings.archived.title')} ({shelved.length})
               </button>

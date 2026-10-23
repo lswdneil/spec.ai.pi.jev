@@ -31,7 +31,7 @@ const NoModel: React.FC = () => {
   const page = t('mu.sections.providers');
   return (
     <div className={CARD} data-testid='native-needs-model'>
-      <Attention theme='filled' size='16' fill={iconColors.warning} className='m-t-2px shrink-0' />
+      <Attention theme='filled' className='sv-icon-md m-t-2px shrink-0' fill={iconColors.warning} />
       <div className='flex-1 min-w-0 flex flex-col gap-6px'>
         <div className='text-14px font-500 text-t-primary'>{t('mu.noModel.title')}</div>
         <div className='text-13px leading-20px text-t-secondary'>
@@ -52,7 +52,7 @@ const Stopped: React.FC<{ error: { kind: NativeFailure['kind']; message: string;
   const { t } = useTranslation();
   return (
     <div className={CARD} data-testid='native-failed' data-kind={error.kind}>
-      <Attention theme='filled' size='16' fill={iconColors.danger} className='m-t-2px shrink-0' />
+      <Attention theme='filled' className='sv-icon-md m-t-2px shrink-0' fill={iconColors.danger} />
       <div className='flex-1 min-w-0 flex flex-col gap-6px'>
         <div className='text-14px font-500 text-t-primary'>{t(errorKey(error.kind))}</div>
         <Detail text={error.message} />
@@ -75,7 +75,7 @@ const CommandFailed: React.FC<{ failure: NativeFailure; onClose: () => void }> =
   const { t } = useTranslation();
   return (
     <div className={CARD} role='alert' data-testid='native-command-failed' data-kind={failure.kind}>
-      <Attention theme='filled' size='16' fill={iconColors.danger} className='m-t-2px shrink-0' />
+      <Attention theme='filled' className='sv-icon-md m-t-2px shrink-0' fill={iconColors.danger} />
       <div className='flex-1 min-w-0 flex flex-col gap-4px'>
         <div className='text-13px font-500 text-t-primary'>{t(errorKey(failure.kind))}</div>
         <Detail text={failure.message} />
@@ -83,7 +83,7 @@ const CommandFailed: React.FC<{ failure: NativeFailure; onClose: () => void }> =
       <Button
         type='text'
         size='mini'
-        icon={<Close theme='outline' size='12' />}
+        icon={<Close theme='outline' className='sv-icon-xs' />}
         aria-label={t('common.close')}
         onClick={onClose}
       />

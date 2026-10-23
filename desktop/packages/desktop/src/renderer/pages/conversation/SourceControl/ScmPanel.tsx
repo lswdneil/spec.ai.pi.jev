@@ -384,7 +384,7 @@ const ChangesHeaderActions: React.FC<{
             disabled={busy}
             data-scm-header-discard-all
             className='flex-shrink-0'
-            icon={<Undo theme='outline' size='14' />}
+            icon={<Undo theme='outline' className='sv-icon-sm' />}
             aria-label={t('conversation.explorer.scm.actions.discard')}
             onClick={onDiscardAll}
           />
@@ -398,7 +398,7 @@ const ChangesHeaderActions: React.FC<{
             disabled={busy}
             data-scm-header-stage-all
             className='flex-shrink-0'
-            icon={<Plus theme='outline' size='14' />}
+            icon={<Plus theme='outline' className='sv-icon-sm' />}
             aria-label={t('conversation.explorer.scm.actions.stageAll')}
             onClick={onStageAll}
           />
@@ -425,7 +425,7 @@ const ViewModeToggle: React.FC<{ mode: ScmViewMode; onChange: (mode: ScmViewMode
         size='mini'
         data-scm-view-toggle={mode}
         className='flex-shrink-0'
-        icon={next === 'tree' ? <TreeList theme='outline' size='14' /> : <ViewList theme='outline' size='14' />}
+        icon={next === 'tree' ? <TreeList theme='outline' className='sv-icon-sm' /> : <ViewList theme='outline' className='sv-icon-sm' />}
         aria-label={label}
         onClick={() => onChange(next)}
       />
@@ -538,7 +538,7 @@ const RepoRow: React.FC<{
         shows nothing rather than a lone icon. */}
     {repo.head?.name && (
       <span className='ms-auto flex items-center gap-2px min-w-0 flex-shrink text-t-tertiary text-12px'>
-        <BranchTwo theme='outline' size='12' className='flex-shrink-0' />
+        <BranchTwo theme='outline' className='sv-icon-xs flex-shrink-0' />
         <span className='overflow-hidden text-ellipsis whitespace-nowrap'>{repo.head.name}</span>
       </span>
     )}
@@ -549,7 +549,7 @@ const RepoRow: React.FC<{
 const WorktreeGlyph: React.FC<{ label: string }> = ({ label }) => (
   <Tooltip content={label} mini>
     <span className='flex-shrink-0 flex items-center' aria-label={label}>
-      <RightBranchOne theme='outline' size='12' className='text-t-tertiary' />
+      <RightBranchOne theme='outline' className='sv-icon-xs text-t-tertiary' />
     </span>
   </Tooltip>
 );
@@ -649,7 +649,7 @@ const RepoGroupRows: React.FC<{
               }}
               className='flex-shrink-0 flex items-center justify-center w-14px h-14px text-t-tertiary hover:text-t-primary bg-transparent border-none p-0 cursor-pointer'
             >
-              <RepoIcon theme='outline' size='12' />
+              <RepoIcon theme='outline' className='sv-icon-xs' />
             </button>
           ) : (
             // A non-expandable repo (no worktrees) still occupies the same 14px leading
@@ -659,7 +659,7 @@ const RepoGroupRows: React.FC<{
               data-scm-repo-glyph={group.repo.repo_id}
               className='flex-shrink-0 flex items-center justify-center w-14px h-14px text-t-tertiary'
             >
-              <FolderCode theme='outline' size='12' />
+              <FolderCode theme='outline' className='sv-icon-xs' />
             </span>
           )
         }

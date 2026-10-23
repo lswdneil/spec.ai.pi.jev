@@ -144,7 +144,7 @@ const HorizontalFileList: React.FC<HorizontalFileListProps> = ({ children }) => 
               boxShadow: 'var(--mu-shadow-1)',
             }}
           >
-            <ChevronLeft size={14} style={{ color: 'var(--text-t-primary)' }} />
+            <ChevronLeft className='sv-icon-sm' style={{ color: 'var(--text-t-primary)' }} />
           </button>
         </div>
       )}
@@ -166,7 +166,7 @@ const HorizontalFileList: React.FC<HorizontalFileListProps> = ({ children }) => 
               boxShadow: 'var(--mu-shadow-1)',
             }}
           >
-            <ChevronRight size={14} style={{ color: 'var(--text-t-primary)' }} />
+            <ChevronRight className='sv-icon-sm' style={{ color: 'var(--text-t-primary)' }} />
           </button>
         </div>
       )}

@@ -11,9 +11,14 @@ const walk = (dir: string): string[] =>
     return entry.isDirectory() ? walk(path) : entry.name.endsWith('.tsx') ? [path] : [];
   });
 
-/** Avatars, logos and spinners size themselves from content, not the icon scale. */
+const literalIconSize =
+  /(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/;
+
+/** Avatars, logos, spinners and 24/28px illustration marks are content-sized, not icon-scale. */
 const withoutContentSizedMarks = (source: string) =>
-  source.replace(/<(?:Avatar|AssistantAvatar|ProviderMark|EndpointMark|MuMark|ThemedLogo|Spin)\b[^>]*>/g, '');
+  source
+    .replace(/<(?:Avatar|AssistantAvatar|ProviderMark|EndpointMark|MuMark|ThemedLogo|Spin|CronJobIndicator)\b[^>]*>/g, '')
+    .replace(/size=(?:\{(?:24|28)\}|['"](?:24|28)['"])/g, '');
 
 const shell = [
   'components/layout/Layout.tsx',
@@ -49,22 +54,36 @@ describe('the shared shell icon scale', () => {
   it('keeps shell icons on the scale instead of literal pixel classes', () => {
     for (const path of shell) {
       const source = read(path);
-      expect(source, path).not.toMatch(/(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/);
+      expect(source, path).not.toMatch(literalIconSize);
     }
   });
 
   it('keeps the message surface on the icon scale', () => {
     for (const path of walk('pages/conversation/Messages')) {
-      expect(read(path), path).not.toMatch(/(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/);
+      expect(read(path), path).not.toMatch(literalIconSize);
     }
   });
 
   it('keeps settings, preview and agent icons on the icon scale', () => {
     for (const dir of ['pages/settings', 'pages/conversation/Preview', 'components/agent']) {
       for (const path of walk(dir)) {
-        expect(withoutContentSizedMarks(read(path)), path).not.toMatch(
-          /(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/
-        );
+        expect(withoutContentSizedMarks(read(path)), path).not.toMatch(literalIconSize);
+      }
+    }
+  });
+
+  it('keeps conversation chrome, media, native and scheduled icons on the icon scale', () => {
+    for (const dir of [
+      'pages/conversation/GroupedHistory',
+      'pages/conversation/components/ChatLayout',
+      'components/media',
+      'pages/conversation/SourceControl',
+      'pages/native',
+      'pages/cron/ScheduledTasksPage',
+      'pages/conversation/platforms',
+    ]) {
+      for (const path of walk(dir)) {
+        expect(withoutContentSizedMarks(read(path)), path).not.toMatch(literalIconSize);
       }
     }
   });

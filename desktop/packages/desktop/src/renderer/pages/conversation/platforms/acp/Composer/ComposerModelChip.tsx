@@ -97,8 +97,8 @@ const ComposerModelChip: React.FC<{
         testId='composer-model-pill'
         className='sendbox-model-btn agent-mode-compact-pill'
         label={noModel ? modelLabel : composeRuntimeSelectorLabel({ t, modelLabel, thoughtLevel })}
-        leading={<Brain theme='outline' size='14' fill={iconColors.secondary} className='shrink-0' />}
-        trailing={<Down size={12} className='text-t-tertiary shrink-0' />}
+        leading={<Brain theme='outline' className='sv-icon-sm shrink-0' fill={iconColors.secondary} />}
+        trailing={<Down className='sv-icon-xs text-t-tertiary shrink-0' />}
         loading={setting}
         disabled={disabled}
         onClick={() => setVisible((open) => !open)}

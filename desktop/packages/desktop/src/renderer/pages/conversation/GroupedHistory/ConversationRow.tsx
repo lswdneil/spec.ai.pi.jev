@@ -93,16 +93,15 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
   // On mobile the row's menu always shows at the end, so the state sits left of it.
   const trailingBesideMenu = isMobile && !batchMode;
 
-  const renderLiveStatus = (size: number) =>
+  const renderLiveStatus = (size: 'md' | 'sm') =>
     liveStatus === 'waiting' ? (
       <Attention
         theme='filled'
-        size={size}
-        className='line-height-0 flex-shrink-0 text-warning animate-wiggle'
+        className={`sv-icon-${size} line-height-0 flex-shrink-0 text-warning animate-wiggle`}
         data-testid={`conversation-waiting-confirmation-${conversation.id}`}
       />
     ) : (
-      <Spinner size={size >= 16 ? 'md' : 'sm'} />
+      <Spinner size={size} />
     );
 
   const renderLeadingIcon = () => {
@@ -135,8 +134,7 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
       return (
         <Pushpin
           theme='outline'
-          size='14'
-          className={classNames('line-height-0 flex-shrink-0 text-t-tertiary', composedClass)}
+          className={classNames('sv-icon-sm line-height-0 flex-shrink-0 text-t-tertiary', composedClass)}
         />
       );
     }
@@ -254,7 +252,7 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
             className='size-22px flex items-center justify-center shrink-0 relative'
             data-testid={`conversation-leading-${conversation.id}`}
           >
-            {liveStatus !== 'none' ? renderLiveStatus(16) : renderLeadingIcon()}
+            {liveStatus !== 'none' ? renderLiveStatus('md') : renderLeadingIcon()}
             {/* Hover overlay on the leading icon: drag handle for sortable pinned rows, pushpin marker otherwise */}
             {!batchMode &&
               isPinned &&
@@ -266,7 +264,7 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                   className='absolute inset-0 flex-center text-t-secondary pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity'
                   style={{ lineHeight: 0 }}
                 >
-                  <Pushpin theme='outline' size='14' />
+                  <Pushpin theme='outline' className='sv-icon-sm' />
                 </span>
               ))}
           </span>
@@ -285,7 +283,7 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                   position='top'
                 >
                   <span className='flex-shrink-0 line-height-0 text-t-tertiary' data-testid='conversation-fork-badge'>
-                    <ForkBranchIcon size={12} />
+                    <ForkBranchIcon className='sv-icon-xs' />
                   </span>
                 </Tooltip>
               )}
@@ -306,7 +304,7 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
             data-testid={`conversation-status-${conversation.id}`}
           >
             {trailing === 'status' ? (
-              renderLiveStatus(14)
+              renderLiveStatus('sm')
             ) : (
               <CronJobIndicator status={cronStatus} size={14} className='flex-shrink-0' />
             )}
@@ -335,13 +333,13 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                 <>
                   <MenuItem onClick={() => onTogglePin(conversation)}>
                     <div className='flex items-center gap-8px'>
-                      <Pushpin theme='outline' size='14' />
+                      <Pushpin theme='outline' className='sv-icon-sm' />
                       <span>{isPinned ? t('conversation.history.unpin') : t('conversation.history.pin')}</span>
                     </div>
                   </MenuItem>
                   <MenuItem onClick={() => onToggleManualUnread(conversation)}>
                     <div className='flex items-center gap-8px'>
-                      <Inbox theme='outline' size='14' />
+                      <Inbox theme='outline' className='sv-icon-sm' />
                       <span>
                         {isManualUnread ? t('conversation.history.markAsRead') : t('conversation.history.markAsUnread')}
                       </span>
@@ -349,27 +347,27 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                   </MenuItem>
                   <MenuItem onClick={() => onEditStart(conversation)}>
                     <div className='flex items-center gap-8px'>
-                      <EditOne theme='outline' size='14' />
+                      <EditOne theme='outline' className='sv-icon-sm' />
                       <span>{t('conversation.history.rename')}</span>
                     </div>
                   </MenuItem>
                   <MenuItem onClick={() => onCreateCronTask(conversation)}>
                     <div className='flex items-center gap-8px'>
-                      <Timer theme='outline' size='14' />
+                      <Timer theme='outline' className='sv-icon-sm' />
                       <span>{t('conversation.history.createCronTask')}</span>
                     </div>
                   </MenuItem>
                   {onExport && (
                     <MenuItem onClick={() => onExport?.(conversation)}>
                       <div className='flex items-center gap-8px'>
-                        <Export theme='outline' size='14' />
+                        <Export theme='outline' className='sv-icon-sm' />
                         <span>{t('conversation.history.export')}</span>
                       </div>
                     </MenuItem>
                   )}
                   <MenuItem onClick={() => onArchive(conversation)}>
                     <div className='flex items-center gap-8px'>
-                      <FolderClose theme='outline' size='14' />
+                      <FolderClose theme='outline' className='sv-icon-sm' />
                       <span>{t('conversation.history.archive')}</span>
                     </div>
                   </MenuItem>
@@ -396,7 +394,7 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                 }}
                 onKeyDown={menuKeyboard.onButtonKeyDown}
               >
-                <MoreOne theme='outline' size='14' fill='currentColor' className='block leading-none' />
+                <MoreOne theme='outline' className='sv-icon-sm block leading-none' fill='currentColor' />
               </span>
             </Dropdown>
           </div>

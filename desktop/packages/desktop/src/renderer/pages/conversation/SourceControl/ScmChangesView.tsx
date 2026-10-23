@@ -147,7 +147,7 @@ const TreeNode: React.FC<{
         aria-expanded={isOpen}
         title={node.key}
       >
-        {isOpen ? <Down theme='outline' size='13' /> : <Right theme='outline' size='13' />}
+        {isOpen ? <Down theme='outline' className='sv-icon-xs' /> : <Right theme='outline' className='sv-icon-xs' />}
         <span className='overflow-hidden text-ellipsis whitespace-nowrap text-13px text-t-primary'>{node.label}</span>
       </div>
       {isOpen &&
@@ -224,7 +224,7 @@ export const ScmChangesView: React.FC<{
           prior RepoSection: key off "no status yet", not `state === 'refreshing'`. */}
       {(!status || repo.state === 'refreshing') && (
         <div data-scm-loading className='px-8px py-4px'>
-          <Spin size={14} />
+          <Spin className='sv-icon-sm' />
         </div>
       )}
       {status?.degraded === true && (
@@ -270,7 +270,7 @@ export const ScmChangesView: React.FC<{
                     disabled={busy}
                     data-scm-bulk-discard
                     className='flex-shrink-0 opacity-0 group-hover/scmgroup:opacity-100 focus:opacity-100'
-                    icon={<Undo theme='outline' size='13' />}
+                    icon={<Undo theme='outline' className='sv-icon-xs' />}
                     aria-label={t('conversation.explorer.scm.actions.discard')}
                     title={t('conversation.explorer.scm.actions.discard')}
                     onClick={() => onAction('discard', repo.repo_id, discardTargets)}
@@ -283,7 +283,7 @@ export const ScmChangesView: React.FC<{
                     disabled={busy}
                     data-scm-bulk={bulk}
                     className='flex-shrink-0 opacity-0 group-hover/scmgroup:opacity-100 focus:opacity-100'
-                    icon={bulk === 'stage' ? <Plus theme='outline' size='13' /> : <Minus theme='outline' size='13' />}
+                    icon={bulk === 'stage' ? <Plus theme='outline' className='sv-icon-xs' /> : <Minus theme='outline' className='sv-icon-xs' />}
                     aria-label={t(
                       bulk === 'stage'
                         ? 'conversation.explorer.scm.actions.stageAll'

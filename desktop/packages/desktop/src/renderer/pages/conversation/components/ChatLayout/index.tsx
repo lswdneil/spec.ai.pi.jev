@@ -267,7 +267,7 @@ const ChatLayout: React.FC<{
             onClick={() => dispatchWorkspaceToggleEvent()}
             aria-label={t('common.workPanel.label')}
           >
-            <PanelRight className='h-3.5 w-3.5' strokeWidth={1.75} />
+            <PanelRight className='sv-icon-sm' strokeWidth={1.75} />
           </Button>
         </Tooltip>
       </div>

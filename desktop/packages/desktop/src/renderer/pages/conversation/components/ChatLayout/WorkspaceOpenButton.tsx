@@ -118,25 +118,25 @@ const WorkspaceOpenButton: React.FC<WorkspaceOpenButtonProps> = ({ workspacePath
       {
         key: 'vscode',
         label: t('conversation.workspace.openWith.vscode', { defaultValue: 'VS Code' }),
-        icon: <Command size={16} />,
+        icon: <Command className='sv-icon-md' />,
         available: !isTemporary && vscodeInstalled,
       },
       {
         key: 'terminal',
         label: t('conversation.workspace.openWith.terminal', { defaultValue: 'Terminal' }),
-        icon: <Terminal size={16} />,
+        icon: <Terminal className='sv-icon-md' />,
         available: !isTemporary,
       },
       {
         key: 'explorer',
         label: t('conversation.workspace.openWith.explorer', { defaultValue: 'File Explorer' }),
-        icon: <FolderOpen size={16} />,
+        icon: <FolderOpen className='sv-icon-md' />,
         available: !isTemporary,
       },
       {
         key: 'browser',
         label: t('conversation.workspace.openWith.browser', { defaultValue: 'Browser' }),
-        icon: <Browser size={16} />,
+        icon: <Browser className='sv-icon-md' />,
         available: Boolean(openBrowserTab),
       },
     ],
@@ -158,14 +158,14 @@ const WorkspaceOpenButton: React.FC<WorkspaceOpenButtonProps> = ({ workspacePath
   const currentIcon = useMemo(() => {
     switch (currentTool) {
       case 'vscode':
-        return <Command size={16} />;
+        return <Command className='sv-icon-md' />;
       case 'explorer':
-        return <FolderOpen size={16} />;
+        return <FolderOpen className='sv-icon-md' />;
       case 'browser':
-        return <Browser size={16} />;
+        return <Browser className='sv-icon-md' />;
       case 'terminal':
       default:
-        return <Terminal size={16} />;
+        return <Terminal className='sv-icon-md' />;
     }
   }, [currentTool]);
 
@@ -190,7 +190,7 @@ const WorkspaceOpenButton: React.FC<WorkspaceOpenButtonProps> = ({ workspacePath
       key: option.key,
       label: (
         <span className='flex items-center gap-2'>
-          <span className='flex h-5 w-5 items-center justify-center'>{option.icon}</span>
+          <span className='flex size-20px items-center justify-center'>{option.icon}</span>
           <span className='text-[13px]'>{option.label}</span>
           {currentTool === option.key ? <span className='ms-auto text-[11px] text-sv-muted'>?</span> : null}
         </span>
@@ -222,7 +222,7 @@ const WorkspaceOpenButton: React.FC<WorkspaceOpenButtonProps> = ({ workspacePath
           style={{ marginInlineStart: '-4px' }}
           aria-label={t('conversation.workspace.openWith.choose')}
         >
-          <Down size={12} className={`transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
+          <Down className={`sv-icon-xs transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
         </Button>
       </Dropdown>
     </div>

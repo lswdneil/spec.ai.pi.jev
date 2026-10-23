@@ -568,7 +568,7 @@ const AionrsSendBox: React.FC<{
     const entries: MobileActionSheetEntry[] = [
       {
         key: 'model',
-        icon: <Brain theme='outline' size='16' />,
+        icon: <Brain theme='outline' className='sv-icon-md' />,
         label: t('common.model', { defaultValue: 'Model' }),
         meta: currentModelLabel,
         submenu: {
@@ -580,7 +580,7 @@ const AionrsSendBox: React.FC<{
       },
       {
         key: 'permission',
-        icon: <Shield theme='outline' size='16' />,
+        icon: <Shield theme='outline' className='sv-icon-md' />,
         label: t('agentMode.permission', { defaultValue: 'Permission' }),
         meta: currentModeLabel,
         submenu: {
@@ -595,7 +595,7 @@ const AionrsSendBox: React.FC<{
     if (runtimeThoughtLevel) {
       entries.splice(1, 0, {
         key: 'thought-level',
-        icon: <Brain theme='outline' size='16' />,
+        icon: <Brain theme='outline' className='sv-icon-md' />,
         label: t('agent.thoughtLevel.label'),
         meta: getCurrentThoughtLevelLabel(t, runtimeThoughtLevel),
         submenu: {
@@ -623,7 +623,7 @@ const AionrsSendBox: React.FC<{
       }));
       entries.push({
         key: 'skills',
-        icon: <MagicHat theme='outline' size='16' />,
+        icon: <MagicHat theme='outline' className='sv-icon-md' />,
         label: t('common.selectedSkills', { defaultValue: 'Selected skills' }),
         variant: 'muted',
         submenu: {
@@ -653,7 +653,7 @@ const AionrsSendBox: React.FC<{
       }));
       entries.push({
         key: 'mcp',
-        icon: <Shield theme='outline' size='16' />,
+        icon: <Shield theme='outline' className='sv-icon-md' />,
         label: t('conversation.mcp.selected', { defaultValue: 'Selected MCP servers' }),
         variant: 'muted',
         submenu: {
@@ -820,7 +820,7 @@ const AionrsSendBox: React.FC<{
               compact
               initialMode={session_mode}
               dynamicModes={dynamicModes}
-              compactLeadingIcon={<Shield theme='outline' size='14' fill={iconColors.secondary} />}
+              compactLeadingIcon={<Shield theme='outline' className='sv-icon-sm' fill={iconColors.secondary} />}
               modeLabelFormatter={(mode) => t(`agentMode.${mode.value}`, { defaultValue: mode.label })}
               compactLabelPrefix={t('agentMode.permission')}
               hideCompactLabelPrefixOnMobile

@@ -265,11 +265,11 @@ export const ScmResourceRow: React.FC<ScmResourceRowProps> = ({
       )}
       {actionable && (
         <span className='flex items-center flex-shrink-0 ms-auto'>
-          {canDiscard && actionButton('discard', <Undo theme='outline' size='13' />)}
+          {canDiscard && actionButton('discard', <Undo theme='outline' className='sv-icon-xs' />)}
           {stagingActions &&
             (resource.staged === true
-              ? actionButton('unstage', <Minus theme='outline' size='13' />)
-              : actionButton('stage', <Plus theme='outline' size='13' />))}
+              ? actionButton('unstage', <Minus theme='outline' className='sv-icon-xs' />)
+              : actionButton('stage', <Plus theme='outline' className='sv-icon-xs' />))}
         </span>
       )}
     </div>

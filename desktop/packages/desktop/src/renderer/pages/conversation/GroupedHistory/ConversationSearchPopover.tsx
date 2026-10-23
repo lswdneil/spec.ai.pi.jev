@@ -461,18 +461,16 @@ const ConversationSearchPopover: React.FC<ConversationSearchPopoverProps> = ({
             <span className='size-22px flex items-center justify-center shrink-0 text-t-primary'>
               <Search
                 theme='outline'
-                size='16'
                 fill='currentColor'
-                className='block leading-none'
+                className='sv-icon-md block leading-none'
                 style={{ lineHeight: 0 }}
               />
             </span>
           ) : (
             <Search
               theme='outline'
-              size='16'
               fill='currentColor'
-              className='block leading-none shrink-0'
+              className='sv-icon-md block leading-none shrink-0'
               style={{ lineHeight: 0 }}
             />
           )}
@@ -528,7 +526,7 @@ const ConversationSearchPopover: React.FC<ConversationSearchPopoverProps> = ({
               onClick={handleClose}
               aria-label={t('common.close')}
             >
-              <Close size={16} />
+              <Close className='sv-icon-md' />
             </button>
           </div>
 

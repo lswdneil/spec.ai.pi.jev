@@ -59,7 +59,7 @@ const UploadProgressBar: React.FC<{ source?: UploadSource }> = ({ source }) => {
                 onClick={() => abortUpload(upload.id)}
                 data-testid='upload-cancel-btn'
               >
-                <CloseSmall theme='outline' size='12' strokeWidth={3} />
+                <CloseSmall theme='outline' className='sv-icon-xs' strokeWidth={3} />
               </button>
             </li>
           ))}

@@ -65,8 +65,7 @@ const SectionLabel: React.FC<SectionLabelProps> = ({ sectionKey, label, folded, 
       <span className='ms-2px flex items-center justify-center opacity-0 group-hover/label:opacity-100 transition-opacity text-t-tertiary shrink-0'>
         <Right
           theme='outline'
-          size={12}
-          className={classNames('transition-transform duration-150', { 'rotate-90': !folded })}
+          className={classNames('sv-icon-xs transition-transform duration-150', { 'rotate-90': !folded })}
         />
       </span>
       {trailing && (
@@ -485,7 +484,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                       }}
                     >
                       <span className='flex items-center gap-8px'>
-                        <FolderClose theme='outline' size='14' />
+                        <FolderClose theme='outline' className='sv-icon-sm' />
                         {t('conversation.history.archiveProject')}
                       </span>
                     </MenuItem>
@@ -529,7 +528,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                                 }
                               }}
                             >
-                              <Plus theme='outline' size='14' fill='currentColor' className='block leading-none' />
+                              <Plus theme='outline' className='sv-icon-sm block leading-none' fill='currentColor' />
                             </span>
                           </Tooltip>
                           <Dropdown droplist={projectMenu} align='end'>
@@ -541,7 +540,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
                               )}
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <MoreOne theme='outline' size='14' fill='currentColor' className='block leading-none' />
+                              <MoreOne theme='outline' className='sv-icon-sm block leading-none' fill='currentColor' />
                             </span>
                           </Dropdown>
                         </span>

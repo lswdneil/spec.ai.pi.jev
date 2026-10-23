@@ -49,7 +49,7 @@ const AionrsModelSelector: React.FC<{
 
   const current_model = selection?.current_model;
 
-  const renderLogo = () => <Brain theme='outline' size='14' fill={iconColors.secondary} className='shrink-0' />;
+  const renderLogo = () => <Brain theme='outline' className='sv-icon-sm shrink-0' fill={iconColors.secondary} />;
 
   if (disabled || !selection) {
     return (
@@ -178,7 +178,7 @@ const AionrsModelSelector: React.FC<{
         <span className='flex items-center gap-6px min-w-0'>
           {renderLogo()}
           <span className={compact ? 'block truncate' : undefined}>{combinedLabel}</span>
-          <Down theme='outline' size={12} fill={iconColors.secondary} className='shrink-0' />
+          <Down theme='outline' className='sv-icon-xs shrink-0' fill={iconColors.secondary} />
         </span>
       </Button>
     </Dropdown>

@@ -667,7 +667,7 @@ Please check your local CLI tool authentication status`,
     if (modelOptions.length > 0) {
       entries.push({
         key: 'model',
-        icon: <Brain theme='outline' size='16' />,
+        icon: <Brain theme='outline' className='sv-icon-md' />,
         label: t('common.model', { defaultValue: 'Model' }),
         meta: currentModelLabel,
         submenu: {
@@ -681,7 +681,7 @@ Please check your local CLI tool authentication status`,
     if (runtimeThoughtLevel) {
       entries.push({
         key: 'thought-level',
-        icon: <Brain theme='outline' size='16' />,
+        icon: <Brain theme='outline' className='sv-icon-md' />,
         label: t('agent.thoughtLevel.label'),
         meta: getCurrentThoughtLevelLabel(t, runtimeThoughtLevel),
         submenu: {
@@ -704,7 +704,7 @@ Please check your local CLI tool authentication status`,
     if (modeOptions.length > 0) {
       entries.push({
         key: 'permission',
-        icon: <Shield theme='outline' size='16' />,
+        icon: <Shield theme='outline' className='sv-icon-md' />,
         label: t('agentMode.permission', { defaultValue: 'Permission' }),
         meta: currentModeLabel,
         submenu: {
@@ -729,7 +729,7 @@ Please check your local CLI tool authentication status`,
       }));
       entries.push({
         key: 'skills',
-        icon: <MagicHat theme='outline' size='16' />,
+        icon: <MagicHat theme='outline' className='sv-icon-md' />,
         label: t('common.selectedSkills', { defaultValue: 'Selected skills' }),
         variant: 'muted',
         submenu: {
@@ -759,7 +759,7 @@ Please check your local CLI tool authentication status`,
       }));
       entries.push({
         key: 'mcp',
-        icon: <Shield theme='outline' size='16' />,
+        icon: <Shield theme='outline' className='sv-icon-md' />,
         label: t('conversation.mcp.selected', { defaultValue: 'Selected MCP servers' }),
         variant: 'muted',
         submenu: {
@@ -927,7 +927,7 @@ Please check your local CLI tool authentication status`,
                 conversation_id={conversation_id}
                 compact
                 initialMode={session_mode}
-                compactLeadingIcon={<Shield theme='outline' size='14' fill={iconColors.secondary} />}
+                compactLeadingIcon={<Shield theme='outline' className='sv-icon-sm' fill={iconColors.secondary} />}
                 modeLabelFormatter={(mode) => t(`agentMode.${mode.value}`, { defaultValue: mode.label })}
                 compactLabelPrefix={t('agentMode.permission')}
                 hideCompactLabelPrefixOnMobile

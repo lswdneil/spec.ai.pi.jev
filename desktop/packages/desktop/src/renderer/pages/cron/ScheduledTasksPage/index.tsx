@@ -202,7 +202,7 @@ const ScheduledTasksPage: React.FC = () => {
           {/* No list yet, or none: quiet lines in the page's own text, no picture. */}
           {loading ? (
             <div className='flex items-center gap-8px py-8px text-13px leading-20px text-t-secondary'>
-              <Spin size={16} />
+              <Spin className='sv-icon-md' />
               {t('common.loading')}
             </div>
           ) : jobs.length === 0 ? (
@@ -254,7 +254,7 @@ const ScheduledTasksPage: React.FC = () => {
                           ) : agentMeta.emoji ? (
                             agentMeta.emoji
                           ) : (
-                            <Robot size='16' className='shrink-0 text-t-secondary' />
+                            <Robot className='sv-icon-md shrink-0 text-t-secondary' />
                           )}
                         </div>
                       </Tooltip>
@@ -286,8 +286,7 @@ const ScheduledTasksPage: React.FC = () => {
                         <Tooltip content={errorHint}>
                           <Attention
                             theme='outline'
-                            size={16}
-                            className='shrink-0 text-danger-6'
+                            className='sv-icon-md shrink-0 text-danger-6'
                             aria-label={errorHint}
                           />
                         </Tooltip>

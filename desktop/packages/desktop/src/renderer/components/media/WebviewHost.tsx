@@ -824,7 +824,7 @@ const WebviewHost: React.FC<WebviewHostProps> = ({
             className='toolbar-btn icon-btn'
             title={t('common.historyBack')}
           >
-            <Left theme='outline' size={16} />
+            <Left theme='outline' className='sv-icon-md' />
           </button>
           <button
             onClick={handleGoForward}
@@ -832,13 +832,13 @@ const WebviewHost: React.FC<WebviewHostProps> = ({
             className='toolbar-btn icon-btn'
             title={t('common.forward')}
           >
-            <Right theme='outline' size={16} />
+            <Right theme='outline' className='sv-icon-md' />
           </button>
           <button onClick={handleRefresh} className='toolbar-btn icon-btn' title={t('common.refresh')}>
             {isLoading ? (
-              <Loading theme='outline' size={16} className='animate-spin' />
+              <Loading theme='outline' className='sv-icon-md animate-spin' />
             ) : (
-              <Refresh theme='outline' size={16} />
+              <Refresh theme='outline' className='sv-icon-md' />
             )}
           </button>
           {isStarOffice && (

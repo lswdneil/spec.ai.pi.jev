@@ -55,10 +55,9 @@ const LocalImageView: React.FC<{
     return (
       <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
         <LoadingTwo
-          className='loading'
+          className='sv-icon-sm loading'
           style={{ display: 'flex' }}
           theme='outline'
-          size='14'
           fill={iconColors.primary}
           strokeWidth={2}
         />

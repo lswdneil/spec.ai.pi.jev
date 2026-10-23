@@ -113,7 +113,7 @@ export default function NativeSource({ cwd, visible, refresh }: { cwd: string; v
     if (state === 'loading')
       return (
         <div className='px-12px py-10px'>
-          <Spin size={14} />
+          <Spin className='sv-icon-sm' />
         </div>
       );
     if (state === 'failed') return <Note text={t('conversation.explorer.scm.loadFailed')} detail={error} />;
@@ -182,7 +182,7 @@ export default function NativeSource({ cwd, visible, refresh }: { cwd: string; v
         className='flex items-center gap-6px px-12px h-32px flex-shrink-0'
         style={{ borderBottom: '1px solid var(--color-border-2)' }}
       >
-        {repository ? <BranchTwo size={14} className='flex-shrink-0 text-t-tertiary' /> : null}
+        {repository ? <BranchTwo className='sv-icon-sm flex-shrink-0 text-t-tertiary' /> : null}
         <span
           className='min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-12px font-500 text-t-secondary'
           dir='ltr'
@@ -208,7 +208,7 @@ export default function NativeSource({ cwd, visible, refresh }: { cwd: string; v
         <Button
           type='text'
           size='mini'
-          icon={<Refresh size={14} />}
+          icon={<Refresh className='sv-icon-sm' />}
           loading={reading}
           aria-label={t('mu.native.panel.files.refresh')}
           title={t('mu.native.panel.files.refresh')}

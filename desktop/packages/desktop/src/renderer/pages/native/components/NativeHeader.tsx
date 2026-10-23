@@ -152,7 +152,7 @@ const NativeHeader: React.FC<{
             title={conversation.cwd}
             data-testid='native-header-folder'
           >
-            <FolderOpen theme='outline' size='12' fill={iconColors.secondary} className='shrink-0' />
+            <FolderOpen theme='outline' className='sv-icon-xs shrink-0' fill={iconColors.secondary} />
             <span className='truncate'>{folderName(conversation.cwd)}</span>
           </span>
         ) : null}

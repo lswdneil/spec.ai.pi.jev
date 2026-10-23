@@ -326,7 +326,7 @@ const TaskDetailPage: React.FC = () => {
             type='text'
             size='small'
             className='w-fit !px-0 !text-14px md:!text-15px !text-t-secondary hover:!text-t-primary'
-            icon={<Left theme='outline' size={16} className='line-height-0 shrink-0' />}
+            icon={<Left theme='outline' className='sv-icon-md line-height-0 shrink-0' />}
             onClick={() => navigate('/scheduled')}
           >
             {t('cron.detail.backToAll')}
@@ -356,7 +356,7 @@ const TaskDetailPage: React.FC = () => {
           type='text'
           size='small'
           className='w-fit !px-0 !text-14px md:!text-15px !text-t-secondary hover:!text-t-primary'
-          icon={<Left theme='outline' size={16} className='line-height-0 shrink-0' />}
+          icon={<Left theme='outline' className='sv-icon-md line-height-0 shrink-0' />}
           onClick={() => navigate('/scheduled')}
         >
           {t('cron.detail.backToAll')}
@@ -373,7 +373,7 @@ const TaskDetailPage: React.FC = () => {
                   size='mini'
                   type='text'
                   className='!h-20px !min-w-20px !w-20px !rounded-0 !border-none !bg-transparent !p-0 !text-t-secondary hover:!bg-transparent hover:!text-t-primary translate-y-1px'
-                  icon={<Write theme='outline' size={16} fill='currentColor' />}
+                  icon={<Write theme='outline' className='sv-icon-md' fill='currentColor' />}
                   aria-label={t('cron.page.editTask')}
                   title={t('cron.page.editTask')}
                   onClick={() => setEditDialogVisible(true)}
@@ -383,7 +383,7 @@ const TaskDetailPage: React.FC = () => {
                     size='mini'
                     type='text'
                     className='!h-20px !min-w-20px !w-20px !rounded-0 !border-none !bg-transparent !p-0 !text-t-secondary hover:!bg-transparent hover:!text-t-primary translate-y-1px'
-                    icon={<Delete theme='outline' size={16} fill='currentColor' />}
+                    icon={<Delete theme='outline' className='sv-icon-md' fill='currentColor' />}
                     aria-label={t('cron.actions.delete')}
                     title={t('cron.actions.delete')}
                   />
@@ -583,7 +583,7 @@ const TaskDetailPage: React.FC = () => {
               <h2 className='m-0 text-13px font-medium text-t-secondary'>{t('cron.page.form.executionMode')}</h2>
               <div className='inline-flex items-center gap-4px'>
                 <span className='text-14px leading-22px text-t-primary'>{currentExecutionModeLabel}</span>
-                <Attention theme='outline' size={12} className='line-height-0 shrink-0 text-t-secondary' />
+                <Attention theme='outline' className='sv-icon-xs line-height-0 shrink-0 text-t-secondary' />
               </div>
               <div className='box-border rounded-12px border border-solid border-[var(--color-border-2)] bg-fill-2 px-16px py-14px'>
                 <div className='flex flex-col gap-10px'>

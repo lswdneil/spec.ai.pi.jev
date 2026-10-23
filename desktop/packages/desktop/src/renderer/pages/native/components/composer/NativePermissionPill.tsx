@@ -79,8 +79,8 @@ const NativePermissionPill: React.FC<{
           testId='native-permission'
           className='sendbox-model-btn agent-mode-compact-pill'
           label={`${t('agentMode.permission')} · ${current}`}
-          leading={<Shield theme='outline' size='14' fill={iconColors.secondary} className='shrink-0' />}
-          trailing={<Down size={12} className='text-t-tertiary shrink-0' />}
+          leading={<Shield theme='outline' className='sv-icon-sm shrink-0' fill={iconColors.secondary} />}
+          trailing={<Down className='sv-icon-xs text-t-tertiary shrink-0' />}
           loading={switching}
           disabled={disabled}
           onClick={() => setVisible((open) => !open)}
