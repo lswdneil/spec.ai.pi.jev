@@ -85,6 +85,12 @@
   --fs-h1: 20px;
   --fs-display: 34px;
 
+  --icon-xs: 12px;
+  --icon-sm: 14px;
+  --icon-md: 16px;
+  --icon-lg: 18px;
+  --icon-xl: 20px;
+
   --lh-display: 1.35;
   --lh-heading: 1.35;
   --lh-body: 1.65;

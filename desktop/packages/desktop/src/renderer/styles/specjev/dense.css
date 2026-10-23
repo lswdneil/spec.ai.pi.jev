@@ -145,6 +145,15 @@ html[data-sv-ui="dense"] body {
   scrollbar-width: thin;
 }
 
+/* The shared icon scale: components name a size, never a pixel value. */
+.sv-icon-xs, .sv-icon-xs > svg { width: var(--sv-icon-xs); height: var(--sv-icon-xs); flex: none; }
+.sv-icon-sm, .sv-icon-sm > svg { width: var(--sv-icon-sm); height: var(--sv-icon-sm); flex: none; }
+.sv-icon-md, .sv-icon-md > svg { width: var(--sv-icon-md); height: var(--sv-icon-md); flex: none; }
+.sv-icon-lg, .sv-icon-lg > svg { width: var(--sv-icon-lg); height: var(--sv-icon-lg); flex: none; }
+.sv-icon-xl, .sv-icon-xl > svg { width: var(--sv-icon-xl); height: var(--sv-icon-xl); flex: none; }
+.sv-icon-sider, .sv-icon-sider > svg { width: var(--sv-icon-sider); height: var(--sv-icon-sider); flex: none; }
+.sv-icon-titlebar, .sv-icon-titlebar > svg { width: var(--sv-icon-titlebar); height: var(--sv-icon-titlebar); flex: none; }
+
 /* Native fields and buttons otherwise fall back to the browser's own control font. */
 html[data-sv-ui="dense"] button,
 html[data-sv-ui="dense"] input,

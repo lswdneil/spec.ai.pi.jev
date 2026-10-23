@@ -7,6 +7,7 @@ UI code.
 ## What is checked
 
 - Raw six- or three-digit colours in CSS, TSX and TS.
+- Literal icon sizes in shell components; they use `sv-icon-*` classes backed by `--sv-icon-*` tokens.
 - Raw `rgb()` / `rgba()` values that are not built from a variable.
 - Literal `font-family` declarations.
 - Dense labels use `--sv-font-ui`; monospace is reserved for code, identifiers, timings and

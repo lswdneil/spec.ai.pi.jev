@@ -176,7 +176,7 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
           <Input
             size='sm'
             allowClear
-            prefix={<Search size={14} />}
+            prefix={<Search className='sv-icon-sm' />}
             aria-label={t('settings.search.placeholder')}
             placeholder={t('settings.search.placeholder')}
             value={query}
@@ -237,7 +237,7 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
                       {/* Leading icon — 22px slot to align with main sider rows */}
                       <span className='size-22px flex items-center justify-center shrink-0 line-height-0'>
                         {item.isImageIcon ? (
-                          <span className={classNames('flex items-center justify-center', collapsed ? 'w-5 h-5' : 'w-16px h-16px')}>{item.icon}</span>
+                          <span className='sv-icon-sider flex items-center justify-center'>{item.icon}</span>
                         ) : (
                           React.cloneElement(
                             item.icon as React.ReactElement<{
@@ -248,10 +248,9 @@ const SettingsSider: React.FC<{ collapsed?: boolean; tooltipEnabled?: boolean }>
                             }>,
                             {
                               theme: 'outline',
-                              size: collapsed ? '20' : '16',
                               strokeWidth: 3,
                               className: classNames(
-                                'block leading-none',
+                                'sv-icon-sider block leading-none',
                                 isSelected ? 'text-t-primary' : 'text-t-tertiary'
                               ),
                             }

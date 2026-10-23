@@ -37,17 +37,15 @@ const SiderFooter: React.FC<SiderFooterProps> = ({
   const settingsIcon = isSettings ? (
     <ArrowCircleLeft
       theme='outline'
-      size='16'
       fill='currentColor'
-      className='block leading-none'
+      className='sv-icon-sider block leading-none'
       style={{ lineHeight: 0 }}
     />
   ) : (
     <SettingTwo
       theme='outline'
-      size='16'
       fill='currentColor'
-      className='block leading-none'
+      className='sv-icon-sider block leading-none'
       style={{ lineHeight: 0 }}
     />
   );

@@ -48,10 +48,9 @@ import { SETTINGS_HOME } from '@renderer/pages/settings/settingsNav';
 import KernelBar from '@renderer/components/kernel/KernelBar';
 import '@renderer/styles/layout.css';
 
-const SidebarIcon: React.FC<{ size?: number; strokeWidth?: number }> = ({ size = 18, strokeWidth = 4 }) => (
+const SidebarIcon: React.FC<{ strokeWidth?: number; className?: string }> = ({ strokeWidth = 4, className }) => (
   <svg
-    width={size}
-    height={size}
+    className={className}
     viewBox='0 0 48 48'
     fill='none'
     stroke='currentColor'
@@ -497,7 +496,7 @@ const Layout: React.FC<{
                       title={t('common.collapseSidebar')}
                       aria-label={t('common.collapseSidebar')}
                     >
-                      <SidebarIcon size={18} strokeWidth={2.5} />
+                      <SidebarIcon className='sv-icon-titlebar' strokeWidth={2.5} />
                     </button>
                   )
                 ) : (
@@ -517,9 +516,9 @@ const Layout: React.FC<{
                       )}
                     >
                       {collapsed ? (
-                        <PanelLeftOpen className='h-5 w-5' strokeWidth={1.75} />
+                        <PanelLeftOpen className='sv-icon-sider' strokeWidth={1.75} />
                       ) : (
-                        <PanelLeftClose className='h-5 w-5' strokeWidth={1.75} />
+                        <PanelLeftClose className='sv-icon-sider' strokeWidth={1.75} />
                       )}
                     </button>
                   </Tooltip>

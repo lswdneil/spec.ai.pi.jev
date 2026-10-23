@@ -78,7 +78,7 @@ describe('Titlebar history arrows', () => {
     fireEvent.click(back()!);
     expect(history.value.back).toHaveBeenCalledTimes(1);
     // Smaller than the sidebar toggle's 18px icon.
-    expect(back()!.querySelector('svg')).toHaveAttribute('width', '14');
+    expect(back()!.querySelector('.sv-icon-sm')).not.toBeNull();
   });
 
   it('never show on a phone', () => {

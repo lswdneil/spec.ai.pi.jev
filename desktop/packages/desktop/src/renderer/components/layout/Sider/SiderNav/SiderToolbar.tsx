@@ -47,9 +47,8 @@ const SiderToolbar: React.FC<SiderToolbarProps> = ({
           >
             <Plus
               theme='outline'
-              size='16'
               fill='currentColor'
-              className={classNames('block leading-none', styles.newChatIcon)}
+              className={classNames('sv-icon-sider block leading-none', styles.newChatIcon)}
               style={{ lineHeight: 0 }}
             />
           </div>
@@ -73,9 +72,8 @@ const SiderToolbar: React.FC<SiderToolbarProps> = ({
           <span className='size-22px rd-6px bg-aou-2 border border-solid border-[var(--color-border-2)] group-hover:bg-fill-3 group-hover:border-transparent flex items-center justify-center shrink-0 transition-colors'>
             <Plus
               theme='outline'
-              size='14'
               fill='currentColor'
-              className={classNames('block leading-none', styles.newChatIcon)}
+              className={classNames('sv-icon-sider block leading-none', styles.newChatIcon)}
               style={{ lineHeight: 0 }}
             />
           </span>
@@ -103,7 +101,7 @@ const SiderToolbar: React.FC<SiderToolbarProps> = ({
           )}
           {...rowButtonProps(onToggleBatchMode)}
         >
-          <ListCheckbox theme='outline' size='14' className='block leading-none shrink-0' style={{ lineHeight: 0 }} />
+          <ListCheckbox theme='outline' className='sv-icon-sider block leading-none shrink-0' style={{ lineHeight: 0 }} />
         </div>
       </Tooltip>
     </div>

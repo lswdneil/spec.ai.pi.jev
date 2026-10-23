@@ -68,7 +68,7 @@ const CommandPalettePanel: React.FC<{ onRun: (item: PaletteItem) => void }> = ({
           onChange={setQuery}
           onKeyDown={onKeyDown}
           placeholder={t('common.commandPalette.placeholder')}
-          prefix={<Search className='h-4 w-4' strokeWidth={1.75} />}
+          prefix={<Search className='sv-icon-md' strokeWidth={1.75} />}
           className={styles.fieldInput}
           role='combobox'
           aria-label={title}

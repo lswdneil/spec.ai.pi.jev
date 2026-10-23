@@ -139,7 +139,7 @@ export default function WorkPanelTabs({
           type='text'
           size='mini'
           className={styles.back}
-          icon={<ArrowLeft size={14} className='rtl-mirror' />}
+          icon={<ArrowLeft className='sv-icon-sm rtl-mirror' />}
           onClick={onBack}
           data-testid='work-panel-back'
         >
@@ -179,7 +179,7 @@ export default function WorkPanelTabs({
                 {labelsFit ? (
                   label
                 ) : (
-                  <Icon theme='outline' size={16} strokeWidth={3} fill='currentColor' className={styles.tabIcon} />
+                  <Icon theme='outline' strokeWidth={3} fill='currentColor' className={`sv-icon-md ${styles.tabIcon}`} />
                 )}
                 {news ? <span className={styles.dot} data-testid='work-panel-dot' aria-hidden='true' /> : null}
               </Button>
@@ -195,7 +195,7 @@ export default function WorkPanelTabs({
                 key: tab,
                 label: (
                   <span className='inline-flex items-center gap-2'>
-                    <Icon theme='outline' size={14} strokeWidth={3} fill='currentColor' />
+                    <Icon theme='outline' strokeWidth={3} fill='currentColor' className='sv-icon-sm' />
                     {t(`common.workPanel.tabs.${tab}`)}
                   </span>
                 ),
@@ -216,10 +216,10 @@ export default function WorkPanelTabs({
                 {labelsFit ? (
                   <span className='inline-flex items-center gap-2px'>
                     {t('common.more')}
-                    <Down size={12} />
+                    <Down className='sv-icon-xs' />
                   </span>
                 ) : (
-                  <More theme='outline' size={16} strokeWidth={3} fill='currentColor' className={styles.tabIcon} />
+                  <More theme='outline' strokeWidth={3} fill='currentColor' className={`sv-icon-md ${styles.tabIcon}`} />
                 )}
               </Button>
             </Tooltip>
@@ -230,7 +230,7 @@ export default function WorkPanelTabs({
         type='text'
         size='mini'
         className={styles.close}
-        icon={<Close size={14} />}
+        icon={<Close className='sv-icon-sm' />}
         aria-label={t('common.workPanel.close')}
         title={t('common.workPanel.close')}
         onClick={onClose}

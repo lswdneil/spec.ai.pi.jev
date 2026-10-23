@@ -74,7 +74,7 @@ const MobileTabBar: React.FC = () => {
         aria-current={sessionsActive ? 'page' : undefined}
         aria-label={t('common.sessions')}
       >
-        <MessageSquare className='h-5 w-5' strokeWidth={1.75} />
+        <MessageSquare className='sv-icon-sider' strokeWidth={1.75} />
         <span className='truncate'>{t('common.sessions')}</span>
       </div>
       <div
@@ -83,7 +83,7 @@ const MobileTabBar: React.FC = () => {
         className={itemClass(false)}
         aria-label={t('conversation.historySearch.shortTitle')}
       >
-        <Search className='h-5 w-5' strokeWidth={1.75} />
+        <Search className='sv-icon-sider' strokeWidth={1.75} />
         <span className='truncate'>{t('conversation.historySearch.shortTitle')}</span>
       </div>
       <div
@@ -93,7 +93,7 @@ const MobileTabBar: React.FC = () => {
         aria-label={t('conversation.welcome.newConversation')}
       >
         <span className='flex h-8 w-8 items-center justify-center rounded-full bg-sv-brand text-sv-on-brand'>
-          <Plus className='h-4 w-4' strokeWidth={2} />
+          <Plus className='sv-icon-md' strokeWidth={2} />
         </span>
         <span className='truncate'>{t('conversation.welcome.newConversation')}</span>
       </div>
@@ -104,7 +104,7 @@ const MobileTabBar: React.FC = () => {
         aria-current={settingsActive ? 'page' : undefined}
         aria-label={t('common.settings')}
       >
-        <Settings2 className='h-5 w-5' strokeWidth={1.75} />
+        <Settings2 className='sv-icon-sider' strokeWidth={1.75} />
         <span className='truncate'>{t('common.settings')}</span>
       </div>
     </nav>

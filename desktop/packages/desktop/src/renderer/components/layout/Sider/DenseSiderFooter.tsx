@@ -28,7 +28,6 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
   const { t } = useTranslation();
   const settingsLabel = isSettings ? t('common.back') : t('common.settings');
   const iconOnly = collapsed && !isMobile;
-  const railIconClass = iconOnly ? 'h-5 w-5 shrink-0' : 'h-3.5 w-3.5 shrink-0';
   const [userName, setUserName] = useState('');
 
   useEffect(() => {
@@ -69,9 +68,9 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
             )}
           >
             {isSettings ? (
-              <ArrowLeft className={railIconClass} strokeWidth={1.75} />
+              <ArrowLeft className='sv-icon-sider' strokeWidth={1.75} />
             ) : (
-              <Settings2 className={railIconClass} strokeWidth={1.75} />
+              <Settings2 className='sv-icon-sider' strokeWidth={1.75} />
             )}
             {iconOnly ? null : <span className='truncate text-[11.5px]'>{settingsLabel}</span>}
           </Button>

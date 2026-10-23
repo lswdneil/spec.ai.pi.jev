@@ -31,10 +31,9 @@ interface TitlebarProps {
 // ArrowLeft/ArrowRight (which span y=12..36) so the sidebar icon reads a
 // touch larger. The rect remains centered at y=24, matching the arrows'
 // centerline so all three icons stay on the same visual baseline.
-const SidebarIcon: React.FC<{ size?: number; strokeWidth?: number }> = ({ size = 18, strokeWidth = 4 }) => (
+const SidebarIcon: React.FC<{ className?: string; strokeWidth?: number }> = ({ className, strokeWidth = 4 }) => (
   <svg
-    width={size}
-    height={size}
+    className={className}
     viewBox='0 0 48 48'
     fill='none'
     stroke='currentColor'
@@ -94,7 +93,6 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
     : t('conversation.workspace.collapsePanel');
   const backToChatTooltip = t('common.back', { defaultValue: 'Back' });
   const isSettingsRoute = location.pathname.startsWith('/settings');
-  const iconSize = 18;
   // Desktop uses slimmer strokes to match macOS-native chrome aesthetics;
   // mobile keeps the default weight so icons stay legible at larger sizes.
   const desktopIconStroke = layout?.isMobile ? undefined : 2.5;
@@ -108,7 +106,6 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
   // Show back/forward on desktop only; mobile keeps the existing back-to-chat button. They appear once there is
   // somewhere to go, small and muted, so they do not read as a browser's toolbar.
   const showHistoryNav = Boolean(navigationHistory?.canBack || navigationHistory?.canForward) && !layout?.isMobile;
-  const navIconSize = 14;
   const historyBackTooltip = t('common.historyBack', { defaultValue: 'Back' });
   const historyForwardTooltip = t('common.forward', { defaultValue: 'Forward' });
 
@@ -248,9 +245,9 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
           title={themeLabel}
         >
           {theme === 'dark' ? (
-            <Sun className='h-[18px] w-[18px]' strokeWidth={1.75} />
+            <Sun className='sv-icon-titlebar' strokeWidth={1.75} />
           ) : (
-            <Moon className='h-[18px] w-[18px]' strokeWidth={1.75} />
+            <Moon className='sv-icon-titlebar' strokeWidth={1.75} />
           )}
         </button>
         {showBackToChatButton && (
@@ -260,7 +257,7 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
             onClick={handleBackToChat}
             aria-label={backToChatTooltip}
           >
-            <ArrowCircleLeft theme='outline' size={iconSize} fill='currentColor' />
+            <ArrowCircleLeft theme='outline' className='sv-icon-titlebar' fill='currentColor' />
           </button>
         )}
         {showSiderToggle && (
@@ -270,7 +267,7 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
             onClick={handleSiderToggle}
             aria-label={siderTooltip}
           >
-            <SidebarIcon size={iconSize} strokeWidth={desktopIconStroke} />
+            <SidebarIcon className='sv-icon-titlebar' strokeWidth={desktopIconStroke} />
           </button>
         )}
         {showHistoryNav && (
@@ -283,7 +280,7 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
               aria-label={historyBackTooltip}
               title={historyBackTooltip}
             >
-              <ArrowLeft theme='outline' size={navIconSize} fill='currentColor' strokeWidth={desktopIconStroke} />
+              <ArrowLeft theme='outline' className='sv-icon-sm' fill='currentColor' strokeWidth={desktopIconStroke} />
             </button>
             <button
               type='button'
@@ -293,7 +290,7 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
               aria-label={historyForwardTooltip}
               title={historyForwardTooltip}
             >
-              <ArrowRight theme='outline' size={navIconSize} fill='currentColor' strokeWidth={desktopIconStroke} />
+              <ArrowRight theme='outline' className='sv-icon-sm' fill='currentColor' strokeWidth={desktopIconStroke} />
             </button>
           </>
         )}
@@ -329,9 +326,9 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
             aria-label={workspaceTooltip}
           >
             {workspaceCollapsed ? (
-              <ExpandRight theme='outline' size={iconSize} fill='currentColor' />
+              <ExpandRight theme='outline' className='sv-icon-titlebar' fill='currentColor' />
             ) : (
-              <ExpandLeft theme='outline' size={iconSize} fill='currentColor' />
+              <ExpandLeft theme='outline' className='sv-icon-titlebar' fill='currentColor' />
             )}
           </button>
         )}

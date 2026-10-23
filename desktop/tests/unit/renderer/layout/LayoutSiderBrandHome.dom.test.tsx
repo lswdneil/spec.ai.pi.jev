@@ -270,10 +270,10 @@ describe('Layout sider brand Home button', () => {
     const toggle = screen.getByTestId('sider-collapse');
 
     expect(toggle).toBeVisible();
-    expect(toggle.querySelector('svg')).toHaveClass('h-5', 'w-5');
+    expect(toggle.querySelector('svg')).toHaveClass('sv-icon-sider');
     fireEvent.click(toggle);
     expect(sider).toHaveClass('collapsed');
-    expect(screen.getByTestId('sider-collapse').querySelector('svg')).toHaveClass('h-5', 'w-5');
+    expect(screen.getByTestId('sider-collapse').querySelector('svg')).toHaveClass('sv-icon-sider');
     fireEvent.click(screen.getByTestId('sider-collapse'));
     expect(sider).not.toHaveClass('collapsed');
   });

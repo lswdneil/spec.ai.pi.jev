@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { Minus, CloseSmall } from '@icon-park/react';
 import { ipcBridge } from '@/common';
 
-const WindowMaximizeIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
-  <svg width={size} height={size} viewBox='0 0 18 18' fill='none' stroke='currentColor' strokeWidth='1.4'>
+const WindowMaximizeIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} viewBox='0 0 18 18' fill='none' stroke='currentColor' strokeWidth='1.4'>
     <rect x='3.5' y='3.5' width='11' height='11' rx='1.2' />
   </svg>
 );
 
-const WindowRestoreIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
-  <svg width={size} height={size} viewBox='0 0 18 18' fill='none' stroke='currentColor' strokeWidth='1.4'>
+const WindowRestoreIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} viewBox='0 0 18 18' fill='none' stroke='currentColor' strokeWidth='1.4'>
     <rect x='4.75' y='6.75' width='8' height='8' rx='1.1' />
     <path
       d='M6.5 5.25V4.5c0-.7.57-1.25 1.25-1.25h5c.69 0 1.25.56 1.25 1.25v5c0 .69-.56 1.25-1.25 1.25h-.7'
@@ -90,7 +90,7 @@ const WindowControls: React.FC = () => {
         aria-label={minimizeLabel}
         title={minimizeLabel}
       >
-        <Minus theme='outline' size='14' fill='currentColor' strokeWidth={4} />
+        <Minus theme='outline' className='sv-icon-sm' fill='currentColor' strokeWidth={4} />
       </button>
       <button
         type='button'
@@ -99,7 +99,11 @@ const WindowControls: React.FC = () => {
         aria-label={maximizeLabel}
         title={maximizeLabel}
       >
-        {isMaximized ? <WindowRestoreIcon size={14} /> : <WindowMaximizeIcon size={14} />}
+        {isMaximized ? (
+          <WindowRestoreIcon className='sv-icon-sm' />
+        ) : (
+          <WindowMaximizeIcon className='sv-icon-sm' />
+        )}
       </button>
       <button
         type='button'
@@ -108,7 +112,7 @@ const WindowControls: React.FC = () => {
         aria-label={closeLabel}
         title={closeLabel}
       >
-        <CloseSmall theme='outline' size='16' fill='currentColor' strokeWidth={3} />
+        <CloseSmall theme='outline' className='sv-icon-sm' fill='currentColor' strokeWidth={3} />
       </button>
     </div>
   );

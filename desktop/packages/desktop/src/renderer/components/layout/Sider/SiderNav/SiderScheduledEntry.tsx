@@ -44,9 +44,8 @@ const SiderScheduledEntry: React.FC<SiderScheduledEntryProps> = ({
         >
           <AlarmClock
             theme='outline'
-            size='16'
             fill='currentColor'
-            className='block leading-none shrink-0'
+            className='sv-icon-sider block leading-none shrink-0'
             style={{ lineHeight: 0 }}
           />
         </div>
@@ -69,9 +68,8 @@ const SiderScheduledEntry: React.FC<SiderScheduledEntryProps> = ({
         <span className='size-22px flex items-center justify-center shrink-0 text-t-primary'>
           <AlarmClock
             theme='outline'
-            size='16'
             fill='currentColor'
-            className='block leading-none'
+            className='sv-icon-sider block leading-none'
             style={{ lineHeight: 0 }}
           />
         </span>

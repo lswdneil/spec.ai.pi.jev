@@ -41,9 +41,8 @@ const SiderSearchEntry: React.FC<SiderSearchEntryProps> = ({ isMobile, collapsed
         >
           <Search
             theme='outline'
-            size='16'
             fill='currentColor'
-            className='block leading-none shrink-0'
+            className='sv-icon-sider block leading-none shrink-0'
             style={{ lineHeight: 0 }}
           />
         </div>
@@ -64,9 +63,8 @@ const SiderSearchEntry: React.FC<SiderSearchEntryProps> = ({ isMobile, collapsed
         <span className='size-22px flex items-center justify-center shrink-0 text-t-primary'>
           <Search
             theme='outline'
-            size='16'
             fill='currentColor'
-            className='block leading-none'
+            className='sv-icon-sider block leading-none'
             style={{ lineHeight: 0 }}
           />
         </span>
