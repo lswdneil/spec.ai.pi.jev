@@ -387,7 +387,7 @@ function WavedromBlock({ code, style, showOpenInPanelButton = true, enablePanZoo
                 <ZoomOut
                   data-testid='wavedrom-zoom-out'
                   theme='outline'
-                  size='16'
+                  className='sv-icon-md'
                   style={{ cursor: 'pointer', flexShrink: 0 }}
                   fill='var(--text-secondary)'
                   title={t('preview.zoomOut')}
@@ -396,7 +396,7 @@ function WavedromBlock({ code, style, showOpenInPanelButton = true, enablePanZoo
                 <ZoomIn
                   data-testid='wavedrom-zoom-in'
                   theme='outline'
-                  size='16'
+                  className='sv-icon-md'
                   style={{ cursor: 'pointer', flexShrink: 0 }}
                   fill='var(--text-secondary)'
                   title={t('preview.zoomIn')}
@@ -405,7 +405,7 @@ function WavedromBlock({ code, style, showOpenInPanelButton = true, enablePanZoo
                 <Refresh
                   data-testid='wavedrom-zoom-reset'
                   theme='outline'
-                  size='16'
+                  className='sv-icon-md'
                   style={{ cursor: 'pointer', flexShrink: 0 }}
                   fill='var(--text-secondary)'
                   title={t('preview.zoomReset')}
@@ -417,7 +417,7 @@ function WavedromBlock({ code, style, showOpenInPanelButton = true, enablePanZoo
               <PreviewOpen
                 data-testid='wavedrom-open-in-panel'
                 theme='outline'
-                size='18'
+                className='sv-icon-lg'
                 style={{ cursor: 'pointer', flexShrink: 0 }}
                 fill='var(--text-secondary)'
                 title={t('preview.openInPanelTooltip')}
@@ -432,7 +432,7 @@ function WavedromBlock({ code, style, showOpenInPanelButton = true, enablePanZoo
             <Copy
               data-testid='wavedrom-copy'
               theme='outline'
-              size='18'
+              className='sv-icon-lg'
               style={{ cursor: 'pointer', flexShrink: 0 }}
               fill='var(--text-secondary)'
               onClick={() => {

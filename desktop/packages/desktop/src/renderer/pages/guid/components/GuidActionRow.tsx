@@ -229,7 +229,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
     if (modelOptions.length > 0) {
       entries.push({
         key: 'model',
-        icon: <Brain theme='outline' size='16' />,
+        icon: <Brain theme='outline' className='sv-icon-md' />,
         label: t('common.model', { defaultValue: 'Model' }),
         meta: currentModelLabel,
         submenu: {
@@ -245,7 +245,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
       const currentValue = thoughtLevelOption.currentValue;
       entries.push({
         key: 'thought-level',
-        icon: <Brain theme='outline' size='16' />,
+        icon: <Brain theme='outline' className='sv-icon-md' />,
         label: t('agent.thoughtLevel.label'),
         meta: getCurrentThoughtLevelLabel(t, thoughtLevelOption),
         submenu: {
@@ -273,7 +273,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
       }));
       entries.push({
         key: 'permission',
-        icon: <Shield theme='outline' size='16' />,
+        icon: <Shield theme='outline' className='sv-icon-md' />,
         label: t('agentMode.permission', { defaultValue: 'Permission' }),
         meta: modeOptions.find((o) => o.active)?.label,
         submenu: {
@@ -286,7 +286,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
 
     entries.push({
       key: 'attach',
-      icon: <FolderUpload theme='outline' size='16' />,
+      icon: <FolderUpload theme='outline' className='sv-icon-md' />,
       label: t('common.fileAttach.addFiles', { defaultValue: 'Add files' }),
       variant: 'muted',
       dividerBefore: true,
@@ -297,7 +297,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
     if (allSkills.length > 0) {
       entries.push({
         key: 'skills',
-        icon: <Lightning theme='outline' size='16' />,
+        icon: <Lightning theme='outline' className='sv-icon-md' />,
         label: t('settings.capabilitiesTab.skills'),
         variant: 'muted',
         meta:
@@ -325,7 +325,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
     if (mcpServers.length > 0) {
       entries.push({
         key: 'mcp',
-        icon: <Shield theme='outline' size='16' />,
+        icon: <Shield theme='outline' className='sv-icon-md' />,
         label: t('mcp.label'),
         variant: 'muted',
         meta:
@@ -394,7 +394,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
     >
       <Menu.Item key='file'>
         <div className='flex items-center gap-8px'>
-          <UploadOne theme='outline' size='16' fill={iconColors.secondary} style={{ lineHeight: 0 }} />
+          <UploadOne theme='outline' className='sv-icon-md' fill={iconColors.secondary} style={{ lineHeight: 0 }} />
           <span>{t('common.fileAttach.addFiles')}</span>
         </div>
       </Menu.Item>
@@ -403,7 +403,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
           key='skills'
           title={
             <div className='flex items-center gap-8px'>
-              <Lightning theme='filled' size='16' fill={iconColors.primary} style={{ lineHeight: 0 }} />
+              <Lightning theme='filled' className='sv-icon-md' fill={iconColors.primary} style={{ lineHeight: 0 }} />
               <span>
                 {t('common.labelWithSelectedCount', {
                   label: t('settings.capabilitiesTab.skills'),
@@ -449,7 +449,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
           key='mcp'
           title={
             <div className='flex items-center gap-8px'>
-              <Shield theme='outline' size='16' fill={iconColors.primary} style={{ lineHeight: 0 }} />
+              <Shield theme='outline' className='sv-icon-md' fill={iconColors.primary} style={{ lineHeight: 0 }} />
               <span>
                 {t('common.labelWithSelectedCount', {
                   label: t('mcp.label'),
@@ -507,7 +507,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
               <Button
                 type='secondary'
                 shape='circle'
-                icon={<Plus theme='outline' size='14' strokeWidth={2} fill={iconColors.primary} />}
+                icon={<Plus theme='outline' className='sv-icon-sm' strokeWidth={2} fill={iconColors.primary} />}
                 data-testid='file-upload-btn'
                 aria-label={t('common.more')}
                 onClick={() => setIsSheetOpen(true)}
@@ -530,7 +530,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
                   type='secondary'
                   shape='circle'
                   className={isPlusDropdownOpen ? styles.plusButtonRotate : ''}
-                  icon={<Plus theme='outline' size='14' strokeWidth={2} fill={iconColors.primary} />}
+                  icon={<Plus theme='outline' className='sv-icon-sm' strokeWidth={2} fill={iconColors.primary} />}
                   data-testid='file-upload-btn'
                   // Files, skills: what the menu under it adds.
                   aria-label={t('common.add')}
@@ -557,7 +557,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
             initialMode={selectedMode}
             onModeSelect={onModeSelect}
             dynamicModes={dynamicModes}
-            compactLeadingIcon={<Shield theme='outline' size='14' fill={iconColors.secondary} />}
+            compactLeadingIcon={<Shield theme='outline' className='sv-icon-sm' fill={iconColors.secondary} />}
             modeLabelFormatter={getModeDisplayLabel}
             compactLabelPrefix={t('agentMode.permission')}
             hideCompactLabelPrefixOnMobile
@@ -588,7 +588,7 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
           className={`send-button-custom ${
             isButtonDisabled ? 'send-button-custom--disabled' : 'send-button-custom--enabled'
           }`}
-          icon={<SendArrowIcon size={16} />}
+          icon={<SendArrowIcon className='sv-icon-md' />}
           onClick={onSend}
           data-testid='guid-send-btn'
           aria-label={t('common.send')}

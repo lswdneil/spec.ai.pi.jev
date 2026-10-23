@@ -85,12 +85,12 @@ const AT_FILE_MENTION_LIMIT = 8;
 // makes the browser recompute the styles of the whole window, which in a long conversation costs more with every turn.
 const MULTI_LINE_AUTO_SIZE = { minRows: 1, maxRows: 10 };
 
-const DraftBoxActionIcon: React.FC<{ size?: number; color?: string; strokeWidth?: number }> = ({
-  size = 16,
+const DraftBoxActionIcon: React.FC<{ className?: string; color?: string; strokeWidth?: number }> = ({
+  className,
   color = 'currentColor',
   strokeWidth = 1.3,
 }) => (
-  <svg width={size} height={size} viewBox='0 0 24 24' fill='none' aria-hidden='true'>
+  <svg className={className} viewBox='0 0 24 24' fill='none' aria-hidden='true'>
     <path
       d='M8.2 6.2h7.6l1.45 5.55v4.45A2.45 2.45 0 0 1 14.8 18.65H9.2a2.45 2.45 0 0 1-2.45-2.45v-4.45L8.2 6.2Z'
       stroke={color}
@@ -1712,7 +1712,7 @@ const SendBox: React.FC<{
             isSendActionDisabled ? 'send-button-custom--disabled' : 'send-button-custom--enabled'
           }`}
           style={sendButtonShapeStyle}
-          icon={<SendArrowIcon size={16} />}
+          icon={<SendArrowIcon className='sv-icon-md' />}
           onClick={handlePrimaryAction}
           data-testid={testIds?.send ?? 'sendbox-send-btn'}
           aria-label={typeof sendActionTooltip === 'string' ? sendActionTooltip : sendNowLabel}
@@ -1726,7 +1726,7 @@ const SendBox: React.FC<{
       ? `${draftActionBaseTooltip} · ${addToDraftShortcutLabel}`
       : draftActionBaseTooltip;
   const draftActionTitle = typeof draftActionTooltip === 'string' ? draftActionTooltip : addToDraftLabel;
-  const draftActionIcon = <DraftBoxActionIcon size={20} strokeWidth={1.25} />;
+  const draftActionIcon = <DraftBoxActionIcon className='sv-icon-xl' strokeWidth={1.25} />;
   const draftActionButton = hasDraftAction ? (
     <Tooltip content={draftActionTooltip} position='top'>
       <span className='sendbox-draft-tooltip-anchor'>
@@ -1844,7 +1844,7 @@ const SendBox: React.FC<{
       shape='circle'
       type='secondary'
       className='sendbox-mobile-plus-btn'
-      icon={<Plus theme='outline' size='16' />}
+      icon={<Plus theme='outline' className='sv-icon-md' />}
       onClick={onMobilePlusClick}
       data-testid='sendbox-mobile-plus-btn'
       aria-label={t('common.more', { defaultValue: 'More' })}
@@ -2016,7 +2016,7 @@ const SendBox: React.FC<{
           {replyQuote && (
             <div className='flex items-start gap-10px mb-8px px-12px py-10px rd-10px bg-fill-1'>
               <div className='flex-shrink-0 mt-2px' style={{ lineHeight: 0 }}>
-                <Quote theme='filled' size='16' fill='var(--color-text-3)' />
+                <Quote theme='filled' className='sv-icon-md' fill='var(--color-text-3)' />
               </div>
               <div className='flex-1 min-w-0 text-13px text-t-primary line-clamp-3 lh-20px whitespace-pre-wrap break-all'>
                 {replyQuote.content}
@@ -2026,7 +2026,7 @@ const SendBox: React.FC<{
                 onClick={() => setReplyQuote(null)}
                 style={{ lineHeight: 0 }}
               >
-                <CloseSmall theme='outline' size='14' />
+                <CloseSmall theme='outline' className='sv-icon-sm' />
               </div>
             </div>
           )}
@@ -2037,7 +2037,7 @@ const SendBox: React.FC<{
                 <Tag
                   key={snippet.id}
                   closable
-                  closeIcon={<CloseSmall theme='outline' size='12' />}
+                  closeIcon={<CloseSmall theme='outline' className='sv-icon-xs' />}
                   onClose={() => removeDomSnippet(snippet.id)}
                   className='text-12px bg-fill-2 rd-4px'
                 >
@@ -2052,7 +2052,7 @@ const SendBox: React.FC<{
                 <Tag
                   key={getSelectedItemKey(item) ?? getSelectedItemDisplayLabel(item)}
                   closable
-                  closeIcon={<CloseSmall theme='outline' size='12' />}
+                  closeIcon={<CloseSmall theme='outline' className='sv-icon-xs' />}
                   onClose={() => {
                     const path = getSelectedItemKey(item);
                     if (!path) {

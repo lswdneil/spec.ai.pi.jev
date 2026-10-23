@@ -212,7 +212,7 @@ function CodeBlock(props: CodeBlockProps) {
                 {expanded ? (
                   <Up
                     theme='outline'
-                    size='14'
+                    className='sv-icon-sm'
                     style={{ cursor: 'pointer', display: 'block' }}
                     fill={iconFill}
                     onClick={toggleExpanded}
@@ -220,7 +220,7 @@ function CodeBlock(props: CodeBlockProps) {
                 ) : (
                   <Down
                     theme='outline'
-                    size='14'
+                    className='sv-icon-sm'
                     style={{ cursor: 'pointer', display: 'block' }}
                     fill={iconFill}
                     onClick={toggleExpanded}
@@ -231,7 +231,7 @@ function CodeBlock(props: CodeBlockProps) {
             <span title={t('common.copy')} style={{ display: 'flex' }}>
               <Copy
                 theme='outline'
-                size='14'
+                className='sv-icon-sm'
                 style={{ cursor: 'pointer', display: 'block' }}
                 fill={iconFill}
                 onClick={handleCopy}
@@ -269,9 +269,9 @@ function CodeBlock(props: CodeBlockProps) {
               {expanded ? t('common.collapse') : t('common.viewMoreLines', { count: totalLines - PREVIEW_LINES })}
             </span>
             {expanded ? (
-              <Up theme='outline' size='12' fill={footerTextColor} />
+              <Up theme='outline' className='sv-icon-xs' fill={footerTextColor} />
             ) : (
-              <Down theme='outline' size='12' fill={footerTextColor} />
+              <Down theme='outline' className='sv-icon-xs' fill={footerTextColor} />
             )}
           </div>
         )}

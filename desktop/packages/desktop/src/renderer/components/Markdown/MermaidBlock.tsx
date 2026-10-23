@@ -290,7 +290,7 @@ function MermaidBlock({ code, style, showOpenInPanelButton = true, enablePanZoom
                 <ZoomOut
                   data-testid='mermaid-zoom-out'
                   theme='outline'
-                  size='16'
+                  className='sv-icon-md'
                   style={{ cursor: 'pointer', flexShrink: 0 }}
                   fill='var(--text-secondary)'
                   title={t('preview.zoomOut')}
@@ -299,7 +299,7 @@ function MermaidBlock({ code, style, showOpenInPanelButton = true, enablePanZoom
                 <ZoomIn
                   data-testid='mermaid-zoom-in'
                   theme='outline'
-                  size='16'
+                  className='sv-icon-md'
                   style={{ cursor: 'pointer', flexShrink: 0 }}
                   fill='var(--text-secondary)'
                   title={t('preview.zoomIn')}
@@ -308,7 +308,7 @@ function MermaidBlock({ code, style, showOpenInPanelButton = true, enablePanZoom
                 <Refresh
                   data-testid='mermaid-zoom-reset'
                   theme='outline'
-                  size='16'
+                  className='sv-icon-md'
                   style={{ cursor: 'pointer', flexShrink: 0 }}
                   fill='var(--text-secondary)'
                   title={t('preview.zoomReset')}
@@ -320,7 +320,7 @@ function MermaidBlock({ code, style, showOpenInPanelButton = true, enablePanZoom
               <PreviewOpen
                 data-testid='mermaid-open-in-panel'
                 theme='outline'
-                size='18'
+                className='sv-icon-lg'
                 style={{ cursor: 'pointer', flexShrink: 0 }}
                 fill='var(--text-secondary)'
                 title={t('preview.openInPanelTooltip')}
@@ -335,7 +335,7 @@ function MermaidBlock({ code, style, showOpenInPanelButton = true, enablePanZoom
             <Copy
               data-testid='mermaid-copy'
               theme='outline'
-              size='18'
+              className='sv-icon-lg'
               style={{ cursor: 'pointer', flexShrink: 0 }}
               fill='var(--text-secondary)'
               onClick={() => {

@@ -26,8 +26,8 @@ import { useTranslation } from 'react-i18next';
 
 const getCommandPreview = (input: string): string => input.replace(/\s+/g, ' ').trim();
 
-const DraftBoxActionIcon: React.FC<{ size?: number; color?: string }> = ({ size = 16, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox='0 0 24 24' fill='none' aria-hidden='true'>
+const DraftBoxActionIcon: React.FC<{ className?: string; color?: string }> = ({ className, color = 'currentColor' }) => (
+  <svg className={className} viewBox='0 0 24 24' fill='none' aria-hidden='true'>
     <path
       d='M7 4.5h10l2 7.5v5.2A2.8 2.8 0 0 1 16.2 20H7.8A2.8 2.8 0 0 1 5 17.2V12l2-7.5Z'
       stroke={color}
@@ -228,7 +228,7 @@ const QueueItemCard: React.FC<QueueItemCardProps> = ({
               onSortableDragHandlePointerDown?.(event);
             }}
           >
-            <Drag theme='outline' size='12' strokeWidth={2.5} />
+            <Drag theme='outline' className='sv-icon-xs' strokeWidth={2.5} />
           </button>
           <span
             aria-hidden='true'
@@ -238,7 +238,7 @@ const QueueItemCard: React.FC<QueueItemCardProps> = ({
               color: 'var(--color-text-3)',
             }}
           >
-            <CornerDownRight theme='outline' size='12' strokeWidth={2.3} />
+            <CornerDownRight theme='outline' className='sv-icon-xs' strokeWidth={2.3} />
           </span>
         </div>
         <div className='min-w-0 flex-1 flex items-center gap-6px'>
@@ -262,18 +262,18 @@ const QueueItemCard: React.FC<QueueItemCardProps> = ({
         {renderQueueActionIconButton({
           ariaLabel: t('conversation.commandQueue.sendNow', { defaultValue: 'Send now' }),
           onClick: () => onSendNow(item),
-          icon: <SendOne theme='outline' size='14' strokeWidth={2.5} />,
+          icon: <SendOne theme='outline' className='sv-icon-sm' strokeWidth={2.5} />,
           accent: true,
         })}
         {renderQueueActionIconButton({
           ariaLabel: t('conversation.commandQueue.edit', { defaultValue: 'Edit' }),
           onClick: () => onEdit?.(item),
-          icon: <Edit theme='outline' size='14' strokeWidth={2.5} />,
+          icon: <Edit theme='outline' className='sv-icon-sm' strokeWidth={2.5} />,
         })}
         {renderQueueActionIconButton({
           ariaLabel: t('conversation.commandQueue.remove', { defaultValue: 'Remove' }),
           onClick: () => onRemove(item.id),
-          icon: <Delete theme='outline' size='14' strokeWidth={2.5} />,
+          icon: <Delete theme='outline' className='sv-icon-sm' strokeWidth={2.5} />,
           danger: true,
         })}
       </div>
@@ -490,12 +490,12 @@ const CommandQueuePanel: React.FC<CommandQueuePanelProps> = ({
             {isMobile ? (
               <Tooltip content={title} position='top'>
                 <span className='inline-flex items-center justify-center text-t-tertiary' aria-label={title}>
-                  <DraftBoxActionIcon size={16} />
+                  <DraftBoxActionIcon className='sv-icon-md' />
                 </span>
               </Tooltip>
             ) : (
               <span className='inline-flex items-center gap-5px text-12px font-600 text-t-secondary whitespace-nowrap leading-none'>
-                <DraftBoxActionIcon size={15} />
+                <DraftBoxActionIcon className='sv-icon-md' />
                 {title}
               </span>
             )}
@@ -525,7 +525,7 @@ const CommandQueuePanel: React.FC<CommandQueuePanelProps> = ({
               >
                 <span className='inline-flex items-center gap-4px text-11px'>
                   {modeLabel}
-                  <SortTwo theme='outline' size='12' strokeWidth={3} style={{ opacity: 0.7 }} />
+                  <SortTwo theme='outline' className='sv-icon-xs' strokeWidth={3} style={{ opacity: 0.7 }} />
                 </span>
               </Button>
             </Tooltip>
@@ -541,7 +541,7 @@ const CommandQueuePanel: React.FC<CommandQueuePanelProps> = ({
                   className='inline-flex items-center justify-center leading-none'
                   style={{ color: 'var(--color-text-3)', fontSize: 0 }}
                 >
-                  <MoreOne theme='outline' size='15' strokeWidth={2.5} />
+                  <MoreOne theme='outline' className='sv-icon-md' strokeWidth={2.5} />
                 </span>
               </Button>
             </Dropdown>

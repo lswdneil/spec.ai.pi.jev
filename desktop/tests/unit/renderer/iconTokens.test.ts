@@ -20,6 +20,13 @@ const shell = [
   'components/layout/WorkPanel/WorkPanelTabs.tsx',
   'components/layout/Sider/CommandPalette/CommandPalettePanel.tsx',
   'pages/settings/components/SettingsSider.tsx',
+  'components/chat/SendBox/index.tsx',
+  'components/chat/SendBox/SendArrowIcon.tsx',
+  'components/chat/CommandQueuePanel.tsx',
+  'components/Markdown/CodeBlock.tsx',
+  'components/Markdown/MermaidBlock.tsx',
+  'components/Markdown/WavedromBlock.tsx',
+  'pages/guid/components/GuidActionRow.tsx',
 ];
 
 describe('the shared shell icon scale', () => {
@@ -33,7 +40,7 @@ describe('the shared shell icon scale', () => {
   it('keeps shell icons on the scale instead of literal pixel classes', () => {
     for (const path of shell) {
       const source = read(path);
-      expect(source, path).not.toMatch(/h-3\.5|h-4 w-4|h-5 w-5|h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/);
+      expect(source, path).not.toMatch(/(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/);
     }
   });
 
