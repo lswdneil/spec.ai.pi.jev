@@ -103,7 +103,7 @@ Usage notes:
 ```
 
 - Dense (approved direction): UI base **13px**; sidebar primary labels 13; sidebar section headers and empty-state copy 12; small 11.5; caption 11.5; meta 12; h1 20; hero display 34. Editorial alternatives may use 14/26.
-- Icons use the shared scale `--sv-icon-xs/sm/md/lg/xl`; the sidebar uses the 20px `sv-icon-sider` size in both states. Shell components name a scale class, never a pixel size.
+- Icons use the shared scale `--sv-icon-xs/sm/md/lg/xl`; the sidebar uses the 18px `sv-icon-sider` size in both states. Shell components name a scale class, never a pixel size.
 - UI labels and prose use `--sv-font-ui`. Monospace is only for code, identifiers, timings and commands. Colours come from `--sv-*` tokens (or the mapped legacy theme variables); raw colours live only in token sources and documented data/preview exceptions. Jev status, focus and tags use `--sv-jev-pink` / `--sv-jev-violet`; everything else uses the Dense sage accent.
 - Line-height: body **1.65** (CJK 1.7–1.8), headings **1.35** (CJK 1.35–1.4), small 1.5.
 - Weights: 400 / 500 / 600 only. No 700 body.
@@ -130,7 +130,7 @@ Editorial direction: serif for display/headings only; UI controls stay sans. Den
 
 | Surface | Rule |
 | --- | --- |
-| Desktop 1280+ | sidebar 208 + thread + judge rail 300; brand and sidebar fold live in the sidebar header; collapsed to a 48px rail, the expand control drops below the 20px mark onto the rail icon column; rail icons are 20px, never wider than the mark. The light/dark switch sits at the titlebar top-left, aligned with the other titlebar controls. |
+| Desktop 1280+ | sidebar 208 + thread + judge rail 300; brand and sidebar fold live in the sidebar header; collapsed to a 48px rail, the expand control drops below the 20px mark onto the rail icon column; rail icons are 18px, never wider than the mark. The light/dark switch sits at the titlebar top-left, aligned with the other titlebar controls. |
 | 1024-1279 | rail collapses; sidebar remains |
 | 768-1023 | sidebar hidden behind a menu; single column |
 | < 768 | mobile shell: top bar 44, bottom nav 50 + safe area; composer above nav |

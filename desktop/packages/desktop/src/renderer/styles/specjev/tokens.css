@@ -85,7 +85,7 @@
   --sv-icon-md: 16px;
   --sv-icon-lg: 18px;
   --sv-icon-xl: 20px;
-  --sv-icon-sider: var(--sv-icon-xl);
+  --sv-icon-sider: var(--sv-icon-lg);
   --sv-icon-titlebar: var(--sv-icon-lg);
 
   --sv-lh-body: 1.65;
