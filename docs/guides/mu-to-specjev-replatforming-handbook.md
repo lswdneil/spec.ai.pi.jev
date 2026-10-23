@@ -395,6 +395,8 @@ spec.jev 的做法：
 - 真手机布局必须在浏览器/WebUI 或真机验证
 - WebUI 没有 Electron main 的 bridge；`kyrn.catalog` 需要 Web 实现
 - 该实现应是**只读**的：读 `/api/agents/management` 和 `/api/assistants`，不注册/不关闭 agent
+- 其他 KyRN provider 依赖本地文件、密钥或子进程，不要在浏览器里重写；让 WebUI 通过带 token 的 loopback KyRN host 调用桌面 main 的同一批 provider
+- host 链接形如 `?kyrnHost=ws://127.0.0.1:<port>/<token>`；远程必须 `wss://` 并先设计配对、TLS、撤销
 - 手机测试要用 web-host 静态服务 + 构建后的 `out/renderer`
 - 测试里的启动 stub 只能当临时探针；一旦真实实现完成，立即删除 stub，否则测试会掩盖产品缺口
 

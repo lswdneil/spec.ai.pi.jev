@@ -10,7 +10,9 @@ import './utils/ui/runtimePatches';
 // Browser adapter setup
 import '@/common/adapter/browser';
 import { installWebKyrnCatalog } from './utils/kyrnWebCatalog';
+import { installKyrnHostClient } from './utils/kyrnHostClient';
 installWebKyrnCatalog();
+installKyrnHostClient();
 
 // React and core dependencies
 import type { PropsWithChildren } from 'react';

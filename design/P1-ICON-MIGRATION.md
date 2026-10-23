@@ -110,10 +110,11 @@ The test asserts the focused element is `judge-context-toggle` and that opening 
 - It starts web-host's static server against the Electron test backend.
 - It opens Chrome with a 390×844 viewport, `isMobile`, and touch.
 - It uses the real read-only WebUI catalog provider: `renderer/utils/kyrnWebCatalog.ts` reads `/api/agents/management` and `/api/assistants` through the web HTTP bridge. It never registers or disables agents.
+- It passes the desktop's loopback KyRN host link with `?kyrnHost=...`; Settings -> Providers therefore runs through the real desktop providers, not a stub.
 - It asserts `html[data-phone-layout]`, the bottom tab bar, the home hero, and no horizontal overflow.
 - It captures light and dark home, the sessions sheet, the command palette, Settings → Appearance, and an empty conversation.
 
-Screenshots: `phone-390-guid.png`, `phone-390-dark.png`, `phone-390-sessions.png`, `phone-390-palette.png`, `phone-390-settings.png`, `phone-390-conversation.png`.
+Screenshots: `phone-390-guid.png`, `phone-390-dark.png`, `phone-390-sessions.png`, `phone-390-palette.png`, `phone-390-settings.png`, `phone-390-providers.png`, `phone-390-conversation.png`.
 
 The phone check runs against the built renderer in `out/renderer`, so run `bun run package` first when the renderer changed. Electron itself still keeps the desktop rail at any window width; this test is the browser/WebUI path, not a resized Electron window.
 
@@ -126,5 +127,7 @@ E2E_DEV=1 bun run test:visual
 ```
 
 The WebUI catalog provider is read-only on purpose. The desktop's `initializeKyrn` also registers spec.jev and disables other runtimes; a browser opening a phone view must not mutate the machine's agent registrations. Unit coverage: `tests/unit/renderer/kyrnWebCatalog.dom.test.ts`.
+
+The KyRN host boundary and the remaining remote-pairing work are in `desktop/docs/kyrn-webui-parity.md`.
 
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.

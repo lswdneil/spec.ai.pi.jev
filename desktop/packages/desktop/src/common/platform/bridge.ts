@@ -31,6 +31,8 @@ type EmitterEmit<Params> = [Params] extends [void] ? () => void : (params: Param
 const eventEmitter = new EventEmitter();
 const interceptors: Interceptor[] = [];
 const listenerWrappers = new Map<string, Map<EventHandler, Set<EventHandler>>>();
+type LocalProvider = (data: unknown) => MaybePromise<unknown>;
+const localProviders = new Map<string, LocalProvider>();
 const noop = (): void => {};
 
 let emitToAdapter: BridgeAdapter['emit'] = () => undefined;
@@ -135,6 +137,25 @@ export const subscribe = <Params = unknown, Data = unknown>(
       });
   });
 
+/**
+ * Register the same provider handler for a trusted in-process caller. This is how a local host (the desktop main
+ * process serving a browser) invokes the providers it already registered for Electron. It is not a renderer API:
+ * only code with this module in the main process can call `invokeLocal`.
+ */
+export const provideLocal = (name: string, handler: LocalProvider): (() => void) => {
+  localProviders.set(name, handler);
+  return () => {
+    if (localProviders.get(name) === handler) localProviders.delete(name);
+  };
+};
+
+/** Invoke a provider registered in this process, without sending a bridge event over IPC/WebSocket. */
+export const invokeLocal = async <Data = unknown>(name: string, data?: unknown): Promise<Data> => {
+  const provider = localProviders.get(name);
+  if (!provider) throw new Error(`No local provider "${name}"`);
+  return (await provider(data)) as Data;
+};
+
 export const invoke = <Data = unknown>(name: string, data?: unknown): Promise<Data> => {
   const id = createRequestId(name);
   const callbackName = `subscribe.callback-${name}${id}`;
@@ -150,12 +171,18 @@ export const invoke = <Data = unknown>(name: string, data?: unknown): Promise<Da
 
 export const buildProvider = <Data, Params = undefined>(key: string) => {
   let disposeProvider = noop;
+  let disposeLocal = noop;
 
   return {
     provider(handler: ProviderHandler<Data, Params>): () => void {
       disposeProvider();
+      disposeLocal();
       disposeProvider = subscribe<Params, Data>(key, handler as (params: Params) => MaybePromise<Data>);
-      return disposeProvider;
+      disposeLocal = provideLocal(key, handler as unknown as LocalProvider);
+      return () => {
+        disposeProvider();
+        disposeLocal();
+      };
     },
     invoke: ((params?: Params) => invoke<Data>(key, params)) as ProviderInvoke<Data, Params>,
   };

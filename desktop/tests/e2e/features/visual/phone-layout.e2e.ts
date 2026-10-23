@@ -65,13 +65,18 @@ function startWebHost(backendPort: number): Promise<{ url: string; stop: () => v
   });
 }
 
-test('renders the phone shell at 390px', async ({ page: electronPage, browser }, testInfo) => {
+test('renders the phone shell at 390px', async ({ electronApp, page: electronPage, browser }, testInfo) => {
   test.setTimeout(120_000);
 
   const backendPort = await electronPage.evaluate(
     () => (window as unknown as { __backendPort?: number }).__backendPort ?? 0
   );
   if (!backendPort) test.skip(true, 'The Electron app did not expose a backend port');
+
+  const kyRnHostUrl = await electronApp.evaluate(
+    () => (globalThis as unknown as { __kyrnHostUrl?: string }).__kyrnHostUrl
+  );
+  if (!kyRnHostUrl) throw new Error('The desktop KyRN host did not start');
 
   const server = await startWebHost(backendPort);
 
@@ -91,7 +96,10 @@ test('renders the phone shell at 390px', async ({ page: electronPage, browser },
       }
     });
 
-    await webPage.goto(`${server.url}/#/guid`, { waitUntil: 'domcontentloaded' });
+    await webPage.goto(
+      `${server.url}/?kyrnHost=${encodeURIComponent(kyRnHostUrl)}#/guid`,
+      { waitUntil: 'domcontentloaded' }
+    );
     await expect(webPage.locator('html')).toHaveAttribute('data-phone-layout', '', { timeout: 30_000 });
     await expect(webPage.getByTestId('mobile-tab-bar')).toBeVisible();
     await expect(webPage.getByTestId('tab-new')).toBeVisible();
@@ -138,6 +146,10 @@ test('renders the phone shell at 390px', async ({ page: electronPage, browser },
     await webPage.locator('.settings-mobile-top-nav__item').first().click();
     await expect(webPage.getByTestId('appearance-v2')).toBeVisible({ timeout: 30_000 });
     await webPage.screenshot({ path: testInfo.outputPath('phone-390-settings.png') });
+
+    await webPage.locator('.settings-mobile-top-nav__item').nth(3).click();
+    await expect(webPage.getByTestId('mu-provider-manager')).toBeVisible({ timeout: 30_000 });
+    await webPage.screenshot({ path: testInfo.outputPath('phone-390-providers.png') });
 
     const assistantId = await webPage.evaluate(async () => {
       const response = await fetch('/api/assistants');
