@@ -99,7 +99,7 @@ const CheckboxBase = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.
           {...props}
         >
           <CheckboxPrimitive.Indicator className='flex items-center justify-center'>
-            <Check className='h-3 w-3' strokeWidth={2.5} />
+            <Check className='sv-icon-xs' strokeWidth={2.5} />
           </CheckboxPrimitive.Indicator>
         </CheckboxPrimitive.Root>
         {children}

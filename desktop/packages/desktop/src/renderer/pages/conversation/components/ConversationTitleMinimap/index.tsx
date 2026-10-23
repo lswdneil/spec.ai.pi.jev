@@ -108,7 +108,7 @@ const ConversationTitleMinimap: React.FC<ConversationTitleMinimapProps> = ({
             onBlur={handleSearchInputBlur}
             onCompositionStartCapture={handleSearchInputCompositionStart}
             onCompositionEndCapture={handleSearchInputCompositionEnd}
-            prefix={<Search size={14} className='text-t-secondary' />}
+            prefix={<Search className='sv-icon-sm text-t-secondary' />}
             placeholder={isSearchMode ? '' : t('conversation.minimap.searchHint')}
           />
           {countNode}
@@ -122,7 +122,7 @@ const ConversationTitleMinimap: React.FC<ConversationTitleMinimapProps> = ({
         <div className='conversation-minimap-panel' style={frameStyle}>
           {titleNode}
           <div className='flex-center' style={{ height: `calc(100% - ${HEADER_HEIGHT}px)` }}>
-            <Spin size={18} />
+            <Spin className='sv-icon-lg' />
           </div>
         </div>
       );

@@ -90,7 +90,7 @@ const ShellPreview: React.FC = () => (
               <span className='block text-[11px] leading-tight text-sv-text'>neil</span>
               <span className='block text-[9.5px] leading-tight text-sv-faint'>ai.spec.pi.jev</span>
             </span>
-            <ChevronDown className='ml-auto h-3 w-3 text-sv-faint' />
+            <ChevronDown className='sv-icon-xs ml-auto text-sv-faint' />
           </div>
           <div className='mt-0.5 flex h-[27px] items-center gap-2 rounded-[5px] px-2 text-[11px] text-sv-muted hover:bg-sv-surface'>
             <Sliders className='sv-icon-sm' /> Settings
@@ -101,7 +101,7 @@ const ShellPreview: React.FC = () => (
       <div className='grid min-h-0 min-w-0 grid-rows-[40px_minmax(0,1fr)_auto]'>
         <header className='flex min-w-0 items-center gap-2 border-b border-sv-line px-2.5'>
           <span className='flex min-w-0 items-center gap-1.5 text-[11px] text-sv-muted'>
-            ai.spec.pi.jev <ChevronRight className='h-3 w-3 text-sv-faint' />
+            ai.spec.pi.jev <ChevronRight className='sv-icon-xs text-sv-faint' />
             <b className='truncate font-medium text-sv-text'>Fix the ACP handshake</b>
           </span>
           <div className='ml-auto flex items-center gap-1.5'>
@@ -109,7 +109,7 @@ const ShellPreview: React.FC = () => (
               <span className='h-1 w-1 rounded-full bg-sv-muted' /> Jev · sure
             </span>
             <span className='flex h-6 items-center gap-1.5 rounded-full border border-sv-line bg-sv-surface px-2 text-[10.5px] text-sv-text'>
-              Claude Sonnet 4.5 <ChevronDown className='h-3 w-3 text-sv-faint' />
+              Claude Sonnet 4.5 <ChevronDown className='sv-icon-xs text-sv-faint' />
             </span>
             <span className='flex gap-2 px-1 text-sv-faint'>
               <span className='h-px w-2.5 self-center bg-current' />
@@ -148,7 +148,7 @@ const ShellPreview: React.FC = () => (
                 </p>
                 <div className='mt-2 overflow-hidden rounded-[5px] border border-sv-line bg-sv-surface'>
                   <div className='flex h-[26px] items-center gap-2 border-b border-sv-line px-2 text-[10.5px] text-sv-muted'>
-                    <Terminal className='h-3 w-3' /> <span className='text-sv-text'>powershell</span>
+                    <Terminal className='sv-icon-xs' /> <span className='text-sv-text'>powershell</span>
                     <span className='ml-auto font-mono text-[9.5px] text-sv-ok'>exit 0</span>
                   </div>
                   <pre className='overflow-auto p-2 font-mono text-[10.5px] leading-[1.6] text-sv-muted'>

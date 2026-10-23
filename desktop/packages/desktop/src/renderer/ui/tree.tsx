@@ -140,7 +140,7 @@ export const Tree: React.FC<TreeProps> = ({
             <span className='flex h-5 w-4 shrink-0 items-center justify-center' aria-hidden='true'>
               {hasChildren ? (
                 <ChevronRight
-                  className={cn('h-3 w-3 transition-transform', open && 'rotate-90')}
+                  className={cn('sv-icon-xs transition-transform', open && 'rotate-90')}
                   strokeWidth={1.75}
                   onClick={(event) => {
                     event.stopPropagation();

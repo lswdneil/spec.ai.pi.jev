@@ -208,7 +208,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
               )}
             >
               <span className='flex-1'>{item.label}</span>
-              {item.checked ? <Check className='h-3.5 w-3.5 text-sv-brand-ink' /> : null}
+              {item.checked ? <Check className='sv-icon-sm text-sv-brand-ink' /> : null}
             </DropdownMenuPrimitive.Item>
           )
         )}

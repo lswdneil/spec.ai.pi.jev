@@ -102,7 +102,7 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
                 onChange?.('');
               }}
             >
-              <svg viewBox='0 0 24 24' className='h-3 w-3' fill='none' stroke='currentColor' strokeWidth='1.75'>
+              <svg viewBox='0 0 24 24' className='sv-icon-xs' fill='none' stroke='currentColor' strokeWidth='1.75'>
                 <path d='m6 6 12 12M18 6 6 18' />
               </svg>
             </button>

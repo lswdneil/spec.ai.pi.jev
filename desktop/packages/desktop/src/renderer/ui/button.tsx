@@ -99,7 +99,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       )}
       {...props}
     >
-      {loading ? <Loader2 className='h-3.5 w-3.5 animate-spin' aria-hidden='true' /> : icon}
+      {loading ? <Loader2 className='sv-icon-sm animate-spin' aria-hidden='true' /> : icon}
       {children}
     </Component>
   );

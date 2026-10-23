@@ -339,10 +339,10 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
                 commit(mode === 'multiple' ? [] : undefined);
               }}
             >
-              <X className='h-3 w-3' />
+              <X className='sv-icon-xs' />
             </span>
           ) : null}
-          <ChevronDown className='h-3 w-3 shrink-0 text-sv-muted' aria-hidden='true' />
+          <ChevronDown className='sv-icon-xs shrink-0 text-sv-muted' aria-hidden='true' />
         </button>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal container={portalContainer}>
@@ -377,7 +377,7 @@ const OptionRow: React.FC<{
     )}
   >
     <span className='flex-1 truncate'>{option.label}</span>
-    {selected ? <Check className='h-3.5 w-3.5 text-sv-brand-ink' aria-hidden='true' /> : null}
+    {selected ? <Check className='sv-icon-sm text-sv-brand-ink' aria-hidden='true' /> : null}
     {multiple && selected ? <span className='sr-only'>selected</span> : null}
   </button>
 );

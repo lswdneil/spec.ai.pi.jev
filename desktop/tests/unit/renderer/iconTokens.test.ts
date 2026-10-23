@@ -12,7 +12,7 @@ const walk = (dir: string): string[] =>
   });
 
 const literalIconSize =
-  /(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/;
+  /(?<![a-z])h-3 w-3|(?<![a-z])h-3\.5|(?<![a-z])h-4 w-4|(?<![a-z])h-5 w-5|(?<![a-z])h-\[(?:18|20)px\]|size=\{[0-9]+\}|size='[0-9]+'/;
 
 /** Avatars, logos, spinners and 24/28px illustration marks are content-sized, not icon-scale. */
 const withoutContentSizedMarks = (source: string) =>
@@ -102,6 +102,29 @@ describe('the shared shell icon scale', () => {
       for (const path of walk(dir)) {
         expect(withoutContentSizedMarks(read(path)), path).not.toMatch(literalIconSize);
       }
+    }
+  });
+
+  it('keeps chat chrome, conversation panels, showcase and icon primitives on the icon scale', () => {
+    for (const dir of ['components/chat', 'pages/conversation/components', 'pages/conversation/PlanBar']) {
+      for (const path of walk(dir)) {
+        expect(withoutContentSizedMarks(read(path)), path).not.toMatch(literalIconSize);
+      }
+    }
+    for (const path of [
+      'pages/TestShowcase.tsx',
+      'ui/alert.tsx',
+      'ui/button.tsx',
+      'ui/collapse.tsx',
+      'ui/dialog.tsx',
+      'ui/dropdown.tsx',
+      'ui/empty.tsx',
+      'ui/image.tsx',
+      'ui/input.tsx',
+      'ui/pagination.tsx',
+      'ui/tree.tsx',
+    ]) {
+      expect(withoutContentSizedMarks(read(path)), path).not.toMatch(literalIconSize);
     }
   });
 

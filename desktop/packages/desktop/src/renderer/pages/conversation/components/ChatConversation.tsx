@@ -89,7 +89,7 @@ const _AssociatedConversation: React.FC<{ conversation_id: string }> = ({ conver
         icon={
           <History
             theme='filled'
-            size='14'
+            className='sv-icon-sm'
             fill={iconColors.primary}
             strokeWidth={2}
             strokeLinejoin='miter'

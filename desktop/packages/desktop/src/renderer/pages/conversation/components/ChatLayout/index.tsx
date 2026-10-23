@@ -239,7 +239,7 @@ const ChatLayout: React.FC<{
     <div className='flex h-10 min-h-10 shrink-0 items-center gap-2 border-b border-sv-line bg-sv-bg px-2.5'>
       <div className='flex min-w-0 flex-1 items-center gap-1.5 text-[11px] text-sv-muted'>
         <span className='max-w-[160px] shrink-0 truncate font-mono text-[11px]'>{denseCrumb}</span>
-        <ChevronRight className='h-3 w-3 shrink-0 text-sv-faint' strokeWidth={1.75} />
+        <ChevronRight className='sv-icon-xs shrink-0 text-sv-faint' strokeWidth={1.75} />
         <div className='min-w-0 flex-1'>
           <ChatTitleEditor
             editingTitle={editingTitle}

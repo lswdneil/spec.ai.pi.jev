@@ -56,7 +56,7 @@ const StepsBase: React.FC<StepsProps> = ({
                   status === 'error' && 'border-sv-danger text-sv-danger'
                 )}
               >
-                {step.props.icon ?? (status === 'finish' ? <Check size={12} strokeWidth={2.5} /> : index + 1)}
+                {step.props.icon ?? (status === 'finish' ? <Check className='sv-icon-xs' strokeWidth={2.5} /> : index + 1)}
               </span>
               {direction === 'vertical' && index < steps.length - 1 ? (
                 <span className='my-1 block h-4 w-px bg-sv-line' aria-hidden='true' />

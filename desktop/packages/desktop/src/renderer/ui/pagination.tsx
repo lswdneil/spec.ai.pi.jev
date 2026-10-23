@@ -38,7 +38,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         onClick={() => go(current - 1)}
         className='flex h-6 w-6 items-center justify-center rounded-[var(--sv-r-control)] border border-sv-line bg-transparent text-sv-muted outline-none transition-colors hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-40'
       >
-        <ChevronLeft className='h-3.5 w-3.5' strokeWidth={1.75} />
+        <ChevronLeft className='sv-icon-sm' strokeWidth={1.75} />
       </button>
       {simple ? (
         <span className='tabular-nums'>
@@ -54,7 +54,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         onClick={() => go(current + 1)}
         className='flex h-6 w-6 items-center justify-center rounded-[var(--sv-r-control)] border border-sv-line bg-transparent text-sv-muted outline-none transition-colors hover:text-sv-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-40'
       >
-        <ChevronRight className='h-3.5 w-3.5' strokeWidth={1.75} />
+        <ChevronRight className='sv-icon-sm' strokeWidth={1.75} />
       </button>
     </nav>
   );

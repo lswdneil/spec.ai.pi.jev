@@ -80,9 +80,9 @@ const WorkspaceCollapse: React.FC<WorkspaceCollapseProps> = ({
           >
             <span className='size-22px flex items-center justify-center shrink-0 text-t-primary'>
               {expanded ? (
-                <FolderOpen theme='outline' size={16} fill='currentColor' className='line-height-0' />
+                <FolderOpen theme='outline' className='sv-icon-md line-height-0' fill='currentColor' />
               ) : (
-                <FolderClose theme='outline' size={16} fill='currentColor' className='line-height-0' />
+                <FolderClose theme='outline' className='sv-icon-md line-height-0' fill='currentColor' />
               )}
             </span>
 

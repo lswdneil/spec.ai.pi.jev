@@ -110,7 +110,7 @@ export const InputTag = React.forwardRef<HTMLInputElement, InputTagProps>(functi
           className='ms-auto flex h-4 w-4 items-center justify-center rounded-full bg-transparent text-sv-muted hover:text-sv-text'
           onClick={() => commit([])}
         >
-          <X className='h-3 w-3' />
+          <X className='sv-icon-xs' />
         </button>
       ) : null}
     </span>

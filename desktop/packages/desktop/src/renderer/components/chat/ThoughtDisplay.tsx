@@ -133,7 +133,7 @@ const ThoughtDisplay: React.FC<ThoughtDisplayProps> = ({
         className='relative z-1 mb--20px pb-30px px-10px py-10px rd-t-20px text-14px lh-20px text-t-primary flex items-center gap-8px'
         style={containerStyle}
       >
-        {running && <Spin size={14} />}
+        {running && <Spin className='sv-icon-sm' />}
         {/* Left block fills the row and truncates long text (tooltip shows the
             full message); the retry button stays pinned on the right and never
             shrinks, so a long/localized status can't push it out of a narrow
@@ -160,7 +160,7 @@ const ThoughtDisplay: React.FC<ThoughtDisplayProps> = ({
       style={containerStyle}
     >
       <div className='flex items-center gap-8px'>
-        {running && <Spin size={14} />}
+        {running && <Spin className='sv-icon-sm' />}
         <Tag color='arcoblue' size='small'>
           {thought?.subject}
         </Tag>

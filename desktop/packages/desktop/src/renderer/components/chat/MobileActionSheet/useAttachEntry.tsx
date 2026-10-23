@@ -32,7 +32,7 @@ export const useAttachEntry = ({ openFileSelector, dividerBefore }: UseAttachEnt
     () => [
       {
         key: 'attach',
-        icon: <FolderUpload theme='outline' size='16' />,
+        icon: <FolderUpload theme='outline' className='sv-icon-md' />,
         label: t('common.fileAttach.addFiles', { defaultValue: 'Add files' }),
         variant: 'muted',
         dividerBefore,

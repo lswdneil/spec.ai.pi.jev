@@ -58,10 +58,17 @@ Fifth content batch:
 - Explorer container, files, and search panels.
 - Design-system shell preview.
 
-The literal `size` / `h-3.5` / `h-4` / `h-5` values were replaced by scale classes. `iconTokens.test.ts` now scans all five batches. Avatars, provider marks, logos, spinners, cron status marks, and 24/28px illustration marks are excluded because they are content-sized, not five-step icons.
+Sixth content batch:
+
+- Chat chrome: collapsible content, thought display, mobile action sheet, attachments, and BTW overlay.
+- Conversation title minimap, workspace collapse, plan bar, and history button.
+- Design-system shell chevrons.
+- Icon-bearing UI primitives: alert, button loader, checkbox mark, collapse, dialog, dropdown, empty, image, input, pagination, steps, select, and tree.
+
+The literal `h-3` / `h-3.5` / `h-4` / `h-5` / `size` values were replaced by scale classes. `iconTokens.test.ts` now scans all six batches. Avatars, provider marks, logos, spinners, cron status marks, control boxes, and 24/28px illustration marks are excluded because they are content-sized, not five-step icons.
 
 ## Remaining
 
-Scan the renderer for literal icon sizes; remaining files are mostly small inline metadata icons and one-off panels outside the covered trees. The guard now covers the shell, composer, messages, settings and settings dialogs, preview, agent, history, media, source control, native host, scheduled tasks, platform composers, workspace, Guid, Markdown, Kyrn, base components, explorer, and the design-system preview.
+Scan the renderer for literal icon sizes; remaining files are mostly small inline metadata icons and one-off panels outside the covered trees. The guard now covers the shell, composer, messages, settings and settings dialogs, preview, agent, history, media, source control, native host, scheduled tasks, platform composers, workspace, Guid, Markdown, Kyrn, base components, explorer, design-system preview, chat chrome, conversation panels, and icon-bearing UI primitives.
 
 Migrate one UI area per batch, extending the guard list in `iconTokens.test.ts` as each batch lands.

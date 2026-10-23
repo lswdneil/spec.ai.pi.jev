@@ -153,7 +153,7 @@ const BtwOverlay: React.FC<BtwOverlayProps> = ({
               >
                 {isLoading ? (
                   <div className='flex items-center gap-8px text-t-secondary'>
-                    <Spin size={16} />
+                    <Spin className='sv-icon-md' />
                     <span>{t('conversation.sideQuestion.loading')}</span>
                   </div>
                 ) : (

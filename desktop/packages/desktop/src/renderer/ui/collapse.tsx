@@ -88,7 +88,7 @@ const CollapseItem: React.FC<CollapseItemProps> = ({
       >
         {showExpandIcon ? (
           <ChevronRight
-            className={cn('h-3.5 w-3.5 shrink-0 text-sv-muted transition-transform', open && 'rotate-90')}
+            className={cn('sv-icon-sm shrink-0 text-sv-muted transition-transform', open && 'rotate-90')}
             strokeWidth={1.75}
             aria-hidden='true'
           />

@@ -67,7 +67,7 @@ const ConversationPlanBar: React.FC<{ conversation_id: string }> = ({ conversati
           }
         }}
       >
-        {expanded ? <Down size={14} /> : <Right size={14} />}
+        {expanded ? <Down className='sv-icon-sm' /> : <Right className='sv-icon-sm' />}
         <Badge status='default' text={t('conversation.planBar.title')} />
         <span className='text-12px'>{t('conversation.planBar.progress', { completed, total: entries.length })}</span>
       </div>
@@ -83,7 +83,7 @@ const ConversationPlanBar: React.FC<{ conversation_id: string }> = ({ conversati
           {entries.map((entry, index) => (
             <div key={`${index}-${entry.content}`} className='flex items-center gap-8px text-t-secondary text-13px'>
               {entry.status === 'completed' ? (
-                <CheckOne size={16} theme='filled' className='flex text-success shrink-0' />
+                <CheckOne className='sv-icon-md flex text-success shrink-0' theme='filled' />
               ) : (
                 <div className='size-14px rd-full b-2px b-solid border-3 shrink-0' />
               )}
