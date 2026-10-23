@@ -59,6 +59,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
   const [internalOpen, setInternalOpen] = React.useState(false);
   const isOpen = popupVisible ?? open ?? internalOpen;
   const pointerDownAt = React.useRef(0);
+  const hoverOpenTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hoverCloseTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const triggers = Array.isArray(trigger) ? trigger : [trigger];
   const hover = triggers.includes('hover');
   const click = triggers.includes('click');
@@ -69,6 +71,15 @@ export const Dropdown: React.FC<DropdownProps> = ({
     onOpenChange?.(next);
     onVisibleChange?.(next);
   };
+  const clearHoverTimers = React.useCallback(() => {
+    if (hoverOpenTimer.current) clearTimeout(hoverOpenTimer.current);
+    if (hoverCloseTimer.current) clearTimeout(hoverCloseTimer.current);
+    hoverOpenTimer.current = null;
+    hoverCloseTimer.current = null;
+  }, []);
+
+  React.useEffect(() => () => clearHoverTimers(), [clearHoverTimers]);
+
   if (disabled) return <>{children}</>;
   const openOnClick = (event: React.MouseEvent) => {
     if (!click) return;
@@ -85,18 +96,40 @@ export const Dropdown: React.FC<DropdownProps> = ({
     event.preventDefault();
     setOpen(!isOpen);
   };
+  const scheduleHoverOpen = () => {
+    if (!hover) return;
+    if (hoverCloseTimer.current) {
+      clearTimeout(hoverCloseTimer.current);
+      hoverCloseTimer.current = null;
+    }
+    if (isOpen || hoverOpenTimer.current) return;
+    hoverOpenTimer.current = setTimeout(() => {
+      hoverOpenTimer.current = null;
+      setOpen(true);
+    }, 80);
+  };
+
+  const scheduleHoverClose = () => {
+    if (!hover) return;
+    if (hoverOpenTimer.current) {
+      clearTimeout(hoverOpenTimer.current);
+      hoverOpenTimer.current = null;
+    }
+    if (!isOpen || hoverCloseTimer.current) return;
+    hoverCloseTimer.current = setTimeout(() => {
+      hoverCloseTimer.current = null;
+      setOpen(false);
+    }, 180);
+  };
+
   const triggerNode =
     React.isValidElement(children) && typeof children.type === 'string' ? (
       React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
         onPointerDown: () => {
           pointerDownAt.current = Date.now();
         },
-        onMouseEnter: () => {
-          if (hover) setOpen(true);
-        },
-        onMouseLeave: () => {
-          if (hover) setOpen(false);
-        },
+        onMouseEnter: scheduleHoverOpen,
+        onMouseLeave: scheduleHoverClose,
         onClick: (event: React.MouseEvent) => {
           (children.props as { onClick?: (event: React.MouseEvent) => void }).onClick?.(event);
           if (!event.defaultPrevented) openOnClick(event);
@@ -116,12 +149,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
         onPointerDown={() => {
           pointerDownAt.current = Date.now();
         }}
-        onMouseEnter={() => {
-          if (hover) setOpen(true);
-        }}
-        onMouseLeave={() => {
-          if (hover) setOpen(false);
-        }}
+        onMouseEnter={scheduleHoverOpen}
+        onMouseLeave={scheduleHoverClose}
         onClick={openOnClick}
         onKeyDown={openOnKeyDown}
         onContextMenu={openOnContextMenu}
@@ -143,6 +172,14 @@ export const Dropdown: React.FC<DropdownProps> = ({
       <DropdownMenuPrimitive.Portal>
         <DropdownMenuPrimitive.Content
           ref={contentRef}
+          onMouseEnter={() => {
+            if (!hover) return;
+            if (hoverCloseTimer.current) {
+              clearTimeout(hoverCloseTimer.current);
+              hoverCloseTimer.current = null;
+            }
+          }}
+          onMouseLeave={scheduleHoverClose}
           onKeyDown={onContentKeyDown}
           onKeyDownCapture={onContentKeyDownCapture}
           align={align ?? (position === 'br' || position === 'tr' ? 'end' : 'start')}

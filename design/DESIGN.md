@@ -120,6 +120,7 @@ Editorial direction: serif for display/headings only; UI controls stay sans. Den
 - Radius (Dense): small **8**, control **8**, chrome/popup **10**, composer/dialog **12**, pill 999.
 - Motion: instant 80ms, fast 120ms, base 160ms, enter 220ms; ease `cubic-bezier(.2,.7,.2,1)`.
 - Interactive list rows (menus, selects, trees, palettes, history, settings rail) show a 2px brand leading bar on hover/selection.
+- Hover menus wait briefly before opening and stay open while the pointer crosses the gap into the menu; they close only after both the trigger and the menu are left.
 - Animate only navigation, expansion, progress, gesture follow-through. No looping decorative motion.
 - Honor `prefers-reduced-motion`; all durations become 0.
 - No shadows. Optional squircle (`corner-shape`) is a progressive enhancement for Chromium only.

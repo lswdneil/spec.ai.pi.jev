@@ -98,6 +98,7 @@ Native `<button>` paints a light system background unless reset. Each surface be
 | Selection menus have readable text on dark surfaces | FIXED |
 | Switch keeps 32 x 18 in both states and thumb stays inside | FIXED |
 | Row highlight accent | 2px brand bar on hover/selection across menus, selects, trees, palette, history and settings rail | FIXED |
+| Hover dropdown stability | opens after a short intent delay; survives the trigger-to-menu gap; closes after both are left | FIXED |
 | Sidebar scrollbar appears only while scrolling | FIXED |
 
 ## 6. Welcome
