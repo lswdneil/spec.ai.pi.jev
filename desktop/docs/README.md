@@ -8,6 +8,7 @@ Notes for working on the desktop app. How to run it and where the code is: [../r
 | [native-host-ui.md](native-host-ui.md)                           | How a native conversation is drawn from pi's events                                               |
 | [ui-polish-plan.md](ui-polish-plan.md)                           | The October 2026 polish plan for settings, the conversation and the first-run guide (Chinese)     |
 | [kyrn-webui-parity.md](kyrn-webui-parity.md)                     | Which KyRN bridge calls can run in the WebUI and which need a local host                           |
+| [webui-remote-access.md](webui-remote-access.md)                 | Pairing, TLS/reverse-proxy choices and the remote WebUI boundary                                  |
 | [theming/tokens.md](theming/tokens.md)                           | The colour, type and spacing tokens                                                               |
 | [contributing/development.md](contributing/development.md)       | Setting up, running, checking                                                                     |
 | [contributing/file-structure.md](contributing/file-structure.md) | Where new files go                                                                                |
