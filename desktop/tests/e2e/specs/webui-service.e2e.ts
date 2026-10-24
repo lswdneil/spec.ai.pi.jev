@@ -65,6 +65,10 @@ test('pairs, approves, and revokes a WebUI device', async ({ page, browser, elec
     expect(started.data?.url).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
     const baseUrl = started.data?.url ?? '';
 
+    await page.getByTestId('webui-public-url').fill('https://specjev.example.com/');
+    await page.getByTestId('webui-public-url').press('Enter');
+    await expect(page.getByTestId('webui-phone-link')).toHaveText('https://specjev.example.com/pair');
+
     const preference = async (): Promise<boolean | undefined> => {
       const userData = await electronApp.evaluate(({ app }) => app.getPath('userData'));
       const raw = readFileSync(join(userData, 'config', 'aionui-config.txt'), 'utf8');
@@ -165,6 +169,18 @@ test('pairs, approves, and revokes a WebUI device', async ({ page, browser, elec
         })
     );
     expect(denied).toMatchObject({ code: 'permissionDenied' });
+
+    const oldCookie = (await phoneContext.cookies()).find((cookie) => cookie.name === 'specjev_device')?.value;
+    expect(oldCookie).toBeTruthy();
+    await page.getByTestId('device-rotate').click();
+    await expect(page.getByTestId('device-rotation-pending')).toBeVisible({ timeout: 15_000 });
+    const rotated = await phone.evaluate(async () => (await fetch('/api/pair/rotate', { method: 'POST' })).json());
+    expect(rotated).toEqual({ rotated: true });
+    await expect(page.getByTestId('device-rotation-pending')).toBeHidden({ timeout: 15_000 });
+    const oldTokenResponse = await fetch(`${baseUrl}/api/settings`, {
+      headers: { cookie: `specjev_device=${oldCookie}` },
+    });
+    expect(oldTokenResponse.status).toBe(401);
 
     await expect(page.getByTestId('device-revoke')).toBeVisible({ timeout: 15_000 });
     await page.getByTestId('device-revoke').click();

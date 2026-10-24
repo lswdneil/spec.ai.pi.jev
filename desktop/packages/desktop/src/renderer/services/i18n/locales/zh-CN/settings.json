@@ -1124,6 +1124,16 @@
     "unknownAddress": "未知地址",
     "readOnly": "只读",
     "fullAccess": "完全控制",
-    "scopeHint": "批准前选择这台设备可以做什么。"
+    "scopeHint": "批准前选择这台设备可以做什么。",
+    "publicUrl": "公开地址",
+    "publicUrlPlaceholder": "https://specjev.example.com",
+    "publicUrlHint": "反向代理或私有网络为这个 WebUI 提供的 HTTPS 地址。",
+    "publicUrlInvalid": "请输入不带路径的 http(s) 地址。",
+    "save": "保存",
+    "openOnPhone": "在手机上打开",
+    "copyLink": "复制链接",
+    "linkCopied": "已复制链接",
+    "rotate": "轮换令牌",
+    "rotationPending": "等待手机确认"
   }
 }

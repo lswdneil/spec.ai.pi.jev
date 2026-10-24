@@ -11,8 +11,10 @@ import './utils/ui/runtimePatches';
 import '@/common/adapter/browser';
 import { installWebKyrnCatalog } from './utils/kyrnWebCatalog';
 import { installKyrnHostClient } from './utils/kyrnHostClient';
+import { installWebUiDeviceRotation } from './utils/webuiSession';
 installWebKyrnCatalog();
 installKyrnHostClient();
+installWebUiDeviceRotation();
 
 // React and core dependencies
 import type { PropsWithChildren } from 'react';

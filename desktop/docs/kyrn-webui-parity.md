@@ -1,6 +1,6 @@
 # KyRN bridge: WebUI parity
 
-Status: loopback host, same-origin proxy, device pairing, scopes, persisted switch, and extension WebUI hosting implemented, 2026-10-24.
+Status: loopback host, same-origin proxy, device pairing, scopes, persisted switch, extension WebUI hosting, public address, and token rotation implemented, 2026-10-24.
 
 The WebUI boots with a read-only catalog provider and can call the desktop's KyRN providers over the same origin. The browser connects to `/kyrn`; web-host first checks the paired-device cookie, then rewrites the token path and forwards to a loopback-only host.
 
@@ -77,11 +77,11 @@ The phone E2E now opens Settings → Providers through this same-origin path, no
 - A device is approved as `read` or `control`. The web-host injects that scope into the `/kyrn` upgrade, and the host allows a read device only the methods in `common/kyrn/remoteScope.ts`; writes are refused with `permissionDenied`.
 - Read devices are also limited at the AionCore HTTP boundary: GET/HEAD plus a narrow read-only POST allowlist.
 - The Remote access switch writes `system.webuiEnabled`; the service starts after backend readiness on the next launch.
+- A public address (`system.webuiPublicUrl`) is shown as a copyable `/pair` link for the phone.
+- A device token can be rotated in place. The old cookie stays valid for a ten-minute grace window while the open WebUI claims the new cookie; an unclaimed rotation restores the old token.
 
 ## Still missing
 
-1. A "show this on my phone" flow that displays the proxy URL rather than only the loopback URL.
-2. E2E coverage for every host-backed settings page, not just Providers and `kyrn.settings`.
-3. Rotating a device token without revoking and re-pairing the device. Re-pairing works, but it is not an in-place rotation.
-4. A full per-endpoint AionCore policy. Read-only is intentionally a GET/narrow-POST allowlist; full access remains all-or-nothing.
-5. Reloading extension handler code without restarting the app. Handlers are cached by path after their first invocation.
+1. E2E coverage for every host-backed settings page, not just Providers and `kyrn.settings`.
+2. A full per-endpoint AionCore policy. Read-only is intentionally a GET/narrow-POST allowlist; full access remains all-or-nothing.
+3. Reloading extension handler code without restarting the app. Handlers are cached by path after their first invocation.

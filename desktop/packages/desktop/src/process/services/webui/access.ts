@@ -11,12 +11,17 @@ const DEFAULT_DELIVERY_TTL_MS = 60_000;
 const MAX_ATTEMPTS = 5;
 const MAX_NAME_LENGTH = 64;
 const DEVICE_LIFETIME_MS = 30 * 24 * 60 * 60_000;
+const ROTATION_GRACE_MS = 10 * 60_000;
 
 type DeviceRecord = {
   id: string;
   name: string;
   scope: WebUiDeviceScope;
   tokenHash: string;
+  previousTokenHash?: string;
+  previousExpiresAt?: number;
+  rotationToken?: string;
+  rotationExpiresAt?: number;
   createdAt: number;
   lastSeenAt: number;
   expiresAt: number;
@@ -36,7 +41,17 @@ type PendingRecord = {
   deliveryExpiresAt?: number;
 };
 
-export type WebUiDeviceView = Omit<DeviceRecord, 'tokenHash'>;
+export type WebUiDeviceView = {
+  id: string;
+  name: string;
+  scope: WebUiDeviceScope;
+  createdAt: number;
+  lastSeenAt: number;
+  expiresAt: number;
+  ip: string;
+  userAgent: string;
+  rotationPending: boolean;
+};
 
 export type WebUiPendingPairingView = {
   id: string;
@@ -81,6 +96,11 @@ const isDeviceRecord = (value: unknown): value is DeviceRecord => {
     typeof device.name === 'string' &&
     typeof device.tokenHash === 'string' &&
     /^[a-f0-9]{64}$/.test(device.tokenHash) &&
+    (device.previousTokenHash === undefined ||
+      (typeof device.previousTokenHash === 'string' && /^[a-f0-9]{64}$/.test(device.previousTokenHash))) &&
+    (device.previousExpiresAt === undefined || typeof device.previousExpiresAt === 'number') &&
+    (device.rotationToken === undefined || typeof device.rotationToken === 'string') &&
+    (device.rotationExpiresAt === undefined || typeof device.rotationExpiresAt === 'number') &&
     (device.scope === 'read' || device.scope === 'control') &&
     typeof device.createdAt === 'number' &&
     typeof device.lastSeenAt === 'number' &&
@@ -274,6 +294,82 @@ export class WebUiAccessManager {
     return { ok: true };
   }
 
+  /**
+   * Rotate a device's token without forcing a new pairing. The old token stays
+   * valid for a short grace window while the phone claims the new one; if it
+   * does not claim in time, the old token is restored so the device is not
+   * silently locked out.
+   */
+  rotateDevice(deviceId: string): { ok: true } | { ok: false; error: string } {
+    const device = this.devices.get(deviceId);
+    if (!device) return { ok: false, error: 'device_not_found' };
+    if (this.now() >= device.expiresAt) {
+      this.devices.delete(deviceId);
+      this.persist();
+      this.audit('device.expired', { deviceId, name: device.name });
+      return { ok: false, error: 'device_expired' };
+    }
+    this.expireRotation(device);
+    if (device.rotationToken) return { ok: false, error: 'rotation_pending' };
+
+    const now = this.now();
+    const secret = randomBytes(32).toString('base64url');
+    const token = `${deviceId}.${secret}`;
+    device.previousTokenHash = device.tokenHash;
+    device.previousExpiresAt = now + ROTATION_GRACE_MS;
+    device.rotationToken = token;
+    device.rotationExpiresAt = now + ROTATION_GRACE_MS;
+    device.tokenHash = hashToken(token);
+    this.persist();
+    this.audit('device.rotation_started', { deviceId, name: device.name });
+    return { ok: true };
+  }
+
+  claimRotation(
+    cookieHeader: string | undefined
+  ): { rotated: true; token: string } | { rotated: false } | null {
+    const token = readCookie(cookieHeader, WEBUI_DEVICE_COOKIE);
+    if (!token) return null;
+    const separator = token.indexOf('.');
+    if (separator <= 0 || separator === token.length - 1) return null;
+    const deviceId = token.slice(0, separator);
+    const device = this.devices.get(deviceId);
+    if (!device) return null;
+    if (this.now() >= device.expiresAt) {
+      this.devices.delete(deviceId);
+      this.persist();
+      this.audit('device.expired', { deviceId, name: device.name });
+      return null;
+    }
+    this.expireRotation(device);
+
+    if (this.matchesHash(device.tokenHash, token)) {
+      if (device.rotationToken) {
+        // The phone already has the new cookie; nothing left to deliver.
+        this.clearRotation(device);
+        this.persist();
+        this.audit('device.rotation_already', { deviceId, name: device.name });
+      }
+      return { rotated: false };
+    }
+
+    if (
+      device.previousTokenHash &&
+      this.matchesHash(device.previousTokenHash, token) &&
+      device.rotationToken &&
+      this.now() < (device.rotationExpiresAt ?? 0)
+    ) {
+      const newToken = device.rotationToken;
+      device.tokenHash = hashToken(newToken);
+      device.expiresAt = this.now() + DEVICE_LIFETIME_MS;
+      this.clearRotation(device);
+      this.persist();
+      this.audit('device.rotation_claimed', { deviceId, name: device.name });
+      return { rotated: true, token: newToken };
+    }
+    return null;
+  }
+
   verifyCookie(cookieHeader: string | undefined): { deviceId: string; scope: WebUiDeviceScope } | null {
     const token = readCookie(cookieHeader, WEBUI_DEVICE_COOKIE);
     if (!token) return null;
@@ -288,9 +384,13 @@ export class WebUiAccessManager {
       this.audit('device.expired', { deviceId, name: device.name });
       return null;
     }
-    const expected = Buffer.from(device.tokenHash, 'hex');
-    const actual = createHash('sha256').update(token).digest();
-    if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) return null;
+    this.expireRotation(device);
+    const valid =
+      this.matchesHash(device.tokenHash, token) ||
+      (device.previousTokenHash !== undefined &&
+        this.now() < (device.previousExpiresAt ?? 0) &&
+        this.matchesHash(device.previousTokenHash, token));
+    if (!valid) return null;
     device.lastSeenAt = this.now();
     this.schedulePersist();
     return { deviceId, scope: device.scope };
@@ -324,9 +424,44 @@ export class WebUiAccessManager {
       ...(current ? { code: current.code, codeExpiresAt: current.expiresAt } : {}),
       pending: pending.toSorted((a, b) => a.createdAt - b.createdAt),
       devices: [...this.devices.values()]
-        .map(({ tokenHash: _tokenHash, ...device }) => device)
+        .map((device) => {
+          this.expireRotation(device);
+          return {
+            id: device.id,
+            name: device.name,
+            scope: device.scope,
+            createdAt: device.createdAt,
+            lastSeenAt: device.lastSeenAt,
+            expiresAt: device.expiresAt,
+            ip: device.ip,
+            userAgent: device.userAgent,
+            rotationPending: Boolean(device.rotationToken),
+          };
+        })
         .toSorted((a, b) => a.createdAt - b.createdAt),
     };
+  }
+
+  private matchesHash(expectedHash: string, token: string): boolean {
+    const expected = Buffer.from(expectedHash, 'hex');
+    const actual = createHash('sha256').update(token).digest();
+    return expected.length === actual.length && timingSafeEqual(expected, actual);
+  }
+
+  private clearRotation(device: DeviceRecord): void {
+    device.previousTokenHash = undefined;
+    device.previousExpiresAt = undefined;
+    device.rotationToken = undefined;
+    device.rotationExpiresAt = undefined;
+  }
+
+  private expireRotation(device: DeviceRecord): void {
+    if (!device.rotationToken) return;
+    if (this.now() < (device.rotationExpiresAt ?? 0)) return;
+    if (device.previousTokenHash) device.tokenHash = device.previousTokenHash;
+    this.clearRotation(device);
+    this.persist();
+    this.audit('device.rotation_expired', { deviceId: device.id, name: device.name });
   }
 
   private matchesCurrentCode(offered: string): boolean {

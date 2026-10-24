@@ -669,6 +669,7 @@ export interface IWebUiDevice {
   expiresAt: number;
   ip: string;
   userAgent: string;
+  rotationPending: boolean;
 }
 
 export interface IWebUiAccessState {
@@ -785,6 +786,11 @@ export const application = {
     'webui.reject-pairing'
   ),
   revokeWebUiDevice: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>('webui.revoke-device'),
+  rotateWebUiDeviceToken: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>(
+    'webui.rotate-device-token'
+  ),
+  getWebUiPublicUrl: bridge.buildProvider<IBridgeResponse<string | null>, void>('webui.get-public-url'),
+  setWebUiPublicUrl: bridge.buildProvider<IBridgeResponse<string | null>, { url: string }>('webui.set-public-url'),
   getGpuStatus: bridge.buildProvider<IBridgeResponse<IGpuStatus>, void>('app.get-gpu-status'),
   setGpuOverride: bridge.buildProvider<IBridgeResponse<IGpuStatus>, { override: IGpuOverride | null }>(
     'app.set-gpu-override'

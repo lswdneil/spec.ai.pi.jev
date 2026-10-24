@@ -1123,6 +1123,16 @@
     "unknownAddress": "Unknown address",
     "readOnly": "Read only",
     "fullAccess": "Full access",
-    "scopeHint": "Choose what this device may do before approving."
+    "scopeHint": "Choose what this device may do before approving.",
+    "publicUrl": "Public address",
+    "publicUrlPlaceholder": "https://specjev.example.com",
+    "publicUrlHint": "The HTTPS address your reverse proxy or private network exposes for this WebUI.",
+    "publicUrlInvalid": "Enter an http(s) address without a path.",
+    "save": "Save",
+    "openOnPhone": "Open on your phone",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied",
+    "rotate": "Rotate token",
+    "rotationPending": "Waiting for phone"
   }
 }

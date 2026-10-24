@@ -117,6 +117,41 @@ describe('WebUiAccessManager', () => {
     expect(late.ok).toBe(false);
   });
 
+  it('rotates a device token in place and invalidates the old one after claim', () => {
+    const { manager } = makeManager();
+    const { token } = pair(manager);
+    const cookie = `${WEBUI_DEVICE_COOKIE}=${encodeURIComponent(token)}`;
+    const deviceId = token.split('.')[0];
+
+    expect(manager.rotateDevice(deviceId)).toEqual({ ok: true });
+    expect(manager.listState().devices[0].rotationPending).toBe(true);
+    // Until the phone claims it, the old cookie keeps working.
+    expect(manager.verifyCookie(cookie)).toEqual({ deviceId, scope: 'control' });
+
+    const claimed = manager.claimRotation(cookie);
+    expect(claimed?.rotated).toBe(true);
+    if (!claimed || claimed.rotated === false) return;
+    expect(manager.listState().devices[0].rotationPending).toBe(false);
+    expect(manager.verifyCookie(cookie)).toBeNull();
+    expect(manager.verifyCookie(`${WEBUI_DEVICE_COOKIE}=${encodeURIComponent(claimed.token)}`)).toEqual({
+      deviceId,
+      scope: 'control',
+    });
+  });
+
+  it('restores the old token when a rotation is never claimed', () => {
+    let now = 1_000;
+    const { manager } = makeManager({ now: () => now });
+    const { token } = pair(manager);
+    const cookie = `${WEBUI_DEVICE_COOKIE}=${encodeURIComponent(token)}`;
+    const deviceId = token.split('.')[0];
+
+    expect(manager.rotateDevice(deviceId)).toEqual({ ok: true });
+    now += 11 * 60_000;
+    expect(manager.listState().devices[0].rotationPending).toBe(false);
+    expect(manager.verifyCookie(cookie)).toEqual({ deviceId, scope: 'control' });
+  });
+
   it('expires a device token after its lifetime', () => {
     let now = 1_000;
     const { manager } = makeManager({ now: () => now });

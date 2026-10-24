@@ -1,6 +1,6 @@
 # WebUI remote access: pairing and transport
 
-Status: service, same-origin proxy, device pairing with read/control scopes, and a persisted switch implemented, 2026-10-24.
+Status: service, same-origin proxy, pairing with read/control scopes, persisted switch, public address, and in-place token rotation implemented, 2026-10-24.
 
 ## What exists
 
@@ -10,13 +10,14 @@ Status: service, same-origin proxy, device pairing with read/control scopes, and
 - The desktop shows a six-digit, single-use pairing code. A phone submits it, the desktop approves the device, and only then does the phone receive an HttpOnly device cookie.
 - At approval, choose **Read only** or **Full access**. Read-only devices may use GET/HEAD, a narrow allowlist of read-only POST endpoints, and read-only KyRN methods; writes are refused before they reach AionCore or the KyRN host.
 - Paired devices are listed with their scope and last-seen time and can be revoked; revocation invalidates the cookie and closes the device's live sockets.
-- Device tokens are stored hashed, expire after 30 days, and rotate on re-pairing. The token never appears in a URL.
+- Device tokens are stored hashed and expire after 30 days. A paired device can rotate its token in place: the old cookie keeps working for a 10-minute grace window while the open WebUI claims the new cookie; an unclaimed rotation restores the old token.
+- The public address is stored in `system.webuiPublicUrl` and shown as a copyable `<address>/pair` link.
 - The Remote access switch is stored in `system.webuiEnabled`; a launch with it on starts the service after the backend is ready.
 - Pairing requests, approvals, rejections, revocations, and expirations are appended to `<userData>/webui-audit.jsonl`.
 - Web-host exposes **same-origin `/kyrn`** and forwards it to the loopback host. It rewrites the KyRN token path in-process, so the KyRN token never appears in the browser URL.
 - `/kyrn` and `/ws` require the browser's `Origin` to equal `Host`, blocking cross-site WebSocket hijacking.
 - Extension WebUI contributions are hosted at their root paths: static assets are public, `auth: true` API handlers require a paired device, and `auth: false` webhooks stay public. Read-only devices may only GET handlers.
-- The phone E2E pairs a real browser as read-only, verifies GET succeeds and POST and `kyrn.save` are refused, revokes it, and asserts that the cookie no longer opens the app. It also checks the persisted switch value.
+- The phone E2E pairs a real browser as read-only, verifies GET succeeds and POST and `kyrn.save` are refused, rotates the token and checks the old cookie is rejected, revokes it, and asserts that the cookie no longer opens the app. It also checks the persisted switch value and public link.
 
 > **Security gate:** the desktop backend runs in local mode, so AionCore's own login page is not a reliable remote gate. Pairing is now the app-level gate, but the transport should still be HTTPS or a private network. Do not expose port 25808 directly to a LAN or the internet. Reverse-proxy authentication remains useful as defense in depth.
 
@@ -34,9 +35,9 @@ Status: service, same-origin proxy, device pairing with read/control scopes, and
 
 1. Open **Settings → System**, turn on **Remote access**, and copy the local URL (usually `http://127.0.0.1:25808`).
 2. Put an HTTPS reverse proxy or private network in front of that loopback URL. The proxy must preserve `Host` and forward WebSocket upgrades.
-3. Open the proxy's HTTPS URL on the phone. It redirects to `/pair`; enter the code shown on the desktop.
-4. Approve the pending device in Settings. The phone then opens the WebUI with its device cookie.
-5. Revoke the device from the same panel when it is no longer trusted. Turning the switch off stops the listener and closes live connections.
+3. Enter that public origin under **Public address**; the panel shows a copyable `<address>/pair` link.
+4. Open the link on the phone, enter the pairing code, then approve the pending device in Settings.
+5. Revoke the device when it is no longer trusted. **Rotate token** issues a new cookie without re-pairing; the phone claims it while its WebUI is open. Turning the switch off stops the listener and closes live connections.
 
 Caddy, with a password gate in front of the local service:
 
@@ -102,7 +103,7 @@ A hosted relay holds the WebSocket and forwards encrypted frames.
 5. On approval, the phone polls and receives an HttpOnly, SameSite=Strict device cookie. The raw token is delivered once; only its SHA-256 hash is stored.
 6. Every page, API request, `/ws`, and `/kyrn` now needs that cookie. Web-host checks it before proxying to AionCore or the KyRN host. Read-only devices are limited to read endpoints and read-only KyRN methods.
 7. The desktop lists paired devices with last-seen time. Revoking one deletes its hash, invalidates the next request, and closes its live sockets.
-8. Device tokens expire after 30 days. Pairing again issues a new token; there is no silent extension.
+8. Device tokens expire after 30 days. Rotating one keeps the old cookie valid for ten minutes while the open WebUI claims the new cookie; if it is not claimed, the old token is restored.
 
 ## Near-term order
 
@@ -113,8 +114,8 @@ A hosted relay holds the WebSocket and forwards encrypted frames.
 5. **Scope the device token.** Done: read-only versus full access, enforced per KyRN method and at the AionCore HTTP boundary.
 6. **Persist the Remote access switch.** Done: `system.webuiEnabled` and startup restore.
 7. **Cover host-backed pages in E2E:** providers, judges, skills, MCP, activity/lessons. The pairing E2E covers `kyrn.settings` and a denied write; the rest still need page-level tests.
-8. **Show the phone-facing proxy URL** instead of only the loopback URL.
-9. **Rotate a device token in place** without revoking and re-pairing.
+8. **Show the phone-facing proxy URL.** Done: `system.webuiPublicUrl` and a copyable `/pair` link.
+9. **Rotate a device token in place.** Done: a 10-minute grace window and a WebUI claim poll.
 10. **Reload extension handlers without an app restart.** Handlers are cached by path after the first request.
 
 ## Non-goals for the first remote slice

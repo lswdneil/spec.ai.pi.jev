@@ -1124,6 +1124,16 @@
     "unknownAddress": "不明なアドレス",
     "readOnly": "読み取り専用",
     "fullAccess": "フルアクセス",
-    "scopeHint": "承認する前に、このデバイスに許可する操作を選択してください。"
+    "scopeHint": "承認する前に、このデバイスに許可する操作を選択してください。",
+    "publicUrl": "公開アドレス",
+    "publicUrlPlaceholder": "https://specjev.example.com",
+    "publicUrlHint": "リバースプロキシまたはプライベートネットワークがこの WebUI に割り当てた HTTPS アドレスです。",
+    "publicUrlInvalid": "パスのない http(s) アドレスを入力してください。",
+    "save": "保存",
+    "openOnPhone": "スマートフォンで開く",
+    "copyLink": "リンクをコピー",
+    "linkCopied": "リンクをコピーしました",
+    "rotate": "トークンをローテーション",
+    "rotationPending": "スマートフォンの確認待ち"
   }
 }

@@ -50,6 +50,8 @@ export interface IConfigStorageRefer {
   'system.closeToTray'?: boolean;
   // Start the loopback WebUI service on launch / 启动时开启 WebUI 服务
   'system.webuiEnabled'?: boolean;
+  // Public HTTPS origin a reverse proxy exposes for the WebUI / WebUI 的对外 HTTPS 地址
+  'system.webuiPublicUrl'?: string;
   // 任务完成时显示系统通知 / Show system notification when task completes
   'system.notificationEnabled'?: boolean;
   // 定时任务完成时显示系统通知 / Show system notification when scheduled task completes

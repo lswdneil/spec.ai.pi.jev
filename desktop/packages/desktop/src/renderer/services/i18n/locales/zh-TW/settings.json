@@ -1124,6 +1124,16 @@
     "unknownAddress": "未知位址",
     "readOnly": "唯讀",
     "fullAccess": "完全控制",
-    "scopeHint": "批准前選擇這台裝置可以做什麼。"
+    "scopeHint": "批准前選擇這台裝置可以做什麼。",
+    "publicUrl": "公開位址",
+    "publicUrlPlaceholder": "https://specjev.example.com",
+    "publicUrlHint": "反向代理或私有網路為這個 WebUI 提供的 HTTPS 位址。",
+    "publicUrlInvalid": "請輸入不帶路徑的 http(s) 位址。",
+    "save": "儲存",
+    "openOnPhone": "在手機上開啟",
+    "copyLink": "複製連結",
+    "linkCopied": "已複製連結",
+    "rotate": "輪換權杖",
+    "rotationPending": "等待手機確認"
   }
 }

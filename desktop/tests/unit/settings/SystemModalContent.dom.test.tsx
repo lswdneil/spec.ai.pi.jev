@@ -88,6 +88,11 @@ vi.mock('@/common', () => ({
       revokeWebUiDevice: {
         invoke: vi.fn(() => Promise.resolve({ success: true, data: { pending: [], devices: [] } })),
       },
+      rotateWebUiDeviceToken: {
+        invoke: vi.fn(() => Promise.resolve({ success: true, data: { pending: [], devices: [] } })),
+      },
+      getWebUiPublicUrl: { invoke: vi.fn(() => Promise.resolve({ success: true, data: null })) },
+      setWebUiPublicUrl: { invoke: vi.fn(() => Promise.resolve({ success: true, data: null })) },
     },
     systemSettings: {
       getCloseToTray: { invoke: vi.fn(() => Promise.resolve(false)) },

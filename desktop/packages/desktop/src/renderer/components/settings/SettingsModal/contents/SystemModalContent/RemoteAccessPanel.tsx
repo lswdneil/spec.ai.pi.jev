@@ -1,8 +1,10 @@
 import { ipcBridge } from '@/common';
 import type { WebUiDeviceScope } from '@/common/webui/scopes';
 import { Button } from '@/renderer/ui/button';
+import { Input } from '@/renderer/ui/input';
 import { Select } from '@/renderer/ui/select';
 import { Message } from '@/renderer/ui/toast';
+import { copyText } from '@/renderer/utils/ui/clipboard';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
@@ -27,10 +29,36 @@ const RemoteAccessPanel: React.FC<{ running: boolean }> = ({ running }) => {
   const [now, setNow] = useState(() => Date.now());
   const [busy, setBusy] = useState<string | null>(null);
   const [scopeById, setScopeById] = useState<Record<string, WebUiDeviceScope>>({});
+  const [publicUrlDraft, setPublicUrlDraft] = useState('');
+  const [savingPublicUrl, setSavingPublicUrl] = useState(false);
   const { data, mutate } = useSWR('webui.access', () => ipcBridge.application.getWebUiAccess.invoke(), {
     refreshInterval: running ? 2_000 : 0,
   });
+  const { data: publicUrlData, mutate: mutatePublicUrl } = useSWR('webui.publicUrl', () =>
+    ipcBridge.application.getWebUiPublicUrl.invoke()
+  );
   const state = data?.data;
+  const publicUrl = publicUrlData?.data ?? null;
+
+  useEffect(() => {
+    setPublicUrlDraft(publicUrl ?? '');
+  }, [publicUrl]);
+
+  const savePublicUrl = useCallback(async () => {
+    setSavingPublicUrl(true);
+    try {
+      const result = await ipcBridge.application.setWebUiPublicUrl.invoke({ url: publicUrlDraft });
+      if (!result.success) {
+        Message.error(t('settings.remoteAccess.publicUrlInvalid'));
+        return;
+      }
+      await mutatePublicUrl();
+    } catch {
+      Message.error(t('settings.remoteAccess.publicUrlInvalid'));
+    } finally {
+      setSavingPublicUrl(false);
+    }
+  }, [mutatePublicUrl, publicUrlDraft, t]);
 
   useEffect(() => {
     if (!running) return;
@@ -65,6 +93,45 @@ const RemoteAccessPanel: React.FC<{ running: boolean }> = ({ running }) => {
   return (
     <div className='settings-list' data-testid='remote-access-panel'>
       <div className='flex flex-col gap-16px rounded-[var(--sv-r-chrome)] border border-sv-line bg-sv-surface px-16px py-14px'>
+        <div>
+          <div className='text-12px font-500 text-t-primary'>{t('settings.remoteAccess.publicUrl')}</div>
+          <div className='mt-4px flex items-center gap-8px'>
+            <Input
+              size='small'
+              data-testid='webui-public-url'
+              value={publicUrlDraft}
+              placeholder={t('settings.remoteAccess.publicUrlPlaceholder')}
+              onChange={(value: string) => setPublicUrlDraft(value)}
+              onPressEnter={() => void savePublicUrl()}
+            />
+            <Button size='sm' variant='secondary' loading={savingPublicUrl} onClick={() => void savePublicUrl()}>
+              {t('settings.remoteAccess.save')}
+            </Button>
+          </div>
+          <div className='mt-4px text-11px text-t-secondary'>{t('settings.remoteAccess.publicUrlHint')}</div>
+          {publicUrl ? (
+            <div className='mt-8px flex items-center justify-between gap-8px rounded-[var(--sv-r-small)] bg-sv-surface-2 px-10px py-8px'>
+              <div className='min-w-0'>
+                <div className='text-11px text-t-secondary'>{t('settings.remoteAccess.openOnPhone')}</div>
+                <div className='truncate font-mono text-12px text-t-primary' data-testid='webui-phone-link'>
+                  {publicUrl}/pair
+                </div>
+              </div>
+              <Button
+                size='sm'
+                variant='text'
+                onClick={() => {
+                  void copyText(`${publicUrl}/pair`)
+                    .then(() => Message.success(t('settings.remoteAccess.linkCopied')))
+                    .catch(() => Message.error(t('settings.remoteAccess.updateFailed')));
+                }}
+              >
+                {t('settings.remoteAccess.copyLink')}
+              </Button>
+            </div>
+          ) : null}
+        </div>
+
         {running ? (
           <div className='flex items-start justify-between gap-16px'>
             <div className='min-w-0'>
@@ -185,20 +252,41 @@ const RemoteAccessPanel: React.FC<{ running: boolean }> = ({ running }) => {
                       })}
                     </div>
                   </div>
-                  <Button
-                    size='sm'
-                    variant='text'
-                    status='danger'
-                    data-testid='device-revoke'
-                    disabled={busy !== null}
-                    onClick={() =>
-                      void run(`revoke-${device.id}`, () =>
-                        ipcBridge.application.revokeWebUiDevice.invoke({ id: device.id })
-                      )
-                    }
-                  >
-                    {t('settings.remoteAccess.revoke')}
-                  </Button>
+                  <div className='flex shrink-0 items-center gap-6px'>
+                    {device.rotationPending ? (
+                      <span className='text-11px text-t-secondary' data-testid='device-rotation-pending'>
+                        {t('settings.remoteAccess.rotationPending')}
+                      </span>
+                    ) : (
+                      <Button
+                        size='sm'
+                        variant='text'
+                        data-testid='device-rotate'
+                        disabled={busy !== null}
+                        onClick={() =>
+                          void run(`rotate-${device.id}`, () =>
+                            ipcBridge.application.rotateWebUiDeviceToken.invoke({ id: device.id })
+                          )
+                        }
+                      >
+                        {t('settings.remoteAccess.rotate')}
+                      </Button>
+                    )}
+                    <Button
+                      size='sm'
+                      variant='text'
+                      status='danger'
+                      data-testid='device-revoke'
+                      disabled={busy !== null}
+                      onClick={() =>
+                        void run(`revoke-${device.id}`, () =>
+                          ipcBridge.application.revokeWebUiDevice.invoke({ id: device.id })
+                        )
+                      }
+                    >
+                      {t('settings.remoteAccess.revoke')}
+                    </Button>
+                  </div>
                 </li>
               ))}
             </ul>

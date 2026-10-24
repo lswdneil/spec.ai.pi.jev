@@ -15,6 +15,7 @@ import {
   type WebUiAccess,
 } from '@mu/web-host';
 import { ipcBridge } from '@/common';
+import { normalizeWebUiPublicUrl } from '@/common/webui/scopes';
 import { WebUiAccessManager } from '@process/services/webui/access';
 import { handlePairingRequest } from '@process/services/webui/pairingHttp';
 import { BROWSER_SESSION_PARTITION } from '@/common/config/constants';
@@ -440,6 +441,26 @@ export function initApplicationBridge(): void {
     const result = access.revoke(id);
     if (!result.ok) return { success: false, msg: 'device_not_found', data: access.listState() };
     return { success: true, data: access.listState() };
+  });
+  ipcBridge.application.rotateWebUiDeviceToken.provider(async ({ id }) => {
+    const access = getWebUiAccess();
+    const result = access.rotateDevice(id);
+    if (result.ok === false) return { success: false, msg: result.error, data: access.listState() };
+    return { success: true, data: access.listState() };
+  });
+  ipcBridge.application.getWebUiPublicUrl.provider(async () => ({
+    success: true,
+    data: (await ProcessConfig.get('system.webuiPublicUrl').catch((): undefined => undefined)) || null,
+  }));
+  ipcBridge.application.setWebUiPublicUrl.provider(async ({ url }) => {
+    const normalized = normalizeWebUiPublicUrl(url);
+    if (normalized.ok === false) return { success: false, msg: 'invalid_public_url' };
+    if (normalized.value === null) {
+      await ProcessConfig.remove('system.webuiPublicUrl').catch((): undefined => undefined);
+    } else {
+      await ProcessConfig.set('system.webuiPublicUrl', normalized.value).catch((): undefined => undefined);
+    }
+    return { success: true, data: normalized.value };
   });
   app.once('will-quit', () => {
     // Quitting is not the user turning the switch off; keep the preference.

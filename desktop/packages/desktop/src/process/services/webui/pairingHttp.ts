@@ -76,6 +76,21 @@ export async function handlePairingRequest(
   const url = new URL(request.url ?? '/', 'http://127.0.0.1');
   if (!url.pathname.startsWith('/api/pair/')) return false;
 
+  if (request.method === 'POST' && url.pathname === '/api/pair/rotate') {
+    if (!isSameOrigin(request)) {
+      sendJson(response, 403, { error: 'origin_mismatch' });
+      return true;
+    }
+    const result = access.claimRotation(request.headers.cookie);
+    if (!result) {
+      sendJson(response, 401, { error: 'PAIRING_REQUIRED' });
+      return true;
+    }
+    if (result.rotated) response.setHeader('set-cookie', deviceCookie(result.token, request));
+    sendJson(response, 200, { rotated: result.rotated });
+    return true;
+  }
+
   if (request.method === 'POST' && url.pathname === '/api/pair/request') {
     if (!isSameOrigin(request)) {
       sendJson(response, 403, { error: 'origin_mismatch' });
