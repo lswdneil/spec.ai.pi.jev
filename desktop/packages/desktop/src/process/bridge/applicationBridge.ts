@@ -8,6 +8,7 @@ import { join } from 'node:path';
 import type { BrowserWindow } from 'electron';
 import { app, session } from 'electron';
 import {
+  loadWebUiExtensionViews,
   renderPairingPage,
   startStaticServer,
   type StaticServerHandle,
@@ -64,39 +65,45 @@ async function startWebUi(port?: number, persist = true): Promise<IWebUiStatus> 
 
   const epoch = ++webUiEpoch;
   webUiStarting = (async (): Promise<IWebUiStatus> => {
-    // Keep a stable port so a reverse-proxy config survives a restart. If the
-    // default is taken (another instance, or an unrelated process), fall back
-    // to an ephemeral port rather than refusing remote access.
-    const candidates = port === undefined ? [undefined, 0] : [port];
-    let lastError: unknown;
-    for (const candidate of candidates) {
-      try {
-        const handle = await startStaticServer({
-          staticDir: join(app.getAppPath(), 'out', 'renderer'),
-          backendPort,
-          port: candidate,
-          // The reverse proxy is the only listener that should cross the machine boundary.
-          allowRemote: false,
-          kyrnHostUrl: (globalThis as typeof globalThis & { __kyrnHostUrl?: string }).__kyrnHostUrl,
-          access: webUiAccessAdapter,
-          pairingPage: renderPairingPage,
-        });
-        if (epoch !== webUiEpoch) {
-          // The user turned the switch off while the listener was starting.
-          await handle.stop();
+    try {
+      // Keep a stable port so a reverse-proxy config survives a restart. If the
+      // default is taken (another instance, or an unrelated process), fall back
+      // to an ephemeral port rather than refusing remote access.
+      const candidates = port === undefined ? [undefined, 0] : [port];
+      let lastError: unknown;
+      for (const candidate of candidates) {
+        try {
+          const handle = await startStaticServer({
+            staticDir: join(app.getAppPath(), 'out', 'renderer'),
+            backendPort,
+            port: candidate,
+            // The reverse proxy is the only listener that should cross the machine boundary.
+            allowRemote: false,
+            kyrnHostUrl: (globalThis as typeof globalThis & { __kyrnHostUrl?: string }).__kyrnHostUrl,
+            access: webUiAccessAdapter,
+            pairingPage: renderPairingPage,
+            extensions: true,
+          });
+          if (epoch !== webUiEpoch) {
+            // The user turned the switch off while the listener was starting.
+            await handle.stop();
+            return webUiStatus();
+          }
+          webUi = { handle, url: handle.localUrl, port: handle.port };
+          getWebUiAccess().beginSession();
+          if (persist) {
+            await ProcessConfig.set('system.webuiEnabled', true).catch((): undefined => undefined);
+          }
           return webUiStatus();
+        } catch (error) {
+          lastError = error;
         }
-        webUi = { handle, url: handle.localUrl, port: handle.port };
-        getWebUiAccess().beginSession();
-        if (persist) {
-          await ProcessConfig.set('system.webuiEnabled', true).catch((): undefined => undefined);
-        }
-        return webUiStatus();
-      } catch (error) {
-        lastError = error;
       }
+      return { running: false, error: lastError instanceof Error ? lastError.message : String(lastError) };
+    } finally {
+      // A completed start must not answer the next start with a cached handle.
+      webUiStarting = null;
     }
-    return { running: false, error: lastError instanceof Error ? lastError.message : String(lastError) };
   })();
 
   return webUiStarting;
@@ -404,6 +411,11 @@ export function initApplicationBridge(): void {
     return status.error ? { success: false, msg: status.error, data: status } : { success: true, data: status };
   });
   ipcBridge.application.stopWebUi.provider(async () => ({ success: true, data: await stopWebUi() }));
+  ipcBridge.extensions.getWebUiContributions.provider(async () => {
+    const backendPort = (globalThis as typeof globalThis & { __backendPort?: number }).__backendPort;
+    if (!backendPort) return { success: false, msg: 'The local backend is not ready' };
+    return { success: true, data: await loadWebUiExtensionViews(backendPort) };
+  });
   ipcBridge.application.getWebUiAccess.provider(async () => ({
     success: true,
     data: getWebUiAccess().listState(),

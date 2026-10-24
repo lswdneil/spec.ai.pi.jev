@@ -14,6 +14,7 @@ import http, { type IncomingMessage, type Server, type ServerResponse } from 'no
 import { networkInterfaces } from 'node:os';
 import net, { type Socket } from 'node:net';
 import serveHandler from 'serve-handler';
+import { handleWebUiExtensionRequest } from './extensions.js';
 
 export type WebUiDeviceScope = 'read' | 'control';
 
@@ -45,6 +46,8 @@ export type StaticServerOptions = {
   access?: WebUiAccess;
   /** The small standalone HTML page served at `/pair`. */
   pairingPage?: (request: IncomingMessage) => string;
+  /** Serve extension-contributed `/ext-*` assets and API handlers. */
+  extensions?: boolean;
 };
 
 export type StaticServerHandle = {
@@ -316,6 +319,9 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
       }
 
       const pathname = req.url.split('?')[0];
+      if (opts.extensions && (await handleWebUiExtensionRequest(req, res, opts.backendPort, opts.access))) {
+        return;
+      }
       if (opts.access) {
         // Pairing is the only public surface. The phone gets a small standalone
         // page, not the app shell or any AionCore data.
@@ -497,6 +503,28 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
   });
 
   const actualPort = (tcp_server.address() as { port: number } | null)?.port ?? port;
+
+  // A listener that reports a port but refuses connections is worse than a
+  // failed start: the settings panel would advertise a dead URL and a reverse
+  // proxy would keep a stale upstream. Probe it before returning a handle.
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const probe = net.connect({ host: '127.0.0.1', port: actualPort });
+      probe.setTimeout(1500, () => probe.destroy(new Error('WebUI listener did not accept connections')));
+      probe.once('connect', () => {
+        probe.end();
+        resolve();
+      });
+      probe.once('error', reject);
+    });
+  } catch (error) {
+    for (const client of clients) client.destroy();
+    clients.clear();
+    tcp_server.close();
+    http_server.close();
+    throw error;
+  }
+
   const lanIP = allowRemote ? (getLanIP() ?? undefined) : undefined;
   const localUrl = `http://127.0.0.1:${actualPort}`;
   const networkUrl = lanIP ? `http://${lanIP}:${actualPort}` : undefined;

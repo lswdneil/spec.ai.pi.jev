@@ -2062,6 +2062,12 @@ export interface IExtensionSettingsTab {
   extensionName: string;
 }
 
+export interface IWebUiExtensionContribution {
+  extensionName: string;
+  apiRoutes: Array<{ path: string; auth: boolean }>;
+  staticAssets: Array<{ urlPrefix: string; directory: string }>;
+}
+
 export type AgentActivityState = 'idle' | 'writing' | 'researching' | 'executing' | 'syncing' | 'error';
 
 export interface IExtensionAgentActivityEvent {
@@ -2101,6 +2107,9 @@ export const extensions = {
   getMcpServers: httpGet<Record<string, unknown>[], void>('/api/extensions/mcp-servers'),
   getSkills: httpGet<Array<{ name: string; description: string; location: string }>, void>('/api/extensions/skills'),
   getSettingsTabs: httpGet<IExtensionSettingsTab[], void>('/api/extensions/settings-tabs'),
+  getWebUiContributions: bridge.buildProvider<IBridgeResponse<IWebUiExtensionContribution[]>, void>(
+    'extensions.get-webui-contributions'
+  ),
   getAgentActivitySnapshot: httpGet<IExtensionAgentActivitySnapshot, void>('/api/extensions/agent-activity'),
   getExtI18nForLocale: httpPost<Record<string, unknown>, { locale: string }>('/api/extensions/i18n'),
   enableExtension: httpPost<void, { name: string }>('/api/extensions/enable'),

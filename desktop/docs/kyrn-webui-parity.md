@@ -1,6 +1,6 @@
 # KyRN bridge: WebUI parity
 
-Status: loopback host, same-origin proxy, device pairing, scoped devices, and persisted switch implemented, 2026-10-24.
+Status: loopback host, same-origin proxy, device pairing, scopes, persisted switch, and extension WebUI hosting implemented, 2026-10-24.
 
 The WebUI boots with a read-only catalog provider and can call the desktop's KyRN providers over the same origin. The browser connects to `/kyrn`; web-host first checks the paired-device cookie, then rewrites the token path and forwards to a loopback-only host.
 
@@ -82,6 +82,6 @@ The phone E2E now opens Settings → Providers through this same-origin path, no
 
 1. A "show this on my phone" flow that displays the proxy URL rather than only the loopback URL.
 2. E2E coverage for every host-backed settings page, not just Providers and `kyrn.settings`.
-3. Hosting extension-contributed WebUI static assets and API routes. `webui.start` serves the renderer, AionCore, and `/kyrn`; it does not yet load `contributes.webui` from extension manifests, so `tests/e2e/specs/ext-webui-contrib.e2e.ts` still fails once the service is actually running.
-4. Rotating a device token without revoking and re-pairing the device. Re-pairing works, but it is not an in-place rotation.
-5. A full per-endpoint AionCore policy. Read-only is intentionally a GET/narrow-POST allowlist; full access remains all-or-nothing.
+3. Rotating a device token without revoking and re-pairing the device. Re-pairing works, but it is not an in-place rotation.
+4. A full per-endpoint AionCore policy. Read-only is intentionally a GET/narrow-POST allowlist; full access remains all-or-nothing.
+5. Reloading extension handler code without restarting the app. Handlers are cached by path after their first invocation.

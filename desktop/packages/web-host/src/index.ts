@@ -4,6 +4,8 @@ export type { AppMetadata, BackendBinaryResolver, WebHostOptions, WebHostHandle 
 export { startStaticServer, stopStaticServer } from './static-server.js';
 export type { StaticServerOptions, StaticServerHandle, WebUiAccess } from './static-server.js';
 export { renderPairingPage } from './pairing-page.js';
+export { loadWebUiExtensionViews } from './extensions.js';
+export type { WebUiExtensionContributionView } from './extensions.js';
 
 // Backend launcher exports (M4)
 export {
