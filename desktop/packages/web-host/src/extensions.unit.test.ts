@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import http from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -112,6 +112,15 @@ describe('extension WebUI host', () => {
       });
       expect(control.status).toBe(200);
       expect(await control.json()).toEqual({ ok: true, method: 'GET', body: null });
+
+      const handler = join(root, 'webui', 'handler.js');
+      writeFileSync(handler, 'module.exports = async (req, res) => { res.json({ version: 2 }); };\n');
+      const future = new Date(Date.now() + 5_000);
+      utimesSync(handler, future, future);
+      const reloaded = await fetch(`${base}/ext-demo/stats`, {
+        headers: { cookie: 'specjev_device=control' },
+      });
+      expect(await reloaded.json()).toEqual({ version: 2 });
 
       const readPost = await fetch(`${base}/ext-demo/stats`, {
         method: 'POST',

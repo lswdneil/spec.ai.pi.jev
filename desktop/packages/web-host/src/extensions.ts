@@ -34,6 +34,7 @@ export type WebUiExtensionRoute = {
   path: string;
   auth: boolean;
   handlerPath: string;
+  rootDir: string;
 };
 
 export type WebUiExtensionAsset = {
@@ -53,8 +54,11 @@ export type WebUiExtensionContributionView = {
   staticAssets: Array<{ urlPrefix: string; directory: string }>;
 };
 
+type Handler = (req: IncomingMessage, res: ServerResponse) => unknown;
+type CachedHandler = { mtimeMs: number; rootDir: string; handler: Handler | null };
+
 const requireFromHere = createRequire(import.meta.url);
-const handlers = new Map<string, ((req: IncomingMessage, res: ServerResponse) => unknown) | null>();
+const handlers = new Map<string, CachedHandler>();
 const MAX_BODY = 2 * 1024 * 1024;
 
 const CONTENT_TYPES: Record<string, string> = {
@@ -136,7 +140,7 @@ function contributionFor(name: string, entries: RawWebUiEntry[], enabled: Set<st
       const path = stringValue(route.path);
       const handlerPath = resolveManifestFile(root, route.entryPoint);
       if (!path || !handlerPath) continue;
-      routes.push({ path, auth: typeof route.auth === 'boolean' ? route.auth : true, handlerPath });
+      routes.push({ path, auth: typeof route.auth === 'boolean' ? route.auth : true, handlerPath, rootDir: root });
     }
   }
   if (routes.length === 0) {
@@ -148,7 +152,9 @@ function contributionFor(name: string, entries: RawWebUiEntry[], enabled: Set<st
         const handler = stringValue(route.handler);
         if (!path || !handler) continue;
         const handlerPath = resolve(directory, handler);
-        if (within(resolve(directory), handlerPath)) routes.push({ path, auth: true, handlerPath });
+        if (within(resolve(directory), handlerPath)) {
+          routes.push({ path, auth: true, handlerPath, rootDir: resolve(directory) });
+        }
       }
     }
   }
@@ -220,18 +226,32 @@ export async function loadWebUiExtensionViews(backendPort: number): Promise<WebU
   }));
 }
 
-function loadHandler(path: string): ((req: IncomingMessage, res: ServerResponse) => unknown) | null {
-  if (handlers.has(path)) return handlers.get(path) ?? null;
+function loadHandler(path: string, rootDir: string): Handler | null {
+  let mtimeMs: number;
   try {
-    const loaded = requireFromHere(path) as
-      | ((req: IncomingMessage, res: ServerResponse) => unknown)
-      | { default?: (req: IncomingMessage, res: ServerResponse) => unknown };
+    mtimeMs = statSync(path).mtimeMs;
+  } catch {
+    handlers.set(path, { mtimeMs: -1, rootDir, handler: null });
+    return null;
+  }
+
+  const cached = handlers.get(path);
+  if (cached && cached.mtimeMs === mtimeMs && cached.rootDir === rootDir) return cached.handler;
+
+  try {
+    // Reload the handler and every module it owns under the extension root, so
+    // editing a handler or a helper it imports shows up on the next request.
+    const resolved = requireFromHere.resolve(path);
+    for (const key of Object.keys(requireFromHere.cache)) {
+      if (within(rootDir, key)) delete requireFromHere.cache[key];
+    }
+    const loaded = requireFromHere(resolved) as Handler | { default?: Handler };
     const handler = typeof loaded === 'function' ? loaded : loaded.default;
     const result = typeof handler === 'function' ? handler : null;
-    handlers.set(path, result);
+    handlers.set(path, { mtimeMs, rootDir, handler: result });
     return result;
   } catch {
-    handlers.set(path, null);
+    handlers.set(path, { mtimeMs, rootDir, handler: null });
     return null;
   }
 }
@@ -359,7 +379,7 @@ export async function handleWebUiExtensionRequest(
       }
     }
 
-    const handler = loadHandler(route.handlerPath);
+    const handler = loadHandler(route.handlerPath, route.rootDir);
     if (!handler) {
       response.writeHead(500, { 'content-type': 'application/json; charset=utf-8' });
       response.end(JSON.stringify({ error: 'EXTENSION_HANDLER_FAILED' }));

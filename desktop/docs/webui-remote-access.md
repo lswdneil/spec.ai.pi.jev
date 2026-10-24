@@ -17,6 +17,7 @@ Status: service, same-origin proxy, pairing with read/control scopes, persisted 
 - Web-host exposes **same-origin `/kyrn`** and forwards it to the loopback host. It rewrites the KyRN token path in-process, so the KyRN token never appears in the browser URL.
 - `/kyrn` and `/ws` require the browser's `Origin` to equal `Host`, blocking cross-site WebSocket hijacking.
 - Extension WebUI contributions are hosted at their root paths: static assets are public, `auth: true` API handlers require a paired device, and `auth: false` webhooks stay public. Read-only devices may only GET handlers.
+- Extension static files are read per request, and a handler (plus the modules under its extension root) is re-required when its mtime changes, so editing an extension does not require restarting the app.
 - The phone E2E pairs a real browser as read-only, verifies GET succeeds and POST and `kyrn.save` are refused, rotates the token and checks the old cookie is rejected, revokes it, and asserts that the cookie no longer opens the app. It also checks the persisted switch value and public link.
 
 > **Security gate:** the desktop backend runs in local mode, so AionCore's own login page is not a reliable remote gate. Pairing is now the app-level gate, but the transport should still be HTTPS or a private network. Do not expose port 25808 directly to a LAN or the internet. Reverse-proxy authentication remains useful as defense in depth.
@@ -116,7 +117,7 @@ A hosted relay holds the WebSocket and forwards encrypted frames.
 7. **Cover host-backed pages in E2E:** providers, judges, skills, MCP, activity/lessons. The pairing E2E covers `kyrn.settings` and a denied write; the rest still need page-level tests.
 8. **Show the phone-facing proxy URL.** Done: `system.webuiPublicUrl` and a copyable `/pair` link.
 9. **Rotate a device token in place.** Done: a 10-minute grace window and a WebUI claim poll.
-10. **Reload extension handlers without an app restart.** Handlers are cached by path after the first request.
+10. **Reload extension handlers without an app restart.** Done: mtime-based reload clears the extension's modules from the require cache.
 
 ## Non-goals for the first remote slice
 
