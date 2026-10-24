@@ -200,7 +200,7 @@ const ModalMcpManagementSection: React.FC<{
   };
 
   return (
-    <section className='settings-group min-h-0'>
+    <section className='settings-group min-h-0' data-testid='mu-tools-mcp'>
       <div className='flex gap-8px items-center justify-between'>
         <h3 className='settings-group__title'>{t('settings.mcpSettings')}</h3>
         <div>{renderAddButton()}</div>

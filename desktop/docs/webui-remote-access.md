@@ -114,7 +114,7 @@ A hosted relay holds the WebSocket and forwards encrypted frames.
 4. **Pairing and device approval.** Done: one-time code, approval, HttpOnly device token, device list, revocation, expiry, audit.
 5. **Scope the device token.** Done: read-only versus full access, enforced per KyRN method and at the AionCore HTTP boundary.
 6. **Persist the Remote access switch.** Done: `system.webuiEnabled` and startup restore.
-7. **Cover host-backed pages in E2E:** providers, judges, skills, MCP, activity/lessons. The pairing E2E covers `kyrn.settings` and a denied write; the rest still need page-level tests.
+7. **Cover host-backed pages in E2E.** Done: the 390px browser test opens judges, providers, the official skills list, MCP servers, and the conversation judge/board/lessons panel through the real runtime.
 8. **Show the phone-facing proxy URL.** Done: `system.webuiPublicUrl` and a copyable `/pair` link.
 9. **Rotate a device token in place.** Done: a 10-minute grace window and a WebUI claim poll.
 10. **Reload extension handlers without an app restart.** Done: mtime-based reload clears the extension's modules from the require cache.

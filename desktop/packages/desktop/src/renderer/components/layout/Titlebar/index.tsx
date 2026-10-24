@@ -324,6 +324,7 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
             className={classNames('app-titlebar__button', layout?.isMobile && 'app-titlebar__button--mobile')}
             onClick={handleWorkspaceToggle}
             aria-label={workspaceTooltip}
+            data-testid='titlebar-workspace-toggle'
           >
             {workspaceCollapsed ? (
               <ExpandRight theme='outline' className='sv-icon-titlebar' fill='currentColor' />

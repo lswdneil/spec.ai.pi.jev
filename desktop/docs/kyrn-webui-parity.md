@@ -83,5 +83,5 @@ The phone E2E now opens Settings → Providers through this same-origin path, no
 
 ## Still missing
 
-1. E2E coverage for every host-backed settings page, not just Providers and `kyrn.settings`.
-2. A full per-endpoint AionCore policy. Read-only is intentionally a GET/narrow-POST allowlist; full access remains all-or-nothing.
+1. A full per-endpoint AionCore policy. Read-only is intentionally a GET/narrow-POST allowlist; full access remains all-or-nothing.
+2. Richer activity fixtures. The phone E2E opens the judge/board/lessons panel and verifies it renders from the host; the test conversation has no judge records or lessons yet.

@@ -266,6 +266,7 @@ const ChatLayout: React.FC<{
             className='h-6 w-6 text-sv-muted hover:bg-sv-surface hover:text-sv-text'
             onClick={() => dispatchWorkspaceToggleEvent()}
             aria-label={t('common.workPanel.label')}
+            data-testid='work-panel-toggle'
           >
             <PanelRight className='sv-icon-sm' strokeWidth={1.75} />
           </Button>

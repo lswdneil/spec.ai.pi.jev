@@ -68,7 +68,7 @@ function startWebHost(backendPort: number, kyrnHostUrl: string): Promise<{ url: 
 }
 
 test('renders the phone shell at 390px', async ({ electronApp, page: electronPage, browser }, testInfo) => {
-  test.setTimeout(120_000);
+  test.setTimeout(180_000);
 
   const backendPort = await electronPage.evaluate(
     () => (window as unknown as { __backendPort?: number }).__backendPort ?? 0
@@ -188,6 +188,34 @@ test('renders the phone shell at 390px', async ({ electronApp, page: electronPag
     await expect(webPage.getByTestId('mu-provider-manager')).toBeVisible({ timeout: 30_000 });
     await webPage.screenshot({ path: testInfo.outputPath('phone-390-providers.png') });
 
+    await webPage.evaluate(() => {
+      window.location.hash = '/settings/judges';
+    });
+    await expect(webPage.getByTestId('mu-section-judges')).toBeVisible({ timeout: 30_000 });
+    await expect(webPage.getByTestId('mu-judge-mode')).toBeVisible();
+    await expect(webPage.getByTestId('mobile-tab-bar')).toBeVisible();
+    await webPage.screenshot({ path: testInfo.outputPath('phone-390-judges.png') });
+
+    await webPage.evaluate(() => {
+      window.location.hash = '/settings/skills';
+    });
+    // The app runs classic skills/MCP pages when the native host is off; either
+    // page must show its loaded sections, not just the settings header.
+    await expect(webPage.getByTestId('skills-header')).toBeVisible({ timeout: 30_000 });
+    await expect(webPage.getByTestId('my-skills-section')).toBeVisible({ timeout: 30_000 });
+    await webPage.getByText(/官方技能|Official skills/i).click();
+    await expect(webPage.getByTestId('official-skills-section')).toBeVisible({ timeout: 30_000 });
+    await expect(webPage.locator('[data-testid^="official-skill-card-"]').first()).toBeVisible({
+      timeout: 30_000,
+    });
+    await webPage.screenshot({ path: testInfo.outputPath('phone-390-skills.png') });
+
+    await webPage.evaluate(() => {
+      window.location.hash = '/settings/tools';
+    });
+    await expect(webPage.getByTestId('mu-tools-mcp')).toBeVisible({ timeout: 30_000 });
+    await webPage.screenshot({ path: testInfo.outputPath('phone-390-mcp.png') });
+
     const assistantId = await webPage.evaluate(async () => {
       const response = await fetch('/api/assistants');
       if (!response.ok) return null;
@@ -233,6 +261,24 @@ test('renders the phone shell at 390px', async ({ electronApp, page: electronPag
       await expect(webPage.getByTestId('mobile-tab-bar')).toBeVisible({ timeout: 15_000 });
       await webPage.waitForTimeout(1_000);
       await webPage.screenshot({ path: testInfo.outputPath('phone-390-conversation.png') });
+
+      await webPage.getByTestId('titlebar-workspace-toggle').click();
+      await expect(webPage.getByTestId('work-panel')).toHaveAttribute('data-open', 'true', {
+        timeout: 15_000,
+      });
+      await webPage.locator('[role="tab"][data-tab="judge"]').click();
+      await expect(webPage.getByTestId('kyrn-judge')).toBeVisible({ timeout: 30_000 });
+      await webPage.screenshot({ path: testInfo.outputPath('phone-390-judge-panel.png') });
+
+      await webPage.locator('[role="tab"][data-tab="board"]').click();
+      await expect(webPage.getByTestId('mu-gauges')).toBeVisible({ timeout: 15_000 });
+
+      // Lessons is not an always-shown tab; it lives under the strip's More menu
+      // until this conversation uses it.
+      await webPage.getByTestId('work-panel-more').click();
+      await webPage.locator('[data-testid="work-panel-more-tab"][data-tab="lessons"]').click();
+      await expect(webPage.getByTestId('mu-lessons')).toBeVisible({ timeout: 30_000 });
+      await webPage.screenshot({ path: testInfo.outputPath('phone-390-lessons.png') });
     }
   } finally {
     server.stop();
