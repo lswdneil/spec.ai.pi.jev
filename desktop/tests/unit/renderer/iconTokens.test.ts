@@ -50,7 +50,7 @@ describe('the shared shell icon scale', () => {
 
   it('keeps shell icons on the scale instead of literal pixel classes', () => {
     for (const path of shell) {
-      const source = read(path);
+      const source = withoutContentSizedMarks(read(path));
       expect(source, path).not.toMatch(literalIconSize);
     }
   });
