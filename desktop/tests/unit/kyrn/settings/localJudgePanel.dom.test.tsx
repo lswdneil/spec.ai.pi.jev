@@ -78,11 +78,11 @@ function panel() {
 }
 
 describe('Laya on Windows and Linux, where the app runs the ONNX model itself', () => {
-  it('never downloads the model: it links to Hugging Face, names the folder and the command', async () => {
+  it('downloads the model, links to Hugging Face and names the folder and the command', async () => {
     bridge.localJudgeState.mockResolvedValue(onnx());
     const view = await panel();
     await waitFor(() => expect(view).toHaveTextContent('about 681 MB'));
-    expect(view).toHaveTextContent("spec.jev doesn't download it for you");
+    expect(view).toHaveTextContent('Download it here');
     expect(view).toHaveTextContent(`Model folder: ${FOLDER}`);
     // Every file is missing: no list of five names, the folder says it.
     expect(view).not.toHaveTextContent('Still missing');
@@ -97,6 +97,7 @@ describe('Laya on Windows and Linux, where the app runs the ONNX model itself', 
     fireEvent.click(within(view).getByTestId('mu-laya-page'));
     expect(outside.open).toHaveBeenCalledWith(LAYA_ONNX_PAGE);
 
+    expect(within(view).getByTestId('mu-laya-download')).toBeInTheDocument();
     bridge.localJudgeRun.mockResolvedValue(onnx());
     fireEvent.click(within(view).getByTestId('mu-laya-locate'));
     await waitFor(() => expect(bridge.localJudgeRun).toHaveBeenCalledWith({ action: 'locate', consent: false }));

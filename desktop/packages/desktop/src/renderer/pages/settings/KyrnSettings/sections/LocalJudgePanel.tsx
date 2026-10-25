@@ -75,6 +75,16 @@ export default function LocalJudgePanel({ guide = false }: { guide?: boolean } =
       cancelText: t('common.cancel'),
       onOk: () => void run('setup', true),
     });
+  const download = () =>
+    modal.confirm?.({
+      title: t('mu.judges.laya.onnx.downloadConfirmTitle'),
+      content: t('mu.judges.laya.onnx.downloadConfirmText', {
+        size: formatNumber(LAYA_ONNX_DOWNLOAD_MB, i18n.language),
+      }),
+      okText: t('mu.judges.laya.onnx.downloadConfirmOk'),
+      cancelText: t('common.cancel'),
+      onOk: () => void run('download'),
+    });
 
   if (!state)
     return problem ? (
@@ -87,7 +97,13 @@ export default function LocalJudgePanel({ guide = false }: { guide?: boolean } =
   const model = onnx ? state.model : undefined;
   const dot: DotState = busy ? 'busy' : state.running ? 'ready' : state.installed ? 'off' : 'attention';
   const status = busy
-    ? t(onnx && task.action === 'start' ? 'mu.judges.laya.onnx.starting' : `mu.judges.laya.working.${task.action}`)
+    ? t(
+        onnx && task.action === 'start'
+          ? 'mu.judges.laya.onnx.starting'
+          : onnx && task.action === 'download'
+            ? 'mu.judges.laya.onnx.downloading'
+            : `mu.judges.laya.working.${task.action}`
+      )
     : state.running
       ? t('mu.judges.laya.running')
       : state.installed
@@ -160,6 +176,16 @@ export default function LocalJudgePanel({ guide = false }: { guide?: boolean } =
         ) : null}
         {getModel ? (
           <>
+            <Button
+              size='small'
+              type='primary'
+              loading={busy}
+              disabled={busy}
+              data-testid='mu-laya-download'
+              onClick={download}
+            >
+              {t('mu.judges.laya.onnx.download')}
+            </Button>
             <Button size='small' data-testid='mu-laya-page' onClick={() => void openExternalUrl(LAYA_ONNX_PAGE)}>
               {t('mu.judges.laya.onnx.page')}
             </Button>

@@ -1,8 +1,10 @@
+import { createHash } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
+import { open, rename, rm } from 'node:fs/promises';
 import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { KyrnError } from '../../../common/kyrn/errors';
-import { LAYA_ONNX_FOLDER } from '../../../common/kyrn/layaOnnx';
+import { LAYA_ONNX_FILES, LAYA_ONNX_FOLDER, layaOnnxFileUrl } from '../../../common/kyrn/layaOnnx';
 import type {
   LocalJudgeAction,
   LocalJudgeProblem,
@@ -36,7 +38,7 @@ export type OnnxJudgeDeps = {
   home: string;
 };
 
-const ACTIONS: ReadonlySet<string> = new Set<LocalJudgeAction>(['setup', 'start', 'stop', 'locate']);
+const ACTIONS: ReadonlySet<string> = new Set<LocalJudgeAction>(['setup', 'download', 'start', 'stop', 'locate']);
 const OUTPUT_LINES = 12;
 const LINE_CHARS = 300;
 const FAILURES: Record<string, LocalJudgeProblem> = {
@@ -80,9 +82,9 @@ async function health(url: string): Promise<boolean> {
 }
 
 /**
- * Laya where Core ML does not run: the app checks the model the person downloaded, starts the judge process, stops
- * it, and opens the model folder. The same `state()` / `run()` as the Core ML `LocalJudge`, so the settings do not
- * care which one this machine has.
+ * Laya where Core ML does not run: the app downloads and verifies the model, starts the judge process, stops it, and
+ * opens the model folder. The same `state()` / `run()` as the Core ML `LocalJudge`, so the settings do not care which
+ * one this machine has.
  */
 export class OnnxLocalJudge {
   private deps: OnnxJudgeDeps;
@@ -138,7 +140,7 @@ export class OnnxLocalJudge {
   /** `start` checks the model (hashing it the first time) and starts the judge; `consent` is coreml's and unused. */
   async run(action: LocalJudgeAction, _consent = false): Promise<LocalJudgeState> {
     if (!ACTIONS.has(action)) throw new KyrnError('invalid', `Unknown local judge action: ${String(action)}`);
-    if (action === 'setup') throw new KyrnError('invalid', 'The app does not download the local judge model');
+    if (action === 'setup') throw new KyrnError('invalid', 'The Core ML installer is not used on this machine');
     if (this.support() !== 'ok') throw new KyrnError('invalid', 'This machine cannot run the local judge');
     if (action === 'locate') {
       await this.deps.open(this.folder);
@@ -150,6 +152,7 @@ export class OnnxLocalJudge {
     const task: LocalJudgeTask = { id: ++this.next, action, phase: 'running', output: [] };
     this.task = task;
     if (action === 'start') void this.start(task);
+    else if (action === 'download') void this.download(task);
     else {
       if (previous) this.end(previous, 'stopped');
       void this.stop(task);
@@ -164,6 +167,62 @@ export class OnnxLocalJudge {
     if (!(await this.deps.check(this.folder, false)).ready || (await this.deps.health(this.url))) return false;
     await this.run('start');
     return true;
+  }
+
+  /** Downloads the pinned ONNX files into the model folder, verifies each hash, and ends when the bundle is ready. */
+  private async download(task: LocalJudgeTask): Promise<void> {
+    try {
+      mkdirSync(this.folder, { recursive: true });
+      const before = await this.deps.check(this.folder, false);
+      if (before.ready) {
+        this.end(task);
+        return;
+      }
+      for (const file of LAYA_ONNX_FILES) {
+        const target = join(this.folder, file.name);
+        mkdirSync(dirname(target), { recursive: true });
+        const part = `${target}.part`;
+        this.say(task, `Downloading ${file.name}`);
+        const response = await fetch(layaOnnxFileUrl(file.name));
+        if (!response.ok || !response.body) {
+          throw new Error(`HTTP ${response.status} for ${file.name}`);
+        }
+        const reader = response.body.getReader();
+        const handle = await open(part, 'w');
+        const hash = createHash('sha256');
+        let received = 0;
+        let nextReport = 0;
+        try {
+          for (;;) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunk = Buffer.from(value);
+            received += chunk.length;
+            hash.update(chunk);
+            await handle.write(chunk);
+            if (received >= nextReport) {
+              const percent = Math.min(100, Math.round((received / file.bytes) * 100));
+              this.say(task, `${file.name}: ${percent}% (${Math.round(received / 1_000_000)} MB)`);
+              nextReport = received + Math.max(1, Math.round(file.bytes / 20));
+            }
+          }
+        } finally {
+          await handle.close();
+        }
+        const digest = hash.digest('hex');
+        if (received !== file.bytes || digest !== file.sha256) {
+          await rm(part, { force: true });
+          throw new Error(`${file.name} did not match the tested version`);
+        }
+        await rename(part, target);
+        this.say(task, `${file.name}: done`);
+      }
+      const after = await this.deps.check(this.folder, true);
+      this.end(task, after.ready ? undefined : 'wrong');
+    } catch (error) {
+      this.say(task, error instanceof Error ? error.message : String(error));
+      this.end(task, 'download');
+    }
   }
 
   private say(task: LocalJudgeTask, chunk: Buffer | string): void {

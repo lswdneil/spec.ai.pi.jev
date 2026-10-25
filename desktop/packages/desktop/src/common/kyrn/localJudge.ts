@@ -4,12 +4,15 @@
  * - coreml (Apple Silicon Macs): installed from the settings with one click after the person agrees to the download,
  *   started and stopped there. The main process runs the harness's own script,
  *   `kyrn/bin/kyrn-judge-local setup|start|stop`, so the app and `spec.jev judge` in a terminal do the same thing.
- * - onnx (Windows, Linux): the app runs Laya itself (see `common/kyrn/layaOnnx.ts`). It never downloads the model:
- *   the person gets it from Hugging Face into the model folder, and the app checks it and starts the judge.
+ * - onnx (Windows, Linux): the app runs Laya itself (see `common/kyrn/layaOnnx.ts`). It downloads the pinned model
+ *   into the model folder, checks every file, and starts the judge.
  */
 
-/** setup: coreml's install (downloads, needs consent). locate: onnx's "open the model folder". */
-export type LocalJudgeAction = 'setup' | 'start' | 'stop' | 'locate';
+/**
+ * setup: coreml's install (downloads, needs consent). download: onnx's model download into the model folder.
+ * locate: onnx's "open the model folder".
+ */
+export type LocalJudgeAction = 'setup' | 'download' | 'start' | 'stop' | 'locate';
 
 /** ok: this machine can run it. platform: no runtime for this machine. uv: installing needs `uv`, which is missing. */
 export type LocalJudgeSupport = 'ok' | 'platform' | 'uv';
@@ -31,7 +34,7 @@ export type LocalJudgeTask = {
  * port: something else answers on the judge's port. stopped: the judge process ended on its own. foreign: a judge the
  * app did not start answers there, so the app cannot stop it.
  */
-export type LocalJudgeProblem = 'missing' | 'wrong' | 'runtime' | 'port' | 'stopped' | 'foreign';
+export type LocalJudgeProblem = 'missing' | 'wrong' | 'runtime' | 'port' | 'stopped' | 'foreign' | 'download';
 
 /** onnx: the model folder and what it still lacks. */
 export type LocalJudgeModel = {

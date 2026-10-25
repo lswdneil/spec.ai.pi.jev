@@ -197,23 +197,29 @@
         "stop": "Laya 沒能停止。"
       },
       "onnx": {
-        "missing": "這台電腦上還沒有 Laya 的模型（約 {{size}} MB）。spec.jev 不會替你下載：請從 Hugging Face 下載這些檔案，放進模型資料夾，再按「檢查並啟動」。",
+        "missing": "Laya 模型還不在本機（約 {{size}} MB）。在這裡下載，spec.jev 會校驗每個檔案。",
         "stopped": "模型已就位，Laya 沒有執行。選了 Laya 作為判定器時，spec.jev 會在開啟 App 時自己啟動它。",
+        "downloading": "正在下載 Laya 模型...",
         "starting": "正在檢查模型並啟動 Laya… 第一次檢查要讀完整個模型，需要一點時間。",
         "missingFiles": "還缺：{{files}}",
         "wrongFiles": "這些檔案不是 spec.jev 測試過的版本，請重新下載：{{files}}",
         "folder": "模型資料夾：{{folder}}",
         "command": "裝了 Hugging Face 命令列（hf）的話，一行指令就能全部下載：",
+        "download": "下載模型",
+        "downloadConfirmTitle": "下載 Laya 模型？",
+        "downloadConfirmText": "將從 Hugging Face 下載約 {{size}} MB，並校驗每個檔案。安裝完成後即可啟動 Laya。",
+        "downloadConfirmOk": "下載",
         "page": "到 Hugging Face 下載",
         "openFolder": "開啟模型資料夾",
         "check": "檢查並啟動",
         "problem": {
-          "missing": "缺少部分模型檔案。",
+          "missing": "Laya 模型還不在本機（約 {{size}} MB）。在這裡下載，spec.jev 會校驗每個檔案。",
           "wrong": "部分模型檔案不是 spec.jev 測試過的版本，請重新下載。",
           "runtime": "這台電腦無法執行這個模型。",
           "port": "Laya 的連接埠（{{port}}）已被其他程式佔用。",
           "stopped": "Laya 還沒準備好就停止了。",
-          "foreign": "這裡正在執行一個不是 spec.jev 啟動的 Laya，請在啟動它的地方停止它。"
+          "foreign": "這裡正在執行一個不是 spec.jev 啟動的 Laya，請在啟動它的地方停止它。",
+          "download": "下載未完成，請檢查網路後重試。"
         }
       }
     },

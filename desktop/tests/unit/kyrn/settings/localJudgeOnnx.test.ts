@@ -107,11 +107,32 @@ describe('the ONNX local judge as the app manages it', () => {
     });
   });
 
-  it('never downloads, and refuses what this machine cannot do', async () => {
+  it('refuses the Core ML installer and what this machine cannot do', async () => {
     const { local } = judge();
-    await expect(local.run('setup', true)).rejects.toThrow('does not download');
+    await expect(local.run('setup', true)).rejects.toThrow('Core ML installer');
     await expect(local.run('run' as never)).rejects.toThrow('Unknown');
     await expect(judge({ platform: 'darwin', arch: 'x64' }).local.run('start')).rejects.toThrow('cannot run');
+  });
+
+  it('marks a model download that cannot reach Hugging Face', async () => {
+    const folder = mkdtempSync(join(tmpdir(), 'laya-download-'));
+    const { local } = judge({
+      check: async () => EMPTY,
+      env: { MU_LOCAL_JUDGE_ONNX_DIR: folder },
+    });
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 500, body: null })));
+    try {
+      await local.run('download');
+      await settle();
+      expect((await local.state()).task).toMatchObject({
+        action: 'download',
+        phase: 'failed',
+        problem: 'download',
+      });
+    } finally {
+      vi.unstubAllGlobals();
+      rmSync(folder, { recursive: true, force: true });
+    }
   });
 
   it('opens the model folder for the person to put the files in', async () => {

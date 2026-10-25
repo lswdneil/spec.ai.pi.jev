@@ -197,23 +197,29 @@
         "stop": "Laya を停止できませんでした。"
       },
       "onnx": {
-        "missing": "このコンピューターにはまだ Laya のモデルがありません（約 {{size}} MB）。spec.jev は自動ではダウンロードしません。Hugging Face からファイルをダウンロードしてモデルフォルダーに入れ、「確認して起動」を押してください。",
+        "missing": "Laya のモデルはまだこのコンピューターにありません（約 {{size}} MB）。ここでダウンロードすると、spec.jev が各ファイルを確認します。",
         "stopped": "モデルは揃っていますが、Laya は実行されていません。Laya を判定器に選んでいる場合、アプリを開いたときに spec.jev が自動で起動します。",
+        "downloading": "Laya モデルをダウンロード中...",
         "starting": "モデルを確認して Laya を起動しています… 初回の確認ではモデル全体を読み込むため、少し時間がかかります。",
         "missingFiles": "まだ足りないファイル：{{files}}",
         "wrongFiles": "spec.jev でテストしたバージョンではありません。ダウンロードし直してください：{{files}}",
         "folder": "モデルフォルダー：{{folder}}",
         "command": "Hugging Face のコマンドライン（hf）があれば、次のコマンド 1 つですべて取得できます：",
+        "download": "モデルをダウンロード",
+        "downloadConfirmTitle": "Laya モデルをダウンロードしますか？",
+        "downloadConfirmText": "Hugging Face から約 {{size}} MB をダウンロードし、各ファイルを確認します。完了後 Laya を起動できます。",
+        "downloadConfirmOk": "ダウンロード",
         "page": "Hugging Face で入手",
         "openFolder": "モデルフォルダーを開く",
         "check": "確認して起動",
         "problem": {
-          "missing": "一部のモデルファイルがありません。",
+          "missing": "Laya のモデルはまだこのコンピューターにありません（約 {{size}} MB）。ここでダウンロードすると、spec.jev が各ファイルを確認します。",
           "wrong": "一部のモデルファイルが spec.jev でテストしたバージョンではありません。ダウンロードし直してください。",
           "runtime": "このコンピューターではモデルを実行できませんでした。",
           "port": "Laya のポート（{{port}}）はすでに別のプログラムが使用しています。",
           "stopped": "Laya は準備が整う前に停止しました。",
-          "foreign": "spec.jev が起動したのではない Laya が実行中です。起動した場所で停止してください。"
+          "foreign": "spec.jev が起動したのではない Laya が実行中です。起動した場所で停止してください。",
+          "download": "ダウンロードが完了しませんでした。接続を確認して再試行してください。"
         }
       }
     },

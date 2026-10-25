@@ -1,7 +1,7 @@
 /**
  * The local judge where Core ML does not run (Windows, Linux): Laya multilingual exported to ONNX, run by the app with
- * onnxruntime-node. The app never downloads the model: the person gets these files from Hugging Face (a link, or the
- * `hf` command below), puts them in the model folder, and the app checks them and starts the judge.
+ * onnxruntime-node. The app can download these files itself, checks them, and starts the judge; the Hugging Face page
+ * and `hf` command below remain for a person who prefers to fetch them by hand.
  *
  * The files are pinned to one revision of the repository, so the hashes below say exactly what was tested.
  */

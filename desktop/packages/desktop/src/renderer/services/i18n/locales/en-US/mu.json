@@ -197,23 +197,29 @@
         "stop": "Laya didn't stop."
       },
       "onnx": {
-        "missing": "Laya's model isn't on this computer yet (about {{size}} MB). spec.jev doesn't download it for you: get the files from Hugging Face, put them in the model folder, then click Check and start.",
+        "missing": "Laya's model isn't on this computer yet (about {{size}} MB). Download it here; spec.jev checks every file.",
         "stopped": "The model is in place, but Laya isn't running. When Laya is your judge, spec.jev starts it automatically when the app opens.",
+        "downloading": "Downloading Laya's model...",
         "starting": "Checking the model and starting Laya. The first check reads the whole model, so it takes a moment.",
         "missingFiles": "Still missing: {{files}}",
         "wrongFiles": "These files don't match the version spec.jev was tested with. Download them again: {{files}}",
         "folder": "Model folder: {{folder}}",
         "command": "With the Hugging Face CLI (hf), this command downloads everything:",
+        "download": "Download model",
+        "downloadConfirmTitle": "Download Laya's model?",
+        "downloadConfirmText": "This downloads about {{size}} MB from Hugging Face and checks every file. Laya starts once it's installed.",
+        "downloadConfirmOk": "Download",
         "page": "Get it on Hugging Face",
         "openFolder": "Open the model folder",
         "check": "Check and start",
         "problem": {
-          "missing": "Some model files are missing.",
+          "missing": "Laya's model isn't on this computer yet (about {{size}} MB). Download it here; spec.jev checks every file.",
           "wrong": "Some model files don't match the version spec.jev was tested with. Download them again.",
           "runtime": "This computer couldn't run the model.",
           "port": "Another program is already using Laya's port ({{port}}).",
           "stopped": "Laya stopped before it was ready.",
-          "foreign": "A copy of Laya that spec.jev didn't start is already running. Stop it from wherever it was started."
+          "foreign": "A copy of Laya that spec.jev didn't start is already running. Stop it from wherever it was started.",
+          "download": "The download didn't finish. Check your connection and try again."
         }
       }
     },
