@@ -176,7 +176,6 @@ export const Dropdown: React.FC<DropdownProps> = ({
       <DropdownMenuPrimitive.Portal>
         <DropdownMenuPrimitive.Content
           ref={contentRef}
-          data-testid='dropdown-content'
           onMouseEnter={() => {
             if (!hover) return;
             if (hoverCloseTimer.current) {
