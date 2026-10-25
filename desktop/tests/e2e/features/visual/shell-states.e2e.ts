@@ -78,13 +78,13 @@ test.describe('Shell visual states', () => {
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('command-palette')).toBeHidden();
 
-    const sider = page.locator('.arco-layout-sider').first();
+    const sider = page.locator('aside.layout-sider').first();
     await page.getByTestId('sider-collapse').click();
-    await expect(sider).toHaveClass(/arco-layout-sider-collapsed/);
+    await expect(sider).toHaveClass(/collapsed/);
     await capture('home-collapsed-dark.png');
 
     await page.getByTestId('sider-collapse').click();
-    await expect(sider).not.toHaveClass(/arco-layout-sider-collapsed/);
+    await expect(sider).not.toHaveClass(/collapsed/);
 
     await page.getByTestId('sider-settings').first().click();
     await expect(page.locator('[data-settings-path="appearance"]')).toBeVisible({ timeout: 15_000 });

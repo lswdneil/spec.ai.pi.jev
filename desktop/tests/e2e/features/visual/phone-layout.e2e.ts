@@ -167,7 +167,7 @@ test('renders the phone shell at 390px', async ({ electronApp, page: electronPag
     await expect(webPage.getByTestId('sider-search')).toBeVisible({ timeout: 15_000 });
     await webPage.screenshot({ path: testInfo.outputPath('phone-390-sessions.png') });
     await webPage.locator('.layout-sider-header button').click();
-    await expect(webPage.locator('.arco-layout-sider')).toHaveClass(/arco-layout-sider-collapsed/, {
+    await expect(webPage.locator('aside.layout-sider')).toHaveClass(/collapsed/, {
       timeout: 15_000,
     });
 
