@@ -25,7 +25,6 @@ const themed = [
   'pages/welcome/Welcome.module.css',
   'styles/layout.css',
   'styles/legacy-overrides.css',
-  'components/base/MuSearchInput.module.css',
   'components/chat/MentionMenuShell.tsx',
   'components/layout/WorkPanel/WorkPanel.module.css',
   'components/Markdown/CodeBlock.tsx',

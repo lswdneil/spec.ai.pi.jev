@@ -52,11 +52,11 @@ vi.mock('@/renderer/components/base/MuModal', () => ({
     ) : null,
 }));
 
-vi.mock('@/renderer/components/base/MuSteps', () => {
+vi.mock('@/renderer/ui/steps', () => {
   const Step = ({ title }: { title: React.ReactNode }) => <div>{title}</div>;
   const Steps = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
   Steps.Step = Step;
-  return { default: Steps };
+  return { Steps };
 });
 
 vi.mock('@icon-park/react', () => ({

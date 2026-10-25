@@ -31,6 +31,7 @@ export { Popover, type PopoverProps, type PopoverPosition } from './popover';
 export { Pagination, type PaginationProps } from './pagination';
 export { Popconfirm, type PopconfirmProps, type PopconfirmPosition } from './popconfirm';
 export { Radio, type RadioProps, type RadioGroupProps } from './radio';
+export { SearchInput, type SearchInputProps } from './search-input';
 export { SelectWithOptions as Select, type SelectProps, type SelectOptionProps, type SelectValue } from './select';
 export { Spinner, Spin, type SpinnerProps } from './spinner';
 export { Slider, type SliderProps } from './slider';

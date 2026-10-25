@@ -17,7 +17,6 @@ export { default as MuModal } from './MuModal';
 export { default as MuCollapse } from './MuCollapse';
 export { default as MuSelect } from './MuSelect';
 export { default as MuScrollArea } from './MuScrollArea';
-export { default as MuSteps } from './MuSteps';
 export { default as MuSearchInput } from './MuSearchInput';
 export { default as MuInlineSearchInput } from './MuInlineSearchInput';
 
@@ -33,8 +32,6 @@ export type { MuCollapseProps, MuCollapseItemProps } from './MuCollapse';
 // MuSelect 类型 / MuSelect types
 export type { MuSelectProps } from './MuSelect';
 
-// MuSteps 类型 / MuSteps types
-export type { MuStepsProps } from './MuSteps';
 
 // MuSearchInput 类型 / MuSearchInput types
 export type { MuSearchInputProps } from './MuSearchInput';
