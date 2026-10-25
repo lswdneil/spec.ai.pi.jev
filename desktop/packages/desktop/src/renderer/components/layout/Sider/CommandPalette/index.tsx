@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router-dom';
 import ConversationSearchPopover from '@/renderer/pages/conversation/GroupedHistory/ConversationSearchPopover';
 import { Message } from '@/renderer/ui';
 import { emitter, useAddEventListener } from '@/renderer/utils/emitter';
-import { isUiV2Enabled } from '@/renderer/utils/ui/uiV2';
 import CommandPalettePanel from './CommandPalettePanel';
 import type { PaletteItem } from './paletteGroups';
 import styles from './CommandPalette.module.css';
@@ -41,7 +40,7 @@ type CommandPaletteProps = {
 const CommandPalette: React.FC<CommandPaletteProps> = ({ onNavigate }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const dense = isUiV2Enabled();
+  const dense = true;
   const [open, setOpen] = useState(false);
   const openRef = useRef(open);
   openRef.current = open;

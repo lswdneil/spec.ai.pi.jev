@@ -25,7 +25,6 @@ import { useGuidModelSelection } from './hooks/useGuidModelSelection';
 import { useGuidNativeSend } from './hooks/useGuidNativeSend';
 import { useGuidSend } from './hooks/useGuidSend';
 import { useMuStartMode } from './hooks/useMuStartMode';
-import { isUiV2Enabled } from '@/renderer/utils/ui/uiV2';
 import { useTypewriterPlaceholder } from './hooks/useTypewriterPlaceholder';
 import { ensureBackendMcpCatalog } from '@/renderer/hooks/mcp/catalog';
 import { resolveGuidAssistantDefaults } from './utils/assistantDefaults';
@@ -680,7 +679,7 @@ const GuidPage: React.FC = () => {
   return (
       <div
         ref={guidContainerRef}
-        className={`${styles.guidContainer}${isUiV2Enabled() ? ' sv-dense-welcome' : ''}`}
+        className={`${styles.guidContainer} sv-dense-welcome`}
       >
         <div className={styles.guidLayout}>
           <MuHero leaving={guidInput.loading} />

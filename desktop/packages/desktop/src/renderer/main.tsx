@@ -52,7 +52,6 @@ configService.initialize().catch((err) => {
 import './services/i18n';
 import { formatNameList } from './services/i18n/list';
 import { registerPwa } from './services/registerPwa';
-import { isUiV2Enabled } from './utils/ui/uiV2';
 
 import { ipcBridge } from '@/common';
 import { repairAllCronJobTimeZonesOnce } from '@renderer/pages/cron/repairCronJobTimeZone';
@@ -64,7 +63,6 @@ import BackendStartupGate from './components/layout/BackendStartupGate';
 import GpuAutoDisableNotice from './components/layout/GpuAutoDisableNotice';
 import Layout from './components/layout/Layout';
 import Router from './components/layout/Router';
-import Sider from './components/layout/Sider';
 import DenseSider from './components/layout/Sider/DenseSider';
 import { ConversationHistoryProvider } from './hooks/context/ConversationHistoryContext';
 import type { BackendStartupFailureInfo } from '@/common/types/platform/electron';
@@ -200,7 +198,7 @@ const Main = () => {
     <Router
       layout={
         <ConversationHistoryProvider>
-          <Layout sider={isUiV2Enabled() ? <DenseSider /> : <Sider />} />
+          <Layout sider={<DenseSider />} />
         </ConversationHistoryProvider>
       }
     />
@@ -325,7 +323,7 @@ const BackendStartupFailureDialog: React.FC<{ failure: BackendStartupFailureInfo
 
 void registerPwa();
 
-if (isUiV2Enabled()) document.documentElement.dataset.svUi = 'dense';
+document.documentElement.dataset.svUi = 'dense';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(

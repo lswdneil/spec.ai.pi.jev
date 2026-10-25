@@ -1,5 +1,4 @@
 import { useCallback, useSyncExternalStore } from 'react';
-import { isUiV2Enabled } from '@renderer/utils/ui/uiV2';
 
 /**
  * What the work panel remembers, and which of its tabs have news.
@@ -34,21 +33,20 @@ export type WorkPanelMemory = { open: boolean; tab: WorkPanelTab; width: number 
 
 /** The narrowest the panel gets: a 900px window with the sidebar open (639px) keeps it beside a 360px transcript. */
 export const WORK_PANEL_MIN_WIDTH = 270;
-const UI_V2 = isUiV2Enabled();
 /**
  * Dense starts the rail on the judge tab, 300px wide, and only while the window has room for both
  * it and a readable transcript (1280px). A narrower window starts it closed; the titlebar and the
  * conversation header still toggle it, and the choice is remembered under its own key.
  */
-const DENSE_WIDE = UI_V2 && typeof window !== 'undefined' && window.innerWidth >= 1280;
-export const WORK_PANEL_DEFAULT_WIDTH = UI_V2 ? 300 : 360;
+const DENSE_WIDE = typeof window !== 'undefined' && window.innerWidth >= 1280;
+export const WORK_PANEL_DEFAULT_WIDTH = 300;
 
-const STORAGE_KEY = UI_V2 ? 'mu-work-panel-v2' : 'mu-work-panel';
+const STORAGE_KEY = 'mu-work-panel-v2';
 /** Conversations remembered in storage; the least recently changed are dropped first. */
 const MAX_REMEMBERED = 200;
 const DEFAULT_MEMORY: WorkPanelMemory = {
   open: DENSE_WIDE,
-  tab: UI_V2 ? 'judge' : 'board',
+  tab: 'judge',
   width: WORK_PANEL_DEFAULT_WIDTH,
 };
 

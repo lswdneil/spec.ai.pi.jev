@@ -13,7 +13,6 @@ import { useWorkspaceCollapse } from '@/renderer/pages/conversation/hooks/useWor
 import { PreviewPanel, usePreviewContext } from '@/renderer/pages/conversation/Preview';
 import MuBrowserHost from '@/renderer/pages/conversation/Preview/browser/muBrowser/MuBrowserHost';
 import { Button, Tooltip } from '@/renderer/ui';
-import { isUiV2Enabled } from '@/renderer/utils/ui/uiV2';
 import { dispatchWorkspaceToggleEvent } from '@/renderer/utils/workspace/workspaceEvents';
 import classNames from 'classnames';
 import { ChevronRight, PanelRight } from 'lucide-react';
@@ -72,7 +71,7 @@ const ChatLayout: React.FC<{
   const { conversation_id, workspacePath, isTemporaryWorkspace } = props;
   const { backend, presetAssistant, agent_name, workspacePreferenceKey } = props;
   const panelHosted = Boolean(props.panelHosted);
-  const dense = isUiV2Enabled();
+  const dense = true;
   const { t } = useTranslation();
   const workspaceEnabled = (props.workspaceEnabled ?? true) && !panelHosted;
   const layout = useLayoutContext();

@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import { useThemeContext } from '@renderer/hooks/context/ThemeContext';
-import { isUiV2Enabled } from '@renderer/utils/ui/uiV2';
 import ShellPreview from './ShellPreview';
 import {
   Alert,
@@ -41,8 +39,6 @@ const DesignSystem: React.FC = () => {
   const [switchOn, setSwitchOn] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  if (!isUiV2Enabled()) return <Navigate to='/guid' replace />;
 
   const mode = activeId === 'dark' ? 'dark' : activeId === 'light' ? 'light' : 'auto';
 

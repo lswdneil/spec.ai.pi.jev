@@ -22,7 +22,6 @@ import { HiveToolCard } from '@/renderer/pages/conversation/KyrnPanel/Hive';
 import { swarmProgressText } from '@/renderer/pages/conversation/KyrnPanel/Hive/codes';
 import { formatNumber } from '@/renderer/services/i18n/format';
 import { downloadFileFromPath } from '@/renderer/utils/file/download';
-import { isUiV2Enabled } from '@/renderer/utils/ui/uiV2';
 import { useMessageListRun } from '../hooks';
 import styles from './MessageToolGroupSummary.module.css';
 import ToolKindIcon from './ToolKindIcon';
@@ -367,7 +366,7 @@ const MessageToolGroupSummary: React.FC<{
   const folds = shouldFoldActivity(tools) && !tools.some((item) => item.hive);
   return (
     <div
-      className={classNames(styles.summary, isUiV2Enabled() && 'sv-dense-tool-summary')}
+      className={classNames(styles.summary, 'sv-dense-tool-summary')}
       role='group'
       aria-label={t('tools.execution.title')}
     >

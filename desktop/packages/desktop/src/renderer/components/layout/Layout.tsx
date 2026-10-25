@@ -40,7 +40,6 @@ import { useDesktopTurnNotification } from '@renderer/hooks/system/notification/
 import { useNativeAttention } from '@renderer/pages/native/hooks/useNativeAttention';
 import { cleanupSiderTooltips } from '@renderer/utils/ui/siderTooltip';
 import MobileTabBar from './MobileTabBar';
-import { isUiV2Enabled } from '@renderer/utils/ui/uiV2';
 import { useConversationShortcuts } from '@renderer/hooks/ui/useConversationShortcuts';
 import { isElectronDesktop } from '@renderer/utils/platform';
 import { deferredRuntimeNeeds } from '@renderer/services/runtime/deferredNodeRuntime';
@@ -96,8 +95,8 @@ const useDebug = () => {
   return { onClick };
 };
 
-const UI_V2 = isUiV2Enabled();
-const DEFAULT_SIDER_WIDTH = UI_V2 ? 208 : 260;
+const UI_V2 = true;
+const DEFAULT_SIDER_WIDTH = 208;
 // 桌面侧栏连续可调：下限 200；低于此值拖拽即吸附收起（消灭旧 130 死区）。
 // 上限 = 窗口宽 50%（动态随窗口）。
 const SIDER_MIN_WIDTH = 200;
