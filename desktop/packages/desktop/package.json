@@ -1,6 +1,6 @@
 {
   "name": "@mu/desktop",
-  "version": "0.1.0",
+  "version": "0.1.10",
   "private": true,
   "description": "mu desktop",
   "main": "../../out/main/index.js",

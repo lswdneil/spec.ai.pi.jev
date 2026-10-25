@@ -1,6 +1,6 @@
 {
   "name": "spec.jev-desktop",
-  "version": "0.1.0",
+  "version": "0.1.10",
   "description": "spec.jev, the coding agent with Jev judgment, as a desktop app.",
   "keywords": [],
   "license": "MIT AND Apache-2.0",

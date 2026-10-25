@@ -6,6 +6,17 @@ spec.jev is in pre-release (0.1.x): names, settings and formats may still change
 
 ## [Unreleased]
 
+## [0.1.10] - 2026-10-25
+
+### Added
+
+- **Laya downloads its model in the app on Windows and Linux.** The local judge's settings now fetch the pinned ONNX files from Hugging Face after a confirmation, check every SHA-256 and start Laya when the bundle is ready. The manual Hugging Face page and `hf` command remain for anyone who prefers to fetch the files by hand.
+
+### Changed
+
+- **Dense is the only desktop UI.** The old MU shell, its routes, its sidebar and its compatibility styles are gone; the WebUI remote-access panel stays out of 0.1.x.
+- **0.1.x ships Windows x64 and Linux x64 (deb).** The macOS build and signing steps are retired.
+
 ## [0.1.9] - 2026-10-21
 
 ### Added

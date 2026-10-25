@@ -11,11 +11,40 @@
 - Remove the legacy UI and Arco compatibility layer before release.
 - Canonical repository: `https://github.com/lswdneil/spec.ai.pi.jev`.
 
+## Release readiness (checked 2026-10-25)
+
+Passed locally on Windows x64:
+
+- Desktop unit suite: 666 files, 6767 tests, 116 skipped.
+- Classic conversation E2E (AionCore): 9/9.
+- Native-host E2E: 72/72, 12 skipped (packaged-app-only cases).
+- Visual regression: 4/4.
+- `bunx tsc --noEmit`.
+- 0.1.x Laya onboarding now downloads the pinned ONNX files itself, checks
+  every SHA-256 and starts the judge; the manual Hugging Face path remains.
+
+Still external or undecided before a public release:
+
+- Windows code signing certificate: CI signs when
+  `WINDOWS_CERTIFICATE_BASE64` and `WINDOWS_CERTIFICATE_PASSWORD` exist;
+  otherwise the release is unsigned and says so.
+- The first public version and both tags (`vX.Y.Z` and `spec.jev-vX.Y.Z`) are a
+  product decision; the package manifests still say 0.1.0 while the desktop
+  changelog ends at 0.1.9.
+- A real Linux x64 `.deb` install/upgrade/uninstall has not been run here. The
+  app opens a downloaded `.deb`; the system package installer completes it.
+- The local Windows installer build stopped while electron-builder fetched its
+  signing/NSIS tools from GitHub; the build itself had packed the harness and
+  reached packaging.
+
 ## Deferred: remove the legacy MU UI and Arco compatibility layer
 
-Status: not started. Do not begin without explicit approval.
+Status: the old shell, its CSS and its routes are gone; Dense is the only UI.
+Some primitives still emit `arco-*` class names and a few E2E helpers still use
+them as selectors. They are labels, not an Arco dependency. Do not reintroduce
+the legacy shell.
 
-Recorded: 2026-10-23.
+Recorded: 2026-10-23. Updated: 2026-10-25.
 
 The default UI is Dense, but the old MU/AionUi shell and its compatibility
 layer are still shipped:

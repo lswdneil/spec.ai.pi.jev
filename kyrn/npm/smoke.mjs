@@ -42,7 +42,7 @@ function check(name, ok, detail) {
 }
 
 const version = spawnSync(mu, ["version"], options);
-check("spec.jev version", version.status === 0 && /^mu \d+\.\d+\.\d+ \(pi \d/.test(version.stdout), version.stdout.trim() || version.stderr.trim());
+check("spec.jev version", version.status === 0 && /^spec\.jev \d+\.\d+\.\d+ \(pi \d/.test(version.stdout), version.stdout.trim() || version.stderr.trim());
 
 const help = spawnSync(mu, ["--help"], options);
 check(
@@ -151,7 +151,7 @@ check(
 		: `${names.length} commands, ${expected.filter((name) => !names.includes(name)).join(", ") || "all expected ones"} ${expected.every((name) => names.includes(name)) ? "present" : "missing"}`,
 );
 // spec.jev 0.1.3 said "spec.jev 0.1.0 · …, built on pi 0.1.3": its judgment layer's own version, and pi's, read from spec.jev's folder.
-const versions = /^mu (\S+) \(pi ([^,)]+)/.exec(version.stdout.trim());
+const versions = /^spec\.jev (\S+) \(pi ([^,)]+)/.exec(version.stdout.trim());
 const greeting = versions ? `spec.jev ${versions[1]} · a judgment-first coding agent, built on pi ${versions[2]}` : undefined;
 check("/help names spec.jev's version and pi's, as spec.jev version does", greeting !== undefined && rpc.help === greeting, rpc.help ?? rpc.error);
 
