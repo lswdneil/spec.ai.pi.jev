@@ -551,3 +551,76 @@ html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled:not(:disabl
 .sv-sider-scroll[data-scrolling='true']::-webkit-scrollbar-thumb {
   background: var(--sv-line-strong);
 }
+
+/* Shell details that no component class owns: selected rows, the send fill, titlebar. */
+[data-color-scheme='mu'] .chat-history__item[aria-current='page']::before,
+[data-color-scheme='mu'] .sider-item[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-start-end-radius: 3px;
+  border-end-end-radius: 3px;
+  background: var(--mu-accent-dot);
+  animation: mu-indicator-in var(--mu-duration) var(--mu-ease) both;
+}
+
+[data-color-scheme='mu'] .layout-sider {
+  border-inline-end: 1px solid var(--border-base);
+}
+
+@keyframes mu-indicator-in {
+  from { opacity: 0; transform: scaleY(0.4); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+
+[data-color-scheme='mu'] .send-button-custom--enabled {
+  border-color: transparent !important;
+  background-color: var(--mu-accent-fill) !important;
+  background-image: none !important;
+  color: var(--mu-accent-on) !important;
+  transition: background-color var(--mu-duration) var(--mu-ease);
+}
+
+[data-color-scheme='mu'] .send-button-custom--enabled:not(:disabled):hover,
+[data-color-scheme='mu'] .send-button-custom--enabled:not(:disabled):focus-visible {
+  border-color: transparent !important;
+  background-color: var(--mu-accent-fill-hover) !important;
+  color: var(--mu-accent-on) !important;
+}
+
+[data-color-scheme='mu'] .send-button-custom--enabled:not(:disabled):active {
+  border-color: transparent !important;
+  background-color: var(--mu-accent-fill-active) !important;
+  color: var(--mu-accent-on) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-color-scheme='mu'] .chat-history__item[aria-current='page']::before,
+  [data-color-scheme='mu'] .sider-item[aria-current='page']::before {
+    animation: none;
+  }
+  [data-color-scheme='mu'] .send-button-custom--enabled {
+    transition: none;
+  }
+}
+
+[data-color-scheme='mu'] .settings-sider__group-header,
+[data-color-scheme='mu'] .sider-section-title {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+[data-color-scheme='mu'] .message-user-bubble {
+  border: 1px solid var(--border-base);
+}
+
+[data-color-scheme='mu'] .app-titlebar--desktop {
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border-base);
+}

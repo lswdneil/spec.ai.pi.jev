@@ -9,4 +9,3 @@
 /* spec.jev: the default scheme (html[data-color-scheme='mu']); the upstream one above stays available */
 @import './mu-color-scheme.css';
 @import './status-colors.css';
-@import './mu-shell.css';
