@@ -462,7 +462,7 @@ const MuModal: React.FC<MuModalProps> = ({
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className='fixed inset-0 z-[1000] bg-[var(--mu-scrim)]' />
         <DialogPrimitive.Content
-          className={classNames('mu-modal arco-modal', isStandard && 'mu-modal-standard', className)}
+          className={classNames('mu-modal', isStandard && 'mu-modal-standard', className)}
           style={{
             ...dialogStyle,
             padding: 0,

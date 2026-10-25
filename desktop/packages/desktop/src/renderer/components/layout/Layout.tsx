@@ -95,7 +95,6 @@ const useDebug = () => {
   return { onClick };
 };
 
-const UI_V2 = true;
 const DEFAULT_SIDER_WIDTH = 208;
 // 桌面侧栏连续可调：下限 200；低于此值拖拽即吸附收起（消灭旧 130 死区）。
 // 上限 = 窗口宽 50%（动态随窗口）。
@@ -242,7 +241,7 @@ const Layout: React.FC<{
     defaultWidth: DEFAULT_SIDER_WIDTH,
     minWidth: SIDER_MIN_WIDTH,
     maxWidth: Math.max(SIDER_MIN_WIDTH, Math.round(viewportWidth * 0.5)),
-    storageKey: UI_V2 ? 'sider-width-px-v2' : 'sider-width-px',
+    storageKey: 'sider-width-px-v2',
     collapseThreshold: SIDER_MIN_WIDTH,
     collapsedWidth: SIDER_RAIL_WIDTH,
     collapsed,
@@ -423,28 +422,22 @@ const Layout: React.FC<{
             <div className='fixed inset-0 bg-black/30 z-90' onClick={putAwayPhoneSider} aria-hidden='true' />
           )}
 
-          <div className='arco-layout size-full layout flex flex-1 min-h-0'>
+          <div className='size-full layout flex flex-1 min-h-0'>
             <aside
-              className={classNames('arco-layout-sider !bg-2 layout-sider', {
-                collapsed,
-                'arco-layout-sider-collapsed': collapsed,
-              })}
+              className={classNames('layout-sider !bg-2', { collapsed })}
               style={{
                 ...siderStyle,
                 width: collapsed ? (isMobile ? 0 : SIDER_RAIL_WIDTH) : siderWidth,
                 flex: '0 0 auto',
               }}
             >
-              <div className='arco-layout-sider-children'>
+              <div className='flex size-full min-h-0 flex-col'>
                 <header
                 className={classNames(
-                  'arco-layout-header flex layout-sider-header',
-                  UI_V2 ? 'pt-1.5 pb-1.5' : 'pt-8px pb-8px',
+                  'flex layout-sider-header pt-1.5 pb-1.5',
                   collapsed && !isMobile
                     ? 'flex-col items-center justify-center gap-1 px-0'
-                    : UI_V2
-                      ? 'items-center justify-start gap-12px ps-10px pe-8px'
-                      : 'items-center justify-start gap-12px ps-18px pe-16px',
+                    : 'items-center justify-start gap-12px ps-10px pe-8px',
                   isMobile && 'layout-sider-header--mobile',
                   {
                     'cursor-pointer group ': collapsed,
@@ -453,15 +446,12 @@ const Layout: React.FC<{
               >
                 {/* The mark keeps upstream's hidden devtools click; its size follows the collapsed rail. */}
                 <div className='shrink-0 line-height-0' data-testid='sider-brand-mark' onClick={onClick}>
-                  <MuMark size={UI_V2 ? 20 : collapsed ? 24 : 26} />
+                  <MuMark size={20} />
                 </div>
                 {isSettingsRoute ? (
                   <Tooltip content={t('common.back', { defaultValue: 'Back' })} position='bottom'>
                     <div
-                      className={classNames(
-                        'collapsed-hidden font-semibold cursor-pointer',
-                        UI_V2 ? 'text-[13px] tracking-[-0.01em] text-t-primary' : 'text-16px text-t-primary'
-                      )}
+                      className='collapsed-hidden cursor-pointer text-[13px] font-semibold tracking-[-0.01em] text-t-primary'
                       role='button'
                       tabIndex={0}
                       aria-label={t('common.back', { defaultValue: 'Back' })}
@@ -473,17 +463,14 @@ const Layout: React.FC<{
                         }
                       }}
                     >
-                      {UI_V2 ? 'spec.jev' : 'mu'}
+                      spec.jev
                     </div>
                   </Tooltip>
                 ) : (
                   <div
-                    className={classNames(
-                      'collapsed-hidden font-semibold',
-                      UI_V2 ? 'text-[13px] tracking-[-0.01em] text-t-primary' : 'text-16px text-t-primary'
-                    )}
+                    className='collapsed-hidden text-[13px] font-semibold tracking-[-0.01em] text-t-primary'
                   >
-                    {UI_V2 ? 'spec.jev' : 'mu'}
+                    spec.jev
                   </div>
                 )}
                 {isMobile ? (
@@ -523,7 +510,7 @@ const Layout: React.FC<{
                   </Tooltip>
                 )}
               </header>
-              <div className='arco-layout-content pt-0 px-8px pb-0 layout-sider-content'>
+              <div className='layout-sider-content min-h-0 flex-1 px-8px pt-0 pb-0'>
                 {React.isValidElement(sider)
                   ? React.cloneElement(sider, {
                       onSessionClick: () => {
@@ -550,7 +537,7 @@ const Layout: React.FC<{
                 per-conversation subtree, so it persists across conversation switches. */}
             <div ref={mainRowRef} className='relative flex flex-1 min-h-0 overflow-hidden'>
               <div
-                className={'arco-layout-content bg-1 layout-content flex flex-col min-h-0 flex-1'}
+                className='layout-content flex min-h-0 flex-1 flex-col bg-1'
                 onClick={() => {
                   if (isMobile && !collapsed) putAwayPhoneSider();
                 }}
@@ -572,7 +559,7 @@ const Layout: React.FC<{
               {workspaceAvailable && <WorkPanelHost rowWidth={panelRowWidth} isMobile={isMobile} />}
             </div>
           </div>
-          {UI_V2 && isMobile ? <MobileTabBar /> : null}
+          {isMobile ? <MobileTabBar /> : null}
           {!isMobile && <KernelBar />}
         </div>
       </NavigationHistoryProvider>
