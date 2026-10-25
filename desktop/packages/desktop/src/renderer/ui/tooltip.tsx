@@ -71,7 +71,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
             side={sideFor(position)}
             sideOffset={6}
             className={cn(
-              'z-[60] max-w-[280px] rounded-[var(--sv-r-popup)] border border-sv-line bg-sv-popover px-2 py-1 text-[11px] leading-[1.45] text-sv-text',
+              'pointer-events-none z-[60] max-w-[280px] rounded-[var(--sv-r-popup)] border border-sv-line bg-sv-popover px-2 py-1 text-[11px] leading-[1.45] text-sv-text',
               className
             )}
           >

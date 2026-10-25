@@ -453,6 +453,7 @@ jobs:
         run: |
           set -euo pipefail
           tag="${GITHUB_REF_NAME}"
+          mkdir -p dist
           git archive --format=tar.gz --prefix="spec.jev-${tag#v}/" -o "dist/spec.jev-${tag#v}-source.tar.gz" HEAD
           cd dist
           sha256sum -- * > SHA256SUMS

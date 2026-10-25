@@ -44,7 +44,8 @@ function appIn(dir) {
 	const binary = readdirSync(dir).find((name) => {
 		if (windows) return name.endsWith(".exe") && !/^uninstall/i.test(name);
 		const path = join(dir, name);
-		return !name.includes(".") && !helpers.has(name) && !isDir(path) && (statSync(path).mode & 0o111) !== 0;
+		// electron-builder names the Linux executable `spec.jev`, so a dot is not a reason to skip it.
+		return (name === "spec.jev" || !name.includes(".")) && !helpers.has(name) && !isDir(path) && (statSync(path).mode & 0o111) !== 0;
 	});
 	return binary ? { binary: join(dir, binary), resources } : undefined;
 }
