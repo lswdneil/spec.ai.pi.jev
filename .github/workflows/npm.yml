@@ -113,7 +113,13 @@ jobs:
 
       - name: Smoke test
         shell: bash
-        run: node kyrn/npm/smoke.mjs spec.jev
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            command="$RUNNER_TEMP/specjev-prefix/spec.jev.cmd"
+          else
+            command="$RUNNER_TEMP/specjev-prefix/bin/spec.jev"
+          fi
+          node kyrn/npm/smoke.mjs "$command"
 
   # npm's trusted publishing: npm trusts this workflow by its OIDC identity, so no npm token is stored anywhere.
   # One-time setup on npmjs.com: spec.jev → Settings → Trusted publishing → GitHub Actions,
