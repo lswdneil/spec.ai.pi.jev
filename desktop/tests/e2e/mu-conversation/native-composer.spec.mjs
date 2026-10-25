@@ -56,6 +56,8 @@ const requestWith = (text) => requests().findLast((request) => request.lastUser.
 async function shots(name, open = async () => {}) {
   await open();
   await shot(name);
+  // An open menu keeps the pointer inside it; Escape closes it, then the theme switch is a normal click.
+  await page().keyboard.press('Escape');
   await page().getByTestId('theme-toggle').click();
   await sleep(400);
   await open();

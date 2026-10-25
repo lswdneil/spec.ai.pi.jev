@@ -240,6 +240,7 @@ const Titlebar: React.FC<TitlebarProps> = ({ workspaceAvailable }) => {
         <button
           type='button'
           className='app-titlebar__button'
+          data-testid='theme-toggle'
           onClick={() => void setTheme(theme === 'dark' ? 'light' : 'dark')}
           aria-label={themeLabel}
           title={themeLabel}

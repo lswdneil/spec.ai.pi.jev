@@ -105,25 +105,53 @@ export interface SubMenuProps {
   'data-value'?: string;
 }
 
-const SubMenu: React.FC<SubMenuProps> = ({ title, children, disabled, className, triggerProps: _triggerProps, __menuKey: _menuKey, ...props }) => (
-  <details className={cn('group/sub', className)} {...props}>
-    <summary
-      data-testid='submenu-title'
-      className={cn(
-        'flex min-h-8 cursor-pointer list-none items-center gap-2 rounded-[6px] px-2 py-1 text-[12px] text-sv-muted outline-none hover:bg-sv-surface hover:text-sv-text group-open/sub:text-sv-text [&::-webkit-details-marker]:hidden',
-        disabled && 'pointer-events-none opacity-40'
-      )}
+const SubMenu: React.FC<SubMenuProps> = ({
+  title,
+  children,
+  disabled,
+  className,
+  triggerProps: _triggerProps,
+  __menuKey: _menuKey,
+  ...props
+}) => {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div
+      className={cn('relative', className)}
+      onMouseEnter={() => {
+        if (!disabled) setOpen(true);
+      }}
+      onMouseLeave={() => setOpen(false)}
+      {...props}
     >
-      <span className='min-w-0 flex-1'>{title}</span>
-      <span aria-hidden='true' className='text-sv-faint transition-transform group-open/sub:rotate-90'>
-        ›
-      </span>
-    </summary>
-    <div role='group' data-testid='submenu-body' className='ml-2 border-l border-sv-line pl-1'>
-      {withKeys(children)}
+      <button
+        type='button'
+        role='menuitem'
+        aria-haspopup='menu'
+        aria-expanded={open}
+        data-testid='submenu-title'
+        disabled={disabled}
+        className={cn(
+          'flex min-h-8 w-full cursor-pointer items-center gap-2 rounded-[6px] bg-transparent px-2 py-1 text-left text-[12px] text-sv-muted outline-none transition-colors hover:bg-sv-surface hover:text-sv-text disabled:cursor-not-allowed disabled:opacity-40',
+          open && 'bg-sv-surface text-sv-text'
+        )}
+        onClick={() => {
+          if (!disabled) setOpen((value) => !value);
+        }}
+      >
+        <span className='min-w-0 flex-1'>{title}</span>
+        <span aria-hidden='true' className={cn('text-sv-faint transition-transform', open && 'rotate-90')}>
+          ›
+        </span>
+      </button>
+      {open ? (
+        <div role='group' data-testid='submenu-body' className='ml-2 border-l border-sv-line pl-1'>
+          {withKeys(children)}
+        </div>
+      ) : null}
     </div>
-  </details>
-);
+  );
+};
 
 type MenuComponent = typeof MenuBase & {
   Item: typeof MenuItem;

@@ -263,7 +263,11 @@ export function profileEnv({ platform = process.platform, env = process.env, pat
   if (checkout) {
     Object.assign(result, {
       MU_BACKEND_BIN: checkout.backend,
-      KYRN_DESKTOP_ROOT: checkout.desktopRoot,    });
+      KYRN_DESKTOP_ROOT: checkout.desktopRoot,
+      // The app must run the profile's view, not the checkout: the view is where the test's .env lives.
+      KYRN_ROOT: checkout.harness,
+      MU_ROOT: checkout.harness,
+    });
   }
   return result;
 }

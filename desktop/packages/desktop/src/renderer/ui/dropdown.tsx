@@ -125,8 +125,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
   const triggerNode =
     React.isValidElement(children) && typeof children.type === 'string' ? (
       React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
-        onPointerDown: () => {
+        onPointerDown: (event: React.PointerEvent) => {
           pointerDownAt.current = Date.now();
+          // A context-menu-only dropdown must not open on a left click. Radix's trigger opens on pointerdown;
+          // cancelling that event keeps the tree row's own click (select, expand) intact.
+          if (context && !click) event.preventDefault();
         },
         onMouseEnter: scheduleHoverOpen,
         onMouseLeave: scheduleHoverClose,
@@ -146,8 +149,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
     ) : (
       <span
         className='inline-flex'
-        onPointerDown={() => {
+        onPointerDown={(event) => {
           pointerDownAt.current = Date.now();
+          if (context && !click) event.preventDefault();
         }}
         onMouseEnter={scheduleHoverOpen}
         onMouseLeave={scheduleHoverClose}
@@ -164,7 +168,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
       {!isOpen && renderClosed && droplist ? (
         <div
           data-dropdown-closed=''
-          style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }}
+          style={{ display: 'none' }}
         >
           {droplist}
         </div>
@@ -172,6 +176,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
       <DropdownMenuPrimitive.Portal>
         <DropdownMenuPrimitive.Content
           ref={contentRef}
+          data-testid='dropdown-content'
           onMouseEnter={() => {
             if (!hover) return;
             if (hoverCloseTimer.current) {
@@ -185,6 +190,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
           align={align ?? (position === 'br' || position === 'tr' ? 'end' : 'start')}
           side={position === 'tl' || position === 'tr' || position === 'top' ? 'top' : 'bottom'}
           sideOffset={6}
+          collisionPadding={40}
+          style={{ zIndex: 1000 }}
           className={cn(
             'z-[60] min-w-[180px] rounded-[var(--sv-r-popup)] border border-sv-line bg-sv-popover p-1 text-[12px] text-sv-text outline-none',
             className

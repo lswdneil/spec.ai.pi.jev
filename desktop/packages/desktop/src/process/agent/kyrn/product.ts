@@ -28,6 +28,43 @@ export const AGENT_NAME = 'spec.jev';
 /** What the registration was called before the rename. Found under these names too, and then renamed. */
 const FORMER_NAMES = ['mu', 'KYRN'];
 export const AGENT_DESCRIPTION = 'spec.jev harness · local Codex login · Jev judgment';
+
+type AgentEnv = { name: string; value: string; description?: string };
+// "SPEC.JEV_CODING_AGENT_DIR" is pi's own name: it builds the variable from piConfig.name, which is "spec.jev".
+const AGENT_DIR_ENV = [
+  'SPECJEV_AGENT_DIR',
+  'SPECJEV_CODING_AGENT_DIR',
+  'SPEC.JEV_CODING_AGENT_DIR',
+  'PI_CODING_AGENT_DIR',
+] as const;
+
+/**
+ * AionCore starts the registered adapter from its own record, and does not pass on every variable the app inherited.
+ * The agent folder is one of them: without it the harness falls back to `~/.spec.jev/agent` beside the real home, while
+ * the app reads and writes the folder it was given. The registration carries the folder explicitly.
+ */
+function agentDirEnv(): AgentEnv[] {
+  const dir = process.env.SPECJEV_AGENT_DIR?.trim();
+  if (!dir) return [];
+  return AGENT_DIR_ENV.map((name) => ({ name, value: dir, description: 'spec.jev agent folder' }));
+}
+
+/** Development and E2E runs choose the harness checkout; the backend must hand the same root to the adapter. */
+const HARNESS_ROOT_ENV = ['KYRN_ROOT', 'MU_ROOT'] as const;
+function harnessRootEnv(): AgentEnv[] {
+  const root = (process.env.KYRN_ROOT || process.env.MU_ROOT)?.trim();
+  return root ? HARNESS_ROOT_ENV.map((name) => ({ name, value: root, description: 'spec.jev harness checkout' })) : [];
+}
+
+/** Keeps a registration's other variables, and replaces the folder and harness variables with this start's. */
+function registrationEnv(env: unknown): AgentEnv[] {
+  const owned = new Set<string>([...AGENT_DIR_ENV, ...HARNESS_ROOT_ENV]);
+  const kept = (Array.isArray(env) ? env : []).filter((entry) => {
+    const name = entry && typeof entry === 'object' ? (entry as { name?: unknown }).name : undefined;
+    return typeof name !== 'string' || !owned.has(name);
+  }) as AgentEnv[];
+  return [...kept, ...harnessRootEnv(), ...agentDirEnv()];
+}
 /**
  * The descriptions spec.jev has written, compared case-insensitively: a record written before the judge's name took
  * its present capitalization is still ours to update.
@@ -116,7 +153,7 @@ export function updated(row: AgentRow, command: string): Record<string, unknown>
     command,
     icon: row.icon,
     args: row.args ?? [],
-    env: row.env ?? [],
+    env: registrationEnv(row.env),
     advanced: {
       yolo_id: needsFullAuto(row) ? FULL_AUTO_MODE : row.yolo_id,
       native_skills_dirs: row.native_skills_dirs,
@@ -140,7 +177,10 @@ export async function initializeKyrn(request: BackendRequest, own: string | OwnC
   const { command, sameFile } = ownCommand(own);
   const agents = await request<AgentRow[]>('GET', '/api/agents/management');
   let agent = findRegistration(agents, own);
-  if (agent && (agent.command !== command || agent.name !== AGENT_NAME || needsFullAuto(agent))) {
+  if (
+    agent &&
+    (agent.command !== command || agent.name !== AGENT_NAME || needsFullAuto(agent) || registrationEnv([]).length > 0)
+  ) {
     const before = agent;
     // A label or the mode of scheduled runs must not keep the app from starting: the registration works without
     // them, and the next start tries again. The backend probes the agent before it saves, so a refusal is possible.
@@ -154,7 +194,7 @@ export async function initializeKyrn(request: BackendRequest, own: string | OwnC
     name: AGENT_NAME,
     command,
     args: [],
-    env: [],
+    env: registrationEnv([]),
     advanced: { description: AGENT_DESCRIPTION, yolo_id: FULL_AUTO_MODE },
   });
   // This is a backend state change, not CSS hiding of other runtimes.

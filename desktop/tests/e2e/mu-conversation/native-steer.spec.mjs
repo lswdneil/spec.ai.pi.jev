@@ -70,7 +70,7 @@ test('a steer and a follow-up wait in the queue while the run goes, and "Edit" p
   await expect(p.getByTestId('native-abort')).toBeVisible();
 
   // The second is left for after the run: the switch beside the box.
-  await p.getByTestId('native-send-mode').locator('.arco-radio-button').nth(1).click();
+  await p.getByTestId('native-send-mode').getByRole('radio').nth(1).click();
   await interject('E2E:ECHO AFTER-OK');
   await expect(queue()).toContainText('AFTER-OK', { timeout: 15_000 });
   await expect(queue().locator('span.truncate')).toHaveCount(2);

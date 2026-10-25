@@ -158,7 +158,7 @@ export function findHarness(desktopRoot: string | undefined, patch: Partial<Harn
   const deps = { ...defaults(), ...patch };
   const p = pathFor(deps.platform);
   const found = (root: string, source: HarnessSource): Harness => ({ root, layout: layoutOf(root, deps), source });
-  const named = muEnv('ROOT', deps.env);
+  const named = muEnv('ROOT', deps.env) || deps.env.KYRN_ROOT || deps.env.MU_ROOT;
   if (named) return found(p.resolve(named), 'env');
   const bundled = deps.resourcesPath ? bundledHarnessRoot(deps.resourcesPath, deps.platform) : undefined;
   if (bundled && holdsMu(bundled, deps)) return found(bundled, 'bundled');

@@ -60,7 +60,7 @@ test('the app starts on AionCore and says in its log why the native host stays o
   await expect(box).toBeVisible();
   await expect.poll(appLog, { timeout: 30_000 }).toContain('[spec.jev] the native host stays off: ');
   expect(appLog()).toMatch(
-    /the native host stays off: This mu cannot run inside the app yet \(.*mu\.mjs has no planHost\)/
+    /the native host stays off: This spec\.jev cannot run inside the app yet \(.*mu\.mjs has no planHost\)/
   );
   // The window asked, was told no, and shows nothing of the native host: no group, and the classic list's placeholder.
   await sleep(1000);

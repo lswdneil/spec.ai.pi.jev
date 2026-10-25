@@ -38,9 +38,19 @@ function machine(platform: NodeJS.Platform, files: string[], patch: Partial<Harn
 }
 
 describe('where the desktop finds the spec.jev harness', () => {
-  it('takes SPECJEV_ROOT first, as in development', () => {
+  it('takes SPECJEV_ROOT first, then the legacy KYRN_ROOT and MU_ROOT', () => {
     const deps = machine('darwin', [], { env: { SPECJEV_ROOT: '/work/KYRN' } });
     expect(findHarness('/work/KYRN-desktop', deps)).toEqual({ root: '/work/KYRN', layout: 'repo', source: 'env' });
+    expect(findHarness('/work/KYRN-desktop', machine('darwin', [], { env: { KYRN_ROOT: '/work/view' } }))).toEqual({
+      root: '/work/view',
+      layout: 'repo',
+      source: 'env',
+    });
+    expect(findHarness('/work/KYRN-desktop', machine('darwin', [], { env: { MU_ROOT: '/work/mu' } }))).toEqual({
+      root: '/work/mu',
+      layout: 'repo',
+      source: 'env',
+    });
   });
 
   it('then the copy the packaged app carries, before anything else on the machine', () => {

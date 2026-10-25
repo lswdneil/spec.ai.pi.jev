@@ -395,7 +395,7 @@ export function sourceRuntime({ root, platform, stripsTypes, exists }) {
 }
 
 /**
- * pi reads PI_CODING_AGENT_DIR, so the launcher exports it and SPECJEV_CODING_AGENT_DIR for spec.jev's own code.
+ * pi reads SPEC.JEV_CODING_AGENT_DIR (built from piConfig.name), so the launcher exports it too.
  */
 export function agentDirFor({ env, muDir, platform }) {
 	return (
@@ -535,6 +535,8 @@ export function planLaunch({
 	}
 	childEnv.PI_PACKAGE_DIR = appDir;
 	childEnv.SPECJEV_CODING_AGENT_DIR = agentDir;
+	// pi reads its own name, built from piConfig.name ("spec.jev").
+	childEnv["SPEC.JEV_CODING_AGENT_DIR"] = agentDir;
 	childEnv.PI_CODING_AGENT_DIR = agentDir;
 	// pi's release check asks pi.dev about pi's versions, which say nothing about spec.jev's: a checkout follows
 	// upstream through git, and the package through npm.
@@ -738,6 +740,8 @@ export function planImport({ platform, env, argv, root, home, execPath, fs, stri
 	const childEnv = {};
 	for (const [key, value] of Object.entries(env)) if (typeof value === "string") childEnv[key] = value;
 	childEnv.SPECJEV_CODING_AGENT_DIR = agentDir;
+	// pi reads its own name, built from piConfig.name ("spec.jev").
+	childEnv["SPEC.JEV_CODING_AGENT_DIR"] = agentDir;
 	childEnv.PI_CODING_AGENT_DIR = agentDir;
 	return { command: execPath, args: [...entry, ...argv], env: childEnv, agentDir };
 }
@@ -846,6 +850,8 @@ export function planSetup({ platform, env, argv, root, home, execPath, fs, strip
 	if (key !== undefined) childEnv.SPECJEV_SETUP_KEY = key;
 	childEnv.SPECJEV_AGENT_DIR = agentDir;
 	childEnv.SPECJEV_CODING_AGENT_DIR = agentDir;
+	// pi reads its own name, built from piConfig.name ("spec.jev").
+	childEnv["SPEC.JEV_CODING_AGENT_DIR"] = agentDir;
 	childEnv.PI_CODING_AGENT_DIR = agentDir;
 	childEnv.SPECJEV_SETUP_HOME = muDir;
 	// The .env a session gets: the wizard writes the Jev key there, and reads a proxy from it.
