@@ -167,7 +167,8 @@ jobs:
           echo "TARBALL=$tarball" >> "$GITHUB_ENV"
 
       - name: Publish
-        run: npm publish "$TARBALL" --access public
+        # npm treats a bare `dir/file.tgz` as a git spec; `./` makes it the tarball it is.
+        run: npm publish "./$TARBALL" --access public
 
       - name: Check that npm serves this tarball
         shell: bash
