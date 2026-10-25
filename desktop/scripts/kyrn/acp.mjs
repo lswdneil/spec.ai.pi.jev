@@ -6,7 +6,7 @@
 // Linux keep the bash `acp`, whose path is the registration's key there: changing it would register mu a second time.
 //
 // The adapter finds the harness itself (process/agent/kyrn/harness.ts): KYRN_ROOT or MU_ROOT, a checkout beside the
-// desktop's, or mu-agent installed with npm.
+// desktop's, or spec.jev installed with npm.
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';

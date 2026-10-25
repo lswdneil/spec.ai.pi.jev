@@ -222,7 +222,7 @@ describe('which registered commands run this launcher', () => {
   });
 });
 
-// https://github.com/lswdneil/ai.spec.pi.jev/issues/14: only absent packaged launchers are eligible for restoration.
+// https://github.com/lswdneil/spec.ai.pi.jev/issues/14: only absent packaged launchers are eligible for restoration.
 describe('restoring an uninstalled launcher', () => {
   it('recognizes missing Windows launchers, including old short paths, without probing arbitrary commands', async () => {
     const checked: string[] = [];

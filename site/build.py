@@ -12,7 +12,7 @@ The facts come from the mu repository, so a rebuild follows the product:
 and from GitHub's API, at build time:
   the releases (pre-releases while mu is 0.x, so not /releases/latest): the newest one gives the banner, the version
   and the download links; each one names a CHANGELOG.md section; kyrn/npm/package.template.json at its tag says
-  which mu-agent it bundles
+  which spec.jev it bundles
 
 The site's own words and assets:
   templates/                       Jinja2 templates
@@ -52,8 +52,8 @@ from markdown_it import MarkdownIt
 
 here = Path(__file__).resolve().parent
 SITE = "https://usemu.dev/"
-REPO = "https://github.com/lswdneil/ai.spec.pi.jev"
-API = "https://api.github.com/repos/lswdneil/ai.spec.pi.jev"
+REPO = "https://github.com/lswdneil/spec.ai.pi.jev"
+API = "https://api.github.com/repos/lswdneil/spec.ai.pi.jev"
 LOCALES = ["zh-CN", "en", "zh-TW", "ja", "ko"]
 MANIFEST_LANG = {"zh-CN": "zh", "en": "en", "zh-TW": "zh-TW", "ja": "ja-JP", "ko": "ko-KR"}
 APP_LOCALE = {"zh-CN": "zh-CN", "en": "en-US", "zh-TW": "zh-TW", "ja": "ja-JP", "ko": "ko-KR"}
@@ -129,7 +129,7 @@ def version_key(number):
     return tuple(int(x) for x in number.split("."))
 
 
-def mu_releases():
+def specjev_releases():
     """Published desktop releases, newest first: tags vX.Y.Z with mu's installers. Drafts and other tags are left out."""
     out = []
     for r in github("/releases?per_page=100"):
@@ -138,17 +138,17 @@ def mu_releases():
             continue
         number = m.group(1)
         assets = {a["name"]: a["browser_download_url"] for a in r.get("assets", [])}
-        if not any(name.startswith(f"mu-{number}-") for name in assets):
+        if not any(name.startswith(f"spec.jev-{number}-") for name in assets):
             continue
         out.append({"tag": r["tag_name"], "number": number, "date": (r.get("published_at") or "")[:10],
                     "url": r["html_url"], "assets": assets, "body": r.get("body") or ""})
     if not out:
-        raise SystemExit("GitHub lists no mu release")
+        raise SystemExit("GitHub lists no spec.jev release")
     return sorted(out, key=lambda r: version_key(r["number"]), reverse=True)
 
 
 def bundled_agent(release, repo):
-    """The mu-agent version a desktop release bundles: kyrn/npm/package.template.json at its tag."""
+    """The spec.jev version a desktop release bundles: kyrn/npm/package.template.json at its tag."""
     path = "kyrn/npm/package.template.json"
     try:
         out = subprocess.run(["git", "-C", str(repo), "show", f"{release['tag']}:{path}"], capture_output=True, text=True, timeout=20)
@@ -161,7 +161,7 @@ def bundled_agent(release, repo):
         return json.loads(base64.b64decode(data["content"]))["version"]
     except (OSError, ValueError, KeyError):
         pass
-    m = re.search(r"mu-agent (\d+\.\d+\.\d+)", release["body"])
+    m = re.search(r"spec\.jev (\d+\.\d+\.\d+)", release["body"])
     return m.group(1) if m else None
 
 
@@ -513,7 +513,7 @@ def changelog_entries(L, ctx, releases, sections, agents):
     for R in releases:
         number = R["number"]
         anchor = re.sub(r"[^\w]+", "-", R["tag"]).strip("-")
-        agent = f"mu-agent {agents[number]}" if agents.get(number) else ""
+        agent = f"spec.jev {agents[number]}" if agents.get(number) else ""
         E = translated.get(number)
         if E is not None:
             if id(E) in used:
@@ -578,11 +578,11 @@ def check_facts(outdir, locales, modes, manifest):
 def main():
     parser = argparse.ArgumentParser(description="Build usemu.dev.")
     parser.add_argument("outdir")
-    parser.add_argument("--repo", default=os.environ.get("MU_REPO") or str(here.parent), help="a checkout of lswdneil/ai.spec.pi.jev")
+    parser.add_argument("--repo", default=os.environ.get("MU_REPO") or str(here.parent), help="a checkout of lswdneil/spec.ai.pi.jev")
     args = parser.parse_args()
     repo = Path(args.repo).expanduser().resolve()
     if not (repo / "packages/kyrn-judge/manifest.json").exists():
-        raise SystemExit(f"{repo} is not a checkout of lswdneil/ai.spec.pi.jev (no packages/kyrn-judge/manifest.json); pass --repo")
+        raise SystemExit(f"{repo} is not a checkout of lswdneil/spec.ai.pi.jev (no packages/kyrn-judge/manifest.json); pass --repo")
     outdir = Path(args.outdir).expanduser().resolve()
     outdir.mkdir(parents=True, exist_ok=True)
 
@@ -596,11 +596,11 @@ def main():
     en = locales[LOCALES.index("en")]
     recordings = {name: load_recording(name) for name in ("zh", "en")}
     sections = changelog_sections(repo)
-    releases = mu_releases()
+    releases = specjev_releases()
     agents = {R["number"]: bundled_agent(R, repo) for R in releases}
     latest = releases[0]
     if not agents[latest["number"]]:
-        warn(f"no mu-agent version found for {latest['tag']}; the banner leaves it out")
+        warn(f"no spec.jev version found for {latest['tag']}; the banner leaves it out")
     modes = {L["lang"]: mode_labels(repo, L["lang"]) for L in locales}
 
     css = "".join((here / "static" / name).read_text() for name in ("site.base.css", "site.extra.css", "site.pages.css"))
@@ -720,7 +720,7 @@ def main():
         shutil.copy(here / "static" / name, outdir / name)
     check_facts(outdir, locales, modes, manifest)
     print(f"{len(written)} pages, {sum(s for _, s in written) // 1024} KB; {facts['points']} decision points, {facts['points_active']} active from the start;"
-          f" newest release {latest['tag']} (mu-agent {release['agent']}); stars {stars}; version {version}")
+          f" newest release {latest['tag']} (spec.jev {release['agent']}); stars {stars}; version {version}")
     if fallbacks:
         print(f"English fallback for {len(fallbacks)} docs pages:", ", ".join(sorted({f.split('/')[0] for f in fallbacks})))
     problems = check_anchors(outdir, written)

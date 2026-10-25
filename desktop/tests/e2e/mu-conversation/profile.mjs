@@ -320,7 +320,7 @@ export function createProfile({ desktopRoot, root, language = 'zh-CN', app } = {
   writeFileSync(join(paths.agentDir, 'mu.json'), `${JSON.stringify(JUDGE_CONFIG, null, 2)}\n`);
 
   if (app) {
-    const carried = join(app.resources, 'harness', 'mu-agent');
+    const carried = join(app.resources, 'harness', 'spec.jev');
     if (!existsSync(join(carried, 'kyrn', 'bin', 'mu.mjs'))) {
       throw new Error(`The packaged app carries no spec.jev: ${join(carried, 'kyrn', 'bin', 'mu.mjs')} is missing.`);
     }

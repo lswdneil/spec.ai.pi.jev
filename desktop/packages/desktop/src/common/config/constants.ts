@@ -97,6 +97,14 @@ export const DEFAULT_IMAGE_EXTENSION = '.png';
 
 // ===== WebUI 相关常量 =====
 
+/**
+ * Whether the remote WebUI is part of this release. It stays in the codebase so
+ * the pairing, scopes and web-host work are not rewritten later, but 0.1.x does
+ * not expose it: the Remote access panel is not rendered and a stored switch no
+ * longer starts the listener.
+ */
+export const WEBUI_ENABLED_IN_RELEASE = false;
+
 /** WebUI default port: 25808 for production, 25809 for development, 25810 for multi-instance dev */
 export const WEBUI_DEFAULT_PORT = (() => {
   if (process.env.NODE_ENV === 'production') return 25808;

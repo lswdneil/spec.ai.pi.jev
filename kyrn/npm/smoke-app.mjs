@@ -71,7 +71,7 @@ if (!app) {
 	console.error(`No unpacked app for ${process.platform}-${arch} in ${target}`);
 	process.exit(2);
 }
-const launcher = join(app.resources, "harness", "mu-agent", "kyrn", "bin", "mu.mjs");
+const launcher = join(app.resources, "harness", "spec.jev", "kyrn", "bin", "mu.mjs");
 if (!existsSync(launcher)) {
 	console.error(`The app carries no spec.jev: ${launcher} is missing`);
 	process.exit(2);
@@ -80,7 +80,7 @@ console.log(`app binary: ${app.binary}`);
 console.log(`spec.jev launcher: ${launcher}`);
 
 // What the app itself does (piRpc.ts, launchCommand): its binary as Node, the launcher as the script.
-const folder = mkdtempSync(join(tmpdir(), "mu-app-smoke-"));
+const folder = mkdtempSync(join(tmpdir(), "specjev-app-smoke-"));
 const mu = join(folder, windows ? "mu.cmd" : "mu");
 writeFileSync(
 	mu,

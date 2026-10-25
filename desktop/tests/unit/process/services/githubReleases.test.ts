@@ -3,11 +3,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { fetchLatestRelease, isNewerVersion, pickRecommendedAsset } from '@/process/services/update/githubReleases';
 
-const RELEASES_API = 'https://api.github.com/repos/lswdneil/ai.spec.pi.jev/releases';
+const RELEASES_API = 'https://api.github.com/repos/lswdneil/spec.ai.pi.jev/releases';
 
 const asset = (tag: string, name: string) => ({
   name,
-  browser_download_url: `https://github.com/lswdneil/ai.spec.pi.jev/releases/download/${tag}/${name}`,
+  browser_download_url: `https://github.com/lswdneil/spec.ai.pi.jev/releases/download/${tag}/${name}`,
   size: 100,
 });
 
@@ -18,7 +18,7 @@ const release = (tag: string, extra: Record<string, unknown> = {}) => {
     tag_name: tag,
     name: `spec.jev ${tag}`,
     body: `notes for ${tag}`,
-    html_url: `https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/${tag}`,
+    html_url: `https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/${tag}`,
     published_at: '2026-09-23T00:00:00Z',
     prerelease: true,
     draft: false,
@@ -66,7 +66,7 @@ afterEach(() => {
 });
 
 describe('fetchLatestRelease', () => {
-  it('finds the newest release, pre-releases included, and asks nobody but lswdneil/ai.spec.pi.jev', async () => {
+  it('finds the newest release, pre-releases included, and asks nobody but lswdneil/spec.ai.pi.jev', async () => {
     onSystem('darwin', 'arm64');
     const fetchMock = stubFetch(() =>
       json([
@@ -82,7 +82,7 @@ describe('fetchLatestRelease', () => {
     expect(latest).toMatchObject({
       version: '0.1.3',
       prerelease: true,
-      htmlUrl: 'https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v0.1.3',
+      htmlUrl: 'https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/v0.1.3',
     });
     // The update feed, the blockmaps, the source archive and the checksums are no installers.
     expect(latest?.assets.map((a) => a.name)).toEqual([
@@ -96,7 +96,7 @@ describe('fetchLatestRelease', () => {
       'spec.jev-0.1.3-linux-arm64.deb',
     ]);
     expect(latest?.recommendedAsset?.url).toBe(
-      'https://github.com/lswdneil/ai.spec.pi.jev/releases/download/v0.1.3/spec.jev-0.1.3-mac-arm64.dmg'
+      'https://github.com/lswdneil/spec.ai.pi.jev/releases/download/v0.1.3/spec.jev-0.1.3-mac-arm64.dmg'
     );
     expect(fetchMock.mock.calls.map(([url]) => String(url))).toEqual([RELEASES_API]);
   });

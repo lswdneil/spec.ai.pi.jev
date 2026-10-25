@@ -6,12 +6,12 @@
 <p align="center">帶判定核心的程式設計代理。以 <a href="https://github.com/earendil-works/pi">pi</a> 為基礎。</p>
 
 <p align="center">
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
-  <a href="https://www.npmjs.com/package/mu-agent"><img src="https://img.shields.io/npm/v/mu-agent?label=mu-agent" alt="npm"></a>
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/releases"><img src="https://img.shields.io/github/v/release/lswdneil/ai.spec.pi.jev?include_prereleases&label=desktop" alt="Desktop release"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/ci.yml"><img src="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/desktop.yml"><img src="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
+  <a href="https://www.npmjs.com/package/spec.jev"><img src="https://img.shields.io/npm/v/spec.jev?label=spec.jev" alt="npm"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/releases"><img src="https://img.shields.io/github/v/release/lswdneil/spec.ai.pi.jev?include_prereleases&label=desktop" alt="Desktop release"></a>
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/discussions"><img src="https://img.shields.io/github/discussions/lswdneil/ai.spec.pi.jev?label=discussions" alt="Discussions"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/discussions"><img src="https://img.shields.io/github/discussions/lswdneil/spec.ai.pi.jev?label=discussions" alt="Discussions"></a>
 </p>
 
 <p align="center">
@@ -33,13 +33,13 @@
 - **spec.jev 桌面版**：內建 spec.jev 和執行環境的桌面應用程式。下載，接上一個模型，開始。
 - **Jev**：判定器。是非題、選擇題、評分題，每個答案帶機率，每一次判定都記進判定帳本。除了審批只由 Jev 決定，任何判定點都可以交給本機判定器（Laya）或任何一個大模型。
 
-> 還在早期開發。預發布版（0.1.x）在 npm 和 [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases) 上，作者每天都在用。名稱、設定和格式都可能改變。
+> 還在早期開發。預發布版（0.1.x）在 npm 和 [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases) 上，作者每天都在用。名稱、設定和格式都可能改變。
 
 **目錄：**[快速開始](#快速開始) · [一輪是怎麼走的](#一輪是怎麼走的) · [判定點](#判定點) · [判定器](#判定器) · [實測](#實測) · [蜂群](#蜂群) · [人話看板](#人話看板) · [桌面版](#桌面版) · [命令列](#命令列) · [文件](#文件) · [參與貢獻](#參與貢獻)
 
 ## 快速開始
 
-**桌面版。** 從 [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases/latest) 下載 macOS、Windows 或 Linux 安裝檔，開啟後貼上一組 API 金鑰，或用 ChatGPT、Claude、Grok、Google 訂閱登入。不需要再安裝其他東西。
+**桌面版。** 從 [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases/latest) 下載 macOS、Windows 或 Linux 安裝檔，開啟後貼上一組 API 金鑰，或用 ChatGPT、Claude、Grok、Google 訂閱登入。不需要再安裝其他東西。
 
 **命令列。**
 
@@ -247,7 +247,7 @@ spec.jev                  # 在目前目錄開一個工作階段
 
 底部的一條列讓核心一直在視線裡：哪個判定器在回答、跑在哪裡，啟用了多少個判定點；在對話裡，還有到目前為止的判定數、最近一次判定的耗時和上下文用量。權限模式和目標在傳送框裡；`⌘K` 開啟命令面板。模型登入在應用程式內完成：ChatGPT、Claude、Grok 和 Google（Gemini CLI / Antigravity）訂閱，或任何 pi 支援的供應商的 API 金鑰。Claude Code 和 Codex CLI 的對話可以匯入並接著聊。
 
-macOS（Apple 晶片 / Intel）、Windows（x64 / Arm）、Linux（x64 / Arm）的安裝檔由 GitHub Actions 建置，發布在 [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases)。
+macOS（Apple 晶片 / Intel）、Windows（x64 / Arm）、Linux（x64 / Arm）的安裝檔由 GitHub Actions 建置，發布在 [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases)。
 
 ## 命令列
 
@@ -300,7 +300,7 @@ pi 自己的指令（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`
 
 ## 參與貢獻
 
-歡迎回報 bug、修 bug、提出新的判定點、評測判定器、協助翻譯，中文或英文都可以。請先看 [CONTRIBUTING.md](../../CONTRIBUTING.md)；標記 [`good first issue`](https://github.com/lswdneil/ai.spec.pi.jev/labels/good%20first%20issue) 的 issue 適合入門。
+歡迎回報 bug、修 bug、提出新的判定點、評測判定器、協助翻譯，中文或英文都可以。請先看 [CONTRIBUTING.md](../../CONTRIBUTING.md)；標記 [`good first issue`](https://github.com/lswdneil/spec.ai.pi.jev/labels/good%20first%20issue) 的 issue 適合入門。
 
 ```bash
 npm install --ignore-scripts   # 安裝相依套件，不執行生命週期指令碼
@@ -319,8 +319,8 @@ spec.jev 採用 MIT 授權（[LICENSE](../../LICENSE)；桌面版見 [desktop/LI
 
 ## 社群支援
 
-- 提問和想法：[Discussions](https://github.com/lswdneil/ai.spec.pi.jev/discussions)；中文討論（簡體中文）也可以到 [linux.do](https://linux.do)。
-- bug 和需求：[Issues](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose)。
+- 提問和想法：[Discussions](https://github.com/lswdneil/spec.ai.pi.jev/discussions)；中文討論（簡體中文）也可以到 [linux.do](https://linux.do)。
+- bug 和需求：[Issues](https://github.com/lswdneil/spec.ai.pi.jev/issues/new/choose)。
 - 更多：[SUPPORT.md](../../SUPPORT.md)。
 
 如果 spec.jev 對你有幫助，給個 star 能讓更多人看到它。

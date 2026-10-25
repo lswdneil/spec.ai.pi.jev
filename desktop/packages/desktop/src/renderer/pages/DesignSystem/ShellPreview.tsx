@@ -88,7 +88,7 @@ const ShellPreview: React.FC = () => (
             </span>
             <span className='min-w-0'>
               <span className='block text-[11px] leading-tight text-sv-text'>neil</span>
-              <span className='block text-[9.5px] leading-tight text-sv-faint'>ai.spec.pi.jev</span>
+              <span className='block text-[9.5px] leading-tight text-sv-faint'>spec.ai.pi.jev</span>
             </span>
             <ChevronDown className='sv-icon-xs ml-auto text-sv-faint' />
           </div>
@@ -101,7 +101,7 @@ const ShellPreview: React.FC = () => (
       <div className='grid min-h-0 min-w-0 grid-rows-[40px_minmax(0,1fr)_auto]'>
         <header className='flex min-w-0 items-center gap-2 border-b border-sv-line px-2.5'>
           <span className='flex min-w-0 items-center gap-1.5 text-[11px] text-sv-muted'>
-            ai.spec.pi.jev <ChevronRight className='sv-icon-xs text-sv-faint' />
+            spec.ai.pi.jev <ChevronRight className='sv-icon-xs text-sv-faint' />
             <b className='truncate font-medium text-sv-text'>Fix the ACP handshake</b>
           </span>
           <div className='ml-auto flex items-center gap-1.5'>

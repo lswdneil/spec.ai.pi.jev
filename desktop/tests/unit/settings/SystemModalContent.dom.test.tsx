@@ -301,6 +301,8 @@ describe('SystemModalContent directory settings', () => {
     expect(screen.queryByText('settings.promptTimeout')).not.toBeInTheDocument();
     expect(screen.queryByText('settings.crossSessionMessage')).not.toBeInTheDocument();
     expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument();
+    // WebUI is deferred for 0.1.x: the panel and its switch stay out of Settings.
+    expect(screen.queryByTestId('webui-toggle')).not.toBeInTheDocument();
   });
 
   it('names the menu bar on a Mac, where the closed app lives on', async () => {

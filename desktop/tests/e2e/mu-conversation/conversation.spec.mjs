@@ -577,8 +577,8 @@ test('关于 shows the version, and 检查更新 downloads nothing', async () =>
   const appVersion = own.packaged
     ? own.version
     : JSON.parse(readFileSync(join(desktopRoot, 'package.json'), 'utf8')).version;
-  const feed = 'https://github.com/lswdneil/ai.spec.pi.jev/releases.atom';
-  const channel = `https://github.com/lswdneil/ai.spec.pi.jev/releases/download/v${version}/${
+  const feed = 'https://github.com/lswdneil/spec.ai.pi.jev/releases.atom';
+  const channel = `https://github.com/lswdneil/spec.ai.pi.jev/releases/download/v${version}/${
     process.platform === 'darwin' ? 'latest-mac.yml' : 'latest.yml'
   }`;
   const listDownloads = () => (existsSync(own.downloads) ? readdirSync(own.downloads).toSorted() : []);
@@ -593,12 +593,12 @@ test('关于 shows the version, and 检查更新 downloads nothing', async () =>
       scope.fetch = async (input, init) => {
         const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
         scope.__e2eRequests.push(url);
-        if (url.startsWith('https://api.github.com/repos/lswdneil/ai.spec.pi.jev/releases')) {
+        if (url.startsWith('https://api.github.com/repos/lswdneil/spec.ai.pi.jev/releases')) {
           const names = [`spec.jev-${newer}-mac-arm64.dmg`, `spec.jev-${newer}-mac-x64.dmg`, `spec.jev-${newer}-win-x64.exe`];
           const release = {
             tag_name: `v${newer}`,
             name: `spec.jev ${newer}`,
-            html_url: `https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v${newer}`,
+            html_url: `https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/v${newer}`,
             prerelease: true,
             draft: false,
             assets: [...names, `spec.jev-${newer}-linux-amd64.deb`].map((name) => ({
@@ -630,13 +630,13 @@ test('关于 shows the version, and 检查更新 downloads nothing', async () =>
       const atom = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">',
-        '  <id>tag:github.com,2008:https://github.com/lswdneil/ai.spec.pi.jev/releases</id>',
+        '  <id>tag:github.com,2008:https://github.com/lswdneil/spec.ai.pi.jev/releases</id>',
         '  <title>Release notes from spec.jev</title>',
         '  <updated>2026-09-25T00:00:00Z</updated>',
         '  <entry>',
         `    <id>tag:github.com,2008:Repository/1/v${newer}</id>`,
         '    <updated>2026-09-25T00:00:00Z</updated>',
-        `    <link rel="alternate" type="text/html" href="https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v${newer}"/>`,
+        `    <link rel="alternate" type="text/html" href="https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/v${newer}"/>`,
         `    <title>spec.jev ${newer}</title>`,
         '    <content type="html">No content.</content>',
         '  </entry>',
@@ -662,7 +662,7 @@ test('关于 shows the version, and 检查更新 downloads nothing', async () =>
   const asked = /** @type {string[]} */ (await app.evaluate(() => /** @type {any} */ (globalThis).__e2eRequests));
   const outside = asked.filter((url) => !/^https?:\/\/(127\.0\.0\.1|localhost)[:/]/.test(url));
   expect(outside, 'the check asked only for the release list').toEqual(
-    restarts ? [feed, channel] : ['https://api.github.com/repos/lswdneil/ai.spec.pi.jev/releases']
+    restarts ? [feed, channel] : ['https://api.github.com/repos/lswdneil/spec.ai.pi.jev/releases']
   );
   expect(
     (run.fake?.hits ?? []).filter((hit) => hit.path.startsWith('/__e2e/asset')),

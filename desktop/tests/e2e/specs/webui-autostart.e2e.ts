@@ -15,6 +15,7 @@ const backendBinary =
  * switch.
  */
 test('starts the WebUI on launch when the persisted switch is on', async () => {
+  test.skip(true, 'Remote access is deferred for 0.1.x; the code and this test stay for the later release.');
   test.setTimeout(120_000);
   if (!existsSync(backendBinary)) test.skip(true, 'bundled backend is missing');
 

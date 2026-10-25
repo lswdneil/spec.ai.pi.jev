@@ -2,7 +2,7 @@
 
 Start with `spec.jev doctor` (or `/doctor` in a session). It checks the installation, the model, the judges and the connections, and tells you what to fix. In the desktop app, the logs are one click away in Settings → About.
 
-If that doesn't help, [open an issue](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose) with the version, the platform and the `spec.jev doctor` output.
+If that doesn't help, [open an issue](https://github.com/lswdneil/spec.ai.pi.jev/issues/new/choose) with the version, the platform and the `spec.jev doctor` output.
 
 ## Installing and starting
 
@@ -12,9 +12,9 @@ If that doesn't help, [open an issue](https://github.com/lswdneil/ai.spec.pi.jev
 
 **Windows: the conversation says Git for Windows is missing.** spec.jev runs commands in a POSIX shell on Windows. Install [Git for Windows](https://git-scm.com/download/win) and start a new conversation.
 
-**The app installed in `C:\Program Files\spec.jev` can't start spec.jev.** Fixed in 0.1.5 ([#4](https://github.com/lswdneil/ai.spec.pi.jev/issues/4)). Install the latest release over the old one; your data is kept.
+**The app installed in `C:\Program Files\spec.jev` can't start spec.jev.** Fixed in 0.1.5 ([#4](https://github.com/lswdneil/spec.ai.pi.jev/issues/4)). Install the latest release over the old one; your data is kept.
 
-**`spec.jev install`, `spec.jev list` or `spec.jev config` starts a session instead.** Fixed in spec.jev 0.1.8 and the desktop app 0.1.7 ([#8](https://github.com/lswdneil/ai.spec.pi.jev/issues/8)). Update to the latest release.
+**`spec.jev install`, `spec.jev list` or `spec.jev config` starts a session instead.** Fixed in spec.jev 0.1.8 and the desktop app 0.1.7 ([#8](https://github.com/lswdneil/spec.ai.pi.jev/issues/8)). Update to the latest release.
 
 ## Models and networks
 
@@ -36,7 +36,7 @@ If that doesn't help, [open an issue](https://github.com/lswdneil/ai.spec.pi.jev
 
 ## The terminal UI
 
-**The terminal UI crashes with "Rendered line … exceeds terminal width" when a subagent starts.** Fixed in spec.jev 0.1.8 and the desktop app 0.1.7 ([#7](https://github.com/lswdneil/ai.spec.pi.jev/issues/7)). Update to the latest release.
+**The terminal UI crashes with "Rendered line … exceeds terminal width" when a subagent starts.** Fixed in spec.jev 0.1.8 and the desktop app 0.1.7 ([#7](https://github.com/lswdneil/spec.ai.pi.jev/issues/7)). Update to the latest release.
 
 ## Starting over
 

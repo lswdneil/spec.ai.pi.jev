@@ -866,7 +866,7 @@ const handleAppReady = async (): Promise<void> => {
     appReadyDone = true;
     mark('createWindow');
 
-    // spec.jev updates itself from the releases of github.com/lswdneil/ai.spec.pi.jev (process/services/update): a check a little after
+    // spec.jev updates itself from the releases of github.com/lswdneil/spec.ai.pi.jev (process/services/update): a check a little after
     // the start and then every 6 hours, besides the one on 关于 (About). A build run from its sources and automated
     // runs (CI, E2E, MU_DISABLE_AUTO_UPDATE=1) check only when asked.
     const updates = getUpdateService();

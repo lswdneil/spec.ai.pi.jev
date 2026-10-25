@@ -109,7 +109,7 @@ describe('StartupGate', () => {
     isMac.mockReturnValue(false);
   });
 
-  // https://github.com/lswdneil/ai.spec.pi.jev/issues/14: the frameless window must remain usable before Layout mounts.
+  // https://github.com/lswdneil/spec.ai.pi.jev/issues/14: the frameless window must remain usable before Layout mounts.
   it.each(['loading', 'error'])('keeps working window controls during %s', async (state) => {
     if (state === 'loading') catalog.mockReturnValue(new Promise(() => {}));
     else catalog.mockResolvedValue({ ok: false, code: 'otherRegistration', error: 'old installation' });
@@ -175,7 +175,7 @@ describe('StartupGate', () => {
     await waitFor(() => expect(screen.getByText('app')).toBeInTheDocument());
   });
 
-  // https://github.com/lswdneil/ai.spec.pi.jev/issues/14: a retry must show progress and keep the window closable.
+  // https://github.com/lswdneil/spec.ai.pi.jev/issues/14: a retry must show progress and keep the window closable.
   it('shows retry progress, handles another failure and remains retryable', async () => {
     catalog.mockResolvedValueOnce({ ok: false, error: 'first failure' });
     view(

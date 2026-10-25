@@ -763,7 +763,7 @@ try {
   execSync('node scripts/prepareHubResources.js', { stdio: 'inherit', env: process.env });
 
   // mu itself, for the system and processor being built: resources/harness, which extraResources copies into the app
-  // and afterPack checks (scripts/kyrn/bundle-harness.mjs). MU_HARNESS_TARBALL names the mu-agent tarball to carry.
+  // and afterPack checks (scripts/kyrn/bundle-harness.mjs). MU_HARNESS_TARBALL names the spec.jev tarball to carry.
   const systems = { '--win': 'win32', '--linux': 'linux', '--mac': 'darwin' };
   const harnessPlatform = Object.entries(systems).find(([flag]) => builderArgs.includes(flag))?.[1] ?? process.platform;
   execFileSync(

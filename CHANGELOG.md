@@ -1,8 +1,8 @@
 # Changelog
 
-What changed in each release of mu: the desktop app and the `mu` command line together. Releases are published under [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases) with their downloads; the `mu-agent` npm package has its own, more detailed [changelog](kyrn/npm/CHANGELOG.md).
+What changed in each release of spec.jev: the desktop app and the `spec.jev` command line together. Releases are published under [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases) with their downloads; the `spec.jev` npm package has its own, more detailed [changelog](kyrn/npm/CHANGELOG.md).
 
-mu is in pre-release (0.1.x): names, settings and formats may still change between releases.
+spec.jev is in pre-release (0.1.x): names, settings and formats may still change between releases.
 
 ## [Unreleased]
 
@@ -10,7 +10,7 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 
 ### Added
 
-- **A new provider starts with what its model list says** ([#23](https://github.com/lswdneil/ai.spec.pi.jev/issues/23)). When Test connection lists the models, the desktop app reads each one's context window, output limit, image input and thinking from the list (OpenRouter, Gemini, vLLM, LM Studio, Mistral, Groq, LiteLLM and models.dev each word these differently), so a model you add from the list no longer starts at 128K, 16K, text only and no thinking. The list shows each model's context size, and the first-run guide uses the same facts. Anything the list doesn't state keeps the old defaults.
+- **A new provider starts with what its model list says** ([#23](https://github.com/lswdneil/spec.ai.pi.jev/issues/23)). When Test connection lists the models, the desktop app reads each one's context window, output limit, image input and thinking from the list (OpenRouter, Gemini, vLLM, LM Studio, Mistral, Groq, LiteLLM and models.dev each word these differently), so a model you add from the list no longer starts at 128K, 16K, text only and no thinking. The list shows each model's context size, and the first-run guide uses the same facts. Anything the list doesn't state keeps the old defaults.
 
 ### Fixed
 
@@ -23,7 +23,7 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 - **A new look for the desktop app.** Ink-and-paper neutrals and monochrome primary buttons; violet marks what you can act on, and pink marks the judge.
   - The home page says which judge is ready, then asks what to work on: no lead paragraph and no example prompts under the input. How many decision points are active is in the kernel bar.
   - A kernel bar along the bottom shows the judge and where it runs. In a conversation it also shows the verdicts so far, the latest judge latency, context use and cache hits. Click the judge to change it.
-  - The context ring by the message box repeated the kernel bar, so beside the bar it now shows only once context use passes 70%, where it turns amber. In a narrow window, which has no kernel bar, it shows as before ([#37](https://github.com/lswdneil/ai.spec.pi.jev/pull/37)).
+  - The context ring by the message box repeated the kernel bar, so beside the bar it now shows only once context use passes 70%, where it turns amber. In a narrow window, which has no kernel bar, it shows as before ([#37](https://github.com/lswdneil/spec.ai.pi.jev/pull/37)).
   - Judge lines in a conversation and in the judge panel name their decision point (`input.preflight`), with the judge's latency.
   - When the judge finds that a run stopped short and mu sends the model back, the line saying so has the judge's diamond.
   - A conversation's header says "Working" while a turn runs, and nothing once it has ended. It used to say "Running" for as long as mu was up.
@@ -46,7 +46,7 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 
 ### Fixed
 
-- After reinstalling mu, the desktop app recovers its startup instead of hanging; the window controls stay usable while it starts ([#14](https://github.com/lswdneil/ai.spec.pi.jev/issues/14)).
+- After reinstalling mu, the desktop app recovers its startup instead of hanging; the window controls stay usable while it starts ([#14](https://github.com/lswdneil/spec.ai.pi.jev/issues/14)).
 - A zoom made the moment a Mermaid diagram appears is no longer undone.
 - Claude Sonnet 5.5's cache reads and Kimi K3 on Moonshot are priced at the providers' own rates again.
 
@@ -69,8 +69,8 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 
 ### Fixed
 
-- `mu install`, `mu list`, `mu config` and pi's other commands run again instead of being sent to the model as a prompt ([#8](https://github.com/lswdneil/ai.spec.pi.jev/issues/8), [#9](https://github.com/lswdneil/ai.spec.pi.jev/pull/9) by [@nyxmoth](https://github.com/nyxmoth)).
-- Subagent status no longer crashes the terminal UI in a window narrower than the status line ([#7](https://github.com/lswdneil/ai.spec.pi.jev/issues/7)).
+- `mu install`, `mu list`, `mu config` and pi's other commands run again instead of being sent to the model as a prompt ([#8](https://github.com/lswdneil/spec.ai.pi.jev/issues/8), [#9](https://github.com/lswdneil/spec.ai.pi.jev/pull/9) by [@nyxmoth](https://github.com/nyxmoth)).
+- Subagent status no longer crashes the terminal UI in a window narrower than the status line ([#7](https://github.com/lswdneil/spec.ai.pi.jev/issues/7)).
 - Closing an MCP server that is still starting stops its process.
 
 ## [0.1.6] - 2026-09-30
@@ -92,11 +92,11 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 
 ### Added
 
-- **Start with an API key.** The first-run guide and `mu setup` recognize the service from the key's shape, check the key with one request, and pick a model to start with ([#3](https://github.com/lswdneil/ai.spec.pi.jev/issues/3)).
+- **Start with an API key.** The first-run guide and `mu setup` recognize the service from the key's shape, check the key with one request, and pick a model to start with ([#3](https://github.com/lswdneil/spec.ai.pi.jev/issues/3)).
 
 ### Fixed
 
-- Windows: the app installed in `C:\Program Files\mu` can start mu ([#4](https://github.com/lswdneil/ai.spec.pi.jev/issues/4)).
+- Windows: the app installed in `C:\Program Files\mu` can start mu ([#4](https://github.com/lswdneil/spec.ai.pi.jev/issues/4)).
 - mu in the app follows the system's proxy when no `HTTPS_PROXY` is set, as do sign-in and the key check.
 - macOS: a conversation no longer puts a bouncing icon in the Dock.
 
@@ -105,7 +105,7 @@ mu is in pre-release (0.1.x): names, settings and formats may still change betwe
 ### Added
 
 - Choose how Jev is reached (TypeSafe, OpenRouter, the Vercel AI Gateway or your own service), each with its own key; CLM as a judge.
-- Providers with an `http://` address on your computer or network, and editable thinking levels per model ([#1](https://github.com/lswdneil/ai.spec.pi.jev/pull/1), [#2](https://github.com/lswdneil/ai.spec.pi.jev/pull/2) by [@drunkduckdrown](https://github.com/drunkduckdrown)).
+- Providers with an `http://` address on your computer or network, and editable thinking levels per model ([#1](https://github.com/lswdneil/spec.ai.pi.jev/pull/1), [#2](https://github.com/lswdneil/spec.ai.pi.jev/pull/2) by [@drunkduckdrown](https://github.com/drunkduckdrown)).
 - Light and dark themes that follow the system; more of the app in your language; `/hive <question>`.
 
 ### Fixed
@@ -135,11 +135,11 @@ Preview build.
 
 The first preview: the desktop app for macOS (signed and notarized), Windows and Linux, x64 and arm64, with mu inside it, and `mu-agent` on npm.
 
-[Unreleased]: https://github.com/lswdneil/ai.spec.pi.jev/compare/v0.1.6...main
-[0.1.6]: https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v0.1.6
-[0.1.5]: https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v0.1.5
-[0.1.4]: https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v0.1.4
-[0.1.3]: https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v0.1.3
-[0.1.2]: https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v0.1.2
-[0.1.1]: https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v0.1.1
-[0.1.0]: https://github.com/lswdneil/ai.spec.pi.jev/releases/tag/v0.1.0
+[Unreleased]: https://github.com/lswdneil/spec.ai.pi.jev/compare/v0.1.6...main
+[0.1.6]: https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/v0.1.6
+[0.1.5]: https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/v0.1.5
+[0.1.4]: https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/v0.1.4
+[0.1.3]: https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/v0.1.3
+[0.1.2]: https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/v0.1.2
+[0.1.1]: https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/v0.1.1
+[0.1.0]: https://github.com/lswdneil/spec.ai.pi.jev/releases/tag/v0.1.0

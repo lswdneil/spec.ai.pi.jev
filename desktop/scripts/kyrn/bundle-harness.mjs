@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-// Puts mu inside the app: the npm package spec.jev, with its dependencies, in resources/harness/spec.jev, which
+// Puts spec.jev inside the app: the npm package spec.jev, with its dependencies, in resources/harness/spec.jev, which
 // electron-builder copies to <resources>/harness (packages/desktop/electron-builder.yml, extraResources). The app runs
 // it on its own binary as Node (resources/spec.jev/acp, process/agent/kyrn/harness.ts), so the machine the app runs on needs
 // no Node, no npm and no download.
 //
 //   node scripts/kyrn/bundle-harness.mjs [--platform darwin|linux|win32] [--arch arm64|x64]
 //
-// Which mu: MU_HARNESS_TARBALL, a tarball packed from a harness checkout (`node kyrn/npm/build.mjs --pack`; the MU
+// Which spec.jev: MU_HARNESS_TARBALL, a tarball packed from a harness checkout (`node kyrn/npm/build.mjs --pack`; the MU
 // repository's CI packs it from the same commit as the app), else spec.jev from the npm registry at the version
 // pinned in this repository's package.json, "muAgentVersion". Its dependencies are installed with npm for the target
 // platform and arch, without install scripts: npm is needed here, at build time, and nowhere else.
@@ -135,7 +135,7 @@ function sizeOf(dir) {
   return { files, bytes };
 }
 
-/** Bundles mu into resources/harness and checks the result; throws when anything is missing. */
+/** Bundles spec.jev into resources/harness and checks the result; throws when anything is missing. */
 export function bundleHarness({
   root = projectRoot,
   platform = process.platform,
@@ -149,7 +149,7 @@ export function bundleHarness({
   const target = join(harness, 'spec.jev');
   rmSync(harness, { recursive: true, force: true });
   mkdirSync(target, { recursive: true });
-  const scratch = mkdtempSync(join(tmpdir(), 'mu-harness-'));
+  const scratch = mkdtempSync(join(tmpdir(), 'specjev-harness-'));
   try {
     let file = tarball ? resolve(tarball) : undefined;
     if (!file) {
@@ -174,7 +174,7 @@ export function bundleHarness({
     const record = { name: manifest.name, version: manifest.version, platform, arch };
     writeFileSync(join(harness, 'bundle.json'), `${JSON.stringify(record, null, 2)}\n`);
     const check = verifyBundledHarness({ resourcesDir: resources, electronPlatformName: platform, targetArch: arch });
-    if (check.missing.length > 0) throw new Error(`The bundled mu is incomplete: ${check.missing.join(', ')}`);
+    if (check.missing.length > 0) throw new Error(`The bundled spec.jev is incomplete: ${check.missing.join(', ')}`);
     const { files, bytes } = sizeOf(harness);
     log(
       `Bundled spec.jev ${manifest.version} for ${platform}-${arch} in resources/harness: ${files} files, ${(bytes / 1048576).toFixed(1)} MiB`

@@ -255,7 +255,7 @@ describe('the installed menu', () => {
     click(itemLabelled(installed(), i18n.t('common.menu.projectPage', { name: 'spec.jev' })));
 
     expect(electron.shell.openExternal).toHaveBeenCalledWith(MU_PROJECT_URL);
-    expect(MU_PROJECT_URL).toBe('https://github.com/lswdneil/ai.spec.pi.jev');
+    expect(MU_PROJECT_URL).toBe('https://github.com/lswdneil/spec.ai.pi.jev');
   });
 
   it('logs a project page that cannot be opened', async () => {

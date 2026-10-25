@@ -15,7 +15,7 @@ vi.mock('electron-log', () => ({ default: { info: vi.fn(), warn: vi.fn(), error:
 
 import { downloadInstaller } from '@/process/services/update/installerDownload';
 
-const ASSET_URL = 'https://github.com/lswdneil/ai.spec.pi.jev/releases/download/v0.1.3/spec.jev-0.1.3-linux-amd64.deb';
+const ASSET_URL = 'https://github.com/lswdneil/spec.ai.pi.jev/releases/download/v0.1.3/spec.jev-0.1.3-linux-amd64.deb';
 const STORAGE_URL = 'https://release-assets.githubusercontent.com/github-production-release-asset/1/abc';
 
 let dir = '';
@@ -72,7 +72,7 @@ describe('downloadInstaller', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
 
     await expect(
-      downloadInstaller({ name: 'x.deb', url: 'http://github.com/lswdneil/ai.spec.pi.jev/x.deb' }, { dir })
+      downloadInstaller({ name: 'x.deb', url: 'http://github.com/lswdneil/spec.ai.pi.jev/x.deb' }, { dir })
     ).rejects.toMatchObject({ info: { code: 'downloadFailed' } });
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(existsSync(path.join(dir, 'x.deb'))).toBe(false);

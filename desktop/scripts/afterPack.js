@@ -40,9 +40,9 @@ function verifyBundledResources(resourcesDir, electronPlatformName, targetArch) 
   // mu itself (scripts/kyrn/bundle-harness.mjs), installed for this build's system and processor.
   const harness = verifyBundledHarness({ resourcesDir, electronPlatformName, targetArch });
   if (harness.missing.length > 0) {
-    throw new Error(`Packaged app is missing mu: ${harness.missing.join(', ')}`);
+    throw new Error(`Packaged app is missing spec.jev: ${harness.missing.join(', ')}`);
   }
-  console.log(`   mu-agent ${harness.version} verified (${harness.checked.length} checks)`);
+  console.log(`   spec.jev ${harness.version} verified (${harness.checked.length} checks)`);
 }
 
 module.exports = async function afterPack(context) {

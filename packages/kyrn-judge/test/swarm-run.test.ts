@@ -726,7 +726,7 @@ describe("swarm view", () => {
 		expect(text).toContain("三个精确 Google 查询均被反爬页拦截");
 	});
 
-	// https://github.com/lswdneil/ai.spec.pi.jev/issues/7
+	// https://github.com/lswdneil/spec.ai.pi.jev/issues/7
 	it("cuts the status shown before the first snapshot to the terminal width", () => {
 		const status = "choosing a role, a model and a thinking level for 1 sub-agent…";
 		const result = renderSwarmResult(

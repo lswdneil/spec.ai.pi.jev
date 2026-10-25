@@ -12,7 +12,7 @@
 - The desktop app is `spec.jev` (app id `com.specjev.desktop`).
 - The brand mark is the new loop logo: every icon (`app.png`, `app.ico`, `app.icns`, the PWA and site icons, the social card) is built from `desktop/resources/brand/mu-icon-source.png` by `desktop/scripts/kyrn/icon/build-icon.py`; the in-app mark and the sign-in page use the same artwork.
 - The app ships five languages: English, 简体中文, 繁體中文, 日本語 and 한국어. Deutsch, Español, Français, Português (BR), Русский, Українська, Türkçe and فارسی are gone from the desktop app, the settings catalog and the docs.
-- The copy is spec.jev's throughout: the desktop app's strings, the site, the documentation and the README no longer call the product `mu`. Identifiers keep their names (`mu.json`, `.mu`, `/mu`, `MU_*`, `lswdneil/ai.spec.pi.jev`), so existing files, scripts and links keep working.
+- The copy is spec.jev's throughout: the desktop app's strings, the site, the documentation and the README no longer call the product `mu`. Identifiers keep their names (`mu.json`, `.mu`, `/mu`, `MU_*`, `lswdneil/spec.ai.pi.jev`), so existing files, scripts and links keep working.
 - Version numbering restarts at 0.1.0 for the renamed project.
 
 ### Added
@@ -67,8 +67,8 @@
 
 ### Fixed
 
-- `mu install`, `remove`, `uninstall`, `update`, `list`, `config`, `auth` and `mcp` reach pi as its first argument again, from the command line and from the desktop app's host, instead of being sent to the model as a prompt ([#8](https://github.com/lswdneil/ai.spec.pi.jev/issues/8), [#9](https://github.com/lswdneil/ai.spec.pi.jev/pull/9) by [@nyxmoth](https://github.com/nyxmoth)).
-- The status of `delegate` and `hive` before their first snapshot is cut to the terminal width; a terminal narrower than the line no longer kills the TUI ([#7](https://github.com/lswdneil/ai.spec.pi.jev/issues/7)).
+- `mu install`, `remove`, `uninstall`, `update`, `list`, `config`, `auth` and `mcp` reach pi as its first argument again, from the command line and from the desktop app's host, instead of being sent to the model as a prompt ([#8](https://github.com/lswdneil/spec.ai.pi.jev/issues/8), [#9](https://github.com/lswdneil/spec.ai.pi.jev/pull/9) by [@nyxmoth](https://github.com/nyxmoth)).
+- The status of `delegate` and `hive` before their first snapshot is cut to the terminal width; a terminal narrower than the line no longer kills the TUI ([#7](https://github.com/lswdneil/spec.ai.pi.jev/issues/7)).
 - Closing an MCP server that is still starting stops its process.
 
 ## [0.1.7] - 2026-09-30
@@ -92,7 +92,7 @@
 
 ### Added
 
-- `mu setup` connects a model in a few questions ([#3](https://github.com/lswdneil/ai.spec.pi.jev/issues/3)). Paste an API key and mu tells by its shape which service it belongs to: DeepSeek, Qwen, Kimi, GLM, SiliconFlow, StepFun, OpenRouter, OpenAI, Anthropic, Google Gemini or xAI; Ollama and an address of your own are picked from the list, and a subscription is pointed to `/login`. One request that lists the service's models checks the key, the model to start with is chosen from what it lists, and then the judge: Jev (a TypeSafe key, saved in the `.env` mu reads), the model itself, or none for now.
+- `mu setup` connects a model in a few questions ([#3](https://github.com/lswdneil/spec.ai.pi.jev/issues/3)). Paste an API key and mu tells by its shape which service it belongs to: DeepSeek, Qwen, Kimi, GLM, SiliconFlow, StepFun, OpenRouter, OpenAI, Anthropic, Google Gemini or xAI; Ollama and an address of your own are picked from the list, and a subscription is pointed to `/login`. One request that lists the service's models checks the key, the model to start with is chosen from what it lists, and then the judge: Jev (a TypeSafe key, saved in the `.env` mu reads), the model itself, or none for now.
   - A key is sent only to the service it belongs to. When two services issue keys of the same shape (DeepSeek and Qwen), you are asked which one; Kimi's key is tried at its .cn address, then at .ai.
   - A check that fails says what to do: a key the service does not accept, an account without balance, a region or network that blocks the service (with your proxy named), a wrong address, an Ollama that is not running.
   - Keys go into `auth.json` the way `/login` stores them, never into `models.json`. Every file is copied to `~/.mu/backups/<time>/` before it changes; a file that is not plain JSON is left alone.

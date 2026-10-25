@@ -23,6 +23,7 @@ type WebUiAccess = {
  * cookie would all fail here.
  */
 test('pairs, approves, and revokes a WebUI device', async ({ page, browser, electronApp }, testInfo) => {
+  test.skip(true, 'Remote access is deferred for 0.1.x; the code and this test stay for the later release.');
   test.setTimeout(120_000);
 
   const welcome = page.getByTestId('mu-welcome');

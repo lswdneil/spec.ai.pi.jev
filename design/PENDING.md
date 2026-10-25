@@ -1,5 +1,16 @@
 # Pending work
 
+## 0.1.x release scope (confirmed 2026-10-25)
+
+- spec.jev is independent; MU 0.1.10-0.2.10 is not a release requirement.
+- Platforms: Windows x64 and Linux x64, Linux ships `.deb` only.
+- macOS and Android are deferred; no macOS build or signing.
+- WebUI code and tests stay, but the Remote access panel is hidden and the
+  listener does not start in 0.1.x.
+- Laya stays as the local judge on Windows/Linux through ONNX.
+- Remove the legacy UI and Arco compatibility layer before release.
+- Canonical repository: `https://github.com/lswdneil/spec.ai.pi.jev`.
+
 ## Deferred: remove the legacy MU UI and Arco compatibility layer
 
 Status: not started. Do not begin without explicit approval.

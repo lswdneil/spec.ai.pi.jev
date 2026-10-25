@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // spec.jev's own releases: every installer (and every architecture) is attached to a release there.
-const MU_RELEASES_URL = 'https://github.com/lswdneil/ai.spec.pi.jev/releases';
+const MU_RELEASES_URL = 'https://github.com/lswdneil/spec.ai.pi.jev/releases';
 
 type InstallationIntegrityDialogKind =
   | 'incomplete_installation'

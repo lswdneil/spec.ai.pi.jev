@@ -38,7 +38,7 @@ Built-in mu browser, hive, skills and tools still run inside mu.
 
 Where mu comes from (`process/agent/kyrn/harness.ts`): `MU_ROOT` / `KYRN_ROOT` when set; else the copy the packaged
 app carries (`<resources>/harness/spec.jev`, below); else a checkout beside this one (`../KYRN`, or `..` in the MU
-monorepo); else `mu-agent` installed with npm (`npm i -g mu-agent`), found from `mu` on PATH or in npm's usual global
+monorepo); else `spec.jev` installed with npm (`npm i -g spec.jev`), found from `mu` on PATH or in npm's usual global
 folders. The npm package, the app's copy included, keeps its keys in `~/.mu/.env` and its Laya venv in
 `~/.mu/local-judge`, and the settings follow it there.
 
@@ -70,14 +70,14 @@ what it starts (tools, servers) and gives it back only to its own sub-agents.
 (`scripts/build-with-builder.js`), and `scripts/afterPack.js` checks the packaged app has it
 (`packages/shared-scripts/src/verify-bundled-harness.js`). Which mu: `MU_HARNESS_TARBALL`, a tarball packed from a
 harness checkout (`node kyrn/npm/build.mjs --pack`; the MU repository's CI packs it from the same commit), else
-`mu-agent` from the npm registry at the version pinned in the root `package.json` (`muAgentVersion`). Its
+`spec.jev` from the npm registry at the version pinned in the root `package.json` (`muAgentVersion`). Its
 dependencies are installed by npm for the target system and processor (`--os`, `--cpu`), without install scripts;
 npm is needed at build time only.
 
 WSL (`process/agent/kyrn/windows/wsl.ts`): on Windows, a conversation whose folder is inside a WSL distribution
 (`\\wsl.localhost\<distro>\...`, or `\\wsl$\...`) gets its harness started inside that distribution:
 `wsl.exe --distribution <distro> --cd <linux path> --exec bash -lc <start script>`. mu must be installed there
-(`npm i -g mu-agent`); the script finds it on the login PATH, through nvm or in npm's usual folders, and says what to
+(`npm i -g spec.jev`); the script finds it on the login PATH, through nvm or in npm's usual folders, and says what to
 install when it is missing. The harness shares the Windows side's agent folder (one sign-in, one configuration:
 `MU_AGENT_DIR`) and the app's session file, both translated by WSL through `WSLENV` (`/p`); keys in a `.env` come
 from the distribution's own `~/.mu/.env`. Closing a conversation ends mu's input first (it then shuts down by

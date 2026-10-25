@@ -6,12 +6,12 @@
 <p align="center">A coding agent that hands its routine decisions to a small, fast judge model, so the main model can focus on the code. Built on <a href="https://github.com/earendil-works/pi">pi</a>.</p>
 
 <p align="center">
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/ci.yml"><img src="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/desktop.yml"><img src="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
   <a href="https://www.npmjs.com/package/spec.jev"><img src="https://img.shields.io/npm/v/spec.jev?label=spec.jev" alt="npm"></a>
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/releases"><img src="https://img.shields.io/github/v/release/lswdneil/ai.spec.pi.jev?include_prereleases&label=desktop" alt="Desktop release"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/releases"><img src="https://img.shields.io/github/v/release/lswdneil/spec.ai.pi.jev?include_prereleases&label=desktop" alt="Desktop release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/discussions"><img src="https://img.shields.io/github/discussions/lswdneil/ai.spec.pi.jev?label=discussions" alt="Discussions"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/discussions"><img src="https://img.shields.io/github/discussions/lswdneil/spec.ai.pi.jev?label=discussions" alt="Discussions"></a>
 </p>
 
 <p align="center">
@@ -43,7 +43,7 @@ What you get:
 
 ## Quick start
 
-**Desktop app.** Download the installer for macOS, Windows or Linux from [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases/latest), open it and paste an API key or sign in with a ChatGPT, Claude, Grok or Google subscription. There's nothing else to install.
+**Desktop app.** Download the installer for Windows x64 or Linux x64 (Debian/Ubuntu) from [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases/latest), open it and paste an API key or sign in with a ChatGPT, Claude, Grok or Google subscription. There's nothing else to install.
 
 **Command line.**
 
@@ -167,7 +167,7 @@ Every point, with its feature switch and options: [docs/reference/decision-point
   With no key set, Jev 1.13 on OpenCode Zen answers, free for a limited time. What it judges goes to OpenCode, which doesn't train on it, and spec.jev reminds you of this once a day. Set a key (`spec.jev setup`, or Settings → Judges in the app) and spec.jev switches to it from the next question.
 
   Measured in the authors' own sessions: a warm question takes about 0.3 s over HTTP/2, and 16 chunks of tool output are judged in a single request in 0.44 s, with the shared state billed once. Verdicts, probabilities and timings go to the ledger: run `spec.jev ledger`, or open the Judge tab in the desktop app.
-- **Laya** (local, macOS on Apple silicon) is a 322M-parameter judge that runs on your machine and never touches the network. Nothing is downloaded without your consent. It's reliable on simple predicates and weaker on meta-judgments, so run it in shadow alongside Jev and read the ledger before you give it a decision point.
+- **Laya** (local, Windows and Linux x64 through ONNX) is a 322M-parameter judge that runs on your machine and never touches the network. Nothing is downloaded without your consent. It's reliable on simple predicates and weaker on meta-judgments, so run it in shadow alongside Jev and read the ledger before you give it a decision point.
 - **Any classifier model** in pi's catalog can serve as a tier: `classifier:<provider>/<model>`. For example, Cloudflare's Clef (`clef`, `clef-flash`), the System One models on OpenRouter and the Vercel AI Gateway, or a llama.cpp classifier.
 - **Any LLM** can serve as a tier: `llm:<provider>/<model>`.
 
@@ -302,7 +302,7 @@ A desktop app with spec.jev and its runtime built in: there's no Node.js to inst
 
 A bar along the bottom keeps the kernel in view: which judge answers and where it runs, how many decision points are active and, in a conversation, the verdicts so far, the latest judge latency and the context in use. The permission mode and the goal sit in the composer, and `⌘K` opens the command palette. You sign in to models inside the app: ChatGPT, Claude, Grok and Google (Gemini CLI / Antigravity) subscriptions, or an API key for any provider pi supports. You can import Claude Code and Codex CLI conversations and continue them.
 
-GitHub Actions builds the app for macOS (Apple silicon / Intel), Windows (x64 / Arm) and Linux (x64 / Arm) and publishes it under [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases).
+GitHub Actions builds the app for Windows x64 and Linux x64 (Debian/Ubuntu) and publishes it under [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases).
 
 ## Command line
 
@@ -349,10 +349,10 @@ Your keys stay on your machine. spec.jev never downloads a model or a runtime on
 
 ## Status and limitations
 
-- spec.jev is in early development. Pre-releases (0.1.x) are on npm and under [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases). The authors use it every day, but names, settings and formats may still change.
+- spec.jev is in early development. Pre-releases (0.1.x) are on npm and under [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases). The authors use it every day, but names, settings and formats may still change.
 - The measurements above come from the authors' own sessions and from synthetic projects. The test-log repeats cover Vitest only.
 - The test-log numbers measure what reaches the model, not whether the model then finishes the task. There's no end-to-end comparison with pi, Claude Code or Codex on the same tasks yet.
-- Laya, the local judge, runs only on macOS on Apple silicon, and it's weaker on meta-judgments than on simple predicates. Run it in shadow before you give it a decision point.
+- Laya, the local judge, runs on Windows and Linux x64 through ONNX. It's weaker on meta-judgments than on simple predicates; run it in shadow before you give it a decision point.
 - Jev on OpenCode Zen is free for a limited time only.
 - `output.drift` is experimental and off by default.
 
@@ -364,7 +364,7 @@ Your keys stay on your machine. spec.jev never downloads a model or a runtime on
 
 ## Contributing
 
-Bug reports, fixes, new decision points, judge measurements and translations are welcome, in English or Chinese. Start with [CONTRIBUTING.md](CONTRIBUTING.md); issues labeled [`good first issue`](https://github.com/lswdneil/ai.spec.pi.jev/labels/good%20first%20issue) are a good way in.
+Bug reports, fixes, new decision points, judge measurements and translations are welcome, in English or Chinese. Start with [CONTRIBUTING.md](CONTRIBUTING.md); issues labeled [`good first issue`](https://github.com/lswdneil/spec.ai.pi.jev/labels/good%20first%20issue) are a good way in.
 
 ```bash
 npm install --ignore-scripts   # install dependencies without lifecycle scripts
@@ -379,8 +379,8 @@ Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md). Report s
 
 ## Community and support
 
-- Questions and ideas: [Discussions](https://github.com/lswdneil/ai.spec.pi.jev/discussions). There's also discussion in Chinese on [linux.do](https://linux.do).
-- Bugs and feature requests: [Issues](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose).
+- Questions and ideas: [Discussions](https://github.com/lswdneil/spec.ai.pi.jev/discussions). There's also discussion in Chinese on [linux.do](https://linux.do).
+- Bugs and feature requests: [Issues](https://github.com/lswdneil/spec.ai.pi.jev/issues/new/choose).
 - More: [SUPPORT.md](SUPPORT.md).
 
 If spec.jev is useful to you, a star helps others find it.

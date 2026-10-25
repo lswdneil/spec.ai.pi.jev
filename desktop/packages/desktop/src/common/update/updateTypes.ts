@@ -15,7 +15,7 @@ export interface GitHubReleaseAsset {
   contentType?: string;
 }
 
-/** A release of github.com/lswdneil/ai.spec.pi.jev. */
+/** A release of github.com/lswdneil/spec.ai.pi.jev. */
 export interface UpdateReleaseInfo {
   tagName: string;
   version: string;

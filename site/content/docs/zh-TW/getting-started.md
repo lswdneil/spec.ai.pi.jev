@@ -7,7 +7,7 @@ spec.jev 有兩種用法：內建所需一切的**桌面版**，和 **`spec.jev`
 
 ## 桌面版 {#desktop-app}
 
-1. 從 [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases/latest) 下載適合你系統的安裝檔，或者到[首頁](@home#install)，它會替你選好系統。
+1. 從 [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases/latest) 下載適合你系統的安裝檔，或者到[首頁](@home#install)，它會替你選好系統。
 
    | 系統 | 檔案 |
    | --- | --- |

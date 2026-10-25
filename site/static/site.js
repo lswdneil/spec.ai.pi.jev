@@ -72,7 +72,7 @@
   try { cached = JSON.parse(store('local', 'mu:stars') || 'null'); } catch (e) {}
   if (cached && typeof cached.n === 'number') showStars(cached.n, false);
   if (window.fetch && (!cached || Date.now() - cached.at > 3600 * 1000)) {
-    fetch('https://api.github.com/repos/lswdneil/ai.spec.pi.jev')
+    fetch('https://api.github.com/repos/lswdneil/spec.ai.pi.jev')
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (repo) {
         if (!repo || typeof repo.stargazers_count !== 'number') return;
@@ -199,7 +199,7 @@
 
   // Point the download buttons at the newest desktop release (tags v*, published as pre-releases).
   if (window.fetch && document.querySelector('[data-asset]')) {
-    fetch('https://api.github.com/repos/lswdneil/ai.spec.pi.jev/releases?per_page=10')
+    fetch('https://api.github.com/repos/lswdneil/spec.ai.pi.jev/releases?per_page=10')
       .then(function (r) { return r.ok ? r.json() : []; })
       .then(function (list) {
         var release = (list || []).filter(function (r) { return !r.draft && /^v\d/.test(r.tag_name); })[0];

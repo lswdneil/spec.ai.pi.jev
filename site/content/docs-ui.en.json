@@ -17,9 +17,9 @@
   "contrib_h2": "For contributors",
   "contrib_p": "How mu is built, and how to add to it. These live in the repository, in English:",
   "contrib": [
-    { "text": "How mu works", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/architecture.md" },
-    { "text": "Adding a decision point", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/adding-a-decision-point.md" },
-    { "text": "Translations", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/translations.md" },
-    { "text": "Contributing", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/CONTRIBUTING.md" }
+    { "text": "How mu works", "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/architecture.md" },
+    { "text": "Adding a decision point", "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/adding-a-decision-point.md" },
+    { "text": "Translations", "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/translations.md" },
+    { "text": "Contributing", "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/CONTRIBUTING.md" }
   ]
 }

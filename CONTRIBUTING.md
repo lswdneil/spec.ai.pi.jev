@@ -20,13 +20,13 @@ Thanks for helping. Bug reports, fixes, new decision points, judge measurements,
 
 ## Ways to contribute
 
-- **Report a bug** with the [bug report form](https://github.com/lswdneil/ai.spec.pi.jev/issues/new?template=bug_report.yml). A short report with the version, the platform and the steps to reproduce is worth more than a long one.
-- **Propose a feature** with the [feature request form](https://github.com/lswdneil/ai.spec.pi.jev/issues/new?template=feature_request.yml), or a **new decision point** with the [decision point form](https://github.com/lswdneil/ai.spec.pi.jev/issues/new?template=decision_point.yml).
-- **Fix something.** Issues labeled [`good first issue`](https://github.com/lswdneil/ai.spec.pi.jev/labels/good%20first%20issue) and [`help wanted`](https://github.com/lswdneil/ai.spec.pi.jev/labels/help%20wanted) are a good place to start. Say in the issue that you're working on it, so two people don't do the same work.
+- **Report a bug** with the [bug report form](https://github.com/lswdneil/spec.ai.pi.jev/issues/new?template=bug_report.yml). A short report with the version, the platform and the steps to reproduce is worth more than a long one.
+- **Propose a feature** with the [feature request form](https://github.com/lswdneil/spec.ai.pi.jev/issues/new?template=feature_request.yml), or a **new decision point** with the [decision point form](https://github.com/lswdneil/spec.ai.pi.jev/issues/new?template=decision_point.yml).
+- **Fix something.** Issues labeled [`good first issue`](https://github.com/lswdneil/spec.ai.pi.jev/labels/good%20first%20issue) and [`help wanted`](https://github.com/lswdneil/spec.ai.pi.jev/labels/help%20wanted) are a good place to start. Say in the issue that you're working on it, so two people don't do the same work.
 - **Measure a judge.** Run a decision point in `shadow` mode with another judge and compare the ledgers (`spec.jev ledger --json`). Numbers from real sessions are the most useful thing to include with a judge change.
 - **Translate.** The desktop app is available in 13 languages and the README in five; see [docs/translations.md](docs/translations.md).
 - **Improve the documentation** in [docs/](docs/README.md). Small fixes can go straight to a pull request.
-- **Ask and answer questions** in [Discussions](https://github.com/lswdneil/ai.spec.pi.jev/discussions).
+- **Ask and answer questions** in [Discussions](https://github.com/lswdneil/spec.ai.pi.jev/discussions).
 
 Don't report security problems in public issues; see [SECURITY.md](SECURITY.md).
 
@@ -34,7 +34,7 @@ Don't report security problems in public issues; see [SECURITY.md](SECURITY.md).
 
 - **Understand your change.** If you can't explain what your change does and how it interacts with the rest of spec.jev, it won't be merged. Using AI to write code or text is fine; submitting something you haven't read and understood isn't. If an AI wrote most of an issue or a pull request description, say so in one line.
 - **Keep it small and focused.** One fix or one feature per pull request. If a fix needs a refactor, put the refactor in its own commit.
-- **Behavior changes come with tests.** A fix comes with a test that fails without it, and a feature with tests of what it does. Reference the issue next to a regression test (`// https://github.com/lswdneil/ai.spec.pi.jev/issues/7`).
+- **Behavior changes come with tests.** A fix comes with a test that fails without it, and a feature with tests of what it does. Reference the issue next to a regression test (`// https://github.com/lswdneil/spec.ai.pi.jev/issues/7`).
 - **Be kind.** Everyone here follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## The repository
@@ -59,7 +59,7 @@ You'll see both "kyrn" and "spec.jev" in names: the project was called KYRN unti
 You need Node.js 22.19 or newer (CI uses Node 24) and, for the desktop app, [Bun](https://bun.sh).
 
 ```bash
-git clone https://github.com/lswdneil/ai.spec.pi.jev.git
+git clone https://github.com/lswdneil/spec.ai.pi.jev.git
 cd spec.jev
 npm install --ignore-scripts
 node kyrn/bin/mu.mjs          # run spec.jev from this checkout; Node runs the TypeScript directly

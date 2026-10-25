@@ -210,7 +210,7 @@ describe("injection screening", () => {
 describe("fetchesOutside", () => {
 	it("counts a fetch from another machine wherever it stands in the command", () => {
 		for (const command of [
-			"curl -s https://api.github.com/repos/lswdneil/ai.spec.pi.jev/issues",
+			"curl -s https://api.github.com/repos/lswdneil/spec.ai.pi.jev/issues",
 			"curl example.com",
 			"gh issue view 12",
 			"cd repo && gh pr diff 11 | head -50",

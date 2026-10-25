@@ -2,7 +2,7 @@
 
 **A coding agent with a judgment kernel.** It hands its routine decisions to a small, fast judge model, so the main model can keep its attention on the work.
 
-> **Early development.** The authors use spec.jev every day, but names, settings and file formats may still change. Source, docs and the desktop app: [github.com/lswdneil/ai.spec.pi.jev](https://github.com/lswdneil/ai.spec.pi.jev) (README in English, 简体中文, 繁體中文, 日本語 and 한국어).
+> **Early development.** The authors use spec.jev every day, but names, settings and file formats may still change. Source, docs and the desktop app: [github.com/lswdneil/spec.ai.pi.jev](https://github.com/lswdneil/spec.ai.pi.jev) (README in English, 简体中文, 繁體中文, 日本語 and 한국어).
 
 ## Install
 

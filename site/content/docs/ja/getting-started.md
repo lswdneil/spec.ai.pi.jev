@@ -7,7 +7,7 @@ spec.jev には 2 つの形があります。必要なものをすべて内蔵�
 
 ## デスクトップアプリ {#desktop-app}
 
-1. [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases/latest) から、または[ホームページ](@home#install)から、お使いのシステム用のビルドをダウンロードします。ホームページではシステムが自動で選ばれます。
+1. [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases/latest) から、または[ホームページ](@home#install)から、お使いのシステム用のビルドをダウンロードします。ホームページではシステムが自動で選ばれます。
 
    | システム | ファイル |
    | --- | --- |

@@ -18,7 +18,7 @@ import { ipcBridge } from '@/common';
 import { normalizeWebUiPublicUrl } from '@/common/webui/scopes';
 import { WebUiAccessManager } from '@process/services/webui/access';
 import { handlePairingRequest } from '@process/services/webui/pairingHttp';
-import { BROWSER_SESSION_PARTITION } from '@/common/config/constants';
+import { BROWSER_SESSION_PARTITION, WEBUI_ENABLED_IN_RELEASE } from '@/common/config/constants';
 import { ProcessConfig } from '@process/utils/initStorage';
 import { getZoomFactor, setZoomFactor } from '@process/utils/zoom';
 import { getCdpStatus, updateCdpConfig } from '@process/utils/configureChromium';
@@ -58,6 +58,9 @@ function webUiStatus(error?: string): IWebUiStatus {
 }
 
 async function startWebUi(port?: number, persist = true): Promise<IWebUiStatus> {
+  if (!WEBUI_ENABLED_IN_RELEASE && app.isPackaged) {
+    return { running: false, error: 'Remote access is not available in this release' };
+  }
   if (webUi) return webUiStatus();
   if (webUiStarting) return webUiStarting;
 
@@ -128,6 +131,9 @@ async function stopWebUi(persist = true): Promise<IWebUiStatus> {
  * opening Settings.
  */
 export async function startWebUiIfEnabled(): Promise<void> {
+  // 0.1.x keeps the WebUI code but does not expose it. A switch left on by an
+  // earlier build must not bring the listener back without a visible control.
+  if (!WEBUI_ENABLED_IN_RELEASE) return;
   if (webUi || webUiStarting) return;
   const enabled = await ProcessConfig.get('system.webuiEnabled').catch((): undefined => undefined);
   if (!enabled) return;

@@ -1,6 +1,9 @@
 # KyRN bridge: WebUI parity
 
-Status: loopback host, same-origin proxy, device pairing, scopes, persisted switch, extension WebUI hosting with hot reload, public address, and token rotation implemented, 2026-10-24.
+Status: **deferred for 0.1.x.** The loopback host, same-origin proxy, device
+pairing, scopes, persisted switch, extension WebUI hosting with hot reload,
+public address and token rotation are implemented and kept in the codebase, but
+the 0.1.x release hides the Remote access panel and does not start the listener.
 
 The WebUI boots with a read-only catalog provider and can call the desktop's KyRN providers over the same origin. The browser connects to `/kyrn`; web-host first checks the paired-device cookie, then rewrites the token path and forwards to a loopback-only host.
 

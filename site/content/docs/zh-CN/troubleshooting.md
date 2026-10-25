@@ -5,7 +5,7 @@ summary: spec.jev 启动不了、连不上模型，或者判定器好像什么�
 
 先运行 `spec.jev doctor`，或在会话里用 `/doctor`：它检查安装、模型、判定器和各项连接，并告诉你要修什么。在桌面端，日志在「设置 → 关于」里，点一下就能打开。
 
-如果这些都没用，请[提一个 issue](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose)，附上版本、平台和 `spec.jev doctor` 的输出。
+如果这些都没用，请[提一个 issue](https://github.com/lswdneil/spec.ai.pi.jev/issues/new/choose)，附上版本、平台和 `spec.jev doctor` 的输出。
 
 ## 安装和启动 {#install}
 

@@ -17,9 +17,9 @@
   "contrib_h2": "給貢獻者",
   "contrib_p": "mu 是怎麼建構起來的，以及怎麼往裡面加東西。這些在儲存庫裡，英文：",
   "contrib": [
-    { "text": "mu 是怎麼運作的", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/architecture.md" },
-    { "text": "新增一個判定點", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/adding-a-decision-point.md" },
-    { "text": "翻譯", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/translations.md" },
-    { "text": "參與貢獻", "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/CONTRIBUTING.md" }
+    { "text": "mu 是怎麼運作的", "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/architecture.md" },
+    { "text": "新增一個判定點", "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/adding-a-decision-point.md" },
+    { "text": "翻譯", "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/translations.md" },
+    { "text": "參與貢獻", "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/CONTRIBUTING.md" }
   ]
 }

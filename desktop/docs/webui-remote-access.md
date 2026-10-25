@@ -1,6 +1,9 @@
 # WebUI remote access: pairing and transport
 
-Status: service, same-origin proxy, pairing with read/control scopes, persisted switch, public address, and in-place token rotation implemented, 2026-10-24.
+Status: **deferred for 0.1.x.** The service, same-origin proxy, pairing, scopes,
+persisted switch, public address and token rotation are implemented and kept in
+the codebase, but the 0.1.x release does not expose the Remote access panel and
+does not start the listener. It is planned for a later release.
 
 ## What exists
 

@@ -1,13 +1,13 @@
 name: npm package
 
-# Builds the npm package mu-agent (kyrn/npm/build.mjs), then installs the tarball on Linux, macOS and Windows
-# and checks that the installed `mu` runs and loads the judgment layer (kyrn/npm/smoke.mjs). No model is called.
-# A `mu-agent-vX.Y.Z` tag also publishes the tarball it checked (the publish job, at the end).
+# Builds the npm package spec.jev (kyrn/npm/build.mjs), then installs the tarball on Linux and Windows
+# and checks that the installed `spec.jev` runs and loads the judgment layer (kyrn/npm/smoke.mjs). No model is called.
+# A `spec.jev-vX.Y.Z` tag also publishes the tarball it checked (the publish job, at the end).
 on:
   push:
     branches: [main]
-    # Path filters don't apply to tags: every mu-agent tag runs.
-    tags: ['mu-agent-v*']
+    # Path filters don't apply to tags: every spec.jev tag runs.
+    tags: ['spec.jev-v*']
     paths:
       - 'kyrn/**'
       - 'packages/**'
@@ -48,24 +48,24 @@ jobs:
       - name: Build pi
         run: npm run build:pinned
 
-      - name: Build and pack mu-agent
+      - name: Build and pack spec.jev
         run: node kyrn/npm/build.mjs --pack
 
       - name: List the tarball
         run: |
           cd .artifacts/npm
-          tar -tzf mu-agent-*.tgz | sort > mu-agent-files.txt
-          wc -l < mu-agent-files.txt
-          sed -E 's#^package/##; s#/.*##' mu-agent-files.txt | sort | uniq -c
-          ls -l mu-agent-*.tgz
+          tar -tzf spec.jev-*.tgz | sort > spec.jev-files.txt
+          wc -l < spec.jev-files.txt
+          sed -E 's#^package/##; s#/.*##' spec.jev-files.txt | sort | uniq -c
+          ls -l spec.jev-*.tgz
 
       - name: Upload the tarball
         uses: actions/upload-artifact@v4
         with:
-          name: mu-agent-tarball
+          name: spec.jev-tarball
           path: |
-            .artifacts/npm/mu-agent-*.tgz
-            .artifacts/npm/mu-agent-files.txt
+            .artifacts/npm/spec.jev-*.tgz
+            .artifacts/npm/spec.jev-files.txt
           if-no-files-found: error
           retention-days: 14
 
@@ -78,11 +78,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # The oldest Node mu supports, and the current one.
+          # The oldest Node spec.jev supports, and the current one. Windows is x64 only.
           - { name: Linux (Node 22.19), os: ubuntu-latest, node: '22.19.0' }
-          - { name: macOS, os: macos-14, node: '24' }
-          - { name: Windows, os: windows-2022, node: '24' }
-          - { name: Windows on Arm, os: windows-11-arm, node: '24' }
+          - { name: Windows x64, os: windows-2022, node: '24' }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -97,27 +95,27 @@ jobs:
       - name: Download the tarball
         uses: actions/download-artifact@v4
         with:
-          name: mu-agent-tarball
+          name: spec.jev-tarball
           path: tarball
 
       # A prefix of its own, as `npm i -g` would use, without touching the runner's global packages.
       - name: Install
         shell: bash
         run: |
-          prefix="$RUNNER_TEMP/mu-prefix"
-          npm i -g --prefix "$prefix" ./tarball/mu-agent-*.tgz
+          prefix="$RUNNER_TEMP/specjev-prefix"
+          npm i -g --prefix "$prefix" ./tarball/spec.jev-*.tgz
           if [ "$RUNNER_OS" = "Windows" ]; then echo "$prefix" >> "$GITHUB_PATH"; else echo "$prefix/bin" >> "$GITHUB_PATH"; fi
 
       - name: Smoke test
         shell: bash
-        run: node kyrn/npm/smoke.mjs mu
+        run: node kyrn/npm/smoke.mjs spec.jev
 
   # npm's trusted publishing: npm trusts this workflow by its OIDC identity, so no npm token is stored anywhere.
-  # One-time setup on npmjs.com: mu-agent → Settings → Trusted publishing → GitHub Actions,
-  # organization or user qybaihe, repository mu, workflow filename npm.yml.
+  # One-time setup on npmjs.com: spec.jev → Settings → Trusted publishing → GitHub Actions,
+  # organization or user lswdneil, repository spec.ai.pi.jev, workflow filename npm.yml.
   publish:
     name: Publish to npm
-    if: startsWith(github.ref, 'refs/tags/mu-agent-v')
+    if: startsWith(github.ref, 'refs/tags/spec.jev-v')
     needs: [pack, smoke]
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -138,20 +136,20 @@ jobs:
       - name: Download the tarball
         uses: actions/download-artifact@v4
         with:
-          name: mu-agent-tarball
+          name: spec.jev-tarball
           path: tarball
 
       - name: Check the tag against the tarball and the registry
         shell: bash
         run: |
-          version="${GITHUB_REF_NAME#mu-agent-v}"
-          tarball="tarball/mu-agent-$version.tgz"
+          version="${GITHUB_REF_NAME#spec.jev-v}"
+          tarball="tarball/spec.jev-$version.tgz"
           if [ ! -f "$tarball" ]; then
             echo "::error::The tag says $version, but the package built here is $(ls tarball/*.tgz). Bump kyrn/npm/package.template.json, then tag that commit."
             exit 1
           fi
-          if [ -n "$(npm view "mu-agent@$version" version 2>/dev/null)" ]; then
-            echo "::error::mu-agent@$version is already on npm."
+          if [ -n "$(npm view "spec.jev@$version" version 2>/dev/null)" ]; then
+            echo "::error::spec.jev@$version is already on npm."
             exit 1
           fi
           echo "VERSION=$version" >> "$GITHUB_ENV"
@@ -165,7 +163,7 @@ jobs:
         run: |
           expected=$(shasum -a 1 "$TARBALL" | cut -d' ' -f1)
           for attempt in 1 2 3 4 5 6; do
-            served=$(npm view "mu-agent@$VERSION" dist.shasum 2>/dev/null)
+            served=$(npm view "spec.jev@$VERSION" dist.shasum 2>/dev/null)
             [ -n "$served" ] && break
             sleep 10
           done

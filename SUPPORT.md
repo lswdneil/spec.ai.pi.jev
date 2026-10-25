@@ -1,8 +1,8 @@
 # Getting help
 
 - **How do I…?** Start with the [documentation](docs/README.md) and [Troubleshooting](docs/troubleshooting.md). `spec.jev doctor` checks the installation, the judges and the connections, and tells you what to fix.
-- **Questions and ideas:** [Discussions](https://github.com/lswdneil/ai.spec.pi.jev/discussions). Search first; someone may have asked already.
-- **A bug:** [open an issue](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose) with the bug report form. Include the version, the platform and the steps to reproduce.
+- **Questions and ideas:** [Discussions](https://github.com/lswdneil/spec.ai.pi.jev/discussions). Search first; someone may have asked already.
+- **A bug:** [open an issue](https://github.com/lswdneil/spec.ai.pi.jev/issues/new/choose) with the bug report form. Include the version, the platform and the steps to reproduce.
 - **A security problem:** report it privately, as described in [SECURITY.md](SECURITY.md). Never in a public issue.
 
 English and Chinese are both fine everywhere. 中文提问、报 bug 都可以。

@@ -134,7 +134,7 @@ const DesignSystem: React.FC = () => {
             <div className='grid gap-3 sm:grid-cols-2'>
               <label className='grid gap-1.5 text-[11.5px] text-sv-muted'>
                 Workspace name
-                <Input placeholder='ai.spec.pi.jev' />
+                <Input placeholder='spec.ai.pi.jev' />
               </label>
               <label className='grid gap-1.5 text-[11.5px] text-sv-muted'>
                 Model

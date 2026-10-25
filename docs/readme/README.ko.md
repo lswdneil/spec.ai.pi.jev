@@ -6,12 +6,12 @@
 <p align="center">판정 커널을 갖춘 코딩 에이전트. <a href="https://github.com/earendil-works/pi">pi</a> 기반.</p>
 
 <p align="center">
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml"><img src="https://github.com/lswdneil/ai.spec.pi.jev/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
-  <a href="https://www.npmjs.com/package/mu-agent"><img src="https://img.shields.io/npm/v/mu-agent?label=mu-agent" alt="npm"></a>
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/releases"><img src="https://img.shields.io/github/v/release/lswdneil/ai.spec.pi.jev?include_prereleases&label=desktop" alt="Desktop release"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/ci.yml"><img src="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/desktop.yml"><img src="https://github.com/lswdneil/spec.ai.pi.jev/actions/workflows/desktop.yml/badge.svg" alt="Desktop app"></a>
+  <a href="https://www.npmjs.com/package/spec.jev"><img src="https://img.shields.io/npm/v/spec.jev?label=spec.jev" alt="npm"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/releases"><img src="https://img.shields.io/github/v/release/lswdneil/spec.ai.pi.jev?include_prereleases&label=desktop" alt="Desktop release"></a>
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
-  <a href="https://github.com/lswdneil/ai.spec.pi.jev/discussions"><img src="https://img.shields.io/github/discussions/lswdneil/ai.spec.pi.jev?label=discussions" alt="Discussions"></a>
+  <a href="https://github.com/lswdneil/spec.ai.pi.jev/discussions"><img src="https://img.shields.io/github/discussions/lswdneil/spec.ai.pi.jev?label=discussions" alt="Discussions"></a>
 </p>
 
 <p align="center">
@@ -33,13 +33,13 @@
 - **spec.jev 데스크톱**: spec.jev와 런타임이 들어 있는 데스크톱 앱이에요. 내려받고, 모델을 연결하고, 시작하면 돼요.
 - **Jev**: 판정기예요. 예/아니요, 선택, 점수 질문에 답하고, 답마다 확률을 붙이고, 모든 판정을 판정 장부에 남겨요. 승인은 Jev만 결정하지만, 나머지 판정 지점은 로컬 판정기(Laya)나 어떤 LLM에든 맡길 수 있어요.
 
-> 아직 초기 개발 단계예요. 프리릴리스(0.1.x)를 npm과 [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases)에 올려 두었고, 만든 사람들은 매일 쓰고 있어요. 이름, 설정, 형식은 앞으로 바뀔 수 있어요.
+> 아직 초기 개발 단계예요. 프리릴리스(0.1.x)를 npm과 [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases)에 올려 두었고, 만든 사람들은 매일 쓰고 있어요. 이름, 설정, 형식은 앞으로 바뀔 수 있어요.
 
 **목차:** [빠른 시작](#빠른-시작) · [한 턴의 흐름](#한-턴의-흐름) · [판정 지점](#판정-지점) · [판정기](#판정기) · [실측](#실측) · [하이브](#하이브) · [쉬운 말 보드](#쉬운-말-보드) · [데스크톱 앱](#데스크톱-앱) · [명령줄](#명령줄) · [문서](#문서) · [기여하기](#기여하기)
 
 ## 빠른 시작
 
-**데스크톱 앱.** [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases/latest)에서 macOS, Windows, Linux용 설치 파일을 내려받아 열고, API 키를 붙여 넣거나 ChatGPT, Claude, Grok, Google 구독으로 로그인하세요. 따로 설치할 것은 없어요.
+**데스크톱 앱.** [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases/latest)에서 macOS, Windows, Linux용 설치 파일을 내려받아 열고, API 키를 붙여 넣거나 ChatGPT, Claude, Grok, Google 구독으로 로그인하세요. 따로 설치할 것은 없어요.
 
 **명령줄.**
 
@@ -247,7 +247,7 @@ spec.jev와 런타임이 들어 있는 데스크톱 앱이에요. Node를 설치
 
 아래쪽 막대에서 커널 상태를 늘 볼 수 있어요. 어떤 판정기가 답하고 어디서 도는지, 켜진 판정 지점이 몇 개인지, 대화 중이라면 지금까지의 판정 수, 마지막 판정에 걸린 시간, 사용 중인 컨텍스트까지 보여 줘요. 권한 모드와 목표는 입력창에 있고, `⌘K`로 명령어 팔레트를 열어요. 모델 로그인은 앱 안에서 해요. ChatGPT, Claude, Grok, Google(Gemini CLI / Antigravity) 구독이나, pi가 지원하는 어떤 프로바이더의 API 키든 쓸 수 있어요. Claude Code와 Codex CLI의 대화는 가져와서 이어 갈 수 있어요.
 
-macOS(Apple 실리콘 / Intel), Windows(x64 / Arm), Linux(x64 / Arm)용 빌드는 GitHub Actions에서 만들어 [Releases](https://github.com/lswdneil/ai.spec.pi.jev/releases)에 올려요.
+macOS(Apple 실리콘 / Intel), Windows(x64 / Arm), Linux(x64 / Arm)용 빌드는 GitHub Actions에서 만들어 [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases)에 올려요.
 
 ## 명령줄
 
@@ -300,7 +300,7 @@ pi의 자체 명령(`/model`, `/thinking`, `/login`, `/resume`, `/tree`, `/fork`
 
 ## 기여하기
 
-버그 제보, 수정, 새 판정 지점, 판정기 측정, 번역을 환영해요. 영어나 중국어로 써 주세요. 먼저 [CONTRIBUTING.md](../../CONTRIBUTING.md)를 읽어 주세요. [`good first issue`](https://github.com/lswdneil/ai.spec.pi.jev/labels/good%20first%20issue) 라벨이 붙은 이슈부터 시작하기 좋아요.
+버그 제보, 수정, 새 판정 지점, 판정기 측정, 번역을 환영해요. 영어나 중국어로 써 주세요. 먼저 [CONTRIBUTING.md](../../CONTRIBUTING.md)를 읽어 주세요. [`good first issue`](https://github.com/lswdneil/spec.ai.pi.jev/labels/good%20first%20issue) 라벨이 붙은 이슈부터 시작하기 좋아요.
 
 ```bash
 npm install --ignore-scripts   # 의존성 설치, 라이프사이클 스크립트는 실행하지 않음
@@ -319,8 +319,8 @@ spec.jev는 MIT 라이선스예요([LICENSE](../../LICENSE), 데스크톱 앱은
 
 ## 커뮤니티
 
-- 질문과 아이디어: [Discussions](https://github.com/lswdneil/ai.spec.pi.jev/discussions). 중국어 토론은 [linux.do](https://linux.do)에서도.
-- 버그 제보와 요청: [Issues](https://github.com/lswdneil/ai.spec.pi.jev/issues/new/choose).
+- 질문과 아이디어: [Discussions](https://github.com/lswdneil/spec.ai.pi.jev/discussions). 중국어 토론은 [linux.do](https://linux.do)에서도.
+- 버그 제보와 요청: [Issues](https://github.com/lswdneil/spec.ai.pi.jev/issues/new/choose).
 - 그 밖에: [SUPPORT.md](../../SUPPORT.md).
 
 spec.jev가 쓸모 있었다면 스타를 눌러 주세요. 다른 사람들이 찾기 쉬워져요.

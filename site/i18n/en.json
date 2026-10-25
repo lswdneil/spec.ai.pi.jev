@@ -49,7 +49,7 @@
     "cli_hint": "Needs Node.js 22.19 or newer. Then run <code>spec.jev</code> in a project folder; the first time, <code>spec.jev setup</code> connects a model.",
     "dl_mac_arm": "Apple silicon",
     "dl_mac_intel": "Intel",
-    "app_hint": "The macOS app is signed and notarized by Apple; the Windows app isn't signed yet, so SmartScreen shows a warning. The app carries spec.jev inside it: no Node.js to install. Windows on Arm, Linux on Arm and every other download are under <a href=\"https://github.com/lswdneil/ai.spec.pi.jev/releases\">Releases</a>.",
+    "app_hint": "The macOS app is signed and notarized by Apple; the Windows app isn't signed yet, so SmartScreen shows a warning. The app carries spec.jev inside it: no Node.js to install. Windows on Arm, Linux on Arm and every other download are under <a href=\"https://github.com/lswdneil/spec.ai.pi.jev/releases\">Releases</a>.",
     "meta": "macOS · Windows · Linux · open source (MIT + Apache-2.0) · built on pi",
     "cue": "Watch a real turn",
     "story_label": "MU · A REAL TURN",
@@ -186,17 +186,17 @@
       {
         "h3": "Issues",
         "p": "Report a bug or ask for a feature; the forms ask for what is needed.",
-        "href": "https://github.com/lswdneil/ai.spec.pi.jev/issues"
+        "href": "https://github.com/lswdneil/spec.ai.pi.jev/issues"
       },
       {
         "h3": "Discussions",
         "p": "Questions, ideas and what you built with spec.jev.",
-        "href": "https://github.com/lswdneil/ai.spec.pi.jev/discussions"
+        "href": "https://github.com/lswdneil/spec.ai.pi.jev/discussions"
       },
       {
         "h3": "Contributing",
         "p": "Fix a bug, propose a decision point, measure a judge or translate; good first issues are labeled.",
-        "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/CONTRIBUTING.md"
+        "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/CONTRIBUTING.md"
       }
     ],
     "key_note": "spec.jev works without a key. To use your own TypeSafe key or another judge, see <a href=\"{decisions}#judges\">Judges</a>."
@@ -213,27 +213,27 @@
     "more": [
       {
         "text": "Getting started",
-        "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/getting-started.md"
+        "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/getting-started.md"
       },
       {
         "text": "Configuration",
-        "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/configuration.md"
+        "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/configuration.md"
       },
       {
         "text": "Judges",
-        "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/judges.md"
+        "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/judges.md"
       },
       {
         "text": "Troubleshooting",
-        "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/troubleshooting.md"
+        "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/troubleshooting.md"
       },
       {
         "text": "Features and options",
-        "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/reference/features.md"
+        "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/reference/features.md"
       },
       {
         "text": "How spec.jev works",
-        "href": "https://github.com/lswdneil/ai.spec.pi.jev/blob/main/docs/architecture.md"
+        "href": "https://github.com/lswdneil/spec.ai.pi.jev/blob/main/docs/architecture.md"
       }
     ]
   },
