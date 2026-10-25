@@ -21,7 +21,7 @@
 - `page_fetch`: one page as Markdown or as a semantic tree through `moli fetch`, with no browser session and no judge call. `/fetch <url> [markdown|semantic_tree]` does the same from the command line.
 - `Emulation.setFocusEmulationEnabled` is now optional: an engine that does not implement it still browses.
 
-## [0.1.10] - 2026-10-21
+## [0.1.10] - 2026-10-25
 
 ### Changed
 
