@@ -62,6 +62,7 @@ async function shots(name, open = async () => {}) {
   await sleep(400);
   await open();
   await shot(`${name}-dark`);
+  await page().keyboard.press('Escape');
   await page().getByTestId('theme-toggle').click();
   await sleep(400);
   await open();
@@ -147,6 +148,8 @@ test('a thinking level set on the model that reasons reaches the request', async
   await thinker.hover();
   const high = p.locator('[data-testid="composer-level-option"][data-value="high"]');
   await expect(high).toBeVisible();
+  // Let the flyout finish positioning before its rows are measured against the viewport.
+  await sleep(300);
   // The menu of levels flies out of a chip at the bottom of the window: every level is inside the window, not below it.
   const levels = p.locator('[data-testid="composer-level-option"]');
   const inside = await levels.evaluateAll((items) =>

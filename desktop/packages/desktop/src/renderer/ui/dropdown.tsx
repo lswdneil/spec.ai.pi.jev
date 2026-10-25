@@ -166,10 +166,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     <DropdownMenuPrimitive.Root open={isOpen} onOpenChange={setOpen}>
       <DropdownMenuPrimitive.Trigger asChild>{triggerNode}</DropdownMenuPrimitive.Trigger>
       {!isOpen && renderClosed && droplist ? (
-        <div
-          data-dropdown-closed=''
-          style={{ display: 'none' }}
-        >
+        <div data-dropdown-closed='' style={{ display: 'none' }}>
           {droplist}
         </div>
       ) : null}
