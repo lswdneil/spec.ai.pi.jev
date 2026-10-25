@@ -38,4 +38,11 @@ Releases stay pre-releases while spec.jev is 0.x.
 
 ## Secrets
 
-0.1.x has no macOS build, so there are no macOS signing or notarization secrets. Windows is not code-signed yet: SmartScreen shows a warning. Linux deb packages ship with `SHA256SUMS`.
+0.1.x has no macOS build, so there are no macOS signing or notarization secrets.
+
+Windows code signing is optional until the certificate exists. Add these repository secrets and the Windows build signs the installer:
+
+- `WINDOWS_CERTIFICATE_BASE64`: the `.pfx` file, base64 encoded.
+- `WINDOWS_CERTIFICATE_PASSWORD`: its password.
+
+Without them the build stays unsigned and the release notes say SmartScreen will warn. Linux deb packages ship with `SHA256SUMS`.

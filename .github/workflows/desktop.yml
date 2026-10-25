@@ -199,6 +199,23 @@ jobs:
           if (-not (Test-Path $sqlite)) { bunx --yes @electron/rebuild --force --only better-sqlite3 --version $electron --arch ${{ matrix.arch }} }
           if (-not (Test-Path $sqlite)) { Write-Error "better-sqlite3 was not built for Electron ($electron, ${{ matrix.arch }})"; exit 1 }
 
+      - name: Setup Windows code signing
+        if: startsWith(matrix.platform, 'windows')
+        shell: pwsh
+        env:
+          WINDOWS_CERTIFICATE_BASE64: ${{ secrets.WINDOWS_CERTIFICATE_BASE64 }}
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+        run: |
+          if (-not $env:WINDOWS_CERTIFICATE_BASE64) {
+            Write-Host "No certificate: building an unsigned app."
+            exit 0
+          }
+          $certificate = Join-Path $env:RUNNER_TEMP 'certificate.pfx'
+          [IO.File]::WriteAllBytes($certificate, [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE_BASE64))
+          "CSC_LINK=$certificate" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "CSC_KEY_PASSWORD=$env:WINDOWS_CERTIFICATE_PASSWORD" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "WINDOWS_SIGNING=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
       # The Developer ID certificate goes into a keychain of its own, put on the search list so codesign finds
       # the identity and the intermediate certificate beside it. The App Store Connect API key (.p8) goes
       # into a file whose path electron-builder reads from APPLE_API_KEY.
@@ -644,6 +661,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BUILD_RESULT: ${{ needs.build.result }}
+          WINDOWS_SIGNED: ${{ secrets.WINDOWS_CERTIFICATE_BASE64 != '' }}
         run: |
           set -euo pipefail
           tag="${GITHUB_REF_NAME}"
@@ -651,7 +669,11 @@ jobs:
             echo "Preview build of spec.jev ${tag}."
             echo
             echo "- **Desktop app**: Windows x64 (.exe) and Linux x64 (.deb)."
-            echo "- Windows is not code-signed yet: SmartScreen shows a warning."
+            if [ "$WINDOWS_SIGNED" = "true" ]; then
+              echo "- Windows: signed."
+            else
+              echo "- Windows is not code-signed: SmartScreen shows a warning."
+            fi
             echo "- The app carries spec.jev inside it: nothing else to install, no Node.js, no download at the first start."
             echo "- The \`spec.jev\` command line: \`npm i -g spec.jev\` (Node.js 22.19 or newer), or from source (the archive below, or a clone)."
             if [ "$BUILD_RESULT" != "success" ]; then
