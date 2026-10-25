@@ -35,12 +35,13 @@ describe('release packaging configuration', () => {
     expect(winBlock).not.toContain('    - zip');
   });
 
-  it('uploads the macOS zip, and no Windows zip', () => {
+  it('uploads the Windows and Linux installers, and no zip', () => {
     // The pipeline that builds and publishes the installers, at the repository root.
     const workflow = readProjectFile('../.github/workflows/desktop.yml');
 
-    expect(workflow).toContain('path: desktop/out/*.zip');
-    expect(workflow).not.toMatch(/win32-[^\n]*\.zip/);
+    expect(workflow).toContain('desktop/out/*.exe');
+    expect(workflow).toContain('desktop/out/*.deb');
+    expect(workflow).not.toContain('desktop/out/*.zip');
   });
 
   it('retries mac prepackaged builds with both dmg and zip targets', () => {

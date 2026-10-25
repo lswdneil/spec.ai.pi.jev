@@ -54,6 +54,7 @@ const requestWith = (text) => requests().findLast((request) => request.lastUser.
  * menu: `open` opens it again (when it is not open) for the dark picture, and after the switch back.
  */
 async function shots(name, open = async () => {}) {
+  await page().keyboard.press('Escape');
   await open();
   await shot(name);
   // An open menu keeps the pointer inside it; Escape closes it, then the theme switch is a normal click.
@@ -68,10 +69,10 @@ async function shots(name, open = async () => {}) {
   await open();
 }
 
-/** Opens a menu with `trigger` unless `shown` already shows. */
+/** Opens a menu with `trigger`; the shot helper closes one first. */
 const opener = (trigger, shown) => async () => {
-  if (!(await shown().isVisible())) await trigger().click();
-  await expect(shown()).toBeVisible();
+  await trigger().click();
+  if (shown) await expect(shown()).toBeVisible();
 };
 
 test('a new conversation shows spec.jev’s default model and the mode it was made in, before spec.jev runs', async () => {

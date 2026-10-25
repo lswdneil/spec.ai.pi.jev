@@ -144,11 +144,9 @@ const SubMenu: React.FC<SubMenuProps> = ({
           ›
         </span>
       </button>
-      {open ? (
-        <div role='group' data-testid='submenu-body' className='ml-2 border-l border-sv-line pl-1'>
-          {withKeys(children)}
-        </div>
-      ) : null}
+      <div role='group' data-testid='submenu-body' hidden={!open} className='ml-2 border-l border-sv-line pl-1'>
+        {withKeys(children)}
+      </div>
     </div>
   );
 };

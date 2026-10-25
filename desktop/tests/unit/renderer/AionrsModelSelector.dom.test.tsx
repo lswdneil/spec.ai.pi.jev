@@ -146,6 +146,7 @@ describe('AionrsModelSelector runtime options', () => {
     );
 
     // The provider group title (OpenAI) is rendered inside the model submenu.
+    fireEvent.mouseEnter(screen.getAllByTestId('submenu-title')[0]);
     expect(screen.getByRole('group', { name: 'OpenAI' })).toBeInTheDocument();
   });
 
@@ -159,6 +160,7 @@ describe('AionrsModelSelector runtime options', () => {
       />
     );
 
+    fireEvent.mouseEnter(screen.getAllByTestId('submenu-title')[0]);
     const providerGroup = screen.getByRole('group', { name: 'OpenAI' });
     const currentModelItem = within(providerGroup).getByText('gpt-5.2').closest('[role="menuitem"]');
     const otherModelItem = within(providerGroup).getByText('gpt-5.2-mini').closest('[role="menuitem"]');
