@@ -165,6 +165,14 @@ jobs:
           echo "VERSION=$version" >> "$GITHUB_ENV"
           echo "TARBALL=$tarball" >> "$GITHUB_ENV"
 
+      - name: Authenticate with an npm token when one is configured
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -n "$NPM_TOKEN" ]; then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> "$HOME/.npmrc"
+          fi
+
       - name: Publish
         # npm treats a bare `dir/file.tgz` as a git spec; `./` makes it the tarball it is.
         run: npm publish "./$TARBALL" --access public --provenance

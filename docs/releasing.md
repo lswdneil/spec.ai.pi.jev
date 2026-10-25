@@ -26,6 +26,8 @@ CI builds every package with the model catalog in `packages/ai/model-catalog.jso
 
 npm trusts the workflow through [trusted publishing](https://docs.npmjs.com/trusted-publishers), so no npm token is stored in the repository. It needs a one-time setup on npmjs.com by an owner of the package: spec.jev → Settings → Trusted publishing → GitHub Actions, with user `lswdneil`, repository `spec.ai.pi.jev` and workflow `npm.yml`. npm also attaches provenance to every version published this way.
 
+Until that package exists on npm and its trusted publisher is configured, an owner can add a granular npm token as the repository secret `NPM_TOKEN`. The publish job uses it when present and still checks the tag, tarball version and registry for an existing version.
+
 ## Releasing the desktop app
 
 1. Make sure the app bundles the intended `spec.jev` (the build packs the spec.jev from the same commit), and that `desktop.yml` passed on `main`, including the conversations held in the built apps.
