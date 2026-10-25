@@ -138,7 +138,8 @@ function appIn(dir, platform) {
       const path = join(dir, name);
       if (!isFile(path)) return false;
       if (platform === 'win32') return /\.exe$/i.test(name) && !/^uninstall/i.test(name);
-      return !name.includes('.') && !helpers.has(name) && (statSync(path).mode & 0o111) !== 0;
+      // electron-builder names the Linux executable `spec.jev`, so a dot is not a reason to skip it.
+      return (name === 'spec.jev' || !name.includes('.')) && !helpers.has(name) && (statSync(path).mode & 0o111) !== 0;
     });
   return program ? { executable: join(dir, program), resources } : undefined;
 }
