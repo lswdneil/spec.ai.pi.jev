@@ -138,7 +138,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          registry-url: https://registry.npmjs.org
 
       # Trusted publishing needs npm 11.5.1 or newer.
       - name: Update npm
@@ -168,7 +167,7 @@ jobs:
 
       - name: Publish
         # npm treats a bare `dir/file.tgz` as a git spec; `./` makes it the tarball it is.
-        run: npm publish "./$TARBALL" --access public
+        run: npm publish "./$TARBALL" --access public --provenance
 
       - name: Check that npm serves this tarball
         shell: bash
