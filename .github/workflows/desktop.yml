@@ -530,7 +530,13 @@ jobs:
           } > notes.md
           # The update feed goes along when there is one (SHA256SUMS covers the installers and the source only).
           shopt -s nullglob
-          gh release create "$tag" dist/* updates/* --title "spec.jev ${tag}" --notes-file notes.md --prerelease --verify-tag
+          if gh release view "$tag" >/dev/null 2>&1; then
+            # A retried tag must replace the assets of the earlier attempt, not fail because the release exists.
+            gh release upload "$tag" dist/* updates/* --clobber
+            gh release edit "$tag" --title "spec.jev ${tag}" --notes-file notes.md --prerelease
+          else
+            gh release create "$tag" dist/* updates/* --title "spec.jev ${tag}" --notes-file notes.md --prerelease --verify-tag
+          fi
 
       - name: Report an incomplete update feed
         if: steps.feed.outcome == 'failure'

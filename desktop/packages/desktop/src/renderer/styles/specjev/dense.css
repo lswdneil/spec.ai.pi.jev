@@ -624,3 +624,8 @@ html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled:not(:disabl
   background: var(--bg-2);
   border-bottom: 1px solid var(--border-base);
 }
+
+/* Tooltips are labels: their popper wrapper must never take the click meant for the control underneath. */
+[data-radix-popper-content-wrapper]:has([data-sv-tooltip]) {
+  pointer-events: none;
+}

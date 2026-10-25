@@ -68,6 +68,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         <TooltipPrimitive.Trigger asChild>{child}</TooltipPrimitive.Trigger>
         <TooltipPrimitive.Portal>
           <TooltipPrimitive.Content
+            data-sv-tooltip=''
             side={sideFor(position)}
             sideOffset={6}
             className={cn(
