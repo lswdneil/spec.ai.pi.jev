@@ -24,7 +24,6 @@ const themed = [
   'pages/settings/KyrnSettings/sections/sections.module.css',
   'pages/welcome/Welcome.module.css',
   'styles/layout.css',
-  'styles/legacy-overrides.css',
   'components/chat/MentionMenuShell.tsx',
   'components/layout/WorkPanel/WorkPanel.module.css',
   'components/Markdown/CodeBlock.tsx',

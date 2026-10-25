@@ -477,7 +477,10 @@ const MuModal: React.FC<MuModalProps> = ({
           }}
         >
       <div
-        className={classNames('mu-modal-wrapper', isStandard && 'flex flex-col min-h-0')}
+        className={classNames(
+          'mu-modal-wrapper max-h-[calc(100vh-64px)] overflow-hidden',
+          isStandard && 'flex flex-col min-h-0'
+        )}
         style={{ borderRadius: borderRadiusVal }}
       >
         {renderHeader()}

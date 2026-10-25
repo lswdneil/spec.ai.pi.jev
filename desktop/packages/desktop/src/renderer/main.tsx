@@ -34,9 +34,9 @@ import { useTranslation } from 'react-i18next';
 
 // Styles
 import 'uno.css';
-import './styles/legacy-overrides.css';
 import './styles/themes/index.css';
 import './styles/specjev/tokens.css';
+import './styles/specjev/global.css';
 import './styles/specjev/dense.css';
 import './styles/markdown.css';
 
