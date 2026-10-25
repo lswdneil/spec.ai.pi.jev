@@ -2,7 +2,7 @@
   <img src="../../desktop/resources/app.png" width="96" alt="spec.jev">
 </p>
 <h1 align="center">spec.jev</h1>
-<p align="center">μ · Only what's needed.</p>
+<p align="center">spec.jev · Only what's needed.</p>
 <p align="center">带判定内核的编码代理。基于 <a href="https://github.com/earendil-works/pi">pi</a>。</p>
 
 <p align="center">
@@ -20,11 +20,9 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="run-dark.gif">
-    <img src="run-light.gif" alt="桌面端里的一次运行：测试在 main 上挂了，找原因并修好。Jev 把消息判为多步任务（input.preflight），模型跑测试、读解析器，说要把分钟改成 60,000 再跑一遍测试，然后停了。Jev 判定这次运行半途而止（turn.continue），spec.jev 提醒模型这一轮还没完，模型改好单位、跑通测试。右侧判定面板逐条列出每次裁决、判定点和耗时。">
+    <source media="(prefers-color-scheme: dark)" srcset="dense-home-dark.png">
+    <img src="dense-home-light.png" width="960" alt="The spec.jev desktop home in Dense, with the judge ready and a new conversation box.">
   </picture>
-  <br>
-  <sub>在桌面端里录下的一次运行。编码模型的回复是为录制写好的脚本（界面上显示为 GPT-6.1 Sol）；判定器的裁决、耗时和那次恢复都是真的：模型话说一半就停了，<code>turn.continue</code> 发现了，spec.jev 让它回去做完。</sub>
 </p>
 
 一个编码代理每次会话要做几百个和代码无关的决定：什么留在上下文里，一条命令安不安全，一个发现值不值得告诉另一个代理，活干完了没有。交给大模型，花的是 token、延迟和注意力；交给死规则，错得太多。spec.jev 把它们交给一个**判定器**：一个小而快的模型，每次只回答一个有边界的问题，每一轮有 40 个判定点。大模型把注意力留给正事。
@@ -162,8 +160,6 @@ spec.jev                  # 在当前目录开一个会话
   </picture>
 </p>
 
-<p align="center"><img src="test-log-folding.gif" width="960" alt="一次 338 行的 Vitest 失败运行滚动而过，重复的 diff 段被标出。然后是模型读到的同一次运行：135 行，每段折叠的重复只剩一行标记。7,686 字符变成 4,262 字符，没有调用模型。"></p>
-
 **按目标挑选。** 用详细 reporter 时，该留什么取决于你问的是什么：调试失败时，通过的测试是噪音；问哪些测试跑过时，它们就是证据。Jev 在一个请求里，对每一块通过记录、每一块测试输出各问一次：目标还需要它吗？汇总和每一个失败从不参与提问。只有 Jev 给"不需要"的概率达到 0.9 或以上，这一块才会省掉。
 
 <p align="center">
@@ -175,7 +171,7 @@ spec.jev                  # 在当前目录开一个会话
 
 *完美判定器*（Perfect judge）直接读标注，代表一个全对的判定器最多能省多少。*只留失败*（Keep failures only）是一个永远回答"省掉"的判定器，也就是不看目标的过滤器会做的事。这次研究的全部 282 次真实 Jev 请求，按标价约 $0.017；用默认问法，单次请求的中位耗时 345 毫秒。
 
-两者默认都关闭。在 `~/.spec.jev/agent/spec.jev.json` 里写 `"features": { "admission": { "testLog": "rules" } }`，或在桌面端设置里打开「测试日志精简」，就会折叠重复。`"jev"` 再让判定器挑出剩下的部分里当前目标用得上的；执行 `/mu mode tool.admission.test-log shadow` 则只记录挑选结果。
+两者默认都关闭。在 `~/.spec.jev/agent/spec.jev.json` 里写 `"features": { "admission": { "testLog": "rules" } }`，或在桌面端设置里打开「测试日志精简」，就会折叠重复。`"jev"` 再让判定器挑出剩下的部分里当前目标用得上的；执行 `/spec.jev mode tool.admission.test-log shadow` 则只记录挑选结果。
 
 这些数字不代表什么：
 
@@ -216,8 +212,6 @@ spec.jev                  # 在当前目录开一个会话
 
 因为板只增不删，后来的结论会推翻早先的：一只 bee 报告测试跑不起来，后来清掉一个环境变量就跑通了。`hive.relate` 读两条笔记之间的关系：*推翻*、*矛盾*或*支持*。被推翻的结论变成一条纠正，送给每一只拿着旧结论的 bee。互相矛盾的两条都留着，标成争议；一分钟内没人解决，就派一只核实 bee 去查。
 
-<p align="center"><img src="swarm.png" width="960" alt="桌面端的蜂群页：四只 bee 各自在做什么，它们之间的投递连接图，和每一条送达的原文"></p>
-
 桌面端的「蜂群」页就是这一切的现场。每只 bee 一行：角色、模型、此刻在做什么或刚说了什么。连接图画出谁把发现送给了谁：线越粗送达越多，纠正和争议各有自己的画法，一条发现送到的那一刻会沿着线亮一下。信息流里是每一条送达的原文，判定记录里是每一次裁决。对话里的蜂群卡片带一张缩略图，点开就是这一页。
 
 一次真实的运行：3 只 bee，9 分钟，评了 117 条候选，27 条上板，16 条投递到需要它的 bee 那里。每一次判定都在运行日志里。
@@ -228,8 +222,6 @@ spec.jev                  # 在当前目录开一个会话
 
 大模型一代代迭代下来，干活越来越强，说话却越来越黑：汇报进展的话越写越像给机器看的，术语堆叠，越来越不说人话。spec.jev 不让干活的模型自己汇报。打开看板（`/board`，或桌面端看板页上的开关）后，代理每做完一步，看板上立刻多一行人话：改了哪个文件、检查过没过、运行了什么命令，连着读文件就折成一行「看了 N 个文件」。代理干活中途每说一段话，`board.read` 都请判定器判一次这是不是新消息；是，就由一个只因为说人话而选出来的模型（`/board model` 可换）当场重讲给人听，并同时更新看板的现状：现在在做什么，清单上几件事做完了几件，有什么在等你。一次运行结束时的总结是流水的最后一行，过程留在上面，所以你看到的不只是「做完了」，还有它到底做了什么。
 
-<p align="center"><img src="board.png" width="960" alt="桌面端的人话看板：进展到哪、在做什么、之前发生了什么；顶上是上下文占用和缓存命中率"></p>
-
 干活的模型照旧用它自己的语言干活，看板上出现的字始终是人一眼能读懂的。看板跟着权限模式、目标和子代理走，代理换了做法，看板也换一种说法。顶上两个数是上下文占用和缓存命中率，正是上面那些上下文和缓存判定的直接结果。
 
 ## 桌面端
@@ -238,12 +230,7 @@ spec.jev                  # 在当前目录开一个会话
 
 **看板** · **判定**（实时的流水：每一次判定和它的问题） · **蜂群** · **经验** · **文件** · **预览** · **源码** · **浏览器**（代理逐步操作的内置浏览器，带目标、暂停和停止）
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="app-dark.png">
-    <img src="app-light.png" width="880" alt="spec.jev 桌面端修好一个小项目里挂掉的测试之后。Jev 把消息判为多步任务（input.preflight），代理跑了测试、读了解析器、改好分钟的单位，再跑了一遍测试。右侧判定面板列出每次判定的判定点和耗时，约 200 到 400 毫秒。底部的栏显示判定器、40 个判定点里启用了 38 个、5 次判定和上下文占用。">
-  </picture>
-</p>
+
 
 底部的一条栏让内核一直在视线里：哪个判定器在回答、跑在哪里，启用了多少个判定点；在对话里，还有到目前为止的判定数、最近一次判定的耗时和上下文占用。权限模式和目标在发送框里；`⌘K` 打开命令面板。模型登录在应用内完成：ChatGPT、Claude、Grok 和 Google（Gemini CLI / Antigravity）订阅，或任何 pi 支持的提供商的 API 密钥。Claude Code 和 Codex CLI 的对话可以导入并接着聊。
 
@@ -257,21 +244,16 @@ spec.jev            # 在当前目录开一个交互会话
 spec.jev doctor     # 检查安装、判定器和各项连接
 ```
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="cli-dark.png">
-    <img src="cli-light.png" width="720" alt="终端里 spec.jev 的欢迎界面：μ 标记，“spec.jev v0.1.9, judgment-first coding agent, built on pi 1.3.0”，然后是判定器（Jev 1.13，免费，428 毫秒回答，判定点已启用）、模型和工作目录，以及值得记住的几个按键。">
-  </picture>
-</p>
+
 
 需要 Node 22.19 或更新。`spec.jev -p "提示"` 跑一次并打印；`spec.jev -c` 接着上一个会话。`spec.jev import --list` 找出你的 Claude Code 和 Codex 对话，`spec.jev import <文件>` 导入。`spec.jev ledger [n]` 打印最近 n 个会话里判定器的决定。命令行和桌面端共用账号、设置和经验。在终端里，spec.jev 用自己的 `mu-dark` 和 `mu-light` 主题，直到你在 `/settings` 里另选一个（`system` 跟随终端的配色）。
 
 | 命令 | 做什么 |
 | --- | --- |
 | `/status` | 判定器、各判定点的模式、没放进上下文的内容、最近的判定 |
-| `/mu judge <判定器>` | 由哪些判定器回答、按什么顺序：`laya`、`laya,jev`、`jev-opencode-free`、`classifier:<提供商>/<模型>`、`llm:<提供商>/<模型>` |
-| `/mu route <判定点> <判定器>` | 让某一个判定点用自己的判定器 |
-| `/mu mode <判定点> <off\|shadow\|active>` | 切换某一个判定点 |
+| `/spec.jev judge <判定器>` | 由哪些判定器回答、按什么顺序：`laya`、`laya,jev`、`jev-opencode-free`、`classifier:<提供商>/<模型>`、`llm:<提供商>/<模型>` |
+| `/spec.jev route <判定点> <判定器>` | 让某一个判定点用自己的判定器 |
+| `/spec.jev mode <判定点> <off\|shadow\|active>` | 切换某一个判定点 |
 | `/frame` | 任务帧：目标、你的约束及其出处、验收条件 |
 | `/goal <条件>` | 一直干到条件成立；`/goal clear` 结束 |
 | `/permissions` | 全部放行 / Jev 审批 / 最小权限 |
@@ -304,7 +286,7 @@ pi 自己的命令（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`
 
 ```bash
 npm install --ignore-scripts   # 安装依赖，不跑生命周期脚本
-node kyrn/bin/mu.mjs           # 从这份代码启动 spec.jev
+./kyrn/bin/spec.jev           # 从这份代码启动 spec.jev
 npm run check                  # 格式、静态检查、类型
 ./test.sh                      # 测试（没有密钥时跳过依赖模型的测试）
 ```

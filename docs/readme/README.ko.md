@@ -2,7 +2,7 @@
   <img src="../../desktop/resources/app.png" width="96" alt="spec.jev">
 </p>
 <h1 align="center">spec.jev</h1>
-<p align="center">μ · Only what's needed.</p>
+<p align="center">spec.jev · Only what's needed.</p>
 <p align="center">판정 커널을 갖춘 코딩 에이전트. <a href="https://github.com/earendil-works/pi">pi</a> 기반.</p>
 
 <p align="center">
@@ -20,11 +20,9 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="run-dark.gif">
-    <img src="run-light.gif" alt="데스크톱 앱에서의 실행. 요청은 "main에서 테스트가 실패한다, 원인을 찾아 고쳐 달라". Jev가 메시지를 여러 단계 작업으로 판정하고(input.preflight), 모델은 테스트를 돌리고 파서를 읽은 뒤 분을 60,000으로 바꾸고 테스트를 다시 돌리겠다고 말하고는 멈춘다. Jev가 실행이 중간에 멈췄다고 판정하고(turn.continue), spec.jev가 이번 턴이 끝나지 않았다고 모델에게 알리자 모델은 단위를 고치고 테스트를 통과시킨다. 오른쪽 판정 패널에 판정, 판정 지점, 걸린 시간이 하나씩 쌓인다.">
+    <source media="(prefers-color-scheme: dark)" srcset="dense-home-dark.png">
+    <img src="dense-home-light.png" width="960" alt="The spec.jev desktop home in Dense, with the judge ready and a new conversation box.">
   </picture>
-  <br>
-  <sub>데스크톱 앱에서 녹화한 실행입니다. 코딩 모델의 답변은 녹화를 위해 미리 쓴 대본입니다(화면에는 GPT-6.1 Sol로 표시). 판정기의 판정, 걸린 시간, 그리고 복구는 실제입니다. 모델이 하겠다고 말만 하고 멈췄고, <code>turn.continue</code>가 이를 잡아냈고, spec.jev가 끝까지 하도록 되돌려 보냈습니다.</sub>
 </p>
 
 코딩 에이전트는 세션 하나에서 코드와 상관없는 결정을 수백 번 내려요. 무엇을 컨텍스트에 남길지, 이 명령이 안전한지, 이 발견을 다른 에이전트에게 알릴 만한지, 일이 끝났는지. 큰 모델에 맡기면 토큰과 지연 시간, 주의력이 들어요. 고정된 규칙에 맡기면 너무 자주 틀려요. spec.jev는 이런 결정을 **판정기**에 맡겨요. 판정기는 작고 빠른 모델로, 답의 범위가 정해진 질문에 한 번에 하나씩 답해요. 판정 지점은 턴마다 40개예요. 큰 모델은 주의력을 본래의 일에 쓸 수 있어요.
@@ -162,8 +160,6 @@ spec.jev                  # 현재 디렉터리에서 세션 시작
   </picture>
 </p>
 
-<p align="center"><img src="test-log-folding.gif" width="960" alt="338줄짜리 Vitest 실패 실행이 스크롤되고, 반복된 diff 블록에 표시가 붙어요. 이어서 모델이 읽는 같은 실행: 135줄이고, 접힌 반복마다 표시 한 줄만 남아요. 7,686자가 4,262자가 되고, 모델은 부르지 않았어요."></p>
-
 **목표에 따른 선별.** 자세한 리포터를 쓰면 무엇을 남길지는 여러분이 무엇을 물었는지에 달려 있어요. 실패를 디버깅할 때 통과한 테스트는 잡음이지만, 어떤 테스트가 실행됐는지 물을 때는 증거예요. Jev는 요청 하나로, 통과한 테스트 블록과 테스트 출력 블록마다 "목표에 아직 필요한가?"를 질문받아요. 요약과 모든 실패는 질문 대상이 아니에요. Jev가 "필요 없음"에 0.9 이상의 확률을 줄 때만 그 블록을 빼요.
 
 <p align="center">
@@ -175,7 +171,7 @@ spec.jev                  # 현재 디렉터리에서 세션 시작
 
 *Perfect judge*(완벽한 판정기)는 레이블을 직접 읽어요. 올바른 판정기가 줄일 수 있는 최대치예요. *Keep failures only*(실패만 남기기)는 늘 "빼라"고 답하는 판정기로, 목표를 보지 않는 필터가 하는 일과 같아요. 이 조사에서 실제로 보낸 Jev 요청은 모두 282건이고, 정가로 약 $0.017이었어요. 기본 질문 방식에서 요청 하나의 소요 시간 중앙값은 345ms예요.
 
-둘 다 기본값은 꺼짐이에요. `~/.spec.jev/agent/spec.jev.json`에 `"features": { "admission": { "testLog": "rules" } }`를 쓰거나 데스크톱 앱 설정에서 '테스트 로그 정리'를 켜면 반복이 접혀요. `"jev"`로 하면 남은 부분 중 지금 목표에 필요한 것을 판정기가 골라요. `/mu mode tool.admission.test-log shadow`를 실행하면 선별 결과는 기록만 돼요.
+둘 다 기본값은 꺼짐이에요. `~/.spec.jev/agent/spec.jev.json`에 `"features": { "admission": { "testLog": "rules" } }`를 쓰거나 데스크톱 앱 설정에서 '테스트 로그 정리'를 켜면 반복이 접혀요. `"jev"`로 하면 남은 부분 중 지금 목표에 필요한 것을 판정기가 골라요. `/spec.jev mode tool.admission.test-log shadow`를 실행하면 선별 결과는 기록만 돼요.
 
 이 숫자가 말해 주지 않는 것:
 
@@ -216,8 +212,6 @@ spec.jev                  # 현재 디렉터리에서 세션 시작
 
 보드는 쌓이기만 하기 때문에, 나중 결론이 앞선 결론을 뒤집을 수 있어요. 어떤 비가 테스트가 안 돌아간다고 보고했다가, 환경 변수 하나를 지우고 나서 돌아가게 만드는 식이에요. `hive.relate`는 두 메모 사이의 관계를 읽어요. '뒤집음', '모순', '뒷받침' 중 하나예요. 뒤집힌 결론은 정정이 되어 옛 결론을 가진 모든 비에게 전달돼요. 서로 모순되는 두 메모는 둘 다 남고 이견으로 표시돼요. 1분 안에 아무도 결론을 내지 않으면 검증 비를 보내요.
 
-<p align="center"><img src="swarm.png" width="960" alt="데스크톱 앱의 하이브 탭: 비 4마리가 각각 무엇을 하는지, 비들 사이의 전달 지도, 전달된 메시지 하나하나의 원문"></p>
-
 이 모든 일이 벌어지는 현장이 데스크톱 앱의 하이브 탭이에요. 비마다 한 줄씩 역할, 모델, 지금 하는 일이나 방금 한 말을 보여 줘요. 지도에는 누가 누구에게 발견을 전달했는지가 그려져요. 전달이 많을수록 선이 굵고, 정정과 이견은 각자 따로 표시되며, 발견이 도착하는 순간 그 선이 빛나요. 정보 흐름에는 전달된 메시지의 원문이 모두 있고, 판정 기록에는 모든 판정이 있어요. 대화 안의 하이브 카드에는 작은 지도가 들어 있고, 누르면 이 탭이 열려요.
 
 실제 실행 한 번을 예로 들면, 비 3마리가 9분 동안 일하는 사이 후보 117개를 판정했고, 27개가 보드에 올라갔고, 16개가 그것을 필요로 하는 비에게 전달됐어요. 모든 판정은 실행 로그에 있어요.
@@ -228,8 +222,6 @@ spec.jev                  # 현재 디렉터리에서 세션 시작
 
 프런티어 모델은 일은 더 잘하게 되는데, 그 일에 대해 말하는 건 더 서툴러져요. 세대가 바뀔수록 진행 보고는 다른 기계가 읽을 출력에 가까워지고, 더 빽빽하고 더 불투명해져서 사람이 하는 말과는 멀어져요. spec.jev는 일하는 모델에게 스스로 보고하게 하지 않아요. 보드를 켜 두면(`/board`, 또는 데스크톱 앱 보드 탭의 스위치), 에이전트가 한 걸음 뗄 때마다 보드에 쉬운 말 한 줄이 바로 붙어요. 어떤 파일을 바꿨는지, 검증이 통과했는지 실패했는지, 어떤 명령을 실행했는지요. 파일을 연달아 읽으면 「파일 N개를 봤어요」 한 줄로 접히고 숫자만 올라가요. 일하는 도중에 에이전트가 무언가 말할 때마다 `board.read`가 판정기에게 그게 새 소식인지 물어요. 새 소식이면, 쉽게 말한다는 한 가지 이유만으로 고른 모델(`/board model`)이 그 자리에서 사람에게 다시 말해 주고, 보드의 현재 상태도 함께 갱신해요. 지금 무엇을 하고 있는지, 체크리스트 항목 중 몇 개가 끝났는지, 여러분을 기다리는 것이 무엇인지요. 실행이 끝났을 때의 요약은 기록의 마지막 줄이 되고, 과정은 그 위에 남아요. 그래서 「끝났다」만이 아니라, 무엇을 했는지가 늘 보여요.
 
-<p align="center"><img src="board.png" width="960" alt="데스크톱 앱의 쉬운 말 보드: 일이 어디까지 진행됐는지, 지금 무엇을 하는지, 그전에 무슨 일이 있었는지. 맨 위에는 컨텍스트 사용량과 캐시 적중률"></p>
-
 일하는 모델은 일할 때 자기 언어를 그대로 쓰고, 보드에 나오는 글은 언제나 한눈에 읽을 수 있어요. 보드는 권한 모드, 목표, 서브 에이전트를 따라가고, 에이전트가 방향을 바꾸면 보드의 표현도 바뀌어요. 맨 위의 두 숫자는 컨텍스트 사용량과 캐시 적중률로, 위에서 본 컨텍스트와 캐시 판정의 직접적인 결과예요.
 
 ## 데스크톱 앱
@@ -238,12 +230,7 @@ spec.jev와 런타임이 들어 있는 데스크톱 앱이에요. Node를 설치
 
 **보드** · **판정**(실시간 판정 장부: 모든 판정과 그 질문) · **하이브** · **교훈** · **파일** · **미리보기** · **소스** · **브라우저**(에이전트가 한 단계씩 조작하는 내장 브라우저. 목표, 일시 정지, 중지 포함)
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="app-dark.png">
-    <img src="app-light.png" width="880" alt="작은 프로젝트에서 실패하던 테스트를 고친 뒤의 spec.jev 데스크톱 앱. Jev가 메시지를 여러 단계 작업으로 판정했고(input.preflight), 에이전트는 테스트를 돌리고 파서를 읽고 분 단위를 고친 다음 테스트를 다시 돌렸다. 오른쪽 판정 패널에는 판정마다 판정 지점과 걸린 시간(약 200~400 ms)이 나온다. 아래쪽 막대에는 판정기, 판정 지점 40개 중 켜진 38개, 판정 5건, 사용 중인 컨텍스트가 나온다.">
-  </picture>
-</p>
+
 
 아래쪽 막대에서 커널 상태를 늘 볼 수 있어요. 어떤 판정기가 답하고 어디서 도는지, 켜진 판정 지점이 몇 개인지, 대화 중이라면 지금까지의 판정 수, 마지막 판정에 걸린 시간, 사용 중인 컨텍스트까지 보여 줘요. 권한 모드와 목표는 입력창에 있고, `⌘K`로 명령어 팔레트를 열어요. 모델 로그인은 앱 안에서 해요. ChatGPT, Claude, Grok, Google(Gemini CLI / Antigravity) 구독이나, pi가 지원하는 어떤 프로바이더의 API 키든 쓸 수 있어요. Claude Code와 Codex CLI의 대화는 가져와서 이어 갈 수 있어요.
 
@@ -257,21 +244,16 @@ spec.jev            # 현재 디렉터리에서 대화형 세션 시작
 spec.jev doctor     # 설치, 판정기, 연결 상태 점검
 ```
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="cli-dark.png">
-    <img src="cli-light.png" width="720" alt="터미널에서 본 spec.jev의 환영 화면: μ 마크, &quot;spec.jev v0.1.9, judgment-first coding agent, built on pi 1.3.0&quot;, 이어서 판정기(Jev 1.13, 무료, 428 ms에 응답, 판정 지점 켜짐), 모델과 작업 디렉터리, 알아 두면 좋은 키.">
-  </picture>
-</p>
+
 
 Node 22.19 이상이 필요해요. `spec.jev -p "prompt"`는 한 번 실행하고 결과를 출력하고, `spec.jev -c`는 마지막 세션을 이어 가요. `spec.jev import --list`는 Claude Code와 Codex 대화를 찾아 주고, `spec.jev import <file>`은 그 대화를 가져와요. `spec.jev ledger [n]`은 최근 n개 세션에서 판정기가 내린 판정을 출력해요. 명령줄과 데스크톱 앱은 계정, 설정, 교훈을 함께 써요. 터미널에서는 `/settings`에서 테마를 고르기 전까지 spec.jev 전용 `mu-dark`와 `mu-light` 테마를 써요(`system`은 터미널 색 구성을 따라가요).
 
 | 명령어 | 하는 일 |
 | --- | --- |
 | `/status` | 판정기, 판정 지점별 모드, 컨텍스트에서 뺀 것, 최근 판정 |
-| `/mu judge <judges>` | 어떤 판정기가 어떤 순서로 답할지: `laya`, `laya,jev`, `jev-opencode-free`, `classifier:<provider>/<model>`, `llm:<provider>/<model>` |
-| `/mu route <point> <judge>` | 판정 지점 하나에 따로 판정기를 지정하기 |
-| `/mu mode <point> <off\|shadow\|active>` | 판정 지점 하나를 전환하기 |
+| `/spec.jev judge <judges>` | 어떤 판정기가 어떤 순서로 답할지: `laya`, `laya,jev`, `jev-opencode-free`, `classifier:<provider>/<model>`, `llm:<provider>/<model>` |
+| `/spec.jev route <point> <judge>` | 판정 지점 하나에 따로 판정기를 지정하기 |
+| `/spec.jev mode <point> <off\|shadow\|active>` | 판정 지점 하나를 전환하기 |
 | `/frame` | 작업 프레임: 목표, 여러분의 제약과 그 출처, 인수 조건 |
 | `/goal <condition>` | 조건이 충족될 때까지 계속 작업하기, `/goal clear`로 끝내기 |
 | `/permissions` | 전체 접근 / Jev 승인 / 최소 권한 |
@@ -304,7 +286,7 @@ pi의 자체 명령(`/model`, `/thinking`, `/login`, `/resume`, `/tree`, `/fork`
 
 ```bash
 npm install --ignore-scripts   # 의존성 설치, 라이프사이클 스크립트는 실행하지 않음
-node kyrn/bin/mu.mjs           # 이 체크아웃에서 spec.jev 실행
+./kyrn/bin/spec.jev           # 이 체크아웃에서 spec.jev 실행
 npm run check                  # 포맷, 린트, 타입 검사
 ./test.sh                      # 테스트 (모델이 필요한 테스트는 키가 없으면 건너뜀)
 ```

@@ -2,7 +2,7 @@
   <img src="../../desktop/resources/app.png" width="96" alt="spec.jev">
 </p>
 <h1 align="center">spec.jev</h1>
-<p align="center">μ · Only what's needed.</p>
+<p align="center">spec.jev · Only what's needed.</p>
 <p align="center">帶判定核心的程式設計代理。以 <a href="https://github.com/earendil-works/pi">pi</a> 為基礎。</p>
 
 <p align="center">
@@ -20,11 +20,9 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="run-dark.gif">
-    <img src="run-light.gif" alt="桌面端裡的一次執行：測試在 main 上失敗了，找出原因並修好。Jev 把訊息判為多步驟任務（input.preflight），模型跑測試、讀解析器，說要把分鐘改成 60,000 再跑一次測試，然後停了。Jev 判定這次執行半途而止（turn.continue），spec.jev 提醒模型這一輪還沒完，模型改好單位、測試通過。右側判定面板逐條列出每次裁決、判定點和耗時。">
+    <source media="(prefers-color-scheme: dark)" srcset="dense-home-dark.png">
+    <img src="dense-home-light.png" width="960" alt="The spec.jev desktop home in Dense, with the judge ready and a new conversation box.">
   </picture>
-  <br>
-  <sub>在桌面端裡錄下的一次執行。程式設計模型的回覆是為錄製寫好的腳本（介面上顯示為 GPT-6.1 Sol）；判定器的裁決、耗時和那次復原都是真的：模型話說一半就停了，<code>turn.continue</code> 發現了，spec.jev 讓它回去做完。</sub>
 </p>
 
 一個程式設計代理每個工作階段要做幾百個和程式碼無關的決定：什麼留在上下文裡，一條指令安不安全，一個發現值不值得告訴另一個代理，工作做完了沒有。交給大模型，花的是 token、延遲和注意力；交給寫死的規則，錯得太多。spec.jev 把它們交給一個**判定器**：一個小而快的模型，每次只回答一個有邊界的問題，每一輪有 40 個判定點。大模型把注意力留給正事。
@@ -162,8 +160,6 @@ spec.jev                  # 在目前目錄開一個工作階段
   </picture>
 </p>
 
-<p align="center"><img src="test-log-folding.gif" width="960" alt="一次 338 行的 Vitest 失敗執行捲動而過，重複的 diff 段被標出。接著是模型讀到的同一次執行：135 行，每段折疊的重複只剩一行標記。7,686 字元變成 4,262 字元，沒有呼叫模型。"></p>
-
 **依目標挑選。** 使用詳細 reporter 時，該留什麼取決於你問的是什麼：除錯失敗時，通過的測試是雜訊；問哪些測試跑過時，它們就是證據。Jev 在一個請求裡，對每一塊通過記錄、每一塊測試輸出各問一次：目標還需要它嗎？摘要和每一個失敗從不參與提問。只有 Jev 給「不需要」的機率達到 0.9 以上，這一塊才會省掉。
 
 <p align="center">
@@ -175,7 +171,7 @@ spec.jev                  # 在目前目錄開一個工作階段
 
 *完美判定器*（Perfect judge）直接讀標註，代表一個全對的判定器最多能省多少。*只留失敗*（Keep failures only）是一個永遠回答「省掉」的判定器，也就是不看目標的過濾器會做的事。這次研究的全部 282 次真實 Jev 請求，依牌價約 $0.017；用預設問法，單次請求的中位耗時 345 毫秒。
 
-兩者預設都關閉。在 `~/.spec.jev/agent/spec.jev.json` 裡寫 `"features": { "admission": { "testLog": "rules" } }`，或在桌面版設定裡打開「測試日誌精簡」，就會折疊重複。`"jev"` 再讓判定器挑出剩下的部分裡目前目標用得上的；執行 `/mu mode tool.admission.test-log shadow` 則只記錄挑選結果。
+兩者預設都關閉。在 `~/.spec.jev/agent/spec.jev.json` 裡寫 `"features": { "admission": { "testLog": "rules" } }`，或在桌面版設定裡打開「測試日誌精簡」，就會折疊重複。`"jev"` 再讓判定器挑出剩下的部分裡目前目標用得上的；執行 `/spec.jev mode tool.admission.test-log shadow` 則只記錄挑選結果。
 
 這些數字不代表什麼：
 
@@ -216,8 +212,6 @@ spec.jev                  # 在目前目錄開一個工作階段
 
 因為板只增不刪，後來的結論會推翻早先的：一隻 bee 回報測試跑不起來，後來清掉一個環境變數就跑起來了。`hive.relate` 讀兩條筆記之間的關係：*推翻*、*矛盾*或*支持*。被推翻的結論變成一條更正，送給每一隻拿著舊結論的 bee。互相矛盾的兩條都留著，標成爭議；一分鐘內沒人解決，就派一隻核實 bee 去查。
 
-<p align="center"><img src="swarm.png" width="960" alt="桌面版的蜂群頁：四隻 bee 各自在做什麼，它們之間的投遞連接圖，和每一條送達的原文"></p>
-
 桌面版的「蜂群」頁就是這一切的現場。每隻 bee 一行：角色、模型、此刻在做什麼或剛說了什麼。連接圖畫出誰把發現送給了誰：線越粗代表送達越多，更正和爭議各有自己的畫法，一條發現送到的那一刻會沿著線亮一下。資訊流裡是每一條送達的原文，判定記錄裡是每一次裁決。對話裡的蜂群卡片帶一張縮圖，點開就是這一頁。
 
 一次真實的執行：3 隻 bee，9 分鐘，評了 117 條候選，27 條上板，16 條投遞到需要它的 bee 那裡。每一次判定都在執行記錄裡。
@@ -228,8 +222,6 @@ spec.jev                  # 在目前目錄開一個工作階段
 
 前沿模型一代比一代會做事，卻一代比一代不會講自己做了什麼：回報進度的文字越寫越像給另一台機器讀的輸出，更密、更晦澀，越來越不像人在說話。spec.jev 不讓做事的模型自己回報。開啟看板（`/board`，或桌面版看板頁上的開關）後，代理每做完一步，看板上立刻多一行人話：改了哪個檔案、檢查過沒過、執行了什麼命令，連著讀檔案就折成一行「看了 N 個檔案」。代理做事途中每說一段話，`board.read` 都請判定器判一次這是不是新消息；是，就由一個只因為會講人話而被選中的模型（`/board model` 可換）當場重講給人聽，並同時更新看板的現況：現在在做什麼，清單上幾件事做完了幾件，有什麼在等你。一次執行結束時的總結是流水的最後一行，過程留在上面，所以你看到的不只是「做完了」，還有它到底做了什麼。
 
-<p align="center"><img src="board.png" width="960" alt="桌面版的人話看板：進展到哪、在做什麼、之前發生了什麼；頂端是上下文用量和快取命中率"></p>
-
 做事的模型照舊用自己的語言做事；看板上出現的字，始終一眼就讀得懂。看板跟著權限模式、目標和子代理走，代理換了做法，看板也換一種說法。頂端兩個數字是上下文用量和快取命中率，正是上面那些上下文和快取判定的直接結果。
 
 ## 桌面版
@@ -238,12 +230,7 @@ spec.jev                  # 在目前目錄開一個工作階段
 
 **看板** · **判定**（即時的判定帳本：每一次判定和它的問題） · **蜂群** · **經驗** · **檔案** · **預覽** · **原始碼** · **瀏覽器**（代理一步步操作的內建瀏覽器，帶目標、暫停和停止）
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="app-dark.png">
-    <img src="app-light.png" width="880" alt="spec.jev 桌面版修好一個小專案裡失敗的測試之後。Jev 把訊息判為多步驟任務（input.preflight），代理跑了測試、讀了解析器、改好分鐘的單位，再跑了一次測試。右側判定面板列出每次判定的判定點和耗時，約 200 到 400 毫秒。底部的列顯示判定器、40 個判定點裡啟用了 38 個、5 次判定和上下文用量。">
-  </picture>
-</p>
+
 
 底部的一條列讓核心一直在視線裡：哪個判定器在回答、跑在哪裡，啟用了多少個判定點；在對話裡，還有到目前為止的判定數、最近一次判定的耗時和上下文用量。權限模式和目標在傳送框裡；`⌘K` 開啟命令面板。模型登入在應用程式內完成：ChatGPT、Claude、Grok 和 Google（Gemini CLI / Antigravity）訂閱，或任何 pi 支援的供應商的 API 金鑰。Claude Code 和 Codex CLI 的對話可以匯入並接著聊。
 
@@ -257,21 +244,16 @@ spec.jev            # 在目前目錄開一個互動式工作階段
 spec.jev doctor     # 檢查安裝、判定器和各項連線
 ```
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="cli-dark.png">
-    <img src="cli-light.png" width="720" alt="終端機裡 spec.jev 的歡迎畫面：μ 標記，「spec.jev v0.1.9, judgment-first coding agent, built on pi 1.3.0」，接著是判定器（Jev 1.13，免費，428 毫秒回答，判定點已啟用）、模型和工作目錄，以及值得記住的幾個按鍵。">
-  </picture>
-</p>
+
 
 需要 Node 22.19 或更新版本。`spec.jev -p "prompt"` 執行一次並印出結果；`spec.jev -c` 接續上一個工作階段。`spec.jev import --list` 找出你的 Claude Code 和 Codex 對話，`spec.jev import <file>` 把它們匯入。`spec.jev ledger [n]` 印出最近 n 個工作階段裡判定器的決定。命令列和桌面版共用帳號、設定和經驗。在終端機裡，spec.jev 使用自己的 `mu-dark` 和 `mu-light` 主題，直到你在 `/settings` 裡另選一個（`system` 跟隨終端機的配色）。
 
 | 指令 | 做什麼 |
 | --- | --- |
 | `/status` | 判定器、各判定點的模式、沒放進上下文的內容、最近的判定 |
-| `/mu judge <judges>` | 由哪些判定器回答、按什麼順序：`laya`、`laya,jev`、`jev-opencode-free`、`classifier:<provider>/<model>`、`llm:<provider>/<model>` |
-| `/mu route <point> <judge>` | 讓某一個判定點用自己的判定器 |
-| `/mu mode <point> <off\|shadow\|active>` | 切換某一個判定點 |
+| `/spec.jev judge <judges>` | 由哪些判定器回答、按什麼順序：`laya`、`laya,jev`、`jev-opencode-free`、`classifier:<provider>/<model>`、`llm:<provider>/<model>` |
+| `/spec.jev route <point> <judge>` | 讓某一個判定點用自己的判定器 |
+| `/spec.jev mode <point> <off\|shadow\|active>` | 切換某一個判定點 |
 | `/frame` | 任務框架：目標、你的約束及其出處、驗收條件 |
 | `/goal <condition>` | 一直做到條件成立；`/goal clear` 結束 |
 | `/permissions` | 全部放行 / Jev 審批 / 最小權限 |
@@ -304,7 +286,7 @@ pi 自己的指令（`/model`、`/thinking`、`/login`、`/resume`、`/tree`、`
 
 ```bash
 npm install --ignore-scripts   # 安裝相依套件，不執行生命週期指令碼
-node kyrn/bin/mu.mjs           # 從這份程式碼啟動 spec.jev
+./kyrn/bin/spec.jev           # 從這份程式碼啟動 spec.jev
 npm run check                  # 格式、靜態檢查、型別
 ./test.sh                      # 測試（沒有金鑰時跳過需要模型的測試）
 ```

@@ -20,11 +20,9 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/run-dark.gif">
-    <img src="docs/readme/run-light.gif" alt="A run in the spec.jev desktop app. The message: the tests are failing on main, find out why and fix it. Jev classifies it as a multi-step task (input.preflight, about 350 ms). The model runs the tests, which Jev lets through (tool.approval, about 200 ms), reads the parser, finds that a minute is defined as 1,000 ms, says it will change it to 60,000 and run the tests again, and stops without doing it. Jev answers that the run stopped short (turn.continue, about 200 ms), spec.jev reminds the model that the turn isn't finished, and it changes the unit and runs the tests, which pass. The judge panel on the right fills with each verdict, its decision point and its latency.">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/dense-home-dark.png">
+    <img src="docs/readme/dense-home-light.png" width="960" alt="The spec.jev desktop home in Dense, with the judge ready and a new conversation box.">
   </picture>
-  <br>
-  <sub>A recorded run in the desktop app. The coding model's replies are scripted for the recording (it's shown as GPT-6.1 Sol). The judge's verdicts, their timings and the recovery are real: the model stopped short, <code>turn.continue</code> caught it, and spec.jev sent it back to finish.</sub>
 </p>
 
 A coding agent makes hundreds of decisions per session that aren't about the code: what goes into the context, whether a command is safe, whether a finding is worth passing to another agent, whether the work is really done. Handing these to the main model costs tokens, time and focus. Fixed rules get them wrong too often. spec.jev hands them to a **judge**: a small, fast model that answers one bounded question at a time, at 40 decision points in the agent loop. The main model keeps its attention on the work.
@@ -185,7 +183,7 @@ Judges can be chained in tiers, cheapest first:
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/readme/pieces-dark.svg">
-    <img src="docs/readme/pieces-light.svg" width="880" alt="The pieces. The desktop app (desktop/, which runs pi in a utility process over pi's RPC protocol) and the spec.jev command (kyrn/bin/spec.jev.mjs) both start pi, the coding agent: its agent loop, tools, sessions and providers. Inside pi runs the judgment kernel (packages/kyrn-judge): features hooked into pi's events, a decision engine with modes, judges and fallbacks, and the ledger. pi calls the main model. The engine asks the judges: Jev, Laya, any classifier or any LLM.">
+    <img src="docs/readme/pieces-light.svg" width="880" alt="The pieces. The desktop app (desktop/, which runs pi in a utility process over pi's RPC protocol) and the spec.jev command (kyrn/bin/spec.jev) both start pi, the coding agent: its agent loop, tools, sessions and providers. Inside pi runs the judgment kernel (packages/kyrn-judge): features hooked into pi's events, a decision engine with modes, judges and fallbacks, and the ledger. pi calls the main model. The engine asks the judges: Jev, Laya, any classifier or any LLM.">
   </picture>
 </p>
 
@@ -214,8 +212,6 @@ The numbers below come from the repository's own replay script, [`kyrn/spikes/ju
     <img src="docs/readme/bench-test-log-repeats-light.svg" width="880" alt="Seven real failing Vitest logs from the authors' sessions, 139,820 characters in total. Folding exact repeats removed 86%, 44%, 44%, 47% and 16% of the five largest logs and left the two smallest whole: 51% overall.">
   </picture>
 </p>
-
-<p align="center"><img src="docs/readme/test-log-folding.gif" width="960" alt="A failing Vitest run of 338 lines scrolls past with its repeated diff blocks highlighted, then the same run as the model sees it: 135 lines, with one marker line for each folded block. 7,686 characters become 4,262, with no model call."></p>
 
 **Goal-aware selection.** With a verbose reporter, what's worth keeping depends on what you asked for. Passing tests are noise when you're debugging a failure, and evidence when you ask which tests ran. In a single request, Jev is asked about each block of passing tests and each block of test output: does the goal still need it? The summary and the failures are never put to the judge. A block is left out only when Jev gives "not needed" a probability of 0.9 or higher.
 
@@ -269,8 +265,6 @@ A hive is two to six bees, each with its own focus. Bees read code, run commands
 
 Because the board is append-only, a later conclusion can overturn an earlier one: a bee reports that the tests won't run, then unsets an environment variable and they do. `hive.relate` decides how two notes relate: *supersedes*, *contradicts* or *supports*. A superseded conclusion turns into a correction, delivered to every bee that holds the old note. When two notes contradict each other, both stay, marked as a dispute; if nobody settles it within a minute, a bee is sent to verify.
 
-<p align="center"><img src="docs/readme/swarm.png" width="960" alt="The desktop app's Hive tab: what four bees are doing, a map of the deliveries between them and the text of each delivery"></p>
-
 You can watch all of this in the desktop app's Hive tab. Each bee gets a row: its role, its model and what it's doing or has just said. The map shows who delivered findings to whom, and the more findings travel along a line, the thicker it gets. Corrections and disputes have their own marks, and a line lights up the moment a finding arrives. The information flow lists the text of every delivery, and every verdict is listed too. The hive card in the conversation shows a miniature of the map and opens this tab.
 
 One real run: 3 bees, 9 minutes, 117 candidates judged, 27 posted to the board and 16 delivered to the bees that needed them. Every verdict is in the run's log.
@@ -283,8 +277,6 @@ Frontier models keep getting better at the work and worse at talking about it. E
 
 With the board on (`/board`, or the switch on the desktop app's Board tab), each step the agent takes becomes one plain line on the board as soon as it finishes: a file changed, a check passed or failed, a command ran. Reading is folded into a single line with a running count. Whenever the agent says something mid-run, `board.read` asks the judge whether it's news. If it is, a model chosen only for plain writing (`/board model`) rewrites it for a person and keeps the board's status current: what's happening now, how many checklist items are done and what's waiting on you. When a run finishes, a summary becomes the last line, with the full account kept above it, so you see what was done, not just that it's done.
 
-<p align="center"><img src="docs/readme/board.png" width="960" alt="The desktop app's plain-language board: how far along the work is, what's happening now and what happened before, with context use and cache hit rate at the top"></p>
-
 The working model keeps its own language for the work, and the board stays readable at a glance. The board follows the permission mode, the goal and the subagents, and when the agent changes course, the wording follows. The two numbers at the top are context use and cache hit rate, the direct result of the context and cache decision points above.
 
 ## The desktop app
@@ -293,12 +285,7 @@ A desktop app with spec.jev and its runtime built in: there's no Node.js to inst
 
 **Board** · **Judge** (the live ledger: every verdict with its question, decision point and latency) · **Hive** · **Lessons** · **Files** · **Preview** · **Source** · **Browser** (the built-in browser the agent drives one step at a time; it shows the goal and lets you pause or stop)
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/app-dark.png">
-    <img src="docs/readme/app-light.png" width="880" alt="The spec.jev desktop app after fixing a failing test in a small project. Jev classified the message as a multi-step task (input.preflight), the agent ran the tests, read the parser, fixed the minute unit and ran the tests again. The judge panel on the right lists each verdict with its decision point and latency, about 200 to 400 ms. The bar along the bottom shows the judge, 38 of 40 decision points active, 5 verdicts and the context in use.">
-  </picture>
-</p>
+
 
 A bar along the bottom keeps the kernel in view: which judge answers and where it runs, how many decision points are active and, in a conversation, the verdicts so far, the latest judge latency and the context in use. The permission mode and the goal sit in the composer, and `⌘K` opens the command palette. You sign in to models inside the app: ChatGPT, Claude, Grok and Google (Gemini CLI / Antigravity) subscriptions, or an API key for any provider pi supports. You can import Claude Code and Codex CLI conversations and continue them.
 
@@ -312,14 +299,9 @@ spec.jev            # interactive session in the current directory
 spec.jev doctor     # check the installation, the judges and the connections
 ```
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/cli-dark.png">
-    <img src="docs/readme/cli-light.png" width="720" alt="spec.jev's welcome screen in a terminal: the μ mark, &quot;spec.jev v0.1.9, judgment-first coding agent, built on pi 1.3.0&quot;, then the judge (Jev 1.13, free, answering in 428 ms, decision points active), the model and the working directory, and the keys worth knowing.">
-  </picture>
-</p>
 
-Requires Node.js 22.19 or newer. `spec.jev -p "prompt"` runs a single prompt and prints the answer; `spec.jev -c` continues the last session. `spec.jev import --list` finds your Claude Code and Codex conversations, and `spec.jev import <file>` brings one in. `spec.jev ledger [n]` prints what the judge decided in the last n sessions. The command line and the desktop app share accounts, settings and lessons. In the terminal, spec.jev uses its own `spec.jev-dark` and `spec.jev-light` themes until you choose one in `/settings` (`system` follows your terminal's palette).
+
+Requires Node.js 22.19 or newer. `spec.jev -p "prompt"` runs a single prompt and prints the answer; `spec.jev -c` continues the last session. `spec.jev import --list` finds your Claude Code and Codex conversations, and `spec.jev import <file>` brings one in. `spec.jev ledger [n]` prints what the judge decided in the last n sessions. The command line and the desktop app share accounts, settings and lessons. In the terminal, spec.jev uses its own `mu-dark` and `mu-light` themes until you choose one in `/settings` (`system` follows your terminal's palette).
 
 | Command | What it does |
 | --- | --- |
@@ -368,7 +350,7 @@ Bug reports, fixes, new decision points, judge measurements and translations are
 
 ```bash
 npm install --ignore-scripts   # install dependencies without lifecycle scripts
-node kyrn/bin/spec.jev.mjs           # run spec.jev from this checkout
+./kyrn/bin/spec.jev           # run spec.jev from this checkout
 npm run check                  # formatting, lint, types
 ./test.sh                      # tests (those that need a model are skipped without a key)
 ```
