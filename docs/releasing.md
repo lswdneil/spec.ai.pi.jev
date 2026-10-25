@@ -30,7 +30,7 @@ npm trusts the workflow through [trusted publishing](https://docs.npmjs.com/trus
 
 1. Make sure the app bundles the intended `spec.jev` (the build packs the spec.jev from the same commit), and that `desktop.yml` passed on `main`, including the conversations held in the built apps.
 2. Update [CHANGELOG.md](../CHANGELOG.md): move `[Unreleased]` under the new version.
-3. Tag and push: `git tag vX.Y.Z && git push origin vX.Y.Z`. The tag run builds every platform again, writes `SHA256SUMS` and the update feeds, and creates the pre-release.
+3. Tag and push: `git tag vX.Y.Z && git push origin vX.Y.Z`. The tag run builds every platform again, writes `SHA256SUMS` and the update feeds, and creates the pre-release. Push the command line's `spec.jev-vX.Y.Z` tag from the same commit as well when the release includes the npm package.
 4. Check the release page for every installer, `SHA256SUMS`, `latest.yml` (Windows) and `latest-linux.yml` (Linux). Edit the notes so they say what changed for users.
 5. An installed earlier version should offer the update and download it only after the user agrees; check that it does. On Windows the app updates on restart through electron-updater. On Linux, where replacing a `.deb` needs administrator rights, the app downloads the new `.deb` and opens it; the person completes the install in the system package installer.
 
