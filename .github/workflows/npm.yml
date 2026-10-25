@@ -104,7 +104,12 @@ jobs:
         run: |
           prefix="$RUNNER_TEMP/specjev-prefix"
           npm i -g --prefix "$prefix" ./tarball/spec.jev-*.tgz
-          if [ "$RUNNER_OS" = "Windows" ]; then echo "$prefix" >> "$GITHUB_PATH"; else echo "$prefix/bin" >> "$GITHUB_PATH"; fi
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            # GITHUB_PATH is read by the Windows runner, so write a Windows path, not Git Bash's /d/a/... form.
+            cygpath -w "$prefix" >> "$GITHUB_PATH"
+          else
+            echo "$prefix/bin" >> "$GITHUB_PATH"
+          fi
 
       - name: Smoke test
         shell: bash
