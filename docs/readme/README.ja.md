@@ -39,7 +39,7 @@
 
 ## クイックスタート
 
-**デスクトップアプリ。** [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases/latest) から macOS、Windows、Linux 用のインストーラーをダウンロードして開き、API キーを貼り付けるか、ChatGPT、Claude、Grok、Google のサブスクリプションでサインインします。ほかにインストールするものはありません。
+**デスクトップアプリ。** [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases/latest) から Windows、Linux 用のインストーラーをダウンロードして開き、API キーを貼り付けるか、ChatGPT、Claude、Grok、Google のサブスクリプションでサインインします。ほかにインストールするものはありません。
 
 **コマンドライン。**
 
@@ -247,7 +247,7 @@ spec.jev とそのランタイムを内蔵したデスクトップアプリで�
 
 画面下部のバーで、カーネルの状態をいつでも確認できます。どの判定器が答えていてどこで動いているか、有効な判定ポイントの数、会話中ならそれまでの判定数、直近の判定の所要時間、コンテキストの使用量です。権限モードと目標は入力欄にあり、`⌘K` でコマンドパレットが開きます。モデルへのログインはアプリの中で行います。ChatGPT、Claude、Grok、Google（Gemini CLI / Antigravity）のサブスクリプションか、pi が対応する任意のプロバイダーの API キーを使えます。Claude Code と Codex CLI の会話は、インポートして続きから話せます。
 
-macOS（Apple シリコン / Intel）、Windows（x64 / Arm）、Linux（x64 / Arm）向けのビルドは GitHub Actions で作成し、[Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases) で公開しています。
+Windows x64、Linux x64（deb）向けのビルドは GitHub Actions で作成し、[Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases) で公開しています。
 
 ## コマンドライン
 
