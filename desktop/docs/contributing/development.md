@@ -39,4 +39,6 @@ Root checks (`npm run check`, `./test.sh`) cover everything outside `desktop/`; 
 
 ## Building installers
 
-GitHub Actions builds the installers for macOS, Windows and Linux (`.github/workflows/desktop.yml` at the repository root) and publishes them under Releases. To package one locally, the `dist:*` scripts in `package.json` (`dist:mac`, `dist:win`, `dist:linux`) run electron-builder through `scripts/build-with-builder.js`.
+GitHub Actions builds the installers for Windows x64 and Linux x64 (`.github/workflows/desktop.yml` at the repository root) and publishes them under Releases. To package one locally, the `dist:*` scripts in `package.json` (`dist:win`, `dist:linux`) run electron-builder through `scripts/build-with-builder.js`.
+
+The desktop build needs the matching `spec.jev` harness tarball. Pack it once from the repository root with `node kyrn/npm/build.mjs --pack`, then set `MU_HARNESS_TARBALL` to the `.tgz` under `.artifacts/npm`; otherwise the build asks the npm registry for the package, which does not exist before the first release.

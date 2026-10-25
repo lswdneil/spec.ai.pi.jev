@@ -61,7 +61,7 @@ test('a fresh start: the native group is in the sidebar, empty, and a conversati
     await expect(p.getByTestId('native-new-panel')).toBeVisible();
     // 最小权限: spec.jev asks before it writes or runs anything.
     await p.getByTestId('native-permissions').click();
-    await p.locator('.arco-select-popup:visible .arco-select-option', { hasText: '最小权限' }).click();
+    await p.locator('[role="listbox"]:visible [role="option"]', { hasText: '最小权限' }).click();
     await shot('new-conversation');
     await p.getByTestId('native-project').click();
     await p.waitForURL(/#\/conversation\/native\//, { timeout: 30_000 });

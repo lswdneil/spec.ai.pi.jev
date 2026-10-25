@@ -348,9 +348,9 @@ test('first start: the guide opens, and a custom endpoint added in the settings 
     await openSettings('default-model');
     const card = p.getByTestId('mu-defaults');
     await card.getByRole('combobox', { name: '提供商' }).click();
-    await p.locator('.arco-select-popup:visible .arco-select-option', { hasText: PROVIDER_NAME }).click();
+    await p.locator('[role="listbox"]:visible [role="option"]', { hasText: PROVIDER_NAME }).click();
     await card.getByRole('combobox', { name: '模型' }).click();
-    await p.locator('.arco-select-popup:visible .arco-select-option', { hasText: FAKE_MODEL_ID }).click();
+    await p.locator('[role="listbox"]:visible [role="option"]', { hasText: FAKE_MODEL_ID }).click();
     await p.getByRole('button', { name: '保存' }).click();
     await expect
       .poll(() => JSON.parse(readFileSync(join(paths().agentDir, 'settings.json'), 'utf8')), { timeout: 15_000 })
@@ -502,9 +502,9 @@ test('the files tab lists the written file, and the board is written by the fake
     await openSettings('board-model');
     const card = p.getByTestId('mu-board-model');
     await card.getByRole('combobox', { name: '提供商' }).click();
-    await p.locator('.arco-select-popup:visible .arco-select-option', { hasText: PROVIDER_NAME }).click();
+    await p.locator('[role="listbox"]:visible [role="option"]', { hasText: PROVIDER_NAME }).click();
     await card.getByRole('combobox', { name: '模型' }).click();
-    await p.locator('.arco-select-popup:visible .arco-select-option', { hasText: FAKE_MODEL_ID }).last().click();
+    await p.locator('[role="listbox"]:visible [role="option"]', { hasText: FAKE_MODEL_ID }).last().click();
     await p.getByRole('button', { name: '保存' }).click();
     await expect
       .poll(() => JSON.parse(readFileSync(join(paths().agentDir, 'mu', 'board.json'), 'utf8')).model, {

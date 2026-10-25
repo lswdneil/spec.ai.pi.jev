@@ -86,9 +86,6 @@ This is the core module that handles all native module rebuilding. It provides:
 ### Building for specific platform
 
 ```bash
-# Build for macOS
-npm run dist:mac
-
 # Build for Windows
 npm run dist:win
 

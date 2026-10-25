@@ -345,7 +345,7 @@ export function createNativeWorld({ desktopRoot, prepare }) {
     await expect(p.getByTestId('native-new-panel')).toBeVisible();
     if (permissions) {
       await p.getByTestId('native-permissions').click();
-      await p.locator('.arco-select-popup:visible .arco-select-option', { hasText: permissions }).click();
+      await p.locator('[role="listbox"]:visible [role="option"]', { hasText: permissions }).click();
     }
     await p.getByTestId('native-project').click();
     await p.waitForURL(/#\/conversation\/native\//, { timeout: 30_000 });

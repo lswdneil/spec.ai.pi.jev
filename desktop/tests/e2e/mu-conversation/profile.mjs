@@ -106,12 +106,17 @@ export function mainCheckout(root) {
   }
 }
 
-/** The harness checkout (or npm package) to run: SPECJEV_ROOT, else `../KYRN` beside the desktop checkout. */
+/** The harness checkout (or npm package) to run: SPECJEV_ROOT, the checkout above `desktop`, or `../KYRN`. */
 export function findHarnessSource(desktopRoot) {
   const named = process.env.SPECJEV_ROOT;
   const candidates = named
     ? [resolve(named)]
-    : [join(desktopRoot, '..', 'KYRN'), join(mainCheckout(desktopRoot), '..', 'KYRN')];
+    : [
+        join(desktopRoot, '..'),
+        mainCheckout(desktopRoot),
+        join(desktopRoot, '..', 'KYRN'),
+        join(mainCheckout(desktopRoot), '..', 'KYRN'),
+      ];
   for (const root of candidates) {
     if (existsSync(join(root, 'kyrn', 'bin', 'mu.mjs'))) {
       const layout = existsSync(join(root, 'packages', 'coding-agent', 'package.json')) ? 'repo' : 'package';
