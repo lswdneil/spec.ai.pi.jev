@@ -53,7 +53,7 @@
 /*
  * The native look of the settings pages, scoped to their frame so nothing else in the app changes. One rhythm of
  * 16px between blocks; quiet lists (a hairline above the first row and between rows, no box around them, never a box
- * inside a box); flat controls in neutral greys with small radii; the system font. Lavender stays where mu-scales.css
+ * inside a box); flat controls in neutral greys with small radii; the system font. Lavender stays where status-colors.css
  * puts it, on a primary button and a switch that is on, and nowhere else on these pages.
  */
 .settings-page-content {
@@ -225,7 +225,7 @@
   background-color: var(--bg-base);
 }
 
-/* The chosen segment of a segmented control: one hairline, no shadow (mu-scales.css adds one in the light theme). */
+/* The chosen segment of a segmented control: one hairline, no shadow (status-colors.css adds one in the light theme). */
 .settings-page-wrapper
   .settings-page-content
   .arco-radio-group

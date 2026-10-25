@@ -119,7 +119,7 @@
   --mu-radius-lg: 14px;
   --mu-radius-xl: 20px;
 
-  /* Motion: short and eased. prefers-reduced-motion turns it off in mu-scales.css. */
+  /* Motion: short and eased. prefers-reduced-motion turns it off in status-colors.css. */
   --mu-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --mu-duration: 160ms;
 
