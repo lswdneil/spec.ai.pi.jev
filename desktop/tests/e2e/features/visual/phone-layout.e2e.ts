@@ -220,8 +220,7 @@ test('renders the phone shell at 390px', async ({ electronApp, page: electronPag
       const response = await fetch('/api/assistants');
       if (!response.ok) return null;
       const json = (await response.json()) as unknown;
-      const rows =
-        Array.isArray(json) ? json : ((json as { data?: unknown }).data as unknown[] | undefined);
+      const rows = Array.isArray(json) ? json : ((json as { data?: unknown }).data as unknown[] | undefined);
       if (!Array.isArray(rows)) return null;
       const assistants = rows as Array<{
         id?: string;
@@ -253,11 +252,9 @@ test('renders the phone shell at 390px', async ({ electronApp, page: electronPag
       }, assistantId);
 
       await webPage.goto(`${server.url}/#/conversation/${conversationId}`);
-      await webPage.waitForFunction(
-        (id) => window.location.hash.includes(`/conversation/${id}`),
-        conversationId,
-        { timeout: 15_000 }
-      );
+      await webPage.waitForFunction((id) => window.location.hash.includes(`/conversation/${id}`), conversationId, {
+        timeout: 15_000,
+      });
       await expect(webPage.getByTestId('mobile-tab-bar')).toBeVisible({ timeout: 15_000 });
       await webPage.waitForTimeout(1_000);
       await webPage.screenshot({ path: testInfo.outputPath('phone-390-conversation.png') });

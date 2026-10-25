@@ -196,31 +196,31 @@ export const Dropdown: React.FC<DropdownProps> = ({
             className
           )}
         >
-        {droplist}
-        {items?.map((item, index) =>
-          item.separator ? (
-            <DropdownMenuPrimitive.Separator key={item.key ?? `sep-${index}`} className='my-1 h-px bg-sv-line' />
-          ) : (
-            <DropdownMenuPrimitive.Item
-              key={item.key ?? index}
-              disabled={item.disabled}
-              data-testid={item['data-testid']}
-              data-tab={item['data-tab']}
-              onSelect={item.onSelect}
-              className={cn(
-                'flex h-7 cursor-default select-none items-center gap-2 bg-transparent rounded-[6px] px-2 outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
-                item.danger ? 'text-sv-danger' : 'text-sv-text',
-                'data-[highlighted]:bg-sv-surface'
-              )}
-            >
-              <span className='flex-1'>{item.label}</span>
-              {item.checked ? <Check className='sv-icon-sm text-sv-brand-ink' /> : null}
-            </DropdownMenuPrimitive.Item>
-          )
-        )}
-      </DropdownMenuPrimitive.Content>
-    </DropdownMenuPrimitive.Portal>
-  </DropdownMenuPrimitive.Root>
+          {droplist}
+          {items?.map((item, index) =>
+            item.separator ? (
+              <DropdownMenuPrimitive.Separator key={item.key ?? `sep-${index}`} className='my-1 h-px bg-sv-line' />
+            ) : (
+              <DropdownMenuPrimitive.Item
+                key={item.key ?? index}
+                disabled={item.disabled}
+                data-testid={item['data-testid']}
+                data-tab={item['data-tab']}
+                onSelect={item.onSelect}
+                className={cn(
+                  'flex h-7 cursor-default select-none items-center gap-2 bg-transparent rounded-[6px] px-2 outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
+                  item.danger ? 'text-sv-danger' : 'text-sv-text',
+                  'data-[highlighted]:bg-sv-surface'
+                )}
+              >
+                <span className='flex-1'>{item.label}</span>
+                {item.checked ? <Check className='sv-icon-sm text-sv-brand-ink' /> : null}
+              </DropdownMenuPrimitive.Item>
+            )
+          )}
+        </DropdownMenuPrimitive.Content>
+      </DropdownMenuPrimitive.Portal>
+    </DropdownMenuPrimitive.Root>
   );
 };
 

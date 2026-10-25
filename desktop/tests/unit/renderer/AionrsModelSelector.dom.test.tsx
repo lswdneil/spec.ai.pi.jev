@@ -98,8 +98,6 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-
-
 describe('AionrsModelSelector runtime options', () => {
   beforeEach(() => {
     vi.clearAllMocks();

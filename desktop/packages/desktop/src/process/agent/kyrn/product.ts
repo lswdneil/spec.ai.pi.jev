@@ -121,7 +121,8 @@ export function findRegistration(agents: AgentRow[], own: string | OwnCommand): 
     canRestore?.(stale.command)
   )
     return stale;
-  if (namesakes.length > 0) throw new KyrnError('otherRegistration', 'A different spec.jev command is already registered');
+  if (namesakes.length > 0)
+    throw new KyrnError('otherRegistration', 'A different spec.jev command is already registered');
   return undefined;
 }
 
