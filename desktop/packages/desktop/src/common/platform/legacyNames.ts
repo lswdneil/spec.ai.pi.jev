@@ -6,23 +6,29 @@
  */
 
 /**
- * The app's data folder inside its profile (`<userData>/aionui`). AionCore's database stores absolute paths into it:
+ * The app's data folder inside its profile (`<userData>/data`). AionCore's database stores absolute paths into it:
  * through the `~/.spec.jev-desktop` shortcut on macOS, as they are on Windows and Linux.
  */
-export const DATA_FOLDER = 'aionui';
+export const DATA_FOLDER = 'data';
+
+/** The name first versions used for the data folder; moved to {@link DATA_FOLDER} at start. */
+export const LEGACY_DATA_FOLDER = 'aionui';
 
 /** The folder in the system's temporary folder that the first versions kept their data in, moved from at start. */
 export const LEGACY_TEMP_FOLDER = 'aionui';
 
-/** A development build's profile folder (and with MU_MULTI_INSTANCE=1, the second instance's): its data stays there. */
-export const DEV_PROFILE_NAMES = { first: 'AionUi-Dev', second: 'AionUi-Dev-2' } as const;
+/** A development build's profile folder (and with MU_MULTI_INSTANCE=1, the second instance's). */
+export const DEV_PROFILE_NAMES = { first: 'spec.jev-Dev', second: 'spec.jev-Dev-2' } as const;
+
+/** The development profile folders earlier builds used; moved to {@link DEV_PROFILE_NAMES} at start. */
+export const LEGACY_DEV_PROFILE_NAMES = { first: 'AionUi-Dev', second: 'AionUi-Dev-2' } as const;
 
 /**
- * A development build's home-folder shortcuts to its data and config folders (`~/.aionui-dev`, `~/.aionui-config-dev`,
- * and `-dev-2` for the second instance), through which the paths it stored were written. A packaged build has spec.jev's
- * own (`~/.spec.jev-desktop`, `~/.spec.jev-desktop-config`).
+ * A development build's home-folder shortcuts to its data and config folders (`~/.spec.jev-dev`,
+ * `~/.spec.jev-config-dev`, and `-dev-2` for the second instance). A packaged build has spec.jev's own
+ * (`~/.spec.jev-desktop`, `~/.spec.jev-desktop-config`).
  */
-export const DEV_SHORTCUT_BASES = { data: '.aionui', config: '.aionui-config' } as const;
+export const DEV_SHORTCUT_BASES = { data: '.spec.jev', config: '.spec.jev-config' } as const;
 
 /** The files in the config folder the app keeps the local service's folders and its first versions' data in. */
 export const CONFIG_FILES = {

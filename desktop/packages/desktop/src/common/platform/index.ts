@@ -2,17 +2,31 @@ import path from 'path';
 import type { IPlatformServices } from './IPlatformServices';
 import { NodePlatformServices } from './NodePlatformServices';
 import { MU_DISPLAY_NAME } from '@/common/kyrn/displayName';
-import { DEV_PROFILE_NAMES } from './legacyNames';
+import { DEV_PROFILE_NAMES, LEGACY_DEV_PROFILE_NAMES } from './legacyNames';
 
 let _services: IPlatformServices | null = null;
+let _devAppName: string | null = null;
 
 /**
  * Resolve the dev-mode app name for environment isolation.
- * Centralised so that every call-site stays in sync.
+ * Centralised so that every call-site stays in sync. A startup migration can
+ * pin the old name for one run when its folder cannot be moved yet.
  */
 export function getDevAppName(): string {
+  if (_devAppName) return _devAppName;
   const isMultiInstance = process.env.MU_MULTI_INSTANCE === '1';
   return isMultiInstance ? DEV_PROFILE_NAMES.second : DEV_PROFILE_NAMES.first;
+}
+
+/** The profile name earlier development builds wrote. */
+export function getLegacyDevAppName(): string {
+  const isMultiInstance = process.env.MU_MULTI_INSTANCE === '1';
+  return isMultiInstance ? LEGACY_DEV_PROFILE_NAMES.second : LEGACY_DEV_PROFILE_NAMES.first;
+}
+
+/** Keep later platform-service fallbacks on the profile chosen at startup. */
+export function setDevAppName(name: string): void {
+  _devAppName = name;
 }
 
 export function registerPlatformServices(services: IPlatformServices): void {

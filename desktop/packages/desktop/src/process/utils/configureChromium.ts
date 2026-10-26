@@ -9,10 +9,11 @@ import http from 'http';
 import * as fs from 'fs';
 import * as path from 'path';
 import os from 'os';
-import { getDevAppName } from '@/common/platform';
+import { getDevAppName, getLegacyDevAppName, setDevAppName } from '@/common/platform';
 import { MU_DISPLAY_NAME } from '@/common/kyrn/displayName';
 import { applyGpuRecoveryFlags } from './gpuRecovery';
-import { LEGACY_CDP_REGISTRY_FILE } from '@/common/platform/legacyNames';
+import { DATA_FOLDER, LEGACY_CDP_REGISTRY_FILE, LEGACY_DATA_FOLDER } from '@/common/platform/legacyNames';
+import { migrateDataDirectory, migrateProfileDirectory } from './storageLayoutMigration';
 
 // ============ E2E test isolation ============
 // When running under E2E with an explicit sandbox dir, redirect userData there
@@ -37,15 +38,24 @@ if (e2eUserDataDir && e2eUserDataDir.trim() !== '') {
 // 开发模式下设置独立 app 名称，userData 目录将与正式版隔离，允许同时运行
 // E2E 沙箱已显式设置 userData 时跳过，避免被 dev app 名覆盖。
 if (!app.isPackaged && !e2eUserDataDir) {
-  const devAppName = getDevAppName();
+  const preferredName = getDevAppName();
+  const legacyName = getLegacyDevAppName();
+  const appDataDir = app.getPath('appData');
+  const profileMove = migrateProfileDirectory(path.join(appDataDir, legacyName), path.join(appDataDir, preferredName));
+  // If an older instance still holds the folder, keep using it for this run;
+  // the next start can move it once that instance has exited.
+  const devAppName = profileMove === 'blocked' ? legacyName : preferredName;
+  setDevAppName(devAppName);
   app.setName(devAppName);
   // In Electron 28+, setName alone no longer updates userData path on macOS.
   // Explicitly override userData to the dev directory.
-  const appSupportDir = path.dirname(app.getPath('userData'));
-  app.setPath('userData', path.join(appSupportDir, devAppName));
-  // The data folder keeps its legacy name (existing dev profiles), but the dock
-  // and the menu bar must say the product name.
+  app.setPath('userData', path.join(appDataDir, devAppName));
+  // The dock and the menu bar must say the product name.
   app.setName(MU_DISPLAY_NAME);
+}
+
+if (!e2eUserDataDir) {
+  migrateDataDirectory(app.getPath('userData'), LEGACY_DATA_FOLDER, DATA_FOLDER);
 }
 
 // app.disableHardwareAcceleration() must run before app is ready.
