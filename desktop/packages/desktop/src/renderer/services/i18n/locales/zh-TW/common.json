@@ -1535,6 +1535,10 @@
     "note": "Node.js 尚未下載，這個智慧體暫時無法執行。下次啟動 spec.jev 時會再詢問。",
     "toolNote": "Node.js 尚未下載，需要它的工具暫時無法執行。下次啟動 spec.jev 時會再詢問。"
   },
+  "localWorkspace": "本機工作區",
+  "localWorkspaceHint": "資料僅保存在本機",
+  "accountComingSoon": "登入與帳戶同步將在後續版本提供",
+  "account": "帳戶",
   "firstHint": {
     "close": "知道了"
   }

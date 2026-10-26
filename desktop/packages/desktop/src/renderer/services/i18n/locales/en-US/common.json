@@ -1535,6 +1535,10 @@
     "note": "Node.js isn't downloaded, so this agent can't run. spec.jev will ask again the next time it starts.",
     "toolNote": "Node.js isn't downloaded, so tools that need it can't run. spec.jev will ask again the next time it starts."
   },
+  "localWorkspace": "Local workspace",
+  "localWorkspaceHint": "Data stays on this computer.",
+  "accountComingSoon": "Sign-in and account sync will arrive in a later version.",
+  "account": "Account",
   "firstHint": {
     "close": "Got it"
   }

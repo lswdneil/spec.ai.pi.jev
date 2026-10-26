@@ -41,9 +41,20 @@ vi.mock('@renderer/components/layout/Sider/CommandPalette', () => ({
   default: () => <div data-testid='command-palette-host' />,
   toggleCommandPalette: () => toggleCommandPalette(),
 }));
+vi.mock('@renderer/hooks/system/useAccountIdentity', () => ({
+  useAccountIdentity: () => ({ identity: { kind: 'local', id: 'system_default_user' } }),
+}));
+
 vi.mock('@/renderer/ui', () => ({
   cn: (...values: unknown[]) => values.filter(Boolean).join(' '),
   Tooltip: ({ children }: React.PropsWithChildren) => <>{children}</>,
+  Avatar: ({ children }: React.PropsWithChildren) => <span>{children}</span>,
+  Popover: ({ children, content }: React.PropsWithChildren<{ content?: React.ReactNode }>) => (
+    <>
+      {children}
+      {content}
+    </>
+  ),
   Button: ({
     children,
     variant: _variant,
@@ -119,9 +130,17 @@ describe('Dense sidebar', () => {
     expect(navigate).toHaveBeenCalledWith('/guid');
   });
 
-  it('keeps the footer to the settings; the theme switch lives in the titlebar', () => {
+  it('shows a local workspace instead of the internal user id', () => {
     render(<DenseSider />);
-    expect(screen.getByTestId('sider-settings')).toHaveTextContent('common.settings');
+    expect(screen.getByTestId('sider-account')).toHaveTextContent('common.localWorkspace');
+    expect(screen.queryByText('system_default_user')).not.toBeInTheDocument();
+    expect(screen.getByTestId('sider-account-menu')).toHaveTextContent('common.localWorkspaceHint');
+    expect(screen.getByTestId('sider-account-menu')).toHaveTextContent('common.accountComingSoon');
+  });
+
+  it('keeps the settings action and the theme switch in its own place', () => {
+    render(<DenseSider />);
+    expect(screen.getByTestId('sider-settings')).toHaveAttribute('aria-label', 'common.settings');
     expect(screen.queryByTestId('theme-toggle')).not.toBeInTheDocument();
   });
 

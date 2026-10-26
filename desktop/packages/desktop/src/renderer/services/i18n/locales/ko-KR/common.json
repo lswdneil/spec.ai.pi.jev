@@ -1535,6 +1535,10 @@
     "note": "Node.js가 다운로드되지 않아 이 에이전트를 실행할 수 없습니다. 다음 시작 때 다시 묻습니다.",
     "toolNote": "Node.js가 다운로드되지 않아 이를 필요로 하는 도구를 실행할 수 없습니다. 다음 시작 때 다시 묻습니다."
   },
+  "localWorkspace": "로컬 워크스페이스",
+  "localWorkspaceHint": "데이터는 이 컴퓨터에만 저장됩니다",
+  "accountComingSoon": "로그인 및 계정 동기화는 이후 버전에서 제공됩니다",
+  "account": "계정",
   "firstHint": {
     "close": "확인"
   }
