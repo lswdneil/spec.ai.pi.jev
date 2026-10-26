@@ -182,7 +182,8 @@ jobs:
         run: |
           expected=$(shasum -a 1 "$TARBALL" | cut -d' ' -f1)
           for attempt in 1 2 3 4 5 6; do
-            served=$(npm view "spec.jev@$VERSION" dist.shasum 2>/dev/null)
+            # A new package can take a moment to appear in the registry; npm view exits 1 until it does.
+            served=$(npm view "spec.jev@$VERSION" dist.shasum 2>/dev/null || true)
             [ -n "$served" ] && break
             sleep 10
           done
