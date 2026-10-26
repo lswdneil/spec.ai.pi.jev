@@ -417,7 +417,10 @@ export function wantsLaya({ env, agentDir, platform, readFile }) {
 	return text.includes('"laya');
 }
 
-/** The Core ML sidecar exists for macOS only. Anything else needs a server of its own behind SPECJEV_LOCAL_JUDGE_URL. */
+/**
+ * The command line's Core ML sidecar exists for macOS only. The desktop app runs the same model with ONNX on
+ * Windows and Linux; anything else that wants to be its own judge needs a server behind SPECJEV_LOCAL_JUDGE_URL.
+ */
 export function localJudgeSupport({ platform, env, wsl = false }) {
 	if (platform === "darwin") return { runs: true };
 	const url = muEnv("LOCAL_JUDGE_URL", env);
@@ -426,9 +429,10 @@ export function localJudgeSupport({ platform, env, wsl = false }) {
 		runs: false,
 		url,
 		message: [
-			`The local judge (Laya) is a Core ML sidecar that runs only on macOS on Apple silicon, not on ${where}.`,
+			`The command line's local judge (Laya) is a Core ML sidecar that runs only on macOS on Apple silicon, not on ${where}.`,
+			"The desktop app runs the same model with ONNX on Windows and Linux: install it from the app's settings.",
 			"spec.jev works without it: Jev answers by default (free on OpenCode Zen, or with your own key: spec.jev setup), or set an LLM judge in spec.jev.json.",
-			"A local judge for the desktop app is in progress. Without a judge, decision points use their fallbacks.",
+			"Without a running judge, decision points use their fallbacks.",
 			"To use a server that implements the same API (GET /health, POST /evaluate), set:",
 			"  SPECJEV_LOCAL_JUDGE_URL=http://host:port",
 		].join("\n"),
@@ -550,7 +554,7 @@ export function planLaunch({
 		if (support.runs) startJudge = true;
 		else if (!support.url) {
 			notes.push(
-				`spec.jev: the configuration asks for the local judge (Laya), which runs on macOS only; on ${platformName({ platform, wsl })} its decision points use the next judge or their fallbacks (spec.jev judge status)`,
+				`spec.jev: the configuration asks for the local judge (Laya). The command line starts its Core ML sidecar on macOS only; on ${platformName({ platform, wsl })} the desktop app runs the ONNX model, and without a running judge decision points use the next judge or their fallbacks (spec.jev judge status)`,
 			);
 		}
 	}
@@ -582,6 +586,11 @@ export function planHost({ platform, env, argv, root, home, fs, wsl = false, str
 	const path = pathFor(platform);
 	const launch = planLaunch({ platform, env, argv, root, home, execPath: "", fs, wsl, stripsTypes });
 	if (launch.error !== undefined) return { error: launch.error };
+	// The desktop app starts the ONNX judge itself on Windows and Linux; the command line's Core ML note would
+	// contradict what the app has already done.
+	const desktopNotes = launch.notes.filter(
+		(note) => !note.startsWith("spec.jev: the configuration asks for the local judge"),
+	);
 	const common = {
 		env: launch.env,
 		layout: launch.layout,
@@ -589,7 +598,7 @@ export function planHost({ platform, env, argv, root, home, fs, wsl = false, str
 		appDir: launch.appDir,
 		agentDir: launch.agentDir,
 		startJudge: launch.startJudge,
-		notes: launch.notes,
+		notes: desktopNotes,
 	};
 	if (launch.layout === "package") {
 		return {

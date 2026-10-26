@@ -98,7 +98,7 @@ sidecar 是 Core ML，只能在 Apple Silicon 的 macOS 上跑。非 macOS 上�
 | `compaction.ts`、`swarm.ts` 的 `mode: 0o600` | 靠权限位保护临时文件 | **无害，保持**：Windows 忽略权限位，但 `%TEMP%` 本来就在用户配置目录下，按用户隔离 |
 | `guard.ts`、`constraints.ts`、`completion.ts`、`compaction/prune.ts`、`swarm/state.ts` | 只认 `bash` 工具；`guard.ts` 的危险命令规则全是 POSIX 写法（`rm -rf`、`sudo`、`curl … \| sh`） | **未解决**：Windows 上 pi 还有 `powershell` 工具，这五处都看不到它的命令，危险命令复核（B3）对 `Remove-Item -Recurse -Force`、`rd /s /q`、`iex (iwr …)` 无效。涉及判断点措辞，应单独做一包 |
 | `kyrn/bin/kyrn`、`kyrn-dev` | bash 转发器 | **未解决（有意）**：Windows 上入口是 `mu.cmd`。桌面端适配器现在调用 `kyrn/bin/kyrn`，它的 Windows 版应直接 `spawn(node, [mu.mjs, …])`（不要经 `.cmd`），并且用 `taskkill /T` 或关闭 stdin 来结束会话：Windows 上杀掉启动器不会带走 pi。属于桌面端的包 |
-| `kyrn/bin/kyrn-judge-local`、`kyrn/local-judge/server.py` | bash、`curl`、`nohup`、`kill -0`、Core ML | **未解决（有意）**：运行时本身只有 macOS 版。路线图第 4 节第 4 条（ONNX / CPU 运行时）另做 |
+| `kyrn/bin/kyrn-judge-local`、`kyrn/local-judge/server.py` | bash、`curl`、`nohup`、`kill -0`、Core ML | **桌面端已换 ONNX**：Windows / Linux（x64、arm64）由桌面端下载、校验并以 `onnxruntime-node`（CPU）启动 Laya；命令行入口仍只有 macOS 的 Core ML sidecar，非 macOS 可用 `SPECJEV_LOCAL_JUDGE_URL` 接自建服务。桌面端真机会话与停服回退见 `docs/judges.md` |
 | 桌面仓库的 `scripts/kyrn/*` | bash | **未解决**：不在本仓库 |
 
 ## 7. 验证

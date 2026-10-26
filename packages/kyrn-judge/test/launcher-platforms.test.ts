@@ -856,8 +856,19 @@ describe("the local judge away from macOS", () => {
 
 		const linux = launch({ fs: disk(files) });
 		expect(linux.startJudge).toBe(false);
-		expect(linux.notes[0]).toMatch(/local judge \(Laya\), which runs on macOS only; on Linux/);
+		expect(linux.notes[0]).toMatch(/local judge \(Laya\).*Core ML sidecar on macOS only.*on Linux/);
 		expect(launch({ wsl: true, fs: disk(files) }).notes[0]).toContain("on WSL");
+
+		// The desktop app starts its ONNX judge itself, so its host plan does not carry the command line's warning.
+		const host = planHost({
+			platform: "linux",
+			env: {},
+			argv: [],
+			root: POSIX_ROOT,
+			home: "/home/bai",
+			fs: disk(files),
+		});
+		expect(host.notes).toEqual([]);
 
 		// A server of one's own is the way out, and then there is nothing to say.
 		expect(launch({ env: { SPECJEV_LOCAL_JUDGE_URL: "http://10.0.0.5:47823" }, fs: disk(files) })).toMatchObject({
