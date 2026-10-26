@@ -22,8 +22,8 @@ const UV_URL = 'https://docs.astral.sh/uv/getting-started/installation/';
  * the save bar: it is a program, not a setting.
  *
  * On an Apple Silicon Mac (coreml) one click installs it after the person agrees to the download. Elsewhere (onnx) the
- * app never downloads the model: it links to Hugging Face, shows the folder the files go in, and checks and starts
- * them once they are there.
+ * app can download and verify the pinned model files too; the Hugging Face page and `hf` command remain for anyone who
+ * prefers to fetch them by hand.
  *
  * `guide`: in the first-run guide, which sets Laya up; stopping it is for the settings.
  */

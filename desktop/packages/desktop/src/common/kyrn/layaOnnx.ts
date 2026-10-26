@@ -53,8 +53,9 @@ export const LAYA_ONNX_DOWNLOAD_MB = Math.round(LAYA_ONNX_FILES.reduce((sum, fil
 export const LAYA_ONNX_PAGE = `https://huggingface.co/${LAYA_ONNX_REPO}/tree/${LAYA_ONNX_REVISION}`;
 
 /** A direct link to one file at the pinned revision: the browser downloads it. */
-export function layaOnnxFileUrl(name: string): string {
-  return `https://huggingface.co/${LAYA_ONNX_REPO}/resolve/${LAYA_ONNX_REVISION}/${name}?download=true`;
+export function layaOnnxFileUrl(name: string, endpoint = 'https://huggingface.co'): string {
+  const base = endpoint.replace(/\/+$/, '');
+  return `${base}/${LAYA_ONNX_REPO}/resolve/${LAYA_ONNX_REVISION}/${name}?download=true`;
 }
 
 /** The one command that fetches everything into the model folder, for a person who has the `hf` CLI. */

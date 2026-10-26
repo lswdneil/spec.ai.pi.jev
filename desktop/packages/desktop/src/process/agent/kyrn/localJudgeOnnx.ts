@@ -91,6 +91,7 @@ export class OnnxLocalJudge {
   private task?: LocalJudgeTask;
   private next = 0;
   private child?: JudgeChild;
+  private transferEndpoint?: string;
 
   constructor(deps: Pick<OnnxJudgeDeps, 'fork' | 'open'> & Partial<OnnxJudgeDeps>) {
     this.deps = {
@@ -169,6 +170,34 @@ export class OnnxLocalJudge {
     return true;
   }
 
+  /**
+   * The endpoints to try, in order: an explicitly configured one, the one that worked last,
+   * Hugging Face, then the public mirror used where Hugging Face is unreachable. File hashes
+   * still decide whether anything downloaded here is accepted.
+   */
+  private endpoints(): string[] {
+    const configured = this.deps.env.SPECJEV_HF_ENDPOINT?.trim();
+    const candidates = [configured, this.transferEndpoint, 'https://huggingface.co', 'https://hf-mirror.com'];
+    return [...new Set(candidates.filter((value): value is string => Boolean(value)))];
+  }
+
+  private async fetchFile(name: string): Promise<Response> {
+    let lastStatus = '';
+    for (const endpoint of this.endpoints()) {
+      try {
+        const response = await fetch(layaOnnxFileUrl(name, endpoint));
+        if (response.ok && response.body) {
+          this.transferEndpoint = endpoint;
+          return response;
+        }
+        lastStatus = `HTTP ${response.status}`;
+      } catch (error) {
+        lastStatus = error instanceof Error ? error.message : String(error);
+      }
+    }
+    throw new Error(`Could not download ${name}${lastStatus ? ` (${lastStatus})` : ''}`);
+  }
+
   /** Downloads the pinned ONNX files into the model folder, verifies each hash, and ends when the bundle is ready. */
   private async download(task: LocalJudgeTask): Promise<void> {
     try {
@@ -183,11 +212,9 @@ export class OnnxLocalJudge {
         mkdirSync(dirname(target), { recursive: true });
         const part = `${target}.part`;
         this.say(task, `Downloading ${file.name}`);
-        const response = await fetch(layaOnnxFileUrl(file.name));
-        if (!response.ok || !response.body) {
-          throw new Error(`HTTP ${response.status} for ${file.name}`);
-        }
-        const reader = response.body.getReader();
+        const response = await this.fetchFile(file.name);
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error(`Empty response for ${file.name}`);
         const handle = await open(part, 'w');
         const hash = createHash('sha256');
         let received = 0;
