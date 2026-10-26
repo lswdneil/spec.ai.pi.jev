@@ -123,7 +123,8 @@ describe('the conversation E2E profile environment', () => {
     });
     expect(checkout).toMatchObject({
       MU_BACKEND_BIN: '/d/aioncore',
-      KYRN_DESKTOP_ROOT: '/d',    });
+      KYRN_DESKTOP_ROOT: '/d',
+    });
     expect(checkout.PATH).toBe('/n/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin');
   });
 

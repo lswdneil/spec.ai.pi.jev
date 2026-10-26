@@ -69,8 +69,6 @@ vi.mock('@icon-park/react', () => ({
   Search: () => <span aria-hidden='true'>search</span>,
 }));
 
-
-
 describe('GuidModelSelector', () => {
   const thoughtLevelOption = {
     id: 'reasoning_effort',

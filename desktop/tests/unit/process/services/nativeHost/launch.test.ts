@@ -110,7 +110,9 @@ describe('prepareHost', () => {
     const prepareLaunchAsync = vi.fn(
       (input: { err(line: string): void }) =>
         new Promise<void>((resolve) => {
-          input.err('spec.jev: the local judge did not start (spec.jev judge status); decisions fall back to pi’s behaviour');
+          input.err(
+            'spec.jev: the local judge did not start (spec.jev judge status); decisions fall back to pi’s behaviour'
+          );
           finish = resolve;
         })
     );
@@ -147,7 +149,8 @@ describe('prepareHost', () => {
     }));
     await expect(prepareHost(options({ importLauncher }))).rejects.toMatchObject({
       kind: 'plan',
-      message: "spec.jev could not prepare the launch: EACCES: permission denied, mkdir '/home/someone/.spec.jev/agent'",
+      message:
+        "spec.jev could not prepare the launch: EACCES: permission denied, mkdir '/home/someone/.spec.jev/agent'",
     });
   });
 

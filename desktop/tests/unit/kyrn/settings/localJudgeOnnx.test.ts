@@ -120,7 +120,10 @@ describe('the ONNX local judge as the app manages it', () => {
       check: async () => EMPTY,
       env: { MU_LOCAL_JUDGE_ONNX_DIR: folder },
     });
-    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 500, body: null })));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: false, status: 500, body: null }))
+    );
     try {
       await local.run('download');
       await settle();

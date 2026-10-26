@@ -99,12 +99,7 @@ vi.mock('@/common', () => ({
   },
 }));
 
-const renderWithProviders = (ui: React.ReactElement) =>
-  render(
-    <MemoryRouter>
-      {ui}
-    </MemoryRouter>
-  );
+const renderWithProviders = (ui: React.ReactElement) => render(<MemoryRouter>{ui}</MemoryRouter>);
 
 const createEditor = (overrides: Partial<AssistantEditorViewModel> = {}): AssistantEditorViewModel => {
   const base: AssistantEditorViewModel = {
@@ -322,9 +317,7 @@ describe('AssistantEditorSections', () => {
     mockLanguage = 'zh-CN';
     rerender(
       <MemoryRouter>
-
-          <AssistantEditorSections editor={editor} activeAssistant={null} />
-
+        <AssistantEditorSections editor={editor} activeAssistant={null} />
       </MemoryRouter>
     );
 
@@ -407,9 +400,7 @@ describe('AssistantEditorSections', () => {
 
     rerender(
       <MemoryRouter>
-
-          <AssistantEditorSections editor={editor} activeAssistant={null} />
-
+        <AssistantEditorSections editor={editor} activeAssistant={null} />
       </MemoryRouter>
     );
 

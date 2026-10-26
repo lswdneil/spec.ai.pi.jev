@@ -235,7 +235,8 @@ describe('restoring an uninstalled launcher', () => {
         return file !== existing;
       },
     });
-    for (const file of [INSTALLED, SHORT, 'c:/old/RESOURCES/spec.jev/ACP.CMD']) expect(own.canRestore?.(file)).toBe(true);
+    for (const file of [INSTALLED, SHORT, 'c:/old/RESOURCES/spec.jev/ACP.CMD'])
+      expect(own.canRestore?.(file)).toBe(true);
     expect(own.canRestore?.(existing)).toBe(false);
     const before = checked.length;
     for (const file of [

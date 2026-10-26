@@ -14,20 +14,18 @@ describe('EmojiPicker', () => {
     const onChange = vi.fn();
 
     render(
-
-        <EmojiPicker
-          builtinAvatars={[
-            {
-              id: 'dashboard-creator',
-              label: 'Dashboard Creator',
-              src: '/api/assistants/dashboard-creator/avatar',
-            },
-          ]}
-          onChange={onChange}
-        >
-          <button type='button'>Open picker</button>
-        </EmojiPicker>
-
+      <EmojiPicker
+        builtinAvatars={[
+          {
+            id: 'dashboard-creator',
+            label: 'Dashboard Creator',
+            src: '/api/assistants/dashboard-creator/avatar',
+          },
+        ]}
+        onChange={onChange}
+      >
+        <button type='button'>Open picker</button>
+      </EmojiPicker>
     );
 
     fireEvent.click(screen.getByText('Open picker'));
@@ -45,11 +43,9 @@ describe('EmojiPicker', () => {
 
   it('names the emoji categories through translation keys', () => {
     render(
-
-        <EmojiPicker>
-          <button type='button'>Open picker</button>
-        </EmojiPicker>
-
+      <EmojiPicker>
+        <button type='button'>Open picker</button>
+      </EmojiPicker>
     );
 
     fireEvent.click(screen.getByText('Open picker'));

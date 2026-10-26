@@ -236,7 +236,10 @@ describe('the free Jev', () => {
     expect(screen.getByTestId('mu-notice')).toHaveAttribute('data-code', 'free_jev');
     free.unmount();
     const stopped = (code?: string) =>
-      notice({ title: 'spec.jev: it stopped', raw_input: { notice: 'free_jev_unavailable', ...(code ? { code } : {}) } });
+      notice({
+        title: 'spec.jev: it stopped',
+        raw_input: { notice: 'free_jev_unavailable', ...(code ? { code } : {}) },
+      });
     expect(muNotice(stopped('gone'))).toEqual({
       code: 'free_jev_unavailable',
       title: 'spec.jev: it stopped',
@@ -270,7 +273,10 @@ describe('a stopped reply, and what spec.jev notified', () => {
     expect(muNotice(notice({ title: 'x', raw_input: { level: 'debug' } }))).toEqual({ title: 'x' });
     showNotice(
       'en',
-      notice({ title: 'spec.jev could not save a checkpoint.\nIt goes on without one.', raw_input: { level: 'warning' } })
+      notice({
+        title: 'spec.jev could not save a checkpoint.\nIt goes on without one.',
+        raw_input: { level: 'warning' },
+      })
     );
     const line = screen.getByTestId('mu-notice');
     expect(line).toHaveAttribute('data-level', 'warning');

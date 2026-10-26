@@ -46,7 +46,10 @@ describe('where the lessons are', () => {
   it('is the agent directory’s mu/lessons.jsonl, unless mu.json names a file by its full path', () => {
     const agentDir = temp();
     expect(lessonsPath(agentDir)).toBe(join(agentDir, 'mu', 'lessons.jsonl'));
-    writeFileSync(join(agentDir, 'spec.jev.json'), JSON.stringify({ features: { memory: { path: '/data/lessons.jsonl' } } }));
+    writeFileSync(
+      join(agentDir, 'spec.jev.json'),
+      JSON.stringify({ features: { memory: { path: '/data/lessons.jsonl' } } })
+    );
     expect(lessonsPath(agentDir)).toBe('/data/lessons.jsonl');
     // A relative path is each session's own folder: no one file to show.
     writeFileSync(join(agentDir, 'spec.jev.json'), JSON.stringify({ features: { memory: { path: 'lessons.jsonl' } } }));

@@ -244,7 +244,10 @@ test('the test stayed in its profile, and left nothing running', async () => {
 
   const { project, home, agentDir } = paths();
   const slug = `--${project.replace(/^[/\\]/, '').replace(/[/\\:]/g, '-')}--`;
-  expect(existsSync(join(agentDir, 'sessions', slug)), "spec.jev kept the conversation's session in SPECJEV_AGENT_DIR").toBe(true);
+  expect(
+    existsSync(join(agentDir, 'sessions', slug)),
+    "spec.jev kept the conversation's session in SPECJEV_AGENT_DIR"
+  ).toBe(true);
   expect(existsSync(join(home, '.spec.jev', 'agent')), 'nothing in the profile home ~/.spec.jev/agent').toBe(false);
   const realMu = join(homedir(), '.spec.jev');
   expect(existsSync(join(realMu, 'agent', 'sessions', slug)), "nothing in the person's ~/.spec.jev/agent").toBe(false);

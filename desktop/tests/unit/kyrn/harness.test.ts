@@ -137,7 +137,11 @@ describe('where the desktop finds the spec.jev harness', () => {
     const roaming = machine('win32', [`${pkg}\\kyrn\\bin\\mu.mjs`, `${pkg}\\dist\\bundle\\cli.js`], {
       env: { APPDATA: appData },
     });
-    expect(findHarness('C:\\Program Files\\spec.jev', roaming)).toEqual({ root: pkg, layout: 'package', source: 'global' });
+    expect(findHarness('C:\\Program Files\\spec.jev', roaming)).toEqual({
+      root: pkg,
+      layout: 'package',
+      source: 'global',
+    });
     expect(findHarness('C:\\Program Files\\spec.jev', machine('win32', []))).toBeUndefined();
   });
 

@@ -8,7 +8,7 @@ const read = (path: string) => readFileSync(join(renderer, path), 'utf8');
 
 describe('settings frame and sidebar scroll', () => {
   it('paints every settings page on the page background and keeps Appearance in the shared frame', () => {
-    expect(read('pages/settings/components/SettingsPageWrapper.tsx')).toContain("bg-sv-bg");
+    expect(read('pages/settings/components/SettingsPageWrapper.tsx')).toContain('bg-sv-bg');
     const appearance = read('pages/settings/AppearanceSettings/AppearanceV2.tsx');
     expect(appearance).toContain('<SettingsPage');
     expect(appearance).not.toContain('max-w-[820px]');
@@ -22,7 +22,9 @@ describe('settings frame and sidebar scroll', () => {
   it('uses the same UI typeface for settings group headers and page rows', () => {
     const dense = read('styles/specjev/dense.css');
     for (const selector of ['.settings-sider__group-header', '.settings-sider__item-label']) {
-      const block = dense.match(new RegExp(`html\\[data-sv-ui="dense"\\] ${selector.replaceAll('.', '\\.')}\\s*\\{[^}]*\\}`));
+      const block = dense.match(
+        new RegExp(`html\\[data-sv-ui="dense"\\] ${selector.replaceAll('.', '\\.')}\\s*\\{[^}]*\\}`)
+      );
       expect(block?.[0]).toContain('font-family: var(--sv-font-ui)');
     }
   });

@@ -22,10 +22,9 @@ test('starts the WebUI on launch when the persisted switch is on', async () => {
   const userData = mkdtempSync(join(tmpdir(), 'sv-webui-autostart-'));
   const configDir = join(userData, 'config');
   mkdirSync(configDir, { recursive: true });
-  const encoded = Buffer.from(
-    encodeURIComponent(JSON.stringify({ 'system.webuiEnabled': true })),
-    'utf8'
-  ).toString('base64');
+  const encoded = Buffer.from(encodeURIComponent(JSON.stringify({ 'system.webuiEnabled': true })), 'utf8').toString(
+    'base64'
+  );
   writeFileSync(join(configDir, 'aionui-config.txt'), encoded, 'utf8');
 
   const app = await electron.launch({

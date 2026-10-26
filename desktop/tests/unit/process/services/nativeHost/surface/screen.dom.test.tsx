@@ -479,7 +479,10 @@ describe('the sidebar’s native group', () => {
   it('says why a conversation could not be made', async () => {
     const host = createFakeHost();
     host.pick('/work/app');
-    sider({ ...host.client, create: async () => ({ ok: false, kind: 'no-harness', message: 'no spec.jev at /opt/mu' }) });
+    sider({
+      ...host.client,
+      create: async () => ({ ok: false, kind: 'no-harness', message: 'no spec.jev at /opt/mu' }),
+    });
     await waitFor(() => expect(screen.getByTestId('native-sidebar-empty')).toHaveTextContent('No conversations yet'));
     await openNew();
     await act(async () => {

@@ -3,10 +3,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-const renderer = join(
-  fileURLToPath(new URL('../../../', import.meta.url)),
-  'packages/desktop/src/renderer/ui'
-);
+const renderer = join(fileURLToPath(new URL('../../../', import.meta.url)), 'packages/desktop/src/renderer/ui');
 const read = (name: string) => readFileSync(join(renderer, name), 'utf8');
 
 /**

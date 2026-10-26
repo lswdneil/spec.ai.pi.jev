@@ -12,7 +12,7 @@ const dense = read('styles/specjev/dense.css');
 
 describe('sidebar and composer typography', () => {
   it('uses the 13px body size for primary sidebar rows', () => {
-    expect(sider).toContain("text-[13px] transition-colors");
+    expect(sider).toContain('text-[13px] transition-colors');
     expect(sider).toContain("className='text-[13px]'");
     expect(sider).not.toContain('text-[11.5px]');
     expect(dense).toMatch(
@@ -21,9 +21,7 @@ describe('sidebar and composer typography', () => {
   });
 
   it('matches the empty state with a 12px UI-typeface section header', () => {
-    const block = dense.match(
-      /html\[data-sv-ui="dense"\] \.layout-sider \.sider-section-title\s*\{[^}]*\}/
-    )?.[0];
+    const block = dense.match(/html\[data-sv-ui="dense"\] \.layout-sider \.sider-section-title\s*\{[^}]*\}/)?.[0];
     expect(block).toContain('font-family: var(--sv-font-ui)');
     expect(block).toContain('font-size: 12px');
   });

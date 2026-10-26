@@ -5,7 +5,10 @@ import { describe, expect, it } from 'vitest';
 
 /** The guide's type and stacking are part of the contract: one UI family, full-width copy, popovers above it. */
 const css = readFileSync(
-  join(fileURLToPath(new URL('../../../', import.meta.url)), 'packages/desktop/src/renderer/pages/welcome/Welcome.module.css'),
+  join(
+    fileURLToPath(new URL('../../../', import.meta.url)),
+    'packages/desktop/src/renderer/pages/welcome/Welcome.module.css'
+  ),
   'utf8'
 );
 

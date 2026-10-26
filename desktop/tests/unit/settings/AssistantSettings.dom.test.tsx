@@ -144,11 +144,9 @@ describe('AssistantSettings', () => {
 
   it('keeps the editor visible when an existing assistant session is open and activeAssistant is temporarily null', () => {
     render(
-
-        <MemoryRouter>
-          <AssistantSettings />
-        </MemoryRouter>
-
+      <MemoryRouter>
+        <AssistantSettings />
+      </MemoryRouter>
     );
 
     expect(screen.getByTestId('assistant-editor-page')).toBeInTheDocument();
@@ -190,18 +188,16 @@ describe('AssistantSettings', () => {
     ] as AssistantListItem[];
 
     render(
-
-        <EnabledAssistantsList
-          assistants={assistants}
-          assistantOrder={['official', 'custom', 'cli']}
-          localeKey='en-US'
-          searchActive={false}
-          onOpenDetail={vi.fn()}
-          onToggleEnabled={vi.fn()}
-          onReorder={vi.fn()}
-          onStartChat={vi.fn()}
-        />
-
+      <EnabledAssistantsList
+        assistants={assistants}
+        assistantOrder={['official', 'custom', 'cli']}
+        localeKey='en-US'
+        searchActive={false}
+        onOpenDetail={vi.fn()}
+        onToggleEnabled={vi.fn()}
+        onReorder={vi.fn()}
+        onStartChat={vi.fn()}
+      />
     );
 
     const rows = screen.getAllByTestId(/^enabled-assistant-row-/);
@@ -232,16 +228,14 @@ describe('AssistantSettings', () => {
       { id: 'coder', name: 'Coder', sort_order: 2, source: 'builtin', enabled: false },
     ] as AssistantListItem[];
     render(
-
-        <OfficialAssistantsGrid
-          assistants={assistants}
-          localeKey='en-US'
-          onOpenSettings={vi.fn()}
-          onDuplicate={vi.fn()}
-          onToggleEnabled={vi.fn()}
-          onStartChat={vi.fn()}
-        />
-
+      <OfficialAssistantsGrid
+        assistants={assistants}
+        localeKey='en-US'
+        onOpenSettings={vi.fn()}
+        onDuplicate={vi.fn()}
+        onToggleEnabled={vi.fn()}
+        onStartChat={vi.fn()}
+      />
     );
     expect(screen.getByRole('switch', { name: 'Writer (en)' })).toBe(screen.getByTestId('switch-enabled-writer'));
     expect(screen.getByRole('switch', { name: 'Coder' })).toBe(screen.getByTestId('switch-enabled-coder'));
@@ -254,18 +248,16 @@ describe('AssistantSettings', () => {
     ] as AssistantListItem[];
 
     render(
-
-        <EnabledAssistantsList
-          assistants={assistants}
-          assistantOrder={[]}
-          localeKey='en-US'
-          searchActive
-          onOpenDetail={vi.fn()}
-          onToggleEnabled={vi.fn()}
-          onReorder={vi.fn()}
-          onStartChat={vi.fn()}
-        />
-
+      <EnabledAssistantsList
+        assistants={assistants}
+        assistantOrder={[]}
+        localeKey='en-US'
+        searchActive
+        onOpenDetail={vi.fn()}
+        onToggleEnabled={vi.fn()}
+        onReorder={vi.fn()}
+        onStartChat={vi.fn()}
+      />
     );
 
     expect(screen.getByTestId('enabled-reorder-search-hint')).toHaveTextContent('Clear search to reorder.');
@@ -279,18 +271,16 @@ describe('AssistantSettings', () => {
     ] as AssistantListItem[];
 
     render(
-
-        <EnabledAssistantsList
-          assistants={assistants}
-          assistantOrder={[]}
-          localeKey='en-US'
-          searchActive={false}
-          onOpenDetail={vi.fn()}
-          onToggleEnabled={vi.fn()}
-          onReorder={vi.fn()}
-          onStartChat={vi.fn()}
-        />
-
+      <EnabledAssistantsList
+        assistants={assistants}
+        assistantOrder={[]}
+        localeKey='en-US'
+        searchActive={false}
+        onOpenDetail={vi.fn()}
+        onToggleEnabled={vi.fn()}
+        onReorder={vi.fn()}
+        onStartChat={vi.fn()}
+      />
     );
 
     const row = screen.getByTestId('enabled-assistant-row-mu');
@@ -316,18 +306,16 @@ describe('AssistantSettings', () => {
     ] as AssistantListItem[];
 
     render(
-
-        <EnabledAssistantsList
-          assistants={assistants}
-          assistantOrder={[]}
-          localeKey='en-US'
-          searchActive={false}
-          onOpenDetail={onOpenDetail}
-          onToggleEnabled={vi.fn()}
-          onReorder={vi.fn()}
-          onStartChat={onStartChat}
-        />
-
+      <EnabledAssistantsList
+        assistants={assistants}
+        assistantOrder={[]}
+        localeKey='en-US'
+        searchActive={false}
+        onOpenDetail={onOpenDetail}
+        onToggleEnabled={vi.fn()}
+        onReorder={vi.fn()}
+        onStartChat={onStartChat}
+      />
     );
 
     const chatButton = screen.getByTestId('btn-chat-cli');
@@ -358,18 +346,16 @@ describe('AssistantSettings', () => {
     ] as AssistantListItem[];
 
     render(
-
-        <EnabledAssistantsList
-          assistants={assistants}
-          assistantOrder={[]}
-          localeKey='en-US'
-          searchActive={false}
-          onOpenDetail={vi.fn()}
-          onToggleEnabled={vi.fn()}
-          onReorder={vi.fn()}
-          onStartChat={vi.fn()}
-        />
-
+      <EnabledAssistantsList
+        assistants={assistants}
+        assistantOrder={[]}
+        localeKey='en-US'
+        searchActive={false}
+        onOpenDetail={vi.fn()}
+        onToggleEnabled={vi.fn()}
+        onReorder={vi.fn()}
+        onStartChat={vi.fn()}
+      />
     );
 
     // Wait for ThemedLogo detection to settle

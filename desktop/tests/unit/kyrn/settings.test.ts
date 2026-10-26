@@ -704,7 +704,9 @@ describe('mu-only backend catalog', () => {
       expect(calls).toHaveLength(1);
     });
     it('checks the registration again while it still holds the long path', async () => {
-      const { calls, request } = backend([{ id: 'k', name: 'spec.jev', command: long, enabled: true, yolo_id: 'full' }]);
+      const { calls, request } = backend([
+        { id: 'k', name: 'spec.jev', command: long, enabled: true, yolo_id: 'full' },
+      ]);
       await recheckKyrn(request, await installed());
       expect(calls.map((call) => call.path)).toEqual(['/api/agents/management', '/api/agents/k/health-check']);
     });

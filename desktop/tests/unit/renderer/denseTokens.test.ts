@@ -4,10 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
-const rendererTokens = readFileSync(
-  join(root, 'packages/desktop/src/renderer/styles/specjev/tokens.css'),
-  'utf8'
-);
+const rendererTokens = readFileSync(join(root, 'packages/desktop/src/renderer/styles/specjev/tokens.css'), 'utf8');
 const designTokens = JSON.parse(readFileSync(join(root, '../design/tokens.json'), 'utf8')) as {
   typography: { sizes: Record<string, string> };
   radius: Record<string, string>;

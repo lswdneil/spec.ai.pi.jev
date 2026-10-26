@@ -81,9 +81,18 @@ const offer = (version: string, files = process.platform === 'darwin' ? macFiles
   versionInfo: { version },
 });
 
-const release = (version: string, installer: string | null = `spec.jev-${version}-mac-arm64.dmg`): UpdateReleaseInfo => {
+const release = (
+  version: string,
+  installer: string | null = `spec.jev-${version}-mac-arm64.dmg`
+): UpdateReleaseInfo => {
   const assets = installer
-    ? [{ name: installer, url: `https://github.com/lswdneil/spec.ai.pi.jev/releases/download/v${version}/${installer}`, size: 1 }]
+    ? [
+        {
+          name: installer,
+          url: `https://github.com/lswdneil/spec.ai.pi.jev/releases/download/v${version}/${installer}`,
+          size: 1,
+        },
+      ]
     : [];
   return {
     tagName: `v${version}`,

@@ -44,9 +44,12 @@ describe('sessionFolders', () => {
       sessionsDir: join(resolve('/a'), 'sessions'),
     });
     expect(
-      sessionFolders({ env: { SPECJEV_AGENT_DIR: '/k', SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings }).agentDir
+      sessionFolders({ env: { SPECJEV_AGENT_DIR: '/k', SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings })
+        .agentDir
     ).toBe(resolve('/k'));
-    expect(sessionFolders({ env: { SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings }).agentDir).toBe(resolve('/b'));
+    expect(sessionFolders({ env: { SPECJEV_CODING_AGENT_DIR: '/b' }, home, readFile: noSettings }).agentDir).toBe(
+      resolve('/b')
+    );
   });
 
   it('adds the session folder the configuration names: the environment first, then the settings', () => {
@@ -56,7 +59,8 @@ describe('sessionFolders', () => {
     writeFileSync(join(agentDir, 'settings.json'), JSON.stringify({ sessionDir: '~/all-sessions' }));
     expect(sessionFolders({ env: { SPECJEV_AGENT_DIR: agentDir }, home }).customDir).toBe(join(home, 'all-sessions'));
     expect(
-      sessionFolders({ env: { SPECJEV_AGENT_DIR: agentDir, SPECJEV_CODING_AGENT_SESSION_DIR: '/elsewhere' }, home }).customDir
+      sessionFolders({ env: { SPECJEV_AGENT_DIR: agentDir, SPECJEV_CODING_AGENT_SESSION_DIR: '/elsewhere' }, home })
+        .customDir
     ).toBe(resolve('/elsewhere'));
     writeFileSync(join(agentDir, 'settings.json'), '{ not json');
     expect(sessionFolders({ env: { SPECJEV_AGENT_DIR: agentDir }, home }).customDir).toBeUndefined();

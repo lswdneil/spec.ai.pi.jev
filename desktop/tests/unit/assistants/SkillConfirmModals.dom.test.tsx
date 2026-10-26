@@ -65,11 +65,7 @@ describe('SkillConfirmModals', () => {
   it('names the skill in each question', () => {
     const { rerender } = renderWithProviders(<SkillConfirmModals {...defaultProps} deletePendingSkillName='skill-x' />);
     expect(screen.getByText('settings.deletePendingSkillConfirm [skill-x]')).toBeInTheDocument();
-    rerender(
-
-        <SkillConfirmModals {...defaultProps} deleteCustomSkillName='custom-skill' />
-
-    );
+    rerender(<SkillConfirmModals {...defaultProps} deleteCustomSkillName='custom-skill' />);
     expect(screen.getByText('settings.removeCustomSkillConfirm [custom-skill]')).toBeInTheDocument();
   });
 

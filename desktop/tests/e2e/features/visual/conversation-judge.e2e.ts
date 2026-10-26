@@ -74,10 +74,7 @@ test.describe('Conversation and judge visuals', () => {
     if (!assistantId) return;
 
     const conversationId = await createConversation(page, assistantId);
-    await page.evaluate(
-      ({ id, key }) => sessionStorage.setItem(key, id),
-      { id: conversationId, key: STREAM_KEY }
-    );
+    await page.evaluate(({ id, key }) => sessionStorage.setItem(key, id), { id: conversationId, key: STREAM_KEY });
 
     const base = page.url().split('#')[0];
     await page.goto(`${base}#/conversation/${conversationId}`);
@@ -114,7 +111,12 @@ test.describe('Conversation and judge visuals', () => {
     await expect(page.getByText('bash').first()).toBeVisible({ timeout: 15_000 });
     await capture(page, testInfo.outputPath('conversation-tool-cards-dark.png'));
 
-    if (!(await page.getByTestId('work-panel').isVisible().catch(() => false))) {
+    if (
+      !(await page
+        .getByTestId('work-panel')
+        .isVisible()
+        .catch(() => false))
+    ) {
       await page.evaluate(() => window.dispatchEvent(new CustomEvent('mu-workspace-toggle')));
     }
     await expect(page.getByTestId('work-panel')).toBeVisible({ timeout: 15_000 });
@@ -123,14 +125,11 @@ test.describe('Conversation and judge visuals', () => {
 
     const contextToggle = page.getByTestId('judge-context-toggle');
     await contextToggle.focus();
-    expect(
-      await page.evaluate(() => document.activeElement?.getAttribute('data-testid'))
-    ).toBe('judge-context-toggle');
+    expect(await page.evaluate(() => document.activeElement?.getAttribute('data-testid'))).toBe('judge-context-toggle');
     await capture(page, testInfo.outputPath('judge-focus-dark.png'));
 
     await contextToggle.click();
     await expect(contextToggle).toHaveAttribute('aria-expanded', 'true');
     await capture(page, testInfo.outputPath('judge-context-dark.png'));
-
   });
 });

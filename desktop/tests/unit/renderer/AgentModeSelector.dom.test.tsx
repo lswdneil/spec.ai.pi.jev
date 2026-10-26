@@ -35,8 +35,6 @@ vi.mock('@icon-park/react', () => ({
   Time: (props: { 'data-testid'?: string }) => <span aria-hidden='true' data-testid={props['data-testid']} />,
 }));
 
-
-
 vi.mock('@/renderer/ui/toast', () => ({
   Message: { success: vi.fn(), error: vi.fn(), info: vi.fn() },
 }));

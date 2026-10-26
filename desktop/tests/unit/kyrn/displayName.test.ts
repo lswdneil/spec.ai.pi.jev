@@ -27,7 +27,9 @@ describe('showAsMu', () => {
 
   it('shows the name as spec.jev in German compound nouns, which join it to the next word with a hyphen', () => {
     expect(showAsMu('Die AionUi-Installation ist unvollständig.')).toBe('Die spec.jev-Installation ist unvollständig.');
-    expect(showAsMu('Liebe AionUi-Nutzerin, lieber AionUi-Nutzer,')).toBe('Liebe spec.jev-Nutzerin, lieber spec.jev-Nutzer,');
+    expect(showAsMu('Liebe AionUi-Nutzerin, lieber AionUi-Nutzer,')).toBe(
+      'Liebe spec.jev-Nutzerin, lieber spec.jev-Nutzer,'
+    );
     expect(showAsMu('die AionUi-Oberfläche')).toBe('die spec.jev-Oberfläche');
     expect(showAsMu('das lokale AionCore-Backend')).toBe('das lokale spec.jev-Backend');
   });

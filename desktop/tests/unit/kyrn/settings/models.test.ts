@@ -520,16 +520,19 @@ describe('the startup model and thinking level in settings.json', () => {
 });
 
 describe('one revision over the three files', () => {
-  it.each(['spec.jev.json', 'settings.json', 'models.json'])('rejects a save after %s changed underneath it', (name) => {
-    using(fixture(handWritten, { defaultModel: 'a' }), (f) => {
-      const old = f.store.read();
-      writeFileSync(join(f.dir, name), name === 'models.json' ? '{"providers":{}}' : '{"tiers":["mock"]}');
-      expect(() => f.store.save({ ...old, mode: 'shadow' })).toThrow('Configuration changed');
-      // The rejected save wrote nothing: no `modes` anywhere.
-      for (const file of ['spec.jev.json', 'settings.json', 'models.json'])
-        if (existsSync(join(f.dir, file))) expect(readFileSync(join(f.dir, file), 'utf8')).not.toContain('modes');
-    });
-  });
+  it.each(['spec.jev.json', 'settings.json', 'models.json'])(
+    'rejects a save after %s changed underneath it',
+    (name) => {
+      using(fixture(handWritten, { defaultModel: 'a' }), (f) => {
+        const old = f.store.read();
+        writeFileSync(join(f.dir, name), name === 'models.json' ? '{"providers":{}}' : '{"tiers":["mock"]}');
+        expect(() => f.store.save({ ...old, mode: 'shadow' })).toThrow('Configuration changed');
+        // The rejected save wrote nothing: no `modes` anywhere.
+        for (const file of ['spec.jev.json', 'settings.json', 'models.json'])
+          if (existsSync(join(f.dir, file))) expect(readFileSync(join(f.dir, file), 'utf8')).not.toContain('modes');
+      });
+    }
+  );
   it('writes only the files a save changes', () => {
     using(fixture(handWritten, { defaultModel: 'a' }), (f) => {
       const before = ['models.json', 'settings.json'].map((name) => readFileSync(join(f.dir, name), 'utf8'));

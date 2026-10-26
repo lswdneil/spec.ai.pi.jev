@@ -72,11 +72,7 @@ describe('AssistantEditorPage', () => {
   });
 
   it('renders a single assistant-editor-page test id', () => {
-    render(
-
-        <AssistantEditorPage editor={createEditor()} activeAssistant={null} onBack={vi.fn()} />
-
-    );
+    render(<AssistantEditorPage editor={createEditor()} activeAssistant={null} onBack={vi.fn()} />);
 
     expect(screen.getAllByTestId('assistant-editor-page')).toHaveLength(1);
     expect(screen.getByTestId('assistant-editor-bar')).toHaveClass('sticky');
@@ -84,11 +80,7 @@ describe('AssistantEditorPage', () => {
   });
 
   it('uses a high-contrast back action in the editor header', () => {
-    render(
-
-        <AssistantEditorPage editor={createEditor()} activeAssistant={null} onBack={vi.fn()} />
-
-    );
+    render(<AssistantEditorPage editor={createEditor()} activeAssistant={null} onBack={vi.fn()} />);
 
     expect(screen.getByTestId('btn-back-assistant-editor').className).toContain('text-t-primary');
   });
@@ -99,28 +91,26 @@ describe('AssistantEditorPage', () => {
     editor.profile.name = '学术论文助手';
 
     render(
-
-        <AssistantEditorPage
-          editor={editor}
-          activeAssistant={{
-            id: 'builtin-1',
-            name: 'Academic Paper',
-            source: 'builtin',
-            enabled: true,
-            sort_order: 1,
-            name_i18n: { 'en-US': 'Academic Paper', 'zh-CN': '学术论文助手' },
-            description_i18n: {},
-            context_i18n: {},
-            prompts_i18n: {},
-            enabled_skills: [],
-            custom_skill_names: [],
-            disabled_builtin_skills: [],
-            preset_agent_type: 'claude',
-            models: [],
-          }}
-          onBack={vi.fn()}
-        />
-
+      <AssistantEditorPage
+        editor={editor}
+        activeAssistant={{
+          id: 'builtin-1',
+          name: 'Academic Paper',
+          source: 'builtin',
+          enabled: true,
+          sort_order: 1,
+          name_i18n: { 'en-US': 'Academic Paper', 'zh-CN': '学术论文助手' },
+          description_i18n: {},
+          context_i18n: {},
+          prompts_i18n: {},
+          enabled_skills: [],
+          custom_skill_names: [],
+          disabled_builtin_skills: [],
+          preset_agent_type: 'claude',
+          models: [],
+        }}
+        onBack={vi.fn()}
+      />
     );
 
     expect(screen.getByText('学术论文助手')).toBeInTheDocument();
@@ -133,28 +123,26 @@ describe('AssistantEditorPage', () => {
     editor.profile.name = 'Droid';
 
     render(
-
-        <AssistantEditorPage
-          editor={editor}
-          activeAssistant={{
-            id: 'bare-1',
-            name: 'Droid',
-            source: 'generated',
-            enabled: true,
-            sort_order: 1,
-            name_i18n: {},
-            description_i18n: {},
-            context_i18n: {},
-            prompts_i18n: {},
-            enabled_skills: [],
-            custom_skill_names: [],
-            disabled_builtin_skills: [],
-            preset_agent_type: 'droid',
-            models: [],
-          }}
-          onBack={vi.fn()}
-        />
-
+      <AssistantEditorPage
+        editor={editor}
+        activeAssistant={{
+          id: 'bare-1',
+          name: 'Droid',
+          source: 'generated',
+          enabled: true,
+          sort_order: 1,
+          name_i18n: {},
+          description_i18n: {},
+          context_i18n: {},
+          prompts_i18n: {},
+          enabled_skills: [],
+          custom_skill_names: [],
+          disabled_builtin_skills: [],
+          preset_agent_type: 'droid',
+          models: [],
+        }}
+        onBack={vi.fn()}
+      />
     );
 
     expect(screen.queryByTestId('btn-delete-assistant')).not.toBeInTheDocument();

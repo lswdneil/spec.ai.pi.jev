@@ -78,7 +78,12 @@ describe('formatCurrency', () => {
 describe('formatDateTime / formatDate / formatTime', () => {
   it('formats a timestamp in the app language', () => {
     const en = formatDateTime(INSTANT, 'en-US', { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' });
-    const zhTW = formatDateTime(INSTANT, 'zh-TW', { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' });
+    const zhTW = formatDateTime(INSTANT, 'zh-TW', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      timeZone: 'UTC',
+    });
     expect(en).toBe('8/17/2025');
     expect(zhTW).toBe('2025/8/17');
   });

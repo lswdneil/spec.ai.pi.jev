@@ -76,7 +76,9 @@ test('error bubble butler chip pre-fills a diagnosis prompt in the home chat', a
     );
 
     // The error bubble surfaces the Butler chip, and no report chip.
-    const butlerChip = page.locator('button:has-text("找管家排查"), button:has-text("Ask spec.jev about this")').first();
+    const butlerChip = page
+      .locator('button:has-text("找管家排查"), button:has-text("Ask spec.jev about this")')
+      .first();
     await expect(butlerChip).toBeVisible({ timeout: 10_000 });
     await expect(page.locator('button:has-text("反馈问题"), button:has-text("Report Issue")')).toHaveCount(0);
 

@@ -41,7 +41,10 @@ describe('downloadInstaller', () => {
     vi.stubGlobal('fetch', fetchMock);
     const onProgress = vi.fn();
 
-    const saved = await downloadInstaller({ name: 'spec.jev-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir, onProgress });
+    const saved = await downloadInstaller(
+      { name: 'spec.jev-0.1.3-linux-amd64.deb', url: ASSET_URL },
+      { dir, onProgress }
+    );
 
     expect(saved).toBe(path.join(dir, 'spec.jev-0.1.3-linux-amd64.deb'));
     expect(readFileSync(saved, 'utf8')).toBe(body);
@@ -89,9 +92,9 @@ describe('downloadInstaller', () => {
       'fetch',
       vi.fn(async () => new Response(broken, { status: 200 }))
     );
-    await expect(downloadInstaller({ name: 'spec.jev-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir })).rejects.toThrow(
-      'socket hang up'
-    );
+    await expect(
+      downloadInstaller({ name: 'spec.jev-0.1.3-linux-amd64.deb', url: ASSET_URL }, { dir })
+    ).rejects.toThrow('socket hang up');
     expect(existsSync(path.join(dir, 'spec.jev-0.1.3-linux-amd64.deb'))).toBe(false);
   });
 

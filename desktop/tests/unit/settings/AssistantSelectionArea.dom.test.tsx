@@ -31,14 +31,12 @@ describe('AssistantSelectionArea', () => {
     const onSelectAssistant = vi.fn();
 
     render(
-
-        <AssistantSelectionArea
-          selectedAssistantId='cowork'
-          assistants={assistants()}
-          localeKey='en-US'
-          onSelectAssistant={onSelectAssistant}
-        />
-
+      <AssistantSelectionArea
+        selectedAssistantId='cowork'
+        assistants={assistants()}
+        localeKey='en-US'
+        onSelectAssistant={onSelectAssistant}
+      />
     );
 
     fireEvent.click(screen.getByTestId('preset-pill-writer'));
@@ -48,14 +46,12 @@ describe('AssistantSelectionArea', () => {
 
   it('renders assistant pills in sort_order order', () => {
     render(
-
-        <AssistantSelectionArea
-          selectedAssistantId='cowork'
-          assistants={assistants()}
-          localeKey='en-US'
-          onSelectAssistant={vi.fn()}
-        />
-
+      <AssistantSelectionArea
+        selectedAssistantId='cowork'
+        assistants={assistants()}
+        localeKey='en-US'
+        onSelectAssistant={vi.fn()}
+      />
     );
 
     const presetPills = screen
@@ -67,41 +63,39 @@ describe('AssistantSelectionArea', () => {
 
   it('prefers localized assistant names for the active locale', () => {
     render(
-
-        <AssistantSelectionArea
-          selectedAssistantId='academic-paper'
-          assistants={[
-            {
-              id: 'academic-paper',
-              source: 'builtin',
-              name: 'Academic Paper',
-              name_i18n: {
-                'zh-CN': '学术论文助手',
-              },
-              description_i18n: {},
-              enabled: true,
-              sort_order: 1,
-              preset_agent_type: 'claude',
-              enabled_skills: [],
-              custom_skill_names: [],
-              disabled_builtin_skills: [],
-              context_i18n: {},
-              prompts: ['English prompt'],
-              prompts_i18n: {
-                'zh-CN': ['中文提示词'],
-              },
-              models: [],
-              agent_status: 'online',
-              team_selectable: true,
-              deletable: false,
+      <AssistantSelectionArea
+        selectedAssistantId='academic-paper'
+        assistants={[
+          {
+            id: 'academic-paper',
+            source: 'builtin',
+            name: 'Academic Paper',
+            name_i18n: {
+              'zh-CN': '学术论文助手',
             },
-            // A second assistant: with one, there is no picker to draw.
-            ...assistants(),
-          ]}
-          localeKey='zh-CN'
-          onSelectAssistant={vi.fn()}
-        />
-
+            description_i18n: {},
+            enabled: true,
+            sort_order: 1,
+            preset_agent_type: 'claude',
+            enabled_skills: [],
+            custom_skill_names: [],
+            disabled_builtin_skills: [],
+            context_i18n: {},
+            prompts: ['English prompt'],
+            prompts_i18n: {
+              'zh-CN': ['中文提示词'],
+            },
+            models: [],
+            agent_status: 'online',
+            team_selectable: true,
+            deletable: false,
+          },
+          // A second assistant: with one, there is no picker to draw.
+          ...assistants(),
+        ]}
+        localeKey='zh-CN'
+        onSelectAssistant={vi.fn()}
+      />
     );
 
     expect(screen.getByText('学术论文助手')).toBeInTheDocument();
@@ -110,14 +104,12 @@ describe('AssistantSelectionArea', () => {
 
   it('draws no picker for a single assistant, which has nothing to pick', () => {
     const { container } = render(
-
-        <AssistantSelectionArea
-          selectedAssistantId='writer'
-          assistants={assistants().filter((assistant) => assistant.id === 'writer')}
-          localeKey='en-US'
-          onSelectAssistant={vi.fn()}
-        />
-
+      <AssistantSelectionArea
+        selectedAssistantId='writer'
+        assistants={assistants().filter((assistant) => assistant.id === 'writer')}
+        localeKey='en-US'
+        onSelectAssistant={vi.fn()}
+      />
     );
 
     expect(screen.queryByTestId('preset-pill-writer')).not.toBeInTheDocument();
@@ -132,14 +124,12 @@ describe('AssistantSelectionArea', () => {
     );
 
     render(
-
-        <AssistantSelectionArea
-          selectedAssistantId={null}
-          assistants={[...fillers, antigravity]}
-          localeKey='en-US'
-          onSelectAssistant={vi.fn()}
-        />
-
+      <AssistantSelectionArea
+        selectedAssistantId={null}
+        assistants={[...fillers, antigravity]}
+        localeKey='en-US'
+        onSelectAssistant={vi.fn()}
+      />
     );
 
     fireEvent.click(screen.getByTestId('assistant-more-btn'));

@@ -89,19 +89,24 @@ describe('the start script inside the distribution', () => {
     });
   }
 
-  it.runIf(posix)('finds spec.jev where nvm installed it, and starts it for RPC with the session when there is one', () => {
-    home = mkdtempSync(join(tmpdir(), 'mu-wsl-'));
-    const bin = join(home, '.nvm', 'versions', 'node', 'v24.16.0', 'bin');
-    mkdirSync(bin, { recursive: true });
-    // A stand-in spec.jev that says how it was called and which node folder leads PATH.
-    writeFileSync(join(bin, 'mu'), '#!/bin/sh\necho "args:$*"\necho "path:${PATH%%:*}"\n');
-    chmodSync(join(bin, 'mu'), 0o755);
-    const withSession = start({ MU_ACP_SESSION: '/mnt/c/Users/me/.spec.jev/acp-sessions/a b.jsonl' });
-    expect(withSession.status).toBe(0);
-    expect(withSession.stdout).toContain('args:--mode rpc --session /mnt/c/Users/me/.spec.jev/acp-sessions/a b.jsonl');
-    expect(withSession.stdout).toContain(`path:${bin}`);
-    expect(start().stdout).toContain('args:--mode rpc\n');
-  });
+  it.runIf(posix)(
+    'finds spec.jev where nvm installed it, and starts it for RPC with the session when there is one',
+    () => {
+      home = mkdtempSync(join(tmpdir(), 'mu-wsl-'));
+      const bin = join(home, '.nvm', 'versions', 'node', 'v24.16.0', 'bin');
+      mkdirSync(bin, { recursive: true });
+      // A stand-in spec.jev that says how it was called and which node folder leads PATH.
+      writeFileSync(join(bin, 'mu'), '#!/bin/sh\necho "args:$*"\necho "path:${PATH%%:*}"\n');
+      chmodSync(join(bin, 'mu'), 0o755);
+      const withSession = start({ MU_ACP_SESSION: '/mnt/c/Users/me/.spec.jev/acp-sessions/a b.jsonl' });
+      expect(withSession.status).toBe(0);
+      expect(withSession.stdout).toContain(
+        'args:--mode rpc --session /mnt/c/Users/me/.spec.jev/acp-sessions/a b.jsonl'
+      );
+      expect(withSession.stdout).toContain(`path:${bin}`);
+      expect(start().stdout).toContain('args:--mode rpc\n');
+    }
+  );
 
   it.runIf(posix)('says what to install when spec.jev is not in the distribution', () => {
     home = mkdtempSync(join(tmpdir(), 'mu-wsl-'));

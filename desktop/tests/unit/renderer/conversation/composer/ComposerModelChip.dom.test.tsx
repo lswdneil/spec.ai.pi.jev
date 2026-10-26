@@ -74,8 +74,6 @@ vi.mock('@icon-park/react', () => ({
 const dataOf = (props: Record<string, unknown>) =>
   Object.fromEntries(Object.entries(props).filter(([name]) => name.startsWith('data-')));
 
-
-
 vi.mock('@/renderer/ui/toast', () => ({ Message: { error: messageErrorMock } }));
 
 const MODELS = [

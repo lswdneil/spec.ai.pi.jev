@@ -64,37 +64,40 @@ createInterface({ input: process.stdin }).on('line', (line) => {
 describe('PiRpc, the adapter’s line to spec.jev', () => {
   // Node cannot close its own input on Windows (libuv keeps descriptors 0 to 2 open): this spec.jev cannot be played there.
   const windows = process.platform === 'win32';
-  it.skipIf(windows)('survives a spec.jev that stopped reading: an answer to it ends nothing but that spec.jev', async () => {
-    const logged: string[] = [];
-    vi.spyOn(process.stderr, 'write').mockImplementation((chunk: string | Uint8Array) => {
-      logged.push(String(chunk));
-      return true;
-    });
-    // Closing its input and lingering is what a crashing spec.jev looks like from here, for a moment.
-    const { port, events } = start(`
+  it.skipIf(windows)(
+    'survives a spec.jev that stopped reading: an answer to it ends nothing but that spec.jev',
+    async () => {
+      const logged: string[] = [];
+      vi.spyOn(process.stderr, 'write').mockImplementation((chunk: string | Uint8Array) => {
+        logged.push(String(chunk));
+        return true;
+      });
+      // Closing its input and lingering is what a crashing spec.jev looks like from here, for a moment.
+      const { port, events } = start(`
 import { closeSync } from 'node:fs';
 closeSync(0);
 process.stdout.write(JSON.stringify({ type: 'ready' }) + '\\n');
 setTimeout(() => {}, 5000);
 `);
-    await vi.waitFor(() => expect(events.some((event) => event.type === 'ready')).toBe(true), { timeout: 5000 });
-    port.respond({ id: 'ui-1', value: '允许这一次' });
-    port.respond({ id: 'ui-2', cancelled: true });
-    await vi.waitFor(() => expect(events.some((event) => event.type === 'kyrn_rpc_closed')).toBe(true), {
-      timeout: 5000,
-    });
-    await expect(port.send({ type: 'get_state' })).rejects.toThrow('spec.jev process is closed');
-    // The closed port takes further answers without a word.
-    expect(() => port.respond({ id: 'ui-3', cancelled: true })).not.toThrow();
-    expect(events.filter((event) => event.type === 'kyrn_rpc_closed')).toHaveLength(1);
-    // A spec.jev that cannot be written to is ended, and the log says so.
-    await vi.waitFor(
-      () => expect(logged.join('')).toContain('[spec.jev] the harness stopped reading its input and was ended'),
-      {
+      await vi.waitFor(() => expect(events.some((event) => event.type === 'ready')).toBe(true), { timeout: 5000 });
+      port.respond({ id: 'ui-1', value: '允许这一次' });
+      port.respond({ id: 'ui-2', cancelled: true });
+      await vi.waitFor(() => expect(events.some((event) => event.type === 'kyrn_rpc_closed')).toBe(true), {
         timeout: 5000,
-      }
-    );
-  });
+      });
+      await expect(port.send({ type: 'get_state' })).rejects.toThrow('spec.jev process is closed');
+      // The closed port takes further answers without a word.
+      expect(() => port.respond({ id: 'ui-3', cancelled: true })).not.toThrow();
+      expect(events.filter((event) => event.type === 'kyrn_rpc_closed')).toHaveLength(1);
+      // A spec.jev that cannot be written to is ended, and the log says so.
+      await vi.waitFor(
+        () => expect(logged.join('')).toContain('[spec.jev] the harness stopped reading its input and was ended'),
+        {
+          timeout: 5000,
+        }
+      );
+    }
+  );
 
   it('fails the requests in flight when spec.jev stops by itself, and logs why with the end of its error output', async () => {
     const logged: string[] = [];

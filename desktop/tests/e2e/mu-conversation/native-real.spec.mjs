@@ -149,7 +149,10 @@ function continuePicks(all) {
     'made by AionCore',
     biggest(usable.filter((one) => one.firstUser.trimStart().startsWith('[Assistant Rules]') && modest(one)))
   );
-  add('made by spec.jev, with tool calls', biggest(usable.filter((one) => !one.imported && one.tools > 0 && modest(one))));
+  add(
+    'made by spec.jev, with tool calls',
+    biggest(usable.filter((one) => !one.imported && one.tools > 0 && modest(one)))
+  );
   add('with images', biggest(usable.filter((one) => one.images > 0 && modest(one))));
   add('the biggest file', biggest(usable));
   return [...chosen.values()];
@@ -180,7 +183,9 @@ test('the sidebar lists every session of the copy', async () => {
   const kinds = ['Codex', 'Claude Code', ''].map(
     (kind) => `${sessions.filter((one) => one.imported === kind).length} ${kind ? `from ${kind}` : 'made here'}`
   );
-  console.log(`[spec.jev e2e] real sessions: ${sessions.length} (${kinds.join(', ')}), ${(bytes / 1_048_576).toFixed(0)} MB`);
+  console.log(
+    `[spec.jev e2e] real sessions: ${sessions.length} (${kinds.join(', ')}), ${(bytes / 1_048_576).toFixed(0)} MB`
+  );
   expect(sessions.length).toBeGreaterThan(0);
   // The ones to continue run in the test's own folder, not in a folder of the person's.
   continuing = continuePicks(sessions);

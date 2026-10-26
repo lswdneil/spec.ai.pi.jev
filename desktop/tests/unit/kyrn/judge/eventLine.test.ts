@@ -693,12 +693,12 @@ describe('Checkpoint lines', () => {
   });
 
   it('keeps spec.jev’s own line for a code without words, or one whose numbers did not come', () => {
-    expect(say(en, 'checkpoint.off', { code: 'melted', params: {}, message: 'spec.jev: checkpoints are off.' })).toEqual([
-      'spec.jev: checkpoints are off.',
-    ]);
-    expect(say(en, 'checkpoint.off', { code: 'too_slow', params: {}, message: 'spec.jev: listing took too long.' })).toEqual([
-      'spec.jev: listing took too long.',
-    ]);
+    expect(
+      say(en, 'checkpoint.off', { code: 'melted', params: {}, message: 'spec.jev: checkpoints are off.' })
+    ).toEqual(['spec.jev: checkpoints are off.']);
+    expect(
+      say(en, 'checkpoint.off', { code: 'too_slow', params: {}, message: 'spec.jev: listing took too long.' })
+    ).toEqual(['spec.jev: listing took too long.']);
   });
 });
 

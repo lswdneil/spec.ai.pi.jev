@@ -158,7 +158,10 @@ export class FakeHost implements ConversationHost {
     this.disposed = true;
     this.setState({
       phase: 'failed',
-      error: new NativeHostError('crashed', 'The spec.jev host stopped by itself (exit code 1)', { code: 1, stderr: 'boom' }),
+      error: new NativeHostError('crashed', 'The spec.jev host stopped by itself (exit code 1)', {
+        code: 1,
+        stderr: 'boom',
+      }),
     });
   }
 

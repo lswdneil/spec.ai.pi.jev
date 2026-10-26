@@ -357,7 +357,10 @@ test('first start: the guide opens, and a custom endpoint added in the settings 
       .toMatchObject({ defaultProvider: PROVIDER_ID, defaultModel: FAKE_MODEL_ID });
   });
 
-  expect(existsSync(join(paths().home, '.spec.jev', 'agent')), 'spec.jev used SPECJEV_AGENT_DIR, not ~/.spec.jev/agent').toBe(false);
+  expect(
+    existsSync(join(paths().home, '.spec.jev', 'agent')),
+    'spec.jev used SPECJEV_AGENT_DIR, not ~/.spec.jev/agent'
+  ).toBe(false);
   expectNoProblems();
 });
 
@@ -594,7 +597,11 @@ test('关于 shows the version, and 检查更新 downloads nothing', async () =>
         const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
         scope.__e2eRequests.push(url);
         if (url.startsWith('https://api.github.com/repos/lswdneil/spec.ai.pi.jev/releases')) {
-          const names = [`spec.jev-${newer}-mac-arm64.dmg`, `spec.jev-${newer}-mac-x64.dmg`, `spec.jev-${newer}-win-x64.exe`];
+          const names = [
+            `spec.jev-${newer}-mac-arm64.dmg`,
+            `spec.jev-${newer}-mac-x64.dmg`,
+            `spec.jev-${newer}-win-x64.exe`,
+          ];
           const release = {
             tag_name: `v${newer}`,
             name: `spec.jev ${newer}`,
@@ -679,16 +686,20 @@ test('the test stayed in its profile, and left nothing running', async () => {
 
   const { project, home, agentDir } = paths();
   const slug = `--${project.replace(/^[/\\]/, '').replace(/[/\\:]/g, '-')}--`;
-  expect(existsSync(join(agentDir, 'sessions', slug)), "spec.jev kept the conversation's session in SPECJEV_AGENT_DIR").toBe(true);
+  expect(
+    existsSync(join(agentDir, 'sessions', slug)),
+    "spec.jev kept the conversation's session in SPECJEV_AGENT_DIR"
+  ).toBe(true);
   expect(existsSync(join(home, '.spec.jev', 'agent')), 'nothing in the profile home ~/.spec.jev/agent').toBe(false);
   const realMu = join(homedir(), '.spec.jev');
   expect(existsSync(join(realMu, 'agent', 'sessions', slug)), "nothing in the person's ~/.spec.jev/agent").toBe(false);
   for (const name of existsSync(join(home, '.spec.jev', 'acp-sessions'))
     ? readdirSync(join(home, '.spec.jev', 'acp-sessions'))
     : []) {
-    expect(existsSync(join(realMu, 'acp-sessions', name)), `nothing in the person's ~/.spec.jev/acp-sessions (${name})`).toBe(
-      false
-    );
+    expect(
+      existsSync(join(realMu, 'acp-sessions', name)),
+      `nothing in the person's ~/.spec.jev/acp-sessions (${name})`
+    ).toBe(false);
   }
   // The person's board settings may change while the test runs (their own spec.jev), but never name the test's project.
   const realBoard = join(realMu, 'agent', 'mu', 'board.json');

@@ -605,7 +605,8 @@ describe('KYRN ACP bridge', () => {
         type: 'extension_ui_request',
         id: 'ui-1',
         method: 'select',
-        title: 'spec.jev wants to run a command\nnpm test\n  -- --watch=false\nJev is not sure this step is what you want.',
+        title:
+          'spec.jev wants to run a command\nnpm test\n  -- --watch=false\nJev is not sure this step is what you want.',
         options: answers,
       });
       await tick();
@@ -824,7 +825,11 @@ describe('KYRN ACP bridge', () => {
       await new Promise((resolve) => setImmediate(resolve));
       expect(f.permissions[0]).toMatchObject({
         sessionId,
-        toolCall: { toolCallId: 'permission:c1', title: 'spec.jev: rm', rawInput: { description: 'Run rm -rf build?' } },
+        toolCall: {
+          toolCallId: 'permission:c1',
+          title: 'spec.jev: rm',
+          rawInput: { description: 'Run rm -rf build?' },
+        },
         options: [
           { optionId: 'allow', name: 'Allow', kind: 'allow_once' },
           { optionId: 'reject', name: 'Reject', kind: 'reject_once' },
@@ -1275,7 +1280,8 @@ describe('what spec.jev notifies', () => {
     const f = fixture();
     try {
       await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
-      const words = 'spec.jev: checkpoints are off, because git cannot run on this Mac until the Xcode license is accepted.';
+      const words =
+        'spec.jev: checkpoints are off, because git cannot run on this Mac until the Xcode license is accepted.';
       f.emit(shown('checkpoint.off', { code: 'xcode_license', params: {}, message: words }));
       notify(f, 'spec.jev could not reach the judge.', 'warning');
       await vi.waitFor(() => expect(noticesOf(f.updates)).toHaveLength(2));
@@ -1293,7 +1299,8 @@ describe('what spec.jev notifies', () => {
     try {
       await f.agent.newSession({ cwd: tmpdir(), mcpServers: [] });
       const free = 'spec.jev: no Jev key is set, so the judge uses Jev 1.13 on OpenCode Zen, free for a limited time.';
-      const paid = 'spec.jev: the free Jev on OpenCode Zen now asks for a key or payment, so plain rules decide for now.';
+      const paid =
+        'spec.jev: the free Jev on OpenCode Zen now asks for a key or payment, so plain rules decide for now.';
       // spec.jev's coded event comes first, its own line right after.
       f.emit(shown('judge.notice', { code: 'free_jev', message: free }));
       notify(f, free, 'info');

@@ -344,7 +344,9 @@ describe('NativeHost', () => {
     child.stderr.write('No models available, said something else\n');
     child.exit(1);
     const state = await reaches(host, 'failed');
-    expect(state).toMatchObject({ error: { kind: 'crashed', message: 'The spec.jev host stopped by itself (exit code 1)' } });
+    expect(state).toMatchObject({
+      error: { kind: 'crashed', message: 'The spec.jev host stopped by itself (exit code 1)' },
+    });
   });
 
   it('says why a host could not load pi', async () => {
@@ -354,7 +356,11 @@ describe('NativeHost', () => {
     child.exit(1);
     const state = await reaches(host, 'failed');
     expect(state).toMatchObject({
-      error: { kind: 'failed', code: 1, message: "The spec.jev host could not load pi: Cannot find module '/mu/index.ts'" },
+      error: {
+        kind: 'failed',
+        code: 1,
+        message: "The spec.jev host could not load pi: Cannot find module '/mu/index.ts'",
+      },
     });
   });
 

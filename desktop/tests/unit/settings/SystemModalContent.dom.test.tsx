@@ -145,11 +145,7 @@ const defaultSystemInfo = {
 };
 
 const renderContent = (content: React.ReactElement = <SystemModalContent />) =>
-  render(
-    <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
-      {content}
-    </SWRConfig>
-  );
+  render(<SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>{content}</SWRConfig>);
 
 /** What a conversation may wait for and keep: the conversations page, split off the system page. */
 const renderConversations = () => renderContent(<ConversationPreferences />);

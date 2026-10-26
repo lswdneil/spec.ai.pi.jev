@@ -17,7 +17,10 @@ const literalIconSize =
 /** Avatars, logos, spinners and 24/28px illustration marks are content-sized, not icon-scale. */
 const withoutContentSizedMarks = (source: string) =>
   source
-    .replace(/<(?:Avatar|AssistantAvatar|ProviderMark|EndpointMark|MuMark|ThemedLogo|Spin|CronJobIndicator)\b[^>]*>/g, '')
+    .replace(
+      /<(?:Avatar|AssistantAvatar|ProviderMark|EndpointMark|MuMark|ThemedLogo|Spin|CronJobIndicator)\b[^>]*>/g,
+      ''
+    )
     .replace(/size=(?:\{(?:24|28)\}|['"](?:24|28)['"])/g, '');
 
 const shell = [

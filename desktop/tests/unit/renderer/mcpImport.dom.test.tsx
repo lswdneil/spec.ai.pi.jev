@@ -64,7 +64,15 @@ vi.mock('@icon-park/react', () => ({
 }));
 
 vi.mock('@/renderer/ui/button', () => ({
-  Button: ({ children, onClick, disabled }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean }) => (
+  Button: ({
+    children,
+    onClick,
+    disabled,
+  }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+    disabled?: boolean;
+  }) => (
     <button disabled={disabled} onClick={onClick}>
       {children}
     </button>
