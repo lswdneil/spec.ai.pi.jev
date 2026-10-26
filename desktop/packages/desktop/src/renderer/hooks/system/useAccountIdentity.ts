@@ -13,9 +13,7 @@ import { ipcBridge } from '@/common';
 
 export const LOCAL_USER_ID = 'system_default_user';
 
-export type AccountIdentity =
-  | { kind: 'local'; id: string }
-  | { kind: 'remote'; id: string; displayName: string };
+export type AccountIdentity = { kind: 'local'; id: string } | { kind: 'remote'; id: string; displayName: string };
 
 export function useAccountIdentity(): { identity: AccountIdentity | null } {
   const [identity, setIdentity] = useState<AccountIdentity | null>(null);

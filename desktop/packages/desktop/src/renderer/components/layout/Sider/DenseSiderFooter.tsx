@@ -31,11 +31,7 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
   const iconOnly = collapsed && !isMobile;
   const { identity } = useAccountIdentity();
   const local = identity?.kind === 'local';
-  const accountName = identity
-    ? identity.kind === 'local'
-      ? t('common.localWorkspace')
-      : identity.displayName
-    : '';
+  const accountName = identity ? (identity.kind === 'local' ? t('common.localWorkspace') : identity.displayName) : '';
   const initial = identity?.kind === 'remote' ? identity.displayName.slice(0, 1).toUpperCase() : '';
 
   return (

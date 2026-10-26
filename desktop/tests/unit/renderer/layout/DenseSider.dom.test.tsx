@@ -88,16 +88,10 @@ describe('Dense sidebar', () => {
   it('collapses to a rail of named icons, without the conversations', () => {
     render(<DenseSider collapsed />);
     expect(screen.queryByTestId('history')).not.toBeInTheDocument();
-    expect(screen.getByTestId('sider-new-chat')).toHaveAttribute(
-      'aria-label',
-      'conversation.welcome.newConversation'
-    );
+    expect(screen.getByTestId('sider-new-chat')).toHaveAttribute('aria-label', 'conversation.welcome.newConversation');
     expect(screen.getByTestId('sider-search')).toHaveAttribute('aria-label', 'conversation.historySearch.shortTitle');
     expect(screen.getByTestId('sider-scheduled')).toHaveAttribute('aria-label', 'cron.scheduledTasks');
-    expect(screen.getByTestId('sider-batch-mode')).toHaveAttribute(
-      'aria-label',
-      'conversation.history.batchManage'
-    );
+    expect(screen.getByTestId('sider-batch-mode')).toHaveAttribute('aria-label', 'conversation.history.batchManage');
   });
 
   it('starts a conversation, opens the palette and reaches the scheduled tasks', () => {
