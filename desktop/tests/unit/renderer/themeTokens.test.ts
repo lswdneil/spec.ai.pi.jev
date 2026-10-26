@@ -59,7 +59,7 @@ describe('Dense theme and type tokens', () => {
   });
 
   it('lets the Dense token block outrank the colour-scheme blocks', () => {
-    expect(read('styles/specjev/dense.css')).toContain('html[data-sv-ui="dense"][data-theme] {');
+    expect(read('styles/specjev/dense.css')).toMatch(/html\[data-sv-ui=['"]dense['"]\]\[data-theme\] \{/);
   });
 
   it('marks highlighted list rows with one brand-coloured leading bar', () => {

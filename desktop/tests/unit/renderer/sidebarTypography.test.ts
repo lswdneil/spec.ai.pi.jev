@@ -16,22 +16,22 @@ describe('sidebar and composer typography', () => {
     expect(sider).toContain("className='text-[13px]'");
     expect(sider).not.toContain('text-[11.5px]');
     expect(dense).toMatch(
-      /html\[data-sv-ui="dense"\] \.layout-sider \.chat-history__item-name\s*\{[^}]*font-size: 13px;/
+      /html\[data-sv-ui=['"]dense['"]\] \.layout-sider \.chat-history__item-name\s*\{[^}]*font-size: 13px;/
     );
   });
 
   it('matches the empty state with a 12px UI-typeface section header', () => {
-    const block = dense.match(/html\[data-sv-ui="dense"\] \.layout-sider \.sider-section-title\s*\{[^}]*\}/)?.[0];
+    const block = dense.match(/html\[data-sv-ui=['"]dense['"]\] \.layout-sider \.sider-section-title\s*\{[^}]*\}/)?.[0];
     expect(block).toContain('font-family: var(--sv-font-ui)');
     expect(block).toContain('font-size: 12px');
   });
 
   it('lets native fields inherit the app font instead of the browser control font', () => {
     expect(dense).toMatch(
-      /html\[data-sv-ui="dense"\] button,[\s\S]*?html\[data-sv-ui="dense"\] textarea\s*\{[^}]*font-family: inherit;/
+      /html\[data-sv-ui=['"]dense['"]\] button,[\s\S]*?html\[data-sv-ui=['"]dense['"]\] textarea\s*\{[^}]*font-family: inherit;/
     );
     expect(dense).toMatch(
-      /html\[data-sv-ui="dense"\] \.guid-input-card-shell textarea\s*\{[^}]*font-family: var\(--sv-font-ui\);/
+      /html\[data-sv-ui=['"]dense['"]\] \.guid-input-card-shell textarea\s*\{[^}]*font-family: var\(--sv-font-ui\);/
     );
     expect(guidInput).toContain('text-[13px]');
     expect(guidInput).not.toContain('text-14px');

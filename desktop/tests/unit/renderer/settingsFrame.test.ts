@@ -23,7 +23,7 @@ describe('settings frame and sidebar scroll', () => {
     const dense = read('styles/specjev/dense.css');
     for (const selector of ['.settings-sider__group-header', '.settings-sider__item-label']) {
       const block = dense.match(
-        new RegExp(`html\\[data-sv-ui="dense"\\] ${selector.replaceAll('.', '\\.')}\\s*\\{[^}]*\\}`)
+        new RegExp(`html\\[data-sv-ui=['"]dense['"]\\] ${selector.replaceAll('.', '\\.')}\\s*\\{[^}]*\\}`)
       );
       expect(block?.[0]).toContain('font-family: var(--sv-font-ui)');
     }
