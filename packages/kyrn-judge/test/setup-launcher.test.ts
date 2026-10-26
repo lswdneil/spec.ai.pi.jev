@@ -99,6 +99,7 @@ describe("spec.jev setup, as the launcher starts it", () => {
 			SPECJEV_SETUP_KEY: KEY,
 			SPECJEV_AGENT_DIR: "/home/bai/.spec.jev/agent",
 			SPECJEV_CODING_AGENT_DIR: "/home/bai/.spec.jev/agent",
+			"SPEC.JEV_CODING_AGENT_DIR": "/home/bai/.spec.jev/agent",
 			PI_CODING_AGENT_DIR: "/home/bai/.spec.jev/agent",
 			SPECJEV_SETUP_HOME: "/home/bai/.spec.jev",
 			// A checkout's session reads the .env at its root: the Jev key goes there.

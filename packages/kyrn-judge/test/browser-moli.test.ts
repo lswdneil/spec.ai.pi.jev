@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { join } from "node:path";
+import { join, win32 } from "node:path";
 import { describe, expect, it } from "vitest";
 import { moliFetch, planMoliFetch } from "../src/browser/fetch.ts";
 import {
@@ -42,8 +42,8 @@ function host(platform: NodeJS.Platform, installed: string[], extra: Partial<Mol
 describe("finding moli", () => {
 	it("looks in the Windows installer folder before PATH", () => {
 		const candidates = moliCandidates(host("win32", []));
-		expect(candidates[0]).toBe(join("C:", "Users", "bai", "AppData", "Local", "moli", "moli.exe"));
-		expect(candidates).toContain(join("C:", "Users", "bai", ".local", "bin", "moli.exe"));
+		expect(candidates[0]).toBe(win32.join("C:", "Users", "bai", "AppData", "Local", "moli", "moli.exe"));
+		expect(candidates).toContain(win32.join("C:", "Users", "bai", ".local", "bin", "moli.exe"));
 	});
 
 	it("looks in the Unix install places, and then on PATH", () => {
