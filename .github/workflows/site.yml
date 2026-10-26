@@ -1,6 +1,7 @@
 name: Site
 
-# Builds usemu.dev from site/ and deploys it to Cloudflare Pages (project `usemu`, production branch `main`).
+# Builds app.spec-ai.cn from site/ and deploys it to Cloudflare Pages (project `spec-jev`, production branch `main`).
+# dev.spec-ai.cn has its own workflow, site-dev.yml, and project `spec-jev-dev`.
 #
 # The build reads its facts instead of repeating them (site/build.py says where each comes from): the decision points
 # and options from packages/kyrn-judge/manifest.json, the changelog from CHANGELOG.md, each point's question and the
@@ -53,6 +54,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      SPECJEV_SITE_URL: https://app.spec-ai.cn/
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -73,7 +75,7 @@ jobs:
       - name: Keep the build
         uses: actions/upload-artifact@v4
         with:
-          name: usemu-site
+          name: spec-jev-site
           path: _site
           retention-days: 14
 
@@ -87,8 +89,8 @@ jobs:
         if: github.event_name != 'pull_request' && env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
         env:
           WRANGLER_SEND_METRICS: 'false'
-        run: npx --yes wrangler@4.112.0 pages deploy _site --project-name usemu --branch main --commit-dirty=true
+        run: npx --yes wrangler@4.112.0 pages deploy _site --project-name spec-jev --branch main --commit-dirty=true
 
       - name: Explain a skipped deploy
         if: github.event_name != 'pull_request' && (env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ACCOUNT_ID == '')
-        run: echo "::notice title=Not deployed::Built, but not deployed. Add the repository secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID to deploy usemu.dev."
+        run: echo "::notice title=Not deployed::Built, but not deployed. Add the repository secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID to deploy app.spec-ai.cn."

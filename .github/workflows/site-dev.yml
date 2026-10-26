@@ -1,0 +1,82 @@
+name: Site dev
+
+# Builds dev.spec-ai.cn from site/ and deploys it to Cloudflare Pages (project `spec-jev-dev`).
+# Production is app.spec-ai.cn, built by site.yml; this workflow is for previews and future features.
+# The same repository facts as site.yml are used, so a dev build follows the product too.
+#
+# Deploying needs two repository secrets, CLOUDFLARE_API_TOKEN (Cloudflare Pages: Edit) and
+# CLOUDFLARE_ACCOUNT_ID. Without them the site is still built and kept as an artifact.
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'site/**'
+      - 'packages/kyrn-judge/manifest.json'
+      - 'CHANGELOG.md'
+      - 'README.md'
+      - 'docs/readme/**'
+      - 'desktop/packages/desktop/src/renderer/services/i18n/locales/*/agentMode.json'
+      - '.github/workflows/site-dev.yml'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch, tag, or commit to build
+        required: false
+        default: main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-dev
+  cancel-in-progress: true
+
+jobs:
+  site:
+    name: Build and deploy dev
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      SPECJEV_SITE_URL: https://dev.spec-ai.cn/
+      SPECJEV_SITE_NOINDEX: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.ref }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build
+        run: |
+          pip install -r site/requirements.txt
+          python site/build.py _site
+
+      - name: Keep the build
+        uses: actions/upload-artifact@v4
+        with:
+          name: spec-jev-dev-site
+          path: _site
+          retention-days: 14
+
+      - name: Setup Node.js
+        if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Deploy to Cloudflare Pages
+        if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: npx --yes wrangler@4.112.0 pages deploy _site --project-name spec-jev-dev --branch dev --commit-dirty=true
+
+      - name: Explain a skipped deploy
+        if: env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ACCOUNT_ID == ''
+        run: echo "::notice title=Not deployed::Built, but not deployed. Add the repository secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID to deploy dev.spec-ai.cn."

@@ -1,4 +1,4 @@
-"""Build usemu.dev, the mu site: five languages; home, decision points, docs and changelog.
+"""Build app.spec-ai.cn, the spec.jev site: five languages; home, decision points, docs and changelog.
 
 The facts come from the mu repository, so a rebuild follows the product:
   packages/kyrn-judge/manifest.json   the decision points, features and options, with their names in every language
@@ -51,7 +51,9 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from markdown_it import MarkdownIt
 
 here = Path(__file__).resolve().parent
-SITE = "https://usemu.dev/"
+SITE = os.environ.get("SPECJEV_SITE_URL", "https://app.spec-ai.cn/")
+if not SITE.endswith("/"):
+    SITE += "/"
 REPO = "https://github.com/lswdneil/spec.ai.pi.jev"
 API = "https://api.github.com/repos/lswdneil/spec.ai.pi.jev"
 LOCALES = ["zh-CN", "en", "zh-TW", "ja", "ko"]
@@ -118,7 +120,7 @@ def fill(value, facts):
 
 def github(path):
     token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
-    headers = {"Accept": "application/vnd.github+json", "User-Agent": "usemu-site-build"}
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "spec-jev-site-build"}
     if token:
         headers["Authorization"] = f"Bearer {token}"
     with urllib.request.urlopen(urllib.request.Request(API + path, headers=headers), timeout=30) as response:
@@ -576,7 +578,7 @@ def check_facts(outdir, locales, modes, manifest):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Build usemu.dev.")
+    parser = argparse.ArgumentParser(description="Build app.spec-ai.cn (or dev.spec-ai.cn with SPECJEV_SITE_URL).")
     parser.add_argument("outdir")
     parser.add_argument("--repo", default=os.environ.get("MU_REPO") or str(here.parent), help="a checkout of lswdneil/spec.ai.pi.jev")
     args = parser.parse_args()
@@ -718,6 +720,10 @@ def main():
     (outdir / "404.html").write_text(env.get_template("not_found.html").render(locales=locales, version=version))
     for name in ("_headers", "_redirects"):
         shutil.copy(here / "static" / name, outdir / name)
+    if os.environ.get("SPECJEV_SITE_NOINDEX") == "1":
+        # dev.spec-ai.cn is a staging copy: keep it out of search results while the production site is indexed.
+        with (outdir / "_headers").open("a") as f:
+            f.write("\n/*\n  X-Robots-Tag: noindex\n")
     check_facts(outdir, locales, modes, manifest)
     print(f"{len(written)} pages, {sum(s for _, s in written) // 1024} KB; {facts['points']} decision points, {facts['points_active']} active from the start;"
           f" newest release {latest['tag']} (spec.jev {release['agent']}); stars {stars}; version {version}")
