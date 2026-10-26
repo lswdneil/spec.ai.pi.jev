@@ -868,6 +868,7 @@ describe("the local judge away from macOS", () => {
 			home: "/home/bai",
 			fs: disk(files),
 		});
+		if ("error" in host) throw new Error(host.error);
 		expect(host.notes).toEqual([]);
 
 		// A server of one's own is the way out, and then there is nothing to say.
