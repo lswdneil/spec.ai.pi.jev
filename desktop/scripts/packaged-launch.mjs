@@ -73,7 +73,9 @@ async function main() {
   if (shouldClean) {
     // taskkill /IM matches the image name exactly. pkill -f matches anywhere in a command line, and "mu" is in far
     // too many of them, so elsewhere match the packaged binary's own path instead.
-    await killProcessByName(isWindows() ? 'spec.jev.exe' : packaged.executablePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    await killProcessByName(
+      isWindows() ? 'spec.jev.exe' : packaged.executablePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    );
     await killProcessByName('electron.exe');
     await killProcessByName('electron');
   }

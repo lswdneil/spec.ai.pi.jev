@@ -39,33 +39,33 @@ The phone E2E now opens Settings → Providers through this same-origin path, no
 
 ## Classification
 
-| Class | Meaning |
-| --- | --- |
-| **Web-ready** | Existing backend HTTP/WS data is enough. |
-| **Host-ready** | Needs local files, keys, or child processes, but the loopback KyRN host can answer it. |
+| Class            | Meaning                                                                                                     |
+| ---------------- | ----------------------------------------------------------------------------------------------------------- |
+| **Web-ready**    | Existing backend HTTP/WS data is enough.                                                                    |
+| **Host-ready**   | Needs local files, keys, or child processes, but the loopback KyRN host can answer it.                      |
 | **Desktop-only** | No safe WebUI meaning without a new local service and an explicit security model. Hide or say so in the UI. |
 
 ## Provider matrix
 
-| Provider | What it touches | Class | WebUI decision |
-| --- | --- | --- | --- |
-| `kyrn.catalog` | `/api/agents/management`, `/api/assistants` | Web-ready | Read-only in `renderer/utils/kyrnWebCatalog.ts`. No registration or agent disabling. |
-| `kyrn.settings` | `mu.json`, pi `settings.json`, `models.json`, permissions and board files | Host-ready | Proxied to the desktop host. |
-| `kyrn.save` | Same files; writes credentials and config | Host-ready | Proxied to the desktop host; keys never enter the browser. |
-| `kyrn.defaultModel` / `kyrn.setDefaultModel` | Local settings files | Host-ready | Proxied. |
-| `kyrn.availableModels` | Backend + local registration lookup | Host-ready | Proxied. |
-| `kyrn.recheck` | Backend registration + health check | Host-ready | Proxied. |
-| `kyrn.testProvider` | Local `.env` keys, external endpoint, system proxy | Host-ready | Proxied; the browser never receives the key. |
-| `kyrn.loginStart` / `loginState` / `loginAnswer` / `loginCancel` / `loginStatus` / `loginLogout` | Local auth CLI and OAuth callback | Host-ready | Proxied. |
-| `kyrn.localJudgeState` / `kyrn.localJudgeRun` | Local judge process, model files, consent | Host-ready | Proxied. |
-| `kyrn.clmCheck` | External CLM server over HTTP | Web-ready (read-only) | Can be proxied; currently host-ready. |
-| `kyrn.activity` | Local ACP/session store | Host-ready | Proxied; the work panel can read it. |
-| `kyrn.modelLevels` | Local session store | Host-ready | Proxied. |
-| `kyrn.lessons` / `kyrn.lessonsChange` | Local `lessons.jsonl` | Host-ready | Proxied. |
-| `kyrnFolderBridge.lessons` / `files` | Local project folder and session store | Host-ready | Proxied. |
-| `kyrn.importList` / `importRun` / `importHistory` | Local Claude/Codex transcripts and `spec.jev import` CLI | Host-ready | Proxied. |
-| `kyrn.skills` / `skillAdd` / `skillRemove` / `capabilityReveal` | Local skill folders and file manager | Host-ready | Proxied. |
-| `kyrn.mcpServers` / `mcpAdd` / `mcpRemove` / `mcpSwitch` | Local `mcp.json` and other tools' config | Host-ready | Proxied. |
+| Provider                                                                                         | What it touches                                                           | Class                 | WebUI decision                                                                       |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------------------------------ |
+| `kyrn.catalog`                                                                                   | `/api/agents/management`, `/api/assistants`                               | Web-ready             | Read-only in `renderer/utils/kyrnWebCatalog.ts`. No registration or agent disabling. |
+| `kyrn.settings`                                                                                  | `mu.json`, pi `settings.json`, `models.json`, permissions and board files | Host-ready            | Proxied to the desktop host.                                                         |
+| `kyrn.save`                                                                                      | Same files; writes credentials and config                                 | Host-ready            | Proxied to the desktop host; keys never enter the browser.                           |
+| `kyrn.defaultModel` / `kyrn.setDefaultModel`                                                     | Local settings files                                                      | Host-ready            | Proxied.                                                                             |
+| `kyrn.availableModels`                                                                           | Backend + local registration lookup                                       | Host-ready            | Proxied.                                                                             |
+| `kyrn.recheck`                                                                                   | Backend registration + health check                                       | Host-ready            | Proxied.                                                                             |
+| `kyrn.testProvider`                                                                              | Local `.env` keys, external endpoint, system proxy                        | Host-ready            | Proxied; the browser never receives the key.                                         |
+| `kyrn.loginStart` / `loginState` / `loginAnswer` / `loginCancel` / `loginStatus` / `loginLogout` | Local auth CLI and OAuth callback                                         | Host-ready            | Proxied.                                                                             |
+| `kyrn.localJudgeState` / `kyrn.localJudgeRun`                                                    | Local judge process, model files, consent                                 | Host-ready            | Proxied.                                                                             |
+| `kyrn.clmCheck`                                                                                  | External CLM server over HTTP                                             | Web-ready (read-only) | Can be proxied; currently host-ready.                                                |
+| `kyrn.activity`                                                                                  | Local ACP/session store                                                   | Host-ready            | Proxied; the work panel can read it.                                                 |
+| `kyrn.modelLevels`                                                                               | Local session store                                                       | Host-ready            | Proxied.                                                                             |
+| `kyrn.lessons` / `kyrn.lessonsChange`                                                            | Local `lessons.jsonl`                                                     | Host-ready            | Proxied.                                                                             |
+| `kyrnFolderBridge.lessons` / `files`                                                             | Local project folder and session store                                    | Host-ready            | Proxied.                                                                             |
+| `kyrn.importList` / `importRun` / `importHistory`                                                | Local Claude/Codex transcripts and `spec.jev import` CLI                  | Host-ready            | Proxied.                                                                             |
+| `kyrn.skills` / `skillAdd` / `skillRemove` / `capabilityReveal`                                  | Local skill folders and file manager                                      | Host-ready            | Proxied.                                                                             |
+| `kyrn.mcpServers` / `mcpAdd` / `mcpRemove` / `mcpSwitch`                                         | Local `mcp.json` and other tools' config                                  | Host-ready            | Proxied.                                                                             |
 
 ## Security boundary
 
