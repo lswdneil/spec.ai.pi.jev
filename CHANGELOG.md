@@ -6,6 +6,13 @@ spec.jev is in pre-release (0.1.x): names, settings and formats may still change
 
 ## [Unreleased]
 
+## [0.1.11] - 2026-10-26
+
+### Fixed
+
+- **Laya's model download tries a mirror when Hugging Face is unreachable.** If `huggingface.co` cannot be reached, the app now tries `hf-mirror.com` and remembers the last endpoint that worked. Every file's SHA-256 is still checked.
+- **The command line no longer says Laya needs macOS when the desktop app can run it.** On Windows and Linux the desktop app runs the ONNX model; the command line's Core ML sidecar remains macOS-only.
+
 ## [0.1.10] - 2026-10-25
 
 ### Added

@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.1.11] - 2026-10-26
+
+### Fixed
+
+- `spec.jev judge` now says that the desktop app can run Laya with ONNX on Windows and Linux, while the command line's Core ML sidecar remains macOS-only.
+
 ## [0.1.0] - 2026-10-21
 
 ### Changed
