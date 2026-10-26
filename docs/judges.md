@@ -49,7 +49,7 @@ spec.jev judge start     # starts the sidecar
 spec.jev judge status
 ```
 
-The desktop app sets it up in one step, also after asking. Laya is reliable on simple predicates (does this text describe an error?) and weak on questions about relationships or about the request itself. spec.jev knows this and never sends it a question it can't answer well, so in a cascade such as `["laya", "jev"]` those questions go straight to the next judge. Run it in shadow mode alongside Jev and read the ledger before you give it a decision point of its own. The measurements are in [kyrn/docs/03-local-judge.md](../kyrn/docs/03-local-judge.md) (in Chinese).
+The desktop app sets it up in one step, also after asking. On Windows and Linux it downloads the pinned ONNX files, verifies every SHA-256, and falls back to `hf-mirror.com` when `huggingface.co` is unreachable; `SPECJEV_HF_ENDPOINT` selects another source first. Laya is reliable on simple predicates (does this text describe an error?) and weak on questions about relationships or about the request itself. spec.jev knows this and never sends it a question it can't answer well, so in a cascade such as `["laya", "jev"]` those questions go straight to the next judge. Run it in shadow mode alongside Jev and read the ledger before you give it a decision point of its own. The measurements are in [kyrn/docs/03-local-judge.md](../kyrn/docs/03-local-judge.md) (in Chinese).
 
 ## Classifier models and LLMs
 
