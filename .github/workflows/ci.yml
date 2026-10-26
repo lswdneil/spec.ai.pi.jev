@@ -82,6 +82,12 @@ jobs:
       - name: Run postinstall
         run: bun run postinstall || true
 
+      # The native-host integration tests run the spec.jev harness from this checkout, so they need
+      # the checkout's dependencies as well as the desktop app's.
+      - name: Install harness dependencies
+        working-directory: .
+        run: npm ci --ignore-scripts
+
       # What the desktop app checks before every commit (desktop/.pre-commit-config.yaml): oxlint's errors (its warnings stay
       # advisory), oxfmt's formatting, and the locale files against the generated i18n-keys.d.ts.
       - name: Lint
