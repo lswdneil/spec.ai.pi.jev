@@ -31,7 +31,9 @@ Passed locally on Windows x64:
   yet demonstrated.
 - Windows installed-app first-run E2E: 3/3; install and uninstall succeeded.
 - Linux x64 `.deb` install, executable check, remove and purge succeeded in WSL
-  Ubuntu.
+  Ubuntu. The `.deb` carries the Linux x64 `onnxruntime-node` binary; its
+  `localJudgeOnnx.js` loaded the real model, answered `/health` and returned a
+  boolean verdict (`0.8777`) on CPU in 282 ms.
 
 Still external or undecided before a public release:
 
