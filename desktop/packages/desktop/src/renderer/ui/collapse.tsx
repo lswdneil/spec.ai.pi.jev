@@ -39,7 +39,11 @@ const CollapseBase: React.FC<CollapseProps> = ({
       value={{
         active,
         toggle: (key) => {
-          const next = active.includes(key) ? active.filter((item) => item !== key) : accordion ? [key] : [...active, key];
+          const next = active.includes(key)
+            ? active.filter((item) => item !== key)
+            : accordion
+              ? [key]
+              : [...active, key];
           if (activeKey === undefined) setUncontrolled(next);
           onChange?.(next, next);
         },

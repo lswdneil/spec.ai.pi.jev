@@ -12,8 +12,7 @@ export const AppToaster: React.FC = () => {
       closeButton
       toastOptions={{
         classNames: {
-          toast:
-            'border border-sv-line bg-sv-popover text-sv-text rounded-[var(--sv-r-control)] text-[12px]',
+          toast: 'border border-sv-line bg-sv-popover text-sv-text rounded-[var(--sv-r-control)] text-[12px]',
           description: 'text-sv-muted',
           actionButton: 'bg-sv-brand text-sv-on-brand',
           cancelButton: 'bg-sv-surface text-sv-muted',

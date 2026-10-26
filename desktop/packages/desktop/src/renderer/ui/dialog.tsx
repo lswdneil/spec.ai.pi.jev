@@ -41,7 +41,9 @@ export const DialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(function DialogDescription({ className, ...props }, ref) {
-  return <DialogPrimitive.Description ref={ref} className={cn('mt-1 text-[12px] text-sv-muted', className)} {...props} />;
+  return (
+    <DialogPrimitive.Description ref={ref} className={cn('mt-1 text-[12px] text-sv-muted', className)} {...props} />
+  );
 });
 
 export interface ModalProps {
@@ -61,7 +63,12 @@ export interface ModalProps {
   okText?: React.ReactNode;
   cancelText?: React.ReactNode;
   confirmLoading?: boolean;
-  okButtonProps?: { disabled?: boolean; status?: 'normal' | 'success' | 'warning' | 'danger'; style?: React.CSSProperties; loading?: boolean };
+  okButtonProps?: {
+    disabled?: boolean;
+    status?: 'normal' | 'success' | 'warning' | 'danger';
+    style?: React.CSSProperties;
+    loading?: boolean;
+  };
   cancelButtonProps?: { disabled?: boolean; style?: React.CSSProperties; className?: string };
   /** Arco compatibility; the Dense dialog is always centred. */
   alignCenter?: boolean;
@@ -174,7 +181,12 @@ export interface ModalConfirmConfig {
   icon?: React.ReactNode;
   okText?: React.ReactNode;
   cancelText?: React.ReactNode;
-  okButtonProps?: { disabled?: boolean; status?: 'normal' | 'success' | 'warning' | 'danger'; style?: React.CSSProperties; loading?: boolean };
+  okButtonProps?: {
+    disabled?: boolean;
+    status?: 'normal' | 'success' | 'warning' | 'danger';
+    style?: React.CSSProperties;
+    loading?: boolean;
+  };
   cancelButtonProps?: { disabled?: boolean; style?: React.CSSProperties; className?: string };
   onOk?: () => void | boolean | Promise<unknown>;
   onCancel?: () => void;
@@ -302,8 +314,10 @@ const openConfirm = (config: ModalConfirmConfig, kind: ConfirmKind): ModalContro
 
 const confirm = (config: ModalConfirmConfig) => openConfirm(config, 'confirm');
 const info = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'info');
-const success = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'success');
-const warning = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'warning');
+const success = (config: ModalConfirmConfig) =>
+  openConfirm({ ...config, closable: config.closable ?? false }, 'success');
+const warning = (config: ModalConfirmConfig) =>
+  openConfirm({ ...config, closable: config.closable ?? false }, 'warning');
 const error = (config: ModalConfirmConfig) => openConfirm({ ...config, closable: config.closable ?? false }, 'error');
 const destroyAll = () => {
   for (const [root, host] of liveRoots) {
@@ -315,9 +329,10 @@ const destroyAll = () => {
 
 const modalApi = { confirm, info, success, warning, error, destroyAll };
 
-type ModalComponent = typeof ModalBase & typeof modalApi & {
-  useModal: (config?: { maxCount?: number }) => [typeof modalApi, React.ReactNode];
-};
+type ModalComponent = typeof ModalBase &
+  typeof modalApi & {
+    useModal: (config?: { maxCount?: number }) => [typeof modalApi, React.ReactNode];
+  };
 
 export const Modal = Object.assign(ModalBase, {
   ...modalApi,

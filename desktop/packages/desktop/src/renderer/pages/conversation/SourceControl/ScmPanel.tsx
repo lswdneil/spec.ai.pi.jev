@@ -425,7 +425,13 @@ const ViewModeToggle: React.FC<{ mode: ScmViewMode; onChange: (mode: ScmViewMode
         size='mini'
         data-scm-view-toggle={mode}
         className='flex-shrink-0'
-        icon={next === 'tree' ? <TreeList theme='outline' className='sv-icon-sm' /> : <ViewList theme='outline' className='sv-icon-sm' />}
+        icon={
+          next === 'tree' ? (
+            <TreeList theme='outline' className='sv-icon-sm' />
+          ) : (
+            <ViewList theme='outline' className='sv-icon-sm' />
+          )
+        }
         aria-label={label}
         onClick={() => onChange(next)}
       />

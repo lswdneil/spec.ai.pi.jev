@@ -283,7 +283,13 @@ export const ScmChangesView: React.FC<{
                     disabled={busy}
                     data-scm-bulk={bulk}
                     className='flex-shrink-0 opacity-0 group-hover/scmgroup:opacity-100 focus:opacity-100'
-                    icon={bulk === 'stage' ? <Plus theme='outline' className='sv-icon-xs' /> : <Minus theme='outline' className='sv-icon-xs' />}
+                    icon={
+                      bulk === 'stage' ? (
+                        <Plus theme='outline' className='sv-icon-xs' />
+                      ) : (
+                        <Minus theme='outline' className='sv-icon-xs' />
+                      )
+                    }
                     aria-label={t(
                       bulk === 'stage'
                         ? 'conversation.explorer.scm.actions.stageAll'

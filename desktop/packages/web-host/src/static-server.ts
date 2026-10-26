@@ -171,12 +171,7 @@ const PEEK_LIMIT_BYTES = 4096;
  * from `client` during peek are replayed to the upstream as the first write,
  * so the endpoint sees the full HTTP request as-sent.
  */
-function spliceToTcpEndpoint(
-  client: Socket,
-  targetPort: number,
-  initialBytes: Buffer,
-  targetHost = '127.0.0.1'
-): void {
+function spliceToTcpEndpoint(client: Socket, targetPort: number, initialBytes: Buffer, targetHost = '127.0.0.1'): void {
   client.setNoDelay(true);
   client.setKeepAlive(true);
   client.setTimeout(0);

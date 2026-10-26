@@ -19,7 +19,16 @@ export {
 } from './dialog';
 export { Dropdown, type DropdownItem, type DropdownProps } from './dropdown';
 export { Form, type FormProps, type FormInstance, type FormItemProps, type FormRule } from './form';
-export { Link, Progress, Result, Space, type LinkProps, type ProgressProps, type ResultProps, type SpaceProps } from './display';
+export {
+  Link,
+  Progress,
+  Result,
+  Space,
+  type LinkProps,
+  type ProgressProps,
+  type ResultProps,
+  type SpaceProps,
+} from './display';
 export { Empty, type EmptyProps } from './empty';
 export { Image, type ImageProps, type ImagePreviewGroupProps } from './image';
 export { Input, Textarea, type InputProps, type TextareaProps } from './input';

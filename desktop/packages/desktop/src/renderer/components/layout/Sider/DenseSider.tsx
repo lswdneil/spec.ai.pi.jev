@@ -109,13 +109,7 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
     hideEmptyState: nativeOn,
   };
 
-  const navRow = (
-    icon: React.ReactNode,
-    label: string,
-    onClick: () => void,
-    active = false,
-    testId?: string
-  ) => (
+  const navRow = (icon: React.ReactNode, label: string, onClick: () => void, active = false, testId?: string) => (
     <Tooltip content={short ? label : undefined} position='right' disabled={!short}>
       <div
         {...rowButtonProps(onClick)}

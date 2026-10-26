@@ -179,7 +179,12 @@ export default function WorkPanelTabs({
                 {labelsFit ? (
                   label
                 ) : (
-                  <Icon theme='outline' strokeWidth={3} fill='currentColor' className={`sv-icon-md ${styles.tabIcon}`} />
+                  <Icon
+                    theme='outline'
+                    strokeWidth={3}
+                    fill='currentColor'
+                    className={`sv-icon-md ${styles.tabIcon}`}
+                  />
                 )}
                 {news ? <span className={styles.dot} data-testid='work-panel-dot' aria-hidden='true' /> : null}
               </Button>
@@ -219,7 +224,12 @@ export default function WorkPanelTabs({
                     <Down className='sv-icon-xs' />
                   </span>
                 ) : (
-                  <More theme='outline' strokeWidth={3} fill='currentColor' className={`sv-icon-md ${styles.tabIcon}`} />
+                  <More
+                    theme='outline'
+                    strokeWidth={3}
+                    fill='currentColor'
+                    className={`sv-icon-md ${styles.tabIcon}`}
+                  />
                 )}
               </Button>
             </Tooltip>

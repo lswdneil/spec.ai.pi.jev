@@ -260,7 +260,9 @@ async function applyBuiltinOverrides(overrides: BuiltinOverride[]): Promise<numb
       const reason = r.reason;
       if (isBackendHttpError(reason) && reason.status === 404) {
         skipped += 1;
-        console.warn(`[spec.jev] Skipped override for retired built-in '${overrides[i].id}' (no longer in backend manifest)`);
+        console.warn(
+          `[spec.jev] Skipped override for retired built-in '${overrides[i].id}' (no longer in backend manifest)`
+        );
         return;
       }
       failed += 1;

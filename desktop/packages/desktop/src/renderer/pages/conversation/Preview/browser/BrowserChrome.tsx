@@ -231,7 +231,13 @@ export default function BrowserChrome({
             type='text'
             size='small'
             className={styles.navButton}
-            icon={navigation?.loading ? <Loading className={`${styles.spin} sv-icon-md`} /> : <Refresh className='sv-icon-md' />}
+            icon={
+              navigation?.loading ? (
+                <Loading className={`${styles.spin} sv-icon-md`} />
+              ) : (
+                <Refresh className='sv-icon-md' />
+              )
+            }
             aria-label={t('common.refresh')}
             title={t('common.refresh')}
             disabled={!active}

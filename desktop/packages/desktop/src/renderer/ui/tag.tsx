@@ -52,7 +52,7 @@ export const Tag: React.FC<TagProps> = ({
   <span
     className={cn(
       'arco-tag inline-flex h-[22px] items-center gap-1 rounded-full border px-2 text-[10.5px] font-medium leading-none',
-      tones[tone ?? (color ? arcoTones[color as keyof typeof arcoTones] ?? 'neutral' : 'neutral')],
+      tones[tone ?? (color ? (arcoTones[color as keyof typeof arcoTones] ?? 'neutral') : 'neutral')],
       className
     )}
     {...props}

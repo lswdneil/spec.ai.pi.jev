@@ -114,11 +114,21 @@ const StepBar: React.FC<{ run: BrowserRunState }> = ({ run }) => {
         {running && (
           <div className={styles.controls}>
             {run.paused ? (
-              <Button size='mini' type='primary' icon={<PlayOne className='sv-icon-xs' />} onClick={() => send('resume')}>
+              <Button
+                size='mini'
+                type='primary'
+                icon={<PlayOne className='sv-icon-xs' />}
+                onClick={() => send('resume')}
+              >
                 {t('preview.muBrowser.resume')}
               </Button>
             ) : (
-              <Button size='mini' icon={<Pause className='sv-icon-xs' />} disabled={run.stopRequested} onClick={() => send('pause')}>
+              <Button
+                size='mini'
+                icon={<Pause className='sv-icon-xs' />}
+                disabled={run.stopRequested}
+                onClick={() => send('pause')}
+              >
                 {t('preview.muBrowser.pause')}
               </Button>
             )}

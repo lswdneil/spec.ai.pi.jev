@@ -2,7 +2,7 @@
    Tokens and legacy chrome live here; the structural shell is DenseSider + MobileTabBar
    and the 40px header in ChatLayout. */
 
-html[data-sv-ui="dense"][data-theme] {
+html[data-sv-ui='dense'][data-theme] {
   --titlebar-height: 40px;
 
   --bg-base: var(--sv-bg);
@@ -125,19 +125,19 @@ html[data-sv-ui="dense"][data-theme] {
   font-size: 13px;
 }
 
-html[data-sv-ui="dense"][data-theme="dark"] {
+html[data-sv-ui='dense'][data-theme='dark'] {
   --primary-5: 196, 216, 182;
   --primary-6: 181, 206, 165;
   --primary-7: 157, 180, 141;
 }
 
-html[data-sv-ui="dense"][data-theme="light"] {
+html[data-sv-ui='dense'][data-theme='light'] {
   --primary-5: 100, 121, 84;
   --primary-6: 78, 101, 63;
   --primary-7: 62, 82, 50;
 }
 
-html[data-sv-ui="dense"] body {
+html[data-sv-ui='dense'] body {
   font-family: var(--sv-font-ui);
   font-size: 13px;
   line-height: 1.65;
@@ -146,92 +146,118 @@ html[data-sv-ui="dense"] body {
 }
 
 /* The shared icon scale: components name a size, never a pixel value. */
-.sv-icon-xs, .sv-icon-xs > svg { width: var(--sv-icon-xs); height: var(--sv-icon-xs); flex: none; }
-.sv-icon-sm, .sv-icon-sm > svg { width: var(--sv-icon-sm); height: var(--sv-icon-sm); flex: none; }
-.sv-icon-md, .sv-icon-md > svg { width: var(--sv-icon-md); height: var(--sv-icon-md); flex: none; }
-.sv-icon-lg, .sv-icon-lg > svg { width: var(--sv-icon-lg); height: var(--sv-icon-lg); flex: none; }
-.sv-icon-xl, .sv-icon-xl > svg { width: var(--sv-icon-xl); height: var(--sv-icon-xl); flex: none; }
-.sv-icon-sider, .sv-icon-sider > svg { width: var(--sv-icon-sider); height: var(--sv-icon-sider); flex: none; }
-.sv-icon-titlebar, .sv-icon-titlebar > svg { width: var(--sv-icon-titlebar); height: var(--sv-icon-titlebar); flex: none; }
+.sv-icon-xs,
+.sv-icon-xs > svg {
+  width: var(--sv-icon-xs);
+  height: var(--sv-icon-xs);
+  flex: none;
+}
+.sv-icon-sm,
+.sv-icon-sm > svg {
+  width: var(--sv-icon-sm);
+  height: var(--sv-icon-sm);
+  flex: none;
+}
+.sv-icon-md,
+.sv-icon-md > svg {
+  width: var(--sv-icon-md);
+  height: var(--sv-icon-md);
+  flex: none;
+}
+.sv-icon-lg,
+.sv-icon-lg > svg {
+  width: var(--sv-icon-lg);
+  height: var(--sv-icon-lg);
+  flex: none;
+}
+.sv-icon-xl,
+.sv-icon-xl > svg {
+  width: var(--sv-icon-xl);
+  height: var(--sv-icon-xl);
+  flex: none;
+}
+.sv-icon-sider,
+.sv-icon-sider > svg {
+  width: var(--sv-icon-sider);
+  height: var(--sv-icon-sider);
+  flex: none;
+}
+.sv-icon-titlebar,
+.sv-icon-titlebar > svg {
+  width: var(--sv-icon-titlebar);
+  height: var(--sv-icon-titlebar);
+  flex: none;
+}
 
 /* Native fields and buttons otherwise fall back to the browser's own control font. */
-html[data-sv-ui="dense"] button,
-html[data-sv-ui="dense"] input,
-html[data-sv-ui="dense"] select,
-html[data-sv-ui="dense"] textarea {
+html[data-sv-ui='dense'] button,
+html[data-sv-ui='dense'] input,
+html[data-sv-ui='dense'] select,
+html[data-sv-ui='dense'] textarea {
   font-family: inherit;
 }
 
-html[data-sv-ui="dense"] .guid-input-card-shell textarea {
+html[data-sv-ui='dense'] .guid-input-card-shell textarea {
   font-family: var(--sv-font-ui);
 }
 
-html[data-sv-ui="dense"] ::selection {
+html[data-sv-ui='dense'] ::selection {
   background: color-mix(in srgb, var(--sv-brand) 35%, transparent);
 }
 
-html[data-sv-ui="dense"] .app-titlebar {
+html[data-sv-ui='dense'] .app-titlebar {
   font-size: 12px;
 }
 
-html[data-sv-ui="dense"] .app-titlebar--desktop:not(.app-titlebar--mac) {
+html[data-sv-ui='dense'] .app-titlebar--desktop:not(.app-titlebar--mac) {
   height: 40px;
   min-height: 40px;
 }
 
-html[data-sv-ui="dense"] .app-titlebar--mobile {
+html[data-sv-ui='dense'] .app-titlebar--mobile {
   height: 44px;
   min-height: 44px;
 }
 
-html[data-sv-ui="dense"] .layout-sider {
+html[data-sv-ui='dense'] .layout-sider {
   font-size: 12px;
 }
 
-html[data-sv-ui="dense"] .layout-sider .text-14px {
+html[data-sv-ui='dense'] .layout-sider .text-14px {
   font-size: 13px;
 }
 
-html[data-sv-ui="dense"] .layout-sider .sider-section-title {
+html[data-sv-ui='dense'] .layout-sider .sider-section-title {
   font-family: var(--sv-font-ui);
   font-size: 12px;
   line-height: 16px;
 }
 
-html[data-sv-ui="dense"] .layout-sider [data-testid="sider-new-chat"] {
+html[data-sv-ui='dense'] .layout-sider [data-testid='sider-new-chat'] {
   height: 28px;
 }
 
-html[data-sv-ui="dense"] .layout-sider [data-testid="sider-search"],
-html[data-sv-ui="dense"] .layout-sider [data-testid="sider-scheduled"] {
+html[data-sv-ui='dense'] .layout-sider [data-testid='sider-search'],
+html[data-sv-ui='dense'] .layout-sider [data-testid='sider-scheduled'] {
   height: 27px;
 }
 
 /* The palette's leading accent follows the highlighted row. The same cue belongs to
    every menu-like list: dropdowns, selects, trees and the settings rail. History already
    has its own active marker. */
-html[data-sv-ui="dense"]
-  :is(
-    [role='option'],
-    [role='menuitem'],
-    [role='treeitem'],
-    .settings-sider__item
-  ) {
+html[data-sv-ui='dense'] :is([role='option'], [role='menuitem'], [role='treeitem'], .settings-sider__item) {
   position: relative;
 }
 
-html[data-sv-ui="dense"]
-  :is(
-    [role='option'],
-    [role='menuitem'],
-    [role='treeitem'],
-    .settings-sider__item
-  ):not([data-disabled]):not([aria-disabled='true']):not(:disabled):hover::before,
-html[data-sv-ui="dense"] [role='option'][aria-selected='true']::before,
-html[data-sv-ui="dense"] [role='menuitem'][data-highlighted]::before,
-html[data-sv-ui="dense"] [role='menuitem'][aria-current='true']::before,
-html[data-sv-ui="dense"] [role='treeitem'][aria-selected='true']::before,
-html[data-sv-ui="dense"] .settings-sider__item[aria-current='page']::before {
+html[data-sv-ui='dense']
+  :is([role='option'], [role='menuitem'], [role='treeitem'], .settings-sider__item):not([data-disabled]):not(
+    [aria-disabled='true']
+  ):not(:disabled):hover::before,
+html[data-sv-ui='dense'] [role='option'][aria-selected='true']::before,
+html[data-sv-ui='dense'] [role='menuitem'][data-highlighted]::before,
+html[data-sv-ui='dense'] [role='menuitem'][aria-current='true']::before,
+html[data-sv-ui='dense'] [role='treeitem'][aria-selected='true']::before,
+html[data-sv-ui='dense'] .settings-sider__item[aria-current='page']::before {
   content: '';
   position: absolute;
   inset-inline-start: 0;
@@ -245,22 +271,22 @@ html[data-sv-ui="dense"] .settings-sider__item[aria-current='page']::before {
 
 /* Keyboard focus stays inside the row. The old MU ring was lavender and offset 2px,
    so the sidebar's overflow clipped it into a purple bar above the focus target. */
-html[data-sv-ui="dense"] .arco-btn:focus-visible,
-html[data-sv-ui="dense"] [role='button']:focus-visible,
-html[data-sv-ui="dense"] [role='radio']:focus-visible,
-html[data-sv-ui="dense"] [role='switch']:focus-visible,
-html[data-sv-ui="dense"] a:focus-visible {
+html[data-sv-ui='dense'] .arco-btn:focus-visible,
+html[data-sv-ui='dense'] [role='button']:focus-visible,
+html[data-sv-ui='dense'] [role='radio']:focus-visible,
+html[data-sv-ui='dense'] [role='switch']:focus-visible,
+html[data-sv-ui='dense'] a:focus-visible {
   outline: 1px solid var(--sv-focus);
   outline-offset: -1px;
   box-shadow: none;
 }
 
-html[data-sv-ui="dense"] .layout-sider .chat-history__item {
+html[data-sv-ui='dense'] .layout-sider .chat-history__item {
   height: 27px;
   border-radius: 5px;
 }
 
-html[data-sv-ui="dense"] .layout-sider .chat-history__item[aria-current="page"]::before {
+html[data-sv-ui='dense'] .layout-sider .chat-history__item[aria-current='page']::before {
   content: '';
   position: absolute;
   inset-inline-start: 0;
@@ -273,40 +299,40 @@ html[data-sv-ui="dense"] .layout-sider .chat-history__item[aria-current="page"]:
   pointer-events: none;
 }
 
-html[data-sv-ui="dense"] .layout-sider .chat-history__item-name {
+html[data-sv-ui='dense'] .layout-sider .chat-history__item-name {
   font-size: 13px;
   line-height: 18px;
 }
 
-html[data-sv-ui="dense"] .message-user-bubble {
+html[data-sv-ui='dense'] .message-user-bubble {
   background-color: var(--sv-surface-2) !important;
   border: 1px solid var(--sv-line);
   border-radius: 8px 8px 2px 8px !important;
   padding: 8px 10px !important;
 }
 
-html[data-sv-ui="dense"] .sv-dense-tool-summary {
+html[data-sv-ui='dense'] .sv-dense-tool-summary {
   padding: 2px 4px;
   border: 1px solid var(--sv-line);
   border-radius: 5px;
   background: var(--sv-surface);
 }
 
-html[data-sv-ui="dense"] .sv-dense-acp-card {
+html[data-sv-ui='dense'] .sv-dense-acp-card {
   border-radius: 5px;
 }
 
-html[data-sv-ui="dense"] .sv-dense-acp-card .arco-card-body {
+html[data-sv-ui='dense'] .sv-dense-acp-card .arco-card-body {
   padding: 8px;
 }
 
-html[data-sv-ui="dense"] .sv-dense-acp-title,
-html[data-sv-ui="dense"] .sv-dense-acp-command {
+html[data-sv-ui='dense'] .sv-dense-acp-title,
+html[data-sv-ui='dense'] .sv-dense-acp-command {
   font-size: 11.5px;
   line-height: 18px;
 }
 
-html[data-sv-ui="dense"] .sv-dense-acp-card .arco-tag {
+html[data-sv-ui='dense'] .sv-dense-acp-card .arco-tag {
   height: 18px;
   padding: 0 6px;
   border-radius: 4px;
@@ -314,8 +340,8 @@ html[data-sv-ui="dense"] .sv-dense-acp-card .arco-tag {
   line-height: 16px;
 }
 
-html[data-sv-ui="dense"] .sv-dense-terminal-output,
-html[data-sv-ui="dense"] .sv-dense-code-block {
+html[data-sv-ui='dense'] .sv-dense-terminal-output,
+html[data-sv-ui='dense'] .sv-dense-code-block {
   padding: 6px 8px;
   border: 1px solid var(--sv-line);
   border-radius: 4px;
@@ -324,30 +350,30 @@ html[data-sv-ui="dense"] .sv-dense-code-block {
   line-height: 1.6;
 }
 
-html[data-sv-ui="dense"] .settings-page-title {
+html[data-sv-ui='dense'] .settings-page-title {
   font-size: 20px;
   line-height: 1.35;
   letter-spacing: -0.01em;
 }
 
-html[data-sv-ui="dense"] .settings-page-content {
+html[data-sv-ui='dense'] .settings-page-content {
   max-width: 760px;
 }
 
-html[data-sv-ui="dense"] .settings-page-header p {
+html[data-sv-ui='dense'] .settings-page-header p {
   font-size: 12px;
 }
 
 /* The search field only darkens its hairline on focus: no ring, glow or accent bar. */
-html[data-sv-ui="dense"] .settings-sider__search input:focus,
-html[data-sv-ui="dense"] .settings-sider__search input:focus-visible {
+html[data-sv-ui='dense'] .settings-sider__search input:focus,
+html[data-sv-ui='dense'] .settings-sider__search input:focus-visible {
   outline: none;
   box-shadow: none;
   border-color: var(--sv-line-strong);
 }
 
 /* The settings rail follows the same 32px rows as the conversation sidebar. */
-html[data-sv-ui="dense"] .settings-sider__group-header {
+html[data-sv-ui='dense'] .settings-sider__group-header {
   height: 20px;
   align-items: center;
   padding-bottom: 0;
@@ -358,29 +384,29 @@ html[data-sv-ui="dense"] .settings-sider__group-header {
   color: var(--sv-faint);
 }
 
-html[data-sv-ui="dense"] .settings-sider__item {
+html[data-sv-ui='dense'] .settings-sider__item {
   border-radius: 9px;
 }
 
-html[data-sv-ui="dense"] .settings-sider__item[aria-current='page'] {
+html[data-sv-ui='dense'] .settings-sider__item[aria-current='page'] {
   background: var(--sv-selected);
 }
 
-html[data-sv-ui="dense"] .settings-sider__item-label {
+html[data-sv-ui='dense'] .settings-sider__item-label {
   font-family: var(--sv-font-ui);
   font-size: 12px;
   line-height: 20px;
 }
 
 @media (max-width: 767px) {
-  html[data-sv-ui="dense"] .settings-mobile-top-nav {
+  html[data-sv-ui='dense'] .settings-mobile-top-nav {
     gap: 6px;
     padding-top: 10px;
     padding-bottom: 8px;
     margin-bottom: 10px;
   }
 
-  html[data-sv-ui="dense"] .settings-mobile-top-nav__item {
+  html[data-sv-ui='dense'] .settings-mobile-top-nav__item {
     height: 30px;
     padding: 0 10px;
     border-radius: 6px;
@@ -389,110 +415,110 @@ html[data-sv-ui="dense"] .settings-sider__item-label {
 }
 
 /* Arco primary buttons: sage fill, dark ink, no blue. */
-html[data-sv-ui="dense"] .arco-btn-primary:not(.arco-btn-disabled) {
+html[data-sv-ui='dense'] .arco-btn-primary:not(.arco-btn-disabled) {
   background-color: var(--sv-brand);
   color: var(--sv-on-brand);
 }
 
-html[data-sv-ui="dense"] .arco-btn-primary:not(.arco-btn-disabled):hover {
+html[data-sv-ui='dense'] .arco-btn-primary:not(.arco-btn-disabled):hover {
   background-color: var(--sv-brand-1);
 }
 
-html[data-sv-ui="dense"] .arco-btn-primary.arco-btn-disabled {
+html[data-sv-ui='dense'] .arco-btn-primary.arco-btn-disabled {
   background-color: var(--sv-raised);
   color: var(--sv-faint);
 }
 
 /* Arco links and selected rows follow the one accent. */
-html[data-sv-ui="dense"] a {
+html[data-sv-ui='dense'] a {
   color: var(--sv-brand-ink);
 }
 
-html[data-sv-ui="dense"] .arco-menu-selected,
-html[data-sv-ui="dense"] .arco-tabs-tab-active {
+html[data-sv-ui='dense'] .arco-menu-selected,
+html[data-sv-ui='dense'] .arco-tabs-tab-active {
   color: var(--sv-text);
 }
 
-html[data-sv-ui="dense"] .arco-input,
-html[data-sv-ui="dense"] .arco-textarea,
-html[data-sv-ui="dense"] .arco-select-view,
-html[data-sv-ui="dense"] .arco-input-inner-wrapper,
-html[data-sv-ui="dense"] .arco-btn {
+html[data-sv-ui='dense'] .arco-input,
+html[data-sv-ui='dense'] .arco-textarea,
+html[data-sv-ui='dense'] .arco-select-view,
+html[data-sv-ui='dense'] .arco-input-inner-wrapper,
+html[data-sv-ui='dense'] .arco-btn {
   font-size: 13px;
 }
 
-html[data-sv-ui="dense"] .arco-form-label-item > label,
-html[data-sv-ui="dense"] .arco-form-item-label-col > label {
+html[data-sv-ui='dense'] .arco-form-label-item > label,
+html[data-sv-ui='dense'] .arco-form-item-label-col > label {
   font-size: 12px;
 }
 
 /* Flat chrome: the Dense reference has no shadows. */
-html[data-sv-ui="dense"] .arco-modal {
+html[data-sv-ui='dense'] .arco-modal {
   border: 1px solid var(--sv-line);
   border-radius: var(--sv-r-dialog);
   box-shadow: none;
 }
 
-html[data-sv-ui="dense"] .arco-dropdown,
-html[data-sv-ui="dense"] .arco-popover-content {
+html[data-sv-ui='dense'] .arco-dropdown,
+html[data-sv-ui='dense'] .arco-popover-content {
   border: 1px solid var(--sv-line);
   border-radius: var(--sv-r-popup);
   box-shadow: none;
 }
 
-html[data-sv-ui="dense"] .arco-card {
+html[data-sv-ui='dense'] .arco-card {
   border-color: var(--sv-line);
   border-radius: 8px;
   background: var(--sv-surface);
   box-shadow: none;
 }
 
-html[data-sv-ui="dense"] .arco-card-header {
+html[data-sv-ui='dense'] .arco-card-header {
   border-bottom-color: var(--sv-line);
 }
 
 /* The settings pages are flat in Dense: no glow, no dot grid. */
-html[data-sv-ui="dense"] .settings-page-wrapper::before {
+html[data-sv-ui='dense'] .settings-page-wrapper::before {
   display: none;
 }
 
-html[data-sv-ui="dense"] .settings-page-eyebrow::before {
+html[data-sv-ui='dense'] .settings-page-eyebrow::before {
   background: var(--sv-brand-1);
 }
 
 /* The welcome page keeps the hero, not the atmosphere; its card is a flat field. */
-html[data-sv-ui="dense"] .sv-dense-welcome::before {
+html[data-sv-ui='dense'] .sv-dense-welcome::before {
   display: none;
 }
 
-html[data-sv-ui="dense"] .guid-input-card-shell {
+html[data-sv-ui='dense'] .guid-input-card-shell {
   border-color: var(--sv-line);
   border-radius: 18px;
   background: var(--sv-surface);
   box-shadow: none;
 }
 
-html[data-sv-ui="dense"] .guid-input-card-shell[data-active='true'] {
+html[data-sv-ui='dense'] .guid-input-card-shell[data-active='true'] {
   border-color: var(--sv-line-strong);
   box-shadow: none;
 }
 
 /* The composer is a flat field in Dense; only its send button carries the accent. */
-html[data-sv-ui="dense"] .sendbox-panel,
-html[data-sv-ui="dense"] .sendbox-panel--active {
+html[data-sv-ui='dense'] .sendbox-panel,
+html[data-sv-ui='dense'] .sendbox-panel--active {
   background-color: var(--sv-surface);
   border-color: var(--sv-line);
   box-shadow: none;
 }
 
-html[data-sv-ui="dense"] .sendbox-panel {
+html[data-sv-ui='dense'] .sendbox-panel {
   padding: 7px 9px 5px !important;
   border-radius: 12px !important;
 }
 
-html[data-sv-ui="dense"] .sendbox-panel .send-button-custom,
-html[data-sv-ui="dense"] .sendbox-panel .send-button-custom.arco-btn,
-html[data-sv-ui="dense"] .sendbox-panel .send-button-custom.arco-btn-primary {
+html[data-sv-ui='dense'] .sendbox-panel .send-button-custom,
+html[data-sv-ui='dense'] .sendbox-panel .send-button-custom.arco-btn,
+html[data-sv-ui='dense'] .sendbox-panel .send-button-custom.arco-btn-primary {
   width: 26px !important;
   min-width: 26px !important;
   height: 26px !important;
@@ -500,26 +526,26 @@ html[data-sv-ui="dense"] .sendbox-panel .send-button-custom.arco-btn-primary {
   flex-basis: 26px !important;
 }
 
-html[data-sv-ui="dense"] .sendbox-panel textarea,
-html[data-sv-ui="dense"] .sendbox-highlight-layer {
+html[data-sv-ui='dense'] .sendbox-panel textarea,
+html[data-sv-ui='dense'] .sendbox-highlight-layer {
   font-size: 12.5px !important;
   line-height: 18px !important;
 }
 
-html[data-sv-ui="dense"] .sendbox-toolbar {
+html[data-sv-ui='dense'] .sendbox-toolbar {
   row-gap: 6px;
 }
 
-html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled,
-html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled.arco-btn {
+html[data-sv-ui='dense'] .sendbox-panel .send-button-custom--enabled,
+html[data-sv-ui='dense'] .sendbox-panel .send-button-custom--enabled.arco-btn {
   background-color: var(--sv-brand) !important;
   border-color: var(--sv-brand) !important;
   color: var(--sv-on-brand) !important;
 }
 
-html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled:not(:disabled):hover,
-html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled:not(:disabled):active,
-html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled:not(:disabled):focus-visible {
+html[data-sv-ui='dense'] .sendbox-panel .send-button-custom--enabled:not(:disabled):hover,
+html[data-sv-ui='dense'] .sendbox-panel .send-button-custom--enabled:not(:disabled):active,
+html[data-sv-ui='dense'] .sendbox-panel .send-button-custom--enabled:not(:disabled):focus-visible {
   background-color: var(--sv-brand-1) !important;
   border-color: var(--sv-brand-1) !important;
   color: var(--sv-on-brand) !important;
@@ -572,8 +598,14 @@ html[data-sv-ui="dense"] .sendbox-panel .send-button-custom--enabled:not(:disabl
 }
 
 @keyframes mu-indicator-in {
-  from { opacity: 0; transform: scaleY(0.4); }
-  to { opacity: 1; transform: scaleY(1); }
+  from {
+    opacity: 0;
+    transform: scaleY(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
 }
 
 [data-color-scheme='mu'] .send-button-custom--enabled {

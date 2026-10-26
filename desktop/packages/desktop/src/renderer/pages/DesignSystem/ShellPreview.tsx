@@ -143,7 +143,10 @@ const ShellPreview: React.FC = () => (
                   <b className='font-medium text-sv-text'>spec.jev</b> 14:32
                 </div>
                 <p className='mt-1 text-[12.5px] leading-[1.55]'>
-                  找到原因了：<code className='rounded border border-sv-line bg-sv-surface-2 px-1 font-mono text-[11px]'>asarUnpack</code>{' '}
+                  找到原因了：
+                  <code className='rounded border border-sv-line bg-sv-surface-2 px-1 font-mono text-[11px]'>
+                    asarUnpack
+                  </code>{' '}
                   的文件名被改成 spec.jev-acp.js，但构建产物仍是 mu-acp.js。ACP 进程启动后立即退出。
                 </p>
                 <div className='mt-2 overflow-hidden rounded-[5px] border border-sv-line bg-sv-surface'>
@@ -152,7 +155,8 @@ const ShellPreview: React.FC = () => (
                     <span className='ml-auto font-mono text-[9.5px] text-sv-ok'>exit 0</span>
                   </div>
                   <pre className='overflow-auto p-2 font-mono text-[10.5px] leading-[1.6] text-sv-muted'>
-                    <span className='text-sv-faint'>PS&gt;</span> Test-Path .\resources\app.asar.unpacked\out\main\mu-acp.js{'\n'}
+                    <span className='text-sv-faint'>PS&gt;</span> Test-Path
+                    .\resources\app.asar.unpacked\out\main\mu-acp.js{'\n'}
                     <span className='text-sv-ok'>False</span>
                   </pre>
                 </div>
@@ -162,7 +166,11 @@ const ShellPreview: React.FC = () => (
                   <span className='ml-auto font-mono text-[9.5px] text-sv-faint'>0.92</span>
                 </div>
                 <p className='mt-2 text-[12.5px] leading-[1.55]'>
-                  已重新打包并验证 ACP 握手：<code className='rounded border border-sv-line bg-sv-surface-2 px-1 font-mono text-[11px]'>spec.jev 0.1.0</code>。
+                  已重新打包并验证 ACP 握手：
+                  <code className='rounded border border-sv-line bg-sv-surface-2 px-1 font-mono text-[11px]'>
+                    spec.jev 0.1.0
+                  </code>
+                  。
                 </p>
               </div>
             </div>

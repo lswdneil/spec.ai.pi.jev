@@ -782,9 +782,7 @@ export const application = {
     IBridgeResponse<IWebUiAccessState>,
     { id: string; scope: WebUiDeviceScope }
   >('webui.approve-pairing'),
-  rejectWebUiPairing: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>(
-    'webui.reject-pairing'
-  ),
+  rejectWebUiPairing: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>('webui.reject-pairing'),
   revokeWebUiDevice: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>('webui.revoke-device'),
   rotateWebUiDeviceToken: bridge.buildProvider<IBridgeResponse<IWebUiAccessState>, { id: string }>(
     'webui.rotate-device-token'

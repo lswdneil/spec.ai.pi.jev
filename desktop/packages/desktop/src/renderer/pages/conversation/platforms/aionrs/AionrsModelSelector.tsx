@@ -115,7 +115,8 @@ const AionrsModelSelector: React.FC<{
   );
 
   return (
-    <Dropdown renderClosed
+    <Dropdown
+      renderClosed
       trigger='click'
       // Mobile: portal the popup to <body> so it escapes the titlebar slot.
       // Desktop: leave default container so click events reach Menu.Item normally.

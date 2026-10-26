@@ -108,7 +108,13 @@ export default function ModelRows({ models, onChange, suggestions, facts = {}, d
                   aria-label={toggle}
                   title={toggle}
                   data-testid={`mu-model-edit-${index}`}
-                  icon={editing ? <Check theme='outline' className='sv-icon-sm' /> : <Edit theme='outline' className='sv-icon-sm' />}
+                  icon={
+                    editing ? (
+                      <Check theme='outline' className='sv-icon-sm' />
+                    ) : (
+                      <Edit theme='outline' className='sv-icon-sm' />
+                    )
+                  }
                   onClick={() => setOpen(editing ? undefined : index)}
                 />
                 <Button

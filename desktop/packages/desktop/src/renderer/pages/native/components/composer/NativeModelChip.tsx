@@ -139,7 +139,8 @@ const NativeModelChip: React.FC<{
     );
 
   return (
-    <Dropdown renderClosed
+    <Dropdown
+      renderClosed
       trigger='click'
       position='tr'
       popupVisible={visible}

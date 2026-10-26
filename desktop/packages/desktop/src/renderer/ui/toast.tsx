@@ -42,8 +42,7 @@ const messageOf = (value: unknown): { content: React.ReactNode; duration?: numbe
 };
 
 const notify =
-  (kind: 'success' | 'error' | 'info' | 'warning' | 'loading') =>
-  (value: unknown, fallbackDuration?: number) => {
+  (kind: 'success' | 'error' | 'info' | 'warning' | 'loading') => (value: unknown, fallbackDuration?: number) => {
     const { content, duration } = messageOf(value);
     const id = toast[kind](content, duration ?? fallbackDuration);
     return () => toast.dismiss(id);

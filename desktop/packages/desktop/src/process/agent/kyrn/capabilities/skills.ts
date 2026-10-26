@@ -266,7 +266,10 @@ export async function removeSkill(
   if (!skill) throw new KyrnError('notFound', `No skill named ${wanted}`, { name: wanted });
   const target = skill.source === 'mu' ? removableTarget(folder, skill.file) : undefined;
   if (!target)
-    throw new KyrnError('notMine', `${wanted} is not in spec.jev's skills folder`, { name: wanted, source: skill.source });
+    throw new KyrnError('notMine', `${wanted} is not in spec.jev's skills folder`, {
+      name: wanted,
+      source: skill.source,
+    });
   try {
     await trash(target);
   } catch (error) {

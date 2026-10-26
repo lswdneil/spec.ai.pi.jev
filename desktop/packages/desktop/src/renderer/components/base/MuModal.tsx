@@ -476,27 +476,27 @@ const MuModal: React.FC<MuModalProps> = ({
             if (!maskClosable) event.preventDefault();
           }}
         >
-      <div
-        className={classNames(
-          'mu-modal-wrapper max-h-[calc(100vh-64px)] overflow-hidden',
-          isStandard && 'flex flex-col min-h-0'
-        )}
-        style={{ borderRadius: borderRadiusVal }}
-      >
-        {renderHeader()}
-        <div
-          className={classNames(
-            'mu-modal-body-content',
-            isStandard && STD_BODY_LAYOUT_CLASS,
-            // 默认套用标准内边距；调用方显式传 contentStyle.padding 时改由 inline style 生效（可为 0）
-            isStandard && !stdBodyHasCustomPadding && STD_BODY_PADDING_CLASS
-          )}
-          style={stdBodyHasCustomPadding ? { ...bodyInlineStyle, padding: paddingVal } : bodyInlineStyle}
-        >
-          {children}
-        </div>
-        {renderFooter()}
-      </div>
+          <div
+            className={classNames(
+              'mu-modal-wrapper max-h-[calc(100vh-64px)] overflow-hidden',
+              isStandard && 'flex flex-col min-h-0'
+            )}
+            style={{ borderRadius: borderRadiusVal }}
+          >
+            {renderHeader()}
+            <div
+              className={classNames(
+                'mu-modal-body-content',
+                isStandard && STD_BODY_LAYOUT_CLASS,
+                // 默认套用标准内边距；调用方显式传 contentStyle.padding 时改由 inline style 生效（可为 0）
+                isStandard && !stdBodyHasCustomPadding && STD_BODY_PADDING_CLASS
+              )}
+              style={stdBodyHasCustomPadding ? { ...bodyInlineStyle, padding: paddingVal } : bodyInlineStyle}
+            >
+              {children}
+            </div>
+            {renderFooter()}
+          </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

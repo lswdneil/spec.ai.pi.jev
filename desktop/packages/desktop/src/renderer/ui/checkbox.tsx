@@ -63,50 +63,48 @@ export interface CheckboxProps {
   indeterminate?: boolean;
 }
 
-const CheckboxBase = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>, CheckboxProps>(
-  function Checkbox(
-    { checked, defaultChecked, value, indeterminate, onCheckedChange, onChange, disabled, className, children, ...props },
-    ref
-  ) {
-    const group = React.useContext(GroupContext);
-    const inGroup = group.value !== undefined && value !== undefined;
-    const isChecked = inGroup ? group.value!.includes(value!) : checked;
-    return (
-      <label className={cn('inline-flex items-center gap-2', className)}>
-        <CheckboxPrimitive.Root
-          ref={ref}
-          checked={indeterminate ? 'indeterminate' : isChecked}
-          defaultChecked={defaultChecked}
-          disabled={disabled || group.disabled}
-          onCheckedChange={(next) => {
-            const on = next === true;
-            if (inGroup) {
-              const set = new Set(group.value);
-              if (on) set.add(value!);
-              else set.delete(value!);
-              group.onChange?.([...set]);
-            }
-            onCheckedChange?.(on);
-            onChange?.(on);
-          }}
-          className={cn(
-            'flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] border border-sv-line bg-sv-surface text-sv-on-brand outline-none transition-colors',
-            'data-[state=checked]:border-sv-brand data-[state=checked]:bg-sv-brand',
-            'data-[state=indeterminate]:border-sv-brand data-[state=indeterminate]:bg-sv-brand',
-            'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus',
-            'disabled:cursor-not-allowed disabled:opacity-50'
-          )}
-          {...props}
-        >
-          <CheckboxPrimitive.Indicator className='flex items-center justify-center'>
-            <Check className='sv-icon-xs' strokeWidth={2.5} />
-          </CheckboxPrimitive.Indicator>
-        </CheckboxPrimitive.Root>
-        {children}
-      </label>
-    );
-  }
-);
+const CheckboxBase = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>, CheckboxProps>(function Checkbox(
+  { checked, defaultChecked, value, indeterminate, onCheckedChange, onChange, disabled, className, children, ...props },
+  ref
+) {
+  const group = React.useContext(GroupContext);
+  const inGroup = group.value !== undefined && value !== undefined;
+  const isChecked = inGroup ? group.value!.includes(value!) : checked;
+  return (
+    <label className={cn('inline-flex items-center gap-2', className)}>
+      <CheckboxPrimitive.Root
+        ref={ref}
+        checked={indeterminate ? 'indeterminate' : isChecked}
+        defaultChecked={defaultChecked}
+        disabled={disabled || group.disabled}
+        onCheckedChange={(next) => {
+          const on = next === true;
+          if (inGroup) {
+            const set = new Set(group.value);
+            if (on) set.add(value!);
+            else set.delete(value!);
+            group.onChange?.([...set]);
+          }
+          onCheckedChange?.(on);
+          onChange?.(on);
+        }}
+        className={cn(
+          'flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] border border-sv-line bg-sv-surface text-sv-on-brand outline-none transition-colors',
+          'data-[state=checked]:border-sv-brand data-[state=checked]:bg-sv-brand',
+          'data-[state=indeterminate]:border-sv-brand data-[state=indeterminate]:bg-sv-brand',
+          'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus',
+          'disabled:cursor-not-allowed disabled:opacity-50'
+        )}
+        {...props}
+      >
+        <CheckboxPrimitive.Indicator className='flex items-center justify-center'>
+          <Check className='sv-icon-xs' strokeWidth={2.5} />
+        </CheckboxPrimitive.Indicator>
+      </CheckboxPrimitive.Root>
+      {children}
+    </label>
+  );
+});
 
 type CheckboxComponent = typeof CheckboxBase & { Group: typeof CheckboxGroup };
 

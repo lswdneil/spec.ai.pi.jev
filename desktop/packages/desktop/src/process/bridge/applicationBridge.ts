@@ -52,9 +52,7 @@ const webUiAccessAdapter: WebUiAccess = {
 };
 
 function webUiStatus(error?: string): IWebUiStatus {
-  return webUi
-    ? { running: true, port: webUi.port, url: webUi.url }
-    : { running: false, ...(error ? { error } : {}) };
+  return webUi ? { running: true, port: webUi.port, url: webUi.url } : { running: false, ...(error ? { error } : {}) };
 }
 
 async function startWebUi(port?: number, persist = true): Promise<IWebUiStatus> {

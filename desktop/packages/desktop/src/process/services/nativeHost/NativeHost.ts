@@ -224,7 +224,10 @@ export class NativeHost {
       child = this.fork(this.launch);
     } catch (error) {
       this.finish(
-        new NativeHostError('failed', `The spec.jev host did not start: ${error instanceof Error ? error.message : error}`)
+        new NativeHostError(
+          'failed',
+          `The spec.jev host did not start: ${error instanceof Error ? error.message : error}`
+        )
       );
       return;
     }
@@ -329,7 +332,8 @@ export class NativeHost {
   private unavailable(): NativeHostError | undefined {
     const state = this.current;
     if (state.phase === 'failed') return state.error;
-    if (state.phase === 'stopped' || this.disposing) return new NativeHostError('closed', 'The spec.jev host was closed');
+    if (state.phase === 'stopped' || this.disposing)
+      return new NativeHostError('closed', 'The spec.jev host was closed');
     if (!this.child) return new NativeHostError('closed', 'The spec.jev host has not been started');
     return undefined;
   }
@@ -401,7 +405,10 @@ export class NativeHost {
     if (record.success === true) request.resolve(record.data);
     else
       request.reject(
-        new NativeHostError('command', typeof record.error === 'string' && record.error ? record.error : 'spec.jev refused')
+        new NativeHostError(
+          'command',
+          typeof record.error === 'string' && record.error ? record.error : 'spec.jev refused'
+        )
       );
   }
 

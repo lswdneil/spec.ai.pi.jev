@@ -14,8 +14,7 @@ const sizeFor = (size: Size | ArcoSize = 'md'): Size => {
   return size;
 };
 
-export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix' | 'onChange'> {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix' | 'onChange'> {
   size?: Size | ArcoSize;
   status?: 'normal' | 'error' | 'warning';
   prefix?: React.ReactNode;
@@ -53,7 +52,11 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   ref
 ) {
   const statusClass =
-    status === 'error' ? 'border-sv-danger arco-input-error' : status === 'warning' ? 'border-sv-warn arco-input-warning' : '';
+    status === 'error'
+      ? 'border-sv-danger arco-input-error'
+      : status === 'warning'
+        ? 'border-sv-warn arco-input-warning'
+        : '';
   const input = (
     <input
       ref={ref}
@@ -121,8 +124,7 @@ const InputBase = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   );
 });
 
-export interface TextareaProps
-  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
+export interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
   status?: 'normal' | 'error' | 'warning';
   autoSize?: boolean | { minRows?: number; maxRows?: number };
   showWordLimit?: boolean;

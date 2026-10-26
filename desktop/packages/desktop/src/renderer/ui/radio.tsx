@@ -27,7 +27,19 @@ export interface RadioGroupProps {
 }
 
 const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(function RadioGroup(
-  { value, defaultValue, onChange, disabled, type = 'radio', direction = 'horizontal', size = 'default', className, options, children, ...props },
+  {
+    value,
+    defaultValue,
+    onChange,
+    disabled,
+    type = 'radio',
+    direction = 'horizontal',
+    size = 'default',
+    className,
+    options,
+    children,
+    ...props
+  },
   ref
 ) {
   return (

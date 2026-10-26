@@ -60,7 +60,9 @@ export const useTalkToButler = (): ((args: TalkToButlerArgs) => Promise<void>) =
           if (butler.enabled === false) {
             await ipcBridge.assistants.setState.invoke({ id: butler.id, enabled: true });
             await swrMutate('assistants.list');
-            Message.success(t('settings.talkToButler.enabledToast', { defaultValue: 'Enabled the spec.jev Butler for you' }));
+            Message.success(
+              t('settings.talkToButler.enabledToast', { defaultValue: 'Enabled the spec.jev Butler for you' })
+            );
           }
         }
       } catch (error) {

@@ -176,7 +176,9 @@ export function initKyrnBridge(): void {
         harness.layout === 'package' ? { stateDir: muEnv('LOCAL_JUDGE_RUN_DIR') || join(home, 'local-judge') } : {}
       );
   if (localJudge instanceof OnnxLocalJudge)
-    void localJudge.autoStart(agentDir).catch((error: unknown) => console.warn('[spec.jev] local judge autostart:', error));
+    void localJudge
+      .autoStart(agentDir)
+      .catch((error: unknown) => console.warn('[spec.jev] local judge autostart:', error));
   kyrnBridge.localJudgeState.provider(() => result(() => localJudge.state()));
   kyrnBridge.localJudgeRun.provider(({ action, consent }) => result(() => localJudge.run(action, consent === true)));
   kyrnBridge.clmCheck.provider(({ baseUrl }) =>

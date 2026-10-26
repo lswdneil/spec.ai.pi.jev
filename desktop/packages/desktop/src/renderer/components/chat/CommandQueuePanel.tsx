@@ -26,7 +26,10 @@ import { useTranslation } from 'react-i18next';
 
 const getCommandPreview = (input: string): string => input.replace(/\s+/g, ' ').trim();
 
-const DraftBoxActionIcon: React.FC<{ className?: string; color?: string }> = ({ className, color = 'currentColor' }) => (
+const DraftBoxActionIcon: React.FC<{ className?: string; color?: string }> = ({
+  className,
+  color = 'currentColor',
+}) => (
   <svg className={className} viewBox='0 0 24 24' fill='none' aria-hidden='true'>
     <path
       d='M7 4.5h10l2 7.5v5.2A2.8 2.8 0 0 1 16.2 20H7.8A2.8 2.8 0 0 1 5 17.2V12l2-7.5Z'

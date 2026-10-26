@@ -458,7 +458,10 @@ async function syncBuiltinMcpConfig(configFile: ConfigFile): Promise<void> {
   }
 
   await httpRequest<void>('PUT', '/api/settings/client', { 'mcp.config': mergedMcpConfig });
-  console.info('[spec.jev] Synced builtin MCP config to backend settings (%d builtin servers)', localBuiltinServers.length);
+  console.info(
+    '[spec.jev] Synced builtin MCP config to backend settings (%d builtin servers)',
+    localBuiltinServers.length
+  );
 }
 
 export async function runBackendMigrations(configFile: ConfigFile): Promise<void> {
@@ -495,6 +498,9 @@ export async function runBackendMigrations(configFile: ConfigFile): Promise<void
     await syncBuiltinMcpConfig(configFile);
     console.info(`[spec.jev] Backend migration step completed: syncBuiltinMcpConfig (${Date.now() - syncStart}ms)`);
   } catch (error) {
-    console.error(`[spec.jev] Backend migration step failed: syncBuiltinMcpConfig (${Date.now() - syncStart}ms)`, error);
+    console.error(
+      `[spec.jev] Backend migration step failed: syncBuiltinMcpConfig (${Date.now() - syncStart}ms)`,
+      error
+    );
   }
 }

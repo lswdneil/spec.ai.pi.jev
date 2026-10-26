@@ -128,7 +128,11 @@ function resolveManifestFile(root: string, value: unknown): string | null {
   return within(resolve(root), file) ? file : null;
 }
 
-function contributionFor(name: string, entries: RawWebUiEntry[], enabled: Set<string>): WebUiExtensionContribution | null {
+function contributionFor(
+  name: string,
+  entries: RawWebUiEntry[],
+  enabled: Set<string>
+): WebUiExtensionContribution | null {
   if (!enabled.has(name)) return null;
   const manifestHit = findManifest(entries);
   const root = manifestHit?.root;
@@ -299,7 +303,12 @@ async function readBody(request: IncomingMessage): Promise<unknown> {
   return text;
 }
 
-function serveAsset(request: IncomingMessage, response: ServerResponse, pathname: string, asset: WebUiExtensionAsset): boolean {
+function serveAsset(
+  request: IncomingMessage,
+  response: ServerResponse,
+  pathname: string,
+  asset: WebUiExtensionAsset
+): boolean {
   if (pathname !== asset.urlPrefix && !pathname.startsWith(`${asset.urlPrefix}/`)) return false;
   const encoded = pathname.slice(asset.urlPrefix.length).replace(/^\/+/, '');
   let relativePath: string;
@@ -392,9 +401,7 @@ export async function handleWebUiExtensionRequest(
       if (!response.headersSent) {
         response.writeHead(500, { 'content-type': 'application/json; charset=utf-8' });
       }
-      response.end(
-        JSON.stringify({ error: error instanceof Error ? error.message : 'EXTENSION_HANDLER_FAILED' })
-      );
+      response.end(JSON.stringify({ error: error instanceof Error ? error.message : 'EXTENSION_HANDLER_FAILED' }));
     }
     return true;
   }

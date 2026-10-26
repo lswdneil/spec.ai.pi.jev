@@ -118,7 +118,8 @@ const AcpModelChip: React.FC<AcpModelChipProps> = ({
 
   return (
     // The composer sits mid-page: the menu opens below the chip, flush right.
-    <Dropdown renderClosed
+    <Dropdown
+      renderClosed
       trigger='click'
       position='br'
       popupVisible={visible}
@@ -264,7 +265,8 @@ const GuidModelSelector: React.FC<GuidModelSelectorProps> = ({
     );
 
     return (
-      <Dropdown renderClosed
+      <Dropdown
+        renderClosed
         trigger='hover'
         droplist={
           <Menu selectedKeys={currentProviderModelId ? [currentProviderModelId] : []}>

@@ -97,7 +97,10 @@ export const Result: React.FC<ResultProps> = ({ status = 'info', title, subTitle
   const config = resultIcons[status as keyof typeof resultIcons] ?? resultIcons.info;
   const Icon = config.Icon;
   return (
-    <div className={cn('flex flex-col items-center justify-center gap-3 px-6 py-10 text-center', className)} style={style}>
+    <div
+      className={cn('flex flex-col items-center justify-center gap-3 px-6 py-10 text-center', className)}
+      style={style}
+    >
       <div className={config.tone}>{icon ?? <Icon className='h-8 w-8' strokeWidth={1.5} aria-hidden='true' />}</div>
       {title ? <div className='text-[15px] font-semibold text-sv-text'>{title}</div> : null}
       {subTitle ? <div className='max-w-[420px] text-[12px] leading-[1.6] text-sv-muted'>{subTitle}</div> : null}
@@ -166,7 +169,10 @@ export const Progress: React.FC<ProgressProps> = ({
   return (
     <span className={cn('flex w-full items-center gap-2', className)} style={style}>
       <span className='relative block flex-1 overflow-hidden rounded-full' style={{ height, background: trailColor }}>
-        <span className='block h-full rounded-full transition-[width]' style={{ width: `${value}%`, background: color }} />
+        <span
+          className='block h-full rounded-full transition-[width]'
+          style={{ width: `${value}%`, background: color }}
+        />
       </span>
       {showText ? (
         <span className='shrink-0 text-[11px] text-sv-muted'>

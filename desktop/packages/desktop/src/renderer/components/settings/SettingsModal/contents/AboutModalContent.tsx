@@ -206,9 +206,7 @@ const AboutModalContent: React.FC = () => {
         data-testid='about-quote'
       >
         <p className='m-0 text-13px leading-22px text-t-primary'>{t('settings.aboutQuote')}</p>
-        <footer className='text-[11.5px] leading-[18px] text-t-secondary'>
-          — {t('settings.aboutQuoteAuthor')}
-        </footer>
+        <footer className='text-[11.5px] leading-[18px] text-t-secondary'>— {t('settings.aboutQuoteAuthor')}</footer>
       </blockquote>
     </div>
   );

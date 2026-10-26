@@ -29,7 +29,11 @@ export const Pagination: React.FC<PaginationProps> = ({
   if (pages <= 1) return null;
   const go = (page: number) => onChange?.(Math.min(pages, Math.max(1, page)));
   return (
-    <nav aria-label={ariaLabel} className={cn('flex items-center justify-end gap-2 text-[11px] text-sv-muted', className)} style={style}>
+    <nav
+      aria-label={ariaLabel}
+      className={cn('flex items-center justify-end gap-2 text-[11px] text-sv-muted', className)}
+      style={style}
+    >
       {showTotal ? <span>{`${total} total`}</span> : null}
       <button
         type='button'

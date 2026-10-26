@@ -75,7 +75,8 @@ export const Tree: React.FC<TreeProps> = ({
 
   const keyOf = (node: TreeNodeData, index: number): string => String(node[names.key] ?? index);
   const titleOf = (node: TreeNodeData): React.ReactNode => node[names.title] as React.ReactNode;
-  const childrenOf = (node: TreeNodeData): TreeNodeData[] | undefined => node[names.children] as TreeNodeData[] | undefined;
+  const childrenOf = (node: TreeNodeData): TreeNodeData[] | undefined =>
+    node[names.children] as TreeNodeData[] | undefined;
   const leafOf = (node: TreeNodeData): boolean => node.isLeaf ?? !(childrenOf(node)?.length || loadMore);
 
   const setExpanded = (next: string[], node: TreeNodeData, expandedNow: boolean) => {
@@ -100,7 +101,11 @@ export const Tree: React.FC<TreeProps> = ({
     if (!actionOnClick.includes('expand')) return;
     const open = expanded.includes(key);
     if (open) {
-      setExpanded(expanded.filter((item) => item !== key), node, false);
+      setExpanded(
+        expanded.filter((item) => item !== key),
+        node,
+        false
+      );
       return;
     }
     if (!childrenOf(node)?.length && loadMore) {
@@ -144,7 +149,12 @@ export const Tree: React.FC<TreeProps> = ({
                   strokeWidth={1.75}
                   onClick={(event) => {
                     event.stopPropagation();
-                    if (open) setExpanded(expanded.filter((item) => item !== key), node, false);
+                    if (open)
+                      setExpanded(
+                        expanded.filter((item) => item !== key),
+                        node,
+                        false
+                      );
                     else {
                       if (!children?.length && loadMore) void loadMore(rendered);
                       setExpanded([...expanded, key], node, true);

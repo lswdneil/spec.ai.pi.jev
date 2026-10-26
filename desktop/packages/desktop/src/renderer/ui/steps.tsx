@@ -36,10 +36,7 @@ const StepsBase: React.FC<StepsProps> = ({
     (child): child is React.ReactElement<StepProps> => React.isValidElement<StepProps>(child) && child.type === Step
   );
   return (
-    <div
-      className={cn('flex', direction === 'vertical' ? 'flex-col gap-3' : 'items-start', className)}
-      style={style}
-    >
+    <div className={cn('flex', direction === 'vertical' ? 'flex-col gap-3' : 'items-start', className)} style={style}>
       {steps.map((step, index) => {
         const status = step.props.status ?? (index < current ? 'finish' : index === current ? 'process' : 'wait');
         const active = status === 'finish' || status === 'process';
@@ -56,7 +53,8 @@ const StepsBase: React.FC<StepsProps> = ({
                   status === 'error' && 'border-sv-danger text-sv-danger'
                 )}
               >
-                {step.props.icon ?? (status === 'finish' ? <Check className='sv-icon-xs' strokeWidth={2.5} /> : index + 1)}
+                {step.props.icon ??
+                  (status === 'finish' ? <Check className='sv-icon-xs' strokeWidth={2.5} /> : index + 1)}
               </span>
               {direction === 'vertical' && index < steps.length - 1 ? (
                 <span className='my-1 block h-4 w-px bg-sv-line' aria-hidden='true' />

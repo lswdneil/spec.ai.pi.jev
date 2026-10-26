@@ -214,7 +214,12 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
                     icon={<Shield theme='outline' className='sv-icon-sm' strokeWidth={2.5} />}
                     label={t('conversation.mcp.selectedWithCount', { count: mcpStatuses.length })}
                     suffix={
-                      <Right theme='outline' className='sv-icon-xs' strokeWidth={3} style={{ color: 'var(--text-disabled)' }} />
+                      <Right
+                        theme='outline'
+                        className='sv-icon-xs'
+                        strokeWidth={3}
+                        style={{ color: 'var(--text-disabled)' }}
+                      />
                     }
                   />
                 </div>
@@ -237,7 +242,12 @@ const FileAttachButton: React.FC<FileAttachButtonProps> = ({ openFileSelector, l
                     icon={<Lightning theme='outline' className='sv-icon-sm' strokeWidth={2.5} />}
                     label={t('common.selectedSkillsWithCount', { count: skillNames.length })}
                     suffix={
-                      <Right theme='outline' className='sv-icon-xs' strokeWidth={3} style={{ color: 'var(--text-disabled)' }} />
+                      <Right
+                        theme='outline'
+                        className='sv-icon-xs'
+                        strokeWidth={3}
+                        style={{ color: 'var(--text-disabled)' }}
+                      />
                     }
                   />
                 </div>

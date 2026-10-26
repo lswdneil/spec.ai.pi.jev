@@ -19,8 +19,7 @@ const MobileTabBar: React.FC = () => {
   const { pathname } = useLocation();
   const layout = useLayoutContext();
   const { closePreview } = usePreviewContext();
-  const sessionsActive =
-    pathname === '/guid' || pathname.startsWith('/conversation/') || pathname.startsWith('/team/');
+  const sessionsActive = pathname === '/guid' || pathname.startsWith('/conversation/') || pathname.startsWith('/team/');
   const settingsActive = pathname.startsWith('/settings');
 
   const putSiderAway = () => layout?.setSiderCollapsed?.(true);

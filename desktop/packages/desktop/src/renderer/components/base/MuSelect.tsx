@@ -5,12 +5,7 @@
  */
 
 import React, { useImperativeHandle, useRef } from 'react';
-import {
-  Select,
-  SelectOption,
-  SelectOptGroup,
-  type SelectProps,
-} from '@/renderer/ui/select';
+import { Select, SelectOption, SelectOptGroup, type SelectProps } from '@/renderer/ui/select';
 import { cn } from '@/renderer/ui/cn';
 
 /**

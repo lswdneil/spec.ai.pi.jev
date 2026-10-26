@@ -119,7 +119,8 @@ const ComposerModelChip: React.FC<{
 
   return (
     // The chip sits at the right of the box, beside the send button: the menu opens above it, flush right.
-    <Dropdown renderClosed
+    <Dropdown
+      renderClosed
       trigger='click'
       position='tr'
       popupVisible={visible}

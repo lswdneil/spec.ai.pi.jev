@@ -23,11 +23,7 @@ export type LayoutDirection = 'ltr' | 'rtl';
 /** Whether the given app language lays out right-to-left. */
 export function isRtlLanguage(language: string | undefined | null): boolean {
   if (!language) return false;
-  const base = language
-    .trim()
-    .toLowerCase()
-    .replace(/_/g, '-')
-    .split('-')[0];
+  const base = language.trim().toLowerCase().replace(/_/g, '-').split('-')[0];
   return RTL_LANGUAGES.has(base);
 }
 

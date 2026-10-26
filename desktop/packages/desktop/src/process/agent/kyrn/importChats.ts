@@ -129,7 +129,8 @@ export function importCli(harness: Pick<Harness, 'root' | 'layout'>, deps: Impor
   const run = deps.run ?? runCommand;
   return async (args, timeoutMs) => {
     const entry = importEntryOf(harness, platform);
-    if (!exists(entry)) throw new KyrnError('importMissing', `This spec.jev has no import command: ${entry} is missing`);
+    if (!exists(entry))
+      throw new KyrnError('importMissing', `This spec.jev has no import command: ${entry} is missing`);
     const start = launchCommand(launcherOf(harness, platform), ['import', ...args]);
     return run(start.command, start.args, timeoutMs, { ...process.env, ...start.env });
   };

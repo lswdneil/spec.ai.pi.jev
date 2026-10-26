@@ -32,7 +32,6 @@ export type { MuCollapseProps, MuCollapseItemProps } from './MuCollapse';
 // MuSelect 类型 / MuSelect types
 export type { MuSelectProps } from './MuSelect';
 
-
 // MuSearchInput 类型 / MuSearchInput types
 export type { MuSearchInputProps } from './MuSearchInput';
 

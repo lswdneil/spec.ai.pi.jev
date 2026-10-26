@@ -135,7 +135,12 @@ const CssThemeModal: React.FC<CssThemeModalProps> = ({ visible, theme, onClose, 
           <div className='flex justify-between items-center'>
             <div>
               {onDelete && (
-                <Button type='text' status='danger' icon={<Delete theme='outline' className='sv-icon-sm' />} onClick={onDelete}>
+                <Button
+                  type='text'
+                  status='danger'
+                  icon={<Delete theme='outline' className='sv-icon-sm' />}
+                  onClick={onDelete}
+                >
                   {t('common.delete')}
                 </Button>
               )}

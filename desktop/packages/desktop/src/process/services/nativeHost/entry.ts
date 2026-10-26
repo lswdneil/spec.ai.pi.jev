@@ -98,7 +98,9 @@ let ended = false;
 
 function fail(stage: 'init' | 'import' | 'main', error: unknown): void {
   const message = error instanceof Error ? error.message : String(error);
-  process.stderr.write(`spec.jev host: ${stage} failed: ${error instanceof Error && error.stack ? error.stack : message}\n`);
+  process.stderr.write(
+    `spec.jev host: ${stage} failed: ${error instanceof Error && error.stack ? error.stack : message}\n`
+  );
   parent.post({ type: 'failed', stage, message });
   void parent.sent().finally(() => process.exit(1));
 }

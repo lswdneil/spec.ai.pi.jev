@@ -677,42 +677,39 @@ const GuidPage: React.FC = () => {
   ) : null;
 
   return (
-      <div
-        ref={guidContainerRef}
-        className={`${styles.guidContainer} sv-dense-welcome`}
-      >
-        <div className={styles.guidLayout}>
-          <MuHero leaving={guidInput.loading} />
+    <div ref={guidContainerRef} className={`${styles.guidContainer} sv-dense-welcome`}>
+      <div className={styles.guidLayout}>
+        <MuHero leaving={guidInput.loading} />
 
-          <AssistantSelectionArea
-            selectedAssistantId={agentSelection.selectedAssistantId}
-            assistants={agentSelection.assistants}
-            localeKey={localeKey}
-            onSelectAssistant={handleSelectAssistant}
-          />
+        <AssistantSelectionArea
+          selectedAssistantId={agentSelection.selectedAssistantId}
+          assistants={agentSelection.assistants}
+          localeKey={localeKey}
+          onSelectAssistant={handleSelectAssistant}
+        />
 
-          <GuidInputCard
-            focusRequestKey={navState?.focusPrefill && navState.prefillPrompt ? location.key : undefined}
-            input={guidInput.input}
-            onInputChange={handleInputChange}
-            onKeyDown={handleInputKeyDown}
-            onPaste={guidInput.onPaste}
-            onFocus={guidInput.handleTextareaFocus}
-            onBlur={guidInput.handleTextareaBlur}
-            placeholder={typewriterPlaceholder || placeholderText}
-            isInputActive={guidInput.isInputFocused}
-            isFileDragging={guidInput.isFileDragging}
-            dragHandlers={guidInput.dragHandlers}
-            files={displayFilePaths}
-            onRemoveFile={guidInput.handleRemoveFile}
-            actionRow={actionRowNode}
-            slashCommandMenu={slashCommandMenuNode}
-            workspaceDir={guidInput.dir}
-            onSelectWorkspace={(dir) => guidInput.setDir(dir)}
-            onClearWorkspace={() => guidInput.setDir('')}
-          />
-        </div>
+        <GuidInputCard
+          focusRequestKey={navState?.focusPrefill && navState.prefillPrompt ? location.key : undefined}
+          input={guidInput.input}
+          onInputChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
+          onPaste={guidInput.onPaste}
+          onFocus={guidInput.handleTextareaFocus}
+          onBlur={guidInput.handleTextareaBlur}
+          placeholder={typewriterPlaceholder || placeholderText}
+          isInputActive={guidInput.isInputFocused}
+          isFileDragging={guidInput.isFileDragging}
+          dragHandlers={guidInput.dragHandlers}
+          files={displayFilePaths}
+          onRemoveFile={guidInput.handleRemoveFile}
+          actionRow={actionRowNode}
+          slashCommandMenu={slashCommandMenuNode}
+          workspaceDir={guidInput.dir}
+          onSelectWorkspace={(dir) => guidInput.setDir(dir)}
+          onClearWorkspace={() => guidInput.setDir('')}
+        />
       </div>
+    </div>
   );
 };
 

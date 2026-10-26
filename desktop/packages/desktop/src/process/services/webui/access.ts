@@ -241,10 +241,7 @@ export class WebUiAccessManager {
     return { status: 'pending' };
   }
 
-  approve(
-    requestId: string,
-    scope: WebUiDeviceScope = 'read'
-  ): { ok: true } | { ok: false; error: string } {
+  approve(requestId: string, scope: WebUiDeviceScope = 'read'): { ok: true } | { ok: false; error: string } {
     const record = this.pending.get(requestId);
     if (!record || record.status !== 'pending') return { ok: false, error: 'request_not_found' };
     if (this.now() >= record.expiresAt) {
@@ -325,9 +322,7 @@ export class WebUiAccessManager {
     return { ok: true };
   }
 
-  claimRotation(
-    cookieHeader: string | undefined
-  ): { rotated: true; token: string } | { rotated: false } | null {
+  claimRotation(cookieHeader: string | undefined): { rotated: true; token: string } | { rotated: false } | null {
     const token = readCookie(cookieHeader, WEBUI_DEVICE_COOKIE);
     if (!token) return null;
     const separator = token.indexOf('.');
@@ -495,11 +490,10 @@ export class WebUiAccessManager {
   private persist(): void {
     try {
       mkdirSync(dirname(this.storePath), { recursive: true });
-      writeFileSync(
-        this.storePath,
-        JSON.stringify({ version: 1, devices: [...this.devices.values()] }, null, 2),
-        { encoding: 'utf8', mode: 0o600 }
-      );
+      writeFileSync(this.storePath, JSON.stringify({ version: 1, devices: [...this.devices.values()] }, null, 2), {
+        encoding: 'utf8',
+        mode: 0o600,
+      });
     } catch (error) {
       this.audit('store.write_failed', { error: error instanceof Error ? error.message : String(error) });
     }

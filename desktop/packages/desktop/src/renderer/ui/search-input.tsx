@@ -3,8 +3,7 @@ import * as React from 'react';
 import { cn } from './cn';
 import { Input, type InputProps } from './input';
 
-export interface SearchInputProps
-  extends Omit<InputProps, 'prefix' | 'suffix' | 'allowClear' | 'onChange' | 'value'> {
+export interface SearchInputProps extends Omit<InputProps, 'prefix' | 'suffix' | 'allowClear' | 'onChange' | 'value'> {
   value: string;
   onChange: (value: string) => void;
   allowClear?: boolean;
@@ -14,11 +13,25 @@ export interface SearchInputProps
   /** Test id for the wrapper, while `data-testid` still lands on the input. */
   wrapTestId?: string;
   /** Extra attributes for the native input. */
-  inputProps?: Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'placeholder' | 'disabled' | 'autoFocus' | 'className'>;
+  inputProps?: Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    'value' | 'onChange' | 'placeholder' | 'disabled' | 'autoFocus' | 'className'
+  >;
 }
 
 export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(function SearchInput(
-  { value, onChange, allowClear = true, onClear, variant = 'bar', wrapTestId, inputProps, className, autoFocus, ...props },
+  {
+    value,
+    onChange,
+    allowClear = true,
+    onClear,
+    variant = 'bar',
+    wrapTestId,
+    inputProps,
+    className,
+    autoFocus,
+    ...props
+  },
   ref
 ) {
   return (

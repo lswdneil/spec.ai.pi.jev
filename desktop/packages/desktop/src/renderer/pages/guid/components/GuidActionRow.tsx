@@ -524,7 +524,12 @@ const GuidActionRow: React.FC<GuidActionRowProps> = ({
               )}
             </span>
           ) : (
-            <Dropdown renderClosed trigger='hover' onVisibleChange={handlePlusDropdownVisibleChange} droplist={menuContent}>
+            <Dropdown
+              renderClosed
+              trigger='hover'
+              onVisibleChange={handlePlusDropdownVisibleChange}
+              droplist={menuContent}
+            >
               <span className='flex items-center gap-4px cursor-pointer lh-[1]'>
                 <Button
                   type='secondary'

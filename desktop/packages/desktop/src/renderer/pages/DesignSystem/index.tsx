@@ -73,7 +73,10 @@ const DesignSystem: React.FC = () => {
         </header>
 
         <div className='mt-8'>
-          <Section title='Dense shell' hint='The target shell with mock content. Phase 2 wires it to the real stores and router.'>
+          <Section
+            title='Dense shell'
+            hint='The target shell with mock content. Phase 2 wires it to the real stores and router.'
+          >
             <ShellPreview />
           </Section>
 

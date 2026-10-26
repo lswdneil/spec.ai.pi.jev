@@ -100,12 +100,20 @@ const OfficialAssistantsGrid: React.FC<OfficialAssistantsGridProps> = ({
           const actionItems = [
             {
               key: 'settings',
-              label: <span data-testid={`menu-settings-${assistant.id}`}>{t('common.settings', { defaultValue: 'Settings' })}</span>,
+              label: (
+                <span data-testid={`menu-settings-${assistant.id}`}>
+                  {t('common.settings', { defaultValue: 'Settings' })}
+                </span>
+              ),
               onSelect: () => onOpenSettings(assistant),
             },
             {
               key: 'duplicate',
-              label: <span data-testid={`menu-duplicate-${assistant.id}`}>{t('settings.duplicateAssistant', { defaultValue: 'Duplicate as my assistant' })}</span>,
+              label: (
+                <span data-testid={`menu-duplicate-${assistant.id}`}>
+                  {t('settings.duplicateAssistant', { defaultValue: 'Duplicate as my assistant' })}
+                </span>
+              ),
               onSelect: () => onDuplicate(assistant),
             },
           ];

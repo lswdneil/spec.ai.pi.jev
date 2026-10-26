@@ -74,7 +74,13 @@ const AppearanceV2: React.FC = () => {
   const { activeId, selectTheme, theme } = useThemeContext();
 
   const active: Mode | null =
-    activeId === DARK_THEME_ID ? 'dark' : activeId === LIGHT_THEME_ID ? 'light' : activeId === SYSTEM_THEME_ID ? 'auto' : null;
+    activeId === DARK_THEME_ID
+      ? 'dark'
+      : activeId === LIGHT_THEME_ID
+        ? 'light'
+        : activeId === SYSTEM_THEME_ID
+          ? 'auto'
+          : null;
 
   const select = (mode: Mode) => {
     void selectTheme(mode === 'dark' ? DARK_THEME_ID : mode === 'light' ? LIGHT_THEME_ID : SYSTEM_THEME_ID);

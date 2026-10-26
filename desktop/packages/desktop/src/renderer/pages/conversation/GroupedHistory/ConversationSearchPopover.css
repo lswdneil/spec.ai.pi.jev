@@ -38,7 +38,6 @@
   box-shadow: 0 0 0 2px color-mix(in srgb, rgb(var(--primary-6)) 24%, transparent) !important;
 }
 
-
 .conversation-search-modal.mu-modal .arco-modal,
 .conversation-search-modal.mu-modal .arco-modal-content,
 .conversation-search-modal.mu-modal .arco-modal-header,

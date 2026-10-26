@@ -28,12 +28,7 @@ async function startMockBackend(
 }
 
 /** Send a raw WebSocket upgrade and resolve with the response status line. */
-function rawUpgradeStatus(
-  port: number,
-  origin: string,
-  path = '/kyrn',
-  cookie?: string
-): Promise<string> {
+function rawUpgradeStatus(port: number, origin: string, path = '/kyrn', cookie?: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const sock = nodeNet.connect({ host: '127.0.0.1', port }, () => {
       sock.write(
@@ -531,8 +526,7 @@ describe('static-server', () => {
     });
     stopBackend = backend.close;
     const access: WebUiAccess = {
-      verify: (cookie) =>
-        cookie === 'specjev_device=good' ? { deviceId: 'device-1', scope: 'control' } : null,
+      verify: (cookie) => (cookie === 'specjev_device=good' ? { deviceId: 'device-1', scope: 'control' } : null),
       handlePublicRequest: async (req, res) => {
         res.writeHead(201, { 'content-type': 'application/json' });
         res.end(JSON.stringify({ requestId: 'request-1', method: req.method }));
@@ -615,8 +609,7 @@ describe('static-server', () => {
     stopBackend = () => new Promise<void>((r) => backendServer.close(() => r()));
     const backendPort = (backendServer.address() as { port: number }).port;
     const access: WebUiAccess = {
-      verify: (cookie) =>
-        cookie === 'specjev_device=good' ? { deviceId: 'device-1', scope: 'control' } : null,
+      verify: (cookie) => (cookie === 'specjev_device=good' ? { deviceId: 'device-1', scope: 'control' } : null),
       handlePublicRequest: async () => true,
     };
     handle = await startStaticServer({ staticDir, backendPort, port: 0, access });
@@ -655,8 +648,7 @@ describe('static-server', () => {
     };
     const revokeListeners: Array<(deviceId: string) => void> = [];
     const access: WebUiAccess = {
-      verify: (cookie) =>
-        cookie === 'specjev_device=good' ? { deviceId: 'device-1', scope: 'control' } : null,
+      verify: (cookie) => (cookie === 'specjev_device=good' ? { deviceId: 'device-1', scope: 'control' } : null),
       handlePublicRequest: async () => true,
       onRevoke: (listener) => {
         revokeListeners.push(listener);

@@ -433,100 +433,98 @@ const Layout: React.FC<{
             >
               <div className='flex size-full min-h-0 flex-col'>
                 <header
-                className={classNames(
-                  'flex layout-sider-header pt-1.5 pb-1.5',
-                  collapsed && !isMobile
-                    ? 'flex-col items-center justify-center gap-1 px-0'
-                    : 'items-center justify-start gap-12px ps-10px pe-8px',
-                  isMobile && 'layout-sider-header--mobile',
-                  {
-                    'cursor-pointer group ': collapsed,
-                  }
-                )}
-              >
-                {/* The mark keeps upstream's hidden devtools click; its size follows the collapsed rail. */}
-                <div className='shrink-0 line-height-0' data-testid='sider-brand-mark' onClick={onClick}>
-                  <MuMark size={20} />
-                </div>
-                {isSettingsRoute ? (
-                  <Tooltip content={t('common.back', { defaultValue: 'Back' })} position='bottom'>
-                    <div
-                      className='collapsed-hidden cursor-pointer text-[13px] font-semibold tracking-[-0.01em] text-t-primary'
-                      role='button'
-                      tabIndex={0}
-                      aria-label={t('common.back', { defaultValue: 'Back' })}
-                      onClick={handleBrandHome}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                          event.preventDefault();
-                          handleBrandHome();
-                        }
-                      }}
-                    >
+                  className={classNames(
+                    'flex layout-sider-header pt-1.5 pb-1.5',
+                    collapsed && !isMobile
+                      ? 'flex-col items-center justify-center gap-1 px-0'
+                      : 'items-center justify-start gap-12px ps-10px pe-8px',
+                    isMobile && 'layout-sider-header--mobile',
+                    {
+                      'cursor-pointer group ': collapsed,
+                    }
+                  )}
+                >
+                  {/* The mark keeps upstream's hidden devtools click; its size follows the collapsed rail. */}
+                  <div className='shrink-0 line-height-0' data-testid='sider-brand-mark' onClick={onClick}>
+                    <MuMark size={20} />
+                  </div>
+                  {isSettingsRoute ? (
+                    <Tooltip content={t('common.back', { defaultValue: 'Back' })} position='bottom'>
+                      <div
+                        className='collapsed-hidden cursor-pointer text-[13px] font-semibold tracking-[-0.01em] text-t-primary'
+                        role='button'
+                        tabIndex={0}
+                        aria-label={t('common.back', { defaultValue: 'Back' })}
+                        onClick={handleBrandHome}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            handleBrandHome();
+                          }
+                        }}
+                      >
+                        spec.jev
+                      </div>
+                    </Tooltip>
+                  ) : (
+                    <div className='collapsed-hidden text-[13px] font-semibold tracking-[-0.01em] text-t-primary'>
                       spec.jev
                     </div>
-                  </Tooltip>
-                ) : (
-                  <div
-                    className='collapsed-hidden text-[13px] font-semibold tracking-[-0.01em] text-t-primary'
-                  >
-                    spec.jev
-                  </div>
-                )}
-                {isMobile ? (
-                  !collapsed && (
-                    <button
-                      type='button'
-                      className='app-titlebar__button app-titlebar__button--mobile'
-                      onClick={putAwayPhoneSider}
-                      title={t('common.collapseSidebar')}
-                      aria-label={t('common.collapseSidebar')}
+                  )}
+                  {isMobile ? (
+                    !collapsed && (
+                      <button
+                        type='button'
+                        className='app-titlebar__button app-titlebar__button--mobile'
+                        onClick={putAwayPhoneSider}
+                        title={t('common.collapseSidebar')}
+                        aria-label={t('common.collapseSidebar')}
+                      >
+                        <SidebarIcon className='sv-icon-titlebar' strokeWidth={2.5} />
+                      </button>
+                    )
+                  ) : (
+                    <Tooltip
+                      content={collapsed ? t('common.expandSidebar') : t('common.collapseSidebar')}
+                      position={collapsed ? 'right' : 'bottom'}
                     >
-                      <SidebarIcon className='sv-icon-titlebar' strokeWidth={2.5} />
-                    </button>
-                  )
-                ) : (
-                  <Tooltip
-                    content={collapsed ? t('common.expandSidebar') : t('common.collapseSidebar')}
-                    position={collapsed ? 'right' : 'bottom'}
-                  >
-                    <button
-                      type='button'
-                      data-testid='sider-collapse'
-                      aria-label={collapsed ? t('common.expandSidebar') : t('common.collapseSidebar')}
-                      aria-expanded={!collapsed}
-                      onClick={() => setSiderCollapsed(!collapsed)}
-                      className={classNames(
-                        'inline-flex shrink-0 items-center justify-center rounded-[5px] bg-transparent text-t-secondary transition-colors hover:bg-fill-3 hover:text-t-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-sv-focus',
-                        collapsed ? 'h-7 w-full' : 'ms-auto h-6 w-6'
-                      )}
-                    >
-                      {collapsed ? (
-                        <PanelLeftOpen className='sv-icon-sider' strokeWidth={1.75} />
-                      ) : (
-                        <PanelLeftClose className='sv-icon-sider' strokeWidth={1.75} />
-                      )}
-                    </button>
-                  </Tooltip>
-                )}
-              </header>
-              <div className='layout-sider-content min-h-0 flex-1 px-8px pt-0 pb-0'>
-                {React.isValidElement(sider)
-                  ? React.cloneElement(sider, {
-                      onSessionClick: () => {
-                        cleanupSiderTooltips();
-                        if (isMobile) putAwayPhoneSider();
-                      },
-                      collapsed,
-                    } as any)
-                  : sider}
-              </div>
-              {!isMobile &&
-                createSiderDragHandle({
-                  className: 'z-20',
-                  style: { right: '-4px', width: '8px' },
-                  linePlacement: 'start',
-                })}
+                      <button
+                        type='button'
+                        data-testid='sider-collapse'
+                        aria-label={collapsed ? t('common.expandSidebar') : t('common.collapseSidebar')}
+                        aria-expanded={!collapsed}
+                        onClick={() => setSiderCollapsed(!collapsed)}
+                        className={classNames(
+                          'inline-flex shrink-0 items-center justify-center rounded-[5px] bg-transparent text-t-secondary transition-colors hover:bg-fill-3 hover:text-t-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-sv-focus',
+                          collapsed ? 'h-7 w-full' : 'ms-auto h-6 w-6'
+                        )}
+                      >
+                        {collapsed ? (
+                          <PanelLeftOpen className='sv-icon-sider' strokeWidth={1.75} />
+                        ) : (
+                          <PanelLeftClose className='sv-icon-sider' strokeWidth={1.75} />
+                        )}
+                      </button>
+                    </Tooltip>
+                  )}
+                </header>
+                <div className='layout-sider-content min-h-0 flex-1 px-8px pt-0 pb-0'>
+                  {React.isValidElement(sider)
+                    ? React.cloneElement(sider, {
+                        onSessionClick: () => {
+                          cleanupSiderTooltips();
+                          if (isMobile) putAwayPhoneSider();
+                        },
+                        collapsed,
+                      } as any)
+                    : sider}
+                </div>
+                {!isMobile &&
+                  createSiderDragHandle({
+                    className: 'z-20',
+                    style: { right: '-4px', width: '8px' },
+                    linePlacement: 'start',
+                  })}
               </div>
             </aside>
 

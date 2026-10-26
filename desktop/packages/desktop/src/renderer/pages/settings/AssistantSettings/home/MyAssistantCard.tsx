@@ -46,7 +46,9 @@ const MyAssistantCard: React.FC<MyAssistantCardProps> = ({
   const actionItems = [
     {
       key: 'edit',
-      label: <span data-testid={`menu-edit-${assistant.id}`}>{t('common.settings', { defaultValue: 'Settings' })}</span>,
+      label: (
+        <span data-testid={`menu-edit-${assistant.id}`}>{t('common.settings', { defaultValue: 'Settings' })}</span>
+      ),
       onSelect: () => onOpenDetail(assistant),
     },
     ...(canDelete

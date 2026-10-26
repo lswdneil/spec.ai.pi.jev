@@ -3,7 +3,7 @@
    collide with Arco or the existing theme tokens. */
 
 :root,
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --sv-bg: #1c1d1c;
   --sv-chrome: #292b2a;
   --sv-surface: #222423;
@@ -34,7 +34,7 @@
   --sv-jev-violet: #8f7cf7;
 }
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --sv-bg: #f0f2ef;
   --sv-chrome: #e3e7e4;
   --sv-surface: #f7f8f5;
@@ -66,10 +66,11 @@
 }
 
 :root {
-  --sv-font-ui: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans SC", "Noto Sans",
-    "Helvetica Neue", Arial, sans-serif;
-  --sv-font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, "Noto Serif SC", "Songti SC", serif;
-  --sv-font-mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", "Noto Sans Mono", monospace;
+  --sv-font-ui:
+    'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Noto Sans SC', 'Noto Sans', 'Helvetica Neue',
+    Arial, sans-serif;
+  --sv-font-serif: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, 'Noto Serif SC', 'Songti SC', serif;
+  --sv-font-mono: 'Cascadia Code', 'SFMono-Regular', Consolas, 'Liberation Mono', 'Noto Sans Mono', monospace;
 
   --sv-fs-caption: 11.5px;
   --sv-fs-small: 11.5px;

@@ -99,11 +99,7 @@ const WindowControls: React.FC = () => {
         aria-label={maximizeLabel}
         title={maximizeLabel}
       >
-        {isMaximized ? (
-          <WindowRestoreIcon className='sv-icon-sm' />
-        ) : (
-          <WindowMaximizeIcon className='sv-icon-sm' />
-        )}
+        {isMaximized ? <WindowRestoreIcon className='sv-icon-sm' /> : <WindowMaximizeIcon className='sv-icon-sm' />}
       </button>
       <button
         type='button'

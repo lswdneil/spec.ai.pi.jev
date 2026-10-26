@@ -30,11 +30,13 @@ const OptGroup: React.FC<SelectOptGroupProps> = () => null;
 type ParsedOption = { value: SelectValue; label: React.ReactNode; disabled?: boolean; extra?: unknown };
 
 const labelText = (option: ParsedOption) =>
-  typeof option.label === 'string' || typeof option.label === 'number'
-    ? String(option.label)
-    : String(option.value);
+  typeof option.label === 'string' || typeof option.label === 'number' ? String(option.label) : String(option.value);
 
-const walk = (children: React.ReactNode, out: ParsedOption[], groups: { label: React.ReactNode; options: ParsedOption[] }[]) => {
+const walk = (
+  children: React.ReactNode,
+  out: ParsedOption[],
+  groups: { label: React.ReactNode; options: ParsedOption[] }[]
+) => {
   React.Children.forEach(children, (child) => {
     if (!React.isValidElement(child)) return;
     const props = child.props as {
@@ -90,7 +92,10 @@ export interface SelectProps {
   'data-testid'?: string;
   notFoundContent?: React.ReactNode;
   showSearch?: boolean;
-  filterOption?: (inputValue: string, option: React.ReactElement<{ children?: React.ReactNode; value?: unknown }>) => boolean;
+  filterOption?: (
+    inputValue: string,
+    option: React.ReactElement<{ children?: React.ReactNode; value?: unknown }>
+  ) => boolean;
   onClear?: () => void;
   renderTag?: (props: { label: React.ReactNode; value: SelectValue }) => React.ReactNode;
   onSearch?: (value: string) => void;
@@ -170,11 +175,13 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
   const text =
     renderFormat?.(mode === 'multiple' ? undefined : selected[0], current) ??
     (selected.length
-      ? selected.map((option) => option.label).reduce<React.ReactNode[]>((all, label, index) => {
-          if (index) all.push(', ');
-          all.push(label);
-          return all;
-        }, [])
+      ? selected
+          .map((option) => option.label)
+          .reduce<React.ReactNode[]>((all, label, index) => {
+            if (index) all.push(', ');
+            all.push(label);
+            return all;
+          }, [])
       : placeholder);
   const commit = (next: SelectValue | SelectValue[] | undefined) => {
     if (value === undefined) setUncontrolled(next);
@@ -319,12 +326,7 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
               ))}
             </span>
           ) : (
-            <span
-              className={cn(
-                'arco-select-view-value min-w-0 flex-1 truncate',
-                !selected.length && 'text-sv-muted'
-              )}
-            >
+            <span className={cn('arco-select-view-value min-w-0 flex-1 truncate', !selected.length && 'text-sv-muted')}>
               {text}
             </span>
           )}

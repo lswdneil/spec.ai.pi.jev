@@ -41,13 +41,17 @@ export const Alert: React.FC<AlertProps> = ({
   const config = tones[tone ?? type ?? 'info'];
   const Icon = config.icon;
   return (
-    <div role={(tone ?? type) === 'error' ? 'alert' : 'status'} className={cn('flex gap-2.5 rounded-[var(--sv-r-control)] border p-3', config.box, className)} style={style}>
-      {showIcon ? (
-        icon ?? <Icon className={cn('sv-icon-md mt-0.5 shrink-0', config.iconColor)} aria-hidden='true' />
-      ) : null}
+    <div
+      role={(tone ?? type) === 'error' ? 'alert' : 'status'}
+      className={cn('flex gap-2.5 rounded-[var(--sv-r-control)] border p-3', config.box, className)}
+      style={style}
+    >
+      {showIcon
+        ? (icon ?? <Icon className={cn('sv-icon-md mt-0.5 shrink-0', config.iconColor)} aria-hidden='true' />)
+        : null}
       <div className='min-w-0 flex-1'>
         {title ? <p className='text-[13px] font-medium text-sv-text'>{title}</p> : null}
-        {content ?? children ? (
+        {(content ?? children) ? (
           <div className='mt-0.5 text-[12px] leading-[1.6] text-sv-muted'>{content ?? children}</div>
         ) : null}
       </div>

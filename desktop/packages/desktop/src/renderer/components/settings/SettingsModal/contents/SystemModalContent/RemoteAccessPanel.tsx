@@ -245,7 +245,9 @@ const RemoteAccessPanel: React.FC<{ running: boolean }> = ({ running }) => {
                   <div className='min-w-0'>
                     <div className='truncate text-13px text-t-primary'>{device.name}</div>
                     <div className='truncate text-11px text-t-secondary'>
-                      {t(device.scope === 'read' ? 'settings.remoteAccess.readOnly' : 'settings.remoteAccess.fullAccess')}
+                      {t(
+                        device.scope === 'read' ? 'settings.remoteAccess.readOnly' : 'settings.remoteAccess.fullAccess'
+                      )}
                       {' · '}
                       {t('settings.remoteAccess.lastSeen', {
                         time: new Date(device.lastSeenAt).toLocaleString(locale),
@@ -293,9 +295,7 @@ const RemoteAccessPanel: React.FC<{ running: boolean }> = ({ running }) => {
           )}
         </div>
 
-        {running ? (
-          <div className='text-11px text-t-secondary'>{t('settings.remoteAccess.pairHint')}</div>
-        ) : null}
+        {running ? <div className='text-11px text-t-secondary'>{t('settings.remoteAccess.pairHint')}</div> : null}
       </div>
     </div>
   );

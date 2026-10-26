@@ -31,7 +31,8 @@ type ArcoButtonType = 'default' | 'primary' | 'secondary' | 'outline' | 'dashed'
 type ArcoButtonSize = 'mini' | 'small' | 'default' | 'large';
 
 export interface ButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'>,
+  extends
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'>,
     Omit<VariantProps<typeof buttonVariants>, 'size'> {
   /** Arco compatibility: the visual type. Prefer `variant` in new code. */
   type?: ArcoButtonType;
