@@ -11,7 +11,7 @@
 - Remove the legacy UI and Arco compatibility layer before release.
 - Canonical repository: `https://github.com/lswdneil/spec.ai.pi.jev`.
 
-## Release readiness (checked 2026-10-25)
+## Release readiness (checked 2026-10-26)
 
 Passed locally on Windows x64:
 
@@ -20,22 +20,31 @@ Passed locally on Windows x64:
 - Native-host E2E: 72/72, 12 skipped (packaged-app-only cases).
 - Visual regression: 4/4.
 - `bunx tsc --noEmit`.
-- 0.1.x Laya onboarding now downloads the pinned ONNX files itself, checks
-  every SHA-256 and starts the judge; the manual Hugging Face path remains.
+- 0.1.x Laya onboarding downloads the pinned ONNX files itself, checks every
+  SHA-256 and starts the judge; the manual Hugging Face path remains.
+- Real Laya model (681 MB) installed and run with ONNX on CPU. In a real native
+  conversation it answered most `input.preflight`, `capability.disclosure` and
+  `turn.continue` questions; the low-confidence remainder went to the next tier.
+- Stopping Laya between turns made every decision report `unreachable` and fall
+  to the next tier. The deterministic fallback tier was `mock`. OpenCode Zen's
+  free Jev returned `rate_limited` in the same run, so a real Jev answer is not
+  yet demonstrated.
+- Windows installed-app first-run E2E: 3/3; install and uninstall succeeded.
+- Linux x64 `.deb` install, executable check, remove and purge succeeded in WSL
+  Ubuntu.
 
 Still external or undecided before a public release:
 
 - Windows code signing certificate: CI signs when
   `WINDOWS_CERTIFICATE_BASE64` and `WINDOWS_CERTIFICATE_PASSWORD` exist;
   otherwise the release is unsigned and says so.
-- The first public version and both tags (`vX.Y.Z` and `spec.jev-vX.Y.Z`) are a
-  product decision; the package manifests still say 0.1.0 while the desktop
-  changelog ends at 0.1.9.
-- A real Linux x64 `.deb` install/upgrade/uninstall has not been run here. The
-  app opens a downloaded `.deb`; the system package installer completes it.
-- The local Windows installer build stopped while electron-builder fetched its
-  signing/NSIS tools from GitHub; the build itself had packed the harness and
-  reached packaging.
+- npm Trusted Publishing is configured for `npm.yml`; it needs one real publish
+  before the configured window closes.
+- The repository-wide format check (`oxfmt` in the desktop app and Biome in the
+  harness) still reports pre-existing drift in untouched files. CI stays red
+  until that is cleaned up in small, separate commits.
+- OpenCode Zen's free Jev is rate-limited here; a real Jev fallback needs a key
+  or a later retry.
 
 ## Deferred: remove the legacy MU UI and Arco compatibility layer
 

@@ -74,12 +74,12 @@ macOS 实测（Node 24.16，临时 HOME，9 次取中位数）：
 
 ## 5. 本地判定服务（Laya）
 
-sidecar 是 Core ML，只能在 Apple Silicon 的 macOS 上跑。非 macOS 上：
+命令行的 sidecar 是 Core ML，只能在 Apple Silicon 的 macOS 上跑。桌面端在 Windows / Linux 上用 ONNX 跑同一模型：设置里下载、逐文件校验 SHA-256，再以 `onnxruntime-node`（CPU）启动，真机会话与停服回退见 `docs/judges.md`。非 macOS 的命令行：
 
-- `spec.jev judge setup|start|stop|run`：打印说明并以 1 退出，不会出现堆栈。说明里写明：只支持 macOS；可以用 Jev 或 `spec.jev.json` 里的 llm 判定器；桌面端自己的本地判定服务在做；任何实现了同一契约（`GET /health`、`POST /evaluate`）的服务器都可以通过 `MU_LOCAL_JUDGE_URL` 接进来。
-- `spec.jev judge status` 在设置了 `MU_LOCAL_JUDGE_URL` 时会真的去问那台服务器的 `/health`。
-- 配置里要了 laya 而平台跑不了：启动时一行提示（设置了 `MU_LOCAL_JUDGE_URL` 就不提示），决策照常回退到下一层判定器或 pi 的原生行为。`spec.jev doctor` 把它显示成说明行而不是 `fix`。
-- macOS 上行为不变（配置里有 laya 就自动拉起）。
+- `spec.jev judge setup|start|stop|run`：打印说明并以 1 退出，不会出现堆栈。说明里写明：命令行只支持 macOS；桌面端设置里可以安装 ONNX 版本；可以用 Jev 或 `spec.jev.json` 里的 llm 判定器；任何实现了同一契约（`GET /health`、`POST /evaluate`）的服务器都可以通过 `SPECJEV_LOCAL_JUDGE_URL` 接进来。
+- `spec.jev judge status` 在设置了 `SPECJEV_LOCAL_JUDGE_URL` 时会真的去问那台服务器的 `/health`。
+- 配置里要了 laya 而命令行跑不了：启动时一行提示（设置了 `SPECJEV_LOCAL_JUDGE_URL` 就不提示），决策照常回退到下一层判定器或 pi 的原生行为。`spec.jev doctor` 把它显示成说明行而不是 `fix`。
+- macOS 上行为不变（配置里有 laya 就自动拉起 Core ML sidecar）。
 
 ## 6. 仍然假设 POSIX 的地方（grep 审计，范围：`kyrn/` 与 `packages/kyrn-judge/src`）
 
