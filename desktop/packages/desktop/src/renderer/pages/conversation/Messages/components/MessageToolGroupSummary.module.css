@@ -11,11 +11,16 @@
 .call > .detailPanel {
   margin: 2px 0 6px 16px;
 }
+/* The shared Button no longer carries Arco's `.arco-btn` class. Match the button itself, not only the legacy
+   selector: otherwise its intrinsic `white-space: nowrap` width pushes a long tool command past the message list. */
+.callButton,
 .callButton:global(.arco-btn),
 .callStatic {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   width: 100%;
+  max-width: 100%;
   min-width: 0;
   height: auto;
   gap: 8px;
@@ -24,6 +29,7 @@
   color: var(--text-primary);
   font-size: 13px;
   text-align: start;
+  white-space: normal !important;
 }
 .callButton:global(.arco-btn:hover) {
   background: var(--bg-hover);
@@ -52,9 +58,11 @@
 .callPreview {
   min-width: 0;
   flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  text-overflow: clip;
+  white-space: normal;
   color: var(--text-secondary);
   font: 12px/1.6 var(--font-mono);
 }

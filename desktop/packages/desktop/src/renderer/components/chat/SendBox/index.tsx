@@ -2127,7 +2127,7 @@ const SendBox: React.FC<{
                     ? `${placeholder}  ${bottomHint ?? sendboxHint}`
                     : ((bottomHint as string | undefined) ?? sendboxHint)
               }
-              className={`${shouldUseHighlightOverlay ? 'sendbox-highlight-textarea ' : ''}ps-0 pe-0 !b-none focus:shadow-none m-0 !bg-transparent !focus:bg-transparent !hover:bg-transparent lh-[20px] !resize-none text-14px ${isMobile ? 'sendbox-input--mobile' : ''}`}
+              className={`${shouldUseHighlightOverlay ? 'sendbox-highlight-textarea ' : ''}ps-0 pe-0 !b-none focus:shadow-none m-0 !bg-transparent !focus:bg-transparent !hover:bg-transparent lh-[20px] !resize-none text-14px !text-t-primary ${isMobile ? 'sendbox-input--mobile' : ''}`}
               data-testid={testIds?.input ?? 'sendbox-input'}
               style={{
                 width: '100%',
