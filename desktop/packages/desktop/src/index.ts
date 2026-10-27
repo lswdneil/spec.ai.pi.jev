@@ -19,6 +19,7 @@ import * as path from 'path';
 import { initMainAdapterWithWindow } from './common/adapter/main';
 import { ipcBridge } from './common';
 import { initializeProcess } from './process';
+import { installBundledMoli } from './process/startup/bundledMoli';
 import { startWebUiIfEnabled } from './process/bridge/applicationBridge';
 import { startBackendOrExit } from './process/startup/backendStartup';
 import { planStartupNodeRuntime } from './process/startup/nodeRuntimeStartup';
@@ -656,6 +657,10 @@ const handleAppReady = async (): Promise<void> => {
   session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => {
     callback(true);
   });
+
+  // Give the agent a browser that ships with the app before any child inherits our environment.
+  const bundledMoli = installBundledMoli();
+  if (bundledMoli) console.log(`[spec.jev] using bundled moli: ${bundledMoli}`);
 
   try {
     await initializeProcess();

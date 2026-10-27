@@ -43,6 +43,17 @@ function verifyBundledResources(resourcesDir, electronPlatformName, targetArch) 
     throw new Error(`Packaged app is missing spec.jev: ${harness.missing.join(', ')}`);
   }
   console.log(`   spec.jev ${harness.version} verified (${harness.checked.length} checks)`);
+
+  if (electronPlatformName === 'win32' || electronPlatformName === 'linux') {
+    const moli = path.join(
+      resourcesDir,
+      'bundled-moli',
+      `${electronPlatformName}-${targetArch}`,
+      electronPlatformName === 'win32' ? 'moli.exe' : 'moli'
+    );
+    if (!fs.existsSync(moli)) throw new Error(`Packaged app is missing bundled moli: ${moli}`);
+    console.log(`   bundled moli verified (${moli})`);
+  }
 }
 
 module.exports = async function afterPack(context) {

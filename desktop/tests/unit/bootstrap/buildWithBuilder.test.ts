@@ -332,6 +332,9 @@ childProcess.execFileSync = function mockedExecFileSync(file, args, options) {
     fs.writeFileSync(callsPath, JSON.stringify(calls));
     return Buffer.from('');
   }
+  if (Array.isArray(args) && String(args[0]).endsWith('prepareMoliResources.js')) {
+    return Buffer.from('');
+  }
   return originalExecFileSync.call(this, file, args, options);
 };
 

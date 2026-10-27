@@ -768,6 +768,11 @@ try {
   const harnessPlatform = Object.entries(systems).find(([flag]) => builderArgs.includes(flag))?.[1] ?? process.platform;
   execFileSync(
     process.execPath,
+    [path.join(__dirname, 'prepareMoliResources.js'), '--platform', harnessPlatform, '--arch', targetArch],
+    { stdio: 'inherit', env: process.env }
+  );
+  execFileSync(
+    process.execPath,
     [path.join(__dirname, 'kyrn', 'bundle-harness.mjs'), '--platform', harnessPlatform, '--arch', targetArch],
     { stdio: 'inherit', env: process.env }
   );

@@ -54,7 +54,8 @@ Two differences from Chrome that the backend absorbs:
 
 The desktop app shows these under Settings → In-app browser: Browser backend, moli executable and Running
 moli address. The in-app tabs themselves still render in Electron's Chromium; this backend is what the agent
-starts when the app is not driving the browser.
+starts when the app is not driving the browser. The packaged app carries moli under `resources/bundled-moli` and
+sets `SPECJEV_MOLI` to it, so `auto` works without a separate install.
 
 Order of use: the desktop app's browser panel (when it offers one), then moli, then Chrome.
 
