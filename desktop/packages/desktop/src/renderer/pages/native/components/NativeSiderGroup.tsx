@@ -14,6 +14,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type { NativeConversation, NativeFailure, NativeResult } from '@/common/kyrn/nativeBridge';
+import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { iconColors } from '@/renderer/styles/colors';
 import { pruneNativeUnread, toggleNativeUnread, useNativeUnread } from '../hooks/useNativeAttention';
 import { useNativeArchived } from '../hooks/useNativeArchived';
@@ -295,6 +296,7 @@ const Group: React.FC<{ onSessionClick?: () => void }> = ({ onSessionClick }) =>
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const isMobile = useLayoutContext()?.isMobile ?? false;
   const client = useNativeClient();
   const { conversations, loading, failure } = useNativeConversations(true);
   const { pinned, toggle: togglePin, unpin } = useNativePins();
@@ -343,8 +345,19 @@ const Group: React.FC<{ onSessionClick?: () => void }> = ({ onSessionClick }) =>
     [conversations]
   );
 
+  // Keeping the composer ready is part of opening a conversation: selecting the one already on screen does not remount
+  // the send box, so without this its input keeps the focus on the sidebar row.
+  const focusComposer = () => {
+    if (isMobile) return;
+    requestAnimationFrame(() => {
+      const input = document.querySelector<HTMLTextAreaElement>('[data-testid="native-send-input"]');
+      if (input && !input.disabled) input.focus();
+    });
+  };
+
   const open = (id: string) => {
     void navigate(nativeConversationPath(id));
+    focusComposer();
     onSessionClick?.();
   };
 
