@@ -15,6 +15,7 @@ import type { IMessageText } from '@/common/chat/chatLib';
 import type { NativeFailure } from '@/common/kyrn/nativeBridge';
 import { wordsOf } from '@/common/utils/nativeHost';
 import FlexFullContainer from '@/renderer/components/layout/FlexFullContainer';
+import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import MessageList from '@/renderer/pages/conversation/Messages/MessageList';
 import MuBrowserHost from '@/renderer/pages/conversation/Preview/browser/muBrowser/MuBrowserHost';
 import {
@@ -87,6 +88,7 @@ const NativeConversationScreen: React.FC<{ id: string }> = ({ id }) => {
   const conversation = useNativeConversation(id);
   const { view, loading, failure, outgoing } = conversation;
   const cwd = conversation.conversation?.cwd;
+  const isMobile = useLayoutContext()?.isMobile ?? false;
   const updateList = useUpdateMessageList();
   const updateLoading = useUpdateMessageListLoading();
 
@@ -143,6 +145,17 @@ const NativeConversationScreen: React.FC<{ id: string }> = ({ id }) => {
   }, [conversation.id, id, navigate]);
 
   useNativePanel(conversation.id, view, conversation.epoch, loading, failure, cwd);
+
+  // A conversation chosen from the sidebar starts with the keyboard in its composer, including one whose id was already
+  // on screen. The focus waits for the snapshot so it lands in the real send box, not the loading state.
+  useEffect(() => {
+    if (isMobile || loading) return;
+    const frame = requestAnimationFrame(() => {
+      const input = document.querySelector<HTMLTextAreaElement>('[data-testid="native-send-input"]');
+      if (input && !input.disabled && document.activeElement !== input) input.focus();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [conversation.id, isMobile, loading]);
 
   // What the conversation wanted of its person (a run ended, a question) is seen once it is on screen.
   useEffect(() => {
