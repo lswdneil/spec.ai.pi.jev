@@ -57,7 +57,7 @@ import React, { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMe
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
 import { useCompositionInput } from '@renderer/hooks/chat/useCompositionInput';
-import { rewriteIdeographicSlash } from './ideographicSlash';
+import { IDEOGRAPHIC_COMMA, rewriteIdeographicSlash } from './ideographicSlash';
 import { useConversationExport } from '@renderer/hooks/file/useConversationExport';
 import { useDragUpload } from '@renderer/hooks/file/useDragUpload';
 import { useLatestRef } from '@renderer/hooks/ui/useLatestRef';
@@ -841,11 +841,10 @@ const SendBox: React.FC<{
   }, [input, isInputFocused, isMobile, isSingleLine, syncHighlightTextMetrics]);
 
   const handleTextAreaChange = (rawValue: string) => {
-    if (isComposing.current) return;
     // A Chinese IME writes `、` where the `/` key is: as the first character of an empty box that
     // is the command menu's own key, so it becomes `/` and the menu opens, where there is a menu.
-    // Only what the IME committed counts: Arco hands the committed text over at compositionend,
-    // after our capture handler has already cleared `isComposing`.
+    // Only what the IME committed counts for that rewrite; the text itself must still flow through
+    // the controlled value while the input method is composing (the Guid composer does the same).
     const value =
       !isComposing.current && mergedSlashCommands.length > 0 ? rewriteIdeographicSlash(input, rawValue) : rawValue;
     if (historyNavigationIndex !== null) {
@@ -2147,16 +2146,6 @@ const SendBox: React.FC<{
                 overflowWrap: 'break-word',
               }}
               onChange={handleTextAreaChange}
-              // Arco keeps its own composition latch. When an input method, a focus change, or a menu interrupts it,
-              // its `onChange` can stay suppressed while the native input event already has the committed text. Commit
-              // that event here as a fallback, after clearing our latch, so the controlled value cannot stay empty.
-              onInput={(event) => {
-                if (event.nativeEvent.isComposing) return;
-                const value = event.currentTarget.value;
-                if (value === input) return;
-                isComposing.current = false;
-                handleTextAreaChange(value);
-              }}
               onPaste={onPaste}
               onTouchStart={markMobileFocusIntent}
               onMouseDown={markMobileFocusIntent}
@@ -2174,11 +2163,13 @@ const SendBox: React.FC<{
               }}
               {...compositionHandlers}
               onCompositionEnd={(event) => {
-                // Arco may keep the committed text out of `onChange` on its way through composition; take what the
-                // input method committed here as well, so a normal IME composition lands in the controlled value.
-                // Some IMEs hand the committed text in `data` while the controlled textarea still reads empty.
-                const committed = event.currentTarget.value || (event.nativeEvent as CompositionEvent).data || '';
-                handleTextAreaChange(rewriteIdeographicSlash(input, committed));
+                // The shared Textarea is native, not Arco's: its compositionend does not necessarily come with a
+                // React change event. Commit the committed value here as the Guid composer does. The change during
+                // composition already put `、` into the controlled value, so use the empty pre-composition value
+                // for the one-character slash rewrite.
+                const next = event.currentTarget.value;
+                const previous = input === IDEOGRAPHIC_COMMA && next === IDEOGRAPHIC_COMMA ? '' : input;
+                handleTextAreaChange(rewriteIdeographicSlash(previous, next));
               }}
               autoSize={isSingleLine ? false : MULTI_LINE_AUTO_SIZE}
               onKeyDown={createKeyDownHandler(handlePrimaryAction, (event) => {

@@ -163,15 +163,6 @@ describe('SendBox: the ideographic comma on an empty box', () => {
     expect(input().value).toBe('hello');
   });
 
-  it('keeps the committed text an input method sends only as composition data', () => {
-    render(<Harness />);
-
-    fireEvent.compositionStart(input());
-    fireEvent.compositionEnd(input(), { data: 'hello' });
-
-    expect(input().value).toBe('hello');
-  });
-
   it('keeps a 、 written after other text', () => {
     render(<Harness initialValue='先读代码' />);
 
