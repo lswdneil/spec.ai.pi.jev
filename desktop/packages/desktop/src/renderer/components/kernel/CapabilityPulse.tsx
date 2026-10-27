@@ -74,6 +74,7 @@ const CapabilityPulse: React.FC<{ view?: NativeView }> = ({ view }) => {
   const catalog = useCapabilityCatalog();
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const events = useMemo(() => capabilityActivity(view), [view]);
   const active = events.filter((event) => event.status === 'active');
   const mcpEnabled = catalog.mcp.filter((server) => server.on).length;
@@ -118,20 +119,51 @@ const CapabilityPulse: React.FC<{ view?: NativeView }> = ({ view }) => {
     return t('common.kyrn.capabilities.loaded');
   };
 
+  const cancelClose = () => {
+    if (closeTimer.current !== undefined) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = undefined;
+    }
+  };
+  const openPanel = () => {
+    cancelClose();
+    setOpen(true);
+  };
+  // The panel floats above the 20px bar. Keep it alive while the pointer crosses the small gap between them.
+  const scheduleClose = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => {
+      closeTimer.current = undefined;
+      setOpen(false);
+    }, 180);
+  };
+  const leavePanel = (event: React.MouseEvent<HTMLDivElement>) => {
+    // Moving between the trigger, the bridge and the panel is not leaving the widget.
+    if (root.current?.contains(event.relatedTarget as Node | null)) return;
+    scheduleClose();
+  };
+  useEffect(() => cancelClose, []);
+
   const closeOnOutsideFocus = (event: React.FocusEvent<HTMLDivElement>) => {
-    if (!root.current?.contains(event.relatedTarget as Node | null)) setOpen(false);
+    if (!root.current?.contains(event.relatedTarget as Node | null)) {
+      cancelClose();
+      setOpen(false);
+    }
   };
 
   return (
     <div
       ref={root}
-      className={styles.pulse}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-      onFocus={() => setOpen(true)}
+      className={`${styles.pulse}${open ? ` ${styles.open}` : ''}`}
+      onMouseEnter={openPanel}
+      onMouseLeave={leavePanel}
+      onFocus={openPanel}
       onBlur={closeOnOutsideFocus}
       onKeyDown={(event) => {
-        if (event.key === 'Escape') setOpen(false);
+        if (event.key === 'Escape') {
+          cancelClose();
+          setOpen(false);
+        }
       }}
     >
       <button
@@ -143,7 +175,10 @@ const CapabilityPulse: React.FC<{ view?: NativeView }> = ({ view }) => {
           active: active.length,
         })}
         aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          cancelClose();
+          setOpen((value) => !value);
+        }}
         data-testid='mu-capability-pulse'
       >
         <span
@@ -158,114 +193,114 @@ const CapabilityPulse: React.FC<{ view?: NativeView }> = ({ view }) => {
         ) : null}
       </button>
 
-      {open ? (
-        <div
-          className={styles.panel}
-          role='dialog'
-          aria-label={t('common.kyrn.capabilities.label')}
-          data-testid='mu-capability-panel'
-        >
-          <div className={styles.header}>
-            <span>{t('common.kyrn.capabilities.label')}</span>
-            {busy ? <span className={styles.headerBusy}>{t('common.kyrn.capabilities.active')}</span> : null}
-          </div>
-
-          {catalog.loading ? <div className={styles.empty}>{t('common.kyrn.capabilities.loading')}</div> : null}
-
-          {active.length > 0 ? (
-            <section className={styles.section}>
-              <h4>{t('common.kyrn.capabilities.active')}</h4>
-              {active.map((event) => (
-                <div className={styles.event} key={event.id}>
-                  <span className={`${styles.eventDot} ${statusClass(event.status)}`} aria-hidden='true' />
-                  <span className={styles.eventName}>{nameOf(event)}</span>
-                  <span className={styles.eventMeta}>{labelOf(event)}</span>
-                </div>
-              ))}
-            </section>
-          ) : null}
-
-          <section className={styles.section}>
-            <h4>{t('common.kyrn.capabilities.mcp')}</h4>
-            {catalog.mcp.length === 0 ? (
-              <div className={styles.empty}>
-                {catalog.failed ? t('common.kyrn.capabilities.unavailable') : t('common.kyrn.capabilities.noMcp')}
-              </div>
-            ) : (
-              catalog.mcp.map((server) => {
-                const activeHere = activeMcp.has(serverKey(server.name));
-                return (
-                  <div className={styles.row} key={server.name}>
-                    <span
-                      className={`${styles.eventDot} ${activeHere ? styles.statusActive : server.on ? styles.statusDone : styles.statusOff}`}
-                      aria-hidden='true'
-                    />
-                    <span className={styles.rowName}>{mcpServerDisplayName(server.name, t)}</span>
-                    <span className={styles.rowMeta}>
-                      {activeHere
-                        ? t('common.kyrn.capabilities.calling')
-                        : server.on
-                          ? t('common.kyrn.capabilities.enabled')
-                          : t('common.kyrn.capabilities.off')}
-                    </span>
-                  </div>
-                );
-              })
-            )}
-          </section>
-
-          <section className={styles.section}>
-            <h4>{t('common.kyrn.capabilities.skills')}</h4>
-            {catalog.skills.length === 0 ? (
-              <div className={styles.empty}>{t('common.kyrn.capabilities.noSkills')}</div>
-            ) : (
-              <>
-                {shownSkills.map((skill) => (
-                  <div className={styles.row} key={skill.name}>
-                    <span
-                      className={`${styles.eventDot} ${activeSkills.has(skill.name) ? styles.statusActive : styles.statusDone}`}
-                      aria-hidden='true'
-                    />
-                    <span className={styles.rowName} title={skill.description}>
-                      {skill.name}
-                    </span>
-                    <span className={styles.rowMeta}>
-                      {activeSkills.has(skill.name)
-                        ? t('common.kyrn.capabilities.calling')
-                        : t('common.kyrn.capabilities.enabled')}
-                    </span>
-                  </div>
-                ))}
-                {moreSkills > 0 ? (
-                  <div className={styles.empty}>{t('common.kyrn.capabilities.more', { count: moreSkills })}</div>
-                ) : null}
-              </>
-            )}
-          </section>
-
-          {recent.length > 0 ? (
-            <section className={styles.section}>
-              <h4>{t('common.kyrn.capabilities.recent')}</h4>
-              {recent.map((event) => (
-                <div className={styles.recent} key={event.id}>
-                  <span className={styles.recentName}>
-                    {nameOf(event)}
-                    {detailOf(event) ? <span className={styles.recentDetail}>{detailOf(event)}</span> : null}
-                  </span>
-                  <span className={styles.recentMeta}>
-                    {labelOf(event)}
-                    {timeLabel(event.at, i18n.language) ? ` · ${timeLabel(event.at, i18n.language)}` : ''}
-                  </span>
-                </div>
-              ))}
-            </section>
-          ) : null}
-
-          <div className={styles.footer}>
-            <span className={styles.footerText}>{t('common.kyrn.capabilities.settingsHint')}</span>
-          </div>
+      <div
+        className={styles.panel}
+        role='dialog'
+        aria-label={t('common.kyrn.capabilities.label')}
+        data-testid='mu-capability-panel'
+        onMouseEnter={cancelClose}
+        onMouseLeave={leavePanel}
+      >
+        <div className={styles.header}>
+          <span>{t('common.kyrn.capabilities.label')}</span>
+          {busy ? <span className={styles.headerBusy}>{t('common.kyrn.capabilities.active')}</span> : null}
         </div>
-      ) : null}
+
+        {catalog.loading ? <div className={styles.empty}>{t('common.kyrn.capabilities.loading')}</div> : null}
+
+        {active.length > 0 ? (
+          <section className={styles.section}>
+            <h4>{t('common.kyrn.capabilities.active')}</h4>
+            {active.map((event) => (
+              <div className={styles.event} key={event.id}>
+                <span className={`${styles.eventDot} ${statusClass(event.status)}`} aria-hidden='true' />
+                <span className={styles.eventName}>{nameOf(event)}</span>
+                <span className={styles.eventMeta}>{labelOf(event)}</span>
+              </div>
+            ))}
+          </section>
+        ) : null}
+
+        <section className={styles.section}>
+          <h4>{t('common.kyrn.capabilities.mcp')}</h4>
+          {catalog.mcp.length === 0 ? (
+            <div className={styles.empty}>
+              {catalog.failed ? t('common.kyrn.capabilities.unavailable') : t('common.kyrn.capabilities.noMcp')}
+            </div>
+          ) : (
+            catalog.mcp.map((server) => {
+              const activeHere = activeMcp.has(serverKey(server.name));
+              return (
+                <div className={styles.row} key={server.name}>
+                  <span
+                    className={`${styles.eventDot} ${activeHere ? styles.statusActive : server.on ? styles.statusDone : styles.statusOff}`}
+                    aria-hidden='true'
+                  />
+                  <span className={styles.rowName}>{mcpServerDisplayName(server.name, t)}</span>
+                  <span className={styles.rowMeta}>
+                    {activeHere
+                      ? t('common.kyrn.capabilities.calling')
+                      : server.on
+                        ? t('common.kyrn.capabilities.enabled')
+                        : t('common.kyrn.capabilities.off')}
+                  </span>
+                </div>
+              );
+            })
+          )}
+        </section>
+
+        <section className={styles.section}>
+          <h4>{t('common.kyrn.capabilities.skills')}</h4>
+          {catalog.skills.length === 0 ? (
+            <div className={styles.empty}>{t('common.kyrn.capabilities.noSkills')}</div>
+          ) : (
+            <>
+              {shownSkills.map((skill) => (
+                <div className={styles.row} key={skill.name}>
+                  <span
+                    className={`${styles.eventDot} ${activeSkills.has(skill.name) ? styles.statusActive : styles.statusDone}`}
+                    aria-hidden='true'
+                  />
+                  <span className={styles.rowName} title={skill.description}>
+                    {skill.name}
+                  </span>
+                  <span className={styles.rowMeta}>
+                    {activeSkills.has(skill.name)
+                      ? t('common.kyrn.capabilities.calling')
+                      : t('common.kyrn.capabilities.enabled')}
+                  </span>
+                </div>
+              ))}
+              {moreSkills > 0 ? (
+                <div className={styles.empty}>{t('common.kyrn.capabilities.more', { count: moreSkills })}</div>
+              ) : null}
+            </>
+          )}
+        </section>
+
+        {recent.length > 0 ? (
+          <section className={styles.section}>
+            <h4>{t('common.kyrn.capabilities.recent')}</h4>
+            {recent.map((event) => (
+              <div className={styles.recent} key={event.id}>
+                <span className={styles.recentName}>
+                  {nameOf(event)}
+                  {detailOf(event) ? <span className={styles.recentDetail}>{detailOf(event)}</span> : null}
+                </span>
+                <span className={styles.recentMeta}>
+                  {labelOf(event)}
+                  {timeLabel(event.at, i18n.language) ? ` · ${timeLabel(event.at, i18n.language)}` : ''}
+                </span>
+              </div>
+            ))}
+          </section>
+        ) : null}
+
+        <div className={styles.footer}>
+          <span className={styles.footerText}>{t('common.kyrn.capabilities.settingsHint')}</span>
+        </div>
+      </div>
     </div>
   );
 };
