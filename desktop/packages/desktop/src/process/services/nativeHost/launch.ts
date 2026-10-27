@@ -164,8 +164,12 @@ export async function prepareHost(options: PrepareOptions): Promise<PreparedHost
   const { harness, platform } = options;
   const { launcher, plan, bin } = await planned(options);
   const notes: string[] = [];
+  // Starting pi must never wait for the local judge. MU's host does the same (`startJudge: false`): the judge is an
+  // optional sidecar, not a prerequisite for the RPC host, and a judge that is slow or wedged must not leave the
+  // conversation in `starting` (its model menu then looks like “spec.jev is starting” forever). The app starts the
+  // local judge itself on Windows and Linux; on macOS it can be started from its settings page.
   const input: PrepareLaunchInput = {
-    plan,
+    plan: { ...plan, startJudge: false },
     platform,
     root: harness.root,
     bin,

@@ -149,6 +149,24 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
   const usage = useMemo(() => contextUsageOf(view), [view]);
   useSessionStats(conversation);
 
+  // Opening the model menu starts spec.jev when it was idle, and the menu takes the keyboard while it is open. Once
+  // spec.jev is up, put the caret back in the box unless the person is typing somewhere else.
+  useEffect(() => {
+    if (isMobile || host.phase === 'starting') return;
+    const frame = requestAnimationFrame(() => {
+      const active = document.activeElement;
+      const elsewhere =
+        active instanceof HTMLElement &&
+        active !== document.body &&
+        !active.matches('[data-testid="native-model-pill"], [data-testid="native-model-chip"]') &&
+        active.closest('[role="menu"]') === null;
+      if (elsewhere) return;
+      const input = document.querySelector<HTMLTextAreaElement>('[data-testid="native-send-input"]');
+      if (input && !input.disabled && document.activeElement !== input) input.focus();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [host.phase, isMobile]);
+
   // Ending a goal is a command the person gives, `/goal clear`, as in spec.jev's other conversations. pi runs an extension's
   // command at once, a run going or not; a run that goes is stopped as well, as the classic line stops it (a goal's run
   // does not end by itself: spec.jev sends the agent back to work). Cleared first, so the stop does not pause it on the way.
