@@ -30,6 +30,8 @@
   --sv-warn: #f5c86f;
   --sv-ok: #b5cea5;
   --sv-info: #c1f5f4;
+  /* Live MCP/skill activity: a fixed emerald, not a theme accent, so it stays legible. */
+  --sv-capability-live: #10b981;
   --sv-jev-pink: #f06bc9;
   --sv-jev-violet: #8f7cf7;
 }
@@ -61,6 +63,8 @@
   --sv-warn: #7a4b00;
   --sv-ok: #4e653f;
   --sv-info: #1f5f63;
+  /* Live MCP/skill activity: a fixed emerald, not a theme accent, so it stays legible. */
+  --sv-capability-live: #10b981;
   --sv-jev-pink: #d63fa2;
   --sv-jev-violet: #7f6af0;
 }

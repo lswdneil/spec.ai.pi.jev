@@ -39,16 +39,18 @@
   height: 5px;
   flex: none;
   border-radius: 50%;
-  background: var(--bg-6);
+  background: var(--sv-capability-live);
+  opacity: 0.48;
 }
 
 .dotBusy {
-  background: var(--mu-judge-dot);
+  background: var(--sv-capability-live);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--sv-capability-live) 18%, transparent);
   animation: capability-pulse 1.2s ease-in-out infinite;
 }
 
 .dotLoading {
-  background: var(--text-tertiary, var(--bg-6));
+  background: var(--sv-capability-live);
   animation: capability-pulse 1.8s ease-in-out infinite;
 }
 
@@ -150,12 +152,13 @@
 }
 
 .statusActive {
-  background: var(--mu-judge-dot);
+  background: var(--sv-capability-live);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--sv-capability-live) 18%, transparent);
   animation: capability-pulse 1.2s ease-in-out infinite;
 }
 
 .statusDone {
-  background: var(--sv-ok, var(--text-secondary));
+  background: var(--sv-capability-live);
 }
 
 .statusError {
@@ -163,7 +166,8 @@
 }
 
 .statusInfo {
-  background: var(--text-tertiary, var(--bg-6));
+  background: var(--sv-capability-live);
+  opacity: 0.72;
 }
 
 .statusOff {
