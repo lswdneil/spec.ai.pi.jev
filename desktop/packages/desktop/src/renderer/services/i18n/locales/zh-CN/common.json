@@ -1435,6 +1435,30 @@
       "judgeReady": "{{judge}} 已就绪",
       "judgeOff": "判定已关闭",
       "title": "让 spec.jev 做点什么？"
+    },
+    "capabilities": {
+      "label": "能力动态",
+      "mcp": "MCP",
+      "skills": "技能",
+      "aria": "MCP 与技能动态：{{mcp}} 个 MCP，{{skills}} 个技能，{{active}} 个正在调用",
+      "loading": "正在加载 MCP 与技能…",
+      "unavailable": "不可用",
+      "enabled": "已启用",
+      "off": "已关闭",
+      "calling": "调用中",
+      "called": "已调用",
+      "failed": "失败",
+      "loaded": "已加载",
+      "updated": "工具已更新",
+      "suggested": "相关技能",
+      "find": "查找技能",
+      "tools": "{{count}} 个工具",
+      "noMcp": "未配置 MCP",
+      "noSkills": "未配置技能",
+      "active": "正在调用",
+      "recent": "最近动态",
+      "settingsHint": "设置 → MCP 服务器 / 技能",
+      "more": "���� {{count}} ��"
     }
   },
   "menu": {

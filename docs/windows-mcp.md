@@ -25,6 +25,11 @@ PowerShell, the registry, processes and notifications. It is powerful by
 design; turn the server off if you do not want the agent to control the
 desktop.
 
+The right end of the kernel bar also shows MCP and skill activity. Hover or
+focus the `MCP n · Skills n` pulse to see the configured servers and skills,
+the current MCP calls, relevant-skill suggestions and recent MCP/skill
+activity.
+
 The bundled build is made from the Windows-MCP checkout at commit `cef52ec`
 (version 0.8.8) with PyInstaller. The release job runs:
 

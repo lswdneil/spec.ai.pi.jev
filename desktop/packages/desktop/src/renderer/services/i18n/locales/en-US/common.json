@@ -1435,6 +1435,30 @@
       "judgeReady": "{{judge}} is ready",
       "judgeOff": "Judging is off",
       "title": "What should spec.jev work on?"
+    },
+    "capabilities": {
+      "label": "Capability activity",
+      "mcp": "MCP",
+      "skills": "Skills",
+      "aria": "MCP and skill activity: {{mcp}} MCP, {{skills}} skills, {{active}} active",
+      "loading": "Loading MCP and skills…",
+      "unavailable": "Unavailable",
+      "enabled": "Enabled",
+      "off": "Off",
+      "calling": "Calling",
+      "called": "Called",
+      "failed": "Failed",
+      "loaded": "Loaded",
+      "updated": "Tools updated",
+      "suggested": "Suggested",
+      "find": "Finding a skill",
+      "tools": "{{count}} tools",
+      "noMcp": "No MCP servers configured",
+      "noSkills": "No skills configured",
+      "active": "Now",
+      "recent": "Recent",
+      "settingsHint": "Settings → MCP servers and Skills",
+      "more": "{{count}} more"
     }
   },
   "menu": {

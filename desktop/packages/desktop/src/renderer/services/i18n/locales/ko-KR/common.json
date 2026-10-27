@@ -1435,6 +1435,30 @@
       "judgeReady": "{{judge}} 준비 완료",
       "judgeOff": "판정이 꺼져 있습니다",
       "title": "spec.jev에게 무엇을 맡길까요?"
+    },
+    "capabilities": {
+      "label": "기능 활동",
+      "mcp": "MCP",
+      "skills": "스킬",
+      "aria": "MCP 및 스킬 활동: MCP {{mcp}}개, 스킬 {{skills}}개, 실행 중 {{active}}개",
+      "loading": "MCP와 스킬을 불러오는 중…",
+      "unavailable": "사용할 수 없음",
+      "enabled": "사용 중",
+      "off": "꺼짐",
+      "calling": "호출 중",
+      "called": "호출됨",
+      "failed": "실패",
+      "loaded": "불러옴",
+      "updated": "도구 업데이트됨",
+      "suggested": "관련 스킬",
+      "find": "스킬 찾기",
+      "tools": "도구 {{count}}개",
+      "noMcp": "설정된 MCP가 없습니다",
+      "noSkills": "설정된 스킬이 없습니다",
+      "active": "실행 중",
+      "recent": "최근 활동",
+      "settingsHint": "설정 → MCP 서버 / 스킬",
+      "more": "{{count}}? ?"
     }
   },
   "menu": {

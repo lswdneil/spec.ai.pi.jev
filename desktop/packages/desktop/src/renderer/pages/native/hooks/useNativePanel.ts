@@ -85,8 +85,8 @@ export function useNativePanel(
     [error, events, loading]
   );
   useEffect(() => {
-    publishNativeActivity({ conversationId: id, activity, ...(cwd ? { cwd } : {}) });
-  }, [activity, cwd, id]);
+    publishNativeActivity({ conversationId: id, activity, view: shown, ...(cwd ? { cwd } : {}) });
+  }, [activity, cwd, id, shown]);
   useEffect(() => () => withdrawNativeActivity(id), [id]);
 
   // A file the model finished writing or editing is news for the files tab, which gets its dot unless the person is

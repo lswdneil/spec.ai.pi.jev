@@ -14,6 +14,7 @@ const themed = [
   'components/media/FileAttachButton.tsx',
   'components/kernel/MuHero.module.css',
   'components/kernel/KernelBar.module.css',
+  'components/kernel/CapabilityPulse.module.css',
   'pages/guid/components/AssistantSelectionArea.tsx',
   'pages/guid/index.module.css',
   'pages/conversation/GroupedHistory/ConversationSearchPopover.css',

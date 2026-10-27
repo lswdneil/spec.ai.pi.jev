@@ -1,13 +1,15 @@
 /**
  * The Jev panel's record of the native conversation on screen. The native page publishes what its view holds here
  * (`toActivity`), and the work panel reads it for that conversation instead of asking the main process for the spec.jev
- * bridge's telemetry, which a native conversation does not have. One conversation at a time: the one on screen. With
- * it, the folder the conversation works in (`cwd`), once known: the panel's lessons and files are read by it.
+ * bridge's telemetry, which a native conversation does not have. The view itself is published too, so the kernel bar can
+ * read its tool calls and capability events. One conversation at a time: the one on screen. With it, the folder the
+ * conversation works in (`cwd`), once known: the panel's lessons and files are read by it.
  */
 import { useSyncExternalStore } from 'react';
+import type { NativeView } from '@/common/utils/nativeHost';
 import type { KyrnActivity } from '@/renderer/pages/conversation/KyrnPanel';
 
-type Published = { conversationId: string; activity: KyrnActivity; cwd?: string };
+type Published = { conversationId: string; activity: KyrnActivity; view?: NativeView; cwd?: string };
 
 let published: Published | undefined;
 const listeners = new Set<() => void>();
@@ -17,6 +19,7 @@ export function publishNativeActivity(next: Published | undefined): void {
   if (
     next?.conversationId === published?.conversationId &&
     next?.activity === published?.activity &&
+    next?.view === published?.view &&
     next?.cwd === published?.cwd
   )
     return;
@@ -41,6 +44,12 @@ const read = (): Published | undefined => published;
 export function useNativeActivity(conversationId: string | null): KyrnActivity | undefined {
   const current = useSyncExternalStore(subscribe, read, read);
   return conversationId && current?.conversationId === conversationId ? current.activity : undefined;
+}
+
+/** The view of the native conversation on screen, or undefined for any other conversation. */
+export function useNativeView(conversationId: string | null): NativeView | undefined {
+  const current = useSyncExternalStore(subscribe, read, read);
+  return conversationId && current?.conversationId === conversationId ? current.view : undefined;
 }
 
 /** The folder of the native conversation on screen, once known; undefined for any other conversation. */

@@ -7,8 +7,9 @@ import JudgePulse from '@/renderer/components/brand/JudgePulse';
 import { gaugeReadings, wholePercent } from '@/renderer/pages/conversation/KyrnPanel/Board/gauges';
 import { judgeCards } from '@/renderer/pages/conversation/KyrnPanel/Judge/activity';
 import { useCurrentConversation } from '@/renderer/pages/conversation/explorer/currentConversationStore';
-import { useNativeActivity } from '@/renderer/pages/native/utils/nativeActivityStore';
+import { useNativeActivity, useNativeView } from '@/renderer/pages/native/utils/nativeActivityStore';
 import { formatNumber } from '@/renderer/services/i18n/format';
+import CapabilityPulse from './CapabilityPulse';
 import { useKernelSummary } from './useKernelSummary';
 import styles from './KernelBar.module.css';
 
@@ -37,6 +38,7 @@ const KernelBar: React.FC = () => {
   const summary = useKernelSummary();
   const conversationId = useCurrentConversation();
   const activity = useNativeActivity(conversationId);
+  const view = useNativeView(conversationId);
   const events = activity?.events ?? NO_EVENTS;
   const judge = useMemo(() => judgeActivity(events), [events]);
   const readings = useMemo(() => gaugeReadings(events), [events]);
@@ -102,6 +104,7 @@ const KernelBar: React.FC = () => {
           </span>
         </div>
       ) : null}
+      <CapabilityPulse view={view} />
     </footer>
   );
 };

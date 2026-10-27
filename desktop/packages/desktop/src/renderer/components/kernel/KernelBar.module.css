@@ -17,7 +17,8 @@
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
   user-select: none;
-  overflow: hidden;
+  /* The capability panel opens above the bar. */
+  overflow: visible;
 }
 
 .group {

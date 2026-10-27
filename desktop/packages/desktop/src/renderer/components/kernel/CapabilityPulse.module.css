@@ -1,0 +1,232 @@
+/* The MCP and skill pulse at the kernel bar's right edge. */
+.pulse {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 20px;
+  color: var(--bg-6);
+  font-family: var(--sv-font-ui);
+  font-size: var(--sv-fs-small);
+  line-height: 20px;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 20px;
+  padding: 0 5px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.trigger:hover,
+.trigger:focus-visible {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  outline: none;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--bg-6);
+}
+
+.dotBusy {
+  background: var(--mu-judge-dot);
+  animation: capability-pulse 1.2s ease-in-out infinite;
+}
+
+.dotLoading {
+  background: var(--text-tertiary, var(--bg-6));
+  animation: capability-pulse 1.8s ease-in-out infinite;
+}
+
+.badge {
+  min-width: 15px;
+  padding: 0 4px;
+  border-radius: 7px;
+  background: var(--bg-3);
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 15px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 7px);
+  z-index: 80;
+  width: 326px;
+  max-height: min(440px, 58vh);
+  overflow: auto;
+  padding: 10px;
+  border: 1px solid var(--border-base);
+  border-radius: 9px;
+  background: var(--bg-1);
+  color: var(--text-primary);
+  font-family: var(--sv-font-ui);
+  font-size: 12px;
+  line-height: 18px;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--bg-2) 70%, transparent);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 2px 8px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.headerBusy {
+  color: var(--mu-judge);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.section {
+  padding: 7px 2px;
+  border-top: 1px solid var(--border-base);
+}
+
+.section h4 {
+  margin: 0 0 5px;
+  color: var(--text-tertiary, var(--bg-6));
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.row,
+.event,
+.recent {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 2px 0;
+}
+
+.rowName,
+.eventName {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowMeta,
+.eventMeta {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--text-tertiary, var(--bg-6));
+  font-size: 11px;
+}
+
+.eventDot {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--text-tertiary, var(--bg-6));
+}
+
+.statusActive {
+  background: var(--mu-judge-dot);
+  animation: capability-pulse 1.2s ease-in-out infinite;
+}
+
+.statusDone {
+  background: var(--sv-ok, var(--text-secondary));
+}
+
+.statusError {
+  background: var(--sv-danger, var(--text-secondary));
+}
+
+.statusInfo {
+  background: var(--text-tertiary, var(--bg-6));
+}
+
+.statusOff {
+  background: var(--bg-4);
+}
+
+.empty {
+  padding: 3px 0;
+  color: var(--text-tertiary, var(--bg-6));
+  font-size: 11px;
+}
+
+.recent {
+  align-items: flex-start;
+}
+
+.recentName {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recentDetail {
+  margin-inline-start: 5px;
+  color: var(--text-tertiary, var(--bg-6));
+}
+
+.recentMeta {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--text-tertiary, var(--bg-6));
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.footer {
+  padding: 7px 2px 0;
+  border-top: 1px solid var(--border-base);
+}
+
+.footerText {
+  color: var(--text-tertiary, var(--bg-6));
+  font-size: 10px;
+}
+
+@keyframes capability-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.88);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dotBusy,
+  .dotLoading,
+  .statusActive {
+    animation: none;
+  }
+}

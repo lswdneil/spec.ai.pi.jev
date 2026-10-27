@@ -10,6 +10,7 @@ spec.jev is in pre-release (0.1.x): names, settings and formats may still change
 
 - **The desktop app carries moli**, so the agent's browser backend works without a separate install. Windows and Linux builds stage the pinned moli release (or a locally built `MU_MOLI_BINARY`) under `resources/bundled-moli`, verify it during packaging, and set `SPECJEV_MOLI` before the agent starts. The In-app browser settings expose the backend choice.
 - **The Windows desktop app includes Windows-MCP by default.** A standalone `windows-mcp.exe` is built from the latest Windows-MCP source and seeded as an enabled built-in MCP server, so desktop control, screenshots, UI inspection, input, files and PowerShell work without installing Python or uv. It is added once to the native host's `mcp.json` (shown as **Windows desktop** in Settings → MCP servers) and to the classic MCP database; it can be switched off or removed, and removing it is remembered.
+- **The kernel bar shows MCP and skill activity.** Its right end carries a quiet `MCP n · Skills n` pulse while a conversation runs: MCP servers that load, MCP tool calls (`mcp__server__tool`), relevant-skill suggestions, explicit skill invocations and `find_skill` searches appear in the expanded panel. Hover or focus opens it above the bar; the panel also lists the configured MCP servers and the loaded skills, with a shortcut to Settings.
 
 ## [0.1.11] - 2026-10-26
 

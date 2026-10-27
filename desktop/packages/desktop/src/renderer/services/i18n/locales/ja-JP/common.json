@@ -1435,6 +1435,30 @@
       "judgeReady": "{{judge}} の準備ができました",
       "judgeOff": "判定はオフです",
       "title": "spec.jev に何を任せますか？"
+    },
+    "capabilities": {
+      "label": "ケイパビリティの動き",
+      "mcp": "MCP",
+      "skills": "スキル",
+      "aria": "MCP とスキルの動き：MCP {{mcp}} 件、スキル {{skills}} 件、実行中 {{active}} 件",
+      "loading": "MCP とスキルを読み込み中…",
+      "unavailable": "利用できません",
+      "enabled": "有効",
+      "off": "オフ",
+      "calling": "呼び出し中",
+      "called": "呼び出し済み",
+      "failed": "失敗",
+      "loaded": "読み込み済み",
+      "updated": "ツールを更新",
+      "suggested": "関連スキル",
+      "find": "スキルを検索",
+      "tools": "{{count}} 個のツール",
+      "noMcp": "MCP が設定されていません",
+      "noSkills": "スキルが設定されていません",
+      "active": "実行中",
+      "recent": "最近の動き",
+      "settingsHint": "設定 → MCP サーバー / スキル",
+      "more": "���� {{count}} ��"
     }
   },
   "menu": {
