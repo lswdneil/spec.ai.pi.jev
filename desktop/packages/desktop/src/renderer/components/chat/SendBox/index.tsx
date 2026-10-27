@@ -2147,6 +2147,16 @@ const SendBox: React.FC<{
                 overflowWrap: 'break-word',
               }}
               onChange={handleTextAreaChange}
+              // Arco keeps its own composition latch. When an input method, a focus change, or a menu interrupts it,
+              // its `onChange` can stay suppressed while the native input event already has the committed text. Commit
+              // that event here as a fallback, after clearing our latch, so the controlled value cannot stay empty.
+              onInput={(event) => {
+                if (event.nativeEvent.isComposing) return;
+                const value = event.currentTarget.value;
+                if (value === input) return;
+                isComposing.current = false;
+                handleTextAreaChange(value);
+              }}
               onPaste={onPaste}
               onTouchStart={markMobileFocusIntent}
               onMouseDown={markMobileFocusIntent}
