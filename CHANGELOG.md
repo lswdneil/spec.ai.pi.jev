@@ -6,6 +6,10 @@ spec.jev is in pre-release (0.1.x): names, settings and formats may still change
 
 ## [Unreleased]
 
+### Added
+
+- **The desktop app carries moli**, so the agent's browser backend works without a separate install. Windows and Linux builds stage the pinned moli release (or a locally built `MU_MOLI_BINARY`) under `resources/bundled-moli`, verify it during packaging, and set `SPECJEV_MOLI` before the agent starts. The In-app browser settings expose the backend choice.
+
 ## [0.1.11] - 2026-10-26
 
 ### Fixed

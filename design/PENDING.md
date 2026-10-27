@@ -43,6 +43,11 @@ Passed locally on Windows x64:
 - `0.1.11` desktop release published with Windows x64, Linux x64 `.deb`,
   `SHA256SUMS` and both update feeds. `spec.jev@0.1.11` is live on npm with
   provenance; Trusted Publishing worked through `npm.yml`.
+- A local Windows 0.1.11 installer now carries the moli source build
+  (`73928db11`, 1.1.19) under `resources/bundled-moli`; the packaged app sets
+  `SPECJEV_MOLI` and starts it. The build hook verifies the binary; the release
+  CI path downloads the pinned official 1.1.19 asset with a SHA-256 check.
+  A published installer that includes moli still needs a new version.
 
 Still external or undecided before a public release:
 
