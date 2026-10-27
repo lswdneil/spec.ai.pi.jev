@@ -10,7 +10,11 @@ import { Alert } from '@/renderer/ui/alert';
 import { Button } from '@/renderer/ui/button';
 import { Message } from '@/renderer/ui/toast';
 import { Modal } from '@/renderer/ui/dialog';
+import { Input } from '@/renderer/ui/input';
 import { Switch } from '@/renderer/ui/switch';
+import MuSelect from '@/renderer/components/base/MuSelect';
+import { useSharedMuSettings } from '@/renderer/pages/settings/KyrnSettings/useMuSettings';
+import { setFeature, stateOf } from '@/renderer/pages/settings/KyrnSettings/sections/FeaturesSection';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useSWR, { mutate } from 'swr';
@@ -34,6 +38,99 @@ import PreferenceRow from './PreferenceRow';
  *   so putting the switch there would leave production users with no way to turn off a
  *   capability that defaults to on — which would make it not really optional.
  */
+type BrowserBackend = 'auto' | 'moli' | 'chrome';
+
+/**
+ * The agent browser's engine, edited here because this is where people look for the in-app browser. The in-app tabs
+ * themselves stay in Electron's Chromium; this chooses what `browse` and `page_fetch` start when the app is not
+ * driving them (see docs/moli.md).
+ */
+function BrowserBackendSettings() {
+  const { t } = useTranslation();
+  const mu = useSharedMuSettings();
+  const feature =
+    mu?.base?.harness.status === 'ok'
+      ? mu.base.harness.manifest.features.find((each) => each.name === 'browser')
+      : undefined;
+  if (!mu || !mu.draft || !feature || !feature.options.some((option) => option.key === 'backend')) return null;
+
+  const state = stateOf(mu.draft.settings, feature);
+  const backend = String(state.options.backend ?? 'auto') as BrowserBackend;
+  const moliPath = String(state.options.moliPath ?? '');
+  const moliUrl = String(state.options.moliUrl ?? '');
+  const save = async () => {
+    if (await mu.save()) Message.success(t('common.saveSuccess'));
+    else Message.error(t('common.saveFailed'));
+  };
+  const setOption = (key: 'backend' | 'moliPath' | 'moliUrl', value: string) =>
+    setFeature(mu.editSettings, feature, {
+      ...state,
+      options: { ...state.options, [key]: value },
+    });
+
+  return (
+    <>
+      <PreferenceRow label={t('settings.browserData.backendLabel')} description={t('settings.browserData.backendDesc')}>
+        <div className='flex items-center gap-8px'>
+          <MuSelect
+            size='small'
+            className='w-200px'
+            aria-label={t('settings.browserData.backendLabel')}
+            data-testid='mu-browser-backend'
+            value={backend}
+            onChange={(value: string) => setOption('backend', value as BrowserBackend)}
+            options={[
+              { value: 'auto', label: t('settings.browserData.backendAuto') },
+              { value: 'moli', label: t('settings.browserData.backendMoli') },
+              { value: 'chrome', label: t('settings.browserData.backendChrome') },
+            ]}
+          />
+          <Button
+            size='small'
+            type='primary'
+            loading={mu.saving}
+            disabled={mu.saving || !mu.dirty.has('features')}
+            data-testid='mu-browser-backend-save'
+            onClick={() => void save()}
+          >
+            {t('common.save')}
+          </Button>
+        </div>
+      </PreferenceRow>
+      {backend !== 'chrome' ? (
+        <>
+          <PreferenceRow
+            label={t('settings.browserData.moliPathLabel')}
+            description={t('settings.browserData.moliPathDesc')}
+          >
+            <Input
+              size='small'
+              className='w-260px'
+              aria-label={t('settings.browserData.moliPathLabel')}
+              value={moliPath}
+              placeholder='moli.exe'
+              onChange={(value: string) => setOption('moliPath', value)}
+            />
+          </PreferenceRow>
+          <PreferenceRow
+            label={t('settings.browserData.moliUrlLabel')}
+            description={t('settings.browserData.moliUrlDesc')}
+          >
+            <Input
+              size='small'
+              className='w-260px'
+              aria-label={t('settings.browserData.moliUrlLabel')}
+              value={moliUrl}
+              placeholder='http://127.0.0.1:9222'
+              onChange={(value: string) => setOption('moliUrl', value)}
+            />
+          </PreferenceRow>
+        </>
+      ) : null}
+    </>
+  );
+}
+
 const BrowserDataSection: React.FC = () => {
   const { t } = useTranslation();
   const [clearing, setClearing] = useState(false);
@@ -110,6 +207,8 @@ const BrowserDataSection: React.FC = () => {
   return (
     // The page's title names it: the section is only its rows.
     <div className='settings-list'>
+      <BrowserBackendSettings />
+
       <PreferenceRow
         label={t('settings.browserData.agentControlLabel')}
         description={t('settings.browserData.agentControlDesc')}

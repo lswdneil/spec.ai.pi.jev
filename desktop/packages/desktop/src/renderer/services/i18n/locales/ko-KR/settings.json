@@ -984,6 +984,15 @@
   "autoInjectedSkillsHint": "모든 대화에 자동으로 로드됩니다. 활성화할 필요가 없으며, 에이전트가 사용 시점을 결정합니다.",
   "browserData": {
     "title": "앱 내 브라우저",
+    "backendLabel": "브라우저 백엔드",
+    "backendDesc": "spec.jev가 브라우저를 직접 시작할 때 사용할 엔진입니다. 앱 내 탭은 항상 데스크톱 앱의 Chromium으로 렌더링됩니다.",
+    "backendAuto": "자동(moli 우선)",
+    "backendMoli": "moli",
+    "backendChrome": "Chrome / Chromium",
+    "moliPathLabel": "moli 실행 파일",
+    "moliPathDesc": "비워 두면 일반 설치 위치와 PATH를 검색합니다. SPECJEV_MOLI로 지정할 수도 있습니다.",
+    "moliUrlLabel": "실행 중인 moli 주소",
+    "moliUrlDesc": "예: http://127.0.0.1:9222. 비워 두면 spec.jev가 시작합니다.",
     "agentControlLabel": "앱 내 브라우저의 에이전트 조작 허용",
     "agentControlDesc": "켜면 에이전트가 앱 내 브라우저에서 페이지를 열고 클릭하거나 양식을 채워 줍니다(자료 검색, 웹사이트 절차 완료 등). 조작 대상은 앱 내 브라우저 화면 하나뿐이며, spec.jev 인터페이스 자체에는 접근할 수 없고 별도의 Chrome 창도 열지 않습니다. 끄면 브라우저는 계속 직접 사용할 수 있고 에이전트만 조작할 수 없게 됩니다.",
     "agentControlSaved": "설정이 저장되었습니다",
@@ -995,7 +1004,7 @@
     "clearConfirmContent": "앱 내 브라우저의 모든 사이트에서 로그아웃됩니다. 되돌릴 수 없습니다.",
     "clearSuccess": "인터넷 사용 정보를 삭제했습니다",
     "clearFailed": "인터넷 사용 정보 삭제에 실패했습니다",
-    "description": "에이전트가 앱 내 브라우저를 사용할 수 있는지, 그리고 브라우저가 저장한 데이터 삭제."
+    "description": "브라우저 백엔드, 에이전트의 앱 내 브라우저 접근, 브라우징 데이터 삭제."
   },
   "archived": {
     "navLabel": "보관된 대화",

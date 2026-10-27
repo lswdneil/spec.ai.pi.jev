@@ -983,6 +983,15 @@
   "autoInjectedSkillsHint": "Loaded into every conversation automatically. You don't need to turn them on; the agent decides when to use them.",
   "browserData": {
     "title": "In-app browser",
+    "backendLabel": "Browser backend",
+    "backendDesc": "Which engine spec.jev uses when it starts a browser itself. In-app tabs are always rendered by the desktop app's Chromium.",
+    "backendAuto": "Automatic (prefer moli)",
+    "backendMoli": "moli",
+    "backendChrome": "Chrome / Chromium",
+    "moliPathLabel": "moli executable",
+    "moliPathDesc": "Empty searches the usual install places and PATH; SPECJEV_MOLI also works.",
+    "moliUrlLabel": "Running moli address",
+    "moliUrlDesc": "For example http://127.0.0.1:9222; empty lets spec.jev start it.",
     "agentControlLabel": "Let the agent use the in-app browser",
     "agentControlDesc": "When on, the agent can open pages, click and fill in forms in the in-app browser, for example to look something up or finish a task on a website. It can only control that browser view: it can't reach spec.jev's own interface, and it never opens a separate Chrome window. When off, you can still use the browser; only the agent loses access.",
     "agentControlSaved": "Setting saved",
@@ -994,7 +1003,7 @@
     "clearConfirmContent": "You'll be signed out of every site in the in-app browser. This can't be undone.",
     "clearSuccess": "Browsing data cleared",
     "clearFailed": "Couldn't clear browsing data",
-    "description": "Agent access to the in-app browser, and clearing its data."
+    "description": "The agent browser's backend, agent access to the in-app browser, and clearing its data."
   },
   "archived": {
     "navLabel": "Archived conversations",

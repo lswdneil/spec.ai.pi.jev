@@ -984,6 +984,15 @@
   "autoInjectedSkillsHint": "すべての会話に自動的に読み込まれます。有効化は不要で、エージェントが使用するタイミングを判断します。",
   "browserData": {
     "title": "アプリ内ブラウザー",
+    "backendLabel": "ブラウザバックエンド",
+    "backendDesc": "spec.jev がブラウザを起動するときのエンジンです。アプリ内タブはデスクトップアプリの Chromium で描画されます。",
+    "backendAuto": "自動（moli を優先）",
+    "backendMoli": "moli",
+    "backendChrome": "Chrome / Chromium",
+    "moliPathLabel": "moli 実行ファイル",
+    "moliPathDesc": "空の場合、一般的なインストール先と PATH を検索します。SPECJEV_MOLI でも指定できます。",
+    "moliUrlLabel": "実行中の moli アドレス",
+    "moliUrlDesc": "例: http://127.0.0.1:9222。空の場合、spec.jev が起動します。",
     "agentControlLabel": "アプリ内ブラウザのエージェント操作を許可",
     "agentControlDesc": "オンにすると、エージェントがアプリ内ブラウザでページを開いたり、クリックやフォーム入力を代行できます（調べ物やサイト上の手続きなど）。操作できるのはアプリ内ブラウザのビューのみで、spec.jev の画面自体には触れられず、別の Chrome ウィンドウを開くこともありません。オフにしてもブラウザは通常どおり使えますが、エージェントは操作できなくなります。",
     "agentControlSaved": "設定を保存しました",
@@ -995,7 +1004,7 @@
     "clearConfirmContent": "アプリ内ブラウザーのすべてのサイトからサインアウトされます。この操作は取り消せません。",
     "clearSuccess": "閲覧データを消去しました",
     "clearFailed": "閲覧データの消去に失敗しました",
-    "description": "エージェントにアプリ内ブラウザーの操作を許可するかどうかと、ブラウザーが保存したデータの消去。"
+    "description": "ブラウザバックエンド、エージェントによるアプリ内ブラウザの利用、閲覧データの消去。"
   },
   "archived": {
     "navLabel": "アーカイブ済みの会話",

@@ -52,6 +52,10 @@ Two differences from Chrome that the backend absorbs:
 | `moliUrl` | `SPECJEV_MOLI_URL` | a running server, e.g. `http://127.0.0.1:9222`. |
 | `fetchChars` | — | how much of a `page_fetch` reaches the model (default 12000). |
 
+The desktop app shows these under Settings → In-app browser: Browser backend, moli executable and Running
+moli address. The in-app tabs themselves still render in Electron's Chromium; this backend is what the agent
+starts when the app is not driving the browser.
+
 Order of use: the desktop app's browser panel (when it offers one), then moli, then Chrome.
 
 ## The cheap read: `page_fetch`

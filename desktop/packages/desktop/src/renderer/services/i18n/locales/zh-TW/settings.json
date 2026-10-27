@@ -984,6 +984,15 @@
   "autoInjectedSkillsHint": "每次對話都會自動載入，無需手動啟用；由智能體自行決定何時呼叫。",
   "browserData": {
     "title": "應用內瀏覽器",
+    "backendLabel": "瀏覽器後端",
+    "backendDesc": "spec.jev 自行啟動瀏覽器時使用的引擎。應用內分頁始終由桌面應用程式自己的 Chromium 渲染。",
+    "backendAuto": "自動（優先 moli）",
+    "backendMoli": "moli",
+    "backendChrome": "Chrome / Chromium",
+    "moliPathLabel": "moli 執行檔",
+    "moliPathDesc": "留空會搜尋常見安裝位置與 PATH；也可以設定 SPECJEV_MOLI。",
+    "moliUrlLabel": "執行中的 moli 位址",
+    "moliUrlDesc": "例如 http://127.0.0.1:9222；留空由 spec.jev 啟動。",
     "agentControlLabel": "允許代理操作應用內瀏覽器",
     "agentControlDesc": "開啟後，代理可以在應用內瀏覽器裡替你開啟網頁、點擊和填寫表單，例如查資料或完成某個網站流程。它只能操作應用內瀏覽器這一個頁面，碰不到 spec.jev 介面本身，也不會開啟獨立的 Chrome 視窗。關閉後瀏覽器仍可自行使用，只是代理無法操作。",
     "agentControlSaved": "設定已儲存",
@@ -995,7 +1004,7 @@
     "clearConfirmContent": "應用內瀏覽器中所有網站的登入狀態都會被登出，且無法復原。",
     "clearSuccess": "瀏覽資料已清空",
     "clearFailed": "清空瀏覽資料失敗",
-    "description": "是否允許代理操作應用內瀏覽器，以及清除瀏覽器保存的資料。"
+    "description": "瀏覽器後端、代理存取應用內瀏覽器，以及清除瀏覽器儲存的資料。"
   },
   "archived": {
     "navLabel": "已歸檔的對話",
