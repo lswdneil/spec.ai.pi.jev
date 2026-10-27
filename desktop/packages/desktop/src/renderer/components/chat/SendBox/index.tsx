@@ -2176,7 +2176,9 @@ const SendBox: React.FC<{
               onCompositionEnd={(event) => {
                 // Arco may keep the committed text out of `onChange` on its way through composition; take what the
                 // input method committed here as well, so a normal IME composition lands in the controlled value.
-                handleTextAreaChange(rewriteIdeographicSlash(input, event.currentTarget.value));
+                // Some IMEs hand the committed text in `data` while the controlled textarea still reads empty.
+                const committed = event.currentTarget.value || (event.nativeEvent as CompositionEvent).data || '';
+                handleTextAreaChange(rewriteIdeographicSlash(input, committed));
               }}
               autoSize={isSingleLine ? false : MULTI_LINE_AUTO_SIZE}
               onKeyDown={createKeyDownHandler(handlePrimaryAction, (event) => {
