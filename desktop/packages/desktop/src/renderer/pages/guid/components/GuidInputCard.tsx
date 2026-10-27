@@ -80,7 +80,9 @@ const GuidInputCard: React.FC<GuidInputCardProps> = ({
   }, [focusRequestKey, input, isMobile]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (isComposing.current) return;
+    // Trust the event's own composition flag, not only our ref: an interrupted composition can leave the ref true.
+    if (e.nativeEvent.isComposing) return;
+    isComposing.current = false;
     onKeyDown(e);
   };
 

@@ -21,7 +21,11 @@ export const useCompositionInput = () => {
 
   const createKeyDownHandler = (onEnterPress: () => void, onKeyDownIntercept?: (e: React.KeyboardEvent) => boolean) => {
     return (e: React.KeyboardEvent) => {
-      if (isComposing.current) return;
+      // The native flag is the truth for this event. Our ref can outlive an interrupted composition (focus moving to
+      // the model menu, an input method that never delivers compositionend); trusting it would swallow Enter forever
+      // and let the textarea insert a newline instead of sending.
+      if (e.nativeEvent.isComposing) return;
+      isComposing.current = false;
       if (onKeyDownIntercept?.(e)) return;
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
