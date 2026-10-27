@@ -17,17 +17,21 @@ design; turn the server off if you do not want the agent to control the
 desktop.
 
 The bundled build is made from the Windows-MCP checkout at commit `cef52ec`
-(version 0.8.8) with PyInstaller. To build it yourself:
+(version 0.8.8) with PyInstaller. The release job runs:
 
 ```sh
-cd Windows-MCP
-uv sync --frozen
-uv pip install pyinstaller
-uv run pyinstaller --clean --noconfirm --onefile --name windows-mcp \
-  --paths src src/windows_mcp/__main__.py
+node desktop/scripts/buildWindowsMcp.js
 ```
 
-Then stage it for the desktop build:
+It clones the pinned commit when no `WINDOWS_MCP_SOURCE` is given, installs
+Python through `uv`, and builds the one-file executable. To use an existing
+checkout:
+
+```sh
+WINDOWS_MCP_SOURCE=/path/to/Windows-MCP node desktop/scripts/buildWindowsMcp.js
+```
+
+To stage an already built executable for a local desktop build:
 
 ```sh
 MU_WINDOWS_MCP_BINARY=/path/to/Windows-MCP/dist/windows-mcp.exe \

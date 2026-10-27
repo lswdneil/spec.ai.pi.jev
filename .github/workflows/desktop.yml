@@ -89,6 +89,8 @@ jobs:
       ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
       ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
       MU_BACKEND_ARCH: ${{ matrix.arch }}
+      # The Windows installer must carry the default Windows desktop MCP.
+      MU_REQUIRE_WINDOWS_MCP: '1'
       # Public release downloads (AionCore, Electron) are rate-limited without a token.
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -120,6 +122,19 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: Setup uv for the Windows MCP build
+        if: startsWith(matrix.platform, 'windows')
+        uses: astral-sh/setup-uv@v6
+
+      # Windows-MCP needs Python 3.14 and a standalone executable; uv supplies the interpreter and PyInstaller
+      # produces the single file that the packaged app seeds as the default Windows MCP server.
+      - name: Build the bundled Windows MCP
+        if: startsWith(matrix.platform, 'windows')
+        shell: bash
+        run: |
+          node scripts/buildWindowsMcp.js
+          echo "MU_WINDOWS_MCP_BINARY=$(cygpath -w "$GITHUB_WORKSPACE/desktop/resources/bundled-mcp/windows-mcp.exe")" >> "$GITHUB_ENV"
 
       - name: Cache Electron downloads
         uses: actions/cache@v4
