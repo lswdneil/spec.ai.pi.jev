@@ -49,9 +49,12 @@ Passed locally on Windows x64:
   CI path downloads the pinned official 1.1.19 asset with a SHA-256 check.
 - The same local installer carries Windows-MCP 0.8.8 (`cef52ec`) as a
   PyInstaller standalone `resources/bundled-mcp/windows-mcp.exe`. It is seeded
-  as an enabled built-in MCP server named `windows-mcp`; its stdio handshake
-  returned all 21 tools. A published installer that includes moli and
-  Windows-MCP still needs a new version.
+  once into the native host's `agent/mcp.json` (shown as "Windows desktop" on
+  Settings → MCP servers) and into the classic MCP database. Its stdio
+  handshake returned all 21 tools; `ControlStatus` answered `ready`. Removing
+  the native entry is remembered, and an app move refreshes only its path. A
+  published installer that includes moli and Windows-MCP still needs a new
+  version.
 
 Still external or undecided before a public release:
 

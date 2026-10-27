@@ -17,6 +17,7 @@ import { LocalJudge } from '../agent/kyrn/localJudge';
 import { OnnxLocalJudge, openFolder, usesOnnxJudge } from '../agent/kyrn/localJudgeOnnx';
 import { importCli, importService } from '../agent/kyrn/importChats';
 import { addSkill, listSkills, removeSkill, skillsFolder } from '../agent/kyrn/capabilities/skills';
+import { seedBundledWindowsMcp } from '../agent/kyrn/capabilities/bundledWindowsMcp';
 import {
   addMcpServer,
   listMcpServers,
@@ -33,6 +34,7 @@ import { muAgentDir, muEnv, muHome } from '../agent/kyrn/naming';
 import { asRecord, text } from '../agent/kyrn/piRpc';
 import { sessionBinding } from '../agent/kyrn/sessionBinding';
 import { conversationSessions } from '../agent/kyrn/conversationSession';
+import { getBundledMcpExecutablePath } from '../utils/initStorage';
 import { getDataPath } from '../utils/utils';
 
 /**
@@ -90,6 +92,12 @@ export function initKyrnBridge(): void {
   const root = harness.root;
   const home = muHome();
   const agentDir = muAgentDir();
+  // The native host reads its own mcp.json, not the app's classic MCP database. Offer the bundled Windows MCP there
+  // before the settings page or a conversation reads the list; an existing custom server of that name is left alone.
+  seedBundledWindowsMcp(
+    agentDir,
+    process.platform === 'win32' ? getBundledMcpExecutablePath('windows-mcp') : undefined
+  );
   const store = join(home, 'acp-sessions');
   const settings = new SettingsStore(agentDir, root, {
     env: envFileOf(harness, home, process.platform),

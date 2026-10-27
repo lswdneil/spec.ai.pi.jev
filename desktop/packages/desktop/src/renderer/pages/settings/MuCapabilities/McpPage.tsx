@@ -17,6 +17,7 @@ import { muErrorText, toMuError } from '../KyrnSettings/fields/muError';
 import SectionShell, { Card } from '../KyrnSettings/sections/SectionShell';
 import styles from '../KyrnSettings/sections/sections.module.css';
 import { useSharedMuSettings } from '../KyrnSettings/useMuSettings';
+import { mcpServerDisplayName } from '@/renderer/hooks/mcp/mcpServerLabel';
 import AddMcpServerModal from './AddMcpServerModal';
 import Count from './Count';
 import { useMuList } from './useMuList';
@@ -83,7 +84,8 @@ export default function MuMcpPage() {
   })).filter((group) => group.servers.length > 0);
 
   const control = (server: MuMcpServer) => {
-    const name = t('mu.capabilities.mcp.use', { name: server.name });
+    const displayName = mcpServerDisplayName(server.name, t);
+    const name = t('mu.capabilities.mcp.use', { name: displayName });
     if (server.lock)
       return (
         <Tooltip content={t(`mu.capabilities.mcp.locked.${server.lock}.help`)}>
@@ -98,7 +100,7 @@ export default function MuMcpPage() {
           <Button
             size='small'
             type='text'
-            aria-label={`${server.name}: ${t('mu.capabilities.remove')}`}
+            aria-label={`${displayName}: ${t('mu.capabilities.remove')}`}
             disabled={pending === server.name}
             onClick={() => remove(server)}
           >
@@ -176,7 +178,7 @@ export default function MuMcpPage() {
                   <div className={styles.plainMain}>
                     <div className={styles.plainText}>
                       <div className={styles.plainTitle} title={server.file}>
-                        <span>{server.name}</span>
+                        <span>{mcpServerDisplayName(server.name, t)}</span>
                       </div>
                       {/* A command line or an address: cut at the end of the line, whole in its tooltip. */}
                       <div

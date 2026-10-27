@@ -256,6 +256,16 @@ describe('spec.jev’s MCP servers while spec.jev runs inside the app', () => {
     expect(screen.getByText(/are used only in that project's conversations/)).toBeInTheDocument();
   });
 
+  it('shows the bundled Windows MCP by its product name', async () => {
+    bridge.mcpServers.mockResolvedValue(
+      ok({ ...SERVERS, servers: [...SERVERS.servers, server({ name: 'windows-mcp' })] })
+    );
+    draw(<MuMcpPage />);
+
+    expect(await screen.findByTestId('mu-mcp-windows-mcp')).toHaveTextContent('Windows desktop');
+    expect(screen.getByRole('switch', { name: 'Use Windows desktop' })).toBeChecked();
+  });
+
   it('switches a server off and shows the list the main process answered with', async () => {
     bridge.mcpServers.mockResolvedValue(ok(SERVERS));
     draw(<MuMcpPage />);
