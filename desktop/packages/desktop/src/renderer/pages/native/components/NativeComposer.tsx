@@ -155,7 +155,8 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
   useEffect(() => {
     if (isMobile) return;
     const frame = requestAnimationFrame(() => {
-      if (document.querySelector('[role="menu"]')) return;
+      const menu = document.querySelector<HTMLElement>('[role="menu"]');
+      if (menu && menu.getBoundingClientRect().width > 0) return;
       const active = document.activeElement;
       const elsewhere =
         active instanceof HTMLElement &&
@@ -168,6 +169,32 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
     });
     return () => cancelAnimationFrame(frame);
   }, [host.phase, isMobile]);
+
+  // The model menu is portaled; dismissing it with an outside click can leave focus on the document body (the
+  // dropdown's own close callback is not the only path). Remember that it was open, then put the caret back after
+  // the dismissal. A click on a real input/panel keeps its own focus.
+  useEffect(() => {
+    if (isMobile) return;
+    let menuWasOpen = false;
+    const openMenu = () => {
+      const menu = document.querySelector<HTMLElement>('[role="menu"]');
+      menuWasOpen = Boolean(menu && menu.getBoundingClientRect().width > 0);
+    };
+    const restore = () => {
+      if (!menuWasOpen) return;
+      menuWasOpen = false;
+      requestAnimationFrame(() => {
+        const input = document.querySelector<HTMLTextAreaElement>('[data-testid="native-send-input"]');
+        if (input && !input.disabled) input.focus();
+      });
+    };
+    document.addEventListener('pointerdown', openMenu, true);
+    document.addEventListener('pointerup', restore, true);
+    return () => {
+      document.removeEventListener('pointerdown', openMenu, true);
+      document.removeEventListener('pointerup', restore, true);
+    };
+  }, [isMobile]);
 
   // Ending a goal is a command the person gives, `/goal clear`, as in spec.jev's other conversations. pi runs an extension's
   // command at once, a run going or not; a run that goes is stopped as well, as the classic line stops it (a goal's run
