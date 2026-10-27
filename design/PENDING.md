@@ -40,6 +40,9 @@ Passed locally on Windows x64:
 - `0.1.10 -> 0.1.11` Linux `.deb` upgrade passed in WSL Ubuntu: `dpkg` reports
   `0.1.11`, the data marker survived, the bundled ONNX runtime is present, and
   the app starts under Xvfb.
+- `0.1.11` desktop release published with Windows x64, Linux x64 `.deb`,
+  `SHA256SUMS` and both update feeds. `spec.jev@0.1.11` is live on npm with
+  provenance; Trusted Publishing worked through `npm.yml`.
 
 Still external or undecided before a public release:
 
@@ -50,8 +53,10 @@ Still external or undecided before a public release:
   before the configured window closes.
 - OpenCode Zen's free Jev is rate-limited here; a real Jev fallback needs a key
   or a later retry.
-- `0.1.11` is prepared on `main` but not yet tagged or published. CI on
-  `54532f17e` and the `0.1.11` desktop/npm build workflows are green.
+- The `spec.jev-v0.1.11` publish job is red because npm took longer than the
+  job's 60-second registry check; the package is live and its shasum matches.
+  The workflow now waits five minutes and can verify an already-published
+  tarball, so future releases and reruns do not fail this way.
 
 ## Deferred: remove the legacy MU UI and Arco compatibility layer
 

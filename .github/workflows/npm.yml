@@ -158,9 +158,15 @@ jobs:
             echo "::error::The tag says $version, but the package built here is $(ls tarball/*.tgz). Bump kyrn/npm/package.template.json, then tag that commit."
             exit 1
           fi
-          if [ -n "$(npm view "spec.jev@$version" version 2>/dev/null)" ]; then
-            echo "::error::spec.jev@$version is already on npm."
-            exit 1
+          expected=$(shasum -a 1 "$tarball" | cut -d' ' -f1)
+          served=$(npm view "spec.jev@$version" dist.shasum 2>/dev/null || true)
+          if [ -n "$served" ]; then
+            if [ "$served" != "$expected" ]; then
+              echo "::error::spec.jev@$version is already on npm with another tarball ($served, expected $expected)."
+              exit 1
+            fi
+            echo "spec.jev@$version is already published with this tarball; checking it again."
+            echo "ALREADY_PUBLISHED=1" >> "$GITHUB_ENV"
           fi
           echo "VERSION=$version" >> "$GITHUB_ENV"
           echo "TARBALL=$tarball" >> "$GITHUB_ENV"
@@ -174,6 +180,7 @@ jobs:
           fi
 
       - name: Publish
+        if: env.ALREADY_PUBLISHED != '1'
         # npm treats a bare `dir/file.tgz` as a git spec; `./` makes it the tarball it is.
         run: npm publish "./$TARBALL" --access public --provenance
 
@@ -181,10 +188,10 @@ jobs:
         shell: bash
         run: |
           expected=$(shasum -a 1 "$TARBALL" | cut -d' ' -f1)
-          for attempt in 1 2 3 4 5 6; do
-            # A new package can take a moment to appear in the registry; npm view exits 1 until it does.
+          for attempt in $(seq 1 30); do
+            # A new package can take a few minutes to appear in the registry; npm view exits 1 until it does.
             served=$(npm view "spec.jev@$VERSION" dist.shasum 2>/dev/null || true)
-            [ -n "$served" ] && break
+            [ "$served" = "$expected" ] && break
             sleep 10
           done
           echo "built $expected, served ${served:-nothing}"

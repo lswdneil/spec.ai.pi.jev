@@ -22,7 +22,7 @@ CI builds every package with the model catalog in `packages/ai/model-catalog.jso
 
 1. Add the release's section to `kyrn/npm/CHANGELOG.md` (move `[Unreleased]` under a version and date) and bump the version.
 2. Push to `main` and wait for `npm.yml` to pass on both systems.
-3. Tag that commit and push the tag: `git tag spec.jev-vX.Y.Z && git push origin spec.jev-vX.Y.Z` (a tag only, no GitHub release). The tag's `npm.yml` run builds and tests the package on both systems again, publishes that tarball to npm and checks that npm serves the same shasum. It refuses a tag whose version isn't the package's, or a version that's already on npm.
+3. Tag that commit and push the tag: `git tag spec.jev-vX.Y.Z && git push origin spec.jev-vX.Y.Z` (a tag only, no GitHub release). The tag's `npm.yml` run builds and tests the package on both systems again, publishes that tarball to npm and checks that npm serves the same shasum. It refuses a tag whose version isn't the package's, or a version already on npm with a different tarball. A rerun of an already-published, matching tarball skips publishing and verifies the registry entry.
 
 npm trusts the workflow through [trusted publishing](https://docs.npmjs.com/trusted-publishers), so no npm token is stored in the repository. It needs a one-time setup on npmjs.com by an owner of the package: spec.jev → Settings → Trusted publishing → GitHub Actions, with user `lswdneil`, repository `spec.ai.pi.jev` and workflow `npm.yml`. npm also attaches provenance to every version published this way.
 
