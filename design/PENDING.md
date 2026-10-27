@@ -11,7 +11,7 @@
 - Remove the legacy UI and Arco compatibility layer before release.
 - Canonical repository: `https://github.com/lswdneil/spec.ai.pi.jev`.
 
-## Release readiness (checked 2026-10-26)
+## Release readiness (checked 2026-10-27)
 
 Passed locally on Windows x64:
 
@@ -34,6 +34,12 @@ Passed locally on Windows x64:
   Ubuntu. The `.deb` carries the Linux x64 `onnxruntime-node` binary; its
   `localJudgeOnnx.js` loaded the real model, answered `/health` and returned a
   boolean verdict (`0.8777`) on CPU in 282 ms.
+- `0.1.10 -> 0.1.11` Windows upgrade passed with the installed app: the data
+  marker and database survived, the installed app.asar and bundled harness both
+  report `0.1.11`, and the app starts.
+- `0.1.10 -> 0.1.11` Linux `.deb` upgrade passed in WSL Ubuntu: `dpkg` reports
+  `0.1.11`, the data marker survived, the bundled ONNX runtime is present, and
+  the app starts under Xvfb.
 
 Still external or undecided before a public release:
 
@@ -42,11 +48,10 @@ Still external or undecided before a public release:
   otherwise the release is unsigned and says so.
 - npm Trusted Publishing is configured for `npm.yml`; it needs one real publish
   before the configured window closes.
-- The repository-wide format check (`oxfmt` in the desktop app and Biome in the
-  harness) still reports pre-existing drift in untouched files. CI stays red
-  until that is cleaned up in small, separate commits.
 - OpenCode Zen's free Jev is rate-limited here; a real Jev fallback needs a key
   or a later retry.
+- `0.1.11` is prepared on `main` but not yet tagged or published. CI on
+  `54532f17e` and the `0.1.11` desktop/npm build workflows are green.
 
 ## Deferred: remove the legacy MU UI and Arco compatibility layer
 
