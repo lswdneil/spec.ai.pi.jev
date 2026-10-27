@@ -150,10 +150,12 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
   useSessionStats(conversation);
 
   // Opening the model menu starts spec.jev when it was idle, and the menu takes the keyboard while it is open. Once
-  // spec.jev is up, put the caret back in the box unless the person is typing somewhere else.
+  // the menu is gone, put the caret back in the box unless the person is typing somewhere else. This must not wait for
+  // `host.phase` to leave `starting`: a slow first host start is exactly when the box otherwise looks dead.
   useEffect(() => {
-    if (isMobile || host.phase === 'starting') return;
+    if (isMobile) return;
     const frame = requestAnimationFrame(() => {
+      if (document.querySelector('[role="menu"]')) return;
       const active = document.activeElement;
       const elsewhere =
         active instanceof HTMLElement &&
