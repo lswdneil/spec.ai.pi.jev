@@ -517,6 +517,7 @@
   "mcpSettings": "MCPツール設定",
   "mcpServerList": "MCP サーバー",
   "mcpBuiltinBrowserName": "内蔵ブラウザ",
+  "mcpBuiltinWindowsName": "Windows デスクトップ",
   "mcpStatus": "ステータス",
   "mcpAddServer": "MCP を追加",
   "mcpEditServer": "編集",

@@ -517,6 +517,7 @@
   "mcpSettings": "MCP 도구 구성",
   "mcpServerList": "MCP 서버",
   "mcpBuiltinBrowserName": "내장 브라우저",
+  "mcpBuiltinWindowsName": "Windows 데스크톱",
   "mcpStatus": "상태",
   "mcpAddServer": "MCP 추가",
   "mcpEditServer": "편집",

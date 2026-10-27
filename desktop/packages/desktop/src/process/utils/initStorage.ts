@@ -364,6 +364,15 @@ const getBuiltinMcpScriptPath = (scriptName: string): string => {
   return path.resolve(getBuiltinMcpBaseDir(), `${scriptName}.js`);
 };
 
+/** A native built-in MCP executable, outside app.asar so it can be spawned directly. */
+const getBundledMcpExecutablePath = (name: string): string => {
+  const services = getPlatformServices();
+  const base = services.paths.isPackaged()
+    ? process.resourcesPath
+    : path.join(services.paths.getAppPath(), 'resources');
+  return path.join(base, 'bundled-mcp', `${name}${process.platform === 'win32' ? '.exe' : ''}`);
+};
+
 const initStorage = async () => {
   const t0 = performance.now();
   const mark = (label: string) => console.log(`[mu:init] ${label} +${Math.round(performance.now() - t0)}ms`);
@@ -452,6 +461,13 @@ export const getSystemDir = () => {
  * 获取助手规则目录路径（供其他模块使用）
  * Get assistant rules directory path (for use by other modules)
  */
-export { getAssistantsDir, getSkillsDir, getCronSkillsDir, BUILTIN_IMAGE_GEN_ID, getBuiltinMcpScriptPath };
+export {
+  getAssistantsDir,
+  getSkillsDir,
+  getCronSkillsDir,
+  BUILTIN_IMAGE_GEN_ID,
+  getBuiltinMcpScriptPath,
+  getBundledMcpExecutablePath,
+};
 
 export default initStorage;

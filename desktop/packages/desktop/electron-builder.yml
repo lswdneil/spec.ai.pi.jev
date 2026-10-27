@@ -128,6 +128,9 @@ extraResources:
   # A browser the agent can use without a separate download. The app sets SPECJEV_MOLI to it.
   - from: resources/bundled-moli
     to: bundled-moli
+  # The Windows desktop MCP server, a standalone executable with its own Python runtime.
+  - from: resources/bundled-mcp
+    to: bundled-mcp
 win:
   target:
     - nsis

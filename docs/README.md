@@ -6,6 +6,7 @@
 - [Configuration](configuration.md): `spec.jev.json`, modes, environment variables and proxies.
 - [Judges](judges.md): hosted Jev, the free Jev, the local judge, classifier models and LLMs, and how to compare them.
 - [The moli backend](moli.md): driving the built-in browser with moli's engine, and the cheap `page_fetch` read.
+- [The Windows desktop MCP](windows-mcp.md): the bundled Windows-MCP server, its tools and how to build it.
 - [Troubleshooting](troubleshooting.md): what to do when something doesn't work.
 
 ## Reference

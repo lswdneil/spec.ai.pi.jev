@@ -43,6 +43,7 @@ vi.mock('@/common/config/configMigration', () => ({
 
 vi.mock('@/process/utils/initStorage', () => ({
   getBuiltinMcpScriptPath: (name: string) => `/mock/${name}.js`,
+  getBundledMcpExecutablePath: (name: string) => `/mock/${name}.exe`,
 }));
 
 vi.mock('@/process/utils/migrateAssistants', () => ({

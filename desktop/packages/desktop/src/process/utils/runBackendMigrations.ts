@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { existsSync } from 'node:fs';
 import { migrateConfigStorage, migrateLegacyMcpConfigToDb, migrateProviders } from '@/common/config/configMigration';
 import { httpRequest } from '@/common/adapter/httpBridge';
 import { mcpService } from '@/common/adapter/ipcBridge';
@@ -16,7 +17,12 @@ import {
   type ImageGenerationMcpEnvResolveResult,
 } from '@/common/config/imageGenerationMcpEnv';
 import { BUILTIN_IMAGE_GEN_NAME, type IMcpServer, type IProvider } from '@/common/config/storage';
-import { getBuiltinMcpScriptPath, type ProcessConfig as ProcessConfigType } from './initStorage';
+import { BUILTIN_MCP_SERVER_NAMES } from '@/common/platform/legacyNames';
+import {
+  getBundledMcpExecutablePath,
+  getBuiltinMcpScriptPath,
+  type ProcessConfig as ProcessConfigType,
+} from './initStorage';
 import { migrateAssistantsToBackend } from './migrateAssistants';
 
 type ConfigFile = typeof ProcessConfigType;
@@ -24,6 +30,7 @@ type MigrationStepResult = boolean;
 type McpImportServer = Partial<IMcpServer> & Pick<IMcpServer, 'name' | 'transport'>;
 type BackendClientPreferences = Record<string, unknown>;
 const BUILTIN_CHROME_DEVTOOLS_NAME = 'chrome-devtools';
+const BUILTIN_WINDOWS_MCP_NAME = BUILTIN_MCP_SERVER_NAMES.windows;
 
 /**
  * 内置「应用内浏览器」MCP。
@@ -200,11 +207,37 @@ function buildBuiltinBrowserServer(): McpImportServer {
   };
 }
 
+/**
+ * The Windows desktop MCP that ships with the app. It is a stdio server built as a single executable, so the
+ * machine does not need Python, uv, or a package install. Windows only; other platforms do not get the record.
+ */
+function buildBuiltinWindowsMcpServer(): McpImportServer | undefined {
+  if (process.platform !== 'win32') return undefined;
+  const command = getBundledMcpExecutablePath('windows-mcp');
+  if (!existsSync(command)) return undefined;
+  const serverConfig = { command, args: ['serve'] };
+
+  return {
+    name: BUILTIN_WINDOWS_MCP_NAME,
+    description:
+      'Control the Windows desktop: windows, keyboard and mouse, screenshots, UI state, apps, files and PowerShell.',
+    enabled: true,
+    builtin: true,
+    transport: {
+      type: 'stdio',
+      command,
+      args: serverConfig.args,
+    },
+    original_json: JSON.stringify({ mcpServers: { [BUILTIN_WINDOWS_MCP_NAME]: serverConfig } }, null, 2),
+  };
+}
+
 function buildDefaultMcpServers(): McpImportServer[] {
   const chromeConfig = {
     command: 'npx',
     args: ['-y', 'chrome-devtools-mcp@latest'],
   };
+  const windowsMcp = buildBuiltinWindowsMcpServer();
 
   return [
     {
@@ -220,6 +253,7 @@ function buildDefaultMcpServers(): McpImportServer[] {
       original_json: JSON.stringify({ mcpServers: { [BUILTIN_CHROME_DEVTOOLS_NAME]: chromeConfig } }, null, 2),
     },
     buildBuiltinBrowserServer(),
+    ...(windowsMcp ? [windowsMcp] : []),
   ];
 }
 
@@ -411,11 +445,32 @@ async function ensureBootstrapMcpServersInDb(configFile: ConfigFile): Promise<vo
     }
   }
 
+  const existingWindowsMcp = existingByName.get(BUILTIN_WINDOWS_MCP_NAME);
+  let windowsMcpUpdated = false;
+  if (existingWindowsMcp) {
+    const desiredWindowsMcp = buildBuiltinWindowsMcpServer();
+    if (desiredWindowsMcp) {
+      const windowsTransportChanged = !isSameStdioTransport(existingWindowsMcp.transport, desiredWindowsMcp.transport);
+      const windowsJsonChanged = existingWindowsMcp.original_json !== desiredWindowsMcp.original_json;
+      if (windowsTransportChanged || windowsJsonChanged) {
+        await mcpService.updateServer.invoke({
+          id: existingWindowsMcp.id,
+          data: {
+            transport: desiredWindowsMcp.transport,
+            original_json: desiredWindowsMcp.original_json,
+          },
+        });
+        windowsMcpUpdated = true;
+      }
+    }
+  }
+
   console.info(
-    '[Migration] MCP bootstrap completed, imported %d missing defaults, updated image server: %s, updated browser server: %s, image config source: %s, image enabled: %s',
+    '[Migration] MCP bootstrap completed, imported %d missing defaults, updated image server: %s, updated browser server: %s, updated Windows MCP server: %s, image config source: %s, image enabled: %s',
     missing.length,
     imageServerUpdated ? 'yes' : 'no',
     browserServerUpdated ? 'yes' : 'no',
+    windowsMcpUpdated ? 'yes' : 'no',
     imageConfigSource,
     imageConfig?.switch === true ? 'yes' : 'no'
   );

@@ -47,7 +47,11 @@ Passed locally on Windows x64:
   (`73928db11`, 1.1.19) under `resources/bundled-moli`; the packaged app sets
   `SPECJEV_MOLI` and starts it. The build hook verifies the binary; the release
   CI path downloads the pinned official 1.1.19 asset with a SHA-256 check.
-  A published installer that includes moli still needs a new version.
+- The same local installer carries Windows-MCP 0.8.8 (`cef52ec`) as a
+  PyInstaller standalone `resources/bundled-mcp/windows-mcp.exe`. It is seeded
+  as an enabled built-in MCP server named `windows-mcp`; its stdio handshake
+  returned all 21 tools. A published installer that includes moli and
+  Windows-MCP still needs a new version.
 
 Still external or undecided before a public release:
 

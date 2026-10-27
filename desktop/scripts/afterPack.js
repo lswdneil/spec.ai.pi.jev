@@ -54,6 +54,14 @@ function verifyBundledResources(resourcesDir, electronPlatformName, targetArch) 
     if (!fs.existsSync(moli)) throw new Error(`Packaged app is missing bundled moli: ${moli}`);
     console.log(`   bundled moli verified (${moli})`);
   }
+
+  if (electronPlatformName === 'win32') {
+    const windowsMcp = path.join(resourcesDir, 'bundled-mcp', 'windows-mcp.exe');
+    if (fs.existsSync(windowsMcp)) console.log(`   bundled Windows MCP verified (${windowsMcp})`);
+    else if (process.env.MU_REQUIRE_WINDOWS_MCP === '1')
+      throw new Error(`Packaged app is missing bundled Windows MCP: ${windowsMcp}`);
+    else console.warn(`   bundled Windows MCP is not included (${windowsMcp})`);
+  }
 }
 
 module.exports = async function afterPack(context) {

@@ -517,6 +517,7 @@
   "mcpSettings": "MCP 工具配置",
   "mcpServerList": "MCP 伺服器",
   "mcpBuiltinBrowserName": "內建瀏覽器",
+  "mcpBuiltinWindowsName": "Windows 桌面",
   "mcpStatus": "狀態",
   "mcpAddServer": "新增 MCP",
   "mcpEditServer": "編輯",

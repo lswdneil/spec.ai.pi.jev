@@ -771,6 +771,10 @@ try {
     [path.join(__dirname, 'prepareMoliResources.js'), '--platform', harnessPlatform, '--arch', targetArch],
     { stdio: 'inherit', env: process.env }
   );
+  execFileSync(process.execPath, [path.join(__dirname, 'prepareWindowsMcpResources.js')], {
+    stdio: 'inherit',
+    env: process.env,
+  });
   execFileSync(
     process.execPath,
     [path.join(__dirname, 'kyrn', 'bundle-harness.mjs'), '--platform', harnessPlatform, '--arch', targetArch],

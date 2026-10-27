@@ -9,6 +9,7 @@ spec.jev is in pre-release (0.1.x): names, settings and formats may still change
 ### Added
 
 - **The desktop app carries moli**, so the agent's browser backend works without a separate install. Windows and Linux builds stage the pinned moli release (or a locally built `MU_MOLI_BINARY`) under `resources/bundled-moli`, verify it during packaging, and set `SPECJEV_MOLI` before the agent starts. The In-app browser settings expose the backend choice.
+- **The Windows desktop app includes Windows-MCP by default.** A standalone `windows-mcp.exe` is built from the latest Windows-MCP source and seeded as an enabled built-in MCP server, so desktop control, screenshots, UI inspection, input, files and PowerShell work without installing Python or uv. It can be turned off in Settings → Tools.
 
 ## [0.1.11] - 2026-10-26
 

@@ -58,6 +58,7 @@ export const BROWSER_PARTITION = 'persist:aionui-browser';
 export const BUILTIN_MCP_SERVER_NAMES = {
   browser: 'aionui-browser',
   imageGeneration: 'aionui-image-generation',
+  windows: 'windows-mcp',
 } as const;
 
 /** The image generation server's record name in the first versions, which a record may still have. */

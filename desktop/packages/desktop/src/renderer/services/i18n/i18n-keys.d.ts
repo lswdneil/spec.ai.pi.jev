@@ -4026,6 +4026,7 @@ export type I18nKey =
   | 'settings.mcpAuthRequiredNamed'
   | 'settings.mcpAuthenticated'
   | 'settings.mcpBuiltinBrowserName'
+  | 'settings.mcpBuiltinWindowsName'
   | 'settings.mcpCheckAvailableSimple'
   | 'settings.mcpCheckFailedSimple'
   | 'settings.mcpCheckFailedSummary'

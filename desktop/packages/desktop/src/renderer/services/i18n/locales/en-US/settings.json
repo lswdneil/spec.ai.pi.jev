@@ -517,6 +517,7 @@
   "mcpSettings": "MCP settings",
   "mcpServerList": "MCP servers",
   "mcpBuiltinBrowserName": "In-app browser",
+  "mcpBuiltinWindowsName": "Windows desktop",
   "mcpStatus": "Status",
   "mcpAddServer": "Add server",
   "mcpEditServer": "Edit",
