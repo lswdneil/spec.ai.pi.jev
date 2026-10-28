@@ -95,9 +95,11 @@ const Where: React.FC = () => <div data-testid='where'>{useLocation().pathname}<
 const Panel: React.FC<{ id: string }> = ({ id }) => {
   const activity = useNativeActivity(id);
   const folder = useNativeFolder(id);
+  const board = activity?.events.findLast((event) => event.kind === 'board.update');
   return (
     <div data-testid='panel' data-folder={folder ?? ''}>
-      {activity ? `${activity.events.length}:${String(activity.settled)}` : 'none'}
+      <span>{activity ? `${activity.events.length}:${String(activity.settled)}` : 'none'}</span>
+      <span data-testid='panel-board-now'>{typeof board?.payload.now === 'string' ? board.payload.now : ''}</span>
     </div>
   );
 };
@@ -391,6 +393,24 @@ describe('the native conversation page', () => {
     await waitFor(() => expect(screen.getByTestId('panel')).toHaveTextContent('2:true'));
     view.unmount();
     expect(getCurrentConversation()).toBeNull();
+  });
+
+  it('rerenders the native panel as board updates arrive after the first board', async () => {
+    const host = createFakeHost();
+    host.add({ id: 'c1' });
+    page(host.client, 'c1', <Panel id='c1' />);
+    await opened();
+    await waitFor(() => expect(screen.getByTestId('panel')).toHaveTextContent('0:true'));
+
+    act(() => host.play('c1', [frame('board.update', { now: 'Reading the code', progress: 'One file checked' })]));
+    await waitFor(() => expect(screen.getByTestId('panel-board-now')).toHaveTextContent('Reading the code'), {
+      timeout: 2_000,
+    });
+
+    act(() => host.play('c1', [frame('board.update', { now: 'Changing the code', progress: 'Two files changed' })]));
+    await waitFor(() => expect(screen.getByTestId('panel-board-now')).toHaveTextContent('Changing the code'), {
+      timeout: 2_000,
+    });
   });
 
   it('says a native conversation’s lessons show once it has opened, while its folder is not known', () => {

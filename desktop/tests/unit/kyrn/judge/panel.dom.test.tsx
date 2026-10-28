@@ -1,4 +1,6 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { createInstance } from 'i18next';
@@ -14,6 +16,7 @@ import { KernelBody, useKyrnActivity } from '@/renderer/pages/conversation/KyrnP
 import JudgeLog from '@/renderer/pages/conversation/KyrnPanel/Judge';
 import { judgeCards } from '@/renderer/pages/conversation/KyrnPanel/Judge/activity';
 import JudgeCardView from '@/renderer/pages/conversation/KyrnPanel/Judge/JudgeCardView';
+import styles from '@/renderer/pages/conversation/KyrnPanel/Judge/Judge.module.css';
 import { event, gate, ledger, turn, verdict } from './judgeFixtures';
 
 const { activity, lessons } = vi.hoisted(() => ({ activity: vi.fn(), lessons: vi.fn() }));
@@ -582,6 +585,39 @@ function measure(scroller: HTMLElement) {
 }
 
 describe('the judge log', () => {
+  it('lays each line out as time and wrapping body through the shared Button, not generic button text', () => {
+    showLog([event('mcp.failed', { name: 'github', code: 'timeout', reason: 'no answer within 30000 ms' })]);
+    const button = within(lines()[0]).getByRole('button');
+    expect(button).toHaveClass(styles.lineButton);
+    expect(button.children[0]).toHaveClass(styles.time);
+    expect(button.children[1]).toHaveClass(styles.body);
+
+    const css = readFileSync(
+      resolve(
+        __dirname,
+        '../../../../packages/desktop/src/renderer/pages/conversation/KyrnPanel/Judge/Judge.module.css'
+      ),
+      'utf8'
+    );
+    const rules = css.replace(/\/\*[\s\S]*?\*\//g, '').match(/[^{}]+\{[^}]+\}/g) ?? [];
+    const bodies = rules
+      .filter((rule) =>
+        rule
+          .slice(0, rule.indexOf('{'))
+          .split(',')
+          .some((part) => part.trim() === '.lineButton')
+      )
+      .map((rule) => rule.slice(rule.indexOf('{') + 1, -1))
+      .join('\n');
+    expect(bodies).toContain('display: grid');
+    expect(bodies).toContain('grid-template-columns: max-content minmax(0, 1fr)');
+    expect(bodies).toContain('font-size: 12px');
+    expect(bodies).toContain('line-height: 18px');
+    expect(bodies).toContain('padding: 6px 12px');
+    expect(css).not.toContain('.lineButton:global(.arco-btn)');
+    expect(css).toMatch(/\.lineButton:focus-visible\s*\{[^}]*outline: 1px solid var\(--sv-focus\);/);
+  });
+
   it('says what happened one line at a time, oldest first: the time and a short sentence, a verdict with its readout', () => {
     showLog([
       event('preflight.verdict', verdict(), turn('runtime-a', 1, 2)),

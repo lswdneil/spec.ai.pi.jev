@@ -5,12 +5,15 @@
  */
 
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createInstance } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import common from '@/renderer/services/i18n/locales/en-US/common.json';
 import WorkPanelTabs from '@/renderer/components/layout/WorkPanel/WorkPanelTabs';
+import styles from '@/renderer/components/layout/WorkPanel/WorkPanel.module.css';
 import { WORK_PANEL_TABS, type WorkPanelTab } from '@/renderer/components/layout/WorkPanel/workPanelStore';
 
 const i18n = createInstance();
@@ -40,6 +43,21 @@ const shown = () => tabs().map((tab) => tab.getAttribute('data-tab'));
 const moreTabs = () => screen.queryAllByTestId('work-panel-more-tab').map((item) => item.getAttribute('data-tab'));
 const moreTab = (tab: WorkPanelTab) =>
   screen.getAllByTestId('work-panel-more-tab').find((item) => item.getAttribute('data-tab') === tab) as HTMLElement;
+
+const css = readFileSync(
+  resolve(__dirname, '../../../../../packages/desktop/src/renderer/components/layout/WorkPanel/WorkPanel.module.css'),
+  'utf8'
+);
+const ruleFor = (selector: string): string => {
+  const rules = css.replace(/\/\*[\s\S]*?\*\//g, '').match(/[^{}]+\{[^}]+\}/g) ?? [];
+  const rule = rules.find((candidate) =>
+    candidate
+      .slice(0, candidate.indexOf('{'))
+      .split(',')
+      .some((part) => part.trim() === selector)
+  );
+  return rule?.slice(rule.indexOf('{') + 1, -1) ?? '';
+};
 
 function show(
   unread: WorkPanelTab[] = [],
@@ -96,6 +114,22 @@ describe('the work panel tab strip', () => {
     show();
     expect(tabs().map((tab) => tab.textContent)).toEqual(labels);
     expect(strip()).not.toHaveAttribute('data-icons');
+  });
+
+  it('gives the selected tab an underline and a keyboard focus ring through the shared Button', () => {
+    show();
+    const selected = screen.getByRole('tab', { selected: true });
+    const unselected = screen.getAllByRole('tab', { selected: false })[0];
+    expect(selected).toHaveClass(styles.tab);
+    expect(unselected).toHaveClass(styles.tab);
+    selected.focus();
+    expect(selected).toHaveFocus();
+
+    expect(ruleFor(".tab[aria-selected='true']::after")).toContain(
+      'background: var(--mu-accent-border, var(--text-primary))'
+    );
+    expect(ruleFor('.tab:focus-visible')).toContain('outline: 1px solid var(--sv-focus)');
+    expect(css).not.toContain('.tab:global(.arco-btn)');
   });
 
   it('shows one icon per tab, each still named, when the panel is too narrow for the labels', () => {

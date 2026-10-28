@@ -21,20 +21,20 @@
   border-bottom: 1px solid var(--border-base);
 }
 
-.contextButton:global(.arco-btn),
-.toolButton:global(.arco-btn) {
+.contextButton,
+.toolButton {
   min-width: 0;
   padding: 0 6px;
   color: var(--text-secondary);
   font-size: 12px;
 }
 
-.contextButton:global(.arco-btn) {
+.contextButton {
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.contextButton:global(.arco-btn[aria-expanded='true']) {
+.contextButton[aria-expanded='true'] {
   color: var(--text-primary);
 }
 
@@ -74,7 +74,7 @@
   line-height: 20px;
 }
 
-.earlier:global(.arco-btn) {
+.earlier {
   margin: 2px 8px;
   color: var(--text-secondary);
 }
@@ -93,7 +93,7 @@
  * A line is its time, then its sentence, which wraps in its own column so the sentences start in one line down the
  * log. The code of what it records waits in the opened line. The pinned verdict's label leads its time.
  */
-.lineButton:global(.arco-btn),
+.lineButton,
 .pinned {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
@@ -108,7 +108,7 @@
   grid-template-columns: max-content max-content minmax(0, 1fr);
 }
 
-.lineButton:global(.arco-btn) {
+.lineButton {
   height: auto;
   min-height: 30px;
   padding: 6px 12px;
@@ -118,18 +118,19 @@
   text-align: start;
 }
 
-.lineButton:global(.arco-btn:not(:disabled):hover) {
+.lineButton:not(:disabled):hover {
   background: var(--bg-hover);
   color: var(--text-primary);
 }
 
-.lineButton:global(.arco-btn[aria-expanded='true']) {
+.lineButton[aria-expanded='true'] {
   background: transparent;
 }
 
-.lineButton:global(.arco-btn:focus-visible) {
-  outline: 1px solid var(--text-primary);
+.lineButton:focus-visible {
+  outline: 1px solid var(--sv-focus);
   outline-offset: -1px;
+  box-shadow: none;
 }
 
 .time {
@@ -214,7 +215,7 @@
   border-radius: 8px;
 }
 
-.latest:global(.arco-btn) {
+.latest {
   position: absolute;
   inset-inline-end: 12px;
   bottom: 12px;

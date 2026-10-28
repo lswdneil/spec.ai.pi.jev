@@ -11,6 +11,7 @@ import Board from '@/renderer/pages/conversation/KyrnPanel/Board';
 import {
   ACCOUNT_LIMIT,
   boardAccount,
+  boardLabels,
   boardState,
   boardStateKey,
   boardView,
@@ -103,6 +104,122 @@ describe('reading the board from the session’s events', () => {
     expect(toBoardUpdate(update({ phase: 'celebrating' }))?.phase).toBeUndefined();
     expect(toBoardUpdate(update({ now: '', progress: '' }))).toBeUndefined();
     expect(toBoardUpdate(update({ now: 'x'.repeat(2000) }))?.now).toHaveLength(601);
+  });
+
+  it('keeps the live v2 board fields and accepts a headline or a timestamp on its own', () => {
+    const T0 = new Date(2026, 9, 24, 10, 0, 0).getTime();
+    const read = toBoardUpdate(
+      update({
+        phase: 'blocked',
+        headline: 'fixer has run one test for 6 min with no output',
+        headlineCode: 'still_running',
+        headlineParams: { who: 'fixer', what: 'npm test', minutes: 6 },
+        blocked: 'fixer: no output for 6 min',
+        next: 'Stop it and run the test again.',
+        agents: [
+          { who: 'fixer', label: 'test retry', role: 'worker', state: 'stuck', doing: 'npm test', sinceMs: 360_000 },
+          { who: '', state: 'working', doing: 'nameless' },
+        ],
+        updatedAt: T0,
+      })
+    );
+    expect(read).toMatchObject({
+      phase: 'blocked',
+      headline: 'fixer has run one test for 6 min with no output',
+      headlineCode: {
+        code: 'still_running',
+        params: { who: 'fixer', what: 'npm test', minutes: 6 },
+      },
+      blocked: 'fixer: no output for 6 min',
+      next: 'Stop it and run the test again.',
+      updatedAt: T0,
+    });
+    expect(read?.agents).toEqual([
+      { who: 'fixer', label: 'test retry', role: 'worker', state: 'stuck', doing: 'npm test', sinceMs: 360_000 },
+    ]);
+    expect(toBoardUpdate(update({ now: '', progress: '', headline: 'Done: the login works' }))?.headline).toBe(
+      'Done: the login works'
+    );
+    expect(toBoardUpdate(update({ now: '', progress: '', updatedAt: T0 }))?.updatedAt).toBe(T0);
+  });
+});
+
+const T0 = new Date(2026, 9, 24, 10, 0, 0).getTime();
+const spoken = (payload: Record<string, unknown> = {}) =>
+  update({
+    phase: 'blocked',
+    headline: 'fixer has run one test for 6 min with no output',
+    blocked: 'fixer: npx vitest test/retry.test.ts has run 6 min with no output.',
+    next: 'Stop the run and rerun the test.',
+    now: 'scout found the double clock read.',
+    progress: 'Cause found; the fix is not verified yet.',
+    agents: [
+      { who: 'scout', label: 'timing audit', role: 'scout', state: 'done', doing: 'found it', sinceMs: 240_000 },
+      { who: 'fixer', label: 'test retry', role: 'worker', state: 'stuck', doing: 'no output', sinceMs: 360_000 },
+    ],
+    updatedAt: T0 - 12_000,
+    ...payload,
+  });
+
+describe('a live v2 board in the panel', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ now: T0 });
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('updates now, progress and updatedAt while the same board stays mounted', () => {
+    const events = [switched(true), update({ now: 'Reading the code', progress: 'One file checked', updatedAt: T0 })];
+    const { rerender } = showBoard(events);
+    expect(screen.getByTestId('mu-board-now')).toHaveTextContent('Reading the code');
+    expect(screen.getByTestId('mu-board-progress')).toHaveTextContent('One file checked');
+    expect(screen.getByTestId('mu-board-updated')).toHaveTextContent('Updated just now');
+
+    const next = update({ now: 'Changing the code', progress: 'Two files changed', updatedAt: T0 - 6_000 });
+    rerender(<Board events={[...events, next]} conversationId='conv' />);
+    expect(screen.getByTestId('mu-board-now')).toHaveTextContent('Changing the code');
+    expect(screen.getByTestId('mu-board-progress')).toHaveTextContent('Two files changed');
+    expect(screen.getByTestId('mu-board-updated')).toHaveTextContent('Updated 5 sec ago');
+
+    act(() => vi.advanceTimersByTime(60_000));
+    expect(screen.getByTestId('mu-board-updated')).toHaveTextContent('Updated 1 min ago');
+  });
+
+  it('accepts and renders a headline-only update instead of keeping the previous board', () => {
+    const events = [switched(true), update({ now: 'Old work', progress: 'Old progress' })];
+    const { rerender } = showBoard(events);
+    rerender(
+      <Board
+        events={[
+          ...events,
+          update({ now: '', progress: '', headline: 'Done: the login works', updatedAt: T0 - 2_000 }),
+        ]}
+        conversationId='conv'
+      />
+    );
+    expect(screen.getByTestId('mu-board-headline')).toHaveTextContent('Done: the login works');
+    expect(screen.queryByTestId('mu-board-now')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('mu-board-progress')).not.toBeInTheDocument();
+    expect(screen.getByTestId('mu-board-updated')).toHaveTextContent('Updated just now');
+  });
+
+  it('shows the spoken fields, helper rows and labels instead of dropping them', () => {
+    showBoard([switched(true), spoken()]);
+    expect(screen.getByTestId('mu-board-state')).toHaveTextContent('Waiting on something else');
+    expect(screen.getByTestId('mu-board-headline')).toHaveTextContent('fixer has run one test for 6 min');
+    expect(screen.getByTestId('mu-board-blocked')).toHaveTextContent('Blocked');
+    expect(screen.getByTestId('mu-board-next')).toHaveTextContent('Stop the run and rerun the test.');
+    expect(screen.getAllByTestId('mu-board-agent-who').map((name) => name.textContent)).toEqual([
+      'timing audit',
+      'test retry',
+    ]);
+
+    const account = boardAccount([
+      spoken(),
+      note({ who: 'fixer', label: 'test retry', by: 'model', text: 'The retry test now uses fake timers.' }),
+    ]);
+    expect(boardLabels(toBoardUpdate(spoken()), account).get('fixer')).toBe('test retry');
   });
 });
 
