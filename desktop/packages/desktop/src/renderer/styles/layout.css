@@ -36,17 +36,6 @@
   border-inline-end: 1px solid var(--border-base);
 }
 
-/* Arco Layout inner container needs flex layout so Header + Content + Footer
-   stack vertically and Content fills the remaining space (avoids a fixed
-   calc() that breaks when header height changes). */
-.layout-sider > .arco-layout-sider-children {
-  display: flex !important;
-  flex-direction: column !important;
-  flex: 1 !important;
-  min-height: 0 !important;
-  height: 100% !important;
-}
-
 .layout-sider-header {
   flex-shrink: 0 !important;
 }
@@ -55,11 +44,6 @@
   flex: 1 !important;
   min-height: 0 !important;
   height: auto !important;
-}
-
-.layout-sider.collapsed .arco-layout-sider-children,
-.layout-sider.arco-layout-sider-collapsed .arco-layout-sider-children {
-  overflow-x: hidden;
 }
 
 /* Disable transition during drag for smooth dragging */
@@ -148,38 +132,6 @@
   }
 }
 
-/* Message component positioning - center in conversation area (exclude left sider) */
-/* Use padding-inline-start offset while keeping inner message centered */
-.arco-message-wrapper {
-  inset-inline-start: 0 !important;
-  width: 100% !important;
-  padding-inline-start: 266px;
-  box-sizing: border-box;
-  z-index: 10001 !important;
-}
-
-/* Default background for select and input components */
-.arco-select-view,
-.arco-select-addbefore,
-.arco-input,
-.arco-input-inner-wrapper,
-.arco-input-group-addafter,
-.arco-input-group-addbefore {
-  background-color: var(--fill-0) !important;
-}
-
-/* Grouped inputs should share one surface across the field and its add-ons. */
-.arco-input-inner-wrapper > .arco-input,
-.arco-input-group-addafter .arco-input,
-.arco-input-group-addbefore .arco-input,
-.arco-input-inner-wrapper .arco-input-group-prefix,
-.arco-input-inner-wrapper .arco-input-group-suffix,
-.arco-select-suffix,
-.arco-input-group-addafter .arco-select .arco-select-view,
-.arco-input-group-addbefore .arco-select .arco-select-view {
-  background-color: transparent !important;
-}
-
 /* Mobile sidebar positioning */
 /* Use dvh for better mobile browser support (iOS Chrome/Safari) */
 /* Only in the phone layout (html[data-phone-layout], set by Layout): a narrow desktop window keeps the desktop sidebar,
@@ -243,11 +195,6 @@
     min-height: 34px !important;
     padding: 6px 10px !important;
     border-radius: 8px !important;
-  }
-
-  /* Mobile: remove left padding for message wrapper */
-  html[data-phone-layout] .arco-message-wrapper {
-    padding-inline-start: 0;
   }
 
   /* Sidebar conversation title + secondary timeline text */

@@ -271,7 +271,6 @@ html[data-sv-ui='dense'] .settings-sider__item[aria-current='page']::before {
 
 /* Keyboard focus stays inside the row. The old MU ring was lavender and offset 2px,
    so the sidebar's overflow clipped it into a purple bar above the focus target. */
-html[data-sv-ui='dense'] .arco-btn:focus-visible,
 html[data-sv-ui='dense'] [role='button']:focus-visible,
 html[data-sv-ui='dense'] [role='radio']:focus-visible,
 html[data-sv-ui='dense'] [role='switch']:focus-visible,
@@ -424,67 +423,29 @@ html[data-sv-ui='dense'] .settings-sider__item-label {
   }
 }
 
-/* Arco primary buttons: sage fill, dark ink, no blue. */
-html[data-sv-ui='dense'] .arco-btn-primary:not(.arco-btn-disabled) {
+/* Primary buttons: sage fill, dark ink, no blue. */
+html[data-sv-ui='dense'] .arco-btn-primary:not(:disabled) {
   background-color: var(--sv-brand);
   color: var(--sv-on-brand);
 }
 
-html[data-sv-ui='dense'] .arco-btn-primary:not(.arco-btn-disabled):hover {
+html[data-sv-ui='dense'] .arco-btn-primary:not(:disabled):hover {
   background-color: var(--sv-brand-1);
 }
 
-html[data-sv-ui='dense'] .arco-btn-primary.arco-btn-disabled {
+html[data-sv-ui='dense'] .arco-btn-primary:disabled {
   background-color: var(--sv-raised);
   color: var(--sv-faint);
 }
 
-/* Arco links and selected rows follow the one accent. */
+/* Links and selected rows follow the one accent. */
 html[data-sv-ui='dense'] a {
   color: var(--sv-brand-ink);
 }
 
-html[data-sv-ui='dense'] .arco-menu-selected,
-html[data-sv-ui='dense'] .arco-tabs-tab-active {
+html[data-sv-ui='dense'] [role='menuitem'][aria-current='true'],
+html[data-sv-ui='dense'] [role='tab'][aria-selected='true'] {
   color: var(--sv-text);
-}
-
-html[data-sv-ui='dense'] .arco-input,
-html[data-sv-ui='dense'] .arco-textarea,
-html[data-sv-ui='dense'] .arco-select-view,
-html[data-sv-ui='dense'] .arco-input-inner-wrapper,
-html[data-sv-ui='dense'] .arco-btn {
-  font-size: 13px;
-}
-
-html[data-sv-ui='dense'] .arco-form-label-item > label,
-html[data-sv-ui='dense'] .arco-form-item-label-col > label {
-  font-size: 12px;
-}
-
-/* Flat chrome: the Dense reference has no shadows. */
-html[data-sv-ui='dense'] .arco-modal {
-  border: 1px solid var(--sv-line);
-  border-radius: var(--sv-r-dialog);
-  box-shadow: none;
-}
-
-html[data-sv-ui='dense'] .arco-dropdown,
-html[data-sv-ui='dense'] .arco-popover-content {
-  border: 1px solid var(--sv-line);
-  border-radius: var(--sv-r-popup);
-  box-shadow: none;
-}
-
-html[data-sv-ui='dense'] .arco-card {
-  border-color: var(--sv-line);
-  border-radius: 8px;
-  background: var(--sv-surface);
-  box-shadow: none;
-}
-
-html[data-sv-ui='dense'] .arco-card-header {
-  border-bottom-color: var(--sv-line);
 }
 
 /* The settings pages are flat in Dense: no glow, no dot grid. */
@@ -526,9 +487,7 @@ html[data-sv-ui='dense'] .sendbox-panel {
   border-radius: 12px !important;
 }
 
-html[data-sv-ui='dense'] .sendbox-panel .send-button-custom,
-html[data-sv-ui='dense'] .sendbox-panel .send-button-custom.arco-btn,
-html[data-sv-ui='dense'] .sendbox-panel .send-button-custom.arco-btn-primary {
+html[data-sv-ui='dense'] .sendbox-panel .send-button-custom {
   width: 26px !important;
   min-width: 26px !important;
   height: 26px !important;
@@ -546,8 +505,7 @@ html[data-sv-ui='dense'] .sendbox-toolbar {
   row-gap: 6px;
 }
 
-html[data-sv-ui='dense'] .sendbox-panel .send-button-custom--enabled,
-html[data-sv-ui='dense'] .sendbox-panel .send-button-custom--enabled.arco-btn {
+html[data-sv-ui='dense'] .sendbox-panel .send-button-custom--enabled {
   background-color: var(--sv-brand) !important;
   border-color: var(--sv-brand) !important;
   color: var(--sv-on-brand) !important;

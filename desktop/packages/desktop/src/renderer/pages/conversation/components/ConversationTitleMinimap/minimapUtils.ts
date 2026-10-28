@@ -25,7 +25,7 @@ export const isTransparentColor = (value: string) => {
 
 export const readChatSurfaceBackground = () => {
   if (typeof document === 'undefined') return defaultVisualStyle.background;
-  const selectors = ['.chat-layout-header', '.layout-content.bg-1', '.arco-layout-content.bg-1', '.bg-1'];
+  const selectors = ['.chat-layout-header', '.layout-content.bg-1', '.bg-1'];
   for (const selector of selectors) {
     const node = document.querySelector<HTMLElement>(selector);
     if (!node) continue;
@@ -43,7 +43,7 @@ export const readChatSurfaceBackground = () => {
 export const readPopoverVisualStyle = (): MinimapVisualStyle => {
   if (typeof document === 'undefined') return defaultVisualStyle;
   const probe = document.createElement('div');
-  probe.className = 'arco-popover-content';
+  probe.className = 'rounded-[var(--sv-r-popup)] border border-sv-line bg-sv-popover';
   probe.style.position = 'fixed';
   probe.style.left = '-10000px';
   probe.style.top = '-10000px';

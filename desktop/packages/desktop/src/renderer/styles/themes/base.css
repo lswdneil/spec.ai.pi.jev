@@ -12,9 +12,15 @@
 html,
 body,
 #root,
-.layout,
-.layout-content {
+.layout {
   min-width: var(--app-min-width); /* prevent layout collapse on very small screens */
+}
+
+/* The sidebar and chat column share the shell's width. The nested column must
+   be allowed to shrink into the remaining space instead of requiring another
+   full app-wide minimum beside the sidebar. */
+.layout-content {
+  min-width: 0;
 }
 
 /*

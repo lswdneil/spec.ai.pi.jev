@@ -129,10 +129,6 @@
   border-color: transparent !important;
 }
 
-.actionConfigGroup :global(.sendbox-model-btn .arco-btn-content > span:first-child) {
-  min-width: 0 !important;
-}
-
 /* Model button must be allowed to shrink so a long label truncates instead of
  * pushing the send button / mode switch out of the row on narrow viewports. */
 .actionConfigGroup :global(.sendbox-model-btn) {
@@ -140,7 +136,7 @@
   max-width: 100% !important;
 }
 
-.actionConfigGroup :global(.sendbox-model-btn .arco-btn-content) {
+.actionConfigGroup :global(.sendbox-model-btn > span) {
   min-width: 0 !important;
   overflow: hidden !important;
 }

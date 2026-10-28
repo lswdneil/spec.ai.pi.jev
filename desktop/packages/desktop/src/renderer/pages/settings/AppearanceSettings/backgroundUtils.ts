@@ -35,7 +35,6 @@ const buildBackgroundCss = (imageDataUrl: string): string => {
 /* 根容器设置背景图 / Root container background image */
 body,
 html,
-.arco-layout,
 .app-shell {
   background-image: url("${imageDataUrl}");
   background-size: cover;
@@ -48,9 +47,6 @@ html,
 /* 内部容器透明化，让背景图穿透 / Make inner containers transparent */
 .layout-content,
 .layout-content.bg-1,
-.arco-layout-content,
-[class*="chat-layout"] .arco-layout-content,
-[class*="conversation"] .arco-layout-content,
 .bg-1,
 .bg-2:not(.app-titlebar),
 [class*="flex-col"][class*="h-full"],
@@ -61,9 +57,7 @@ html,
 
 /* 确保伪元素也透明 / Ensure pseudo elements are transparent */
 .layout-content::before,
-.layout-content.bg-1::before,
-[class*="chat-layout"] .arco-layout-content::before,
-[class*="conversation"] .arco-layout-content::before {
+.layout-content.bg-1::before {
   background: transparent;
   opacity: 0;
 }

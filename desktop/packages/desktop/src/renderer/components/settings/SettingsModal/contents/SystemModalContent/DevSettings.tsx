@@ -178,7 +178,7 @@ const DevSettings: React.FC = () => {
                 <Collapse
                   bordered={false}
                   onChange={(_, keys) => setExpandedMcpKeys(keys as string[])}
-                  className='[&_.arco-collapse-item]:!border-none [&_.arco-collapse-item-header]:!px-0 [&_.arco-collapse-item-header]:!py-6px [&_.arco-collapse-item-header]:!bg-transparent [&_.arco-collapse-item-header-title]:!flex-1 [&_.arco-collapse-item-content]:!bg-transparent [&_.arco-collapse-item-content-box]:!px-0 [&_.arco-collapse-item-content-box]:!pt-0 [&_.arco-collapse-item-content-box]:!pb-8px'
+                  className='[&>div]:!border-none [&>div>button]:!px-0 [&>div>button]:!py-6px [&>div>div]:!px-0 [&>div>div]:!pt-0 [&>div>div]:!pb-8px'
                 >
                   <Collapse.Item
                     name='chrome-devtools'

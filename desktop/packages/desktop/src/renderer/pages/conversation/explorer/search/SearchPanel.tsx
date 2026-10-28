@@ -103,7 +103,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({ roots, peNames, onReve
           onChange={onQueryChange}
           allowClear
           size='small'
-          className='[&_.arco-input-inner-wrapper]:!ps-8px'
+          className='!ps-8px'
           prefix={<Search theme='outline' className='sv-icon-sm' />}
           placeholder={t('conversation.explorer.search.placeholder')}
           aria-label={t('conversation.explorer.search.placeholder')}

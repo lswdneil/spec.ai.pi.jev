@@ -55,8 +55,8 @@ describe('backgroundUtils', () => {
     const result = injectBackgroundCssBlock('', testImageUrl);
     expect(result).toContain('body,');
     expect(result).toContain('html,');
-    expect(result).toContain('.arco-layout,');
     expect(result).toContain('.app-shell');
+    expect(result).not.toContain('.arco-');
     expect(result).toContain('background-size: cover');
     expect(result).toContain('background-attachment: fixed');
   });

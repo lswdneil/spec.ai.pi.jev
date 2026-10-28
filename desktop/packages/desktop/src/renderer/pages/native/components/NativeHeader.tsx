@@ -87,7 +87,7 @@ const Title: React.FC<{ name: string; onRename?: (name: string) => Promise<Nativ
         value={draft}
         disabled={saving}
         maxLength={TITLE_LENGTH}
-        className='w-320px max-w-full min-w-0 [&_.arco-input]:text-15px [&_.arco-input]:font-500'
+        className='w-320px max-w-full min-w-0 text-15px font-500'
         placeholder={t('conversation.history.renamePlaceholder')}
         onChange={setDraft}
         onFocus={(event) => event.target.select()}

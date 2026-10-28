@@ -79,10 +79,10 @@ const ChatTitleEditor: React.FC<ChatTitleEditorProps> = ({
             value={titleDraft}
             disabled={renameLoading}
             className={classNames(
-              'w-full min-w-0 max-w-full border-none bg-transparent shadow-none [&_.arco-input-inner-wrapper]:border-none [&_.arco-input-inner-wrapper]:bg-transparent [&_.arco-input-inner-wrapper]:shadow-none [&_.arco-input]:bg-transparent [&_.arco-input]:px-0 [&_.arco-input]:text-[var(--color-text-1)]',
+              'w-full min-w-0 max-w-full border-none bg-transparent px-0 text-[var(--color-text-1)] shadow-none',
               compact
-                ? '[&_.arco-input]:text-13px [&_.arco-input]:font-500 [&_.arco-input]:leading-20px'
-                : '[&_.arco-input]:text-16px [&_.arco-input]:font-700 [&_.arco-input]:leading-24px'
+                ? 'text-13px font-500 leading-20px'
+                : 'text-16px font-700 leading-24px'
             )}
             style={{
               width: '100%',

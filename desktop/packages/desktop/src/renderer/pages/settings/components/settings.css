@@ -160,20 +160,8 @@
   text-wrap: balance;
 }
 
-/* ---- Arco, flattened ---- */
+/* ---- Custom controls, flattened ---- */
 
-/* Focus: a darker hairline, no glow and no accent. */
-.settings-page-wrapper .settings-page-content .arco-input-focus,
-.settings-page-wrapper .settings-page-content .arco-input-inner-wrapper-focus,
-.settings-page-wrapper .settings-page-content .arco-textarea-focus,
-.settings-page-wrapper .settings-page-content .arco-select-focused .arco-select-view,
-.settings-page-wrapper .settings-page-content .arco-input-tag-focus,
-.settings-page-wrapper .settings-page-content .arco-picker-focused {
-  border-color: var(--settings-focus);
-  box-shadow: none;
-}
-
-.settings-page-wrapper .settings-page-content .arco-btn:focus-visible,
 .settings-page-wrapper .settings-page-content button:focus-visible,
 .settings-page-wrapper .settings-page-content [role='button']:focus-visible,
 .settings-page-wrapper .settings-page-content [role='radio']:focus-visible,
@@ -185,56 +173,7 @@
   box-shadow: none;
 }
 
-/* An outline button: a hairline that darkens on hover, never the accent. */
-.settings-page-wrapper .settings-page-content .arco-btn.arco-btn-outline:not(.arco-btn-disabled):hover {
-  border-color: var(--settings-focus);
-}
-
-/* A text or outline button that cannot be pressed: the disabled grey, not Arco's pale tint of the accent. */
-.settings-page-wrapper .settings-page-content .arco-btn-text.arco-btn-disabled:not([class*='arco-btn-status']),
-.settings-page-wrapper .settings-page-content .arco-btn-outline.arco-btn-disabled:not([class*='arco-btn-status']) {
-  border-color: transparent;
-  color: var(--color-text-4);
-}
-
-.settings-page-wrapper .settings-page-content .arco-btn-outline.arco-btn-disabled:not([class*='arco-btn-status']) {
-  border-color: var(--settings-hairline);
-}
-
-/* A checked box: the body text colour, with the page's own colour for the mark. */
-.settings-page-wrapper .settings-page-content .arco-checkbox-checked:not(.arco-checkbox-disabled) .arco-checkbox-mask,
-.settings-page-wrapper
-  .settings-page-content
-  .arco-checkbox-indeterminate:not(.arco-checkbox-disabled)
-  .arco-checkbox-mask {
-  border-color: var(--text-primary);
-  background-color: var(--text-primary);
-}
-
-.settings-page-wrapper
-  .settings-page-content
-  .arco-checkbox-checked:not(.arco-checkbox-disabled)
-  .arco-checkbox-mask-icon {
-  color: var(--bg-base);
-}
-
-.settings-page-wrapper
-  .settings-page-content
-  .arco-checkbox-indeterminate:not(.arco-checkbox-disabled)
-  .arco-checkbox-mask::after {
-  background-color: var(--bg-base);
-}
-
-/* The chosen segment of a segmented control: one hairline, no shadow (status-colors.css adds one in the light theme). */
-.settings-page-wrapper
-  .settings-page-content
-  .arco-radio-group
-  .arco-radio-button.arco-radio-checked:not(.arco-radio-disabled) {
-  box-shadow: 0 0 0 1px var(--settings-hairline);
-}
-
 /* Links read as text: the body colour, underlined. */
-.settings-page-wrapper .settings-page-content .arco-link:not(.arco-link-disabled),
 .settings-page-wrapper .settings-page-content a:not([class]) {
   color: var(--text-primary);
   text-decoration: underline;
@@ -242,14 +181,7 @@
   text-underline-offset: 2px;
 }
 
-.settings-page-wrapper .settings-page-content .arco-link:not(.arco-link-disabled):hover,
 .settings-page-wrapper .settings-page-content a:not([class]):hover {
   background: none;
   text-decoration-color: currentColor;
-}
-
-/* A card drawn by Arco keeps a hairline and no shadow. */
-.settings-page-wrapper .settings-page-content .arco-card {
-  border-color: var(--settings-hairline);
-  box-shadow: none;
 }

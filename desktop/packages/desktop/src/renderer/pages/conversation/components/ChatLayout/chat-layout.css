@@ -63,10 +63,6 @@
     border-radius: 999px !important;
   }
 
-  .agent-mode-compact-pill .arco-btn-content {
-    line-height: 1;
-  }
-
   .agent-mode-compact-pill--readonly,
   .agent-mode-compact-pill--readonly:hover,
   .agent-mode-compact-pill--readonly:active,
