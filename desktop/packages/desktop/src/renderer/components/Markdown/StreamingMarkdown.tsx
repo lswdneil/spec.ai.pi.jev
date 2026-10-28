@@ -1,6 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import MarkdownView, { type MarkdownViewProps } from '@renderer/components/Markdown';
 import { extendStreamingMarkdown, type StreamingMarkdownBlock } from './streamingBlocks';
+
+export const MAX_ACTIVE_TAIL_CHARS = 200_000;
 
 type SettledBlockProps = {
   block: StreamingMarkdownBlock;
@@ -23,6 +26,40 @@ const SettledBlock = React.memo(
     previous.plainTextAbove === next.plainTextAbove
 );
 SettledBlock.displayName = 'SettledBlock';
+
+type ActiveTailProps = {
+  block: StreamingMarkdownBlock;
+};
+
+const ActiveTail: React.FC<ActiveTailProps> = ({ block }) => {
+  const { t } = useTranslation();
+  const [isExpanded, setIsExpanded] = React.useState(false);
+  const needsExpansion = block.text.length > MAX_ACTIVE_TAIL_CHARS;
+  const visibleText = needsExpansion && !isExpanded ? block.text.slice(-MAX_ACTIVE_TAIL_CHARS) : block.text;
+
+  return (
+    <>
+      {needsExpansion && !isExpanded && (
+        <div>
+          <button
+            data-testid='message-streaming-expand'
+            className='flex items-center gap-1 px-3 py-1.5 text-sm text-t-primary hover:text-primary transition-colors cursor-pointer border-none bg-transparent font-medium'
+            onClick={() => setIsExpanded(true)}
+            type='button'
+          >
+            {t('common.expandMore')}
+          </button>
+        </div>
+      )}
+      <div
+        data-testid='message-streaming-tail'
+        style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+      >
+        {visibleText}
+      </div>
+    </>
+  );
+};
 
 export type StreamingMarkdownProps = {
   children: string;
@@ -60,13 +97,7 @@ const StreamingMarkdown: React.FC<StreamingMarkdownProps> = ({
             plainTextAbove={plainTextAbove}
           />
         ) : (
-          <div
-            key={block.id}
-            data-testid='message-streaming-tail'
-            style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word' }}
-          >
-            {block.text}
-          </div>
+          <ActiveTail key={block.id} block={block} />
         )
       )}
     </div>
