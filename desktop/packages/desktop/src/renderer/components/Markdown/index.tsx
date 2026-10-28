@@ -7,7 +7,6 @@
 import ReactMarkdown, { defaultUrlTransform } from 'react-markdown';
 
 import rehypeKatex from 'rehype-katex';
-import rehypeRaw from 'rehype-raw';
 
 // Import KaTeX CSS to make it available in the document
 import 'katex/dist/katex.min.css';
@@ -23,7 +22,12 @@ import LocalImageView from '@renderer/components/media/LocalImageView';
 import CodeBlock from './CodeBlock';
 import LocalFileLink from './LocalFileLink';
 import ShadowView from './ShadowView';
-import { MARKDOWN_REMARK_PLUGINS, MarkdownTable, MarkdownTd } from './markdownComponents';
+import {
+  MARKDOWN_REMARK_PLUGINS,
+  MarkdownTable,
+  MarkdownTd,
+  SANITIZED_HTML_REHYPE_PLUGINS,
+} from './markdownComponents';
 import {
   resolveLocalFileLinkPath,
   resolveLocalFileLinkReference,
@@ -149,7 +153,7 @@ const MarkdownView: React.FC<MarkdownViewProps> = React.memo(
       [codeStyle, hiddenCodeCopyButton, handleLinkClick, onLocalFileLink]
     );
 
-    const rehypePlugins = useMemo(() => (allowHtml ? [rehypeRaw, rehypeKatex] : [rehypeKatex]), [allowHtml]);
+    const rehypePlugins = useMemo(() => (allowHtml ? SANITIZED_HTML_REHYPE_PLUGINS : [rehypeKatex]), [allowHtml]);
 
     // The same element while the text and the components are the same, so React skips the markdown when this view
     // renders for anything else (the preview panel above, a new translation function).

@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { NativeResult } from '@/common/kyrn/nativeBridge';
 import type { PiCommand } from '@/common/utils/nativeHost';
 import NativeComposer from '@/renderer/pages/native/components/NativeComposer';
+import { clearNativeComposerDrafts } from '@/renderer/pages/native/hooks/useNativeComposerDraft';
 import { useNativeConversation } from '@/renderer/pages/native/hooks/useNativeConversation';
 import { NativeClientContext } from '@/renderer/pages/native/utils/nativeClient';
 import enCommon from '@/renderer/services/i18n/locales/en-US/common.json';
@@ -79,7 +80,10 @@ vi.mock('@/renderer/components/chat/SendBox', () => ({
   ),
 }));
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  clearNativeComposerDrafts();
+});
 
 const i18n = createInstance();
 void i18n.init({
@@ -236,7 +240,11 @@ describe('the native send box', () => {
     act(() =>
       host.setStatus('c1', {
         phase: 'failed',
-        error: { kind: 'crashed', message: 'spec.jev exited with code 1', stderr: 'TypeError: boom' },
+        error: {
+          kind: 'crashed',
+          message: 'spec.jev exited with code 1',
+          stderr: 'TypeError: boom\nAuthorization: Bearer ui-secret-value',
+        },
       })
     );
     expect(screen.queryByTestId('native-needs-model')).toBeNull();
@@ -245,6 +253,8 @@ describe('the native send box', () => {
     expect(stopped).toHaveTextContent('spec.jev stopped unexpectedly.');
     expect(stopped).toHaveTextContent('spec.jev exited with code 1');
     expect(stopped).toHaveTextContent('TypeError: boom');
+    expect(stopped).toHaveTextContent('Authorization: Bearer ••••');
+    expect(stopped).not.toHaveTextContent('ui-secret-value');
     expect(stopped).toHaveTextContent('Send a message to start spec.jev again.');
     type('hello');
     await send();

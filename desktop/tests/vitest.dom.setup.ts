@@ -10,6 +10,37 @@ import { createRoot } from 'react-dom/client';
 import { Toaster, toast } from 'sonner';
 import { Modal } from '@/renderer/ui/dialog';
 
+class TestWebSocket {
+  static readonly CONNECTING = 0;
+  static readonly OPEN = 1;
+  static readonly CLOSING = 2;
+  static readonly CLOSED = 3;
+
+  readonly CONNECTING = TestWebSocket.CONNECTING;
+  readonly OPEN = TestWebSocket.OPEN;
+  readonly CLOSING = TestWebSocket.CLOSING;
+  readonly CLOSED = TestWebSocket.CLOSED;
+  readyState = TestWebSocket.CONNECTING;
+
+  constructor(readonly url: string) {}
+
+  addEventListener() {}
+  removeEventListener() {}
+  send() {}
+
+  close() {
+    this.readyState = TestWebSocket.CLOSED;
+  }
+}
+
+// jsdom and undici expose incompatible Event implementations. DOM tests must
+// never dial the real backend socket just because a component subscribes.
+Object.defineProperty(globalThis, 'WebSocket', {
+  configurable: true,
+  writable: true,
+  value: TestWebSocket,
+});
+
 // A real toaster for every DOM test: components call the Dense toast facade,
 // and assertions look for the words it showed.
 if (typeof document !== 'undefined') {

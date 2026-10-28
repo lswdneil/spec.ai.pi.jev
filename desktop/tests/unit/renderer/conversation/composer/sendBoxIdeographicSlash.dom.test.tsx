@@ -108,19 +108,14 @@ const COMMANDS: SlashCommandItem[] = [
 const Harness = ({
   initialValue = '',
   commands = COMMANDS,
+  onSend = vi.fn().mockResolvedValue(undefined),
 }: {
   initialValue?: string;
   commands?: SlashCommandItem[];
+  onSend?: (message: string) => Promise<void | false>;
 }) => {
   const [value, setValue] = useState(initialValue);
-  return (
-    <SendBox
-      value={value}
-      onChange={setValue}
-      onSend={vi.fn().mockResolvedValue(undefined)}
-      slash_commands={commands}
-    />
-  );
+  return <SendBox value={value} onChange={setValue} onSend={onSend} slash_commands={commands} />;
 };
 
 const input = () => screen.getByTestId('sendbox-input') as HTMLTextAreaElement;
@@ -161,6 +156,37 @@ describe('SendBox: the ideographic comma on an empty box', () => {
     fireEvent.compositionEnd(input(), { target: { value: 'hello' } });
 
     expect(input().value).toBe('hello');
+  });
+
+  it('uses CompositionEvent.data when a Windows IME leaves the textarea value empty', () => {
+    render(<Harness />);
+
+    fireEvent.compositionStart(input());
+    fireEvent.compositionEnd(input(), { data: '\u4F60\u597D' });
+
+    expect(input().value).toBe('\u4F60\u597D');
+  });
+
+  it('keeps ordinary Chinese text from the composed textarea value', () => {
+    render(<Harness />);
+
+    fireEvent.compositionStart(input());
+    fireEvent.change(input(), { target: { value: '\u4F60\u597D\u4E16\u754C' } });
+    fireEvent.compositionEnd(input(), { data: '\u4E16\u754C' });
+
+    expect(input().value).toBe('\u4F60\u597D\u4E16\u754C');
+  });
+
+  it('sends on Enter after composition ends even if a composition ref had gone stale', () => {
+    const onSend = vi.fn().mockResolvedValue(undefined);
+    render(<Harness onSend={onSend} />);
+
+    fireEvent.compositionStart(input());
+    fireEvent.change(input(), { target: { value: '\u4F60\u597D' } });
+    fireEvent.compositionEnd(input(), { data: '\u4F60\u597D' });
+    fireEvent.keyDown(input(), { key: 'Enter', code: 'Enter' });
+
+    expect(onSend).toHaveBeenCalledWith('\u4F60\u597D');
   });
 
   it('keeps a 、 written after other text', () => {

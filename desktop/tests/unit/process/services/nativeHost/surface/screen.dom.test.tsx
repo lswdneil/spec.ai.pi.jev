@@ -13,6 +13,7 @@ import { getCurrentProject, setCurrentProject } from '@/renderer/pages/conversat
 import { KernelBody } from '@/renderer/pages/conversation/KyrnPanel';
 import NativeConversationPage from '@/renderer/pages/native';
 import NativeSiderGroup from '@/renderer/pages/native/components/NativeSiderGroup';
+import { clearNativeComposerDrafts } from '@/renderer/pages/native/hooks/useNativeComposerDraft';
 import { forgetNativeUnread } from '@/renderer/pages/native/hooks/useNativeAttention';
 import { NativeClientContext, type NativeClient } from '@/renderer/pages/native/utils/nativeClient';
 import { useNativeActivity, useNativeFolder } from '@/renderer/pages/native/utils/nativeActivityStore';
@@ -67,7 +68,10 @@ vi.mock('@/renderer/pages/conversation/Preview/browser/muBrowser/MuBrowserHost',
   ),
 }));
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  clearNativeComposerDrafts();
+});
 
 const i18n = createInstance();
 void i18n.init({
@@ -208,6 +212,32 @@ describe('the native conversation page', () => {
     page(host.client);
     await waitFor(() => expect(screen.getByTestId('home')).toBeInTheDocument());
     expect(host.calls.filter((call) => call.method === 'open')).toEqual([]);
+  });
+
+  it('does not focus the composer after the person clicks a panel while the conversation loads', async () => {
+    const host = createFakeHost();
+    host.add({ id: 'c1' });
+    let release: (() => void) | undefined;
+    const client = {
+      ...host.client,
+      open: async (id: string) => {
+        await new Promise<void>((resolve) => {
+          release = resolve;
+        });
+        return host.client.open(id);
+      },
+    };
+    page(client, 'c1', <div data-testid='outside-panel' tabIndex={-1} />);
+    await waitFor(() => expect(release).toBeDefined());
+
+    const panel = screen.getByTestId('outside-panel');
+    panel.focus();
+    fireEvent.pointerDown(panel);
+    await act(async () => release?.());
+    await opened();
+
+    expect(screen.getByTestId('outside-panel')).toHaveFocus();
+    expect(screen.getByTestId('native-send-input')).not.toHaveFocus();
   });
 
   it('follows a draft to its session’s id and keeps what was being typed', async () => {

@@ -166,6 +166,65 @@ describe('SendBox active-controlled focus', () => {
     await waitFor(() => expect(textarea.value).toBe('blocked message'));
   });
 
+  it('restores the draft and caret when the send rejects, and reports the rejection', async () => {
+    const error = new Error('ipc failed');
+    const onSend = vi.fn().mockRejectedValue(error);
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(<SendBoxHarness initialValue='keep this' onSend={onSend} />);
+
+    const textarea = screen.getByTestId('sendbox-input') as HTMLTextAreaElement;
+    textarea.focus();
+    textarea.setSelectionRange(2, 6);
+    fireEvent.keyDown(textarea, { key: 'Enter', code: 'Enter' });
+
+    await waitFor(() => expect(consoleError).toHaveBeenCalledWith('[SendBox] send failed:', error));
+    expect(textarea.value).toBe('keep this');
+    expect(textarea.selectionStart).toBe(2);
+    expect(textarea.selectionEnd).toBe(6);
+    consoleError.mockRestore();
+  });
+
+  it('does not take focus from another field when the box becomes enabled', async () => {
+    layoutState.isMobile = false;
+    const Harness = ({ disabled }: { disabled: boolean }) => (
+      <div>
+        <input data-testid='other-field' />
+        <SendBoxHarness active={true} disabled={disabled} />
+      </div>
+    );
+    const { rerender } = render(<Harness disabled={true} />);
+    const other = screen.getByTestId('other-field') as HTMLInputElement;
+    other.focus();
+
+    rerender(<Harness disabled={false} />);
+    await act(async () => {});
+
+    expect(other).toHaveFocus();
+    expect(screen.getByTestId('sendbox-input')).not.toHaveFocus();
+  });
+
+  it('does not take focus after the person clicks a panel while the box is disabled', async () => {
+    layoutState.isMobile = false;
+    const Harness = ({ disabled }: { disabled: boolean }) => (
+      <div>
+        <div data-testid='outside-panel' />
+        <SendBoxHarness active={true} disabled={disabled} />
+      </div>
+    );
+    const { rerender } = render(<Harness disabled={true} />);
+    const panel = screen.getByTestId('outside-panel');
+    act(() => {
+      (document.activeElement as HTMLElement | null)?.blur();
+      fireEvent.pointerDown(panel);
+    });
+
+    rerender(<Harness disabled={false} />);
+    await act(async () => {});
+
+    expect(screen.getByTestId('sendbox-input')).not.toHaveFocus();
+  });
+
   it('uses the platform primary Enter shortcut for Draft box without sending', () => {
     const onSend = vi.fn().mockResolvedValue(undefined);
     const onAddToDraft = vi.fn();

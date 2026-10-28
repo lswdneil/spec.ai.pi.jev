@@ -20,6 +20,7 @@ const UPDATE_ERROR_KEYS: Record<UpdateErrorCode, string> = {
 const INSTALLER_REASON_KEYS: Record<InstallerReason, string> = {
   linux: 'update.installerReason.linux',
   unpackaged: 'update.installerReason.unpackaged',
+  unsigned: 'update.installerReason.unsigned',
   autoUpdateFailed: 'update.installerReason.autoUpdateFailed',
 };
 

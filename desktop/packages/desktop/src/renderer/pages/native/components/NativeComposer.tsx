@@ -13,7 +13,7 @@
 import { Button } from '@/renderer/ui/button';
 import { Radio } from '@/renderer/ui/radio';
 import type { TMessage } from '@/common/chat/chatLib';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import ContextUsageIndicator from '@/renderer/components/agent/ContextUsageIndicator';
 import SendBox from '@/renderer/components/chat/SendBox';
@@ -25,8 +25,9 @@ import { GOAL_CLEAR_COMMAND } from '@/renderer/pages/conversation/platforms/acp/
 import { getChatSurfaceWidthClass } from '@/renderer/pages/conversation/utils/chatSurfaceWidth';
 import { useAddEventListener, type SendBoxCommandState } from '@/renderer/utils/emitter';
 import type { FileSelectionItem } from '@/renderer/utils/file/fileSelection';
-import { useNativeAttachments } from '../hooks/useNativeAttachments';
+import { useNativeAttachments, type AttachmentUpdate } from '../hooks/useNativeAttachments';
 import { useNativeCommands } from '../hooks/useNativeCommands';
+import { useNativeComposerDraft } from '../hooks/useNativeComposerDraft';
 import type { NativeConversationApi, NativeConversationState, SendMode } from '../hooks/useNativeConversation';
 import { useNativeModels } from '../hooks/useNativeModels';
 import { contextUsageOf, goalOnScreen, showsContextRing } from '../utils/composerLines';
@@ -129,12 +130,38 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
     conversation;
   const { clearFailure } = conversation;
   const cwd = conversation.conversation?.cwd;
-  const [draft, setDraft] = useState('');
-  const [mode, setMode] = useState<SendMode>('steer');
-  // The project's files the person mentioned with `@` (the send box keeps them in step with the text).
-  const [mentioned, setMentioned] = useState<FileSelectionItem[]>([]);
-  const files = useNativeAttachments();
+  const [composerDraft, updateComposerDraft] = useNativeComposerDraft(id);
+  const { draft, mode, mentioned } = composerDraft;
+  const setDraft = useCallback(
+    (change: React.SetStateAction<string>) => {
+      updateComposerDraft((current) => ({
+        ...current,
+        draft: typeof change === 'function' ? change(current.draft) : change,
+      }));
+    },
+    [updateComposerDraft]
+  );
+  const setMode = useCallback(
+    (next: SendMode) => updateComposerDraft((current) => ({ ...current, mode: next })),
+    [updateComposerDraft]
+  );
+  const setMentioned = useCallback(
+    (next: FileSelectionItem[]) => updateComposerDraft((current) => ({ ...current, mentioned: next })),
+    [updateComposerDraft]
+  );
+  const setAttachments = useCallback(
+    (change: AttachmentUpdate) => {
+      updateComposerDraft((current) => ({
+        ...current,
+        attachments: typeof change === 'function' ? change(current.attachments) : change,
+      }));
+    },
+    [updateComposerDraft]
+  );
+  const files = useNativeAttachments(composerDraft.attachments, setAttachments);
   const picker = useRef<HTMLInputElement>(null);
+  const composerRef = useRef<HTMLDivElement>(null);
+  const focusIntentRef = useRef<'composer' | 'external' | null>(null);
   const models = useNativeModels(view, settings, request);
   const permissions = useMemo(() => permissionState(view, settings), [settings, view]);
   const commands = useNativeCommands(host, draft, request);
@@ -149,6 +176,20 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
   const usage = useMemo(() => contextUsageOf(view), [view]);
   useSessionStats(conversation);
 
+  useEffect(() => {
+    const trackFocusIntent = (event: PointerEvent) => {
+      const target = event.target;
+      focusIntentRef.current =
+        target instanceof Node &&
+        (Boolean(composerRef.current?.contains(target)) ||
+          (target instanceof Element && target.closest('[role="menu"]') !== null))
+          ? 'composer'
+          : 'external';
+    };
+    document.addEventListener('pointerdown', trackFocusIntent, true);
+    return () => document.removeEventListener('pointerdown', trackFocusIntent, true);
+  }, []);
+
   // Opening the model menu starts spec.jev when it was idle, and the menu takes the keyboard while it is open. Once
   // the menu is gone, put the caret back in the box unless the person is typing somewhere else. This must not wait for
   // `host.phase` to leave `starting`: a slow first host start is exactly when the box otherwise looks dead.
@@ -158,13 +199,14 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
       const menu = document.querySelector<HTMLElement>('[role="menu"]');
       if (menu && menu.getBoundingClientRect().width > 0) return;
       const active = document.activeElement;
+      if (focusIntentRef.current === 'external') return;
       const elsewhere =
         active instanceof HTMLElement &&
         active !== document.body &&
         !active.matches('[data-testid="native-model-pill"], [data-testid="native-model-chip"]') &&
         active.closest('[role="menu"]') === null;
       if (elsewhere) return;
-      const input = document.querySelector<HTMLTextAreaElement>('[data-testid="native-send-input"]');
+      const input = composerRef.current?.querySelector<HTMLTextAreaElement>('[data-testid="native-send-input"]');
       if (input && !input.disabled && document.activeElement !== input) input.focus();
     });
     return () => cancelAnimationFrame(frame);
@@ -183,8 +225,9 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
     const restore = () => {
       if (!menuWasOpen) return;
       menuWasOpen = false;
+      if (focusIntentRef.current === 'external') return;
       requestAnimationFrame(() => {
-        const input = document.querySelector<HTMLTextAreaElement>('[data-testid="native-send-input"]');
+        const input = composerRef.current?.querySelector<HTMLTextAreaElement>('[data-testid="native-send-input"]');
         if (input && !input.disabled) input.focus();
       });
     };
@@ -279,6 +322,7 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
   return (
     // `data-composer-zone`: the work panel, floating in a narrow window, stops above this.
     <div
+      ref={composerRef}
       data-composer-zone
       className={`${getChatSurfaceWidthClass()} flex flex-col mt-auto mb-16px`}
       onDropCapture={onDropCapture}

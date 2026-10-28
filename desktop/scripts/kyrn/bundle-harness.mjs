@@ -23,6 +23,7 @@ import { gunzipSync } from 'node:zlib';
 
 const require = createRequire(import.meta.url);
 const { verifyBundledHarness } = require('../../packages/shared-scripts/src/verify-bundled-harness.js');
+const { writeIntegrityRecord } = require('../../packages/shared-scripts/src/bundle-integrity.js');
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -171,8 +172,13 @@ export function bundleHarness({
     if (manifest.name !== 'spec.jev') throw new Error(`${file} is ${manifest.name}, not spec.jev`);
     log(`Installing what spec.jev ${manifest.version} depends on, for ${platform}-${arch}`);
     npm(installArgs(platform, arch), target);
-    const record = { name: manifest.name, version: manifest.version, platform, arch };
-    writeFileSync(join(harness, 'bundle.json'), `${JSON.stringify(record, null, 2)}\n`);
+    const record = {
+      name: manifest.name,
+      version: manifest.version,
+      platform,
+      arch,
+    };
+    writeIntegrityRecord(join(harness, 'bundle.json'), record);
     const check = verifyBundledHarness({ resourcesDir: resources, electronPlatformName: platform, targetArch: arch });
     if (check.missing.length > 0) throw new Error(`The bundled spec.jev is incomplete: ${check.missing.join(', ')}`);
     const { files, bytes } = sizeOf(harness);

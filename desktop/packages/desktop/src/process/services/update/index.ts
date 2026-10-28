@@ -13,6 +13,8 @@ import { fetchLatestRelease } from './githubReleases';
 import { downloadInstaller } from './installerDownload';
 import { consumeInstallerLastFailure } from './installerLastFailure';
 import { UpdateService } from './updateService';
+import { isSignedBuild } from '../../startup/buildProvenance';
+import { updateTransportFor } from './updatePolicy';
 
 let service: UpdateService | null = null;
 
@@ -27,11 +29,15 @@ export function getUpdateService(): UpdateService {
 }
 
 function createUpdateService(): UpdateService {
-  const restarts = app.isPackaged && (process.platform === 'darwin' || process.platform === 'win32');
+  const transport = updateTransportFor({
+    isPackaged: app.isPackaged,
+    platform: process.platform,
+    signedBuild: isSignedBuild({ isPackaged: app.isPackaged, resourcesPath: process.resourcesPath }),
+  });
   return new UpdateService({
     currentVersion: app.getVersion(),
-    restartUpdater: restarts ? new AutoUpdaterService() : undefined,
-    installerReason: process.platform === 'linux' && app.isPackaged ? 'linux' : 'unpackaged',
+    restartUpdater: transport.method === 'restart' ? new AutoUpdaterService() : undefined,
+    installerReason: transport.installerReason ?? 'unpackaged',
     latestRelease: () => fetchLatestRelease(),
     downloadInstaller: (asset, onProgress) => downloadInstaller(asset, { dir: app.getPath('downloads'), onProgress }),
     openPath: (filePath) => shell.openPath(filePath),

@@ -4637,6 +4637,7 @@ export type I18nKey =
   | 'update.installerReason.autoUpdateFailed'
   | 'update.installerReason.linux'
   | 'update.installerReason.unpackaged'
+  | 'update.installerReason.unsigned'
   | 'update.lastInstallFailed'
   | 'update.later'
   | 'update.openInstaller'

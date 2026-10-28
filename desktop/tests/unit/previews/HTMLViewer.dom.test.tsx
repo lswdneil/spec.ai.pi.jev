@@ -26,14 +26,15 @@ vi.mock('@monaco-editor/react', () => ({
   default: ({ value }: { value: string }) => <div data-testid='monaco-editor'>{value}</div>,
 }));
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-}));
+vi.mock('react-i18next', () => {
+  const t = (key: string) => key;
+  return { useTranslation: () => ({ t }) };
+});
 
 import HTMLViewer from '@/renderer/pages/conversation/Preview/components/viewers/HTMLViewer';
 import HTMLRenderer from '@/renderer/pages/conversation/Preview/components/renderers/HTMLRenderer';
+import PDFViewer from '@/renderer/pages/conversation/Preview/components/viewers/PDFViewer';
+import { PREVIEW_SESSION_PARTITION } from '@/common/config/constants';
 
 function createConsoleMessageEvent({
   level,
@@ -74,6 +75,19 @@ describe('HTMLViewer', () => {
   });
 });
 
+describe('PDFViewer', () => {
+  it('loads PDF content in the isolated preview session', async () => {
+    const { container } = render(<PDFViewer content='data:application/pdf;base64,AA==' />);
+    const webview = await waitFor(() => {
+      const element = container.querySelector('webview');
+      expect(element).toBeInTheDocument();
+      return element;
+    });
+
+    expect(webview?.getAttribute('partition')).toBe(PREVIEW_SESSION_PARTITION);
+  });
+});
+
 describe('HTMLRenderer', () => {
   const electronAPI = {};
 
@@ -98,6 +112,7 @@ describe('HTMLRenderer', () => {
     const webview = container.querySelector('webview');
     expect(webview).toBeInTheDocument();
     expect(webview?.getAttribute('src')).toBe('file:///workspace/financial-wechat-miniapp.html');
+    expect(webview?.getAttribute('partition')).toBe(PREVIEW_SESSION_PARTITION);
   });
 
   it('keeps dirty local HTML content in memory in Electron', () => {

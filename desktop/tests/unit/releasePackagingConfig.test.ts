@@ -35,6 +35,12 @@ describe('release packaging configuration', () => {
     expect(winBlock).not.toContain('    - zip');
   });
 
+  it('packages build provenance so unsigned builds can disable auto-update', () => {
+    const config = readProjectFile('packages/desktop/electron-builder.yml');
+    expect(config).toContain('from: resources/build-provenance.json');
+    expect(config).toContain('to: build-provenance.json');
+  });
+
   it('uploads the Windows and Linux installers, and no zip', () => {
     // The pipeline that builds and publishes the installers, at the repository root.
     const workflow = readProjectFile('../.github/workflows/desktop.yml');
@@ -48,5 +54,25 @@ describe('release packaging configuration', () => {
     const script = readProjectFile('scripts/build-with-builder.js');
 
     expect(script).toMatch(/--mac\s+dmg\s+zip\s+--\$\{targetArch\}\s+--prepackaged/);
+  });
+
+  it('runs packaged desktop smoke checks on PRs for every bundled input', () => {
+    const workflow = readProjectFile('../.github/workflows/desktop.yml');
+
+    expect(workflow).toContain('  pull_request:');
+    expect(workflow).toContain("- 'kyrn/**'");
+    expect(workflow).toContain("- 'packages/**'");
+    expect(workflow).toContain("- 'package-lock.json'");
+    expect(workflow).toContain('needs.build.result ==');
+  });
+
+  it('keeps Windows signing secrets off branch and pull-request builds', () => {
+    const workflow = readProjectFile('../.github/workflows/desktop.yml');
+
+    expect(workflow).toContain(
+      "if: startsWith(github.ref, 'refs/tags/v') && matrix.platform == 'windows-x64'"
+    );
+    expect(workflow).toContain("MU_REQUIRE_SIGNED_BUILD: ${{ startsWith(github.ref, 'refs/tags/v')");
+    expect(workflow).toContain("needs.build.result == 'success'");
   });
 });

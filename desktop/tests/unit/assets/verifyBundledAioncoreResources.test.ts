@@ -6,6 +6,7 @@ import { dirname, join } from 'node:path';
 const {
   verifyBundledAioncoreResources,
 } = require('../../../packages/shared-scripts/src/verify-bundled-aioncore-resources');
+const { digestTree } = require('../../../packages/shared-scripts/src/bundle-integrity');
 
 const CLAUDE_VERSION = '2.1.215';
 const CODEX_VERSION = '0.144.6';
@@ -139,7 +140,19 @@ function seedRuntimeKey(
   createManagedCliFixture({ managedResourcesDir, name: 'claude', version: CLAUDE_VERSION, runtimeKey });
   createManagedCliFixture({ managedResourcesDir, name: 'codex', version: CODEX_VERSION, runtimeKey });
   writeManagedResourcesContract(managedResourcesDir, { runtimeKey, nodeRoot, nodeExecutable });
+  refreshBundleIntegrity(resourcesDir, runtimeKey, { platform, arch });
   return managedResourcesDir;
+}
+
+function refreshBundleIntegrity(
+  resourcesDir: string,
+  runtimeKey: string,
+  metadata: { platform: string; arch: string } = { platform: 'win32', arch: 'x64' }
+) {
+  writeJson(join(resourcesDir, 'bundled-aioncore', runtimeKey, 'manifest.json'), {
+    ...metadata,
+    integrity: digestTree(join(resourcesDir, 'bundled-aioncore', runtimeKey), { ignore: ['manifest.json'] }),
+  });
 }
 
 describe('verifyBundledAioncoreResources', () => {
@@ -212,6 +225,19 @@ describe('verifyBundledAioncoreResources', () => {
         component: 'bundle-manifest',
         reason: 'runtime_key_mismatch',
       })
+    );
+  });
+
+  it('rejects a bundle whose files changed after its digest was recorded', () => {
+    writeFileSync(join(managedResourcesDir, 'node', 'node-v24.11.0-win-x64', 'node.exe'), 'tampered');
+    const result = verifyBundledAioncoreResources({
+      resourcesDir,
+      electronPlatformName: 'win32',
+      targetArch: 'x64',
+    });
+    expect(result.missing).toContain('bundled-aioncore/win32-x64/manifest.json<integrity:digest_mismatch>');
+    expect(result.failures).toContainEqual(
+      expect.objectContaining({ component: 'bundle-integrity', reason: 'digest_mismatch' })
     );
   });
 
@@ -350,6 +376,7 @@ describe('verifyBundledAioncoreResources', () => {
     manifest.extraDiagnostic = { ignored: true };
     manifest.clis.push({ ...manifest.clis[0] });
     writeJson(manifestPath, manifest);
+    refreshBundleIntegrity(resourcesDir, 'win32-x64');
 
     const result = verifyBundledAioncoreResources({
       resourcesDir,
@@ -374,6 +401,7 @@ describe('verifyBundledAioncoreResources', () => {
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
     manifest.clis = [];
     writeJson(manifestPath, manifest);
+    refreshBundleIntegrity(resourcesDir, 'win32-x64');
 
     const result = verifyBundledAioncoreResources({
       resourcesDir,
@@ -391,6 +419,7 @@ describe('verifyBundledAioncoreResources', () => {
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
     manifest.clis = manifest.clis.map((cli: { name: string }) => (cli.name === 'codex' ? { ...cli, name: '' } : cli));
     writeJson(manifestPath, manifest);
+    refreshBundleIntegrity(resourcesDir, 'win32-x64');
 
     const result = verifyBundledAioncoreResources({
       resourcesDir,

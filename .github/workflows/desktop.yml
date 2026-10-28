@@ -24,6 +24,19 @@ on:
     tags: ['v*']
     paths:
       - 'desktop/**'
+      - 'kyrn/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/desktop.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'desktop/**'
+      - 'kyrn/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/desktop.yml'
   workflow_dispatch:
 
@@ -91,6 +104,8 @@ jobs:
       MU_BACKEND_ARCH: ${{ matrix.arch }}
       # The Windows installer must carry the default Windows desktop MCP.
       MU_REQUIRE_WINDOWS_MCP: '1'
+      # Tagged Windows builds are release/update inputs and must carry a valid Authenticode signature.
+      MU_REQUIRE_SIGNED_BUILD: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.platform == 'windows-x64' && '1' || '0' }}
       # Public release downloads (AionCore, Electron) are rate-limited without a token.
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -207,13 +222,16 @@ jobs:
           if (-not (Test-Path $sqlite)) { Write-Error "better-sqlite3 was not built for Electron ($electron, ${{ matrix.arch }})"; exit 1 }
 
       - name: Setup Windows code signing
-        if: startsWith(matrix.platform, 'windows')
+        if: startsWith(github.ref, 'refs/tags/v') && matrix.platform == 'windows-x64'
         shell: pwsh
         env:
           WINDOWS_CERTIFICATE_BASE64: ${{ secrets.WINDOWS_CERTIFICATE_BASE64 }}
           WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
         run: |
-          if (-not $env:WINDOWS_CERTIFICATE_BASE64) {
+          if (-not $env:WINDOWS_CERTIFICATE_BASE64 -or -not $env:WINDOWS_CERTIFICATE_PASSWORD) {
+            if ($env:MU_REQUIRE_SIGNED_BUILD -eq '1') {
+              throw 'Tagged Windows builds require WINDOWS_CERTIFICATE_BASE64 and WINDOWS_CERTIFICATE_PASSWORD.'
+            }
             Write-Host "No certificate: building an unsigned app."
             exit 0
           }
@@ -242,6 +260,25 @@ jobs:
           MSVS_VERSION: 2022
           GYP_MSVS_VERSION: 2022
         run: ${{ matrix.command }}
+      - name: Verify the Windows release signature
+        if: matrix.platform == 'windows-x64' && env.MU_REQUIRE_SIGNED_BUILD == '1'
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem out -File |
+            Where-Object { $_.Name -match '^spec\.jev-.+-win-x64\.exe$' } |
+            Select-Object -First 1
+          if (-not $installer) { throw 'No Windows x64 installer in out/' }
+          $files = @(
+            $installer
+            Get-Item (Join-Path 'out' 'win-unpacked/spec.jev.exe')
+          )
+          foreach ($file in $files) {
+            $signature = Get-AuthenticodeSignature -LiteralPath $file.FullName
+            if ($signature.Status -ne 'Valid') {
+              throw "$($file.FullName) is not validly signed: $($signature.Status)"
+            }
+            Write-Host "$($file.Name): $($signature.SignerCertificate.Subject)"
+          }
       - name: Start the app's own spec.jev
         shell: bash
         run: node ../kyrn/npm/smoke-app.mjs out ${{ matrix.arch }}
@@ -436,8 +473,8 @@ jobs:
   release:
     name: Publish the release
     needs: build
-    # A tag publishes what was built, even when one platform failed; the notes say which is missing.
-    if: startsWith(github.ref, 'refs/tags/v') && !cancelled()
+    # Publishing is fail closed: never publish a tag when a required platform or signature check failed.
+    if: startsWith(github.ref, 'refs/tags/v') && needs.build.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: write

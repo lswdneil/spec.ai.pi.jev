@@ -5,6 +5,7 @@
  */
 
 import { ipcBridge } from '@/common';
+import { PREVIEW_SESSION_PARTITION } from '@/common/config/constants';
 import type { ChatFileRef } from '@/common/types/chatFile';
 import { buildPdfSrc } from '../../previewUrls';
 import { registerTabReloader } from '../../context/tabReloaderRegistry';
@@ -193,6 +194,7 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({ tabId, fileRef, file_path, cont
         <webview
           key={pdfSrc}
           ref={webviewRef}
+          partition={PREVIEW_SESSION_PARTITION}
           src={pdfSrc}
           className='w-full h-full'
           style={{ display: 'inline-flex' }}

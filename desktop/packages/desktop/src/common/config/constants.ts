@@ -32,6 +32,16 @@ import { BROWSER_PARTITION, BUILTIN_MCP_SERVER_NAMES } from '@/common/platform/l
 export const BROWSER_SESSION_PARTITION = BROWSER_PARTITION;
 
 /**
+ * Session partition for local HTML and other preview surfaces.
+ *
+ * Preview pages are authored by the person or an agent and must not share the
+ * renderer's cookies, storage, or permissions. The main process installs a
+ * deny-by-default permission policy on this partition before the first preview
+ * webview is attached.
+ */
+export const PREVIEW_SESSION_PARTITION = 'persist:specjev-preview';
+
+/**
  * 内置浏览器 MCP 的注册名。
  *
  * 放在 common 的理由和上面一样，而且更强：主进程用它注册这个内置 MCP，渲染进程用它

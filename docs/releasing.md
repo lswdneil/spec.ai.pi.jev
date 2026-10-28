@@ -12,7 +12,7 @@ For maintainers. spec.jev ships two things, versioned separately:
 | `ci.yml` | Every push to `main` and every pull request | `npm run check` and the tests; the app's lint, format, i18n, type and unit checks; MCP conformance |
 | `windows-tests.yml`, `windows-permission.yml` | Pushes and pull requests | The kernel's and the app's unit tests on Windows; the startup chain and a permission round trip |
 | `npm.yml` | Pushes to `main` that touch the harness, and `spec.jev-v*` tags | Builds and packs `spec.jev`, installs the tarball and runs it on Linux (Node 22.19) and Windows x64; keeps the tarball as an artifact; on a tag, publishes it to npm |
-| `desktop.yml` | Pushes to `main` that touch `desktop/`, and `v*` tags | Packs this commit's spec.jev, builds the app for Windows x64 and Linux x64 (deb), and holds a real conversation in each built app; on a tag, publishes the release |
+| `desktop.yml` | Pull requests, pushes to `main`, and `v*` tags that touch the desktop app or the bundled harness inputs | Packs this commit's spec.jev, builds the app for Windows x64 and Linux x64 (deb), and holds a real conversation in each built app; on a tag, publishes the release |
 | `npm-audit.yml` | Daily | Audits the dependencies |
 | `model-catalog.yml` | Weekly | Regenerates the model catalog CI builds from and opens a pull request with the checks started on it |
 
@@ -42,9 +42,11 @@ Releases stay pre-releases while spec.jev is 0.x.
 
 0.1.x has no macOS build, so there are no macOS signing or notarization secrets.
 
-Windows code signing is optional until the certificate exists. Add these repository secrets and the Windows build signs the installer:
+Tagged Windows builds are release/update inputs and require a valid Authenticode signature. The build fails closed, and the release is not published, unless these repository secrets contain a trusted Windows code-signing certificate:
 
 - `WINDOWS_CERTIFICATE_BASE64`: the `.pfx` file, base64 encoded.
 - `WINDOWS_CERTIFICATE_PASSWORD`: its password.
 
-Without them the build stays unsigned and the release notes say SmartScreen will warn. Linux deb packages ship with `SHA256SUMS`.
+The certificate must include the Code Signing extended key usage and be trusted by Windows; the build checks both `spec.jev.exe` and the installer with `Get-AuthenticodeSignature`. Pull-request and branch builds may remain unsigned, but those packaged apps do not enable auto-update and use the manual installer path.
+
+Linux deb packages are not Authenticode-signed. Linux never uses the restart updater: the app downloads the `.deb`, and the person installs it explicitly. `SHA256SUMS` is published with every desktop release.

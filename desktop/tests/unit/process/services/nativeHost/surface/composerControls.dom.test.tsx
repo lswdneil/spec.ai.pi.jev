@@ -9,6 +9,7 @@ import { emptyView, reduceAll, type PiCommand, type PiRecord } from '@/common/ut
 import { useConversationContextSafe } from '@/renderer/hooks/context/ConversationContext';
 import { useMessageList } from '@/renderer/pages/conversation/Messages/hooks';
 import NativeComposer from '@/renderer/pages/native/components/NativeComposer';
+import { clearNativeComposerDrafts } from '@/renderer/pages/native/hooks/useNativeComposerDraft';
 import { useNativeConversation } from '@/renderer/pages/native/hooks/useNativeConversation';
 import { NativeClientContext } from '@/renderer/pages/native/utils/nativeClient';
 import enAgent from '@/renderer/services/i18n/locales/en-US/agent.json';
@@ -106,6 +107,7 @@ vi.mock('@/renderer/components/chat/SendBox', () => ({
 
 afterEach(() => {
   cleanup();
+  clearNativeComposerDrafts();
   warning.mockClear();
   mention.items = [];
 });
@@ -130,12 +132,13 @@ void i18n.init({
 
 const Harness: React.FC<{ id: string }> = ({ id }) => <NativeComposer conversation={useNativeConversation(id)} />;
 
-async function mount(host: FakeHost, id = 'c1') {
+async function mount(host: FakeHost, id = 'c1', extra?: React.ReactNode) {
   const view = render(
     <I18nextProvider i18n={i18n}>
       <MemoryRouter>
         <NativeClientContext.Provider value={host.client}>
           <Harness id={id} />
+          {extra}
         </NativeClientContext.Provider>
       </MemoryRouter>
     </I18nextProvider>
@@ -269,6 +272,33 @@ describe('the native send box’s model, thinking level and permission mode', ()
     expect(chip()).toHaveAttribute('data-level', 'high');
   });
 
+  it('does not take focus back from another field when the model menu closes', async () => {
+    const host = createFakeHost();
+    host.add({ id: 'c1' });
+    host.answer((_id, command) => {
+      if (command.type === 'get_available_models') {
+        return { ok: true, data: { models: [{ provider: 'e2e', id: 'one', name: 'One' }] } };
+      }
+      if (command.type === 'get_available_thinking_levels') return { ok: true, data: { levels: ['off'] } };
+      return { ok: true, data: undefined };
+    });
+    await mount(host, 'c1', <input data-testid='outside-composer-input' />);
+
+    fireEvent.click(screen.getByTestId('native-model-pill'));
+    await waitFor(() => expect(screen.getAllByTestId('composer-model-option')).toHaveLength(1));
+    const outside = screen.getByTestId('outside-composer-input');
+    fireEvent.pointerDown(outside);
+    fireEvent.mouseDown(outside);
+    fireEvent.click(outside);
+    outside.focus();
+    fireEvent.pointerUp(outside);
+    fireEvent.mouseUp(outside);
+
+    await act(async () => {});
+    expect(outside).toHaveFocus();
+    expect(screen.getByTestId('native-send-input')).not.toHaveFocus();
+  });
+
   it('waits for the run to end before a model switch', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1' });
@@ -308,6 +338,58 @@ describe('the native send box’s model, thinking level and permission mode', ()
 });
 
 describe('the native send box’s commands, mentions and attachments', () => {
+  it('restores the draft, mentions and attachments after A -> B -> A', async () => {
+    const host = createFakeHost();
+    host.add({ id: 'c1', cwd: '/work/project' });
+    host.add({ id: 'c2', cwd: '/work/project' });
+    const ConversationComposer: React.FC<{ id: string }> = ({ id }) => {
+      const conversation = useNativeConversation(id);
+      return <NativeComposer conversation={conversation} />;
+    };
+    const KeyedHarness: React.FC<{ id: string }> = ({ id }) => <ConversationComposer key={id} id={id} />;
+    const page = (id: string) => (
+      <I18nextProvider i18n={i18n}>
+        <MemoryRouter>
+          <NativeClientContext.Provider value={host.client}>
+            <KeyedHarness id={id} />
+          </NativeClientContext.Provider>
+        </MemoryRouter>
+      </I18nextProvider>
+    );
+    const view = render(page('c1'));
+    await waitFor(() => expect(host.calls.some((call) => call.method === 'open' && call.id === 'c1')).toBe(true));
+
+    type('draft in A');
+    mention.items = [
+      {
+        path: '/work/project/src/a.ts',
+        name: 'a.ts',
+        isFile: true,
+        relativePath: 'src/a.ts',
+        chatRef: { kind: 'local', path: '/work/project/src/a.ts' },
+      },
+    ];
+    fireEvent.click(screen.getByTestId('mention'));
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('native-attach-input'), {
+        target: { files: [new File(['x'], 'shot.png', { type: 'image/png' })] },
+      });
+    });
+    await waitFor(() => expect(screen.getAllByTestId('native-attachment')).toHaveLength(1));
+
+    view.rerender(page('c2'));
+    await waitFor(() => expect(host.calls.some((call) => call.method === 'open' && call.id === 'c2')).toBe(true));
+    expect(screen.getByTestId('native-send-input')).toHaveValue('');
+
+    view.rerender(page('c1'));
+    await waitFor(() =>
+      expect(host.calls.filter((call) => call.method === 'open' && call.id === 'c1')).toHaveLength(2)
+    );
+    expect(screen.getByTestId('native-send-input')).toHaveValue('draft in A');
+    expect(box()).toHaveAttribute('data-pending', 'true');
+    expect(screen.getAllByTestId('native-attachment')).toHaveLength(1);
+  });
+
   it('offers pi’s slash commands, asked when a command is started and again whenever a host runs', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1' });

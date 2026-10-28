@@ -5,6 +5,7 @@
  */
 export * from './presentation.ts';
 export * from './records.ts';
+export * from './redact.ts';
 export * from './reducer.ts';
 export * from './settings.ts';
 export * from './view.ts';

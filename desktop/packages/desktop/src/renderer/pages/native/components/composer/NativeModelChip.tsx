@@ -71,18 +71,9 @@ const NativeModelChip: React.FC<{
       });
   const disabled = busy || switching;
 
-  // The menu took the keyboard; a person who closes it, or picks a model, expects the caret back in the message.
-  const focusComposer = () => {
-    requestAnimationFrame(() => {
-      const input = document.querySelector<HTMLTextAreaElement>('[data-testid="native-send-input"]');
-      if (input && !input.disabled) input.focus();
-    });
-  };
-
   const close = () => {
     setVisible(false);
     setQuery('');
-    focusComposer();
   };
 
   const droplist =
@@ -157,7 +148,6 @@ const NativeModelChip: React.FC<{
         setVisible(open);
         if (!open) {
           setQuery('');
-          focusComposer();
         }
       }}
       droplist={droplist}

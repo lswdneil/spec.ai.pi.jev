@@ -7,8 +7,9 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { IMessageAcpToolCall } from '@/common/chat/chatLib';
+import type { IMessageAcpTerminalOutput, IMessageAcpToolCall } from '@/common/chat/chatLib';
 import type { FileChangesPanelProps } from '@/renderer/components/base/FileChangesPanel';
+import MessageAcpTerminalOutput from '@/renderer/pages/conversation/Messages/acp/MessageAcpTerminalOutput';
 import MessageAcpToolCall from '@/renderer/pages/conversation/Messages/acp/MessageAcpToolCall';
 
 const mockDownloadFileFromPath = vi.fn().mockResolvedValue(undefined);
@@ -402,5 +403,30 @@ describe('MessageAcpToolCall image output', () => {
     );
 
     expect(screen.getByTestId('file-changes-panel')).toBeInTheDocument();
+  });
+});
+
+describe('MessageAcpTerminalOutput layout', () => {
+  it('keeps one long unbroken token inside the wrapping tool-output constraint', () => {
+    const token = `token-${'x'.repeat(500)}`;
+    const message: IMessageAcpTerminalOutput = {
+      id: 'terminal-1',
+      msg_id: 'terminal-1',
+      conversation_id: 'conv-1',
+      type: 'acp_terminal_output',
+      content: {
+        terminal_id: 'term-1',
+        command: 'node -e "process.stdout.write(longToken)"',
+        output: token,
+        truncated: false,
+        exit_status: { exit_code: 0 },
+      },
+    };
+
+    render(<MessageAcpTerminalOutput message={message} />);
+
+    const output = screen.getByTestId('terminal-card-output');
+    expect(output).toHaveTextContent(token);
+    expect(output).toHaveClass('sv-acp-tool-output');
   });
 });

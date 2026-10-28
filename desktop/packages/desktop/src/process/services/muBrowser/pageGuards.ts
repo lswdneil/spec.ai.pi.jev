@@ -56,6 +56,7 @@ export function hardenAgentSession(
   });
   agentSession.setPermissionCheckHandler(() => false);
   agentSession.setDevicePermissionHandler(() => false);
+  agentSession.setDisplayMediaRequestHandler((_request, callback) => callback({}));
   // The local disk does not exist for this partition, however a navigation to it was started.
   agentSession.protocol.handle('file', () => new Response(null, { status: 403 }));
   agentSession.on('will-download', (event, item, contents) => {

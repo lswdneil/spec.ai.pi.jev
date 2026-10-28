@@ -76,6 +76,35 @@ describe('maskSecrets', () => {
     expect(maskSecrets(`-----BEGIN PUBLIC KEY-----\n${body}\n-----END PUBLIC KEY-----`)).toContain(body);
   });
 
+  it('masks credentials in headers, cookies, key/value pairs, and URLs', () => {
+    const key = `sk-proj-${'A1b2C3d4'.repeat(4)}`;
+    const text = [
+      'Authorization: Bearer bearer-secret-value',
+      'Proxy-Authorization: Basic dXNlcjpwYXNzd29yZA==',
+      'Cookie: session=cookie-secret; theme=dark',
+      'OPENAI_API_KEY=env-secret',
+      `https://proxy-user:url-secret@example.com/v1?api_key=query-secret`,
+      key,
+    ].join('\n');
+    const masked = maskSecrets(text);
+    for (const secret of [
+      'bearer-secret-value',
+      'dXNlcjpwYXNzd29yZA==',
+      'cookie-secret',
+      'env-secret',
+      'url-secret',
+      'query-secret',
+      'A1b2C3d4A1b2C3d4A1b2C3d4A1b2C3d4',
+    ])
+      expect(masked).not.toContain(secret);
+    expect(masked).toContain('Authorization: Bearer ••••');
+    expect(masked).toContain('Proxy-Authorization: Basic ••••');
+    expect(masked).toContain('Cookie: ••••');
+    expect(masked).toContain('OPENAI_API_KEY=••••');
+    expect(masked).toContain('https://proxy-user:••••@example.com');
+    expect(masked).toContain('sk-proj-••••');
+  });
+
   it('gives a message that opens with a private key the header as its title, and nothing of the key', () => {
     const body = 'A1b2C3d4E5f6G7h8I9j0K1l2M3n4';
     const title = clip(`-----BEGIN OPENSSH PRIVATE KEY----- b3BlbnNzaC1rZXktdjEAAAAABG5v${body} ${body}`);

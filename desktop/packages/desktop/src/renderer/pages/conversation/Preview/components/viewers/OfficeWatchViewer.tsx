@@ -5,6 +5,7 @@
  */
 
 import { ipcBridge } from '@/common';
+import { PREVIEW_SESSION_PARTITION } from '@/common/config/constants';
 import type { ChatFileRef } from '@/common/types/chatFile';
 import { getBaseUrl, isBackendHttpError } from '@/common/adapter/httpBridge';
 import WebviewHost from '@/renderer/components/media/WebviewHost';
@@ -327,7 +328,7 @@ const OfficeWatchViewer: React.FC<OfficeWatchViewerProps> = ({ docType, fileRef,
   // Electron: use <webview> via WebviewHost for full Electron integration.
   // Web server mode: use <iframe> since <webview> is Electron-only.
   if (isElectronDesktop()) {
-    return <WebviewHost url={watchUrl} className='bg-bg-1' />;
+    return <WebviewHost url={watchUrl} className='bg-bg-1' partition={PREVIEW_SESSION_PARTITION} />;
   }
   return <iframe src={watchUrl} className='w-full h-full border-0 bg-bg-1' title={t(IFRAME_TITLE_KEYS[docType])} />;
 };

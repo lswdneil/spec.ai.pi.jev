@@ -54,6 +54,22 @@ jobs:
       - name: mu unit tests
         run: bunx vitest run tests/unit/kyrn
 
+      # The packaged desktop smoke run covers the full app. These focused tests
+      # keep Windows-specific composer, IME, delete/rename, and session-path
+      # regressions visible before that slower build starts.
+      - name: Native composer and session regressions
+        run: >-
+          bunx vitest run
+          tests/unit/process/services/nativeHost/surface/composer.dom.test.tsx
+          tests/unit/process/services/nativeHost/surface/headerRename.dom.test.tsx
+          tests/unit/process/services/nativeHost/surface/screen.dom.test.tsx
+          tests/unit/process/services/nativeHost/sessions/readSession.test.ts
+          tests/unit/process/services/nativeHost/sessions/sessionPaths.test.ts
+          tests/unit/process/services/nativeHost/conversations/NativeConversations.test.ts
+          tests/unit/renderer/conversation/composer/useCompositionInput.dom.test.tsx
+          tests/unit/renderer/conversation/useNativeComposerDraft.dom.test.tsx
+          tests/unit/renderer/conversation/useNativeComposerFocus.dom.test.tsx
+
   harness:
     name: Windows · judgment layer tests
     runs-on: windows-2022

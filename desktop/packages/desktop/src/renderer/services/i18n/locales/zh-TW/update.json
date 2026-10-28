@@ -25,7 +25,8 @@
   "installerReason": {
     "linux": "在 Linux 上，spec.jev 無法自行安裝更新：下載安裝檔，開啟它來安裝。",
     "unpackaged": "這個 spec.jev 無法自行安裝更新：下載安裝檔，開啟它來安裝。",
-    "autoUpdateFailed": "可以下載安裝檔來更新。"
+    "autoUpdateFailed": "可以下載安裝檔來更新。",
+    "unsigned": "此版本未經程式碼簽署，無法自動更新。請下載安裝程式並手動安裝。"
   },
   "downloadInstaller": "下載安裝檔",
   "openReleasePage": "開啟發布頁面",

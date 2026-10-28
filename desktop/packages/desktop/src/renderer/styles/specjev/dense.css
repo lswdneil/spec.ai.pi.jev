@@ -348,6 +348,19 @@ html[data-sv-ui='dense'] .sv-dense-code-block {
   background: var(--sv-surface-2);
   font-size: 10.5px;
   line-height: 1.6;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* ACP tool output stays inside its card; code that needs horizontal scrolling
+   remains scrollable because its `white-space` still forbids wrapping. */
+.sv-acp-tool-output {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 html[data-sv-ui='dense'] .settings-page-title {

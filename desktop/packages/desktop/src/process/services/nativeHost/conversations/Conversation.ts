@@ -167,6 +167,10 @@ export type ConversationOwner = {
   view(file: string): Promise<SessionViewRead>;
   /** A session file read whole (readSessionFile). */
   read(file: string): Promise<SessionRead>;
+  /** The canonical path of a valid session file under spec.jev's roots, or undefined when it is gone. */
+  validateSession(file: string, cwd: string): Promise<string | undefined>;
+  /** Puts a removed conversation's session file away (the bin, in the app). */
+  trash(file: string): Promise<void>;
   /** What spec.jev gets in its environment for this conversation, besides the app's (hostEnv.ts). */
   env(conversation: Conversation): Record<string, string>;
   /** The model new sessions start on, for a host that started without one. */
@@ -202,6 +206,8 @@ export type ConversationInit = {
   /** The session file of the session this one was forked or cloned from. */
   forkedFrom?: string;
 };
+
+export type ConversationLifecycle = 'active' | 'closing' | 'removing' | 'removed';
 
 export class Conversation {
   id: string;
@@ -239,6 +245,9 @@ export class Conversation {
   private leaf: string | null | undefined;
   private running = false;
   private inFlight = 0;
+  /** One operation at a time for the work that changes the host or its session file. */
+  private operations: Promise<void> = Promise.resolve();
+  private lifecycle: ConversationLifecycle = 'active';
   /** Prompts in flight that go again when pi refuses them for a locked store. */
   private lockedRetries = 0;
   private finding: Promise<void> | undefined;
@@ -275,6 +284,10 @@ export class Conversation {
     return this.current;
   }
 
+  get lifecycleState(): ConversationLifecycle {
+    return this.lifecycle;
+  }
+
   describe(): NativeConversation {
     return {
       id: this.id,
@@ -305,7 +318,7 @@ export class Conversation {
 
   /** What the list read of the session file, for a conversation with no host (the command line may have used it). */
   refresh(stored: StoredSession): void {
-    if (this.live || stored.id !== this.id) return;
+    if (this.lifecycle !== 'active' || this.live || stored.id !== this.id) return;
     this.file = stored.file;
     this.name = stored.name;
     this.firstText = stored.firstText;
@@ -339,6 +352,14 @@ export class Conversation {
 
   /** Sends a command to pi, starting the host first when none runs. */
   async request(command: PiCommand): Promise<unknown> {
+    this.refuseRemoval();
+    return this.serial(async () => {
+      this.refuseRemoval();
+      return this.requestNow(command);
+    });
+  }
+
+  private async requestNow(command: PiCommand): Promise<unknown> {
     this.inFlight += 1;
     this.owner.touched(this);
     try {
@@ -357,6 +378,7 @@ export class Conversation {
 
   /** Answers a dialog pi waits on. */
   respond(dialogId: string, answer: DialogAnswer): void {
+    this.refuseRemoval(true);
     if (!this.host || !this.ready) throw new NativeHostError('closed', 'No spec.jev runs for this conversation');
     this.host.respondToDialog(dialogId, answer);
     this.owner.touched(this);
@@ -369,20 +391,29 @@ export class Conversation {
    * its host for it: pi keeps the name until it writes the file.
    */
   async rename(name: string): Promise<void> {
+    this.refuseRemoval();
+    await this.serial(async () => {
+      this.refuseRemoval();
+      await this.renameNow(name);
+    });
+  }
+
+  private async renameNow(name: string): Promise<void> {
     const clean = cleanName(name);
     const file = this.file;
     if (this.live || !file || !(await exists(file))) {
-      await this.request({ type: 'set_session_name', name: clean });
+      await this.requestNow({ type: 'set_session_name', name: clean });
       return;
     }
     this.inFlight += 1;
     try {
-      const read = await this.owner.read(file);
-      // A host that started meanwhile read the file before this entry: pi names the session instead.
-      if (this.live) {
-        await this.request({ type: 'set_session_name', name: clean });
+      const valid = await this.owner.validateSession(file, this.cwd);
+      if (!valid) {
+        await this.requestNow({ type: 'set_session_name', name: clean });
         return;
       }
+      this.file = valid;
+      const read = await this.owner.read(valid);
       const entry = {
         type: 'session_info',
         id: newEntryId(new Set(read.entries.map((each) => each.id))),
@@ -390,8 +421,8 @@ export class Conversation {
         timestamp: new Date(this.owner.now()).toISOString(),
         name: clean,
       };
-      const lead = (await endsLine(file, read.size)) ? '' : '\n';
-      await appendFile(file, `${lead}${JSON.stringify(entry)}\n`);
+      const lead = (await endsLine(valid, read.size)) ? '' : '\n';
+      await appendFile(valid, `${lead}${JSON.stringify(entry)}\n`);
       this.name = clean || undefined;
       this.changed();
     } finally {
@@ -400,8 +431,43 @@ export class Conversation {
     }
   }
 
-  /** Ends the host, if one runs or is starting. The conversation stays, with its session file. */
+  /**
+   * Ends the host, if one runs or is starting. The conversation stays, with its session file. Its commands wait for this
+   * to finish, then may start a host again.
+   */
   async end(): Promise<void> {
+    this.refuseRemoval();
+    if (this.lifecycle === 'active') this.lifecycle = 'closing';
+    try {
+      await this.serial(() => this.endNow());
+    } finally {
+      if (this.lifecycle === 'closing') this.lifecycle = 'active';
+    }
+  }
+
+  /**
+   * Removes the conversation's session file after commands already in flight finish. New commands are refused from the
+   * moment removal starts; a file outside spec.jev's roots is never moved.
+   */
+  async remove(): Promise<void> {
+    this.refuseRemoval();
+    this.lifecycle = 'removing';
+    let removed = false;
+    try {
+      await this.serial(async () => {
+        await this.validSessionFile(this.file);
+        await this.endNow();
+        const file = await this.validSessionFile(this.file);
+        if (file) await this.owner.trash(file);
+        this.lifecycle = 'removed';
+        removed = true;
+      });
+    } finally {
+      if (!removed) this.lifecycle = 'active';
+    }
+  }
+
+  private async endNow(): Promise<void> {
     this.generation += 1;
     const host = this.host;
     const starting = this.starting;
@@ -416,6 +482,28 @@ export class Conversation {
     // A start that has no host yet gives it up as soon as it has one (launch).
     if (starting) await starting.catch((): void => {});
     if (!this.live && this.current.phase !== 'idle') this.setStatus({ phase: 'idle' });
+  }
+
+  private async validSessionFile(file: string | undefined): Promise<string | undefined> {
+    return file ? this.owner.validateSession(file, this.cwd) : undefined;
+  }
+
+  private refuseRemoval(allowRemoving = false): void {
+    if (this.lifecycle === 'removed' || (this.lifecycle === 'removing' && !allowRemoving))
+      throw new NativeHostError(
+        'closed',
+        this.lifecycle === 'removed' ? 'The conversation was removed' : 'The conversation is being removed'
+      );
+  }
+
+  /** Runs work after the work queued before it, whether that succeeded or failed. */
+  private serial<T>(work: () => T | Promise<T>): Promise<T> {
+    const next = this.operations.then(work, work);
+    this.operations = next.then(
+      (): void => {},
+      (): void => {}
+    );
+    return next;
   }
 
   private hostSnapshot(): NativeSnapshot {
@@ -460,12 +548,14 @@ export class Conversation {
   }
 
   private async launch(): Promise<ConversationHost> {
+    this.refuseRemoval();
     const generation = this.generation;
     // A session of a deleted worktree or a temporary folder can be read, but not resumed: pi's process would stop before
     // it started, saying nothing of why. Said before another conversation's host is ended to make room for it.
     if (!(await isFolder(this.cwd)))
       throw new NativeHostError('no-folder', `The project folder no longer exists: ${this.cwd}`);
     await this.owner.makeRoom(this);
+    this.refuseRemoval();
     if (generation !== this.generation) throw closed();
     this.setStatus({ phase: 'starting' });
     this.changed();
@@ -482,10 +572,11 @@ export class Conversation {
       this.setStatus({ phase: 'idle' });
       throw error;
     }
-    if (generation !== this.generation) {
+    if (generation !== this.generation || this.lifecycle === 'removing' || this.lifecycle === 'removed') {
       this.setStatus({ phase: 'idle' });
       await host.dispose();
-      throw closed();
+      if (generation !== this.generation) throw closed();
+      this.refuseRemoval();
     }
     this.host = host;
     this.ready = false;

@@ -1,5 +1,8 @@
 import { asList, asNumber, asObject, asText, type JsonObject } from '../../../../common/utils/nativeHost/records.ts';
+import { maskSecrets } from '../../../../common/utils/nativeHost/redact.ts';
 import { withoutHostPreamble } from '../../../../common/utils/nativeHost/words.ts';
+
+export { maskSecrets } from '../../../../common/utils/nativeHost/redact.ts';
 
 /**
  * What the conversation list shows of a pi session, from lines of its file (session-format.md in the harness): the
@@ -99,32 +102,6 @@ export function addEntry(
  * handle, not a file) at the start of a message: not what they said.
  */
 const LEADING_MENTIONS = /^(?:@(?:"[^"]*"|'[^']*'|[^\s"']*[/.]\S*)\s+)+/;
-
-/**
- * Keys and tokens as tools hand them out (and private keys as ssh does), each with the part to keep. A title is shown in the sidebar, the palette, a
- * notification and a screenshot, so a message that opens with a pasted token must not put the token there. (A `\` may
- * sit before the `_` of a token copied out of markdown.)
- */
-const SECRETS: readonly (readonly [RegExp, string])[] = [
-  // A private key pasted in: everything after its header, to the end line or, when there is none, to the end of the text.
-  [
-    /(-----BEGIN [A-Z0-9 ]*PRIVATE KEY(?: BLOCK)?-----)[\s\S]*?(?:-----END [A-Z0-9 ]*PRIVATE KEY(?: BLOCK)?-----|$)/g,
-    '$1',
-  ],
-  [/\b(gh[pousr]\\?_)[A-Za-z0-9]{20,}/g, '$1'],
-  [/\b(github_pat_)[A-Za-z0-9_]{20,}/g, '$1'],
-  [/\b(sk-(?:ant-|proj-|or-v1-)?)(?=[A-Za-z_-]*\d)[A-Za-z0-9_-]{20,}/g, '$1'],
-  [/\b(AIza)[0-9A-Za-z_-]{30,}/g, '$1'],
-  [/\b(AKIA)[0-9A-Z]{16}\b/g, '$1'],
-  [/\b(xox[abprs]-)[A-Za-z0-9-]{10,}/g, '$1'],
-  [/\b(eyJ)[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/g, '$1'],
-  [/\b(Bearer\s+)[A-Za-z0-9._~+/=-]{20,}/gi, '$1'],
-];
-
-/** The text with the tokens in it masked: what a token starts with stays, the rest becomes `••••`. */
-export function maskSecrets(text: string): string {
-  return SECRETS.reduce((masked, [pattern, keep]) => masked.replace(pattern, `${keep}••••`), text);
-}
 
 /**
  * The start of a message as a title: its first line with text, spaces collapsed, at most TITLE_LENGTH characters. A

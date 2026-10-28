@@ -6,6 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { fromEntries, type PiCommand } from '@/common/utils/nativeHost';
 import NativeComposer from '@/renderer/pages/native/components/NativeComposer';
+import { clearNativeComposerDrafts } from '@/renderer/pages/native/hooks/useNativeComposerDraft';
 import { showsContextRing } from '@/renderer/pages/native/utils/composerLines';
 import { useNativeConversation } from '@/renderer/pages/native/hooks/useNativeConversation';
 import { NativeClientContext } from '@/renderer/pages/native/utils/nativeClient';
@@ -66,7 +67,10 @@ vi.mock('@/renderer/components/chat/SendBox', () => ({
   ),
 }));
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  clearNativeComposerDrafts();
+});
 
 const i18n = createInstance();
 void i18n.init({

@@ -94,6 +94,7 @@ const urls = (text) =>
 		.entries.map(urlOf);
 const urlOf = (entry) => scalarValue(entry.find((item) => item.key === "url").raw);
 const sha512 = (contents) => createHash("sha512").update(contents).digest("base64");
+const portablePaths = (text) => text.replaceAll("\\", "/");
 
 // How electron-updater 6.8 picks its file from a feed. macOS (MacUpdater.doDownloadUpdate): on an arm64 Mac the
 // arm64 files if there are any, elsewhere the others, then the first zip. Windows (findFile): the installer whose name
@@ -171,7 +172,7 @@ test("refuses feeds of different versions, and writes nothing", (t) => {
 
 	const result = run("--out", "updates/latest-mac.yml", x64, arm64);
 	assert.equal(result.status, 1);
-	assert.match(result.stderr, /arm64\/latest-mac\.yml is for version 0\.1\.4, .*x64\/latest-mac\.yml for 0\.1\.3/);
+	assert.match(portablePaths(result.stderr), /arm64\/latest-mac\.yml is for version 0\.1\.4, .*x64\/latest-mac\.yml for 0\.1\.3/);
 	assert.equal(existsSync(join(root, "updates/latest-mac.yml")), false);
 });
 

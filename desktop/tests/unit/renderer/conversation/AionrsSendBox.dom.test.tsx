@@ -21,6 +21,7 @@ const {
   clearFilesMock,
   draftMutateMock,
   draftContentRef,
+  draftAtPathRef,
   runtimeViewIsProcessingRef,
 } = vi.hoisted(() => ({
   ensureConversationRuntimeMock: vi.fn().mockResolvedValue({ recovered: false, config_options: [], runtime: null }),
@@ -36,6 +37,7 @@ const {
   clearFilesMock: vi.fn(),
   draftMutateMock: vi.fn(),
   draftContentRef: { current: '' },
+  draftAtPathRef: { current: [] as Array<{ path: string; name: string; isFile: boolean }> },
   runtimeViewIsProcessingRef: { current: false },
 }));
 
@@ -65,6 +67,7 @@ vi.mock('@/renderer/components/chat/SendBox', () => ({
     topRightOverlay,
     onAddToDraft,
     addToDraftDisabled,
+    selectedWorkspaceItems,
     selectedSessions,
     onSelectedSessionsChange,
     crossSessionEnabled,
@@ -81,6 +84,7 @@ vi.mock('@/renderer/components/chat/SendBox', () => ({
     topRightOverlay?: React.ReactNode;
     onAddToDraft?: () => void;
     addToDraftDisabled?: boolean;
+    selectedWorkspaceItems?: Array<{ path: string }>;
     selectedSessions?: Array<{ id: string }>;
     onSelectedSessionsChange?: (sessions: Array<{ id: string }>) => void;
     crossSessionEnabled?: boolean;
@@ -93,6 +97,7 @@ vi.mock('@/renderer/components/chat/SendBox', () => ({
       sendDisabled,
       onAddToDraft,
       addToDraftDisabled,
+      selectedWorkspaceItems,
       selectedSessions,
       onSelectedSessionsChange,
       crossSessionEnabled,
@@ -162,7 +167,7 @@ vi.mock('@/renderer/hooks/chat/useAutoTitle', () => ({
 vi.mock('@/renderer/hooks/chat/useSendBoxDraft', () => ({
   getSendBoxDraftHook: () => () => ({
     data: {
-      atPath: [],
+      atPath: draftAtPathRef.current,
       uploadFile: [],
       content: draftContentRef.current,
     },
@@ -293,9 +298,12 @@ const modelSelection = {
 describe('AionrsSendBox', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    sessionStorage.clear();
     ensureConversationRuntimeMock.mockResolvedValue({ recovered: false, config_options: [], runtime: null });
+    sendMessageInvokeMock.mockResolvedValue(undefined);
     useTeamPermissionMock.mockReturnValue(null);
     draftContentRef.current = '';
+    draftAtPathRef.current = [];
     runtimeViewIsProcessingRef.current = false;
   });
 
@@ -376,6 +384,39 @@ describe('AionrsSendBox', () => {
     });
   });
 
+  it('keeps every initial-message field in sessionStorage when the send fails', async () => {
+    const payload = {
+      input: 'start here',
+      files: [
+        { kind: 'local', path: '/tmp/one.txt' },
+        { kind: 'upload', path: '/tmp/two.txt' },
+      ],
+    };
+    sessionStorage.setItem('aionrs_initial_message_conv-1', JSON.stringify(payload));
+    sendMessageInvokeMock.mockRejectedValue(new Error('send failed'));
+
+    render(<AionrsSendBox conversation_id='conv-1' modelSelection={modelSelection} />);
+
+    await waitFor(() => expect(sendMessageInvokeMock).toHaveBeenCalledTimes(1));
+    expect(sendMessageInvokeMock).toHaveBeenCalledWith(
+      expect.objectContaining({ input: 'start here', files: payload.files })
+    );
+    expect(sessionStorage.getItem('aionrs_initial_message_conv-1')).toBe(JSON.stringify(payload));
+  });
+
+  it('clears the initial-message retry source after the send is accepted', async () => {
+    sessionStorage.setItem(
+      'aionrs_initial_message_conv-1',
+      JSON.stringify({ input: 'start here', files: [{ kind: 'local', path: '/tmp/one.txt' }] })
+    );
+    sendMessageInvokeMock.mockResolvedValue({ turn_id: 'turn-1', runtime: null, msg_id: 'msg-1' });
+
+    render(<AionrsSendBox conversation_id='conv-1' modelSelection={modelSelection} />);
+
+    await waitFor(() => expect(sendMessageInvokeMock).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(sessionStorage.getItem('aionrs_initial_message_conv-1')).toBeNull());
+  });
+
   it('suppresses visible error and preserves runtime gate for active-turn busy conflicts', async () => {
     sendMessageInvokeMock.mockRejectedValue(
       new BackendHttpError({
@@ -414,6 +455,32 @@ describe('AionrsSendBox', () => {
 
     await waitFor(() => expect(Message.error).toHaveBeenCalledWith('acp.send.failed'));
     expect(markSendFailedMock).toHaveBeenCalledWith({ kind: 'ordinary', reason: 'workspace failed' });
+  });
+
+  it('keeps attachments and session mentions when an ordinary send rejects', async () => {
+    draftAtPathRef.current = [{ path: '/tmp/keep.txt', name: 'keep.txt', isFile: true }];
+    sendMessageInvokeMock.mockRejectedValue(new Error('socket hang up'));
+
+    render(<AionrsSendBox conversation_id='conv-1' modelSelection={modelSelection} />);
+    await waitFor(() => expect(ensureConversationRuntimeMock).toHaveBeenCalledWith('conv-1'));
+
+    type SessionProps = {
+      onSelectedSessionsChange?: (sessions: Array<{ id: string }>) => void;
+      selectedSessions?: Array<{ id: string }>;
+      selectedWorkspaceItems?: Array<{ path: string }>;
+    };
+    const latestProps = (): SessionProps => sendBoxPropsSpy.mock.calls.at(-1)?.[0] as SessionProps;
+    await act(async () => {
+      latestProps().onSelectedSessionsChange?.([{ id: 'conv_target' }]);
+    });
+    await act(async () => {
+      screen.getByRole('button', { name: 'send' }).click();
+    });
+
+    await waitFor(() => expect(sendMessageInvokeMock).toHaveBeenCalledTimes(1));
+    expect(clearFilesMock).not.toHaveBeenCalled();
+    expect(latestProps().selectedWorkspaceItems?.map((item) => item.path)).toEqual(['/tmp/keep.txt']);
+    expect(latestProps().selectedSessions).toEqual([{ id: 'conv_target' }]);
   });
 
   it('passes teamRuntime.isActive and onFocus down to SendBox as active/onFocused', () => {

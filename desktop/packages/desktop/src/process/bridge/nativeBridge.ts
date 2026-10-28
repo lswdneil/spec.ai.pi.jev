@@ -2,6 +2,7 @@ import { app, shell } from 'electron';
 import { join } from 'node:path';
 import { nativeBridge, type NativeFailure, type NativeResult } from '../../common/kyrn/nativeBridge';
 import type { DialogAnswer, PiCommand, PiCommandType } from '../../common/utils/nativeHost/records';
+import { maskSecrets } from '../../common/utils/nativeHost/redact';
 import { muHome } from '../agent/kyrn/naming';
 import { isNativeHostEnabled, nativeHostReady, startNativeHost } from '../services/nativeHost';
 import { NativeHostError } from '../services/nativeHost/NativeHost';
@@ -22,10 +23,15 @@ import { sessionFolders } from '../services/nativeHost/sessions/folders';
 /** Why a call failed, as the renderer gets it: the manager's own kinds, and `failed` for anything unforeseen. */
 export function nativeFailure(error: unknown): NativeFailure {
   if (error instanceof NativeHostError)
-    return { ok: false, kind: error.kind, message: error.message, ...(error.stderr ? { stderr: error.stderr } : {}) };
-  if (error instanceof NativeRequestError) return { ok: false, kind: error.kind, message: error.message };
+    return {
+      ok: false,
+      kind: error.kind,
+      message: maskSecrets(error.message),
+      ...(error.stderr ? { stderr: maskSecrets(error.stderr) } : {}),
+    };
+  if (error instanceof NativeRequestError) return { ok: false, kind: error.kind, message: maskSecrets(error.message) };
   // A file the store could not read, a folder that went away: something failed on the way, with its own words.
-  return { ok: false, kind: 'failed', message: error instanceof Error ? error.message : String(error) };
+  return { ok: false, kind: 'failed', message: maskSecrets(error instanceof Error ? error.message : String(error)) };
 }
 
 async function answer<T>(work: () => T | Promise<T>): Promise<NativeResult<T>> {

@@ -475,10 +475,10 @@ Please check your local CLI tool authentication status`,
 
     const allFiles = collectChatFileRefs(uploadFile, atPath);
     const sessions = selectedSessions.length > 0 ? selectedSessions : undefined;
+    await executeCommand({ input: message, files: allFiles, sessions });
     clearFiles();
     setSelectedSessions([]);
     emitter.emit('acp.selected.file.clear');
-    await executeCommand({ input: message, files: allFiles, sessions });
   };
 
   // A command the app sends for the person (spec.jev's board switch): now when idle; while busy, the latest one waits

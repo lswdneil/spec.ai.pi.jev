@@ -14,6 +14,39 @@ import { parseEntry, readHeader, type SessionHeader } from './summary.ts';
  */
 
 const CHUNK_BYTES = 1024 * 1024;
+/** The largest file read whole. A view built from it must still fit the IPC limit (nativeBridge.ts). */
+export const MAX_SESSION_BYTES = 32 * 1024 * 1024;
+/** Large files stop being useful in the conversation view, and make every subsequent reducer step copy more data. */
+export const MAX_SESSION_ENTRIES = 20_000;
+/** One tool result can be large, but a single line this size is not a useful view. */
+export const MAX_SESSION_ENTRY_BYTES = 16 * 1024 * 1024;
+
+export type SessionReadLimits = {
+  bytes: number;
+  entries: number;
+  entryBytes: number;
+};
+
+const DEFAULT_LIMITS: SessionReadLimits = {
+  bytes: MAX_SESSION_BYTES,
+  entries: MAX_SESSION_ENTRIES,
+  entryBytes: MAX_SESSION_ENTRY_BYTES,
+};
+
+export class SessionTooLargeError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'SessionTooLargeError';
+  }
+}
+
+const tooLarge = (what: string, size: number, limit: number): SessionTooLargeError => {
+  const megabytes = (size / 1024 / 1024).toFixed(1);
+  const limitMegabytes = (limit / 1024 / 1024).toFixed(1);
+  return new SessionTooLargeError(
+    `The session ${what} is too large to open safely (${megabytes} MB; limit ${limitMegabytes} MB)`
+  );
+};
 
 export type SessionRead = {
   header?: SessionHeader;
@@ -26,10 +59,12 @@ export type SessionRead = {
   mtimeMs: number;
 };
 
-export async function readSessionFile(file: string): Promise<SessionRead> {
+export async function readSessionFile(file: string, options: Partial<SessionReadLimits> = {}): Promise<SessionRead> {
+  const limits = { ...DEFAULT_LIMITS, ...options };
   const handle = await open(file, 'r');
   try {
     const stats = await handle.stat();
+    if (stats.size > limits.bytes) throw tooLarge('file', stats.size, limits.bytes);
     const decoder = new StringDecoder('utf8');
     const chunk = Buffer.alloc(CHUNK_BYTES);
     const entries: JsonObject[] = [];
@@ -42,27 +77,47 @@ export async function readSessionFile(file: string): Promise<SessionRead> {
         header = readHeader(entry);
         if (header) return;
       }
-      if (entry && entry.type !== 'session') entries.push(entry);
+      if (entry && entry.type !== 'session') {
+        if (entries.length >= limits.entries)
+          throw new SessionTooLargeError(
+            `The session has too many entries to open safely (limit ${limits.entries.toLocaleString('en-US')})`
+          );
+        entries.push(entry);
+      }
     };
     // The start of a line that the chunks read so far have not ended.
-    const parts: string[] = [];
+    let partial = '';
+    let partialBytes = 0;
     let position = 0;
     for (;;) {
       // oxlint-disable-next-line no-await-in-loop -- one chunk at a time, so other work runs between them
       const { bytesRead } = await handle.read(chunk, 0, CHUNK_BYTES, position);
       if (bytesRead === 0) break;
       position += bytesRead;
+      if (position > limits.bytes) throw tooLarge('file', position, limits.bytes);
       const text = decoder.write(chunk.subarray(0, bytesRead));
       let start = 0;
       for (let newline = text.indexOf('\n'); newline >= 0; newline = text.indexOf('\n', start)) {
         const piece = text.slice(start, newline);
-        take(parts.length > 0 ? parts.splice(0).join('') + piece : piece);
+        const lineBytes = partialBytes + Buffer.byteLength(piece);
+        if (lineBytes > limits.entryBytes) throw tooLarge('entry', lineBytes, limits.entryBytes);
+        take(`${partial}${piece}`);
+        partial = '';
+        partialBytes = 0;
         start = newline + 1;
       }
-      if (start < text.length) parts.push(text.slice(start));
+      if (start < text.length) {
+        const rest = text.slice(start);
+        partial += rest;
+        partialBytes += Buffer.byteLength(rest);
+        if (partialBytes > limits.entryBytes) throw tooLarge('entry', partialBytes, limits.entryBytes);
+      }
     }
-    parts.push(decoder.end());
-    take(parts.join(''));
+    const tail = decoder.end();
+    partial += tail;
+    partialBytes += Buffer.byteLength(tail);
+    if (partialBytes > limits.entryBytes) throw tooLarge('entry', partialBytes, limits.entryBytes);
+    take(partial);
     const last = entries.findLast((entry) => typeof entry.id === 'string');
     return {
       ...(header ? { header } : {}),
@@ -93,16 +148,23 @@ const KEPT_VIEWS = 2;
 /** Reads session files into views, keeping the last few by the file's size and time. */
 export class SessionReader {
   private readonly kept = new Map<string, SessionViewRead>();
+  private readonly limits: Partial<SessionReadLimits>;
+
+  constructor(limits: Partial<SessionReadLimits> = {}) {
+    this.limits = limits;
+  }
 
   async view(file: string): Promise<SessionViewRead> {
     const stats = await stat(file);
+    const limit = this.limits.bytes ?? MAX_SESSION_BYTES;
+    if (stats.size > limit) throw tooLarge('file', stats.size, limit);
     const kept = this.kept.get(file);
     if (kept && kept.size === stats.size && kept.mtimeMs === stats.mtimeMs) {
       this.kept.delete(file);
       this.kept.set(file, kept);
       return kept;
     }
-    const read = await readSessionFile(file);
+    const read = await readSessionFile(file, this.limits);
     const result: SessionViewRead = {
       ...(read.header ? { header: read.header } : {}),
       view: fromEntries(read.entries),

@@ -5,7 +5,7 @@
  * A file without a path on this computer (text pasted as a file) cannot be attached, and says so.
  */
 import { Message } from '@/renderer/ui/toast';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { PiImage } from '@/common/utils/nativeHost';
 
@@ -59,9 +59,13 @@ export type NativeAttachments = {
   paths: () => string[];
 };
 
-export function useNativeAttachments(): NativeAttachments {
+export type AttachmentUpdate = NativeAttachment[] | ((current: NativeAttachment[]) => NativeAttachment[]);
+
+export function useNativeAttachments(
+  attachments: NativeAttachment[],
+  setAttachments: (change: AttachmentUpdate) => void
+): NativeAttachments {
   const { t } = useTranslation();
-  const [attachments, setAttachments] = useState<NativeAttachment[]>([]);
 
   const add = useCallback(
     async (files: readonly File[]) => {
@@ -75,11 +79,14 @@ export function useNativeAttachments(): NativeAttachments {
         return [...old, ...taken.filter((each) => each.kind === 'image' || !paths.has(each.path))];
       });
     },
-    [t]
+    [setAttachments, t]
   );
 
-  const remove = useCallback((id: string) => setAttachments((old) => old.filter((each) => each.id !== id)), []);
-  const clear = useCallback(() => setAttachments([]), []);
+  const remove = useCallback(
+    (id: string) => setAttachments((old) => old.filter((each) => each.id !== id)),
+    [setAttachments]
+  );
+  const clear = useCallback(() => setAttachments([]), [setAttachments]);
   const images = useCallback(
     (): PiImage[] =>
       attachments.flatMap((each) =>

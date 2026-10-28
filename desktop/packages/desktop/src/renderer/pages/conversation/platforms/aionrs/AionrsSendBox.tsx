@@ -60,7 +60,7 @@ import { Button } from '@/renderer/ui/button';
 import { Message } from '@/renderer/ui/toast';
 import { Tag } from '@/renderer/ui/tag';
 import { Brain, Lightning, MagicHat, Shield } from '@icon-park/react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { classifyConversationBusyError } from '../conversationBusyError';
 import { useAionrsMessage } from './useAionrsMessage';
@@ -169,6 +169,7 @@ const AionrsSendBox: React.FC<{
   const { markSendStarted, markSendAccepted, markSendFailed } = runtimeView;
 
   const { atPath, uploadFile, setAtPath, setUploadFile, content, setContent } = useSendBoxDraft(conversation_id);
+  const initialSendRef = useRef<string | null>(null);
 
   const handleContentChange = useCallback(
     (val: string) => {
@@ -369,15 +370,12 @@ const AionrsSendBox: React.FC<{
     if (!conversation_id || !current_model?.use_model) return;
 
     const storageKey = `aionrs_initial_message_${conversation_id}`;
-    const processedKey = `aionrs_initial_processed_${conversation_id}`;
 
     const processInitialMessage = async () => {
-      if (sessionStorage.getItem(processedKey)) return;
       const storedMessage = sessionStorage.getItem(storageKey);
       if (!storedMessage) return;
-
-      sessionStorage.setItem(processedKey, '1');
-      sessionStorage.removeItem(storageKey);
+      if (initialSendRef.current === storedMessage) return;
+      initialSendRef.current = storedMessage;
 
       try {
         const { input, files: initialFiles } = JSON.parse(storedMessage);
@@ -388,9 +386,12 @@ const AionrsSendBox: React.FC<{
           ? initialFiles.map((f: unknown) => (typeof f === 'string' ? uploadFileRef(f) : f)).filter(isChatFileRef)
           : [];
         await executeCommand({ input, files: initialRefs });
+        sessionStorage.removeItem(storageKey);
       } catch (error) {
+        if (sessionStorage.getItem(storageKey) === null) {
+          sessionStorage.setItem(storageKey, storedMessage);
+        }
         console.error('[AionrsSendBox] Failed to send initial message:', error);
-        sessionStorage.removeItem(processedKey);
       }
     };
 
@@ -419,10 +420,10 @@ const AionrsSendBox: React.FC<{
 
     const filesToSend = collectChatFileRefs(uploadFile, atPath);
     const sessions = selectedSessions.length > 0 ? selectedSessions : undefined;
+    await executeCommand({ input: message, files: filesToSend, sessions });
     clearFiles();
     setSelectedSessions([]);
     emitter.emit('aionrs.selected.file.clear');
-    await executeCommand({ input: message, files: filesToSend, sessions });
   };
 
   const [interrupting, setInterrupting] = useState(false);

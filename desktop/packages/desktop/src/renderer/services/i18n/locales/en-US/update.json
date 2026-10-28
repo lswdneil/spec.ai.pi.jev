@@ -25,7 +25,8 @@
   "installerReason": {
     "linux": "On Linux, spec.jev can't install updates by itself. Download the installer and open it.",
     "unpackaged": "This copy of spec.jev can't install updates by itself. Download the installer and open it.",
-    "autoUpdateFailed": "You can download the installer and update with it."
+    "autoUpdateFailed": "You can download the installer and update with it.",
+    "unsigned": "This build is not code-signed, so it cannot update automatically. Download and open the installer."
   },
   "downloadInstaller": "Download installer",
   "openReleasePage": "Open release page",

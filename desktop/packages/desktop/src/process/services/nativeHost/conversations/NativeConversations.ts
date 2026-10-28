@@ -1,13 +1,14 @@
 import { existsSync } from 'node:fs';
-import { stat } from 'node:fs/promises';
+import { realpath, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import type { NativeConversation, NativeSnapshot } from '../../../../common/kyrn/nativeBridge.ts';
 import type { DialogAnswer, PiCommand } from '../../../../common/utils/nativeHost/records.ts';
 import { NativeHostError } from '../NativeHost.ts';
 import { boundFile } from '../sessions/acpBindings.ts';
-import { insideSessionFolders, type SessionFolders } from '../sessions/folders.ts';
+import type { SessionFolders } from '../sessions/folders.ts';
 import { readSessionFile, SessionReader } from '../sessions/readSession.ts';
+import { InvalidSessionFileError, validateSessionFile } from '../sessions/sessionPaths.ts';
 import { SessionStore, type StoredSession } from '../sessions/SessionStore.ts';
 import { Conversation, type ConversationOwner } from './Conversation.ts';
 import { NativeRequestError } from './errors.ts';
@@ -107,6 +108,14 @@ export class NativeConversations implements NativeConversationsApi {
       startHost: options.startHost,
       view: (file) => this.reader.view(file),
       read: (file) => readSessionFile(file),
+      validateSession: (file, cwd) => this.validateSession(file, cwd),
+      trash: async (file) => {
+        try {
+          await this.trash(file);
+        } catch (error) {
+          if ((error as { code?: unknown }).code !== 'ENOENT') throw error;
+        }
+      },
       env: (conversation) =>
         env({
           desktopSession: conversation.desktopSession,
@@ -171,12 +180,15 @@ export class NativeConversations implements NativeConversationsApi {
 
   async request(id: string, command: PiCommand): Promise<unknown> {
     const conversation = await this.find(id);
-    if (command.type === 'switch_session') this.refuseTaken(conversation, command.sessionPath);
-    return conversation.request(command);
+    if (command.type !== 'switch_session') return conversation.request(command);
+    const target = await this.validateSession(command.sessionPath, conversation.cwd);
+    if (!target) throw new NativeRequestError('invalid', `There is no session at ${command.sessionPath}`);
+    await this.refuseTaken(conversation, target);
+    return conversation.request({ ...command, sessionPath: target });
   }
 
   async respond(id: string, dialogId: string, answer: DialogAnswer): Promise<void> {
-    (await this.find(id)).respond(dialogId, answer);
+    await (await this.find(id)).respond(dialogId, answer);
   }
 
   async close(id: string): Promise<void> {
@@ -189,27 +201,22 @@ export class NativeConversations implements NativeConversationsApi {
 
   async remove(id: string): Promise<void> {
     const conversation = await this.find(id);
-    this.refuseOutside(conversation.file);
-    await conversation.end();
-    // pi may have written the file while it shut down.
+    await conversation.remove();
     const file = conversation.file;
-    if (file && existsSync(file)) {
-      this.refuseOutside(file);
-      try {
-        await this.trash(file);
-      } catch (error) {
-        if ((error as { code?: unknown }).code !== 'ENOENT') throw error;
-      }
-      this.reader.forget(file);
-    }
+    if (file) this.reader.forget(file);
     this.forget(conversation);
     this.events.changed({ removed: conversation.id });
   }
 
-  /** Only a file in spec.jev's session folders is ever removed. */
-  private refuseOutside(file: string | undefined): void {
-    if (file && existsSync(file) && !insideSessionFolders(this.folders(), file))
-      throw new NativeRequestError('invalid', `spec.jev keeps no session at ${file}`);
+  /** A renderer's session path is used only when it names a real session file under spec.jev's roots. */
+  private async validateSession(file: string, cwd: string): Promise<string | undefined> {
+    try {
+      return (await validateSessionFile(this.folders(), file, cwd)).file;
+    } catch (error) {
+      if ((error as { code?: unknown }).code === 'ENOENT') return undefined;
+      if (error instanceof InvalidSessionFileError) throw new NativeRequestError('invalid', error.message);
+      throw error;
+    }
   }
 
   /** Ends every host (the app quits). Calls after it fail with `closed`. */
@@ -284,11 +291,12 @@ export class NativeConversations implements NativeConversationsApi {
   }
 
   /** A `switch_session` to a session another conversation runs would have two pis write one file. */
-  private refuseTaken(conversation: Conversation, sessionPath: string): void {
-    const target = path.resolve(conversation.cwd, sessionPath);
+  private async refuseTaken(conversation: Conversation, target: string): Promise<void> {
+    const held: string[] = [];
     for (const other of this.byId.values())
-      if (other !== conversation && other.live && other.file && path.resolve(other.file) === target)
-        throw new NativeRequestError('invalid', 'That session is open in another conversation');
+      if (other !== conversation && other.live && other.file) held.push(other.file);
+    const files = await Promise.all(held.map((file) => realpath(file).catch(() => path.resolve(file))));
+    if (files.includes(target)) throw new NativeRequestError('invalid', 'That session is open in another conversation');
   }
 
   private renamed(conversation: Conversation, previous: string, left: string | undefined): void {

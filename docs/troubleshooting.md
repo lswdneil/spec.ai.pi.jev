@@ -8,7 +8,7 @@ If that doesn't help, [open an issue](https://github.com/lswdneil/spec.ai.pi.jev
 
 **`spec.jev needs Node >= 22.19 (found v20…)`.** The command line needs Node.js 22.19 or newer: run `nvm install 24`, or install Node.js with your system's package manager. The desktop app bundles its own Node.js and needs nothing.
 
-**Windows shows a SmartScreen warning.** The Windows builds aren't code-signed yet. Choose "More info" → "Run anyway". The checksums of every download are in `SHA256SUMS` on the release page.
+**Windows shows a SmartScreen warning.** This is expected for an unsigned local or pull-request build. Release builds require a valid Authenticode signature and fail closed without it. The checksums of every download are in `SHA256SUMS` on the release page.
 
 **Windows: the conversation says Git for Windows is missing.** spec.jev runs commands in a POSIX shell on Windows. Install [Git for Windows](https://git-scm.com/download/win) and start a new conversation.
 

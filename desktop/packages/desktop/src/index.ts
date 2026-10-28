@@ -25,6 +25,7 @@ import { startBackendOrExit } from './process/startup/backendStartup';
 import { planStartupNodeRuntime } from './process/startup/nodeRuntimeStartup';
 import { assertStartupArchitectureCompatible } from './process/startup/architectureCompatibility';
 import { classifyBackendStartupFailure } from './process/startup/backendStartupFailure';
+import { verifyBundledResourceIntegrity } from './process/startup/bundleIntegrity';
 import { installQuitCleanup } from './process/startup/quitCleanup';
 import { shouldRegisterBackendStartup } from './process/startup/singleInstanceGating';
 import { ProcessConfig } from './process/utils/initStorage';
@@ -75,6 +76,13 @@ import { readCloseToTraySetting } from './process/utils/closeToTraySetting';
 // @ts-expect-error - electron-squirrel-startup doesn't have types
 import electronSquirrelStartup from 'electron-squirrel-startup';
 import { AIONCORE_INTERNAL_HEADER } from '@/common/platform/aioncoreNames';
+import { BROWSER_SESSION_PARTITION, PREVIEW_SESSION_PARTITION } from '@/common/config/constants';
+import {
+  appRendererPermissionPolicy,
+  BROWSER_PERMISSION_POLICY,
+  installSessionPermissionPolicy,
+  PREVIEW_PERMISSION_POLICY,
+} from './process/security/sessionPermissions';
 
 // ============ Single Instance Lock ============
 // Acquire lock early so the second instance quits before doing unnecessary work.
@@ -631,6 +639,14 @@ const handleAppReady = async (): Promise<void> => {
     return;
   }
 
+  if (app.isPackaged) {
+    const failures = await verifyBundledResourceIntegrity({ resourcesPath: process.resourcesPath });
+    if (failures.length > 0) {
+      throw new Error(`Bundled resource integrity check failed: ${JSON.stringify(failures)}`);
+    }
+    console.log('[spec.jev] bundled harness and aioncore integrity verified');
+  }
+
   // Set dock icon in development mode on macOS
   // In production, the icon is set via forge.config.ts packagerConfig.icon
   if (process.platform === 'darwin' && !app.isPackaged && app.dock) {
@@ -647,16 +663,15 @@ const handleAppReady = async (): Promise<void> => {
     }
   }
 
-  // Allow the renderer's Local Font Access queries (window.queryLocalFonts),
-  // used by the appearance font picker to enumerate installed fonts. Electron 37
-  // surfaces the 'local-fonts' permission as 'unknown' and denies it when no
-  // request handler is installed. Grant it here; other permissions are granted
-  // too so installing this handler preserves Electron's default-grant behaviour
-  // and regresses no capability the app already relies on. Runs once, before any
-  // window is created.
-  session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => {
-    callback(true);
-  });
+  // Each surface gets its own session policy before a window or webview exists.
+  // The renderer keeps clipboard writes and local font enumeration; external
+  // pages and previews receive no dangerous capability.
+  installSessionPermissionPolicy(
+    session.defaultSession,
+    appRendererPermissionPolicy(process.env['ELECTRON_RENDERER_URL'])
+  );
+  installSessionPermissionPolicy(session.fromPartition(BROWSER_SESSION_PARTITION), BROWSER_PERMISSION_POLICY);
+  installSessionPermissionPolicy(session.fromPartition(PREVIEW_SESSION_PARTITION), PREVIEW_PERMISSION_POLICY);
 
   // Give the agent a browser that ships with the app before any child inherits our environment.
   const bundledMoli = installBundledMoli();

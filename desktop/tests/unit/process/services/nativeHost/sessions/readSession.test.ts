@@ -4,10 +4,11 @@ import { join } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 import { fromEntries } from '../../../../../../packages/desktop/src/common/utils/nativeHost/reducer.ts';
 import {
+  SessionTooLargeError,
   readSessionFile,
   SessionReader,
 } from '../../../../../../packages/desktop/src/process/services/nativeHost/sessions/readSession.ts';
-import { assistant, header, toolOutput, user, writeSession, type Line } from './sessionFiles.ts';
+import { assistant, header, system, toolOutput, user, writeSession, type Line } from './sessionFiles.ts';
 
 /** A session file read back into a view without a host: pi's branch, tolerant of bad lines, in chunks. */
 
@@ -74,6 +75,36 @@ describe('readSessionFile', () => {
     expect(read.entries).toHaveLength(3000);
     // One chunk's lines at a time; a generous bound for a busy machine.
     expect(longest).toBeLessThan(150);
+  });
+
+  it('refuses a file over its byte limit before parsing it into a view', async () => {
+    const file = writeSession(join(root, 'limited.jsonl'), [
+      header('limited', '/p'),
+      system('system', null, 4096),
+      user('u1', 'system', 'hello', 1),
+    ]);
+    await expect(readSessionFile(file, { bytes: 1024 })).rejects.toBeInstanceOf(SessionTooLargeError);
+    await expect(new SessionReader({ bytes: 1024 }).view(file)).rejects.toThrow(/file is too large/);
+  });
+
+  it('refuses a file with too many entries', async () => {
+    const file = writeSession(join(root, 'entries.jsonl'), [
+      header('entries', '/p'),
+      user('u1', null, 'one', 1),
+      user('u2', 'u1', 'two', 2),
+      user('u3', 'u2', 'three', 3),
+    ]);
+    await expect(readSessionFile(file, { entries: 2 })).rejects.toThrow(/too many entries/);
+  });
+
+  it('refuses one entry too large to become a useful view', async () => {
+    const file = writeSession(join(root, 'giant-entry.jsonl'), [
+      header('giant', '/p'),
+      user('u1', null, 'x'.repeat(2 * 1024 * 1024), 1),
+    ]);
+    await expect(new SessionReader({ bytes: 4 * 1024 * 1024, entryBytes: 1024 }).view(file)).rejects.toThrow(
+      /entry is too large/
+    );
   });
 });
 

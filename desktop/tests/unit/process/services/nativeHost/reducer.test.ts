@@ -451,6 +451,37 @@ describe('reduce', () => {
     expect(fromFile.messages[0]).toMatchObject({ role: 'user', text: 'Refactor the parser' });
   });
 
+  it('does not reuse a message id when the last message is not the highest', () => {
+    const withMessages = (text: string, ...ids: string[]): NativeView => ({
+      ...emptyView(),
+      messages: ids.map((id) => ({ id, role: 'user' as const, text, images: [], timestamp: 1 })),
+    });
+    const branch = withMessages('old', 'm9', 'm2', 'm4');
+    const next = reduce(branch, { type: 'message_end', message: user('next') });
+    expect(next.messages.map((message) => message.id)).toEqual(['m9', 'm2', 'm4', 'm10']);
+    const after = reduce(next, { type: 'message_end', message: user('again') });
+    expect(after.messages.map((message) => message.id)).toEqual(['m9', 'm2', 'm4', 'm10', 'm11']);
+  });
+
+  it('does not change a returned batch when later records are reduced from it', () => {
+    const firstText = 'first\n\n[[AION_FILES]]\n/p/a.md';
+    const first = reduceAll([
+      { type: 'message_end', message: user(firstText) },
+      { type: 'message_end', message: assistant([text('answer')]) },
+    ]);
+    const second = reduce(first, { type: 'message_end', message: user('second') });
+    const more = reduce(second, { type: 'message_end', message: assistant([text('more')]) });
+
+    expect(first.messages.map(brief)).toEqual([`user: ${firstText}`, 'assistant (stop): answer']);
+    expect(more.messages.map(brief)).toEqual([
+      `user: ${firstText}`,
+      'assistant (stop): answer',
+      'user: second',
+      'assistant (stop): more',
+    ]);
+    expect(more.messages.map((message) => message.id)).toEqual(['m1', 'm2', 'm3', 'm4']);
+  });
+
   it('takes a prompt pi refused as a failed run, but not a response while one runs', () => {
     const refused: PiRecord = { type: 'response', command: 'prompt', success: false, error: 'No API key for p/m' };
     expect(reduce(emptyView(), refused)).toMatchObject({ status: 'error', error: 'No API key for p/m' });

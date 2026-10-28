@@ -125,6 +125,9 @@ extraResources:
   # and the sign-in run on the app's own binary as Node. Plain files outside app.asar, read by that Node.
   - from: resources/harness
     to: harness
+  # Build-time signing status. Unsigned packaged builds do not auto-update.
+  - from: resources/build-provenance.json
+    to: build-provenance.json
   # A browser the agent can use without a separate download. The app sets SPECJEV_MOLI to it.
   - from: resources/bundled-moli
     to: bundled-moli

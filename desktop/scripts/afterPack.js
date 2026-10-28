@@ -10,6 +10,7 @@ const {
 } = require('./rebuildNativeModules');
 const { verifyBundledAioncoreResources } = require('../packages/shared-scripts/src/verify-bundled-aioncore-resources');
 const { verifyBundledHarness } = require('../packages/shared-scripts/src/verify-bundled-harness');
+const { refreshIntegrityRecord } = require('../packages/shared-scripts/src/bundle-integrity');
 
 /**
  * afterPack hook for electron-builder
@@ -24,6 +25,35 @@ function resolveResourcesDir(electronPlatformName, appOutDir, packager) {
 }
 
 function verifyBundledResources(resourcesDir, electronPlatformName, targetArch) {
+  const provenancePath = path.join(resourcesDir, 'build-provenance.json');
+  let provenance;
+  try {
+    provenance = JSON.parse(fs.readFileSync(provenancePath, 'utf8'));
+  } catch {
+    throw new Error(`Packaged app has no readable build provenance: ${provenancePath}`);
+  }
+  if (provenance.platform !== electronPlatformName || provenance.arch !== targetArch) {
+    throw new Error(
+      `Packaged app build provenance is for ${provenance.platform}-${provenance.arch}, not ${electronPlatformName}-${targetArch}`
+    );
+  }
+  if (process.env.MU_REQUIRE_SIGNED_BUILD === '1' && provenance.signed !== true) {
+    throw new Error('This release build is unsigned but signed builds are required');
+  }
+
+  // electron-builder can normalize the copied tree (for example, dropping empty directories). Stamp
+  // the manifests from the packaged files themselves so startup verifies exactly what was installed.
+  const aioncoreManifest = path.join(
+    resourcesDir,
+    'bundled-aioncore',
+    `${electronPlatformName}-${targetArch}`,
+    'manifest.json'
+  );
+  const harnessManifest = path.join(resourcesDir, 'harness', 'bundle.json');
+  for (const manifestPath of [aioncoreManifest, harnessManifest]) {
+    if (fs.existsSync(manifestPath)) refreshIntegrityRecord(manifestPath);
+  }
+
   const result = verifyBundledAioncoreResources({
     resourcesDir,
     electronPlatformName,

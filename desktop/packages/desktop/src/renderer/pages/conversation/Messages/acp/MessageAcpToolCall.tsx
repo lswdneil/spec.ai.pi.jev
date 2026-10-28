@@ -85,8 +85,8 @@ const ContentView: React.FC<{ content: IMessageAcpToolCall['content']['update'][
   if (content.type === 'content' && content.content && content.content.type === 'text' && content.content.text) {
     return (
       <div className='mt-3'>
-        <div className='sv-dense-code-block bg-1 p-3 rounded border overflow-hidden'>
-          <div className='overflow-x-auto break-words'>
+        <div className='sv-dense-code-block sv-acp-tool-output bg-1 p-3 rounded border overflow-hidden'>
+          <div className='min-w-0 overflow-x-auto break-words'>
             <MarkdownView>{content.content.text}</MarkdownView>
           </div>
         </div>
@@ -165,7 +165,7 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
               {typeof rawInput === 'string' ? (
                 <MarkdownView>{`\`\`\`\n${rawInput}\n\`\`\``}</MarkdownView>
               ) : (
-                <pre className='sv-dense-terminal-output bg-1 p-2 rounded text-xs overflow-x-auto'>
+                <pre className='sv-dense-terminal-output sv-acp-tool-output bg-1 p-2 rounded text-xs overflow-x-auto'>
                   {JSON.stringify(rawInput, null, 2)}
                 </pre>
               )}

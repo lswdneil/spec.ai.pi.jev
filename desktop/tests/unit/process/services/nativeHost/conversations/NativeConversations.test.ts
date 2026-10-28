@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type {
   NativeAttentionEvent,
@@ -127,6 +127,14 @@ async function settled(w: World): Promise<void> {
 
 const seqsOf = (w: World, id: string): number[] =>
   w.events.records.filter((event) => event.id === id).map((event) => event.seq);
+
+const deferred = (): { promise: Promise<void>; open(): void } => {
+  let open!: () => void;
+  const promise = new Promise<void>((resolve) => {
+    open = resolve;
+  });
+  return { promise, open };
+};
 
 describe('native conversations', () => {
   it('say what a conversation with no host will run with: its file’s model, thinking level and mode', async () => {
@@ -434,6 +442,44 @@ describe('native conversations', () => {
     expect(now.view.messages[0]).toMatchObject({ role: 'user', text: 'first' });
   });
 
+  it('switches only to a valid session file under a session root, including a relative alias and custom folder', async () => {
+    const w = world();
+    const stored = writeSession(join(w.sessionsDir, '--project--', '2026_target.jsonl'), [
+      header('target', w.project, 1),
+      user('target-u', null, 'target session', 2),
+    ]);
+    const draft = await w.conversations.create({ cwd: w.project });
+    await w.conversations.request(draft.id, {
+      type: 'switch_session',
+      sessionPath: relative(w.project, stored),
+    });
+    expect(w.pi.last.session.file).toBe(realpathSync.native(stored));
+
+    const outside = writeSession(join(w.root, 'outside', '2026_outside.jsonl'), [
+      header('outside', w.project, 3),
+      user('outside-u', null, 'outside', 4),
+    ]);
+    const directory = join(w.root, 'outside', 'directory.jsonl');
+    mkdirSync(directory);
+    const current = (await w.conversations.list()).find((each) => each.live);
+    await Promise.all(
+      [outside, directory].map((sessionPath) =>
+        expect(
+          w.conversations.request(current?.id ?? '', { type: 'switch_session', sessionPath })
+        ).rejects.toMatchObject({ kind: 'invalid' })
+      )
+    );
+
+    const customDir = join(w.root, 'custom-sessions');
+    const custom = writeSession(join(customDir, '2026_custom.jsonl'), [
+      header('custom', w.project, 5),
+      user('custom-u', null, 'custom session', 6),
+    ]);
+    w.moveFolders({ agentDir: w.agentDir, sessionsDir: w.sessionsDir, customDir });
+    await w.conversations.request(w.pi.last.session.id, { type: 'switch_session', sessionPath: custom });
+    expect(w.pi.last.session.file).toBe(realpathSync.native(custom));
+  });
+
   it('sends a prompt again when pi refused it for a locked store, and shows only the run', async () => {
     vi.useFakeTimers();
     const w = world();
@@ -481,7 +527,7 @@ describe('native conversations', () => {
     expect(w.events.status.at(-1)).toEqual({ id, status: { phase: 'running' } });
   });
 
-  it('ends a host that is still starting when the conversation is closed', async () => {
+  it('waits for a start in flight, then ends its host when the conversation is closed', async () => {
     const w = world();
     let open: (() => void) | undefined;
     w.pi.gate = new Promise((resolve) => {
@@ -489,16 +535,88 @@ describe('native conversations', () => {
     });
     const draft = await w.conversations.create({ cwd: w.project });
     const started = w.conversations.request(draft.id, { type: 'get_state' });
-    const failure = expect(started).rejects.toMatchObject({ kind: 'closed' });
     await vi.waitFor(() => expect(w.events.status.at(-1)?.status).toEqual({ phase: 'starting' }));
     const closing = w.conversations.close(draft.id);
+    await Promise.resolve();
+    expect(w.pi.hosts).toHaveLength(0);
     open?.();
+    await expect(started).resolves.toMatchObject({ sessionId: expect.any(String) });
     await closing;
-    await failure;
     expect(w.pi.hosts).toHaveLength(1);
     expect(w.pi.running).toHaveLength(0);
     expect(w.events.status.at(-1)?.status).toEqual({ phase: 'idle' });
     expect(w.events.changed.at(-1)).toEqual({ conversation: expect.objectContaining({ live: false }) });
+  });
+
+  it('serializes close behind a request that already holds the operation lock', async () => {
+    const w = world();
+    const draft = await w.conversations.create({ cwd: w.project });
+    await w.conversations.request(draft.id, { type: 'get_state' });
+    const id = w.pi.last.session.id;
+    const host = w.pi.last;
+    const gate = deferred();
+    host.requestGate = gate.promise;
+    const requested = w.conversations.request(id, { type: 'get_commands' });
+    await vi.waitFor(() => expect(host.sent).toContainEqual({ type: 'get_commands' }));
+
+    let closed = false;
+    const closing = w.conversations.close(id).then(() => {
+      closed = true;
+    });
+    await Promise.resolve();
+    expect(closed).toBe(false);
+    expect(host.disposed).toBe(false);
+
+    gate.open();
+    await expect(requested).resolves.toBeUndefined();
+    await closing;
+    expect(host.disposed).toBe(true);
+    expect(w.conversations.liveCount).toBe(0);
+  });
+
+  it('refuses a start overtaken by removal, waits for it, and leaves no host behind', async () => {
+    const w = world();
+    const draft = await w.conversations.create({ cwd: w.project });
+    const gate = deferred();
+    w.pi.gate = gate.promise;
+    const started = w.conversations.request(draft.id, { type: 'get_state' }).catch((error: unknown) => error);
+    await vi.waitFor(() => expect(w.events.status.at(-1)?.status).toEqual({ phase: 'starting' }));
+
+    const removing = w.conversations.remove(draft.id);
+    await expect(w.conversations.request(draft.id, { type: 'get_state' })).rejects.toMatchObject({
+      kind: 'closed',
+      message: 'The conversation is being removed',
+    });
+    gate.open();
+    await expect(started).resolves.toMatchObject({ kind: 'closed' });
+    await removing;
+    expect(w.pi.hosts).toHaveLength(1);
+    expect(w.pi.running).toEqual([]);
+    expect(w.events.changed.at(-1)).toEqual({ removed: draft.id });
+  });
+
+  it('waits for a rename in flight, then removes the file without a later write recreating it', async () => {
+    const w = world();
+    const file = writeSession(join(w.sessionsDir, '--project--', '2026_rename.jsonl'), [
+      header('rename', w.project, 1),
+      user('rename-u', null, 'rename me', 2),
+    ]);
+    const realFile = realpathSync.native(file);
+    await w.conversations.request('rename', { type: 'get_state' });
+    const gate = deferred();
+    w.pi.last.requestGate = gate.promise;
+    const renaming = w.conversations.rename('rename', 'New name').catch((error: unknown) => error);
+    await vi.waitFor(() => expect(w.pi.last.sent).toContainEqual({ type: 'set_session_name', name: 'New name' }));
+    const removing = w.conversations.remove('rename');
+    gate.open();
+    await expect(renaming).resolves.toBeUndefined();
+    await removing;
+    expect(existsSync(file)).toBe(false);
+    expect(w.trashed).toEqual([realFile]);
+    expect(w.pi.running).toEqual([]);
+    await expect(w.conversations.rename('rename', 'Too late')).rejects.toMatchObject({
+      kind: 'unknown-conversation',
+    });
   });
 
   it('says why a host did not start, and stays without one', async () => {

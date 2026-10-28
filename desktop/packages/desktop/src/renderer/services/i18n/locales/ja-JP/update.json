@@ -25,7 +25,8 @@
   "installerReason": {
     "linux": "Linux では spec.jev は自分で更新をインストールできません。インストーラーをダウンロードして開いてください。",
     "unpackaged": "この spec.jev は自分で更新をインストールできません。インストーラーをダウンロードして開いてください。",
-    "autoUpdateFailed": "インストーラーをダウンロードして更新できます。"
+    "autoUpdateFailed": "インストーラーをダウンロードして更新できます。",
+    "unsigned": "このビルドはコード署名されていないため、自動更新できません。インストーラーをダウンロードして開いてください。"
   },
   "downloadInstaller": "インストーラーをダウンロード",
   "openReleasePage": "リリースページを開く",

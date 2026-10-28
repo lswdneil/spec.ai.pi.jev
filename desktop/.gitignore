@@ -201,6 +201,7 @@ resources/bundled-moli
 resources/bundled-mcp
 resources/harness
 resources/hub
+resources/build-provenance.json
 /resources/windows/support/_sentry-dsn.generated.nsh
 
 # Server build output

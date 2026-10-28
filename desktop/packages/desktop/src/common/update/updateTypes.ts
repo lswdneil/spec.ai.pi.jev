@@ -60,6 +60,8 @@ export type InstallerReason =
   | 'linux'
   /** A build run from its sources, not installed. */
   | 'unpackaged'
+  /** A packaged build whose executable has no trusted code signature. */
+  | 'unsigned'
   /** The update would install on a restart, but that failed; `error` says why. */
   | 'autoUpdateFailed';
 

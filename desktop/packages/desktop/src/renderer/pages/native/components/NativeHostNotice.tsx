@@ -9,6 +9,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import type { NativeFailure, NativeHostStatus } from '@/common/kyrn/nativeBridge';
+import { maskSecrets } from '@/common/utils/nativeHost';
 import { iconColors } from '@/renderer/styles/colors';
 import { errorKey } from '../utils/errorWords';
 
@@ -55,12 +56,12 @@ const Stopped: React.FC<{ error: { kind: NativeFailure['kind']; message: string;
       <Attention theme='filled' className='sv-icon-md m-t-2px shrink-0' fill={iconColors.danger} />
       <div className='flex-1 min-w-0 flex flex-col gap-6px'>
         <div className='text-14px font-500 text-t-primary'>{t(errorKey(error.kind))}</div>
-        <Detail text={error.message} />
+        <Detail text={maskSecrets(error.message)} />
         {error.stderr ? (
           <details className='text-12px text-t-tertiary'>
             <summary className='cursor-pointer select-none'>{t('mu.native.host.output')}</summary>
             <pre className='m-0 mt-6px max-h-160px overflow-auto whitespace-pre-wrap [word-break:break-word] text-11px leading-16px'>
-              {error.stderr}
+              {maskSecrets(error.stderr)}
             </pre>
           </details>
         ) : null}
@@ -78,7 +79,7 @@ const CommandFailed: React.FC<{ failure: NativeFailure; onClose: () => void }> =
       <Attention theme='filled' className='sv-icon-md m-t-2px shrink-0' fill={iconColors.danger} />
       <div className='flex-1 min-w-0 flex flex-col gap-4px'>
         <div className='text-13px font-500 text-t-primary'>{t(errorKey(failure.kind))}</div>
-        <Detail text={failure.message} />
+        <Detail text={maskSecrets(failure.message)} />
       </div>
       <Button
         type='text'

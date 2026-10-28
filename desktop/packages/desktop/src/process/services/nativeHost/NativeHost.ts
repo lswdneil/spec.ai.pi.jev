@@ -18,6 +18,7 @@ import {
   type PiRecord,
   type PiResponseDataOf,
 } from '../../../common/utils/nativeHost/records.ts';
+import { maskSecrets } from '../../../common/utils/nativeHost/redact.ts';
 import { readFromHost, type ToHost } from './protocol.ts';
 
 /**
@@ -48,11 +49,11 @@ export class NativeHostError extends Error {
   /** The end of the host's output (stderr, and stdout, which pi sends there too): where a crash says why. */
   readonly stderr: string;
   constructor(kind: NativeHostErrorKind, message: string, details: { code?: number | null; stderr?: string } = {}) {
-    super(message);
+    super(maskSecrets(message));
     this.name = 'NativeHostError';
     this.kind = kind;
     this.code = details.code;
-    this.stderr = details.stderr ?? '';
+    this.stderr = maskSecrets(details.stderr ?? '');
   }
 }
 
@@ -355,7 +356,7 @@ export class NativeHost {
       return;
     }
     if (envelope.type === 'failed') {
-      this.failure = `The spec.jev host could not ${envelope.stage === 'import' ? 'load pi' : 'start pi'}: ${envelope.message}`;
+      this.failure = `The spec.jev host could not ${envelope.stage === 'import' ? 'load pi' : 'start pi'}: ${maskSecrets(envelope.message)}`;
       return;
     }
     let record: unknown;
@@ -459,7 +460,7 @@ export class NativeHost {
     if (!stderr || !this.log) return;
     const lines = `${this.partial}${chunk}`.split(/\r?\n/);
     this.partial = (lines.pop() ?? '').slice(0, OUTPUT_TAIL);
-    for (const line of lines) if (line.startsWith(LOG_LINE)) this.log(line.slice(LOG_LINE.length));
+    for (const line of lines) if (line.startsWith(LOG_LINE)) this.log(maskSecrets(line.slice(LOG_LINE.length)));
   }
 
   private streamEnded(): void {
@@ -479,7 +480,7 @@ export class NativeHost {
     // Only a host that stopped by itself has something to say after its exit. An Electron utility process's output
     // streams had not ended 500 ms after it exited (measured), so waiting for them made every dispose that long.
     if (!this.disposing) await this.outputDone();
-    const stderr = this.output.replace(ANSI, '').trim();
+    const stderr = maskSecrets(this.output.replace(ANSI, '').trim());
     if (this.disposing) this.finish(undefined);
     else if (!this.alive && NO_MODELS.test(stderr)) {
       const line = stderr.split('\n').find((each) => NO_MODELS.test(each)) ?? 'No models available.';

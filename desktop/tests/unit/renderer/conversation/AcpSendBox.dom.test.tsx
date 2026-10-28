@@ -33,6 +33,7 @@ const {
   clearFilesMock,
   draftMutateMock,
   draftContentRef,
+  draftAtPathRef,
   messageWarningMock,
   stopInvokeMock,
   goalState,
@@ -80,6 +81,7 @@ const {
   clearFilesMock: vi.fn(),
   draftMutateMock: vi.fn(),
   draftContentRef: { current: '' },
+  draftAtPathRef: { current: [] as Array<{ path: string; name: string; isFile: boolean }> },
   messageWarningMock: vi.fn(),
   stopInvokeMock: vi.fn().mockResolvedValue(undefined),
   goalState: {
@@ -117,6 +119,7 @@ vi.mock('@/renderer/components/chat/SendBox', () => ({
     sendDisabled,
     onAddToDraft,
     addToDraftDisabled,
+    selectedWorkspaceItems,
     selectedSessions,
     onSelectedSessionsChange,
     crossSessionEnabled,
@@ -135,6 +138,7 @@ vi.mock('@/renderer/components/chat/SendBox', () => ({
     sendDisabled?: boolean;
     onAddToDraft?: () => void;
     addToDraftDisabled?: boolean;
+    selectedWorkspaceItems?: Array<{ path: string }>;
     selectedSessions?: Array<{ id: string }>;
     onSelectedSessionsChange?: (sessions: Array<{ id: string }>) => void;
     crossSessionEnabled?: boolean;
@@ -148,6 +152,7 @@ vi.mock('@/renderer/components/chat/SendBox', () => ({
       sendDisabled,
       onAddToDraft,
       addToDraftDisabled,
+      selectedWorkspaceItems,
       selectedSessions,
       crossSessionEnabled,
       isTeamConversation,
@@ -249,7 +254,7 @@ vi.mock('@/renderer/hooks/agent/useAcpConfigOptions', () => ({
 vi.mock('@/renderer/hooks/chat/useSendBoxDraft', () => ({
   getSendBoxDraftHook: () => () => ({
     data: {
-      atPath: [],
+      atPath: draftAtPathRef.current,
       uploadFile: [],
       content: draftContentRef.current,
     },
@@ -397,6 +402,7 @@ describe('AcpSendBox', () => {
     runtimeViewMock.activeTurnId = null;
     runtimeViewMock.supportsMidturnDelivery = false;
     draftContentRef.current = '';
+    draftAtPathRef.current = [];
     useTeamPermissionMock.mockReturnValue(null);
     useAcpConfigOptionsMock.mockReturnValue({
       setStatus: { state: 'idle' },
@@ -510,6 +516,36 @@ describe('AcpSendBox', () => {
     });
     expect(addOrUpdateMessageMock).not.toHaveBeenCalled();
     expect(resetStateMock).not.toHaveBeenCalled();
+  });
+
+  it('keeps attachments and session mentions when an ordinary send rejects', async () => {
+    draftAtPathRef.current = [{ path: '/tmp/keep.txt', name: 'keep.txt', isFile: true }];
+    sendMessageInvokeMock.mockRejectedValue(new Error('boom'));
+
+    render(
+      <AcpSendBox
+        conversation_id='conv-1'
+        backend='claude'
+        workspacePath='/tmp/workspace'
+        messageState={makeMessageState()}
+      />
+    );
+
+    await act(async () => {
+      screen.getByText('pick-session').click();
+    });
+    await act(async () => {
+      screen.getByText('send').click();
+    });
+
+    await waitFor(() => expect(sendMessageInvokeMock).toHaveBeenCalledTimes(1));
+    expect(clearFilesMock).not.toHaveBeenCalled();
+    const props = sendBoxPropsSpy.mock.calls.at(-1)?.[0] as {
+      selectedWorkspaceItems?: Array<{ path: string }>;
+      selectedSessions?: Array<{ id: string }>;
+    };
+    expect(props.selectedWorkspaceItems?.map((item) => item.path)).toEqual(['/tmp/keep.txt']);
+    expect(props.selectedSessions).toEqual([{ id: 'conv_target' }]);
   });
 
   it('uses container-responsive fluid width instead of a fixed max width', () => {

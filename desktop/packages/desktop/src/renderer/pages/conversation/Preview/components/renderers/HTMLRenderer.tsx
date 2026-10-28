@@ -5,6 +5,7 @@
  */
 
 import { ipcBridge } from '@/common';
+import { PREVIEW_SESSION_PARTITION } from '@/common/config/constants';
 import { useTypingAnimation } from '@/renderer/hooks/chat/useTypingAnimation';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useScrollSyncTarget } from '../../hooks/useScrollSyncHelpers';
@@ -731,6 +732,7 @@ const HTMLRenderer: React.FC<HTMLRendererProps> = ({
           <webview
             key={webviewSrc}
             ref={webviewRef}
+            partition={PREVIEW_SESSION_PARTITION}
             src={webviewSrc}
             className='w-full border-0'
             style={{

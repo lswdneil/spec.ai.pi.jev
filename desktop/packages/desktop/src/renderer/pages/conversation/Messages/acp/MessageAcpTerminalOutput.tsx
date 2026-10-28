@@ -89,7 +89,7 @@ const MessageAcpTerminalOutput: React.FC<{ message: IMessageAcpTerminalOutput }>
           ref={outputRef}
           data-testid='terminal-card-output'
           dir='ltr'
-          className='sv-dense-terminal-output bg-1 p-2 rounded text-xs font-mono overflow-x-auto overflow-y-auto max-h-320px whitespace-pre-wrap m-0'
+          className='sv-dense-terminal-output sv-acp-tool-output bg-1 p-2 rounded text-xs font-mono overflow-x-auto overflow-y-auto max-h-320px whitespace-pre-wrap m-0'
         >
           {content.truncated
             ? `…${t('conversation.terminal.truncated', { defaultValue: '(earlier output truncated)' })}\n`

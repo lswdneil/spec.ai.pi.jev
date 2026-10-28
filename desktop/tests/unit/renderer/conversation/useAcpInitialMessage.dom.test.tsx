@@ -87,7 +87,11 @@ describe('useAcpInitialMessage', () => {
   });
 
   it('keeps ordinary initial ACP send failures visible and resets loading state', async () => {
-    sessionStorage.setItem('acp_initial_message_conv-1', JSON.stringify({ input: 'hello', files: [] }));
+    const payload = {
+      input: 'hello',
+      files: [{ kind: 'local', path: '/tmp/attachment.txt' }],
+    };
+    sessionStorage.setItem('acp_initial_message_conv-1', JSON.stringify(payload));
     sendMessageInvokeMock.mockRejectedValue(new Error('boom'));
 
     const markSendFailed = vi.fn();
@@ -121,5 +125,59 @@ describe('useAcpInitialMessage', () => {
     );
     expect(resetState).toHaveBeenCalledTimes(1);
     expect(setAiProcessing).toHaveBeenCalledWith(false);
+    expect(sessionStorage.getItem('acp_initial_message_conv-1')).toBe(JSON.stringify(payload));
+  });
+
+  it('clears the retry source only after ACP accepts the initial message', async () => {
+    const payload = { input: 'hello', files: [{ kind: 'upload', path: '/tmp/upload.txt' }] };
+    sessionStorage.setItem('acp_initial_message_conv-1', JSON.stringify(payload));
+    sendMessageInvokeMock.mockResolvedValue({ turn_id: 'turn-1', runtime: null, msg_id: 'msg-1' });
+
+    renderHook(() =>
+      useAcpInitialMessage({
+        conversation_id: 'conv-1',
+        backend: 'codex',
+        setAiProcessing: vi.fn(),
+        resetState: vi.fn(),
+        markSendStarted: vi.fn(),
+        markSendAccepted: vi.fn(),
+        markSendFailed: vi.fn(),
+        checkAndUpdateTitle: vi.fn(),
+        addOrUpdateMessage: vi.fn(),
+      })
+    );
+
+    await waitFor(() => expect(sendMessageInvokeMock).toHaveBeenCalledTimes(1));
+    expect(sessionStorage.getItem('acp_initial_message_conv-1')).toBeNull();
+  });
+
+  it('does not resend the same initial payload when the effect runs again', async () => {
+    sessionStorage.setItem('acp_initial_message_conv-1', JSON.stringify({ input: 'hello', files: [] }));
+    sendMessageInvokeMock.mockRejectedValue(new Error('boom'));
+    const markSendStarted = vi.fn();
+    const markSendFailed = vi.fn();
+    const addOrUpdateMessage = vi.fn();
+    const resetState = vi.fn();
+    const setAiProcessing = vi.fn();
+    const checkAndUpdateTitle = vi.fn();
+
+    const { rerender } = renderHook(() =>
+      useAcpInitialMessage({
+        conversation_id: 'conv-1',
+        backend: 'codex',
+        setAiProcessing,
+        resetState,
+        markSendStarted,
+        markSendAccepted: vi.fn(),
+        markSendFailed,
+        checkAndUpdateTitle,
+        addOrUpdateMessage,
+      })
+    );
+
+    await waitFor(() => expect(markSendFailed).toHaveBeenCalledTimes(1));
+    rerender();
+    await Promise.resolve();
+    expect(sendMessageInvokeMock).toHaveBeenCalledTimes(1);
   });
 });

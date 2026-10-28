@@ -14,6 +14,7 @@ const { execFileSync, execSync, spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { buildProvenance, resolveBuildSigning } = require('./buildSigning');
 
 // DMG retry logic for macOS: detects DMG creation failures by checking artifacts
 // (.app exists but .dmg missing) and retries only the DMG step using
@@ -748,13 +749,17 @@ try {
     return;
   }
 
+  const systems = { '--win': 'win32', '--linux': 'linux', '--mac': 'darwin' };
+  const buildPlatform = Object.entries(systems).find(([flag]) => builderArgs.includes(flag))?.[1] ?? process.platform;
+  const signing = resolveBuildSigning(buildPlatform);
+
   // 5. Prepare aioncore binary (for packaged runtime usage)
   const { prepareAioncore } = require('../packages/shared-scripts/src/prepare-aioncore.js');
   const { resolveAioncoreVersion } = require('./resolveAioncoreVersion.js');
   const projectRoot = path.resolve(__dirname, '..');
   prepareAioncore({
     projectRoot,
-    platform: process.platform,
+    platform: buildPlatform,
     arch: targetArch,
     version: resolveAioncoreVersion(projectRoot),
   });
@@ -764,11 +769,9 @@ try {
 
   // mu itself, for the system and processor being built: resources/harness, which extraResources copies into the app
   // and afterPack checks (scripts/kyrn/bundle-harness.mjs). MU_HARNESS_TARBALL names the spec.jev tarball to carry.
-  const systems = { '--win': 'win32', '--linux': 'linux', '--mac': 'darwin' };
-  const harnessPlatform = Object.entries(systems).find(([flag]) => builderArgs.includes(flag))?.[1] ?? process.platform;
   execFileSync(
     process.execPath,
-    [path.join(__dirname, 'prepareMoliResources.js'), '--platform', harnessPlatform, '--arch', targetArch],
+    [path.join(__dirname, 'prepareMoliResources.js'), '--platform', buildPlatform, '--arch', targetArch],
     { stdio: 'inherit', env: process.env }
   );
   execFileSync(process.execPath, [path.join(__dirname, 'prepareWindowsMcpResources.js')], {
@@ -777,8 +780,12 @@ try {
   });
   execFileSync(
     process.execPath,
-    [path.join(__dirname, 'kyrn', 'bundle-harness.mjs'), '--platform', harnessPlatform, '--arch', targetArch],
+    [path.join(__dirname, 'kyrn', 'bundle-harness.mjs'), '--platform', buildPlatform, '--arch', targetArch],
     { stdio: 'inherit', env: process.env }
+  );
+  fs.writeFileSync(
+    path.join(projectRoot, 'resources', 'build-provenance.json'),
+    `${JSON.stringify(buildProvenance({ platform: buildPlatform, arch: targetArch, signing }), null, 2)}\n`
   );
 
   // 6. 运行 electron-builder 生成分发包（DMG/ZIP/EXE等）
@@ -873,7 +880,11 @@ try {
     const winExePath = path.join(outDir, 'win-unpacked', 'spec.jev.exe');
     const firstError = formatExecError(error);
     const canRetryWithoutExecutableEdit =
-      process.platform === 'win32' && isWindowsBuild && process.env.CI !== 'true' && fs.existsSync(winExePath);
+      process.platform === 'win32' &&
+      isWindowsBuild &&
+      process.env.CI !== 'true' &&
+      !signing.signed &&
+      fs.existsSync(winExePath);
 
     if (!canRetryWithoutExecutableEdit) {
       throw error;
@@ -911,6 +922,27 @@ try {
     }
   }
 
+  if (isWindowsBuild && signing.signed) {
+    const installer = fs.readdirSync(outDir).find((name) => /^spec\.jev-.+-win-(?:x64|arm64)\.exe$/.test(name));
+    const signedFiles = [
+      installer ? path.join(outDir, installer) : '',
+      path.join(outDir, 'win-unpacked', 'spec.jev.exe'),
+    ]
+      .filter((file) => file && fs.existsSync(file))
+      .map((file) => `'${file.replace(/'/g, "''")}'`);
+    if (signedFiles.length !== 2) throw new Error('The signed Windows app or installer was not produced');
+    execFileSync(
+      'powershell.exe',
+      [
+        '-NoProfile',
+        '-NonInteractive',
+        '-Command',
+        `$files = @(${signedFiles.join(', ')}); foreach ($file in $files) { $sig = Get-AuthenticodeSignature -LiteralPath $file; if ($sig.Status -ne 'Valid') { throw "$file is not validly signed: $($sig.Status)" } }`,
+      ],
+      { stdio: 'inherit' }
+    );
+    console.log('Verified Authenticode signatures on the Windows app and installer.');
+  }
   console.log('✅ Build completed!');
 } catch (error) {
   buildFailed = true;

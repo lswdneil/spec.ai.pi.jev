@@ -22,7 +22,6 @@
 import {
   addFrame,
   addRunEvent,
-  nextNumber,
   readPermission,
   takeCheckpointOff,
   takeJudgeNotice,
@@ -136,12 +135,39 @@ const blocksOf = (content: unknown): ViewBlock[] =>
     .map(blockOf)
     .filter((block): block is ViewBlock => block !== undefined);
 
-/** The id of the next message: one above the highest, so an id is never given twice. */
-const nextId = (view: NativeView): string =>
-  nextNumber(
-    'm',
-    view.messages.map((message) => message.id)
-  );
+/**
+ * Views built in a batch and never handed out until it ends may append to their message array in place. A view from
+ * `reduce` or `emptyView` is not marked, so callers keep the pure, copy-on-write behavior.
+ */
+const OWNED_VIEWS = new WeakSet<NativeView>();
+const own = <T extends NativeView>(view: T): T => {
+  OWNED_VIEWS.add(view);
+  return view;
+};
+/** A batch that is returned is no longer owned: later single-record reductions must copy it before changing it. */
+const disown = <T extends NativeView>(view: T): T => {
+  OWNED_VIEWS.delete(view);
+  return view;
+};
+
+/** The id of the next message. Message ids stay sequential; a retry replaces its id rather than removing it. */
+const MESSAGE_CEILINGS = new WeakMap<NativeView, number>();
+
+/** The highest message number the view has used. Branches may put their entries in any order, so scan once per view. */
+function messageCeiling(view: NativeView): number {
+  const known = MESSAGE_CEILINGS.get(view);
+  if (known !== undefined) return known;
+  let highest = 0;
+  for (const { id } of view.messages) {
+    if (!id.startsWith('m')) continue;
+    const number = Number(id.slice(1));
+    if (Number.isSafeInteger(number) && number > highest) highest = number;
+  }
+  MESSAGE_CEILINGS.set(view, highest);
+  return highest;
+}
+
+const nextId = (view: NativeView): string => `m${messageCeiling(view) + 1}`;
 
 /** The session entry id a record names, or undefined. */
 const entryIdOf = (value: unknown): string | undefined => (typeof value === 'string' && value ? value : undefined);
@@ -170,9 +196,28 @@ function assistantOf(
   };
 }
 
-const withMessages = (view: NativeView, messages: ViewMessage[]): NativeView => ({ ...view, messages });
+const withMessages = (view: NativeView, messages: ViewMessage[], ceiling = messageCeiling(view)): NativeView => {
+  const next = { ...view, messages };
+  MESSAGE_CEILINGS.set(next, ceiling);
+  return next;
+};
+
+function appendMessage(view: NativeView, message: ViewMessage): NativeView {
+  const numbered = message.id.startsWith('m') ? Number(message.id.slice(1)) : Number.NaN;
+  const ceiling = Math.max(
+    messageCeiling(view),
+    Number.isSafeInteger(numbered) && numbered > 0 ? numbered : 0
+  );
+  if (!OWNED_VIEWS.has(view)) return withMessages(view, [...view.messages, message], ceiling);
+  view.messages.push(message);
+  return withMessages(view, view.messages, ceiling);
+}
 
 function replaceMessage(view: NativeView, index: number, message: ViewMessage): NativeView {
+  if (OWNED_VIEWS.has(view)) {
+    view.messages[index] = message;
+    return withMessages(view, view.messages);
+  }
   const messages = view.messages.slice();
   messages[index] = message;
   return withMessages(view, messages);
@@ -234,8 +279,7 @@ function addAssistant(view: NativeView, message: JsonObject, streaming: boolean,
     if (earlier.role === 'assistant' && earlier.retried) retried = index;
     break;
   }
-  if (retried < 0)
-    return withMessages(view, [...view.messages, assistantOf(message, nextId(view), streaming, { entryId })]);
+  if (retried < 0) return appendMessage(view, assistantOf(message, nextId(view), streaming, { entryId }));
   const failed = view.messages[retried] as ViewAssistantMessage;
   const next = assistantOf(message, failed.id, streaming, { entryId, retries: (failed.retries ?? 0) + 1 });
   return withMessages(view, [...view.messages.filter((_, index) => index !== retried), next]);
@@ -264,17 +308,14 @@ function endMessage(view: NativeView, message: JsonObject, entryId?: string): Na
       return next.status === 'thinking' ? withStatus(next, 'working') : next;
     }
     case 'user':
-      return withMessages(view, [
-        ...view.messages,
-        {
-          id: nextId(view),
-          role: 'user',
-          ...(entryId ? { entryId } : {}),
-          text: wordsOf(textOf(message.content)),
-          images: imagesOf(message.content),
-          timestamp: asNumber(message.timestamp) ?? 0,
-        },
-      ]);
+      return appendMessage(view, {
+        id: nextId(view),
+        role: 'user',
+        ...(entryId ? { entryId } : {}),
+        text: wordsOf(textOf(message.content)),
+        images: imagesOf(message.content),
+        timestamp: asNumber(message.timestamp) ?? 0,
+      });
     case 'toolResult':
       return updateTool(view, asText(message.toolCallId), (tool) =>
         finished(tool, resultOf(message, message.isError === true))
@@ -289,25 +330,19 @@ function endMessage(view: NativeView, message: JsonObject, entryId?: string): Na
 
 /** Where pi compacted the conversation: a line of its own in the transcript. */
 function compacted(view: NativeView, tokensBefore: number | undefined): NativeView {
-  return withMessages(view, [
-    ...view.messages,
-    { id: nextId(view), role: 'compaction', tokensBefore: tokensBefore ?? 0 },
-  ]);
+  return appendMessage(view, { id: nextId(view), role: 'compaction', tokensBefore: tokensBefore ?? 0 });
 }
 
 /** A message an extension shows the person (`display: true`); one it gives only the model is not shown. */
 function customMessage(view: NativeView, message: JsonObject, entryId?: string): NativeView {
   if (message.display !== true) return view;
-  return withMessages(view, [
-    ...view.messages,
-    {
-      id: nextId(view),
-      role: 'custom',
-      ...(entryId ? { entryId } : {}),
-      customType: asText(message.customType),
-      text: textOf(message.content),
-    },
-  ]);
+  return appendMessage(view, {
+    id: nextId(view),
+    role: 'custom',
+    ...(entryId ? { entryId } : {}),
+    customType: asText(message.customType),
+    text: textOf(message.content),
+  });
 }
 
 /** A streaming delta of the live assistant message (`message_update`). */
@@ -644,13 +679,18 @@ export function fromEntries(entries: readonly unknown[], leafId?: string | null)
     branch.push(current);
     current = typeof current.parentId === 'string' ? byId.get(current.parentId) : undefined;
   }
-  let view = emptyView();
+  let view = own(emptyView());
   for (const entry of branch.toReversed())
-    view =
-      entry.type === 'message' ? endMessage(view, asObject(entry.message), entryIdOf(entry.id)) : addEntry(view, entry);
-  return settle(view);
+    view = own(
+      entry.type === 'message' ? endMessage(view, asObject(entry.message), entryIdOf(entry.id)) : addEntry(view, entry)
+    );
+  return disown(settle(view));
 }
 
 /** The view of a whole recorded stream, from an empty one or from a view to continue (a resumed session). */
-export const reduceAll = (records: readonly PiRecord[], from: NativeView = emptyView()): NativeView =>
-  records.reduce(reduce, from);
+export const reduceAll = (records: readonly PiRecord[], from: NativeView = emptyView()): NativeView => {
+  if (records.length === 0) return disown(from);
+  let view = own({ ...from, messages: from.messages.slice() });
+  for (const record of records) view = own(reduce(view, record));
+  return disown(view);
+};

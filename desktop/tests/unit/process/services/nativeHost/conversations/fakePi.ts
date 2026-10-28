@@ -90,6 +90,8 @@ export class FakeHost implements ConversationHost {
   model: FakeModel | undefined;
   /** The next prompts are refused with these words, one each. */
   readonly refusals: string[] = [];
+  /** A command waits for this before pi answers it. */
+  requestGate: Promise<void> | undefined;
   /** The run in progress. */
   turn: Promise<void> = Promise.resolve();
   private readonly pi: FakePi;
@@ -127,6 +129,7 @@ export class FakeHost implements ConversationHost {
     this.sent.push(command);
     if (this.disposed) throw new NativeHostError('closed', 'The spec.jev host was closed');
     await tick();
+    await this.requestGate;
     if (this.disposed) throw new NativeHostError('closed', 'The spec.jev host was closed');
     let data: unknown;
     try {

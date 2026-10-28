@@ -20,6 +20,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { verifyBundledAioncoreResources } = require('./verify-bundled-aioncore-resources');
+const { writeIntegrityRecord } = require('./bundle-integrity');
 
 const GITHUB_OWNER = 'iOfficeAI';
 const GITHUB_REPO = 'AionCore';
@@ -82,10 +83,6 @@ function ensureExecutableMode(filePath) {
   try {
     fs.chmodSync(filePath, 0o755);
   } catch {}
-}
-
-function writeJson(filePath, payload) {
-  fs.writeFileSync(filePath, JSON.stringify(payload, null, 2) + '\n', 'utf-8');
 }
 
 function getBinaryName(platform) {
@@ -496,7 +493,7 @@ function prepareAioncore(options) {
         source: { path: resolvedLocalBundleDir },
         files: [binaryName, 'managed-resources/'],
       };
-      writeJson(path.join(targetDir, 'manifest.json'), manifest);
+      writeIntegrityRecord(path.join(targetDir, 'manifest.json'), manifest);
       verifyPreparedAioncoreBundle(projectRoot, platform, arch);
       console.log(`  Using local aioncore bundle: ${resolvedLocalBundleDir}`);
       return { prepared: true, dir: targetDir, sourceType: 'local-bundle' };
@@ -572,7 +569,7 @@ function prepareAioncore(options) {
       files: [binaryName, 'managed-resources/'],
     };
 
-    writeJson(path.join(targetDir, 'manifest.json'), manifest);
+    writeIntegrityRecord(path.join(targetDir, 'manifest.json'), manifest);
     verifyPreparedAioncoreBundle(projectRoot, platform, arch);
     console.log(
       `  Bundled aioncore prepared: resources/bundled-aioncore/${runtimeKey}/${binaryName} [source=${sourceType}]`

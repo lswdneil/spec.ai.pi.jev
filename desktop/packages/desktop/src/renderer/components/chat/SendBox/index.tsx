@@ -57,7 +57,7 @@ import React, { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMe
 import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
 import { useCompositionInput } from '@renderer/hooks/chat/useCompositionInput';
-import { IDEOGRAPHIC_COMMA, rewriteIdeographicSlash } from './ideographicSlash';
+import { rewriteIdeographicSlash } from './ideographicSlash';
 import { useConversationExport } from '@renderer/hooks/file/useConversationExport';
 import { useDragUpload } from '@renderer/hooks/file/useDragUpload';
 import { useLatestRef } from '@renderer/hooks/ui/useLatestRef';
@@ -354,6 +354,7 @@ const SendBox: React.FC<{
   const [isInputFocused, setIsInputFocused] = useState(false);
   const isInputActive = isInputFocused;
   const containerRef = useRef<HTMLDivElement>(null);
+  const externalFocusWhileDisabledRef = useRef(false);
   const singleLineWidthRef = useRef<number>(0);
   const measurementCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const mobileUserFocusIntentUntilRef = useRef(0);
@@ -764,6 +765,16 @@ const SendBox: React.FC<{
   const activeFocusGrantedRef = useRef(false);
 
   useEffect(() => {
+    if (!disabled) return;
+    const trackFocusIntent = (event: PointerEvent) => {
+      if (!(event.target instanceof Node)) return;
+      externalFocusWhileDisabledRef.current = !containerRef.current?.contains(event.target);
+    };
+    document.addEventListener('pointerdown', trackFocusIntent, true);
+    return () => document.removeEventListener('pointerdown', trackFocusIntent, true);
+  }, [disabled]);
+
+  useEffect(() => {
     if (!active) {
       activeFocusGrantedRef.current = false;
     }
@@ -778,6 +789,13 @@ const SendBox: React.FC<{
     // Already focused (e.g. user clicked into this box, which drove selection
     // here via onFocused): latch it but leave the caret where the user put it.
     if (document.activeElement === textarea) return;
+    // Becoming active or enabled is not permission to take focus from a field
+    // or panel the person is using elsewhere.
+    if (document.activeElement !== document.body) return;
+    if (externalFocusWhileDisabledRef.current) {
+      externalFocusWhileDisabledRef.current = false;
+      return;
+    }
     textarea.focus();
     const end = textarea.value.length;
     textarea.setSelectionRange(end, end);
@@ -840,13 +858,7 @@ const SendBox: React.FC<{
     syncHighlightTextMetrics();
   }, [input, isInputFocused, isMobile, isSingleLine, syncHighlightTextMetrics]);
 
-  const handleTextAreaChange = (rawValue: string) => {
-    // A Chinese IME writes `、` where the `/` key is: as the first character of an empty box that
-    // is the command menu's own key, so it becomes `/` and the menu opens, where there is a menu.
-    // Only what the IME committed counts for that rewrite; the text itself must still flow through
-    // the controlled value while the input method is composing (the Guid composer does the same).
-    const value =
-      !isComposing.current && mergedSlashCommands.length > 0 ? rewriteIdeographicSlash(input, rawValue) : rawValue;
+  const applyDraftValue = (value: string, caret?: number) => {
     if (historyNavigationIndex !== null) {
       historyDraftRef.current = null;
       setHistoryNavigationIndex(null);
@@ -856,9 +868,30 @@ const SendBox: React.FC<{
     }
     setInput(value);
     requestAnimationFrame(() => {
+      if (caret !== undefined) {
+        const textarea = getTextareaElement();
+        if (textarea) {
+          textarea.setSelectionRange(caret, caret);
+          setCaretPosition(caret);
+        }
+      }
       syncCaretPosition();
       syncHighlightScroll();
     });
+  };
+
+  // Only an IME commit changes 、 to / when it is the whole empty-box value.
+  const handleTextAreaChange = (rawValue: string) => {
+    const value =
+      !isComposing.current && mergedSlashCommands.length > 0 ? rewriteIdeographicSlash(input, rawValue) : rawValue;
+    applyDraftValue(value);
+  };
+
+  const handleCompositionEnd = (event: React.CompositionEvent<HTMLTextAreaElement>) => {
+    const { committedValue, previousValue } = commitComposition(event);
+    const value =
+      mergedSlashCommands.length > 0 ? rewriteIdeographicSlash(previousValue, committedValue) : committedValue;
+    applyDraftValue(value, value.length);
   };
 
   const handleOverlayKeyDown = (event: React.KeyboardEvent) => {
@@ -1320,7 +1353,8 @@ const SendBox: React.FC<{
   );
 
   // 使用共享的输入法合成处理
-  const { compositionHandlers, isComposing, isComposingState, createKeyDownHandler } = useCompositionInput();
+  const { compositionHandlers, isComposing, isComposingState, commitComposition, createKeyDownHandler } =
+    useCompositionInput();
 
   // 使用共享的PasteService集成
   const { onPaste, onFocus: handlePasteFocus } = usePasteService({
@@ -1598,6 +1632,13 @@ const SendBox: React.FC<{
       inputLength: input.length,
       domSnippetCount: domSnippets.length,
     });
+    const textareaAtSend = getTextareaElement();
+    const draftSnapshot = {
+      value: input,
+      selectionStart: textareaAtSend?.selectionStart ?? input.length,
+      selectionEnd: textareaAtSend?.selectionEnd ?? input.length,
+      hadFocus: document.activeElement === textareaAtSend,
+    };
     setIsLoading(true);
     historyDraftRef.current = null;
     setHistoryNavigationIndex(null);
@@ -1622,19 +1663,54 @@ const SendBox: React.FC<{
       finalMessage = input + snippetsHtml;
     }
 
-    // 立即清空输入框，避免异步 onSend 完成后覆盖用户新输入
-    // Clear input immediately to prevent async onSend completion from overwriting new user input
-    setInput('');
-    clearDomSnippets();
-    setReplyQuote(null);
+    // Keep the draft in place until the parent accepts the send.
+    const restoreDraft = () => {
+      const current = latestInputRef.current;
+      if (current === '' || current === finalMessage || current === draftSnapshot.value) {
+        setInput(draftSnapshot.value);
+      }
+      requestAnimationFrame(() => {
+        const textarea = getTextareaElement();
+        if (!textarea) return;
+        const active = document.activeElement;
+        if (draftSnapshot.hadFocus && (active === textarea || active === document.body)) {
+          textarea.focus();
+        }
+        if (document.activeElement === textarea) {
+          textarea.setSelectionRange(draftSnapshot.selectionStart, draftSnapshot.selectionEnd);
+          setCaretPosition(draftSnapshot.selectionStart);
+        }
+        syncHighlightScroll();
+      });
+    };
 
-    onSend(finalMessage)
+    let sendPromise: Promise<void | false>;
+    try {
+      sendPromise = onSend(finalMessage);
+    } catch (error) {
+      console.error('[SendBox] send failed:', error);
+      restoreDraft();
+      setIsLoading(false);
+      return;
+    }
+
+    void sendPromise
       .then((result) => {
         if (result === false) {
-          setInput(finalMessage);
+          restoreDraft();
+          return;
         }
+        // Leave text the person typed while the send was in flight alone.
+        if (latestInputRef.current === draftSnapshot.value || latestInputRef.current === finalMessage) {
+          setInput('');
+        }
+        clearDomSnippets();
+        setReplyQuote(null);
       })
-      .catch(() => {})
+      .catch((error: unknown) => {
+        console.error('[SendBox] send failed:', error);
+        restoreDraft();
+      })
       .finally(() => {
         setIsLoading(false);
       });
@@ -2162,15 +2238,7 @@ const SendBox: React.FC<{
                 syncHighlightScroll(event.currentTarget);
               }}
               {...compositionHandlers}
-              onCompositionEnd={(event) => {
-                // The shared Textarea is native, not Arco's: its compositionend does not necessarily come with a
-                // React change event. Commit the committed value here as the Guid composer does. The change during
-                // composition already put `、` into the controlled value, so use the empty pre-composition value
-                // for the one-character slash rewrite.
-                const next = event.currentTarget.value;
-                const previous = input === IDEOGRAPHIC_COMMA && next === IDEOGRAPHIC_COMMA ? '' : input;
-                handleTextAreaChange(rewriteIdeographicSlash(previous, next));
-              }}
+              onCompositionEnd={handleCompositionEnd}
               autoSize={isSingleLine ? false : MULTI_LINE_AUTO_SIZE}
               onKeyDown={createKeyDownHandler(handlePrimaryAction, (event) => {
                 return (

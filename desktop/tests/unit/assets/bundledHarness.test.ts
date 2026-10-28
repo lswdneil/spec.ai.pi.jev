@@ -7,6 +7,7 @@ import { gzipSync } from 'node:zlib';
 import { bundleHarness, extractPackage, installArgs, pinnedVersion } from '../../../scripts/kyrn/bundle-harness.mjs';
 
 const { verifyBundledHarness } = require('../../../packages/shared-scripts/src/verify-bundled-harness');
+const { digestTree } = require('../../../packages/shared-scripts/src/bundle-integrity');
 
 /** What spec.jev's package.json says it depends on. */
 const DEPENDENCIES = { '@earendil-works/chord': '0.86.0', jiti: '2.7.0' };
@@ -35,11 +36,18 @@ function seedHarness(resourcesDir: string, { platform = 'darwin', arch = 'arm64'
     writeFile(join(pkg, ...file.split('/')), file === 'kyrn/bin/mu.mjs' ? LAUNCHER : '');
   for (const name of Object.keys(DEPENDENCIES))
     writeFile(join(pkg, 'node_modules', ...name.split('/'), 'package.json'));
+  writeBundleRecord(resourcesDir, { name: 'spec.jev', version, platform, arch });
+  return pkg;
+}
+
+function writeBundleRecord(resourcesDir: string, record: Record<string, string>) {
   writeFile(
     join(resourcesDir, 'harness', 'bundle.json'),
-    JSON.stringify({ name: 'spec.jev', version, platform, arch })
+    JSON.stringify({
+      ...record,
+      integrity: digestTree(join(resourcesDir, 'harness'), { ignore: ['bundle.json'] }),
+    })
   );
-  return pkg;
 }
 
 /** One ustar header block, as npm pack writes them. */
@@ -112,10 +120,12 @@ describe('verifyBundledHarness', () => {
     const pkg = seedHarness(resourcesDir);
     rmSync(join(pkg, 'judge', 'mu'), { recursive: true });
     writeFile(join(pkg, 'judge', 'dist', 'kyrn-judge.js'));
+    writeBundleRecord(resourcesDir, { name: 'spec.jev', version: '0.1.1', platform: 'darwin', arch: 'arm64' });
     const verify = () => verifyBundledHarness({ resourcesDir, electronPlatformName: 'darwin', targetArch: 'arm64' });
     expect(verify().missing).toEqual([]);
 
     rmSync(join(pkg, 'judge', 'dist', 'kyrn-judge.js'));
+    writeBundleRecord(resourcesDir, { name: 'spec.jev', version: '0.1.1', platform: 'darwin', arch: 'arm64' });
     expect(verify().missing).toEqual(['harness/spec.jev/judge/mu/index.js']);
   });
 
@@ -123,6 +133,7 @@ describe('verifyBundledHarness', () => {
     const pkg = seedHarness(resourcesDir);
     rmSync(join(pkg, 'judge', 'dist', 'auth.js'));
     rmSync(join(pkg, 'node_modules', 'jiti'), { recursive: true });
+    writeBundleRecord(resourcesDir, { name: 'spec.jev', version: '0.1.1', platform: 'darwin', arch: 'arm64' });
     const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'darwin', targetArch: 'arm64' });
     expect(result.missing).toEqual([
       'harness/spec.jev/judge/dist/auth.js',
@@ -137,6 +148,7 @@ describe('verifyBundledHarness', () => {
       join(pkg, 'kyrn', 'bin', 'mu.mjs'),
       'export function planLaunch() {}\n// prepareLaunch is not exported\n'
     );
+    writeBundleRecord(resourcesDir, { name: 'spec.jev', version: '0.1.1', platform: 'darwin', arch: 'arm64' });
     const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'darwin', targetArch: 'arm64' });
     expect(result.missing).toEqual([
       'harness/spec.jev/kyrn/bin/mu.mjs<export:planHost>',
@@ -153,16 +165,20 @@ describe('verifyBundledHarness', () => {
 
   it('reports dependencies installed for another system, processor or version', () => {
     seedHarness(resourcesDir, { platform: 'darwin', arch: 'arm64' });
-    writeFile(
-      join(resourcesDir, 'harness', 'bundle.json'),
-      JSON.stringify({ name: 'spec.jev', version: '0.1.0', platform: 'darwin', arch: 'arm64' })
-    );
+    writeBundleRecord(resourcesDir, { name: 'spec.jev', version: '0.1.0', platform: 'darwin', arch: 'arm64' });
     const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'win32', targetArch: 'x64' });
     expect(result.missing).toEqual([
       'harness/bundle.json<platform:win32>',
       'harness/bundle.json<arch:x64>',
       'harness/bundle.json<version:0.1.1>',
     ]);
+  });
+
+  it('rejects a bundle whose files changed after its digest was recorded', () => {
+    const pkg = seedHarness(resourcesDir);
+    writeFile(join(pkg, 'judge', 'dist', 'auth.js'), 'tampered');
+    const result = verifyBundledHarness({ resourcesDir, electronPlatformName: 'darwin', targetArch: 'arm64' });
+    expect(result.missing).toContain('harness/bundle.json<integrity:digest_mismatch>');
   });
 });
 
@@ -241,11 +257,12 @@ describe('bundle-harness', () => {
     });
     expect(result.version).toBe('0.1.1');
     expect(calls).toEqual([{ args: installArgs('linux', 'x64'), cwd: join(tmp, 'resources', 'harness', 'spec.jev') }]);
-    expect(JSON.parse(readFileSync(join(tmp, 'resources', 'harness', 'bundle.json'), 'utf8'))).toEqual({
+    expect(JSON.parse(readFileSync(join(tmp, 'resources', 'harness', 'bundle.json'), 'utf8'))).toMatchObject({
       name: 'spec.jev',
       version: '0.1.1',
       platform: 'linux',
       arch: 'x64',
+      integrity: { algorithm: 'sha256' },
     });
     expect(existsSync(join(tmp, 'resources', 'harness', 'spec.jev', 'stale.js'))).toBe(false);
   });

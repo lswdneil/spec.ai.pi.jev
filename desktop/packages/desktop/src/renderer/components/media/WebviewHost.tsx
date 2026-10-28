@@ -884,13 +884,13 @@ const WebviewHost: React.FC<WebviewHostProps> = ({
       >
         <webview
           ref={webviewRef as any}
+          {...webviewAttrs}
           src={source}
           className='border-0 absolute start-0 top-0'
           style={{
             opacity: veilsWhileLoading && isLoading ? 0 : 1,
             transition: 'opacity 150ms ease-in',
           }}
-          {...webviewAttrs}
         />
       </div>
     </div>

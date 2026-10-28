@@ -11,7 +11,7 @@ spec.jev comes in two forms: a desktop app that bundles everything it needs, and
    | Windows x64 | `spec.jev-<version>-win-x64.exe` |
    | Linux x64 (Debian, Ubuntu) | `spec.jev-<version>-linux-amd64.deb` |
 
-   `SHA256SUMS` lists the checksum of every file. The Windows build isn't code-signed yet, so SmartScreen shows a warning the first time ("More info" → "Run anyway").
+   `SHA256SUMS` lists the checksum of every file. Release Windows builds are Authenticode-signed; a local unsigned build can still show SmartScreen's warning.
 2. Open the app. The first-run guide asks for a model: paste an API key (spec.jev detects the service from the key's format and checks the key with one request), or sign in with a ChatGPT, Claude, Grok or Google subscription.
 3. Pick a folder and start a conversation.
 

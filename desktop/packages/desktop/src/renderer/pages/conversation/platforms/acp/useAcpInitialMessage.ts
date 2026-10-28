@@ -10,7 +10,7 @@ import type { TConversationRuntimeSummary } from '@/common/config/storage';
 import { parseError, uuid } from '@/common/utils';
 import { emitter } from '@/renderer/utils/emitter';
 import { type ChatFileRef, isChatFileRef, uploadFileRef } from '@/common/types/chatFile';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getConversationRuntimeWorkspaceErrorDetail } from '../../utils/conversationCreateError';
 import type { ConversationRuntimeSendFailure } from '../../runtime/conversationRuntimeViewStore';
@@ -45,15 +45,17 @@ export const useAcpInitialMessage = ({
   addOrUpdateMessage,
 }: UseAcpInitialMessageParams): void => {
   const { t } = useTranslation();
+  // The sessionStorage item is the retry source; this ref is the in-memory
+  // idempotency guard that keeps an effect rerun from sending it twice.
+  const initialSendRef = useRef<string | null>(null);
 
   useEffect(() => {
     const storageKey = `acp_initial_message_${conversation_id}`;
     const storedMessage = sessionStorage.getItem(storageKey);
 
     if (!storedMessage) return;
-
-    // Clear immediately to prevent duplicate sends (e.g., if component remounts while sendMessage is pending)
-    sessionStorage.removeItem(storageKey);
+    if (initialSendRef.current === storedMessage) return;
+    initialSendRef.current = storedMessage;
 
     const sendInitialMessage = async () => {
       try {
@@ -81,9 +83,13 @@ export const useAcpInitialMessage = ({
         });
         markSendAccepted?.(result.turn_id, result.runtime, result.msg_id);
 
-        // Initial message sent successfully
+        // The backend accepted the turn: only now may the retry source go.
+        sessionStorage.removeItem(storageKey);
         emitter.emit('chat.history.refresh');
       } catch (error) {
+        if (sessionStorage.getItem(storageKey) === null) {
+          sessionStorage.setItem(storageKey, storedMessage);
+        }
         const errorMessageText =
           getConversationRuntimeWorkspaceErrorDetail(error, t) || parseError(error) || t('common.unknownError');
         const busyError = classifyConversationBusyError(error);

@@ -110,6 +110,7 @@ const Row: React.FC<RowProps> = ({
       title={tooltipOf(t, conversation, parent)}
       data-testid='native-sidebar-item'
       data-id={conversation.id}
+      data-native-focus-intent='conversation'
       data-pinned={pinned ? 'true' : undefined}
       data-archived={archived ? 'true' : undefined}
       data-running={conversation.running ? 'true' : undefined}

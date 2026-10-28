@@ -35,6 +35,7 @@ import { emitter } from '@/renderer/utils/emitter';
 import HOC from '@/renderer/utils/ui/HOC';
 import { clearNativeUnread } from '../hooks/useNativeAttention';
 import { useNativeConversation } from '../hooks/useNativeConversation';
+import { useNativeComposerFocus } from '../hooks/useNativeComposerFocus';
 import { useNativePanel } from '../hooks/useNativePanel';
 import { errorKey } from '../utils/errorWords';
 import { forkableIds, forkPoint } from '../utils/forkPoint';
@@ -91,6 +92,7 @@ const NativeConversationScreen: React.FC<{ id: string }> = ({ id }) => {
   const isMobile = useLayoutContext()?.isMobile ?? false;
   const updateList = useUpdateMessageList();
   const updateLoading = useUpdateMessageListLoading();
+  const screenRef = useRef<HTMLDivElement>(null);
 
   const language = i18n?.language;
   const words = useMemo<MessageWords>(
@@ -145,17 +147,7 @@ const NativeConversationScreen: React.FC<{ id: string }> = ({ id }) => {
   }, [conversation.id, id, navigate]);
 
   useNativePanel(conversation.id, view, conversation.epoch, loading, failure, cwd);
-
-  // A conversation chosen from the sidebar starts with the keyboard in its composer, including one whose id was already
-  // on screen. The focus waits for the snapshot so it lands in the real send box, not the loading state.
-  useEffect(() => {
-    if (isMobile || loading) return;
-    const frame = requestAnimationFrame(() => {
-      const input = document.querySelector<HTMLTextAreaElement>('[data-testid="native-send-input"]');
-      if (input && !input.disabled && document.activeElement !== input) input.focus();
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [conversation.id, isMobile, loading]);
+  useNativeComposerFocus({ screenRef, conversationId: conversation.id, isMobile, loading });
 
   // What the conversation wanted of its person (a run ended, a question) is seen once it is on screen.
   useEffect(() => {
@@ -211,6 +203,7 @@ const NativeConversationScreen: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <div
+      ref={screenRef}
       className='size-full flex flex-col min-h-0 bg-1'
       data-testid='native-conversation'
       data-id={conversation.id}

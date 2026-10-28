@@ -317,6 +317,32 @@ describe('NativeHost', () => {
     expect(error.stderr.endsWith('the last line')).toBe(true);
   });
 
+  it('masks credentials in the output it keeps and the lines it logs', async () => {
+    const { child, host, logs } = running();
+    const body = 'A1b2C3d4E5f6G7h8I9j0K1l2M3n4';
+    child.stderr.write(
+      [
+        'Authorization: Bearer bearer-secret-value',
+        'Proxy-Authorization: Basic dXNlcjpwYXNzd29yZA==',
+        'Cookie: session=cookie-secret',
+        'https://proxy-user:url-secret@example.com',
+        `sk-proj-${body}`,
+        `[spec.jev] request failed with Authorization: Bearer ${body}`,
+        '',
+      ].join('\n')
+    );
+    child.exit(1);
+    const state = await reaches(host, 'failed');
+    const error = (state as { error: NativeHostError }).error;
+    expect(error.stderr).toContain('Authorization: Bearer ••••');
+    expect(error.stderr).toContain('Proxy-Authorization: Basic ••••');
+    expect(error.stderr).toContain('Cookie: ••••');
+    expect(error.stderr).toContain('https://proxy-user:••••@example.com');
+    for (const secret of ['bearer-secret-value', 'dXNlcjpwYXNzd29yZA==', 'cookie-secret', 'url-secret', body])
+      expect(error.stderr).not.toContain(secret);
+    expect(logs).toEqual(['request failed with Authorization: Bearer ••••']);
+  });
+
   it('tells a pi that stopped because no model is set up from one that failed', async () => {
     const { child, host } = setup();
     host.start();

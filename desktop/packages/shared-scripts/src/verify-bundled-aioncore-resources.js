@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { verifyTreeDigest } = require('./bundle-integrity');
 
 function backendBinaryName(platform) {
   return platform === 'win32' ? 'aioncore.exe' : 'aioncore';
@@ -91,6 +92,12 @@ function verifyBundleManifest(baseDir, runtimeKey, electronPlatformName, targetA
   if (manifest.arch !== targetArch) {
     missing.push(`${relativePath}<arch:${targetArch}>`);
     failures.push({ component: 'bundle-manifest', reason: 'runtime_key_mismatch', path: relativePath });
+  }
+
+  const integrity = verifyTreeDigest(baseDir, manifest.integrity, { ignore: ['manifest.json'] });
+  if (!integrity.ok) {
+    missing.push(`${relativePath}<integrity:${integrity.reason}>`);
+    failures.push({ component: 'bundle-integrity', reason: integrity.reason, path: relativePath });
   }
 }
 
@@ -336,8 +343,10 @@ function verifyBundledAioncoreResources({ resourcesDir, electronPlatformName, ta
   requireRelativePath(baseDir, runtimeKey, [backendBinaryName(electronPlatformName)], checked, missing, failures);
   verifyBundleManifest(baseDir, runtimeKey, electronPlatformName, targetArch, checked, missing, failures);
   requireRelativeDirectory(baseDir, runtimeKey, ['managed-resources'], checked, missing, failures);
+  const failuresBeforeContract = failures.length;
+  const missingBeforeContract = missing.length;
   verifyManagedResourcesContract(baseDir, runtimeKey, checked, missing, failures);
-  if (failures.length > 0 && missing.length === 0) {
+  if (failures.length > failuresBeforeContract && missing.length === missingBeforeContract) {
     missing.push(`${contractBundledPath(runtimeKey, 'manifest.json')}<contract_failure>`);
   }
 

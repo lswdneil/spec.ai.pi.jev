@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { verifyTreeDigest } = require('./bundle-integrity');
 
 /**
  * What the packaged app has to carry of mu (scripts/kyrn/bundle-harness.mjs puts it in resources/harness, which
@@ -89,6 +90,8 @@ function verifyBundledHarness({ resourcesDir, electronPlatformName, targetArch }
     if (bundle.arch !== targetArch) missing.push(`harness/bundle.json<arch:${targetArch}>`);
     if (manifest && bundle.version !== manifest.version)
       missing.push(`harness/bundle.json<version:${manifest.version}>`);
+    const integrity = verifyTreeDigest(root, bundle.integrity, { ignore: ['bundle.json'] });
+    if (!integrity.ok) missing.push(`harness/bundle.json<integrity:${integrity.reason}>`);
   }
   return { version: manifest?.version, checked, missing };
 }
