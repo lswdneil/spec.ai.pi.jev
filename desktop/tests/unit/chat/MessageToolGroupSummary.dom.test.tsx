@@ -9,6 +9,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { IMessageAcpToolCall, IMessageToolCall } from '@/common/chat/chatLib';
 import MessageToolGroupSummary from '@/renderer/pages/conversation/Messages/components/MessageToolGroupSummary';
+import summaryStyles from '@/renderer/pages/conversation/Messages/components/MessageToolGroupSummary.module.css';
 
 const mockDownloadFileFromPath = vi.fn().mockResolvedValue(undefined);
 const mockMessageSuccess = vi.fn();
@@ -107,7 +108,10 @@ describe('MessageToolGroupSummary ACP image output', () => {
     };
 
     render(<MessageToolGroupSummary messages={[message]} />);
-    fireEvent.click(screen.getByLabelText('acp.image.download_aria'));
+    const download = screen.getByLabelText('acp.image.download_aria');
+    expect(download).toHaveClass(summaryStyles.downloadImage);
+    expect(download).not.toHaveClass('arco-btn');
+    fireEvent.click(download);
 
     expect(mockDownloadFileFromPath).toHaveBeenCalledWith(imagePath, 'ig_test_image.png');
   });

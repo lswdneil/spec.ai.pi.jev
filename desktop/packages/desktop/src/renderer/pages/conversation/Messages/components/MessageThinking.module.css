@@ -3,9 +3,8 @@
   margin: 4px 0;
 }
 
-/* The header is an Arco text button: match Arco's own selectors so its size, colour and hover
-   fill do not win over the quiet one-line look. */
-.header:global(.arco-btn) {
+/* The header is a text button: keep its size, colour and hover fill quiet on one line. */
+.header {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -17,7 +16,7 @@
   background-color: transparent;
 }
 
-.header:global(.arco-btn):not(:disabled):hover {
+.header:not(:disabled):hover {
   color: var(--aou-7);
   background-color: transparent;
 }

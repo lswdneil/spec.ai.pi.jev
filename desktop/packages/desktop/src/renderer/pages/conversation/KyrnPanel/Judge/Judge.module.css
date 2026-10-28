@@ -399,24 +399,9 @@
   margin-top: 6px;
 }
 
-.collapse :global(.arco-collapse-item-header) {
-  padding: 8px 8px 8px 22px;
+.collapse > div > button {
+  padding: 8px;
   background: transparent;
   color: var(--text-secondary);
   font-size: 12px;
-}
-
-/* Arco parks the caret at 13px, which lands on the first letter once the header padding is this tight. */
-.collapse :global(.arco-collapse-item .arco-collapse-item-icon-hover) {
-  left: 2px;
-}
-
-.collapse :global(.arco-collapse-item-content),
-.collapse :global(.arco-collapse-item) {
-  border: none;
-  background: transparent;
-}
-
-.collapse :global(.arco-collapse-item-content-box) {
-  padding: 0 0 8px;
 }

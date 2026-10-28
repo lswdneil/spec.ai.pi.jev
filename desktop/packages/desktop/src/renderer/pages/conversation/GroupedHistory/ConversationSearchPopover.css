@@ -38,12 +38,7 @@
   box-shadow: 0 0 0 2px color-mix(in srgb, rgb(var(--primary-6)) 24%, transparent) !important;
 }
 
-.conversation-search-modal.mu-modal .arco-modal,
-.conversation-search-modal.mu-modal .arco-modal-content,
-.conversation-search-modal.mu-modal .arco-modal-header,
-.conversation-search-modal.mu-modal .arco-modal-body,
-.conversation-search-modal.mu-modal .arco-modal-footer,
-.conversation-search-modal .mu-modal-wrapper,
+.conversation-search-modal.mu-modal,
 .conversation-search-modal .mu-modal-body-content {
   background: transparent !important;
   box-shadow: none !important;
@@ -52,8 +47,7 @@
   -webkit-backdrop-filter: none !important;
 }
 
-.conversation-search-modal.mu-modal .arco-modal-content,
-.conversation-search-modal .arco-modal-content {
+.conversation-search-modal.mu-modal .mu-modal-wrapper {
   position: relative;
   background: var(--conversation-search-panel-bg) !important;
   border: 1px solid var(--conversation-search-panel-border) !important;
@@ -63,8 +57,6 @@
   outline-offset: -1px;
   backdrop-filter: blur(10px) saturate(115%);
   -webkit-backdrop-filter: blur(10px) saturate(115%);
-  padding: 0 !important;
-  margin: 0 !important;
   overflow: hidden !important;
 }
 

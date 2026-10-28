@@ -1,6 +1,7 @@
 import React, { useEffect, useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search } from 'lucide-react';
+import classNames from 'classnames';
 import { useIndexedItemRefs } from '@/renderer/hooks/ui/useIndexedItemRefs';
 import { Input } from '@/renderer/ui';
 import { formatPrimaryShortcut, MESSAGE_SEARCH_SHORTCUT } from '@/renderer/utils/ui/keyboardShortcuts';
@@ -68,7 +69,7 @@ const CommandPalettePanel: React.FC<{ onRun: (item: PaletteItem) => void }> = ({
           onChange={setQuery}
           onKeyDown={onKeyDown}
           placeholder={t('common.commandPalette.placeholder')}
-          prefix={<Search className='sv-icon-md' strokeWidth={1.75} />}
+          prefix={<Search className={classNames('sv-icon-md', styles.fieldPrefix)} strokeWidth={1.75} />}
           className={styles.fieldInput}
           role='combobox'
           aria-label={title}

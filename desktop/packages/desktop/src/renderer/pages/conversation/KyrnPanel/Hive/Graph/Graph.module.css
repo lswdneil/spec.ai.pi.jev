@@ -95,7 +95,7 @@
   letter-spacing: 0.02em;
 }
 
-.node:global(.arco-btn) {
+.node {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -109,11 +109,11 @@
   white-space: normal;
 }
 
-.node:global(.arco-btn:hover) {
+.node:not(:disabled):hover {
   background: var(--bg-hover);
 }
 
-.node:global(.arco-btn:focus-visible) {
+.node:focus-visible {
   outline: 1px solid var(--text-primary);
   outline-offset: 1px;
 }

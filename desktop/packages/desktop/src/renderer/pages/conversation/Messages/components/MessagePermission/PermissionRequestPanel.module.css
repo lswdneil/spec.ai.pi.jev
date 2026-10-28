@@ -2,14 +2,11 @@
   width: 100%;
   margin-bottom: 12px;
   overflow: hidden;
+  padding: 12px;
   border: 1px solid var(--color-border-2);
   border-radius: 10px;
   background: var(--color-bg-2);
   container-type: inline-size;
-}
-
-.card :global(.arco-card-body) {
-  padding: 12px;
 }
 
 .panel {
@@ -125,8 +122,8 @@
   border-radius: 8px;
 }
 
-/* Reset the Arco Button chrome so each option reads as a full-width list row. */
-.optionButton:global(.arco-btn) {
+/* Reset the Button chrome so each option reads as a full-width list row. */
+.optionButton {
   display: flex;
   width: 100%;
   height: auto;
@@ -139,26 +136,27 @@
   border-radius: 0;
   background: transparent;
   text-align: start;
+  white-space: normal;
   transition: background-color 0.16s ease;
 }
 
-.optionButton:global(.arco-btn) + .optionButton:global(.arco-btn) {
+.optionButton + .optionButton {
   border-top: 1px solid var(--color-border-2);
 }
 
-.optionButton:global(.arco-btn):not(:disabled):hover {
+.optionButton:not(:disabled):hover {
   background: var(--color-fill-1);
 }
 
-.optionButton:global(.arco-btn):focus-visible {
+.optionButton:focus-visible {
   background: var(--color-primary-light-1);
 }
 
-.optionButton:global(.arco-btn)[data-disabled='true'] {
+.optionButton[data-disabled='true'] {
   opacity: 0.6;
 }
 
-.optionButton :global(.arco-btn-loading-icon) {
+.optionButton > :global(.sv-icon-sm) {
   margin-inline-end: 8px;
 }
 
@@ -219,7 +217,7 @@
     flex-wrap: wrap;
   }
 
-  .card :global(.arco-card-body) {
+  .card {
     padding: 10px;
   }
 

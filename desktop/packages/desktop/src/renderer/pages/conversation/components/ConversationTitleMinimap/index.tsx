@@ -82,35 +82,42 @@ const ConversationTitleMinimap: React.FC<ConversationTitleMinimapProps> = ({
     const titleNode = (
       <div className={styles.headerShell} style={{ height: `${HEADER_HEIGHT}px` }}>
         <div className='conversation-minimap-header h-34px flex items-center gap-8px w-full min-w-0 text-12px text-t-secondary box-border'>
-          <Input
-            ref={searchInputRef}
-            size='small'
-            readOnly={!isSearchMode}
-            allowClear={isSearchMode}
-            aria-label={t('conversation.minimap.searchAria')}
+          <div
             className={classNames(
-              'conversation-minimap-search-input min-w-0 flex-1',
-              styles.searchInput,
-              !isSearchMode && styles.searchInputIdle
+              'conversation-minimap-search-field min-w-0 flex-1',
+              styles.searchField
             )}
-            value={searchKeyword}
-            onClick={() => {
-              if (!isSearchMode) {
-                openSearchPanel();
-              }
-            }}
-            onFocus={() => {
-              if (!isSearchMode) {
-                openSearchPanel();
-              }
-            }}
-            onChange={setSearchKeyword}
-            onBlur={handleSearchInputBlur}
-            onCompositionStartCapture={handleSearchInputCompositionStart}
-            onCompositionEndCapture={handleSearchInputCompositionEnd}
-            prefix={<Search className='sv-icon-sm text-t-secondary' />}
-            placeholder={isSearchMode ? '' : t('conversation.minimap.searchHint')}
-          />
+          >
+            <Input
+              ref={searchInputRef}
+              size='small'
+              readOnly={!isSearchMode}
+              allowClear={isSearchMode}
+              aria-label={t('conversation.minimap.searchAria')}
+              className={classNames(
+                'conversation-minimap-search-input',
+                styles.searchInput,
+                !isSearchMode && styles.searchInputIdle
+              )}
+              value={searchKeyword}
+              onClick={() => {
+                if (!isSearchMode) {
+                  openSearchPanel();
+                }
+              }}
+              onFocus={() => {
+                if (!isSearchMode) {
+                  openSearchPanel();
+                }
+              }}
+              onChange={setSearchKeyword}
+              onBlur={handleSearchInputBlur}
+              onCompositionStartCapture={handleSearchInputCompositionStart}
+              onCompositionEndCapture={handleSearchInputCompositionEnd}
+              prefix={<Search className={classNames('sv-icon-sm text-t-secondary', styles.searchPrefix)} />}
+              placeholder={isSearchMode ? '' : t('conversation.minimap.searchHint')}
+            />
+          </div>
           {countNode}
         </div>
         <div className={styles.sectionDivider} style={{ backgroundColor: visualStyle.borderColor }} />

@@ -5,7 +5,9 @@ import { ipcBridge } from '@/common';
 import type { TMessage } from '@/common/chat/chatLib';
 import type { ToolMessage } from '@/common/chat/normalizeToolCall';
 import MessageToolGroupSummary from '@/renderer/pages/conversation/Messages/components/MessageToolGroupSummary';
+import summaryStyles from '@/renderer/pages/conversation/Messages/components/MessageToolGroupSummary.module.css';
 import { shortPath } from '@/renderer/pages/conversation/Messages/components/toolActivity';
+import { cssRules, readRendererCss } from '../../helpers/cssRules';
 
 vi.mock('@/common', () => ({
   ipcBridge: {
@@ -68,6 +70,45 @@ afterEach(() => {
 });
 
 describe('MessageToolGroupSummary', () => {
+  it('styles the live activity header, badge dot and controls without Arco button or badge-dot chrome', () => {
+    render(
+      <MessageToolGroupSummary
+        messages={[tool('read', 'completed', { path: 'src/app.ts' }), tool('bash', 'running', { command: 'npm test' })]}
+      />
+    );
+
+    const header = screen.getByRole('button', { name: /2 steps/ });
+    expect(header).toHaveClass(summaryStyles.activityHeader);
+    expect(header).not.toHaveClass('arco-btn');
+    const badge = header.firstElementChild as HTMLElement;
+    expect(badge).toHaveClass(summaryStyles.breathing);
+    expect(badge.firstElementChild?.tagName).toBe('SPAN');
+    expect(badge.querySelector('.arco-badge-status-dot')).toBeNull();
+
+    const css = readRendererCss('pages/conversation/Messages/components/MessageToolGroupSummary.module.css');
+    const headerRules = cssRules(css, '.activityHeader');
+    expect(headerRules.some((rule) => rule.includes('width: 100%;'))).toBe(true);
+    expect(headerRules.some((rule) => rule.includes('height: auto;'))).toBe(true);
+    expect(headerRules.some((rule) => rule.includes('padding: 4px 8px;'))).toBe(true);
+    expect(
+      cssRules(css, '.activityHeader:not(:disabled):hover').some((rule) =>
+        rule.includes('background: var(--bg-hover);')
+      )
+    ).toBe(true);
+    expect(cssRules(css, '.activitySummary').some((rule) => rule.includes('overflow-wrap: anywhere;'))).toBe(true);
+    expect(cssRules(css, '.activitySummary').some((rule) => rule.includes('white-space: normal;'))).toBe(true);
+    expect(
+      cssRules(css, '.breathing > span:first-child').some((rule) =>
+        rule.includes('animation: breathing 1.5s ease-in-out infinite;')
+      )
+    ).toBe(true);
+    expect(cssRules(css, '.moreButton').some((rule) => rule.includes('height: auto;'))).toBe(true);
+    expect(cssRules(css, '.moreButton').some((rule) => rule.includes('padding: 2px 6px;'))).toBe(true);
+    expect(cssRules(css, '.downloadImage').some((rule) => rule.includes('position: absolute;'))).toBe(true);
+    expect(css).not.toContain(':global(.arco-btn)');
+    expect(css).not.toContain('.arco-badge-status-dot');
+  });
+
   it('shows a lone call as its own line, with no summary box above it', () => {
     render(<MessageToolGroupSummary messages={[tool('read', 'completed', { path: 'src/app.ts' })]} />);
 

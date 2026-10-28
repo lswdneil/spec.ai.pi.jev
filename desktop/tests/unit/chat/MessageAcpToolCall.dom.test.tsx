@@ -11,6 +11,7 @@ import type { IMessageAcpTerminalOutput, IMessageAcpToolCall } from '@/common/ch
 import type { FileChangesPanelProps } from '@/renderer/components/base/FileChangesPanel';
 import MessageAcpTerminalOutput from '@/renderer/pages/conversation/Messages/acp/MessageAcpTerminalOutput';
 import MessageAcpToolCall from '@/renderer/pages/conversation/Messages/acp/MessageAcpToolCall';
+import { cssRules, readRendererCss } from '../../helpers/cssRules';
 
 const mockDownloadFileFromPath = vi.fn().mockResolvedValue(undefined);
 const mockMessageSuccess = vi.fn();
@@ -403,6 +404,44 @@ describe('MessageAcpToolCall image output', () => {
     );
 
     expect(screen.getByTestId('file-changes-panel')).toBeInTheDocument();
+  });
+});
+
+describe('Dense ACP card padding', () => {
+  it('pads the live tool-call card directly', () => {
+    const { container } = render(<MessageAcpToolCall message={createMessage({ ...baseUpdate, title: 'Tool call' })} />);
+
+    const card = container.querySelector('.sv-dense-acp-card');
+    expect(card).toHaveClass('sv-dense-acp-card');
+    expect(card?.querySelector('.arco-card-body')).toBeNull();
+  });
+
+  it('pads the live terminal card directly', () => {
+    const message: IMessageAcpTerminalOutput = {
+      id: 'terminal-1',
+      msg_id: 'terminal-1',
+      conversation_id: 'conv-1',
+      type: 'acp_terminal_output',
+      content: {
+        terminal_id: 'term-1',
+        command: 'printf ok',
+        output: 'ok',
+        truncated: false,
+        exit_status: { exit_code: 0 },
+      },
+    };
+    const { container } = render(<MessageAcpTerminalOutput message={message} />);
+
+    const card = container.querySelector('.sv-dense-acp-card');
+    expect(card).toHaveClass('sv-dense-acp-card');
+    expect(card?.querySelector('.arco-card-body')).toBeNull();
+  });
+
+  it('declares the 8px padding on the shared live card class', () => {
+    const css = readRendererCss('styles/specjev/dense.css');
+    const rules = cssRules(css, "html[data-sv-ui='dense'] .sv-dense-acp-card");
+    expect(rules.some((rule) => rule.includes('padding: 8px;'))).toBe(true);
+    expect(css).not.toContain('.sv-dense-acp-card .arco-card-body');
   });
 });
 

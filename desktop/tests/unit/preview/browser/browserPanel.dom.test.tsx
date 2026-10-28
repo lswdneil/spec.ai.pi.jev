@@ -57,6 +57,7 @@ vi.mock('@/renderer/utils/platform', () => ({ isMacOS: () => true, isElectronDes
 vi.mock('@/renderer/utils/ui/clipboard', () => ({ copyText: copyTextMock }));
 
 import BrowserPanel from '@/renderer/pages/conversation/Preview/browser/BrowserPanel';
+import browserStyles from '@/renderer/pages/conversation/Preview/browser/BrowserPanel.module.css';
 import {
   browserNow,
   markBrowserAgentActive,
@@ -67,6 +68,7 @@ import {
 } from '@/renderer/pages/conversation/Preview/browser/browserStore';
 import { MAX_BROWSER_TABS } from '@/renderer/pages/conversation/Preview/browser/constants';
 import { BROWSER_PARTITION } from '@/common/platform/legacyNames';
+import { cssRules, readRendererCss } from '../../../helpers/cssRules';
 
 const i18n = createInstance();
 beforeAll(async () => {
@@ -136,6 +138,36 @@ describe('the browser with no page open', () => {
 });
 
 describe('the browser’s pages', () => {
+  it('keeps the live chrome classes and their direct layout rules', () => {
+    open('https://one.test/');
+    show({ onToggleMaximize: vi.fn() });
+
+    const tab = page('one.test');
+    expect(tab).toHaveClass(browserStyles.pageButton);
+    expect(tab).not.toHaveClass('arco-btn');
+    expect(pageTabs().getByRole('button', { name: 'Close one.test' })).toHaveClass(browserStyles.pageClose);
+    expect(screen.getByRole('button', { name: preview.browser.newTab })).toHaveClass(browserStyles.newPage);
+    expect(screen.getByRole('button', { name: common.historyBack })).toHaveClass(browserStyles.navButton);
+    expect(screen.getByRole('button', { name: preview.maximizePanel })).toHaveClass(browserStyles.actionButton);
+    expect(address()).toHaveClass(browserStyles.field);
+    expect(address()).not.toHaveClass('arco-input');
+    expect(address().closest(`.${browserStyles.fieldWrap}`)).not.toBeNull();
+
+    const css = readRendererCss('pages/conversation/Preview/browser/BrowserPanel.module.css');
+    const has = (selector: string, declaration: string) =>
+      cssRules(css, selector).some((rule) => rule.includes(declaration));
+    expect(has('.pageButton', 'height: 34px;')).toBe(true);
+    expect(has('.pageButton', 'min-width: 0;')).toBe(true);
+    expect(has('.pageClose', 'position: absolute;')).toBe(true);
+    expect(has('.newPage', 'flex: none;')).toBe(true);
+    expect(has('.navButton', 'flex: none;')).toBe(true);
+    expect(has('.field', 'flex: 1;')).toBe(true);
+    expect(has('.fieldWrap', 'margin-inline-start: 4px;')).toBe(true);
+    expect(has('.actionButton', 'color: var(--text-secondary);')).toBe(true);
+    expect(css).not.toContain(':global(.arco-btn)');
+    expect(css).not.toContain(':global(.arco-input)');
+  });
+
   it('opens a blank page with the plus, the address field ready for typing', async () => {
     vi.useFakeTimers();
     open('https://a.test/');

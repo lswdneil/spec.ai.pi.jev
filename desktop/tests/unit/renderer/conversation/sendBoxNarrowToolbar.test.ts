@@ -14,13 +14,15 @@ const tsx = readFileSync(resolve(root, 'index.tsx'), 'utf8');
 
 /** The body of the rule whose selector list names exactly this selector. */
 const rule = (selector: string): string => {
-  const found = (css.match(/[^{}]+\{[^}]+\}/g) ?? []).find((candidate) =>
-    candidate
-      .slice(0, candidate.indexOf('{'))
-      .split(',')
-      .some((part) => part.trim() === selector)
-  );
-  return found?.slice(found.indexOf('{') + 1, -1) ?? '';
+  return (css.match(/[^{}]+\{[^}]+\}/g) ?? [])
+    .filter((candidate) =>
+      candidate
+        .slice(0, candidate.indexOf('{'))
+        .split(',')
+        .some((part) => part.trim() === selector)
+    )
+    .map((candidate) => candidate.slice(candidate.indexOf('{') + 1, -1))
+    .join('\n');
 };
 
 // B4 of the visual QA: beside the work panel in a 900px window the composer is 320px wide, and its chips used to
@@ -43,5 +45,13 @@ describe('SendBox toolbar in a narrow composer', () => {
     expect(chip).toContain('flex: 0 1 auto');
     expect(chip).not.toContain('flex: 1 1 0');
     expect(rule('.sendbox-toolbar .sendbox-left-tool-group > *')).toContain('max-width: 100%');
+  });
+
+  it('styles the live buttons, pill content and textarea instead of removed Arco internals', () => {
+    expect(rule('.send-button-custom > svg')).toContain('stroke-width: 5 !important');
+    expect(rule('.sendbox-tools .agent-mode-compact-pill > span')).toContain('overflow: hidden !important');
+    expect(rule('.sendbox-left-tool-group > button')).toContain('flex-shrink: 0 !important');
+    expect(rule('.sendbox-panel textarea.sendbox-input--mobile')).toContain('width: 100% !important');
+    expect(css).not.toMatch(/\.arco-(?:icon|btn-content|btn-shape-circle|btn-secondary|btn-disabled|textarea|trigger)\b/);
   });
 });

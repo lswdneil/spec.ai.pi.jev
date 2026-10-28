@@ -2,22 +2,8 @@
  * The command palette: one white (or black) surface with a hairline, 8px corners and a faint shadow; monochrome
  * text. The only colour is the thin bar on the chosen row's leading edge. No gradients.
  *
- * Arco's modal chrome is reduced to that surface. `.wrap` scopes the overrides, and the doubled `.palette` outranks
- * `[data-color-scheme='mu'] .arco-modal` (a heavier shadow) and the dark theme's
- * `body[arco-theme='dark'] .arco-modal` (a grey fill, !important).
+ * Radix owns the dialog and its presence state, so both the enter and exit frames can live on the live surface.
  */
-.wrap .palette.palette {
-  top: 20vh;
-  width: 560px;
-  max-width: calc(100vw - 32px);
-  padding: 0;
-  border: 1px solid var(--border-base);
-  border-radius: 8px;
-  background-color: var(--bg-base) !important;
-  box-shadow: var(--mu-shadow-2, none);
-  overflow: hidden;
-}
-
 .radix {
   position: fixed;
   left: 50%;
@@ -33,6 +19,36 @@
   overflow: hidden;
   outline: none;
   transform: translateX(-50%);
+}
+
+.radix[data-state='open'] {
+  animation: palette-in var(--mu-duration, 160ms) var(--mu-ease, ease-out);
+}
+
+.radix[data-state='closed'] {
+  animation: palette-out 100ms ease-in;
+}
+
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes palette-out {
+  from {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -4px);
+  }
 }
 
 .radix.dense {
@@ -56,23 +72,6 @@
 .radix.dense .fieldInput {
   height: 40px !important;
   padding-inline: 34px 12px !important;
-  font-size: 13px;
-}
-
-.dense .palette.palette {
-  top: 18vh;
-  border-radius: 10px;
-  border-color: var(--sv-line);
-  background-color: var(--sv-popover) !important;
-  box-shadow: none;
-}
-
-.dense .field :global(.arco-input-inner-wrapper) {
-  height: 40px;
-  padding: 0 12px;
-}
-
-.dense .field :global(.arco-input) {
   font-size: 13px;
 }
 
@@ -115,44 +114,10 @@
   font-size: 10.5px;
 }
 
-/* The dark theme also gives every modal body a fill of its own. */
-.wrap .palette.palette :global(.arco-modal-content) {
-  padding: 0;
-  background-color: transparent !important;
-}
-
-/* A short fade instead of Arco's zoom from the cursor. */
-.wrap .palette:global(.zoomModal-enter),
-.wrap .palette:global(.zoomModal-appear) {
-  opacity: 0;
-  transform: translateY(-4px);
-}
-
-.wrap .palette:global(.zoomModal-enter-active),
-.wrap .palette:global(.zoomModal-appear-active) {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity var(--mu-duration, 160ms) var(--mu-ease, ease-out),
-    transform var(--mu-duration, 160ms) var(--mu-ease, ease-out);
-}
-
-.wrap .palette:global(.zoomModal-exit) {
-  opacity: 1;
-  transform: none;
-}
-
-.wrap .palette:global(.zoomModal-exit-active) {
-  opacity: 0;
-  transform: none;
-  transition: opacity 100ms ease-in;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .wrap .palette:global(.zoomModal-enter-active),
-  .wrap .palette:global(.zoomModal-appear-active),
-  .wrap .palette:global(.zoomModal-exit-active) {
-    transition: none;
+  .radix[data-state='open'],
+  .radix[data-state='closed'] {
+    animation: none;
   }
 }
 
@@ -161,27 +126,13 @@
   border-bottom: 1px solid var(--border-base);
 }
 
-.field :global(.arco-input-inner-wrapper) {
-  height: 48px;
-  padding: 0 16px;
-  border-width: 0 !important;
-  border-radius: 0;
-  background-color: transparent !important;
-  box-shadow: none !important;
-}
-
-.field :global(.arco-input-group-prefix) {
-  padding-inline-end: 10px;
+.fieldPrefix {
+  flex-shrink: 0;
   color: var(--bg-6);
   line-height: 0;
 }
 
-.field :global(.arco-input) {
-  font-size: 15px;
-  color: var(--text-primary);
-}
-
-.field :global(.arco-input)::placeholder {
+.fieldInput::placeholder {
   color: var(--bg-6);
 }
 

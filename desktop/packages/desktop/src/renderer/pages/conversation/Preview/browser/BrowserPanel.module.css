@@ -66,7 +66,7 @@
   max-width: 180px;
 }
 
-.pageButton:global(.arco-btn) {
+.pageButton {
   display: flex;
   flex: 1;
   align-items: center;
@@ -81,14 +81,14 @@
   transition: color 120ms ease;
 }
 
-.pageButton:global(.arco-btn:not(:disabled):hover),
-.pageButton:global(.arco-btn:not(:disabled):active) {
+.pageButton:not(:disabled):hover,
+.pageButton:not(:disabled):active {
   background: transparent;
   color: var(--text-primary);
 }
 
 /* The open page keeps room for its close button, which always shows there. */
-.page[data-active='true'] .pageButton:global(.arco-btn) {
+.page[data-active='true'] .pageButton {
   padding-inline-end: 26px;
   color: var(--text-primary);
   font-weight: 500;
@@ -105,7 +105,7 @@
   pointer-events: none;
 }
 
-.pageButton:global(.arco-btn:focus-visible) {
+.pageButton:focus-visible {
   outline: 1px solid var(--text-primary);
   outline-offset: -4px;
 }
@@ -157,7 +157,7 @@
  * The close button shows on the open page, and on another one under the pointer or the keyboard, where it covers the
  * end of the title (on the page's own surface) rather than taking room from every tab.
  */
-.pageClose:global(.arco-btn) {
+.pageClose {
   position: absolute;
   inset-inline-end: 4px;
   top: 50%;
@@ -171,13 +171,13 @@
   transform: translateY(-50%);
 }
 
-.page[data-active='true'] .pageClose:global(.arco-btn),
-.page:hover .pageClose:global(.arco-btn),
-.page:focus-within .pageClose:global(.arco-btn) {
+.page[data-active='true'] .pageClose,
+.page:hover .pageClose,
+.page:focus-within .pageClose {
   opacity: 1;
 }
 
-.pageClose:global(.arco-btn:not(:disabled):hover) {
+.pageClose:not(:disabled):hover {
   background: var(--bg-hover);
   color: var(--text-primary);
 }
@@ -189,14 +189,14 @@
   background-color: var(--border-base);
 }
 
-.newPage:global(.arco-btn) {
+.newPage {
   flex: none;
   align-self: center;
   margin-inline-start: 2px;
   color: var(--text-secondary);
 }
 
-.newPage:global(.arco-btn:not(:disabled):hover) {
+.newPage:not(:disabled):hover {
   color: var(--text-primary);
 }
 
@@ -211,12 +211,12 @@
   padding-block: 0 6px;
 }
 
-.navButton:global(.arco-btn) {
+.navButton {
   flex: none;
   color: var(--text-secondary);
 }
 
-.navButton:global(.arco-btn:not(:disabled):hover) {
+.navButton:not(:disabled):hover {
   color: var(--text-primary);
 }
 
@@ -236,10 +236,16 @@
   }
 }
 
-.field:global(.arco-input) {
+.fieldWrap {
+  display: flex;
   flex: 1;
   min-width: 0;
   margin-inline-start: 4px;
+}
+
+.field {
+  flex: 1;
+  min-width: 0;
   font-size: 12px;
 }
 
@@ -253,11 +259,11 @@
   display: none;
 }
 
-.actionButton:global(.arco-btn) {
+.actionButton {
   color: var(--text-secondary);
 }
 
-.actionButton:global(.arco-btn:not(:disabled):hover) {
+.actionButton:not(:disabled):hover {
   color: var(--text-primary);
 }
 

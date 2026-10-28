@@ -7,6 +7,8 @@ import type { LessonChange, LessonsView, StoredLesson } from '@/common/kyrn/less
 import type { Activity } from '@/common/kyrn/types';
 import common from '@/renderer/services/i18n/locales/en-US/common.json';
 import LessonsTab from '@/renderer/pages/conversation/KyrnPanel/Lessons';
+import lessonStyles from '@/renderer/pages/conversation/KyrnPanel/Lessons/Lessons.module.css';
+import { cssRules, readRendererCss } from '../../../helpers/cssRules';
 
 type Answer = { ok: true; data: LessonsView } | { ok: false; error: string };
 
@@ -93,6 +95,32 @@ afterEach(() => {
 });
 
 describe('the lessons tab', () => {
+  it('keeps each lesson as a full-width, two-line row whose trigger wraps when open', async () => {
+    render(<Tab />);
+    await settle();
+
+    const rowButton = within(row('pitfall')).getByRole('button', { expanded: false });
+    expect(rowButton).toHaveClass(lessonStyles.rowButton);
+    expect(rowButton).not.toHaveClass('arco-btn');
+    expect(rowButton.children[0]).toHaveClass(lessonStyles.rowLesson);
+    expect(rowButton.children[1]).toHaveClass(lessonStyles.rowMeta);
+    expect(rowButton.children[1]?.querySelector(`.${lessonStyles.trigger}`)).not.toBeNull();
+
+    open('pitfall');
+    expect(within(row('pitfall')).getByRole('button', { expanded: true })).toBe(rowButton);
+
+    const css = readRendererCss('pages/conversation/KyrnPanel/Lessons/Lessons.module.css');
+    const buttonRules = cssRules(css, '.rowButton');
+    expect(buttonRules.some((rule) => rule.includes('width: 100%;'))).toBe(true);
+    expect(buttonRules.some((rule) => rule.includes('flex-direction: column;'))).toBe(true);
+    expect(buttonRules.some((rule) => rule.includes('height: auto;'))).toBe(true);
+    expect(buttonRules.some((rule) => rule.includes('padding: 8px 12px;'))).toBe(true);
+    expect(
+      cssRules(css, ".rowButton[aria-expanded='true'] .trigger").some((rule) => rule.includes('white-space: normal;'))
+    ).toBe(true);
+    expect(css).not.toContain(':global(.arco-btn)');
+  });
+
   it('lists the lessons in use, the most followed first: kind, what to do, recalls and follows, when it applies', async () => {
     render(<Tab />);
     await settle();

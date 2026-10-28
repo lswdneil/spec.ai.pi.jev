@@ -7,11 +7,14 @@
 import React from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import type { IMessageThinking } from '@/common/chat/chatLib';
 import MessageThinking, {
   THOUGHT_TAIL_CHARS,
   ThoughtHistory,
 } from '@/renderer/pages/conversation/Messages/components/MessageThinking';
+import thinkingStyles from '@/renderer/pages/conversation/Messages/components/MessageThinking.module.css';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -67,6 +70,25 @@ describe('MessageThinking', () => {
     render(<MessageThinking message={createThinkingMessage(createdAt)} />);
 
     expect(screen.getByText('Thinking... · 7s')).toBeInTheDocument();
+  });
+
+  it('styles the header through the live local class', () => {
+    render(<MessageThinking message={createThinkingMessage(Date.now(), 'done')} />);
+
+    const header = screen.getByRole('button', { name: 'Thinking history' });
+    expect(header).toHaveClass(thinkingStyles.header);
+    expect(header).not.toHaveClass('arco-btn');
+
+    const css = readFileSync(
+      join(__dirname, '../../../packages/desktop/src/renderer/pages/conversation/Messages/components/MessageThinking.module.css'),
+      'utf8'
+    );
+    const start = css.indexOf('\n.header {');
+    const rule = start < 0 ? '' : css.slice(start, css.indexOf('\n}', start));
+    expect(rule).toContain('height: auto;');
+    expect(rule).toContain('padding: 0;');
+    expect(css).toContain('.header:not(:disabled):hover');
+    expect(css).not.toContain('.header:global(.arco-btn)');
   });
 
   it('keeps a completed thought body collapsed until its history is opened', () => {

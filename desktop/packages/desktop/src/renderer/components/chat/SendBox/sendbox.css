@@ -23,10 +23,8 @@
   border-color: var(--color-border-4);
 }
 
-/* Send button layout - keep Arco primary states from drawing a square block */
-.send-button-custom,
-.send-button-custom.arco-btn,
-.send-button-custom.arco-btn-primary {
+/* Send button layout */
+.send-button-custom {
   width: 32px !important;
   min-width: 32px !important;
   height: 32px !important;
@@ -44,30 +42,23 @@
 }
 
 .send-button-custom::before,
-.send-button-custom::after,
-.send-button-custom.arco-btn::before,
-.send-button-custom.arco-btn::after {
+.send-button-custom::after {
   background: transparent !important;
   border-radius: 50% !important;
   box-shadow: none !important;
   content: none !important;
 }
 
-.send-button-custom--enabled,
-.send-button-custom--enabled.arco-btn {
+.send-button-custom--enabled {
   background-color: rgb(var(--primary-6)) !important;
   border-color: rgb(var(--primary-6)) !important;
   color: var(--text-white) !important;
 }
 
 .send-button-custom--enabled:not(:disabled):hover,
-.send-button-custom--enabled.arco-btn:not(:disabled):hover,
 .send-button-custom--enabled:not(:disabled):active,
-.send-button-custom--enabled.arco-btn:not(:disabled):active,
 .send-button-custom--enabled:not(:disabled):focus,
-.send-button-custom--enabled.arco-btn:not(:disabled):focus,
-.send-button-custom--enabled:not(:disabled):focus-visible,
-.send-button-custom--enabled.arco-btn:not(:disabled):focus-visible {
+.send-button-custom--enabled:not(:disabled):focus-visible {
   background-color: rgb(var(--primary-7)) !important;
   border-color: rgb(var(--primary-7)) !important;
   color: var(--text-white) !important;
@@ -75,9 +66,7 @@
 
 /* Send button disabled state - keep it synchronized with the draft action. */
 .send-button-custom--disabled,
-.send-button-custom--disabled:disabled,
-.send-button-custom--disabled.arco-btn:disabled,
-.send-button-custom--disabled.arco-btn-disabled {
+.send-button-custom--disabled:disabled {
   background-color: var(--color-fill-3) !important;
   border-color: var(--color-fill-3) !important;
   border-radius: 50% !important;
@@ -87,7 +76,7 @@
 }
 
 /* Make arrow icon thicker */
-.send-button-custom .arco-icon > svg {
+.send-button-custom > svg {
   stroke-width: 5 !important;
   filter: drop-shadow(0 0 0.5px currentColor);
 }
@@ -113,9 +102,7 @@
   flex: 0 0 32px;
 }
 
-.sendbox-draft-tool-action,
-.sendbox-draft-tool-action.arco-btn,
-.sendbox-draft-tool-action.arco-btn-secondary {
+.sendbox-draft-tool-action {
   width: 32px !important;
   min-width: 32px !important;
   height: 32px !important;
@@ -134,51 +121,32 @@
   opacity: 1 !important;
 }
 
-.sendbox-draft-tool-action .arco-btn-icon,
-.sendbox-draft-tool-action .arco-icon {
-  margin: 0 !important;
-  width: 20px !important;
-  height: 20px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
-}
-
 .sendbox-draft-tool-action svg {
   display: block;
   width: 20px;
   height: 20px;
+  margin: 0 !important;
 }
 
 /* The draft action is a second way to send, not the send button: it stays monochrome, so the send button is
    the only colour in the box. */
-.sendbox-draft-tool-action--enabled,
-.sendbox-draft-tool-action--enabled.arco-btn,
-.sendbox-draft-tool-action--enabled.arco-btn-secondary {
+.sendbox-draft-tool-action--enabled {
   background-color: var(--color-fill-2) !important;
   border-color: var(--color-fill-2) !important;
   color: var(--color-text-1) !important;
 }
 
 .sendbox-draft-tool-action--enabled:not(:disabled):hover,
-.sendbox-draft-tool-action--enabled.arco-btn:not(:disabled):hover,
 .sendbox-draft-tool-action--enabled:not(:disabled):active,
-.sendbox-draft-tool-action--enabled.arco-btn:not(:disabled):active,
 .sendbox-draft-tool-action--enabled:not(:disabled):focus,
-.sendbox-draft-tool-action--enabled.arco-btn:not(:disabled):focus,
-.sendbox-draft-tool-action--enabled:not(:disabled):focus-visible,
-.sendbox-draft-tool-action--enabled.arco-btn:not(:disabled):focus-visible {
+.sendbox-draft-tool-action--enabled:not(:disabled):focus-visible {
   background-color: var(--color-fill-3) !important;
   border-color: var(--color-fill-3) !important;
   color: var(--color-text-1) !important;
 }
 
 .sendbox-draft-tool-action--disabled,
-.sendbox-draft-tool-action--disabled:disabled,
-.sendbox-draft-tool-action--disabled.arco-btn:disabled,
-.sendbox-draft-tool-action--disabled.arco-btn-disabled,
-.sendbox-draft-tool-action--disabled.arco-btn-secondary:disabled {
+.sendbox-draft-tool-action--disabled:disabled {
   background-color: var(--color-fill-3) !important;
   border-color: var(--color-fill-3) !important;
   color: var(--text-white) !important;
@@ -188,14 +156,8 @@
 
 html[data-theme='dark'] body .sendbox-panel .sendbox-draft-tool-action--disabled,
 html[data-theme='dark'] body .sendbox-panel .sendbox-draft-tool-action--disabled:disabled,
-html[data-theme='dark'] body .sendbox-panel .sendbox-draft-tool-action--disabled.arco-btn:disabled,
-html[data-theme='dark'] body .sendbox-panel .sendbox-draft-tool-action--disabled.arco-btn-disabled,
-html[data-theme='dark'] body .sendbox-panel .sendbox-draft-tool-action--disabled.arco-btn-secondary:disabled,
 body[arco-theme='dark'] .sendbox-panel .sendbox-draft-tool-action--disabled,
-body[arco-theme='dark'] .sendbox-panel .sendbox-draft-tool-action--disabled:disabled,
-body[arco-theme='dark'] .sendbox-panel .sendbox-draft-tool-action--disabled.arco-btn:disabled,
-body[arco-theme='dark'] .sendbox-panel .sendbox-draft-tool-action--disabled.arco-btn-disabled,
-body[arco-theme='dark'] .sendbox-panel .sendbox-draft-tool-action--disabled.arco-btn-secondary:disabled {
+body[arco-theme='dark'] .sendbox-panel .sendbox-draft-tool-action--disabled:disabled {
   background-color: var(--bg-4) !important;
   border-color: var(--bg-4) !important;
   color: var(--text-disabled) !important;
@@ -203,12 +165,8 @@ body[arco-theme='dark'] .sendbox-panel .sendbox-draft-tool-action--disabled.arco
 
 html[data-theme='dark'] body .sendbox-panel .send-button-custom--disabled,
 html[data-theme='dark'] body .sendbox-panel .send-button-custom--disabled:disabled,
-html[data-theme='dark'] body .sendbox-panel .send-button-custom--disabled.arco-btn:disabled,
-html[data-theme='dark'] body .sendbox-panel .send-button-custom--disabled.arco-btn-disabled,
 body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled,
-body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled:disabled,
-body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled.arco-btn:disabled,
-body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled.arco-btn-disabled {
+body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled:disabled {
   background-color: var(--bg-4) !important;
   border-color: var(--bg-4) !important;
   border-radius: 50% !important;
@@ -224,35 +182,21 @@ body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled svg * {
   stroke: currentColor !important;
 }
 
-.sendbox-stop-button,
-.sendbox-stop-button.arco-btn,
-.sendbox-stop-button.arco-btn-secondary {
+.sendbox-stop-button {
   border: none !important;
   box-shadow: none !important;
 }
 
-[data-theme='dark'] .sendbox-stop-button,
-[data-theme='dark'] .sendbox-stop-button.arco-btn,
-[data-theme='dark'] .sendbox-stop-button.arco-btn-secondary {
+[data-theme='dark'] .sendbox-stop-button {
   border: 1px solid color-mix(in srgb, var(--color-fill-4) 94%, var(--color-bg-2)) !important;
 }
 
-.sendbox-stop-button.bg-animate,
-.sendbox-stop-button.arco-btn.bg-animate,
-.sendbox-stop-button.arco-btn-secondary.bg-animate {
+.sendbox-stop-button.bg-animate {
   animation: sendbox-stop-breathe 1.4s ease-in-out infinite alternate;
 }
 
-[data-theme='dark'] .sendbox-stop-button.bg-animate,
-[data-theme='dark'] .sendbox-stop-button.arco-btn.bg-animate,
-[data-theme='dark'] .sendbox-stop-button.arco-btn-secondary.bg-animate {
+[data-theme='dark'] .sendbox-stop-button.bg-animate {
   animation: sendbox-stop-breathe-dark 1.4s ease-in-out infinite alternate;
-}
-
-.sendbox-stop-button.bg-animate .arco-icon,
-.sendbox-stop-button.bg-animate svg {
-  color: var(--sv-text) !important;
-  fill: var(--sv-text) !important;
 }
 
 /* Breathe via color + a soft glow ring only — NO transform: scale(). On narrow
@@ -295,10 +239,10 @@ body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled svg * {
 }
 
 /* Sendbox tools buttons - prevent layout jitter from theme hover transforms (#1075) */
-.sendbox-tools .arco-btn,
-.sendbox-tools .arco-btn:hover,
-.sendbox-tools .arco-btn:active,
-.sendbox-tools .arco-btn:focus {
+.sendbox-tools button,
+.sendbox-tools button:hover,
+.sendbox-tools button:active,
+.sendbox-tools button:focus {
   transform: none !important;
 }
 
@@ -350,8 +294,7 @@ body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled svg * {
 }
 
 .sendbox-left-tool-group > *,
-.sendbox-left-tool-group .arco-trigger,
-.sendbox-left-tool-group .arco-btn {
+.sendbox-left-tool-group > button {
   position: static !important;
   inset: auto !important;
   transform: none !important;
@@ -362,8 +305,8 @@ body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled svg * {
   min-width: 0;
 }
 
-/* Circle / icon-only buttons must not shrink */
-.sendbox-tools .arco-btn-shape-circle {
+/* Icon-only buttons must not shrink */
+.sendbox-left-tool-group > button {
   flex-shrink: 0 !important;
 }
 
@@ -380,8 +323,8 @@ body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled svg * {
   max-width: max-content !important;
 }
 
-.sendbox-tools .agent-mode-compact-pill .arco-btn-content,
-.sendbox-actions .agent-mode-compact-pill .arco-btn-content {
+.sendbox-tools .agent-mode-compact-pill > span,
+.sendbox-actions .agent-mode-compact-pill > span {
   min-width: 0 !important;
   overflow: hidden !important;
 }
@@ -501,9 +444,7 @@ body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled svg * {
 /* Mobile compact: `+` launcher button replaces inline tools when the
  * action sheet pattern is active. Sized to match the send button so the
  * left/right poles feel balanced. */
-.sendbox-mobile-plus-btn,
-.sendbox-mobile-plus-btn.arco-btn,
-.sendbox-mobile-plus-btn.arco-btn-secondary {
+.sendbox-mobile-plus-btn {
   width: 32px !important;
   height: 32px !important;
   min-width: 32px !important;
@@ -557,13 +498,8 @@ body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled svg * {
     min-height: 22px !important;
   }
 
-  /* Strip Arco's default 4px 12px padding from the textarea wrapper on mobile —
-     long placeholders ("Send message to Claude Code...") were getting clipped
-     on narrow screens because the wrapper's right-side 12px ate trailing chars.
-     Force the wrapper to fill the available flex slot so the textarea (and the
-     hit area) grows to the right edge instead of shrinking to placeholder width. */
-  .sendbox-panel .arco-textarea-wrapper,
-  .sendbox-panel .arco-textarea {
+  /* Keep long placeholders from losing trailing text to inline padding. */
+  .sendbox-panel textarea.sendbox-input--mobile {
     padding-inline-start: 0 !important;
     padding-inline-end: 0 !important;
     width: 100% !important;
@@ -589,9 +525,6 @@ body[arco-theme='dark'] .sendbox-panel .send-button-custom--disabled svg * {
   }
 }
 
-.sendbox-actions .arco-trigger:has(.send-button-custom),
-.sendbox-tools .arco-trigger:has(.send-button-custom),
-.arco-trigger:has(.send-button-custom),
 span:has(> .send-button-custom),
 span:has(.send-button-custom) {
   background: transparent !important;

@@ -12,7 +12,19 @@ import { memoryEvents } from '@/renderer/pages/conversation/KyrnPanel/Lessons/mo
 /** The board's words: a new board is news; the one replayed as the session opens repeats the last. */
 export function boardSignature(events: readonly Activity[]): string {
   const update = boardView(events).update;
-  return update ? JSON.stringify([update.phase ?? '', update.now, update.progress, update.confirm]) : '';
+  return update
+    ? JSON.stringify([
+        update.phase ?? '',
+        update.now,
+        update.progress,
+        update.confirm,
+        update.headline ?? '',
+        update.blocked ?? '',
+        update.next ?? '',
+        update.agents ?? [],
+        update.updatedAt ?? 0,
+      ])
+    : '';
 }
 
 /** The latest verdict on a message. The wait before it is not news; the verdict is. */

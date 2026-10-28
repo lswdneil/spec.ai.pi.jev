@@ -46,6 +46,20 @@ describe('what counts as news in each tab', () => {
     expect(first).not.toBe('');
     expect(boardSignature([board(), board({ restored: true })])).toBe(first);
     expect(boardSignature([board(), board({ now: 'Running the tests' })])).not.toBe(first);
+
+    const v2OnlyUpdates = [
+      { field: 'headline', payload: { headline: 'The login test now passes.' } },
+      { field: 'blocked', payload: { blocked: 'Waiting for the database.' } },
+      { field: 'next', payload: { next: 'Run the desktop smoke test.' } },
+      {
+        field: 'agents',
+        payload: { agents: [{ who: 'reviewer', role: 'scout', state: 'working', doing: 'Reading the diff.' }] },
+      },
+      { field: 'updatedAt', payload: { updatedAt: 1_800_000_000_000 } },
+    ];
+    for (const { field, payload } of v2OnlyUpdates) {
+      expect(boardSignature([board(payload)]), field).not.toBe(first);
+    }
   });
 
   it('the judge: a verdict is news, the wait before it is not', () => {

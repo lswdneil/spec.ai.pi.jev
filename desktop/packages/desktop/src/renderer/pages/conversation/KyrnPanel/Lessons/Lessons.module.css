@@ -97,8 +97,9 @@
   opacity: 0.55;
 }
 
-.rowButton:global(.arco-btn) {
+.rowButton {
   display: flex;
+  width: 100%;
   flex-direction: column;
   align-items: stretch;
   gap: 3px;
@@ -111,16 +112,16 @@
   white-space: normal;
 }
 
-.rowButton:global(.arco-btn:not(:disabled):hover) {
+.rowButton:not(:disabled):hover {
   background: var(--bg-hover);
   color: var(--text-primary);
 }
 
-.rowButton:global(.arco-btn[aria-expanded='true']) {
+.rowButton[aria-expanded='true'] {
   background: transparent;
 }
 
-.rowButton:global(.arco-btn:focus-visible) {
+.rowButton:focus-visible {
   outline: 1px solid var(--text-primary);
   outline-offset: -1px;
 }
@@ -171,7 +172,7 @@
   white-space: nowrap;
 }
 
-.rowButton:global(.arco-btn[aria-expanded='true']) .trigger {
+.rowButton[aria-expanded='true'] .trigger {
   overflow: visible;
   white-space: normal;
   overflow-wrap: anywhere;

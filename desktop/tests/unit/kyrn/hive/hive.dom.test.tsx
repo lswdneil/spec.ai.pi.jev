@@ -3,9 +3,13 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { createInstance } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import common from '@/renderer/services/i18n/locales/en-US/common.json';
 import mu from '@/renderer/services/i18n/locales/en-US/mu.json';
 import Hive from '@/renderer/pages/conversation/KyrnPanel/Hive';
+import HiveRows from '@/renderer/pages/conversation/KyrnPanel/Hive/HiveRows';
+import hiveStyles from '@/renderer/pages/conversation/KyrnPanel/Hive/Hive.module.css';
 import { onHiveFocus, requestHiveFocus } from '@/renderer/pages/conversation/KyrnPanel/focus';
 import MessageToolGroupSummary from '@/renderer/pages/conversation/Messages/components/MessageToolGroupSummary';
 import { activity, hiveEvents, hiveMessage, hiveSnapshot } from './hiveFixtures';
@@ -41,6 +45,47 @@ describe('Native Hive interaction', () => {
     } finally {
       unsubscribe();
     }
+  });
+
+  it('styles the live hive buttons directly instead of through an Arco-only selector', () => {
+    const cardView = render(view(<MessageToolGroupSummary messages={[hiveMessage()]} />));
+    const card = screen.getByTestId('swarm-tool-card');
+    const cardButtons = [...card.querySelectorAll<HTMLElement>('button')];
+    expect(cardButtons[0]).toHaveClass(hiveStyles.agentsHeader);
+    expect(cardButtons[0]).not.toHaveClass('arco-btn');
+    expect(cardButtons.slice(1).every((button) => button.classList.contains(hiveStyles.agentRow))).toBe(true);
+    cardView.unmount();
+
+    const rowsView = render(view(<HiveRows events={hiveEvents} />));
+    const mapToggle = rowsView.container.querySelector<HTMLElement>('button[aria-pressed]');
+    const beeRow = rowsView.container.querySelector<HTMLElement>('[data-bee] button');
+    expect(mapToggle).toHaveClass(hiveStyles.mapToggle);
+    expect(beeRow).toHaveClass(hiveStyles.row);
+    expect(mapToggle).not.toHaveClass('arco-btn');
+    expect(beeRow).not.toHaveClass('arco-btn');
+    rowsView.unmount();
+
+    const hiveView = render(view(<Hive events={hiveEvents} />));
+    expect(within(hiveView.container).getByRole('button', { name: 'prefix-mutations' })).toHaveClass(hiveStyles.routeName);
+
+    const css = readFileSync(
+      join(__dirname, '../../../../packages/desktop/src/renderer/pages/conversation/KyrnPanel/Hive/Hive.module.css'),
+      'utf8'
+    );
+    const rule = (selector: string) => {
+      const start = css.indexOf(`\n${selector} {`);
+      return start < 0 ? '' : css.slice(start, css.indexOf('\n}', start));
+    };
+    expect(rule('.agentsHeader')).toContain('width: 100%;');
+    expect(rule('.agentsHeader')).toContain('height: auto;');
+    expect(rule('.agentRow')).toContain('width: 100%;');
+    expect(rule('.agentRow')).toContain('height: auto;');
+    expect(rule('.mapToggle')).toContain('height: 20px;');
+    expect(rule(".mapToggle[aria-pressed='true']")).toContain('font-weight: 600;');
+    expect(rule('.routeName')).toContain('height: auto;');
+    expect(rule('.row')).toContain('height: auto;');
+    expect(rule('.row:focus-visible')).toContain('outline: 1px solid');
+    expect(css).not.toContain(':global(.arco-btn)');
   });
 
   it('says who each sub-agent is and what it is doing, or what it said back', () => {

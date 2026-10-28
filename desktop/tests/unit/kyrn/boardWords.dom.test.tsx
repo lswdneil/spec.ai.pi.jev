@@ -12,7 +12,11 @@ import zhCN from '@/renderer/services/i18n/locales/zh-CN/common.json';
 import zhTW from '@/renderer/services/i18n/locales/zh-TW/common.json';
 import Board from '@/renderer/pages/conversation/KyrnPanel/Board';
 import { toBoardUpdate, type BoardNote } from '@/renderer/pages/conversation/KyrnPanel/Board/board';
-import { NOTE_SENTENCES, noteWords } from '@/renderer/pages/conversation/KyrnPanel/Board/noteWords';
+import {
+  NOTE_NUMBERS,
+  NOTE_SENTENCES,
+  noteWords,
+} from '@/renderer/pages/conversation/KyrnPanel/Board/noteWords';
 import { boardWords } from '@/renderer/pages/conversation/KyrnPanel/Board/wording';
 
 const i18n = createInstance();
@@ -154,7 +158,14 @@ describe('reading a fixed board’s codes', () => {
       () => false,
       String
     );
-    expect(none).toEqual({ now: update.now, progress: update.progress, confirm: ['It waits.'] });
+    expect(none).toEqual({
+      now: update.now,
+      progress: update.progress,
+      confirm: ['It waits.'],
+      headline: '',
+      blocked: '',
+      next: '',
+    });
     // The stage has a sentence but the item cannot be named: the harness's sentence, which names it, stays.
     const noFocus = boardWords(
       update,
@@ -218,7 +229,7 @@ describe('a fixed line of the account in the app’s language', () => {
         // One, a few, many: every plural form a language has.
         for (const count of [1, 3, 5, 21]) {
           const params = Object.fromEntries(
-            names.map((name) => [name, name === 'count' || name === 'round' ? count : `<${name}>`])
+            names.map((name) => [name, NOTE_NUMBERS.has(name) ? count : `<${name}>`])
           );
           const line: BoardNote = {
             id: '1:1',

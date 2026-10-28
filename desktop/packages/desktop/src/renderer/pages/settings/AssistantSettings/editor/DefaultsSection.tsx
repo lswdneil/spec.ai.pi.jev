@@ -31,10 +31,6 @@ const filterSelectOption = (inputValue: string, option: React.ReactElement): boo
   return label.toLowerCase().includes(inputValue.trim().toLowerCase());
 };
 
-const renderSummaryTag = ({ label }: { label: React.ReactNode }) => (
-  <span className={styles.summaryTagText}>{label}</span>
-);
-
 type DefaultsSectionProps = {
   localeKey: string;
   isBuiltin: boolean;
@@ -354,7 +350,6 @@ const DefaultsSection: React.FC<DefaultsSectionProps> = ({
                         t('settings.assistantNoDefaultSkillsSelected', { defaultValue: 'No default skills selected' })
                       )
                 }
-                renderTag={renderSummaryTag}
               >
                 <Select.Option
                   value={AUTO_SELECT_VALUE}
@@ -474,7 +469,6 @@ const DefaultsSection: React.FC<DefaultsSectionProps> = ({
                       t('settings.assistantNoDefaultMcpsSelected', { defaultValue: 'No default MCP selected' })
                     )
               }
-              renderTag={renderSummaryTag}
             >
               <Select.Option
                 value={AUTO_SELECT_VALUE}

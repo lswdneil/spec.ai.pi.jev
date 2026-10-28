@@ -243,25 +243,27 @@ export default function BrowserChrome({
             disabled={!active}
             onClick={onReload}
           />
-          <Input
-            ref={addressRef}
-            size='small'
-            className={styles.field}
-            value={draft ?? address}
-            placeholder={t('preview.browser.addressPlaceholder')}
-            aria-label={t('preview.browser.addressPlaceholder')}
-            spellCheck={false}
-            autoComplete='off'
-            onChange={(value) => setDraft(value)}
-            onFocus={(event) => event.currentTarget.select()}
-            onBlur={() => setDraft(null)}
-            onPressEnter={submit}
-            onKeyDown={(event) => {
-              if (event.key !== 'Escape') return;
-              setDraft(null);
-              event.currentTarget.blur();
-            }}
-          />
+          <span className={styles.fieldWrap}>
+            <Input
+              ref={addressRef}
+              size='small'
+              className={styles.field}
+              value={draft ?? address}
+              placeholder={t('preview.browser.addressPlaceholder')}
+              aria-label={t('preview.browser.addressPlaceholder')}
+              spellCheck={false}
+              autoComplete='off'
+              onChange={(value) => setDraft(value)}
+              onFocus={(event) => event.currentTarget.select()}
+              onBlur={() => setDraft(null)}
+              onPressEnter={submit}
+              onKeyDown={(event) => {
+                if (event.key !== 'Escape') return;
+                setDraft(null);
+                event.currentTarget.blur();
+              }}
+            />
+          </span>
         </div>
 
         <div className={styles.actions}>

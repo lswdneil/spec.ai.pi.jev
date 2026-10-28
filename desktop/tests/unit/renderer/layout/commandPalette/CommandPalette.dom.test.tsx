@@ -6,6 +6,8 @@
 
 import { Message } from '@/renderer/ui';
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { NavigateFunction } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -90,6 +92,7 @@ vi.mock('@/renderer/pages/conversation/GroupedHistory/ConversationSearchPopover'
 }));
 
 import CommandPalette from '@/renderer/components/layout/Sider/CommandPalette';
+import paletteStyles from '@/renderer/components/layout/Sider/CommandPalette/CommandPalette.module.css';
 import { useConversationShortcuts } from '@/renderer/hooks/ui/useConversationShortcuts';
 import {
   resetCurrentConversationForTest,
@@ -189,6 +192,39 @@ describe('command palette', () => {
   });
 
   describe('opening and closing', () => {
+    it('styles the live Radix surface and native input directly', () => {
+      render(<Harness />);
+      const field = openPalette();
+      const dialog = screen.getByRole('dialog');
+
+      expect(dialog).toHaveClass(paletteStyles.radix);
+      expect(dialog).toHaveClass(paletteStyles.dense);
+      expect(dialog).toHaveAttribute('data-state', 'open');
+      expect(field).toHaveClass(paletteStyles.fieldInput);
+      expect(field.parentElement?.querySelector('svg')).toHaveClass(paletteStyles.fieldPrefix);
+
+      const css = readFileSync(
+        resolve(
+          __dirname,
+          '../../../../../packages/desktop/src/renderer/components/layout/Sider/CommandPalette/CommandPalette.module.css'
+        ),
+        'utf8'
+      );
+      const rule = (selector: string) => {
+        const start = css.indexOf(`\n${selector} {`);
+        return start < 0 ? '' : css.slice(start, css.indexOf('\n}', start));
+      };
+      expect(rule('.fieldInput')).toContain('padding-inline: 36px 16px !important;');
+      expect(rule('.radix.dense .fieldInput')).toContain('padding-inline: 34px 12px !important;');
+      expect(css).toContain('.fieldInput::placeholder');
+      expect(css).toContain(".radix[data-state='open']");
+      expect(css).toContain(".radix[data-state='closed']");
+      expect(css).not.toContain('arco-input');
+      expect(css).not.toContain('arco-modal');
+      expect(css).not.toContain('zoomModal');
+      expect(css).not.toContain('.wrap .palette');
+    });
+
     it('opens with Cmd+K on macOS, and the same keys close it', async () => {
       render(<Harness />);
       expect(queryInput()).not.toBeInTheDocument();

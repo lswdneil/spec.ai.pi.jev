@@ -320,9 +320,6 @@ html[data-sv-ui='dense'] .sv-dense-tool-summary {
 
 html[data-sv-ui='dense'] .sv-dense-acp-card {
   border-radius: 5px;
-}
-
-html[data-sv-ui='dense'] .sv-dense-acp-card .arco-card-body {
   padding: 8px;
 }
 

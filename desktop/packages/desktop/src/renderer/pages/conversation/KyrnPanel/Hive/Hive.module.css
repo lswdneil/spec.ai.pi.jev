@@ -13,7 +13,7 @@
   margin-block: 4px;
   color: var(--text-primary);
 }
-.agentsHeader:global(.arco-btn) {
+.agentsHeader {
   display: flex;
   align-items: center;
   width: 100%;
@@ -26,7 +26,7 @@
   font-size: 13px;
   text-align: start;
 }
-.agentsHeader:global(.arco-btn:hover) {
+.agentsHeader:hover {
   background: var(--color-fill-2);
 }
 .agentsHeader > :global(.i-icon) {
@@ -64,7 +64,7 @@
   min-width: 0;
   margin-inline-start: 8px;
 }
-.agentRow:global(.arco-btn) {
+.agentRow {
   display: flex;
   align-items: center;
   width: 100%;
@@ -77,7 +77,7 @@
   font-size: 13px;
   text-align: start;
 }
-.agentRow:global(.arco-btn:hover) {
+.agentRow:hover {
   background: var(--color-fill-2);
 }
 .agentName {
@@ -259,19 +259,10 @@
   overflow-y: auto;
   color: var(--text-primary);
 }
-.collapse :global(.arco-collapse-item-header) {
-  padding: 10px 10px 10px 22px;
+.collapse > div > button {
+  padding: 10px;
   background: transparent;
   color: var(--text-primary);
-}
-.collapse :global(.arco-collapse-item-content-box) {
-  padding: 8px 0;
-}
-.collapse :global(.arco-collapse-item-content) {
-  background: transparent;
-}
-.collapse :global(.arco-collapse-item-header-title) {
-  min-width: 0;
 }
 .delivery {
   padding-block: 12px;
@@ -286,7 +277,7 @@
 .route > :not(.routeName) {
   flex-shrink: 0;
 }
-.routeName:global(.arco-btn) {
+.routeName {
   height: auto;
   min-width: 0;
   padding: 2px;
@@ -378,7 +369,7 @@
 }
 
 /* The word that opens or closes a run's map: quiet, and marked by weight when the map is open. */
-.mapToggle:global(.arco-btn) {
+.mapToggle {
   flex: none;
   height: 20px;
   padding: 0 4px;
@@ -388,12 +379,12 @@
   line-height: 20px;
 }
 
-.mapToggle:global(.arco-btn[aria-pressed='true']) {
+.mapToggle[aria-pressed='true'] {
   color: var(--text-primary);
   font-weight: 600;
 }
 
-.mapToggle:global(.arco-btn:hover) {
+.mapToggle:hover {
   background: var(--bg-hover);
 }
 
@@ -407,7 +398,7 @@
   border-top: 1px solid var(--border-light, var(--border-base));
 }
 
-.row:global(.arco-btn) {
+.row {
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -419,12 +410,12 @@
   text-align: start;
 }
 
-.row:global(.arco-btn:not(:disabled):hover) {
+.row:not(:disabled):hover {
   background: var(--bg-hover);
   color: var(--text-primary);
 }
 
-.row:global(.arco-btn:focus-visible) {
+.row:focus-visible {
   outline: 1px solid var(--text-primary);
   outline-offset: -1px;
 }

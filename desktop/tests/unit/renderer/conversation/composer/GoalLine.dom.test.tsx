@@ -4,10 +4,12 @@ import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import GoalLine from '@/renderer/pages/conversation/platforms/acp/Composer/GoalLine';
+import goalStyles from '@/renderer/pages/conversation/platforms/acp/Composer/GoalLine.module.css';
 import type { GoalSnapshot } from '@/renderer/pages/conversation/platforms/acp/Composer/goalState';
 import en from '@/renderer/services/i18n/locales/en-US/conversation.json';
 import zh from '@/renderer/services/i18n/locales/zh-CN/conversation.json';
 import type { SendBoxCommandState } from '@/renderer/utils/emitter';
+import { cssRules, readRendererCss } from '../../../../helpers/cssRules';
 
 const instance = async (lng: string, conversation: unknown): Promise<I18n> => {
   const i18n = createInstance();
@@ -44,6 +46,21 @@ describe('the goal line above the send box', () => {
     expect(screen.getByTestId('composer-goal-text').textContent).toBe('目标进行中：packages/x 的测试全部通过');
     expect(end().textContent).toBe('结束');
     expect(end().getAttribute('aria-label')).toBe('结束目标');
+  });
+
+  it('styles the live text button as the underlined end link', () => {
+    show(chinese, { status: 'active', text: 'packages/x 的测试全部通过' });
+
+    expect(end()).toHaveClass(goalStyles.end);
+    expect(end()).not.toHaveClass('arco-btn');
+
+    const css = readRendererCss('pages/conversation/platforms/acp/Composer/GoalLine.module.css');
+    const rule = (selector: string) => cssRules(css, selector).join('\n');
+    expect(rule('.end')).toContain('height: 18px;');
+    expect(rule('.end')).toContain('text-decoration: underline;');
+    expect(rule('.end:disabled')).toContain('text-decoration: none;');
+    expect(rule('.end:focus-visible')).toContain('outline: 1px solid var(--text-primary);');
+    expect(css).not.toContain('.arco-btn');
   });
 
   it('says a paused goal is paused: the next message picks it up, so it is still there to end', () => {

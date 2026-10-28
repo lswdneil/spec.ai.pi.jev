@@ -7,8 +7,10 @@ import common from '@/renderer/services/i18n/locales/en-US/common.json';
 import mu from '@/renderer/services/i18n/locales/en-US/mu.json';
 import HiveRows from '@/renderer/pages/conversation/KyrnPanel/Hive/HiveRows';
 import { endedRuns } from '@/renderer/pages/conversation/KyrnPanel/Hive/activity';
+import graphStyles from '@/renderer/pages/conversation/KyrnPanel/Hive/Graph/Graph.module.css';
 import type { Activity } from '@/common/kyrn/types';
 import { activity, hiveEvents, hiveSnapshot } from './hiveFixtures';
+import { cssRules, readRendererCss } from '../../../helpers/cssRules';
 
 vi.mock('@/renderer/components/media/LocalImageView', () => ({ default: () => null }));
 vi.mock('@/renderer/utils/file/download', () => ({ downloadFileFromPath: vi.fn() }));
@@ -28,6 +30,23 @@ const run = (id: string) =>
   screen.getByText((_, node) => node?.getAttribute('data-hive-run') === id, { selector: 'section' });
 
 describe('the map of a run', () => {
+  it('positions each live hive node with the direct node rule', () => {
+    render(view(<HiveRows events={hiveEvents} />));
+
+    const node = screen.getByRole('button', { name: 'Inspect provider-cache' });
+    expect(node).toHaveClass(graphStyles.node);
+    expect(node).not.toHaveClass('arco-btn');
+    expect(node.style.left).toMatch(/px$/);
+    expect(node.style.top).toMatch(/px$/);
+
+    const css = readRendererCss('pages/conversation/KyrnPanel/Hive/Graph/Graph.module.css');
+    const rules = cssRules(css, '.node');
+    expect(rules.some((rule) => rule.includes('position: absolute;'))).toBe(true);
+    expect(rules.some((rule) => rule.includes('display: flex;'))).toBe(true);
+    expect(rules.some((rule) => rule.includes('height: auto;'))).toBe(true);
+    expect(css).not.toContain(':global(.arco-btn)');
+  });
+
   it('draws a line per pair with its count, a correction with its bar, and words each on hover', () => {
     const { container } = render(
       view(

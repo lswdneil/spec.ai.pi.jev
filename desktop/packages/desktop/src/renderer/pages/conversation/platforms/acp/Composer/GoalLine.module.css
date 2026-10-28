@@ -20,7 +20,7 @@
   white-space: nowrap;
 }
 
-.end:global(.arco-btn) {
+.end {
   flex: none;
   height: 18px;
   padding: 0 2px;
@@ -33,19 +33,19 @@
   text-underline-offset: 2px;
 }
 
-.end:global(.arco-btn:not(:disabled):hover),
-.end:global(.arco-btn:not(:disabled):active) {
+.end:not(:disabled):hover,
+.end:not(:disabled):active {
   background: transparent;
   color: var(--text-primary);
 }
 
-.end:global(.arco-btn:disabled) {
+.end:disabled {
   background: transparent;
   color: var(--text-secondary);
   text-decoration: none;
 }
 
-.end:global(.arco-btn:focus-visible) {
+.end:focus-visible {
   outline: 1px solid var(--text-primary);
   outline-offset: 2px;
 }

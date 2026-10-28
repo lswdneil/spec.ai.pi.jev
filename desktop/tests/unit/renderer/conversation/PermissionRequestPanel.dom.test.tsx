@@ -9,6 +9,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { BackendHttpError } from '@/common/adapter/httpBridge';
 import { isAnswerNoLongerPending } from '@/renderer/pages/conversation/Messages/components/MessagePermission/PermissionRequestPanel';
+import permissionStyles from '@/renderer/pages/conversation/Messages/components/MessagePermission/PermissionRequestPanel.module.css';
 import {
   classifyAcpPermission,
   classifyLegacyPermission,
@@ -18,6 +19,7 @@ import {
   PermissionRequestPanel,
   type PermissionPanelOption,
 } from '@/renderer/pages/conversation/Messages/components/MessagePermission';
+import { cssRules, readRendererCss } from '../../../helpers/cssRules';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -103,6 +105,27 @@ describe('PermissionRequestPanel', () => {
     expect(once).toHaveFocus();
     expect(screen.queryByTestId('message-permission-confirm')).not.toBeInTheDocument();
     expect(screen.queryByRole('radio')).not.toBeInTheDocument();
+  });
+
+  it('pads the live card and styles option rows without an Arco body or button class', () => {
+    renderPanel();
+
+    const card = screen.getByTestId('message-permission-card');
+    expect(card).toHaveClass(permissionStyles.card);
+    expect(card.querySelector('.arco-card-body')).toBeNull();
+    expect(getOptionButton('message-permission-option-once')).toHaveClass(permissionStyles.optionButton);
+    expect(getOptionButton('message-permission-option-once')).not.toHaveClass('arco-btn');
+
+    const css = readRendererCss(
+      'pages/conversation/Messages/components/MessagePermission/PermissionRequestPanel.module.css'
+    );
+    const cardRules = cssRules(css, '.card');
+    expect(cardRules.some((rule) => rule.includes('padding: 12px;'))).toBe(true);
+    expect(cardRules.some((rule) => rule.includes('padding: 10px;'))).toBe(true);
+    expect(cssRules(css, '.optionButton').some((rule) => rule.includes('display: flex;'))).toBe(true);
+    expect(css).not.toContain('.arco-card-body');
+    expect(css).not.toContain(':global(.arco-btn)');
+    expect(css).not.toContain('.arco-btn-loading-icon');
   });
 
   it('does not move focus from the conversation on mount', () => {

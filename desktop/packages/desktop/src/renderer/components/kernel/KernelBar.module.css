@@ -50,7 +50,7 @@
   background: var(--border-base);
 }
 
-.judge:global(.arco-btn) {
+.judge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -62,7 +62,7 @@
   letter-spacing: inherit;
 }
 
-.judge:global(.arco-btn):hover {
+.judge:hover {
   background: var(--bg-hover);
   color: var(--text-secondary);
 }

@@ -143,6 +143,8 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
     onSearch,
     popupVisible,
     loading,
+    maxTagCount,
+    renderTag,
   },
   ref
 ) {
@@ -183,6 +185,14 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
             return all;
           }, [])
       : placeholder);
+  const maxTagCountConfig = typeof maxTagCount === 'object' ? maxTagCount : undefined;
+  const maxTagCountLimit = maxTagCountConfig ? Math.max(0, maxTagCountConfig.count) : undefined;
+  const visibleTags =
+    mode === 'multiple' && maxTagCountLimit !== undefined ? selected.slice(0, maxTagCountLimit) : selected;
+  const summaryTag =
+    mode === 'multiple' && maxTagCountLimit !== undefined && selected.length > maxTagCountLimit
+      ? maxTagCountConfig?.render()
+      : undefined;
   const commit = (next: SelectValue | SelectValue[] | undefined) => {
     if (value === undefined) setUncontrolled(next);
     const values = Array.isArray(next) ? next : next === undefined ? [] : [next];
@@ -308,7 +318,11 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
             'inline-flex min-w-0 max-w-full items-center gap-1 rounded-[var(--sv-r-control)] border border-sv-line bg-sv-surface px-2 text-left text-[12px] text-sv-text outline-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus disabled:cursor-not-allowed disabled:opacity-50',
             'arco-select',
             disabled && 'arco-select-disabled',
-            mode === 'multiple' && selected.length ? 'h-auto min-h-7 flex-wrap py-1' : small ? 'h-7' : 'h-8',
+            mode === 'multiple' && selected.length && !summaryTag
+              ? 'h-auto min-h-7 flex-wrap py-1'
+              : small
+                ? 'h-7'
+                : 'h-8',
             className
           )}
           style={style}
@@ -316,14 +330,19 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(function 
           {prefix ? <span className='shrink-0 text-sv-muted'>{prefix}</span> : null}
           {mode === 'multiple' && selected.length ? (
             <span className='flex min-w-0 flex-1 flex-wrap items-center gap-1'>
-              {selected.map((option) => (
+              {visibleTags.map((option) => (
                 <span
                   key={String(option.value)}
                   className='arco-tag inline-flex h-5 max-w-full items-center truncate rounded-[4px] bg-sv-raised px-1.5 text-[11px] text-sv-text'
                 >
-                  {option.label}
+                  {renderTag ? renderTag({ label: option.label, value: option.value }) : option.label}
                 </span>
               ))}
+              {summaryTag ? (
+                <span className='arco-tag inline-flex h-5 max-w-full items-center truncate rounded-[4px] bg-sv-raised px-1.5 text-[11px] text-sv-text'>
+                  {summaryTag}
+                </span>
+              ) : null}
             </span>
           ) : (
             <span className={cn('arco-select-view-value min-w-0 flex-1 truncate', !selected.length && 'text-sv-muted')}>
