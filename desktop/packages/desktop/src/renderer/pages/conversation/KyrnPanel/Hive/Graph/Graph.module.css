@@ -86,13 +86,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--text-primary);
+  box-sizing: border-box;
+  border: 1.5px solid var(--brand);
   border-radius: 50%;
-  background: var(--bg-1, #fff);
-  color: var(--text-primary);
+  background: color-mix(in srgb, var(--brand) 12%, var(--bg-1, #fff));
+  color: var(--brand);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 .node {

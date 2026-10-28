@@ -130,6 +130,7 @@ export default function HiveGraph({
           <span
             className={styles.home}
             style={{ left: layout.centre.x, top: layout.centre.y, width: 2 * HOME_RADIUS, height: 2 * HOME_RADIUS }}
+            data-testid='hive-home'
             aria-hidden='true'
           >
             spec.jev

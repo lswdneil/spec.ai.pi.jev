@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildHiveRuns } from '@/renderer/pages/conversation/KyrnPanel/Hive/activity';
 import { HOME, hiveLinks, reportLinks, snapshotLinks } from '@/renderer/pages/conversation/KyrnPanel/Hive/Graph/links';
-import { bendOf, linkPath, ringLayout } from '@/renderer/pages/conversation/KyrnPanel/Hive/Graph/layout';
+import { bendOf, HOME_RADIUS, linkPath, ringLayout } from '@/renderer/pages/conversation/KyrnPanel/Hive/Graph/layout';
 import { parseSwarmSnapshot } from '@/common/kyrn/hive';
 import { activity, hiveEvents, hiveSnapshot } from './hiveFixtures';
 
@@ -149,11 +149,13 @@ describe('the ring', () => {
     const lower = { x: 100, y: 300 };
     expect(linkPath(upper, lower, 1)).toMatch(/^M100\.0 149\.0 .* 100\.0 271\.0$/);
     expect(linkPath(lower, upper, 1)).toMatch(/^M100\.0 275\.0 .* 100\.0 153\.0$/);
-    // To spec.jev at the centre of a delegate run: the line ends at its circle.
-    expect(linkPath(upper, { x: 100, y: 200 }, 1, { toHome: true })).toMatch(/ 100\.0 175\.0$/);
+    // To spec.jev at the centre of a delegate run: the line ends outside its larger wordmark circle.
+    expect(linkPath(upper, { x: 100, y: 200 }, 1, { toHome: true })).toMatch(
+      new RegExp(` 100\\.0 ${(200 - HOME_RADIUS - 7).toFixed(1)}$`)
+    );
     // A delegate run's ring is tall enough for the top bee's words to end well above spec.jev's node.
     const delegate = ringLayout(['a', 'b', 'c'], 420, true);
-    expect(delegate.centre.y - delegate.nodes.get('a')!.y).toBeGreaterThanOrEqual(96 + 18 + 40);
+    expect(delegate.centre.y - delegate.nodes.get('a')!.y).toBeGreaterThanOrEqual(96 + HOME_RADIUS + 40);
     expect(ringLayout(['a', 'b', 'c'], 420).centre.y - ringLayout(['a', 'b', 'c'], 420).nodes.get('a')!.y).toBeLessThan(
       154
     );

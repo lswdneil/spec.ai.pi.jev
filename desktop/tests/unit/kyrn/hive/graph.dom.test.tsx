@@ -8,6 +8,7 @@ import mu from '@/renderer/services/i18n/locales/en-US/mu.json';
 import HiveRows from '@/renderer/pages/conversation/KyrnPanel/Hive/HiveRows';
 import { endedRuns } from '@/renderer/pages/conversation/KyrnPanel/Hive/activity';
 import graphStyles from '@/renderer/pages/conversation/KyrnPanel/Hive/Graph/Graph.module.css';
+import { HOME_RADIUS } from '@/renderer/pages/conversation/KyrnPanel/Hive/Graph/layout';
 import type { Activity } from '@/common/kyrn/types';
 import { activity, hiveEvents, hiveSnapshot } from './hiveFixtures';
 import { cssRules, readRendererCss } from '../../../helpers/cssRules';
@@ -131,7 +132,22 @@ describe('the map of a run', () => {
       )
     );
     const map = screen.getByTestId('hive-map');
-    expect(within(map).getByText('spec.jev')).toBeInTheDocument();
+    const home = within(map).getByTestId('hive-home');
+    expect(home).toHaveTextContent('spec.jev');
+    // jsdom cannot measure glyphs. This locks the deliberate wordmark geometry; the visual check is that the
+    // full label sits inside the circle without clipping at both supported themes.
+    expect(HOME_RADIUS).toBeGreaterThan(18);
+    expect(home.style.width).toBe(`${2 * HOME_RADIUS}px`);
+    expect(home.style.height).toBe(`${2 * HOME_RADIUS}px`);
+    const homeRules = cssRules(readRendererCss('pages/conversation/KyrnPanel/Hive/Graph/Graph.module.css'), '.home');
+    expect(homeRules.some((rule) => rule.includes('box-sizing: border-box;'))).toBe(true);
+    expect(homeRules.some((rule) => rule.includes('border: 1.5px solid var(--brand);'))).toBe(true);
+    expect(homeRules.some((rule) => rule.includes('color: var(--brand);'))).toBe(true);
+    expect(homeRules.some((rule) => rule.includes('background: color-mix') && rule.includes('var(--brand)'))).toBe(
+      true
+    );
+    expect(homeRules.some((rule) => rule.includes('white-space: nowrap;'))).toBe(true);
+    expect(homeRules.some((rule) => /(?:width|height):\s*36px/.test(rule))).toBe(false);
     const reports = screen.getAllByTestId('hive-report');
     expect(reports.map((line) => [line.getAttribute('data-from'), line.getAttribute('data-to')])).toEqual([
       ['reviewer', 'spec.jev'],

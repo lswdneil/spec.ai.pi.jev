@@ -17,7 +17,7 @@ const NODE_GAP = 8;
 const MIN_STAGE = 200;
 const SAMPLES = 720;
 /** The radius of spec.jev's own node at the centre of a delegate run's map. */
-export const HOME_RADIUS = 18;
+export const HOME_RADIUS = 36;
 /** Between the words under the top bee and spec.jev's node: room for the line between them. */
 const HOME_CLEARANCE = 40;
 
