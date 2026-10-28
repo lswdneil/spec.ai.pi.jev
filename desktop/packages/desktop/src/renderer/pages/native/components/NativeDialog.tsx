@@ -23,12 +23,18 @@ type Props = {
   more: number;
   onAnswer: (dialogId: string, answer: DialogAnswer) => Promise<NativeResult<void>>;
   onExpire: (dialogId: string) => void;
+  /** spec.jev's permission mode in force, when it has said one. */
+  permissionMode?: string;
 };
 
 const CARD = 'rd-12px border border-solid border-[var(--color-border-2)] bg-1 p-12px flex flex-col gap-10px';
 
 /** spec.jev's permission question: the permission card, worded from spec.jev's codes. */
-const PermissionDialog: React.FC<{ dialog: ViewDialog; answer: Answer }> = ({ dialog, answer }) => {
+const PermissionDialog: React.FC<{ dialog: ViewDialog; answer: Answer; permissionMode?: string }> = ({
+  dialog,
+  answer,
+  permissionMode,
+}) => {
   const { t, i18n } = useTranslation();
   const card = useMemo(
     () =>
@@ -56,6 +62,7 @@ const PermissionDialog: React.FC<{ dialog: ViewDialog; answer: Answer }> = ({ di
         const choice = byId.get(value);
         if (choice) await answer(choice.answer);
       }}
+      autoAllowOnceSeconds={permissionMode === 'jev' && card.choices.length === 2 ? 10 : undefined}
       decision={(option) => card.decided(option.value)}
     />
   );
@@ -174,7 +181,7 @@ const TextDialog: React.FC<{ dialog: ViewDialog; answer: Answer }> = ({ dialog, 
   );
 };
 
-const NativeDialog: React.FC<Props> = ({ conversationId, dialog, more, onAnswer, onExpire }) => {
+const NativeDialog: React.FC<Props> = ({ conversationId, dialog, more, onAnswer, onExpire, permissionMode }) => {
   const { t } = useTranslation();
   const left = useDialogDeadline(`${conversationId}:${dialog.id}`, dialog.timeout, () => onExpire(dialog.id));
   const answer: Answer = async (value) => {
@@ -186,7 +193,7 @@ const NativeDialog: React.FC<Props> = ({ conversationId, dialog, more, onAnswer,
     dialog.method === 'input' || dialog.method === 'editor' ? (
       <TextDialog dialog={dialog} answer={answer} />
     ) : dialog.permission ? (
-      <PermissionDialog dialog={dialog} answer={answer} />
+      <PermissionDialog dialog={dialog} answer={answer} permissionMode={permissionMode} />
     ) : (
       <ChoiceDialog dialog={dialog} answer={answer} />
     );

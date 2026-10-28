@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { BackendHttpError } from '@/common/adapter/httpBridge';
 import { isAnswerNoLongerPending } from '@/renderer/pages/conversation/Messages/components/MessagePermission/PermissionRequestPanel';
 import permissionStyles from '@/renderer/pages/conversation/Messages/components/MessagePermission/PermissionRequestPanel.module.css';
@@ -23,7 +23,7 @@ import { cssRules, readRendererCss } from '../../../helpers/cssRules';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string) => (key === 'mu.units.s' ? 's' : key),
   }),
 }));
 
@@ -51,6 +51,8 @@ const makeOptions = (): PermissionPanelOption[] => [
   },
 ];
 
+const makeTwoOptions = (): PermissionPanelOption[] => [makeOptions()[1], makeOptions()[2]];
+
 const renderPanel = (props: Partial<React.ComponentProps<typeof PermissionRequestPanel>> = {}) =>
   render(
     <PermissionRequestPanel
@@ -73,6 +75,11 @@ const getOptionsGroup = (): HTMLElement => screen.getByTestId('message-permissio
 describe('PermissionRequestPanel', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
   });
 
   it.each([
@@ -126,6 +133,33 @@ describe('PermissionRequestPanel', () => {
     expect(css).not.toContain('.arco-card-body');
     expect(css).not.toContain(':global(.arco-btn)');
     expect(css).not.toContain('.arco-btn-loading-icon');
+  });
+
+  it('marks option intents and gives allow and reject rows their own strong accents', () => {
+    renderPanel();
+
+    expect(getOptionButton('message-permission-option-once')).toHaveAttribute('data-intent', 'allow-once');
+    expect(getOptionButton('message-permission-option-always')).toHaveAttribute('data-intent', 'allow-always');
+    expect(getOptionButton('message-permission-option-reject')).toHaveAttribute('data-intent', 'reject-once');
+
+    const css = readRendererCss(
+      'pages/conversation/Messages/components/MessagePermission/PermissionRequestPanel.module.css'
+    );
+    const allow = cssRules(css, ".optionButton[data-intent='allow-once']").join('\n');
+    const allowAlways = cssRules(css, ".optionButton[data-intent='allow-always']").join('\n');
+    const reject = cssRules(css, ".optionButton[data-intent='reject-once']").join('\n');
+    const rejectAlways = cssRules(css, ".optionButton[data-intent='reject-always']").join('\n');
+    const allowLabel = cssRules(css, ".optionButton[data-intent='allow-once'] .optionLabel").join('\n');
+    const countdown = cssRules(css, '.optionCountdown').join('\n');
+    expect(allow).toContain('--permission-accent: var(--sv-capability-live, #10b981);');
+    expect(allowAlways).toContain('--permission-accent: var(--sv-capability-live, #10b981);');
+    expect(allow).toContain('box-shadow: inset 3px 0 0 var(--permission-accent);');
+    expect(reject).toContain('--permission-accent: var(--danger);');
+    expect(rejectAlways).toContain('--permission-accent: var(--danger);');
+    expect(reject).toContain('background: color-mix(in srgb, var(--permission-accent) 14%, transparent);');
+    expect(allowLabel).toContain('color: var(--permission-label);');
+    expect(countdown).toContain('flex: 0 0 auto;');
+    expect(css).not.toContain("[data-intent='neutral']");
   });
 
   it('does not move focus from the conversation on mount', () => {
@@ -409,6 +443,216 @@ describe('PermissionRequestPanel', () => {
 
     expect(screen.queryByTestId('message-permission-error')).not.toBeInTheDocument();
     expect(getOptionButton('message-permission-option-once')).toBeEnabled();
+  });
+});
+
+describe('PermissionRequestPanel automatic allow once', () => {
+  const countdown = () => screen.queryByTestId('message-permission-auto-allow-countdown');
+
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  it('shows ten seconds and submits enabled allow-once once when the countdown ends', async () => {
+    vi.useFakeTimers();
+    const onConfirm = vi.fn().mockResolvedValue(undefined);
+    renderPanel({ onConfirm, options: makeTwoOptions(), autoAllowOnceSeconds: 10 });
+
+    expect(countdown()).toHaveTextContent('10s');
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(9_999);
+    });
+    expect(onConfirm).not.toHaveBeenCalled();
+    expect(countdown()).toHaveTextContent('1s');
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1);
+    });
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+    expect(onConfirm).toHaveBeenCalledWith('once');
+    expect(screen.getByTestId('message-permission-status')).toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+  });
+
+  it('cancels the timer when the person answers manually', async () => {
+    vi.useFakeTimers();
+    const onConfirm = vi.fn().mockResolvedValue(undefined);
+    renderPanel({ onConfirm, options: makeTwoOptions(), autoAllowOnceSeconds: 10 });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3_000);
+    });
+    fireEvent.click(getOptionButton('message-permission-option-reject'));
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+    expect(onConfirm).toHaveBeenCalledWith('reject');
+    expect(countdown()).not.toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([
+    { name: 'without the prop', options: makeTwoOptions(), autoAllowOnceSeconds: undefined },
+    {
+      name: 'without an allow-once option',
+      options: [
+        makeOptions()[2],
+        { id: 'neutral:3', value: 'ask', label: 'Ask again', intent: 'neutral', testId: 'neutral-option' },
+      ],
+      autoAllowOnceSeconds: 10,
+    },
+    {
+      name: 'when allow-once is disabled',
+      options: [{ ...makeOptions()[1], disabled: true }, makeOptions()[2]],
+      autoAllowOnceSeconds: 10,
+    },
+    { name: 'with three choices', options: makeOptions(), autoAllowOnceSeconds: 10 },
+  ] satisfies { name: string; options: PermissionPanelOption[]; autoAllowOnceSeconds?: number }[])(
+    'does not auto-allow $name',
+    async ({ options, autoAllowOnceSeconds }) => {
+      vi.useFakeTimers();
+      const onConfirm = vi.fn().mockResolvedValue(undefined);
+      renderPanel({ onConfirm, options, autoAllowOnceSeconds });
+
+      expect(countdown()).not.toBeInTheDocument();
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(10_000);
+      });
+      expect(onConfirm).not.toHaveBeenCalled();
+    }
+  );
+
+  it('does not retry after an automatic answer fails', async () => {
+    vi.useFakeTimers();
+    const onConfirm = vi.fn().mockRejectedValue(new Error('offline'));
+    renderPanel({ onConfirm, options: makeTwoOptions(), autoAllowOnceSeconds: 10 });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId('message-permission-error')).toBeInTheDocument();
+    expect(countdown()).not.toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps counting through equivalent parent renders', async () => {
+    vi.useFakeTimers();
+    const onConfirm = vi.fn().mockResolvedValue(undefined);
+    const { rerender } = renderPanel({ onConfirm, options: makeTwoOptions(), autoAllowOnceSeconds: 10 });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5_000);
+    });
+    expect(countdown()).toHaveTextContent('5s');
+    rerender(
+      <PermissionRequestPanel
+        requestKey='request-1'
+        testIdPrefix='message-permission'
+        title='Permission request'
+        operationKind='execute'
+        options={makeTwoOptions()}
+        onConfirm={onConfirm}
+        autoAllowOnceSeconds={10}
+      />
+    );
+    expect(countdown()).toHaveTextContent('5s');
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5_000);
+    });
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+    expect(onConfirm).toHaveBeenCalledWith('once');
+  });
+
+  it('cancels the timer when the option identity changes', async () => {
+    vi.useFakeTimers();
+    const onConfirm = vi.fn().mockResolvedValue(undefined);
+    const { rerender } = renderPanel({ onConfirm, options: makeTwoOptions(), autoAllowOnceSeconds: 10 });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5_000);
+    });
+    rerender(
+      <PermissionRequestPanel
+        requestKey='request-1'
+        testIdPrefix='message-permission'
+        title='Permission request'
+        operationKind='execute'
+        options={[{ ...makeOptions()[1], disabled: true }, makeOptions()[2]]}
+        onConfirm={onConfirm}
+        autoAllowOnceSeconds={10}
+      />
+    );
+    expect(countdown()).not.toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+    expect(onConfirm).not.toHaveBeenCalled();
+  });
+
+  it('restarts for a replacement request instead of submitting the old one', async () => {
+    vi.useFakeTimers();
+    const onConfirm = vi.fn().mockResolvedValue(undefined);
+    const { rerender } = renderPanel({ onConfirm, options: makeTwoOptions(), autoAllowOnceSeconds: 10 });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5_000);
+    });
+    rerender(
+      <PermissionRequestPanel
+        requestKey='request-2'
+        testIdPrefix='message-permission'
+        title='Next permission request'
+        operationKind='execute'
+        options={makeTwoOptions()}
+        onConfirm={onConfirm}
+        autoAllowOnceSeconds={10}
+      />
+    );
+    expect(countdown()).toHaveTextContent('10s');
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5_000);
+    });
+    expect(onConfirm).not.toHaveBeenCalled();
+    expect(countdown()).toHaveTextContent('5s');
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5_000);
+    });
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+    expect(onConfirm).toHaveBeenCalledWith('once');
+  });
+
+  it('cancels the timer when the card unmounts', async () => {
+    vi.useFakeTimers();
+    const onConfirm = vi.fn().mockResolvedValue(undefined);
+    const { unmount } = renderPanel({ onConfirm, options: makeTwoOptions(), autoAllowOnceSeconds: 10 });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5_000);
+    });
+    unmount();
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+    expect(onConfirm).not.toHaveBeenCalled();
   });
 });
 

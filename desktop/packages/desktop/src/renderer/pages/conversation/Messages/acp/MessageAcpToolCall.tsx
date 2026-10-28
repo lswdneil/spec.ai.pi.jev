@@ -20,7 +20,7 @@ import { Download } from '@icon-park/react';
 import { createTwoFilesPatch } from 'diff';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import MarkdownView from '@renderer/components/Markdown';
+import MarkdownView, { MAX_RICH_MARKDOWN_CHARS } from '@renderer/components/Markdown';
 
 const StatusTag: React.FC<{ status: string }> = ({ status }) => {
   const { t } = useTranslation();
@@ -87,7 +87,7 @@ const ContentView: React.FC<{ content: IMessageAcpToolCall['content']['update'][
       <div className='mt-3'>
         <div className='sv-dense-code-block sv-acp-tool-output bg-1 p-3 rounded border overflow-hidden'>
           <div className='min-w-0 overflow-x-auto break-words'>
-            <MarkdownView>{content.content.text}</MarkdownView>
+            <MarkdownView plainTextAbove={MAX_RICH_MARKDOWN_CHARS}>{content.content.text}</MarkdownView>
           </div>
         </div>
       </div>
@@ -163,7 +163,9 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
           {rawInput && (
             <div className='text-sm'>
               {typeof rawInput === 'string' ? (
-                <MarkdownView>{`\`\`\`\n${rawInput}\n\`\`\``}</MarkdownView>
+                <MarkdownView
+                  plainTextAbove={MAX_RICH_MARKDOWN_CHARS}
+                >{`\`\`\`\n${rawInput}\n\`\`\``}</MarkdownView>
               ) : (
                 <pre className='sv-dense-terminal-output sv-acp-tool-output bg-1 p-2 rounded text-xs overflow-x-auto'>
                   {JSON.stringify(rawInput, null, 2)}

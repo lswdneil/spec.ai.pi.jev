@@ -36,6 +36,8 @@ import {
 } from './markdownUtils';
 import type { LocalFileLinkReference } from './markdownUtils';
 
+export const MAX_RICH_MARKDOWN_CHARS = 120_000;
+
 const isLocalFilePath = (src: string): boolean => {
   if (src.startsWith('http://') || src.startsWith('https://')) return false;
   if (src.startsWith('data:')) return false;
@@ -44,7 +46,13 @@ const isLocalFilePath = (src: string): boolean => {
 
 const transformUrl = (url: string) => (resolveLocalFileLinkPath(url) ? url : defaultUrlTransform(url));
 
-type MarkdownViewProps = {
+const PLAIN_TEXT_STYLE: React.CSSProperties = {
+  whiteSpace: 'pre-wrap',
+  overflowWrap: 'anywhere',
+  wordBreak: 'break-word',
+};
+
+export type MarkdownViewProps = {
   children: string;
   hiddenCodeCopyButton?: boolean;
   codeStyle?: React.CSSProperties;
@@ -53,10 +61,65 @@ type MarkdownViewProps = {
   onLocalFileLink?: (path: string, reference?: LocalFileLinkReference) => void | Promise<void>;
   /** Enable raw HTML rendering in markdown content. Use with caution — only for trusted sources. */
   allowHtml?: boolean;
+  /** Render strings above this many characters as plain text instead of parsing them as Markdown. */
+  plainTextAbove?: number;
+};
+
+type MarkdownErrorBoundaryProps = {
+  children: React.ReactNode;
+  fallback: React.ReactNode;
+  resetKey: string;
+};
+
+type MarkdownErrorBoundaryState = {
+  hasError: boolean;
+};
+
+class MarkdownErrorBoundary extends React.Component<MarkdownErrorBoundaryProps, MarkdownErrorBoundaryState> {
+  state: MarkdownErrorBoundaryState = { hasError: false };
+
+  static getDerivedStateFromError(): MarkdownErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error('[MarkdownView] Failed to render Markdown; showing plain text.', error, info.componentStack);
+  }
+
+  componentDidUpdate(previousProps: MarkdownErrorBoundaryProps) {
+    if (this.state.hasError && previousProps.resetKey !== this.props.resetKey) {
+      this.setState({ hasError: false });
+    }
+  }
+
+  render() {
+    return this.state.hasError ? this.props.fallback : this.props.children;
+  }
+}
+
+const PlainMarkdownText: React.FC<{
+  text: string;
+  testId: string;
+  elementRef?: (el?: HTMLDivElement | null) => void;
+}> = ({ text, testId, elementRef }) => {
+  return (
+    <div ref={elementRef} className='markdown-shadow-body' data-testid={testId} style={PLAIN_TEXT_STYLE}>
+      {text}
+    </div>
+  );
 };
 
 const MarkdownView: React.FC<MarkdownViewProps> = React.memo(
-  ({ hiddenCodeCopyButton, codeStyle, className, onRef, onLocalFileLink, allowHtml, children: childrenProp }) => {
+  ({
+    hiddenCodeCopyButton,
+    codeStyle,
+    className,
+    onRef,
+    onLocalFileLink,
+    allowHtml,
+    plainTextAbove,
+    children: childrenProp,
+  }) => {
     const { t } = useTranslation();
     // The preview panel changes whenever a tab opens, loads or updates, and every message in the conversation reads
     // this context. A link only needs the panel at the moment it is clicked, so the handler reads the latest one from
@@ -65,14 +128,18 @@ const MarkdownView: React.FC<MarkdownViewProps> = React.memo(
     const previewRef = useRef(preview);
     previewRef.current = preview;
 
+    const isLargePlainText =
+      typeof childrenProp === 'string' && plainTextAbove !== undefined && childrenProp.length > plainTextAbove;
+
     const normalizedChildren = useMemo(() => {
+      if (isLargePlainText) return childrenProp;
       if (typeof childrenProp === 'string') {
         let text = childrenProp.replace(/file:\/\//g, '');
         text = convertLatexDelimiters(text);
         return text;
       }
       return childrenProp;
-    }, [childrenProp]);
+    }, [childrenProp, isLargePlainText]);
 
     const handleLinkClick = useCallback(
       (e: React.MouseEvent<HTMLAnchorElement>, rawHref: string) => {
@@ -158,24 +225,40 @@ const MarkdownView: React.FC<MarkdownViewProps> = React.memo(
     // The same element while the text and the components are the same, so React skips the markdown when this view
     // renders for anything else (the preview panel above, a new translation function).
     const rendered = useMemo(
-      () => (
-        <ReactMarkdown
-          remarkPlugins={MARKDOWN_REMARK_PLUGINS}
-          rehypePlugins={rehypePlugins}
-          components={components}
-          urlTransform={transformUrl}
-        >
-          {normalizedChildren}
-        </ReactMarkdown>
-      ),
-      [components, normalizedChildren, rehypePlugins]
+      () =>
+        isLargePlainText ? null : (
+          <ReactMarkdown
+            remarkPlugins={MARKDOWN_REMARK_PLUGINS}
+            rehypePlugins={rehypePlugins}
+            components={components}
+            urlTransform={transformUrl}
+          >
+            {normalizedChildren}
+          </ReactMarkdown>
+        ),
+      [components, isLargePlainText, normalizedChildren, rehypePlugins]
     );
+
+    if (isLargePlainText) {
+      return (
+        <div className={classNames('relative w-full', className)}>
+          <ShadowView>
+            <PlainMarkdownText text={childrenProp} testId='markdown-large-text' elementRef={onRef} />
+          </ShadowView>
+        </div>
+      );
+    }
 
     return (
       <div className={classNames('relative w-full', className)}>
         <ShadowView>
           <div ref={onRef} className='markdown-shadow-body'>
-            {rendered}
+            <MarkdownErrorBoundary
+              resetKey={normalizedChildren}
+              fallback={<PlainMarkdownText text={childrenProp} testId='markdown-fallback' />}
+            >
+              {rendered}
+            </MarkdownErrorBoundary>
           </div>
         </ShadowView>
       </div>

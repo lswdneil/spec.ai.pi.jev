@@ -131,6 +131,7 @@
   margin: 0;
   align-items: center;
   justify-content: flex-start;
+  column-gap: 8px;
   padding: 8px 10px;
   border: 0;
   border-radius: 0;
@@ -170,6 +171,65 @@
   line-height: 1.4;
   overflow-wrap: anywhere;
   white-space: normal;
+}
+
+.optionButton[data-intent='allow-once'],
+.optionButton[data-intent='allow-always'] {
+  --permission-accent: var(--sv-capability-live, #10b981);
+  --permission-label: color-mix(in srgb, var(--permission-accent) 72%, var(--color-text-1));
+  background: color-mix(in srgb, var(--permission-accent) 9%, transparent);
+  box-shadow: inset 3px 0 0 var(--permission-accent);
+}
+
+.optionButton[data-intent='reject-once'],
+.optionButton[data-intent='reject-always'] {
+  --permission-accent: var(--danger);
+  --permission-label: var(--danger);
+  background: color-mix(in srgb, var(--permission-accent) 14%, transparent);
+  box-shadow: inset 3px 0 0 var(--permission-accent);
+}
+
+.optionButton[data-intent='allow-once'] .optionLabel,
+.optionButton[data-intent='allow-always'] .optionLabel,
+.optionButton[data-intent='reject-once'] .optionLabel,
+.optionButton[data-intent='reject-always'] .optionLabel {
+  color: var(--permission-label);
+}
+
+.optionButton[data-intent='allow-once']:not(:disabled):hover,
+.optionButton[data-intent='allow-always']:not(:disabled):hover,
+.optionButton[data-intent='reject-once']:not(:disabled):hover,
+.optionButton[data-intent='reject-always']:not(:disabled):hover {
+  background: color-mix(in srgb, var(--permission-accent) 16%, transparent);
+}
+
+.optionButton[data-intent='allow-once']:focus-visible,
+.optionButton[data-intent='allow-always']:focus-visible,
+.optionButton[data-intent='reject-once']:focus-visible,
+.optionButton[data-intent='reject-always']:focus-visible {
+  outline: 2px solid var(--permission-accent);
+  outline-offset: -2px;
+  background: color-mix(in srgb, var(--permission-accent) 20%, transparent);
+  box-shadow:
+    inset 3px 0 0 var(--permission-accent),
+    0 0 0 2px color-mix(in srgb, var(--permission-accent) 30%, transparent);
+}
+
+.optionCountdown {
+  display: inline-flex;
+  min-width: 2.4em;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 6px;
+  border: 1px solid color-mix(in srgb, var(--permission-accent, var(--sv-capability-live, #10b981)) 40%, transparent);
+  border-radius: 999px;
+  color: var(--permission-label, var(--color-text-1));
+  background: color-mix(in srgb, var(--permission-accent, var(--sv-capability-live, #10b981)) 14%, transparent);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .emptyState {
@@ -225,5 +285,9 @@
     align-items: stretch;
     flex-direction: column;
     gap: 2px;
+  }
+
+  .optionButton {
+    align-items: flex-start;
   }
 }

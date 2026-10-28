@@ -21,9 +21,20 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-import MarkdownView from '@/renderer/components/Markdown';
+import MarkdownView, { MAX_RICH_MARKDOWN_CHARS } from '@/renderer/components/Markdown';
 
 describe('MarkdownView allowHtml', () => {
+  it('keeps ordinary-size content on the rich Markdown path when the limit is enabled', () => {
+    render(
+      <MarkdownView plainTextAbove={MAX_RICH_MARKDOWN_CHARS}>
+        {'**bold** and **also bold**'}
+      </MarkdownView>
+    );
+
+    expect(screen.getByText('bold')).toHaveProperty('tagName', 'STRONG');
+    expect(screen.queryByTestId('markdown-large-text')).not.toBeInTheDocument();
+  });
+
   it('strips scripts and event handlers from raw HTML', () => {
     const { container } = render(
       <MarkdownView allowHtml>

@@ -9,7 +9,7 @@ import { Card } from '@/renderer/ui/card';
 import { Typography } from '@/renderer/ui/typography';
 import { Attention, CheckOne, Forbid, Info } from '@icon-park/react';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isBackendHttpError } from '@/common/adapter/httpBridge';
 import styles from './PermissionRequestPanel.module.css';
@@ -46,6 +46,8 @@ type PermissionRequestPanelProps = {
   detailLabelKey?: string;
   options: PermissionPanelOption[];
   onConfirm: (optionValue: string) => Promise<void>;
+  /** Seconds before the enabled allow-once option is submitted automatically. */
+  autoAllowOnceSeconds?: number;
   /**
    * What was decided, said after the answer went through (e.g. "You said no: rm -rf build"), or undefined to name the
    * answer that was picked.
@@ -67,10 +69,16 @@ export const PermissionRequestPanel: React.FC<PermissionRequestPanelProps> = ({
   detailLabelKey,
   options,
   onConfirm,
+  autoAllowOnceSeconds,
   decision,
 }) => {
   const { t } = useTranslation();
   const optionsIdentity = getPermissionOptionsIdentity(options);
+  const autoAllowOption =
+    autoAllowOnceSeconds !== undefined && options.length === 2
+      ? options.find((option) => option.intent === 'allow-once' && !option.disabled)
+      : undefined;
+  const autoAllowOptionId = autoAllowOption?.id;
   const [isResponding, setIsResponding] = useState(false);
   /** The answer that went through; the card then says what it decided. */
   const [answered, setAnswered] = useState<PermissionPanelOption | null>(null);
@@ -79,9 +87,13 @@ export const PermissionRequestPanel: React.FC<PermissionRequestPanelProps> = ({
   /** The question is gone: its buttons go too. */
   const [isGone, setIsGone] = useState(false);
   const [submittingId, setSubmittingId] = useState<string | null>(null);
+  const [autoAllowSecondsLeft, setAutoAllowSecondsLeft] = useState<number | undefined>(undefined);
   const respondingRef = useRef(false);
   const requestEpochRef = useRef(0);
   const optionsEpochRef = useRef(0);
+  const autoAllowCancelRef = useRef<(() => void) | null>(null);
+  const autoAllowOptionsRef = useRef(options);
+  const submitOptionRef = useRef<((option: PermissionPanelOption) => Promise<void>) | null>(null);
   const optionsLabelId = useId();
 
   useEffect(() => {
@@ -101,6 +113,14 @@ export const PermissionRequestPanel: React.FC<PermissionRequestPanelProps> = ({
     setIsGone(false);
   }, [optionsIdentity]);
 
+  useLayoutEffect(() => {
+    autoAllowOptionsRef.current = options;
+  }, [options]);
+
+  const cancelAutoAllow = useCallback(() => {
+    autoAllowCancelRef.current?.();
+  }, []);
+
   // Every option submits on a single click (allow/reject, once or always,
   // plus neutral) — there is no separate confirm step. The in-flight guard
   // (respondingRef) drops double-clicks and clicks during submission, and the
@@ -108,6 +128,7 @@ export const PermissionRequestPanel: React.FC<PermissionRequestPanelProps> = ({
   // or the option set has changed underneath us.
   const submitOption = useCallback(
     async (option: PermissionPanelOption) => {
+      cancelAutoAllow();
       if (respondingRef.current || hasResponded || isGone || option.disabled) return;
 
       const requestEpoch = requestEpochRef.current;
@@ -135,8 +156,69 @@ export const PermissionRequestPanel: React.FC<PermissionRequestPanelProps> = ({
         }
       }
     },
-    [hasResponded, isGone, onConfirm]
+    [cancelAutoAllow, hasResponded, isGone, onConfirm]
   );
+
+  useLayoutEffect(() => {
+    submitOptionRef.current = submitOption;
+  }, [submitOption]);
+
+  // The timer follows the request and option identity, not each parent render. At zero it submits through the same
+  // guarded path as a click; the first submission cancels it, and a failed auto-answer leaves it canceled.
+  useLayoutEffect(() => {
+    if (
+      autoAllowOnceSeconds === undefined ||
+      !Number.isFinite(autoAllowOnceSeconds) ||
+      autoAllowOnceSeconds <= 0 ||
+      autoAllowOptionId === undefined
+    ) {
+      setAutoAllowSecondsLeft(undefined);
+      return;
+    }
+
+    let cancelled = false;
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const seconds = Math.ceil(autoAllowOnceSeconds);
+    const deadline = Date.now() + seconds * 1000;
+    setAutoAllowSecondsLeft(seconds);
+
+    const cancel = () => {
+      if (cancelled) return;
+      cancelled = true;
+      if (timer !== undefined) clearInterval(timer);
+      if (autoAllowCancelRef.current === cancel) autoAllowCancelRef.current = null;
+      setAutoAllowSecondsLeft(undefined);
+    };
+
+    const tick = () => {
+      if (cancelled) return;
+      const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+      if (left > 0) {
+        setAutoAllowSecondsLeft(left);
+        return;
+      }
+
+      cancel();
+      const current = autoAllowOptionsRef.current;
+      const target =
+        current.length === 2
+          ? current.find(
+              (option) => option.id === autoAllowOptionId && option.intent === 'allow-once' && !option.disabled
+            )
+          : undefined;
+      if (target) void submitOptionRef.current?.(target);
+    };
+
+    timer = setInterval(tick, 1000);
+    autoAllowCancelRef.current = cancel;
+
+    return () => {
+      if (cancelled) return;
+      cancelled = true;
+      if (timer !== undefined) clearInterval(timer);
+      if (autoAllowCancelRef.current === cancel) autoAllowCancelRef.current = null;
+    };
+  }, [autoAllowOnceSeconds, autoAllowOptionId, optionsIdentity, requestKey]);
 
   return (
     <Card className={styles.card} bordered={false} data-testid={`${testIdPrefix}-card`}>
@@ -177,11 +259,18 @@ export const PermissionRequestPanel: React.FC<PermissionRequestPanelProps> = ({
                       className={styles.optionButton}
                       data-testid={option.testId}
                       data-disabled={Boolean(option.disabled || isResponding)}
+                      data-intent={option.intent}
                       disabled={option.disabled || isResponding}
                       loading={submittingId === option.id}
                       onClick={() => void submitOption(option)}
                     >
                       <span className={styles.optionLabel}>{option.label}</span>
+                      {option.id === autoAllowOptionId && autoAllowSecondsLeft !== undefined && !option.disabled ? (
+                        <span className={styles.optionCountdown} data-testid={`${testIdPrefix}-auto-allow-countdown`}>
+                          {autoAllowSecondsLeft}
+                          {t('mu.units.s')}
+                        </span>
+                      ) : null}
                     </Button>
                   ))}
                 </div>

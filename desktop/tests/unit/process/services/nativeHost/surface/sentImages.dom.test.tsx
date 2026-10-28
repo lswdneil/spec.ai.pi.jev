@@ -40,6 +40,7 @@ vi.mock('@/renderer/components/media/FilePreview', () => ({
 }));
 vi.mock('@/renderer/components/Markdown', () => ({
   __esModule: true,
+  MAX_RICH_MARKDOWN_CHARS: 120_000,
   default: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
 }));
 

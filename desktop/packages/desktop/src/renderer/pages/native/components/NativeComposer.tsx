@@ -339,6 +339,7 @@ const NativeComposer: React.FC<{ conversation: Conversation }> = ({ conversation
             more={dialogs.length - 1}
             onAnswer={respond}
             onExpire={expire}
+            permissionMode={permissions.mode}
           />
         </div>
       ) : null}

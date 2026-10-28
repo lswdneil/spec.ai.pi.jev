@@ -28,6 +28,7 @@ const t = i18n.t.bind(i18n) as (key: string, options?: Record<string, unknown>) 
 const has = (key: string) => i18n.exists(key);
 
 const ANSWERS = ['Allow once', 'Allow for this conversation (ls)', "Don't allow"];
+const TWO_ANSWERS = ['Allow once', "Don't allow"];
 const permission: ViewPermission = {
   kind: 'shell',
   summary: 'ls -la',
@@ -36,6 +37,11 @@ const permission: ViewPermission = {
   reason: 'unsure',
   grantLabel: 'ls',
   toolCallId: 'call-1',
+};
+const twoChoicePermission: ViewPermission = {
+  ...permission,
+  answers: TWO_ANSWERS,
+  answerIds: ['once', 'deny'],
 };
 const asking = (extra: Partial<ViewDialog> = {}): ViewDialog => ({
   id: 'd1',
@@ -46,13 +52,19 @@ const asking = (extra: Partial<ViewDialog> = {}): ViewDialog => ({
   permission,
   ...extra,
 });
+const askingWithTwoChoices = (): ViewDialog => asking({ options: TWO_ANSWERS, permission: twoChoicePermission });
 
 type Answered = { dialogId: string; answer: DialogAnswer };
 
 /** The options on screen, in order: what the end-to-end tests click. */
 const options = () => screen.getAllByTestId('native-dialog-option');
 
-function show(dialog: ViewDialog, result: NativeResult<void> = { ok: true, data: undefined }, more = 0) {
+function show(
+  dialog: ViewDialog,
+  result: NativeResult<void> = { ok: true, data: undefined },
+  more = 0,
+  permissionMode?: string
+) {
   const answered: Answered[] = [];
   const expired: string[] = [];
   const view = render(
@@ -66,6 +78,7 @@ function show(dialog: ViewDialog, result: NativeResult<void> = { ok: true, data:
           return result;
         }}
         onExpire={(dialogId) => expired.push(dialogId)}
+        permissionMode={permissionMode}
       />
     </I18nextProvider>
   );
@@ -73,6 +86,35 @@ function show(dialog: ViewDialog, result: NativeResult<void> = { ok: true, data:
 }
 
 describe('the permission card of a native dialog', () => {
+  it.each([
+    ['jev', true],
+    ['ask', false],
+    ['full', false],
+  ] as const)('starts the allow-once countdown only in jev mode (%s)', async (permissionMode, starts) => {
+    vi.useFakeTimers();
+    const { answered } = show(askingWithTwoChoices(), undefined, 0, permissionMode);
+    const countdown = screen.queryByTestId('message-acp-permission-auto-allow-countdown');
+    if (starts) expect(countdown).toHaveTextContent('10s');
+    else expect(countdown).not.toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+    expect(answered).toHaveLength(starts ? 1 : 0);
+    if (starts) expect(answered[0]).toEqual({ dialogId: 'd1', answer: { value: 'Allow once' } });
+  });
+
+  it('does not start the allow-once countdown for a three-choice card in jev mode', async () => {
+    vi.useFakeTimers();
+    const { answered } = show(asking(), undefined, 0, 'jev');
+    expect(screen.queryByTestId('message-acp-permission-auto-allow-countdown')).not.toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+    expect(answered).toEqual([]);
+  });
+
   it('words spec.jev’s question from its codes and sends spec.jev’s own answer text back', async () => {
     const { answered } = show(asking());
     expect(screen.getByTestId('native-dialog')).toHaveAttribute('data-method', 'select');
@@ -119,6 +161,18 @@ describe('the permission card of a native dialog', () => {
 });
 
 describe('other native dialogs', () => {
+  it('does not auto-answer an ordinary two-choice select in jev mode', async () => {
+    vi.useFakeTimers();
+    const dialog: ViewDialog = { id: 'd2', method: 'select', title: 'Pick a model', options: ['a', 'b'], inRun: false };
+    const { answered } = show(dialog, undefined, 0, 'jev');
+    expect(screen.queryByTestId('message-acp-permission-auto-allow-countdown')).not.toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_000);
+    });
+    expect(answered).toEqual([]);
+  });
+
   it('offers a select’s options, and dismissing it sends no choice', async () => {
     const dialog: ViewDialog = { id: 'd2', method: 'select', title: 'Pick a model', options: ['a', 'b'], inRun: false };
     const { answered } = show(dialog);

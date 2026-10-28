@@ -59,6 +59,7 @@ vi.mock('@renderer/components/chat/CollapsibleContent', () => ({
 
 // MarkdownView pulls in a heavy markdown pipeline — replace with a passthrough.
 vi.mock('@renderer/components/Markdown', () => ({
+  MAX_RICH_MARKDOWN_CHARS: 120_000,
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 

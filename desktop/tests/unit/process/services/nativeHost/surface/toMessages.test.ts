@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { IMessageAcpToolCall, TMessage } from '@/common/chat/chatLib';
+import type { IMessageAcpToolCall, IMessageText, TMessage } from '@/common/chat/chatLib';
 import { normalizeAcpToolCall } from '@/common/chat/normalizeToolCall';
 import { emptyView, reduce, reduceAll, type NativeView, type PiRecord } from '@/common/utils/nativeHost';
 import { jevLine } from '@/renderer/pages/conversation/Messages/acp/jevLine';
@@ -321,5 +321,28 @@ describe('rows written by hand', () => {
     expect(brief(second.at(-1) as TMessage)).toBe('spec.jev: hello');
     // Other words (another language) give new rows.
     expect(map(after, { ...options, words: { retried: () => '', compacted: () => '' } })[0]).not.toBe(second[0]);
+  });
+
+  it('marks only the final text block of a streaming assistant reply as active, then finishes every row', () => {
+    const streaming = reduceAll([
+      { type: 'agent_start' },
+      ended(user('hi')),
+      { type: 'message_start', message: reply([]) },
+      delta({ type: 'text_start', contentIndex: 0 }),
+      delta({ type: 'text_delta', contentIndex: 0, delta: 'first' }),
+      delta({ type: 'text_end', contentIndex: 0, content: 'first' }),
+      delta({ type: 'text_start', contentIndex: 1 }),
+      delta({ type: 'text_end', contentIndex: 1, content: 'second' }),
+    ]);
+    const map = createMessageMapper();
+    const textRows = (list: TMessage[]): IMessageText[] =>
+      list.filter((row): row is IMessageText => row.type === 'text' && row.position === 'left');
+
+    const active = textRows(map(streaming, options));
+    expect(active.map((row) => row.status)).toEqual(['finish', 'work']);
+    expect(active.map((row) => row.content.content)).toEqual(['first', 'second']);
+
+    const complete = reduce(streaming, ended(reply([text('first'), text('second')])));
+    expect(textRows(map(complete, options)).map((row) => row.status)).toEqual(['finish', 'finish']);
   });
 });

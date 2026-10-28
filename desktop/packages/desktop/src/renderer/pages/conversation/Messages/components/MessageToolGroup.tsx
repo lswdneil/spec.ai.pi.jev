@@ -24,7 +24,7 @@ import { parseDiff } from '@/renderer/utils/file/diffUtils';
 import MessageFileChanges from '../MessageFileChanges';
 import CollapsibleContent from '@renderer/components/chat/CollapsibleContent';
 import LocalImageView from '@renderer/components/media/LocalImageView';
-import MarkdownView from '@renderer/components/Markdown';
+import MarkdownView, { MAX_RICH_MARKDOWN_CHARS } from '@renderer/components/Markdown';
 import { ToolConfirmationOutcome } from '@renderer/utils/common';
 import { ImagePreviewContext } from '../MessageList';
 import { COLLAPSE_CONFIG, TEXT_CONFIG } from '../constants';
@@ -177,7 +177,9 @@ const ConfirmationDetails: React.FC<{
         const bashSnippet = `\`\`\`bash\n${confirmationDetails.command}\n\`\`\``;
         return (
           <div className='w-full max-w-100% min-w-0'>
-            <MarkdownView codeStyle={CODE_STYLE}>{bashSnippet}</MarkdownView>
+            <MarkdownView codeStyle={CODE_STYLE} plainTextAbove={MAX_RICH_MARKDOWN_CHARS}>
+              {bashSnippet}
+            </MarkdownView>
           </div>
         );
       }

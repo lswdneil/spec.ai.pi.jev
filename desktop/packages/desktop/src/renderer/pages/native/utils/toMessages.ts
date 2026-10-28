@@ -125,7 +125,8 @@ function textRow(
   at: number,
   position: 'left' | 'right',
   content: string,
-  images: readonly ViewImage[] = []
+  images: readonly ViewImage[] = [],
+  status?: IMessageText['status']
 ): IMessageText {
   return {
     id,
@@ -135,6 +136,7 @@ function textRow(
     position,
     created_at: at,
     content: images.length ? { content, images: images.slice() } : { content },
+    ...(status ? { status } : {}),
   };
 }
 
@@ -239,6 +241,7 @@ type Context = {
 function assistantRows(message: ViewAssistantMessage, context: Context): TMessage[] {
   const { conversationId, at } = context;
   const rows: TMessage[] = [];
+  const lastTextIndex = message.blocks.findLastIndex((block) => block.type === 'text');
   if (message.retries)
     rows.push(
       noticeRow(conversationId, `${message.id}:retried`, at, context.words.retried(message.retries), { level: 'info' })
@@ -246,7 +249,19 @@ function assistantRows(message: ViewAssistantMessage, context: Context): TMessag
   message.blocks.forEach((block, index) => {
     const id = `${message.id}:${index}`;
     if (block.type === 'text') {
-      if (block.text.trim()) rows.push(textRow(conversationId, id, message.id, at, 'left', block.text));
+      if (block.text.trim())
+        rows.push(
+          textRow(
+            conversationId,
+            id,
+            message.id,
+            at,
+            'left',
+            block.text,
+            [],
+            message.streaming && index === lastTextIndex ? 'work' : 'finish'
+          )
+        );
       return;
     }
     if (block.type === 'thinking') {
@@ -344,7 +359,8 @@ export function createMessageMapper(): (view: NativeView, options: MessageOption
       if (message.role === 'user' || message.role === 'assistant') at = Math.max(at, message.timestamp);
       const open = running && index === lastAssistant;
       const thinking = open && view.status === 'thinking' && message.role === 'assistant' && message.streaming;
-      const key = `${at}|${open}|${thinking}|${bashSaid}`;
+      const streaming = message.role === 'assistant' && message.streaming;
+      const key = `${at}|${open}|${thinking}|${streaming}|${bashSaid}`;
       const hit = cache.get(message);
       let own: TMessage[];
       if (hit?.key === key) own = hit.rows;

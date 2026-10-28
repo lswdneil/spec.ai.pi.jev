@@ -336,12 +336,12 @@ describe('the native send box', () => {
     act(() => {
       host.push('c1', delta({ type: 'thinking_start', contentIndex: 0 }));
     });
-    expect(status()).toHaveAttribute('data-status', 'thinking');
+    await waitFor(() => expect(status()).toHaveAttribute('data-status', 'thinking'));
     expect(status()).toHaveTextContent('Thinking…');
     act(() => {
       host.push('c1', delta({ type: 'thinking_end', contentIndex: 0, content: 'plan' }));
     });
-    expect(status()).toHaveAttribute('data-status', 'working');
+    await waitFor(() => expect(status()).toHaveAttribute('data-status', 'working'));
     act(() => {
       host.play('c1', [ended(reply([text('stopped')], { stopReason: 'aborted' })), { type: 'agent_settled' }]);
     });

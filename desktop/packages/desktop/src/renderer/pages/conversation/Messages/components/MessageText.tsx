@@ -24,7 +24,8 @@ import { copyText } from '@/renderer/utils/ui/clipboard';
 import CollapsibleContent from '@renderer/components/chat/CollapsibleContent';
 import FilePreview from '@renderer/components/media/FilePreview';
 import HorizontalFileList from '@renderer/components/media/HorizontalFileList';
-import MarkdownView from '@renderer/components/Markdown';
+import MarkdownView, { MAX_RICH_MARKDOWN_CHARS } from '@renderer/components/Markdown';
+import StreamingMarkdown from '@renderer/components/Markdown/StreamingMarkdown';
 import MessageImages from './MessageImages';
 import { closeOpenFence } from './streamMarkdown';
 import { stripThinkTags, hasThinkTags } from '@renderer/utils/chat/thinkTagFilter';
@@ -170,6 +171,11 @@ const MessageText: React.FC<{
   // arrives, then jump. Only the Markdown path needs it — a user message and a JSON payload are shown as they are.
   const markdown = useMemo(() => (typeof data === 'string' ? closeOpenFence(data) : data), [data]);
   const shouldRenderPlainText = isUserMessage || Boolean(contextResetNotice);
+  const shouldStreamMarkdown =
+    !shouldRenderPlainText &&
+    !isTeammateMessage &&
+    message.status === 'work' &&
+    !json;
   const conversationContext = useConversationContextSafe();
   // A native conversation has no AionCore conversation around it: its project folder comes with its list.
   const run = useMessageListRun();
@@ -359,14 +365,29 @@ const MessageText: React.FC<{
                   <MarkdownView
                     codeStyle={CODE_STYLE}
                     onLocalFileLink={handleLocalFileLink}
+                    plainTextAbove={MAX_RICH_MARKDOWN_CHARS}
                   >{`\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``}</MarkdownView>
                 </div>
               </CollapsibleContent>
             ) : (
               <div data-testid='message-text-content'>
-                <MarkdownView codeStyle={CODE_STYLE} onLocalFileLink={handleLocalFileLink}>
-                  {markdown}
-                </MarkdownView>
+                {shouldStreamMarkdown ? (
+                  <StreamingMarkdown
+                    codeStyle={CODE_STYLE}
+                    onLocalFileLink={handleLocalFileLink}
+                    plainTextAbove={MAX_RICH_MARKDOWN_CHARS}
+                  >
+                    {renderedText}
+                  </StreamingMarkdown>
+                ) : (
+                  <MarkdownView
+                    codeStyle={CODE_STYLE}
+                    onLocalFileLink={handleLocalFileLink}
+                    plainTextAbove={MAX_RICH_MARKDOWN_CHARS}
+                  >
+                    {markdown}
+                  </MarkdownView>
+                )}
               </div>
             )}
           </div>

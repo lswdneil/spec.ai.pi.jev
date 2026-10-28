@@ -20,10 +20,12 @@ import type {
 import {
   emptyView,
   reduce,
+  reduceAll,
   type DialogAnswer,
   type NativeView,
   type PiCommand,
   type PiImage,
+  type PiRecord,
   type SessionSettings,
 } from '@/common/utils/nativeHost';
 import { useNativeClient } from '../utils/nativeClient';
@@ -165,10 +167,22 @@ export function useNativeConversation(requestedId: string): NativeConversationSt
     let disposed = false;
     // Records that came before the snapshot: folded once it is in.
     let held: NativeRecordEvent[] | undefined = [];
+    // Streaming deltas wait for one frame so a burst copies the message list once instead of once per delta.
+    let pending: NativeRecordEvent[] = [];
+    let scheduled: number | undefined;
     // Another conversation in the same screen: nothing of the last one stays.
     if (latest.current.id !== mine.first) commit(() => initial(mine.first));
 
+    const clearPending = (): void => {
+      if (scheduled !== undefined) {
+        cancelAnimationFrame(scheduled);
+        scheduled = undefined;
+      }
+      pending = [];
+    };
+
     const open = async (): Promise<void> => {
+      clearPending();
       held = held ?? [];
       const result = await client.open(latest.current.id);
       if (disposed) return;
@@ -200,6 +214,51 @@ export function useNativeConversation(requestedId: string): NativeConversationSt
       );
     };
 
+    const foldBatch = (records: readonly PiRecord[], seq: number): void => {
+      if (records.length === 0) return;
+      const view = reduceAll(records, latest.current.view);
+      commit((current) => settleOutgoing({ ...current, view, seq }));
+    };
+
+    /**
+     * Folds the queued deltas in order. A gap leaves the records from it on for the reopened snapshot; false means
+     * that snapshot is now in flight, so a following record must wait in `held`.
+     */
+    const flushPending = (): boolean => {
+      if (scheduled !== undefined) {
+        cancelAnimationFrame(scheduled);
+        scheduled = undefined;
+      }
+      if (pending.length === 0) return true;
+      const queued = pending;
+      pending = [];
+      let seq = latest.current.seq;
+      if (latest.current.failure) return true;
+      const records: PiRecord[] = [];
+      for (let index = 0; index < queued.length; index++) {
+        const event = queued[index];
+        if (event.seq <= seq) continue;
+        if (event.seq !== seq + 1) {
+          foldBatch(records, seq);
+          void open();
+          held?.push(...queued.slice(index));
+          return false;
+        }
+        records.push(event.record);
+        seq = event.seq;
+      }
+      foldBatch(records, seq);
+      return true;
+    };
+
+    const schedulePending = (): void => {
+      if (scheduled !== undefined) return;
+      scheduled = requestAnimationFrame(() => {
+        scheduled = undefined;
+        if (!disposed) flushPending();
+      });
+    };
+
     const fold = (event: NativeRecordEvent): void => {
       if (held) {
         held.push(event);
@@ -207,12 +266,23 @@ export function useNativeConversation(requestedId: string): NativeConversationSt
       }
       const old = latest.current;
       if (old.failure || event.seq <= old.seq) return;
-      if (event.seq > old.seq + 1) {
+      if (event.record.type === 'message_update') {
+        pending.push(event);
+        schedulePending();
+        return;
+      }
+      if (!flushPending()) {
+        held?.push(event);
+        return;
+      }
+      const current = latest.current;
+      if (current.failure || event.seq <= current.seq) return;
+      if (event.seq > current.seq + 1) {
         // Some records never came: the snapshot has them.
         void open();
         return;
       }
-      commit((current) => settleOutgoing({ ...current, view: reduce(current.view, event.record), seq: event.seq }));
+      commit((now) => settleOutgoing({ ...now, view: reduce(now.view, event.record), seq: event.seq }));
     };
 
     const stops = [
@@ -225,6 +295,7 @@ export function useNativeConversation(requestedId: string): NativeConversationSt
       client.onReplaced((event) => {
         if (!has(event.id)) return;
         held = undefined;
+        clearPending();
         commit((old) =>
           settleOutgoing({
             ...old,
@@ -261,6 +332,7 @@ export function useNativeConversation(requestedId: string): NativeConversationSt
     void open();
     return () => {
       disposed = true;
+      clearPending();
       reopen.current = undefined;
       for (const stop of stops) stop();
     };

@@ -14,7 +14,7 @@ import classNames from 'classnames';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import MarkdownView from '@renderer/components/Markdown';
+import MarkdownView, { MAX_RICH_MARKDOWN_CHARS } from '@renderer/components/Markdown';
 import ButlerDiagnoseButton from '@renderer/components/base/ButlerDiagnoseButton';
 import CollapsibleContent from '@renderer/components/chat/CollapsibleContent';
 import { iconColors } from '@/renderer/styles/colors';
@@ -232,7 +232,9 @@ const MessageTips: React.FC<{ message: IMessageTips }> = ({ message }) => {
           <div className='flex items-start gap-4px'>
             {icon[type] || icon.warning}
             <div className='flex-1 min-w-0'>
-              <MarkdownView>{`\`\`\`json\n${showAsMu(JSON.stringify(data, null, 2))}\n\`\`\``}</MarkdownView>
+              <MarkdownView plainTextAbove={MAX_RICH_MARKDOWN_CHARS}>
+                {`\`\`\`json\n${showAsMu(JSON.stringify(data, null, 2))}\n\`\`\``}
+              </MarkdownView>
             </div>
           </div>
           {type === 'error' && (

@@ -15,6 +15,7 @@ import MessageText, {
   formatMessageTime,
   parseTeamContextResetNotice,
 } from '@/renderer/pages/conversation/Messages/components/MessageText';
+import { MAX_RICH_MARKDOWN_CHARS } from '@/renderer/components/Markdown';
 import { copyText } from '@/renderer/utils/ui/clipboard';
 
 const previewMocks = vi.hoisted(() => ({
@@ -35,6 +36,10 @@ const localFileLinkMocks = vi.hoisted(() => ({
   },
 }));
 const mockFilePreview = vi.fn(({ path }: { path: string }) => <div data-testid='file-preview'>{path}</div>);
+const markdownViewMocks = vi.hoisted(() => ({
+  plainTextAbove: [] as Array<number | undefined>,
+  calls: [] as string[],
+}));
 
 const forkMocks = vi.hoisted(() => ({
   fork: vi.fn(),
@@ -87,11 +92,14 @@ vi.mock('@/renderer/components/media/HorizontalFileList', () => ({
 
 vi.mock('@/renderer/components/Markdown', () => ({
   __esModule: true,
+  MAX_RICH_MARKDOWN_CHARS: 120_000,
   default: ({
     children,
     onLocalFileLink,
+    plainTextAbove,
   }: {
     children?: React.ReactNode;
+    plainTextAbove?: number;
     onLocalFileLink?: (
       path: string,
       reference?: {
@@ -102,19 +110,23 @@ vi.mock('@/renderer/components/Markdown', () => ({
         endLine?: number;
       }
     ) => void | Promise<void>;
-  }) => (
-    <div>
-      {children}
-      {onLocalFileLink && (
-        <button
-          type='button'
-          onClick={() => void onLocalFileLink(localFileLinkMocks.payload.path, localFileLinkMocks.payload.reference)}
-        >
-          open local file
-        </button>
-      )}
-    </div>
-  ),
+  }) => {
+    markdownViewMocks.plainTextAbove.push(plainTextAbove);
+    markdownViewMocks.calls.push(String(children ?? ''));
+    return (
+      <div>
+        {children}
+        {onLocalFileLink && (
+          <button
+            type='button'
+            onClick={() => void onLocalFileLink(localFileLinkMocks.payload.path, localFileLinkMocks.payload.reference)}
+          >
+            open local file
+          </button>
+        )}
+      </div>
+    );
+  },
 }));
 
 vi.mock('@/renderer/utils/chat/skillSuggestParser', () => ({
@@ -162,6 +174,8 @@ const fileMetadata = (path: string) => ({
 describe('MessageText attachment paths', () => {
   beforeEach(() => {
     mockFilePreview.mockClear();
+    markdownViewMocks.plainTextAbove.length = 0;
+    markdownViewMocks.calls.length = 0;
     vi.mocked(copyText).mockClear();
     previewMocks.openPreview.mockClear();
     localFileLinkMocks.payload = {
@@ -266,6 +280,105 @@ describe('MessageText attachment paths', () => {
     const content = screen.getByTestId('message-text-content');
     expect(content.parentElement?.className).toContain('min-w-0');
     expect(content.parentElement?.className).not.toContain('max-w-780px');
+  });
+
+  it('passes the bounded render threshold for a native assistant reply', () => {
+    renderMessageText('native assistant reply');
+
+    expect(markdownViewMocks.plainTextAbove).toContain(MAX_RICH_MARKDOWN_CHARS);
+  });
+
+  it('uses the full Markdown path for a completed assistant message', () => {
+    renderMessageText('**complete**');
+
+    expect(markdownViewMocks.calls).toEqual(['**complete**']);
+    expect(screen.queryByTestId('message-streaming-tail')).not.toBeInTheDocument();
+  });
+
+  it('keeps a streaming assistant paragraph plain until a blank line settles it', () => {
+    const renderStreaming = (content: string) => (
+      <ConversationProvider value={{ conversationId: 'conv-1', workspace: '/workspace/demo', type: 'acp' }}>
+        <MessageText
+          message={{
+            id: 'msg-streaming',
+            msg_id: 'msg-streaming',
+            conversation_id: 'conv-1',
+            type: 'text',
+            position: 'left',
+            status: 'work',
+            createdAt: Date.now(),
+            content: { content },
+          }}
+        />
+      </ConversationProvider>
+    );
+    const { rerender } = render(renderStreaming('first paragraph'));
+
+    expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent('first paragraph');
+    expect(markdownViewMocks.calls).toEqual([]);
+
+    rerender(renderStreaming('first paragraph\n\nsecond paragraph'));
+
+    expect(markdownViewMocks.calls).toEqual(['first paragraph\n']);
+    expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent('second paragraph');
+  });
+
+  it('keeps an open streaming code fence plain and parses it after the closing fence', () => {
+    const renderStreaming = (content: string) => (
+      <ConversationProvider value={{ conversationId: 'conv-1', workspace: '/workspace/demo', type: 'acp' }}>
+        <MessageText
+          message={{
+            id: 'msg-streaming-code',
+            msg_id: 'msg-streaming-code',
+            conversation_id: 'conv-1',
+            type: 'text',
+            position: 'left',
+            status: 'work',
+            createdAt: Date.now(),
+            content: { content },
+          }}
+        />
+      </ConversationProvider>
+    );
+    const { rerender } = render(renderStreaming('```ts\nconst answer = 42;'));
+
+    expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent('```ts');
+    expect(markdownViewMocks.calls).toEqual([]);
+
+    rerender(renderStreaming('```ts\nconst answer = 42;\n```'));
+
+    expect(markdownViewMocks.calls).toEqual(['```ts\nconst answer = 42;\n```']);
+    expect(screen.queryByTestId('message-streaming-tail')).not.toBeInTheDocument();
+  });
+
+  it('uses the streaming block path when the full reply exceeds the rich Markdown limit', () => {
+    const settledBlock = 'x'.repeat(MAX_RICH_MARKDOWN_CHARS + 1);
+    const renderStreaming = (content: string) => (
+      <ConversationProvider value={{ conversationId: 'conv-1', workspace: '/workspace/demo', type: 'acp' }}>
+        <MessageText
+          message={{
+            id: 'msg-streaming-large',
+            msg_id: 'msg-streaming-large',
+            conversation_id: 'conv-1',
+            type: 'text',
+            position: 'left',
+            status: 'work',
+            createdAt: Date.now(),
+            content: { content },
+          }}
+        />
+      </ConversationProvider>
+    );
+    const { rerender } = render(renderStreaming(settledBlock));
+
+    expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent(settledBlock);
+    expect(markdownViewMocks.calls).toEqual([]);
+
+    rerender(renderStreaming(`${settledBlock}\n\nactive tail`));
+
+    expect(markdownViewMocks.calls).toEqual([`${settledBlock}\n`]);
+    expect(markdownViewMocks.plainTextAbove).toEqual([MAX_RICH_MARKDOWN_CHARS]);
+    expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent('active tail');
   });
 
   it('wraps a long unbroken url/path in a user message so the bubble never overflows', () => {

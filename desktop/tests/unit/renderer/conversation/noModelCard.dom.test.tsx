@@ -24,6 +24,7 @@ vi.mock('@renderer/components/chat/CollapsibleContent', () => ({
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 vi.mock('@renderer/components/Markdown', () => ({
+  MAX_RICH_MARKDOWN_CHARS: 120_000,
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 vi.mock('@renderer/components/base/ButlerDiagnoseButton', () => ({

@@ -12,7 +12,7 @@ import { Message } from '@/renderer/ui/toast';
 import { Down, Lightning, Up } from '@icon-park/react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import MarkdownView from '@renderer/components/Markdown';
+import MarkdownView, { MAX_RICH_MARKDOWN_CHARS } from '@renderer/components/Markdown';
 import type { SkillSuggestion } from '@renderer/utils/chat/skillSuggestParser';
 
 interface SkillSuggestCardProps {
@@ -87,7 +87,9 @@ const SkillSuggestCard: React.FC<SkillSuggestCardProps> = ({
       </div>
       {expanded && (
         <div className='mb-12px p-8px rd-4px bg-bg-3 max-h-240px overflow-y-auto text-12px'>
-          <MarkdownView codeStyle={CODE_STYLE}>{`\`\`\`markdown\n${suggestion.content}\n\`\`\``}</MarkdownView>
+          <MarkdownView codeStyle={CODE_STYLE} plainTextAbove={MAX_RICH_MARKDOWN_CHARS}>
+            {`\`\`\`markdown\n${suggestion.content}\n\`\`\``}
+          </MarkdownView>
         </div>
       )}
 

@@ -1,4 +1,4 @@
-import MarkdownView from '@/renderer/components/Markdown';
+import MarkdownView, { MAX_RICH_MARKDOWN_CHARS } from '@/renderer/components/Markdown';
 import { Spin } from '@/renderer/ui/spinner';
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
@@ -157,7 +157,9 @@ const BtwOverlay: React.FC<BtwOverlayProps> = ({
                     <span>{t('conversation.sideQuestion.loading')}</span>
                   </div>
                 ) : (
-                  <MarkdownView className='text-14px'>{answer}</MarkdownView>
+                  <MarkdownView className='text-14px' plainTextAbove={MAX_RICH_MARKDOWN_CHARS}>
+                    {answer}
+                  </MarkdownView>
                 )}
               </div>
             </div>

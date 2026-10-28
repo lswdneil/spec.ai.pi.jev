@@ -1,12 +1,12 @@
 import React from 'react';
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { NativeResult, NativeSnapshot } from '@/common/kyrn/nativeBridge';
 import { durable, reduceAll, type NativeView, type PiRecord } from '@/common/utils/nativeHost';
 import { useNativeConversation } from '@/renderer/pages/native/hooks/useNativeConversation';
 import { NativeClientContext, type NativeClient } from '@/renderer/pages/native/utils/nativeClient';
 import { createFakeHost, type FakeHost } from './fakeClient';
-import { ended, findRecord, frame, recorded, reply, text, user } from './records';
+import { delta, ended, findRecord, frame, recorded, reply, text, user } from './records';
 
 /** The native conversation hook against an in-memory host: snapshot, records, commands, dialogs, ids. */
 
@@ -46,6 +46,10 @@ const users = (view: NativeView): number => view.messages.filter((message) => me
 const settledAt = recorded.flatMap((record, index) => (record.type === 'agent_settled' ? [index] : []));
 
 describe('useNativeConversation', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('opens the snapshot, folds the records that follow, and ends where the host ends', async () => {
     const host = createFakeHost();
     host.add({ id: 'c1' });
@@ -58,6 +62,82 @@ describe('useNativeConversation', () => {
     expect(result.current.seq).toBe(recorded.length);
     expect(result.current.view).toStrictEqual(host.viewOf('c1'));
     expect(result.current.view.status).toBe('aborted');
+  });
+
+  it('coalesces a played burst of deltas into one pending flush', async () => {
+    const host = createFakeHost();
+    host.add({ id: 'c1' });
+    const { result } = mount(host);
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    const before = result.current.view;
+    const frames = vi.spyOn(globalThis, 'requestAnimationFrame');
+    const burst: PiRecord[] = [
+      { type: 'agent_start' },
+      { type: 'message_start', message: reply([text('')]) },
+      delta({ type: 'text_start', contentIndex: 0 }),
+      delta({ type: 'text_delta', contentIndex: 0, delta: 'Hel' }),
+      delta({ type: 'text_delta', contentIndex: 0, delta: 'lo' }),
+    ];
+
+    act(() => host.play('c1', burst));
+    expect(result.current.seq).toBe(2);
+    expect(frames).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(result.current.seq).toBe(5));
+    expect(result.current.view).toStrictEqual(reduceAll(burst, before));
+    expect(result.current.view).toStrictEqual(host.viewOf('c1'));
+  });
+
+  it('flushes pending deltas before message_end and agent_settled', async () => {
+    const host = createFakeHost();
+    host.add({ id: 'c1' });
+    const { result } = mount(host);
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    const burst: PiRecord[] = [
+      { type: 'agent_start' },
+      { type: 'message_start', message: reply([text('')]) },
+      delta({ type: 'text_start', contentIndex: 0 }),
+      delta({ type: 'text_delta', contentIndex: 0, delta: 'answer' }),
+      ended(reply([text('answer')]), 'a1'),
+      { type: 'agent_settled' },
+    ];
+
+    act(() => host.play('c1', burst));
+    expect(result.current.seq).toBe(6);
+    expect(result.current.view.status).toBe('settled');
+    expect(result.current.view.messages.at(-1)).toMatchObject({
+      role: 'assistant',
+      streaming: false,
+      blocks: [{ type: 'text', text: 'answer' }],
+    });
+    expect(result.current.view).toStrictEqual(host.viewOf('c1'));
+  });
+
+  it('opens a fresh snapshot when a delta gap is found in the pending burst', async () => {
+    const host = createFakeHost();
+    host.add({ id: 'c1' });
+    const { result } = mount(host);
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    const opens = host.calls.filter((call) => call.method === 'open').length;
+
+    act(() => {
+      host.play('c1', [
+        { type: 'agent_start' },
+        { type: 'message_start', message: reply([text('')]) },
+      ]);
+      host.push('c1', delta({ type: 'text_start', contentIndex: 0 }));
+      host.push('c1', delta({ type: 'text_delta', contentIndex: 0, delta: 'a' }));
+      host.push('c1', delta({ type: 'text_delta', contentIndex: 0, delta: 'missing' }), true);
+      host.push('c1', delta({ type: 'text_delta', contentIndex: 0, delta: 'b' }));
+    });
+    expect(result.current.seq).toBe(2);
+
+    await waitFor(() => expect(result.current.seq).toBe(6));
+    expect(host.calls.filter((call) => call.method === 'open')).toHaveLength(opens + 1);
+    expect(result.current.view.messages.at(-1)).toMatchObject({
+      role: 'assistant',
+      blocks: [{ type: 'text', text: 'amissingb' }],
+    });
+    expect(result.current.view).toStrictEqual(host.viewOf('c1'));
   });
 
   it('shows a run in progress to a window that opens during it, as the first window sees it', async () => {
