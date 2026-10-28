@@ -123,6 +123,73 @@ describe('streaming Markdown blocks', () => {
     ]);
   });
 
+  it('appends to a growing open fence without replacing its block', () => {
+    const previousText = 'before\n\n```ts\nconst answer = 42;';
+    const previousBlocks = splitStreamingMarkdown(previousText);
+    const nextText = `${previousText}\nconsole.log(answer);`;
+    const extended = extendStreamingMarkdown(previousText, previousBlocks, nextText);
+
+    expect(extended).toHaveLength(2);
+    expect(extended.filter((block) => !block.settled)).toHaveLength(1);
+    expect(extended[0]).toBe(previousBlocks[0]);
+    expect(extended[1]).toMatchObject({
+      id: previousBlocks[1].id,
+      index: previousBlocks[1].index,
+      text: nextText.slice('before\n\n'.length),
+      settled: false,
+    });
+  });
+
+  it('settles a growing open fence once its matching close arrives', () => {
+    const previousText = '```ts\nconst answer = 42;\ncode continues';
+    const previousBlocks = splitStreamingMarkdown(previousText);
+    const partial = extendStreamingMarkdown(previousText, previousBlocks, `${previousText}\n\`\``);
+    const nextText = `${previousText}\n\`\`\``;
+    const extended = extendStreamingMarkdown(`${previousText}\n\`\``, partial, nextText);
+
+    expect(partial).toHaveLength(1);
+    expect(partial[0].settled).toBe(false);
+    expect(extended).toEqual([
+      {
+        id: 'stream-block-0',
+        index: 0,
+        text: nextText,
+        settled: true,
+      },
+    ]);
+  });
+
+  it('keeps blank lines inside an open fence on the append-only path', () => {
+    const previousText = '```text\nfirst\n\nsecond';
+    const previousBlocks = splitStreamingMarkdown(previousText);
+    const nextText = `${previousText}\n\nthird`;
+    const extended = extendStreamingMarkdown(previousText, previousBlocks, nextText);
+
+    expect(extended).toHaveLength(1);
+    expect(extended[0]).toMatchObject({
+      id: previousBlocks[0].id,
+      index: previousBlocks[0].index,
+      text: nextText,
+      settled: false,
+    });
+  });
+
+  it('detects a closing fence split after a previous partial line', () => {
+    const previousText = '```ts\nconst answer = 42;\n``';
+    const previousBlocks = splitStreamingMarkdown(previousText);
+    const nextText = `${previousText}\``;
+    const extended = extendStreamingMarkdown(previousText, previousBlocks, nextText);
+
+    expect(extended).toEqual([
+      {
+        id: 'stream-block-0',
+        index: 0,
+        text: nextText,
+        settled: true,
+      },
+    ]);
+  });
+
   it('appends after an already closed fence', () => {
     const previousText = '```ts\nconst answer = 42;\n```';
     const previousBlocks = splitStreamingMarkdown(previousText);
