@@ -53,6 +53,11 @@ function iconParkPlugin() {
 // Common path aliases for main process and workers
 const desktopSrcRoot = resolve('packages/desktop/src');
 const rendererRoot = resolve('packages/desktop/src/renderer');
+// Windows may reserve the default Vite port range; let a developer choose a reachable address without editing the
+// config. The defaults keep the existing localhost:5173 behavior everywhere else.
+const devServerHost = process.env.SPECJEV_DEV_SERVER_HOST || 'localhost';
+const parsedDevServerPort = Number.parseInt(process.env.SPECJEV_DEV_SERVER_PORT || '', 10);
+const devServerPort = Number.isInteger(parsedDevServerPort) && parsedDevServerPort > 0 ? parsedDevServerPort : 5173;
 
 const mainAliases = {
   '@': desktopSrcRoot,
@@ -164,12 +169,13 @@ export default defineConfig(({ mode }) => {
         // Default to 5173; when occupied (e.g. another clone of the repo is running),
         // Vite auto-increments to the next available port.
         // electron-vite reads the actual port and sets ELECTRON_RENDERER_URL accordingly.
-        port: 5173,
+        host: devServerHost,
+        port: devServerPort,
         // Explicit HMR host so Vite client connects directly to the Vite dev server,
         // not to the WebUI proxy server (which would reject the WebSocket and cause infinite reload).
         // Port is omitted so it automatically matches the server port.
         hmr: {
-          host: 'localhost',
+          host: devServerHost,
         },
       },
       resolve: {
