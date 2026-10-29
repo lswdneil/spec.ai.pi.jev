@@ -11,6 +11,7 @@
 //   E2E:BASH <command>   calls `bash` with <command>; once the result is back, says BASH-SAW and what the tool said
 //   E2E:SLOW [<n>]       a long reply, one chunk every 200 ms, for stopping in the middle; <n> chunks (150 without it)
 //   E2E:ECHO <text>      replies <text>
+//   E2E:LARGE [<chars>]  streams one large fenced code reply (1 MiB without <chars>)
 //
 // Anything else (a request spec.jev makes for itself) gets a short neutral reply; the board's writer gets the JSON it asks
 // for. Every completion request is recorded (`GET /__e2e/log` returns them), so a test can check what the model was
@@ -27,6 +28,9 @@ export const FAKE_API_KEY = 'e2e-key-not-secret';
 export const PLAIN_CHUNKS = ['PLAIN-REPLY-OK: ', '这是', '分成', '好几段', '流式', '发回来的', '回答。'];
 export const PLAIN_TEXT = PLAIN_CHUNKS.join('');
 export const SLOW_CHUNK_COUNT = 150;
+export const LARGE_CHUNK_CHARS = 8 * 1024;
+export const DEFAULT_LARGE_CHARS = 1024 * 1024;
+export const LARGE_DONE_MARKER = 'LARGE-DONE';
 /** What the board's writer gets back: the JSON object its system prompt asks for. */
 export const BOARD_REPLY = {
   progress: 'E2E-BOARD-PROGRESS: 已经写好一个文件。',
@@ -51,6 +55,7 @@ export function textOf(content) {
  * for yet, an imported one, gets one at its first message): it is not the person's turn.
  */
 const isFrameNote = (message) => /^\s*\[spec.jev task frame/.test(textOf(message?.content));
+const E2E_MARKER = /E2E:(PLAIN|WRITE|BASH|SLOW|ECHO|LARGE)(?:[ \t]+([^\n]*))?/;
 
 /**
  * What to answer, from the request's messages: the turn is the last user message (not spec.jev's note about the task frame),
@@ -63,19 +68,28 @@ export function planReply(messages) {
     .map((message) => textOf(message.content))
     .join('\n');
   let lastUser = -1;
+  let user = '';
+  let marker;
   for (let i = list.length - 1; i >= 0; i -= 1) {
-    if (list[i]?.role === 'user' && !isFrameNote(list[i])) {
+    if (list[i]?.role !== 'user' || isFrameNote(list[i])) continue;
+    const text = textOf(list[i].content);
+    if (!user) {
       lastUser = i;
-      break;
+      user = text;
     }
+    const found = E2E_MARKER.exec(text);
+    if (!found) continue;
+    lastUser = i;
+    user = text;
+    marker = found;
+    break;
   }
-  const user = lastUser >= 0 ? textOf(list[lastUser].content) : '';
   const results = list.slice(lastUser + 1).filter((message) => message?.role === 'tool');
   const lastResult = results.length ? textOf(results[results.length - 1].content) : '';
   if (/You tell a person who is not a programmer/.test(system)) {
     return { scenario: 'board', kind: 'text', chunks: [JSON.stringify(BOARD_REPLY)] };
   }
-  const marker = /E2E:(PLAIN|WRITE|BASH|SLOW|ECHO)(?:[ \t]+([^\n]*))?/.exec(user);
+  marker ??= E2E_MARKER.exec(user);
   if (!marker) return { scenario: 'other', kind: 'text', chunks: ['OK.'] };
   const [, name, rawArgument = ''] = marker;
   const argument = rawArgument.trim();
@@ -97,6 +111,11 @@ export function planReply(messages) {
     }
     case 'ECHO':
       return { scenario: 'echo', kind: 'text', chunks: [argument || 'ECHO'] };
+    case 'LARGE': {
+      const requested = Number.parseInt(argument, 10);
+      const chars = Number.isFinite(requested) && requested > 0 ? requested : DEFAULT_LARGE_CHARS;
+      return { scenario: 'large', kind: 'text', chunks: largeReplyChunks(chars), delay: 5 };
+    }
     case 'WRITE':
       if (results.length === 0) {
         return {
@@ -120,6 +139,21 @@ export function planReply(messages) {
     default:
       return { scenario: 'other', kind: 'text', chunks: ['OK.'] };
   }
+}
+
+/** One large fenced code reply, split into proxy-sized deltas. */
+export function largeReplyChunks(chars = DEFAULT_LARGE_CHARS) {
+  const header = '```ts\n// LARGE-START\n';
+  const footer = `\n// ${LARGE_DONE_MARKER}\n\`\`\``;
+  const line = 'const streamedValue = 1; // large output\n';
+  const bodyLength = Math.max(0, chars - header.length - footer.length);
+  const body = line.repeat(Math.ceil(bodyLength / line.length)).slice(0, bodyLength);
+  const text = `${header}${body}${footer}`;
+  const chunks = [];
+  for (let index = 0; index < text.length; index += LARGE_CHUNK_CHARS) {
+    chunks.push(text.slice(index, index + LARGE_CHUNK_CHARS));
+  }
+  return chunks;
 }
 
 /** One Server-Sent Events frame of a chat completion chunk. */
@@ -279,6 +313,8 @@ export async function startFakeModel({ port = 0, log = () => {} } = {}) {
         // The arguments arrive in pieces, as a real model streams them.
         const half = Math.ceil(args.length / 2);
         for (const piece of [args.slice(0, half), args.slice(half)]) {
+          // Deliberately sequential: every SSE frame follows the one before it.
+          // eslint-disable-next-line no-await-in-loop
           await sleep(40);
           send(
             frame(id, model, {
@@ -291,6 +327,8 @@ export async function startFakeModel({ port = 0, log = () => {} } = {}) {
         send(frame(id, model, { delta: {}, finish_reason: 'tool_calls' }));
       } else {
         for (const chunk of plan.chunks) {
+          // Deliberately sequential: streaming order is the behavior under test.
+          // eslint-disable-next-line no-await-in-loop
           if (plan.delay) await sleep(plan.delay);
           if (!send(frame(id, model, { delta: { content: chunk }, finish_reason: null }))) return;
           record.sentChunks += 1;
