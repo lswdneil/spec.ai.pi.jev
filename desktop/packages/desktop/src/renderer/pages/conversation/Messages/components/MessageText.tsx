@@ -84,8 +84,11 @@ export const parseTeamContextResetNotice = (content: string): TeamContextResetNo
   return null;
 };
 
-const useFormatContent = (content: string) => {
+const useFormatContent = (content: string, parseJson: boolean) => {
   return useMemo(() => {
+    if (!parseJson) {
+      return { json: false, data: content };
+    }
     try {
       const json = JSON.parse(content);
       const isJson = typeof json === 'object';
@@ -94,9 +97,9 @@ const useFormatContent = (content: string) => {
         data: isJson ? json : content,
       };
     } catch {
-      return { data: content };
+      return { json: false, data: content };
     }
-  }, [content]);
+  }, [content, parseJson]);
 };
 
 const MessageText: React.FC<{
@@ -166,16 +169,16 @@ const MessageText: React.FC<{
         { memberName: contextResetNotice.member_name }
       )
     : visibleText;
-  const { data, json } = useFormatContent(renderedText);
+  const isLiveAssistant = !isUserMessage && !isTeammateMessage && message.status === 'work';
+  const { data, json } = useFormatContent(renderedText, !isLiveAssistant);
+  const shouldRenderPlainText = isUserMessage || Boolean(contextResetNotice);
+  const shouldStreamMarkdown = isLiveAssistant && !shouldRenderPlainText && !json;
   // Mid-stream an opened code fence has no close yet; without one the block would read as raw backticks until it
   // arrives, then jump. Only the Markdown path needs it — a user message and a JSON payload are shown as they are.
-  const markdown = useMemo(() => (typeof data === 'string' ? closeOpenFence(data) : data), [data]);
-  const shouldRenderPlainText = isUserMessage || Boolean(contextResetNotice);
-  const shouldStreamMarkdown =
-    !shouldRenderPlainText &&
-    !isTeammateMessage &&
-    message.status === 'work' &&
-    !json;
+  const markdown = useMemo(
+    () => (typeof data === 'string' && !shouldStreamMarkdown ? closeOpenFence(data) : data),
+    [data, shouldStreamMarkdown]
+  );
   const conversationContext = useConversationContextSafe();
   // A native conversation has no AionCore conversation around it: its project folder comes with its list.
   const run = useMessageListRun();

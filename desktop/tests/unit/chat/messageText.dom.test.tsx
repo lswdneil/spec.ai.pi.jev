@@ -40,6 +40,9 @@ const markdownViewMocks = vi.hoisted(() => ({
   plainTextAbove: [] as Array<number | undefined>,
   calls: [] as string[],
 }));
+const closeFenceMocks = vi.hoisted(() => ({
+  calls: [] as string[],
+}));
 
 const forkMocks = vi.hoisted(() => ({
   fork: vi.fn(),
@@ -60,6 +63,10 @@ vi.mock('@/common', () => ({
     conversation: {
       fork: { invoke: forkMocks.fork },
       ensureRuntime: { invoke: forkMocks.ensureRuntime },
+    },
+    theme: {
+      requestCurrent: { invoke: vi.fn().mockResolvedValue(null) },
+      changed: { on: vi.fn(() => () => undefined) },
     },
   },
 }));
@@ -92,7 +99,7 @@ vi.mock('@/renderer/components/media/HorizontalFileList', () => ({
 
 vi.mock('@/renderer/components/Markdown', () => ({
   __esModule: true,
-  MAX_RICH_MARKDOWN_CHARS: 120_000,
+  MAX_RICH_MARKDOWN_CHARS: 30_000,
   default: ({
     children,
     onLocalFileLink,
@@ -126,6 +133,18 @@ vi.mock('@/renderer/components/Markdown', () => ({
         )}
       </div>
     );
+  },
+}));
+
+vi.mock('@/renderer/components/Markdown/ShadowView', () => ({
+  __esModule: true,
+  default: ({ children }: { children?: React.ReactNode }) => children,
+}));
+
+vi.mock('@/renderer/pages/conversation/Messages/components/streamMarkdown', () => ({
+  closeOpenFence: (text: string) => {
+    closeFenceMocks.calls.push(text);
+    return text;
   },
 }));
 
@@ -171,11 +190,53 @@ const fileMetadata = (path: string) => ({
   lastModified: 1_717_000_000,
 });
 
+const renderStreamingMessage = (content: string, status: IMessageText['status'] = 'work') => (
+  <ConversationProvider value={{ conversationId: 'conv-1', workspace: '/workspace/demo', type: 'acp' }}>
+    <MessageText
+      message={{
+        id: 'msg-streaming',
+        msg_id: 'msg-streaming',
+        conversation_id: 'conv-1',
+        type: 'text',
+        position: 'left',
+        status,
+        createdAt: Date.now(),
+        content: { content },
+      }}
+    />
+  </ConversationProvider>
+);
+
+const statusMessage = (status?: IMessageText['status']): IMessageText => ({
+  id: 'msg-status',
+  msg_id: 'msg-status',
+  conversation_id: 'conv-1',
+  type: 'text',
+  position: 'right',
+  status,
+  createdAt: Date.now(),
+  content: {
+    content: 'sent mid-turn',
+  },
+});
+
+const forkMessage = (overrides: Partial<IMessageText> = {}): IMessageText => ({
+  id: 'msg-fork-1',
+  msg_id: 'msg-fork-1',
+  conversation_id: 'conv-fork',
+  type: 'text',
+  position: 'left',
+  createdAt: Date.now(),
+  content: { content: 'assistant reply' },
+  ...overrides,
+});
+
 describe('MessageText attachment paths', () => {
   beforeEach(() => {
     mockFilePreview.mockClear();
     markdownViewMocks.plainTextAbove.length = 0;
     markdownViewMocks.calls.length = 0;
+    closeFenceMocks.calls.length = 0;
     vi.mocked(copyText).mockClear();
     previewMocks.openPreview.mockClear();
     localFileLinkMocks.payload = {
@@ -296,88 +357,63 @@ describe('MessageText attachment paths', () => {
   });
 
   it('keeps a streaming assistant paragraph plain until a blank line settles it', () => {
-    const renderStreaming = (content: string) => (
-      <ConversationProvider value={{ conversationId: 'conv-1', workspace: '/workspace/demo', type: 'acp' }}>
-        <MessageText
-          message={{
-            id: 'msg-streaming',
-            msg_id: 'msg-streaming',
-            conversation_id: 'conv-1',
-            type: 'text',
-            position: 'left',
-            status: 'work',
-            createdAt: Date.now(),
-            content: { content },
-          }}
-        />
-      </ConversationProvider>
-    );
-    const { rerender } = render(renderStreaming('first paragraph'));
+    const { rerender } = render(renderStreamingMessage('first paragraph'));
 
     expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent('first paragraph');
     expect(markdownViewMocks.calls).toEqual([]);
 
-    rerender(renderStreaming('first paragraph\n\nsecond paragraph'));
+    rerender(renderStreamingMessage('first paragraph\n\nsecond paragraph'));
 
     expect(markdownViewMocks.calls).toEqual(['first paragraph\n']);
     expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent('second paragraph');
   });
 
   it('keeps an open streaming code fence plain and parses it after the closing fence', () => {
-    const renderStreaming = (content: string) => (
-      <ConversationProvider value={{ conversationId: 'conv-1', workspace: '/workspace/demo', type: 'acp' }}>
-        <MessageText
-          message={{
-            id: 'msg-streaming-code',
-            msg_id: 'msg-streaming-code',
-            conversation_id: 'conv-1',
-            type: 'text',
-            position: 'left',
-            status: 'work',
-            createdAt: Date.now(),
-            content: { content },
-          }}
-        />
-      </ConversationProvider>
-    );
-    const { rerender } = render(renderStreaming('```ts\nconst answer = 42;'));
+    const { rerender } = render(renderStreamingMessage('```ts\nconst answer = 42;'));
 
     expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent('```ts');
     expect(markdownViewMocks.calls).toEqual([]);
 
-    rerender(renderStreaming('```ts\nconst answer = 42;\n```'));
+    rerender(renderStreamingMessage('```ts\nconst answer = 42;\n```'));
 
     expect(markdownViewMocks.calls).toEqual(['```ts\nconst answer = 42;\n```']);
     expect(screen.queryByTestId('message-streaming-tail')).not.toBeInTheDocument();
   });
 
-  it('uses the streaming block path when the full reply exceeds the rich Markdown limit', () => {
+  it('does not rescan full-document fences while an assistant reply streams', () => {
+    const streaming = '```ts\nconst answer = 42;';
+    const { rerender } = render(renderStreamingMessage(streaming, 'work'));
+
+    expect(closeFenceMocks.calls).toEqual([]);
+
+    rerender(renderStreamingMessage(`${streaming}\n\`\`\``, 'finish'));
+
+    expect(closeFenceMocks.calls).toEqual([`${streaming}\n\`\`\``]);
+  });
+
+  it('defers JSON parsing until a streaming assistant reply finishes', () => {
+    const content = '{"answer":"ready"}';
+    const { rerender } = render(renderStreamingMessage(content, 'work'));
+
+    expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent(content);
+    expect(markdownViewMocks.calls).toEqual([]);
+
+    rerender(renderStreamingMessage(content, 'finish'));
+
+    expect(markdownViewMocks.calls).toEqual([`\`\`\`json\n${JSON.stringify(JSON.parse(content), null, 2)}\n\`\`\``]);
+  });
+
+  it('keeps a settled block above the rich Markdown limit plain', () => {
     const settledBlock = 'x'.repeat(MAX_RICH_MARKDOWN_CHARS + 1);
-    const renderStreaming = (content: string) => (
-      <ConversationProvider value={{ conversationId: 'conv-1', workspace: '/workspace/demo', type: 'acp' }}>
-        <MessageText
-          message={{
-            id: 'msg-streaming-large',
-            msg_id: 'msg-streaming-large',
-            conversation_id: 'conv-1',
-            type: 'text',
-            position: 'left',
-            status: 'work',
-            createdAt: Date.now(),
-            content: { content },
-          }}
-        />
-      </ConversationProvider>
-    );
-    const { rerender } = render(renderStreaming(settledBlock));
+    const { rerender } = render(renderStreamingMessage(settledBlock));
 
     expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent(settledBlock);
     expect(markdownViewMocks.calls).toEqual([]);
 
-    rerender(renderStreaming(`${settledBlock}\n\nactive tail`));
+    rerender(renderStreamingMessage(`${settledBlock}\n\nactive tail`));
 
-    expect(markdownViewMocks.calls).toEqual([`${settledBlock}\n`]);
-    expect(markdownViewMocks.plainTextAbove).toEqual([MAX_RICH_MARKDOWN_CHARS]);
+    expect(markdownViewMocks.calls).toEqual([]);
+    expect(screen.getByTestId('message-streaming-plain-block')).toHaveTextContent(settledBlock);
     expect(screen.getByTestId('message-streaming-tail')).toHaveTextContent('active tail');
   });
 
@@ -814,19 +850,6 @@ describe('MessageText team system notices', () => {
 });
 
 describe('MessageText delivery status badge', () => {
-  const statusMessage = (status?: IMessageText['status']): IMessageText => ({
-    id: 'msg-status',
-    msg_id: 'msg-status',
-    conversation_id: 'conv-1',
-    type: 'text',
-    position: 'right',
-    status,
-    createdAt: Date.now(),
-    content: {
-      content: 'sent mid-turn',
-    },
-  });
-
   it('shows a pending-delivery badge on a user message the agent has not consumed yet', () => {
     render(
       <ConversationProvider value={{ conversationId: 'conv-1', workspace: '/workspace/demo', type: 'acp' }}>
@@ -861,17 +884,6 @@ describe('MessageText delivery status badge', () => {
 });
 
 describe('MessageText fork entry point', () => {
-  const forkMessage = (overrides: Partial<IMessageText> = {}): IMessageText => ({
-    id: 'msg-fork-1',
-    msg_id: 'msg-fork-1',
-    conversation_id: 'conv-fork',
-    type: 'text',
-    position: 'left',
-    createdAt: Date.now(),
-    content: { content: 'assistant reply' },
-    ...overrides,
-  });
-
   const renderWithCapability = (
     capability: { at_turn: boolean } | undefined,
     props: { isLastMessage?: boolean; hasForkAnchor?: boolean } = {}

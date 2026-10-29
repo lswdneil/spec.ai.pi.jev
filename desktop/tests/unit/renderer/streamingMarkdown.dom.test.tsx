@@ -6,11 +6,17 @@ const markdownCalls = vi.hoisted(() => [] as string[]);
 
 vi.mock('@renderer/components/Markdown', () => ({
   __esModule: true,
+  MAX_RICH_MARKDOWN_CHARS: 30_000,
   default: ({ children }: { children?: React.ReactNode }) => {
     const text = String(children ?? '');
     markdownCalls.push(text);
     return <div data-testid='markdown-block'>{text}</div>;
   },
+}));
+
+vi.mock('@renderer/components/Markdown/ShadowView', () => ({
+  __esModule: true,
+  default: ({ children }: { children?: React.ReactNode }) => children,
 }));
 
 vi.mock('react-i18next', () => ({
@@ -19,7 +25,10 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-import StreamingMarkdown, { MAX_ACTIVE_TAIL_CHARS } from '@/renderer/components/Markdown/StreamingMarkdown';
+import StreamingMarkdown, {
+  MAX_ACTIVE_TAIL_CHARS,
+  MAX_RICH_STREAM_BLOCKS,
+} from '@/renderer/components/Markdown/StreamingMarkdown';
 
 describe('StreamingMarkdown', () => {
   beforeEach(() => {
@@ -100,5 +109,17 @@ describe('StreamingMarkdown', () => {
 
     expect(screen.getByTestId('message-streaming-tail').textContent).toBe(text);
     expect(screen.queryByTestId('message-streaming-expand')).not.toBeInTheDocument();
+  });
+
+  it('caps rich Markdown parsing and renders the remaining settled blocks as plain text', () => {
+    const paragraphs = MAX_RICH_STREAM_BLOCKS + 50;
+    const text = Array.from({ length: paragraphs }, (_, index) => `paragraph ${index}`).join('\n\n');
+
+    render(<StreamingMarkdown>{text}</StreamingMarkdown>);
+
+    expect(markdownCalls).toHaveLength(MAX_RICH_STREAM_BLOCKS);
+    expect(screen.getAllByTestId('message-streaming-plain-block')).toHaveLength(
+      paragraphs - MAX_RICH_STREAM_BLOCKS - 1
+    );
   });
 });

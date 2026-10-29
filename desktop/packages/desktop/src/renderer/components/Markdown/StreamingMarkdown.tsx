@@ -1,26 +1,48 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import MarkdownView, { type MarkdownViewProps } from '@renderer/components/Markdown';
+import MarkdownView, { MAX_RICH_MARKDOWN_CHARS, type MarkdownViewProps } from '@renderer/components/Markdown';
+import ShadowView from './ShadowView';
 import { extendStreamingMarkdown, type StreamingMarkdownBlock } from './streamingBlocks';
 
-export const MAX_ACTIVE_TAIL_CHARS = 200_000;
+export const MAX_ACTIVE_TAIL_CHARS = 50_000;
+export const MAX_RICH_STREAM_CHARS = 80_000;
+export const MAX_RICH_STREAM_BLOCKS = 200;
+
+const PLAIN_BLOCK_STYLE: React.CSSProperties = {
+  whiteSpace: 'pre-wrap',
+  overflowWrap: 'anywhere',
+  wordBreak: 'break-word',
+};
 
 type SettledBlockProps = {
   block: StreamingMarkdownBlock;
+  rich: boolean;
   codeStyle?: React.CSSProperties;
   onLocalFileLink?: MarkdownViewProps['onLocalFileLink'];
   plainTextAbove?: number;
 };
 
 const SettledBlock = React.memo(
-  ({ block, codeStyle, onLocalFileLink, plainTextAbove }: SettledBlockProps) => (
-    <MarkdownView codeStyle={codeStyle} onLocalFileLink={onLocalFileLink} plainTextAbove={plainTextAbove}>
-      {block.text}
-    </MarkdownView>
-  ),
+  ({ block, rich, codeStyle, onLocalFileLink, plainTextAbove }: SettledBlockProps) =>
+    rich ? (
+      <MarkdownView
+        codeStyle={codeStyle}
+        onLocalFileLink={onLocalFileLink}
+        plainTextAbove={plainTextAbove}
+        withShadow={false}
+        resetErrorWhenContentChanges={false}
+      >
+        {block.text}
+      </MarkdownView>
+    ) : (
+      <div data-testid='message-streaming-plain-block' style={PLAIN_BLOCK_STYLE}>
+        {block.text}
+      </div>
+    ),
   (previous, next) =>
     previous.block.id === next.block.id &&
     previous.block.text === next.block.text &&
+    previous.rich === next.rich &&
     previous.codeStyle === next.codeStyle &&
     previous.onLocalFileLink === next.onLocalFileLink &&
     previous.plainTextAbove === next.plainTextAbove
@@ -84,23 +106,38 @@ const StreamingMarkdown: React.FC<StreamingMarkdownProps> = ({
     cache.current = { text: children, blocks: nextBlocks };
     return nextBlocks;
   }, [children]);
+  const richBlocks = React.useMemo(() => {
+    const blockLimit = plainTextAbove ?? MAX_RICH_MARKDOWN_CHARS;
+    const rich = new Set<string>();
+    let usedChars = 0;
+    for (const block of blocks) {
+      if (!block.settled || block.text.length > blockLimit) continue;
+      if (rich.size >= MAX_RICH_STREAM_BLOCKS || usedChars + block.text.length > MAX_RICH_STREAM_CHARS) break;
+      rich.add(block.id);
+      usedChars += block.text.length;
+    }
+    return rich;
+  }, [blocks, plainTextAbove]);
 
   return (
-    <div className='flex flex-col' style={{ gap: 'var(--chat-paragraph-margin, 12px)' }}>
-      {blocks.map((block) =>
-        block.settled ? (
-          <SettledBlock
-            key={block.id}
-            block={block}
-            codeStyle={codeStyle}
-            onLocalFileLink={onLocalFileLink}
-            plainTextAbove={plainTextAbove}
-          />
-        ) : (
-          <ActiveTail key={block.id} block={block} />
-        )
-      )}
-    </div>
+    <ShadowView>
+      <div className='markdown-shadow-body flex flex-col' style={{ gap: 'var(--chat-paragraph-margin, 12px)' }}>
+        {blocks.map((block) =>
+          block.settled ? (
+            <SettledBlock
+              key={block.id}
+              block={block}
+              rich={richBlocks.has(block.id)}
+              codeStyle={codeStyle}
+              onLocalFileLink={onLocalFileLink}
+              plainTextAbove={plainTextAbove}
+            />
+          ) : (
+            <ActiveTail key={block.id} block={block} />
+          )
+        )}
+      </div>
+    </ShadowView>
   );
 };
 

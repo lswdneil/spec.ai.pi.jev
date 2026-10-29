@@ -36,7 +36,7 @@ import {
 } from './markdownUtils';
 import type { LocalFileLinkReference } from './markdownUtils';
 
-export const MAX_RICH_MARKDOWN_CHARS = 120_000;
+export const MAX_RICH_MARKDOWN_CHARS = 30_000;
 
 const isLocalFilePath = (src: string): boolean => {
   if (src.startsWith('http://') || src.startsWith('https://')) return false;
@@ -63,12 +63,17 @@ export type MarkdownViewProps = {
   allowHtml?: boolean;
   /** Render strings above this many characters as plain text instead of parsing them as Markdown. */
   plainTextAbove?: number;
+  /** Render without creating a new Shadow Root. Streaming surfaces wrap all blocks in one shared root. */
+  withShadow?: boolean;
+  /** Retry after the content changes. Settled streaming blocks are immutable, so they keep the plain fallback. */
+  resetErrorWhenContentChanges?: boolean;
 };
 
 type MarkdownErrorBoundaryProps = {
   children: React.ReactNode;
   fallback: React.ReactNode;
   resetKey: string;
+  resetOnChange: boolean;
 };
 
 type MarkdownErrorBoundaryState = {
@@ -87,7 +92,7 @@ class MarkdownErrorBoundary extends React.Component<MarkdownErrorBoundaryProps, 
   }
 
   componentDidUpdate(previousProps: MarkdownErrorBoundaryProps) {
-    if (this.state.hasError && previousProps.resetKey !== this.props.resetKey) {
+    if (this.state.hasError && this.props.resetOnChange && previousProps.resetKey !== this.props.resetKey) {
       this.setState({ hasError: false });
     }
   }
@@ -118,6 +123,8 @@ const MarkdownView: React.FC<MarkdownViewProps> = React.memo(
     onLocalFileLink,
     allowHtml,
     plainTextAbove,
+    withShadow = true,
+    resetErrorWhenContentChanges = true,
     children: childrenProp,
   }) => {
     const { t } = useTranslation();
@@ -239,28 +246,23 @@ const MarkdownView: React.FC<MarkdownViewProps> = React.memo(
       [components, isLargePlainText, normalizedChildren, rehypePlugins]
     );
 
-    if (isLargePlainText) {
-      return (
-        <div className={classNames('relative w-full', className)}>
-          <ShadowView>
-            <PlainMarkdownText text={childrenProp} testId='markdown-large-text' elementRef={onRef} />
-          </ShadowView>
-        </div>
-      );
-    }
+    const content = isLargePlainText ? (
+      <PlainMarkdownText text={childrenProp} testId='markdown-large-text' elementRef={onRef} />
+    ) : (
+      <div ref={onRef} className='markdown-shadow-body'>
+        <MarkdownErrorBoundary
+          resetKey={normalizedChildren}
+          resetOnChange={resetErrorWhenContentChanges}
+          fallback={<PlainMarkdownText text={childrenProp} testId='markdown-fallback' />}
+        >
+          {rendered}
+        </MarkdownErrorBoundary>
+      </div>
+    );
 
     return (
       <div className={classNames('relative w-full', className)}>
-        <ShadowView>
-          <div ref={onRef} className='markdown-shadow-body'>
-            <MarkdownErrorBoundary
-              resetKey={normalizedChildren}
-              fallback={<PlainMarkdownText text={childrenProp} testId='markdown-fallback' />}
-            >
-              {rendered}
-            </MarkdownErrorBoundary>
-          </div>
-        </ShadowView>
+        {withShadow ? <ShadowView>{content}</ShadowView> : content}
       </div>
     );
   }

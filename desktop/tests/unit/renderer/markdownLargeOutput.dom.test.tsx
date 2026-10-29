@@ -87,12 +87,33 @@ describe('MarkdownView large output', () => {
     render(<MarkdownView plainTextAbove={MAX_RICH_MARKDOWN_CHARS}>{text}</MarkdownView>);
 
     expect(screen.getByTestId('markdown-fallback').textContent).toBe(text);
-    const boundaryLogs = consoleError.mock.calls.filter((call) =>
-      String(call[0]).startsWith('[MarkdownView]')
-    );
+    const boundaryLogs = consoleError.mock.calls.filter((call) => String(call[0]).startsWith('[MarkdownView]'));
     expect(boundaryLogs).toHaveLength(1);
     expect(boundaryLogs[0][0]).toBe('[MarkdownView] Failed to render Markdown; showing plain text.');
     expect(boundaryLogs[0][1]).toBeInstanceOf(Error);
     expect(typeof boundaryLogs[0][2]).toBe('string');
+  });
+
+  it('keeps the plain fallback latched for immutable streaming blocks', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { rerender } = render(
+      <MarkdownView plainTextAbove={MAX_RICH_MARKDOWN_CHARS} resetErrorWhenContentChanges={false}>
+        {'**broken** __FORCE_MARKDOWN_ERROR__ first'}
+      </MarkdownView>
+    );
+
+    expect(screen.getByTestId('markdown-fallback')).toHaveTextContent('first');
+    const callsAfterFailure = parserCalls.length;
+
+    rerender(
+      <MarkdownView plainTextAbove={MAX_RICH_MARKDOWN_CHARS} resetErrorWhenContentChanges={false}>
+        {'**broken** __FORCE_MARKDOWN_ERROR__ second'}
+      </MarkdownView>
+    );
+
+    expect(screen.getByTestId('markdown-fallback')).toHaveTextContent('second');
+    expect(parserCalls).toHaveLength(callsAfterFailure);
+    const boundaryLogs = consoleError.mock.calls.filter((call) => String(call[0]).startsWith('[MarkdownView]'));
+    expect(boundaryLogs).toHaveLength(1);
   });
 });
