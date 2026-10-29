@@ -28,6 +28,7 @@ vi.mock('react-i18next', () => ({
 import StreamingMarkdown, {
   MAX_ACTIVE_TAIL_CHARS,
   MAX_RICH_STREAM_BLOCKS,
+  MAX_STREAM_PARSE_CHARS,
 } from '@/renderer/components/Markdown/StreamingMarkdown';
 
 describe('StreamingMarkdown', () => {
@@ -121,5 +122,18 @@ describe('StreamingMarkdown', () => {
     expect(screen.getAllByTestId('message-streaming-plain-block')).toHaveLength(
       paragraphs - MAX_RICH_STREAM_BLOCKS - 1
     );
+  });
+
+  it('stops Markdown block scanning once the stream exceeds the parse budget', () => {
+    const text = `\`\`\`ts\n${'x'.repeat(MAX_STREAM_PARSE_CHARS + 10_000)}`;
+    const { rerender } = render(<StreamingMarkdown>{text}</StreamingMarkdown>);
+
+    expect(markdownCalls).toEqual([]);
+    expect(screen.getByTestId('message-streaming-overflow-tail')).toBeInTheDocument();
+
+    rerender(<StreamingMarkdown>{`${text}latest-output`}</StreamingMarkdown>);
+
+    expect(markdownCalls).toEqual([]);
+    expect(screen.getByTestId('message-streaming-overflow-tail')).toHaveTextContent('latest-output');
   });
 });
