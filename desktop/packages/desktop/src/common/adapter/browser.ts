@@ -78,10 +78,13 @@ if (win.electronAPI) {
   const defaultHost = `${window.location.hostname}:${WEBUI_DEFAULT_PORT}`;
   const socketUrl = `${protocol}//${window.location.host || defaultHost}/ws`;
 
-  type QueuedMessage = { name: string; data: unknown };
+  type QueuedMessage = { payload: string; bytes: number };
 
   const BASE_RECONNECT_DELAY = 500;
   const MAX_RECONNECT_DELAY = 8000;
+  // A long outage must not let bridge traffic grow the tab without bound.
+  const MAX_QUEUED_MESSAGES = 1000;
+  const MAX_QUEUED_BYTES = 8 * 1024 * 1024;
   // A connection must hold this long before the backoff is considered recovered.
   // A server that accepts the upgrade and drops it right away (rejected auth,
   // backend restarting) still fires `open`, so resetting the delay there alone
@@ -96,6 +99,25 @@ if (win.electronAPI) {
   let shouldReconnect = true; // Flag to control reconnection
 
   const messageQueue: QueuedMessage[] = [];
+  let messageQueueBytes = 0;
+
+  const enqueueMessage = (payload: string): void => {
+    const bytes = new TextEncoder().encode(payload).byteLength;
+    if (bytes > MAX_QUEUED_BYTES) {
+      console.warn(`[WebSocket] Dropping bridge message larger than ${MAX_QUEUED_BYTES} bytes`);
+      return;
+    }
+
+    while (
+      messageQueue.length > 0 &&
+      (messageQueue.length >= MAX_QUEUED_MESSAGES || messageQueueBytes + bytes > MAX_QUEUED_BYTES)
+    ) {
+      const dropped = messageQueue.shift();
+      if (dropped) messageQueueBytes -= dropped.bytes;
+    }
+    messageQueue.push({ payload, bytes });
+    messageQueueBytes += bytes;
+  };
 
   // 1.发送队列中积压的消息，确保在重新建立连接后不会丢事件
   const flushQueue = () => {
@@ -106,7 +128,13 @@ if (win.electronAPI) {
     while (messageQueue.length > 0) {
       const queued = messageQueue.shift();
       if (queued) {
-        socket.send(JSON.stringify(queued));
+        messageQueueBytes -= queued.bytes;
+        try {
+          socket.send(queued.payload);
+        } catch {
+          scheduleReconnect();
+          return;
+        }
       }
     }
   };
@@ -274,20 +302,27 @@ if (win.electronAPI) {
 
   bridge.adapter({
     emit(name, data) {
-      const message: QueuedMessage = { name, data };
+      const message = { name, data };
+      let payload: string;
+      try {
+        payload = JSON.stringify(message);
+      } catch (error) {
+        console.warn('[WebSocket] Dropping unserializable bridge message', error);
+        return;
+      }
 
       ensureSocket();
 
       if (socket && socket.readyState === WebSocket.OPEN) {
         try {
-          socket.send(JSON.stringify(message));
+          socket.send(payload);
           return;
         } catch (error) {
           scheduleReconnect();
         }
       }
 
-      messageQueue.push(message);
+      enqueueMessage(payload);
     },
     on(emitter) {
       emitterRef = emitter;

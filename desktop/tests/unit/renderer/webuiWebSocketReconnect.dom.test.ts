@@ -163,6 +163,25 @@ describe('WebUI browser bridge socket', () => {
     expect(JSON.parse(reconnected.sent[0])).toEqual({ name: 'queued-event', data: { value: 7 } });
   });
 
+  it('bounds the offline queue and keeps the newest messages', async () => {
+    const { bridge } = await loadBrowserAdapter();
+
+    latestSocket().acceptUpgrade();
+    latestSocket().close();
+
+    for (let i = 0; i < 1005; i += 1) {
+      bridge.emit(`queued-${i}`, { value: i });
+    }
+
+    await vi.advanceTimersByTimeAsync(500);
+    const reconnected = latestSocket();
+    reconnected.acceptUpgrade();
+
+    expect(reconnected.sent).toHaveLength(1000);
+    expect(JSON.parse(reconnected.sent[0])).toEqual({ name: 'queued-5', data: { value: 5 } });
+    expect(JSON.parse(reconnected.sent.at(-1) ?? '')).toEqual({ name: 'queued-1004', data: { value: 1004 } });
+  });
+
   it('backs off when the server accepts the upgrade and drops it immediately', async () => {
     await loadBrowserAdapter();
 
