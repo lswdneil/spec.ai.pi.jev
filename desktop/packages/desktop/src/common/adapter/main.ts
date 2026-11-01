@@ -9,17 +9,13 @@ import { ipcMain } from 'electron';
 
 import { bridge } from '@/common/platform/bridge';
 import { ADAPTER_BRIDGE_EVENT_KEY } from './constant';
+import { isTrustedIpcSender, parseBridgeEventPayload } from './ipcGuard';
 import { registerWebSocketBroadcaster, getBridgeEmitter, setBridgeEmitter, broadcastToAll } from './registry';
 
 /**
  * Bridge event data structure for IPC communication
  * IPC 通信的桥接事件数据结构
  */
-interface BridgeEventData {
-  name: string;
-  data: unknown;
-}
-
 const adapterWindowList: Array<BrowserWindow> = [];
 
 export { registerWebSocketBroadcaster, getBridgeEmitter };
@@ -75,9 +71,25 @@ bridge.adapter({
     // 保存 emitter 引用供 WebSocket 处理使用 / Save emitter reference for WebSocket handling
     setBridgeEmitter(emitter);
 
-    ipcMain.handle(ADAPTER_BRIDGE_EVENT_KEY, (_event, info) => {
-      const { name, data } = JSON.parse(info) as BridgeEventData;
-      return Promise.resolve(emitter.emit(name, data));
+    ipcMain.handle(ADAPTER_BRIDGE_EVENT_KEY, (event, info) => {
+      const trustedSenderIds = new Set(
+        adapterWindowList
+          .filter((win) => !win.isDestroyed() && !win.webContents.isDestroyed())
+          .map((win) => win.webContents.id)
+      );
+      if (
+        !isTrustedIpcSender({
+          senderId: event.sender.id,
+          isMainFrame: event.senderFrame !== null && event.senderFrame === event.sender.mainFrame,
+          trustedSenderIds,
+        })
+      ) {
+        throw new Error('IPC sender is not the trusted application main frame');
+      }
+
+      const payload = parseBridgeEventPayload(info, MAX_IPC_PAYLOAD_SIZE);
+      if (!payload) throw new Error('IPC event rejected');
+      return Promise.resolve(emitter.emit(payload.name, payload.data));
     });
   },
 });
