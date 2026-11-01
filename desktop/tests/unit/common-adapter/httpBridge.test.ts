@@ -241,6 +241,34 @@ describe('httpBridge', () => {
       }
     });
 
+    it('treats a 2xx success:false envelope as a backend error', async () => {
+      const fetchSpy = vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            success: false,
+            error: 'operation rejected',
+            code: 'X_REJECTED',
+            details: { reason: 'policy' },
+          }),
+          {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }
+        )
+      );
+      vi.stubGlobal('fetch', fetchSpy);
+      vi.spyOn(console, 'debug').mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      await expect(httpGet('/api/x').invoke()).rejects.toMatchObject({
+        name: 'BackendHttpError',
+        status: 200,
+        code: 'X_REJECTED',
+        backendMessage: 'operation rejected',
+        details: { reason: 'policy' },
+      });
+    });
+
     it('non-JSON error response captures raw text without double body consumption (#3249)', async () => {
       const fetchSpy = vi.fn().mockResolvedValue(
         new Response('Unauthorized', {

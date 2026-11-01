@@ -304,6 +304,10 @@ export async function httpRequest<T>(
   }
 
   const json = await response.json();
+  if (json && typeof json === 'object' && 'success' in json && (json as { success?: unknown }).success === false) {
+    console.error(`[httpBridge] ${method} ${path} \u2192 ${response.status} envelope error`, json);
+    throw new BackendHttpError({ method, path, status: response.status, body: json });
+  }
   // Backend wraps in { success, data, ... } — unwrap when present
   if (json && typeof json === 'object' && 'data' in json) {
     return json.data as T;

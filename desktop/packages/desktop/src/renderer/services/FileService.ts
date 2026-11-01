@@ -4,11 +4,25 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { getBaseUrl } from '@/common/adapter/httpBridge';
+import { BackendHttpError, getBaseUrl, isBackendHttpError } from '@/common/adapter/httpBridge';
 import { trackUpload, type UploadSource } from '@/renderer/hooks/file/useUploadState';
 
 /** Sentinel error message used when an upload is cancelled by the caller. */
 export const UPLOAD_ABORTED_ERROR = 'Upload aborted';
+
+export function isFileTooLargeError(error: unknown): boolean {
+  if (isBackendHttpError(error)) return error.status === 413 || error.code === 'FILE_TOO_LARGE';
+  return error instanceof Error && error.message === 'FILE_TOO_LARGE';
+}
+
+function parseUploadResponseBody(text: string): unknown {
+  if (!text) return '';
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    return text;
+  }
+}
 
 export interface UploadFileOptions {
   /** Cancel the upload from the outside. Closing the XHR also frees the backend connection. */
@@ -87,24 +101,21 @@ export async function uploadFileViaHttp(
 
     xhr.addEventListener('load', () => {
       detachSignal();
-      if (xhr.status === 413) {
-        reject(new Error('FILE_TOO_LARGE'));
+      const body = parseUploadResponseBody(xhr.responseText);
+      const envelope = body && typeof body === 'object' ? (body as { success?: unknown; data?: unknown }) : null;
+      if (
+        xhr.status === 413 ||
+        xhr.status < 200 ||
+        xhr.status >= 300 ||
+        envelope?.success === false ||
+        envelope?.success !== true ||
+        typeof envelope?.data !== 'string' ||
+        !envelope?.data
+      ) {
+        reject(new BackendHttpError({ method: 'POST', path: '/api/fs/upload', status: xhr.status, body }));
         return;
       }
-      if (xhr.status < 200 || xhr.status >= 300) {
-        reject(new Error(`Upload failed: ${xhr.status} ${xhr.statusText}`));
-        return;
-      }
-      try {
-        const result = JSON.parse(xhr.responseText) as { success: boolean; data?: string };
-        if (!result.success || typeof result.data !== 'string' || !result.data) {
-          reject(new Error('Upload failed: server returned unsuccessful response'));
-        } else {
-          resolve(result.data);
-        }
-      } catch {
-        reject(new Error('Upload failed: invalid server response'));
-      }
+      resolve(envelope.data);
     });
 
     xhr.addEventListener('error', () => {
@@ -337,16 +348,13 @@ class FileServiceClass {
           signal: controller.signal,
         });
       } catch (error) {
-        // Re-throw size errors so caller can show user-facing toast
-        if (error instanceof Error && error.message === 'FILE_TOO_LARGE') {
-          throw error;
-        }
+        if (isFileTooLargeError(error)) throw error;
         if (error instanceof Error && error.message === UPLOAD_ABORTED_ERROR) {
           // User-initiated abort: drop this file silently (the UI already reflects it).
           continue;
         }
         console.error('Failed to upload file:', error);
-        continue;
+        throw error;
       } finally {
         tracker.finish();
       }

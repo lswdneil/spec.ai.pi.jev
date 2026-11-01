@@ -5,7 +5,7 @@
  */
 
 import type { FileMetadata } from './FileService';
-import { getFileExtension, UPLOAD_ABORTED_ERROR, uploadFileViaHttp } from './FileService';
+import { getFileExtension, isFileTooLargeError, UPLOAD_ABORTED_ERROR, uploadFileViaHttp } from './FileService';
 import { trackUpload, type UploadSource } from '@/renderer/hooks/file/useUploadState';
 
 /**
@@ -234,10 +234,9 @@ class PasteServiceClass {
                 });
               }
             } catch (error) {
-              if (error instanceof Error && error.message === 'FILE_TOO_LARGE') {
-                throw error;
-              }
-              console.error('创建临时文件失败:', error);
+              if (isFileTooLargeError(error)) throw error;
+              console.error('Failed to upload pasted file:', error);
+              throw error;
             }
           } else {
             // 不支持的文件类型，跳过但不报错（让后续过滤处理）
@@ -286,10 +285,9 @@ class PasteServiceClass {
                 });
               }
             } catch (error) {
-              if (error instanceof Error && error.message === 'FILE_TOO_LARGE') {
-                throw error;
-              }
-              console.error('上传粘贴文件失败:', error);
+              if (isFileTooLargeError(error)) throw error;
+              console.error('Failed to upload pasted file:', error);
+              throw error;
             }
           } else {
             // 不支持的文件类型
@@ -336,10 +334,9 @@ class PasteServiceClass {
                 });
               }
             } catch (error) {
-              if (error instanceof Error && error.message === 'FILE_TOO_LARGE') {
-                throw error;
-              }
-              console.error('创建临时文件失败:', error);
+              if (isFileTooLargeError(error)) throw error;
+              console.error('Failed to upload pasted file:', error);
+              throw error;
             }
           } else {
             console.warn(`Unsupported file type: ${file.name}, extension: ${fileExt}`);
