@@ -255,7 +255,11 @@ export class Connection {
 				...(options.onEvent ? { onEvent: options.onEvent } : {}),
 			});
 			options.signal?.addEventListener("abort", onAbort, { once: true });
-			options.onStart?.(id, session.id);
+			try {
+				options.onStart?.(id, session.id);
+			} catch {
+				// A notification callback must not prevent the request from being sent.
+			}
 			this.#write(session, frame(REQUEST, id, { ...json, op }, options.payload));
 			if (options.signal?.aborted) onAbort();
 		});
@@ -294,7 +298,7 @@ export class Connection {
 		});
 		failed.catch(() => {});
 		child.stdout.on("data", (chunk: Buffer) => this.#onData(session, chunk));
-		child.stderr.on("data", (chunk: Buffer) => this.#options.onLog?.(chunk.toString("utf8")));
+		child.stderr.on("data", (chunk: Buffer) => this.#log(chunk.toString("utf8")));
 		child.on("error", () => this.#teardown(session, lost("pi-env connection lost")));
 		child.on("exit", () => this.#teardown(session, lost("pi-env connection lost")));
 		child.stdin.on("error", () => {});
@@ -349,7 +353,7 @@ export class Connection {
 				return;
 			}
 			const noise = all.subarray(0, index).toString("utf8").trim();
-			if (noise !== "") this.#options.onLog?.(noise);
+			if (noise !== "") this.#log(noise);
 			session.consume(index + marker.length);
 			session.synced = true;
 		}
@@ -385,7 +389,11 @@ export class Connection {
 	#dispatch(session: Session, type: number, id: number, json: Json, payload: Uint8Array): void {
 		const pending = session.pending.get(id);
 		if (type === EVENT) {
-			pending?.onEvent?.(json, payload);
+			try {
+				pending?.onEvent?.(json, payload);
+			} catch {
+				// Progress is advisory; one throwing handler must not stop response dispatch.
+			}
 			return;
 		}
 		if (type !== RESULT && type !== ERROR) return;
@@ -393,5 +401,13 @@ export class Connection {
 		session.pending.delete(id);
 		if (type === RESULT) pending.resolve({ json, payload, session: session.id });
 		else pending.reject(new RemoteError(json));
+	}
+
+	#log(text: string): void {
+		try {
+			this.#options.onLog?.(text);
+		} catch {
+			// Diagnostics are advisory and cannot be allowed to break the daemon stream.
+		}
 	}
 }

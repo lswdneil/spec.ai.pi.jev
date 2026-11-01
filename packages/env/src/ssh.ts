@@ -56,6 +56,14 @@ export class SshError extends Error {
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 
+function safeLog(onLog: ConnectionOptions["onLog"], text: string): void {
+	try {
+		onLog?.(text);
+	} catch {
+		// A diagnostic callback must not fail connection setup.
+	}
+}
+
 /** No leading `-` (it would be read as an `ssh` option) and no whitespace or control characters. */
 function checkField(name: string, value: string): void {
 	if (value === "" || value.startsWith("-") || /[\s\x00-\x1f\x7f]/.test(value)) {
@@ -492,7 +500,7 @@ function sshConnectionFor(options: SshConnectOptions, state: SshState): Connecti
 		command: async () => {
 			if (state.remote === undefined) {
 				const remote = await detectPlatform(options);
-				for (const warning of remote.warnings) options.onLog?.(`${warning}\n`);
+				for (const warning of remote.warnings) safeLog(options.onLog, `${warning}\n`);
 				state.remote = remote;
 			}
 			// A deployment that just verified the binary counts for the first start.
@@ -534,6 +542,6 @@ export async function connectSsh(
 ): Promise<{ connection: Connection; remote: RemotePlatform }> {
 	const remote = await detectPlatform(options);
 	const verified = await deployDaemon(options, remote, options.binary ?? packagedDaemon(remote));
-	for (const warning of remote.warnings) options.onLog?.(`${warning}\n`);
+	for (const warning of remote.warnings) safeLog(options.onLog, `${warning}\n`);
 	return { connection: sshConnectionFor(options, { remote, verified }), remote };
 }

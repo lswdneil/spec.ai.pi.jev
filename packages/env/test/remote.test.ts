@@ -81,6 +81,29 @@ describe("RemoteExecutionEnv", () => {
 		expect(nodePlatform({ os: "macos", arch: "x86_64" })).toEqual({ platform: "darwin", arch: "x64" });
 	});
 
+	it("isolates throwing start and progress callbacks from the request", async () => {
+		const { env, connection } = environment();
+		const reply = await connection.request(
+			"exec",
+			{
+				argv: [process.execPath, "-e", "process.stdout.write('x')"],
+				cwd: env.cwd,
+				env: {},
+				inheritEnv: true,
+			},
+			{
+				onStart: () => {
+					throw new Error("start callback failed");
+				},
+				onEvent: () => {
+					throw new Error("progress callback failed");
+				},
+			},
+		);
+
+		expect(reply.json.exitCode).toBe(0);
+	});
+
 	it("reports listFiles as not supported by daemons released before it", async () => {
 		const { env } = environment();
 		expect((await env.connection.info()).features).toContain("listFiles");
