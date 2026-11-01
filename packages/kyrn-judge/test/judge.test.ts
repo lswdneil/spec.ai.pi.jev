@@ -33,6 +33,40 @@ describe("Judge", () => {
 		expect(new Set(provider.calls.map((call) => call.state))).toEqual(new Set(["s"]));
 	});
 
+	it("cancels sibling fan-out requests when one chunk fails", async () => {
+		let calls = 0;
+		let siblingAborted = false;
+		const provider: JudgeProvider = {
+			id: "fanout",
+			evaluate: (request) => {
+				calls += 1;
+				if (calls === 1) return Promise.reject(new Error("first chunk failed"));
+				return new Promise<ProviderResponse>((_resolve, reject) => {
+					request.signal?.addEventListener(
+						"abort",
+						() => {
+							siblingAborted = true;
+							reject(request.signal?.reason);
+						},
+						{ once: true },
+					);
+				});
+			},
+		};
+		const judge = new Judge({ provider, maxQuestionsPerRequest: 1 });
+
+		await expect(
+			judge.evaluate({
+				state: "s",
+				questions: { first: yesNo, second: { ...yesNo, instructions: "And this?" } },
+			}),
+		).rejects.toMatchObject({ kind: "unreachable" });
+		await new Promise((resolve) => setTimeout(resolve, 0));
+
+		expect(calls).toBe(2);
+		expect(siblingAborted).toBe(true);
+	});
+
 	it("classifies a slow provider as a timeout", async () => {
 		const slow: JudgeProvider = {
 			id: "slow",

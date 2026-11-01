@@ -174,7 +174,7 @@ describe("LlmJudgeProvider", () => {
 		expect(prompt).toContain("把超时改成 60 秒");
 		expect(response.answers.edit).toEqual({ type: "boolean", probability: 0.97 });
 		expect(response.answers.vague).toEqual({ type: "boolean", probability: 0 });
-		expect(response.answers.size).toEqual({ type: "score", score: 2 });
+		expect(response.answers.size).toEqual({ type: "score", score: 7 });
 		expect(response.usage).toEqual({ inputTokens: 210, outputTokens: 30 });
 	});
 

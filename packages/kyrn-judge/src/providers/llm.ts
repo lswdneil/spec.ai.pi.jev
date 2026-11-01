@@ -56,7 +56,7 @@ function toAnswer(question: Question, raw: unknown): Answer | undefined {
 	}
 	if (question.type === "score") {
 		if (typeof record.score !== "number") return undefined;
-		return { type: "score", score: clamp(record.score, 0, question.criteria.length - 1) };
+		return { type: "score", score: record.score };
 	}
 	const options = Object.keys(question.criteria);
 	if (typeof record.choice !== "string" || !options.includes(record.choice)) return undefined;

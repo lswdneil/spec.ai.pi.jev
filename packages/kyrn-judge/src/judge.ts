@@ -122,7 +122,10 @@ export class Judge implements JudgeLike {
 		}
 
 		const timeout = AbortSignal.timeout(this.timeoutMs);
-		const signal = request.signal ? AbortSignal.any([timeout, request.signal]) : timeout;
+		const fanout = new AbortController();
+		const signal = request.signal
+			? AbortSignal.any([timeout, request.signal, fanout.signal])
+			: AbortSignal.any([timeout, fanout.signal]);
 		const startedAt = performance.now();
 
 		let responses: Awaited<ReturnType<JudgeProvider["evaluate"]>>[];
@@ -132,6 +135,7 @@ export class Judge implements JudgeLike {
 				chunks.map((questions) => this.provider.evaluate({ state: request.state, questions, signal })),
 			);
 		} catch (error) {
+			fanout.abort(error);
 			if (request.signal?.aborted) throw new JudgeError("aborted", "Judge call was aborted", { cause: error });
 			if (timeout.aborted) {
 				throw new JudgeError("timeout", `Judge call exceeded ${this.timeoutMs} ms`, { cause: error });
