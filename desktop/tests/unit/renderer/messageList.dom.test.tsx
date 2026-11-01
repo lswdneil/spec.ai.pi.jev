@@ -21,7 +21,7 @@ import {
   MessagePaginationProvider,
   useUpdateMessageList,
 } from '@/renderer/pages/conversation/Messages/hooks';
-import MessageList from '@/renderer/pages/conversation/Messages/MessageList';
+import MessageList, { LONG_CONVERSATION_ROW_LIMIT } from '@/renderer/pages/conversation/Messages/MessageList';
 
 const { parseDiffMock, useTeamPermissionMock } = vi.hoisted(() => ({
   parseDiffMock: vi.fn(),
@@ -816,6 +816,29 @@ describe('MessageList', () => {
     });
 
     expect(screen.getByText('empty state')).toBeInTheDocument();
+  });
+
+  it('enables offscreen rendering containment only for long conversations', () => {
+    const { unmount } = render(<MessageList />, {
+      wrapper: ({ children }) => <Wrapper>{children}</Wrapper>,
+    });
+    expect(screen.getByTestId('message-list-scroller')).not.toHaveAttribute('data-long-conversation');
+    unmount();
+
+    const messages = Array.from({ length: LONG_CONVERSATION_ROW_LIMIT + 1 }, (_, index) => {
+      const message = createTextMessage();
+      return {
+        ...message,
+        id: `message-${index}`,
+        msg_id: `msg-${index}`,
+        content: { content: `reply ${index}` },
+      } as IMessageText;
+    });
+    render(<MessageList />, {
+      wrapper: ({ children }) => <Wrapper messages={messages}>{children}</Wrapper>,
+    });
+
+    expect(screen.getByTestId('message-list-scroller')).toHaveAttribute('data-long-conversation', 'true');
   });
 
   it('renders a skeleton while the initial message batch is loading', () => {

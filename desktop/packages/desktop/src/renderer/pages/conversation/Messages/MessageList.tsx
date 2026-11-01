@@ -198,6 +198,7 @@ type KeptPlace = {
 const KEEP_PLACE_MS = 1500;
 /** How long the rows asked for may take to be drawn before the request is forgotten. */
 const EARLIER_ROWS_MS = 2000;
+export const LONG_CONVERSATION_ROW_LIMIT = 200;
 
 /** The grouped rows are memoised so an unchanged group is not redrawn when another row streams. */
 const ThoughtHistoryRow = React.memo(ThoughtHistory);
@@ -768,6 +769,7 @@ const MessageList: React.FC<{
     previousItemsRef.current = new Map(items.map((item) => [item.id, item]));
     return { items, activeThinkingId: liveThoughtId };
   }, [artifacts, isProcessing, list, openThoughtIds]);
+  const longConversation = processedList.length > LONG_CONVERSATION_ROW_LIMIT;
 
   // An AI reply can be split into several messages (thinking / multiple text /
   // tool blocks). The hover copy + timestamp row should appear once per turn,
@@ -1130,6 +1132,7 @@ const MessageList: React.FC<{
           <div
             ref={setScrollerRef}
             data-testid='message-list-scroller'
+            data-long-conversation={longConversation ? 'true' : undefined}
             // Break out of the parent's 20px horizontal padding so the scrollbar hugs the
             // window edge, while re-applying that padding inside to keep message content inset.
             className='message-list-scroller flex-1 h-full overflow-y-auto pb-10px box-border -mx-20px px-20px'

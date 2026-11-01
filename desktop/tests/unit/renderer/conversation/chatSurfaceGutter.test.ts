@@ -62,3 +62,13 @@ describe('gutter threshold', () => {
     expect(rule).toMatch(/clamp\(\s*\d+px\s*,[^,]+,\s*\d+px\s*\)/);
   });
 });
+
+describe('long transcript rendering', () => {
+  it('contains offscreen message layout only when the list is long', () => {
+    const rule = css.match(
+      /\.message-list-scroller\[data-long-conversation='true'\]\s+\.message-item\s*{([^}]*)}/
+    )?.[1];
+    expect(rule).toMatch(/content-visibility:\s*auto/);
+    expect(rule).toMatch(/contain-intrinsic-size:\s*auto\s+96px/);
+  });
+});
