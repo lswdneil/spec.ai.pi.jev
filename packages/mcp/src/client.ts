@@ -1,4 +1,4 @@
-import type { CallToolResult } from "./protocol/content.ts";
+import { type CallToolResult, isContentBlock } from "./protocol/content.ts";
 import {
 	isJsonRpcId,
 	isJsonRpcNotification,
@@ -146,8 +146,18 @@ function validateReadResourceResult(value: unknown): ReadResourceResult {
  * `structuredContent` may be any JSON value, as MCP 2026-07-28 allows.
  */
 function validateCallToolResult(value: unknown): CallToolResult {
-	if (!isObject(value) || (value.content !== undefined && !Array.isArray(value.content))) {
+	if (
+		!isObject(value) ||
+		(value.content !== undefined && !Array.isArray(value.content)) ||
+		(value.isError !== undefined && typeof value.isError !== "boolean") ||
+		(value._meta !== undefined && !isObject(value._meta))
+	) {
 		throw new McpError(JSON_RPC_ERROR_CODES.invalidRequest, "Invalid MCP tools/call result");
+	}
+	for (const block of value.content ?? []) {
+		if (!isContentBlock(block)) {
+			throw new McpError(JSON_RPC_ERROR_CODES.invalidRequest, "Invalid content block in MCP tools/call result");
+		}
 	}
 	return (value.content === undefined ? { ...value, content: [] } : value) as unknown as CallToolResult;
 }

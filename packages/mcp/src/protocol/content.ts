@@ -62,6 +62,60 @@ export interface EmbeddedResourceContent {
 
 export type ContentBlock = TextContent | ImageContent | AudioContent | ResourceLinkContent | EmbeddedResourceContent;
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+	value !== null && typeof value === "object" && !Array.isArray(value);
+
+const isOptionalString = (value: unknown): boolean => value === undefined || typeof value === "string";
+const isOptionalRecord = (value: unknown): boolean => value === undefined || isRecord(value);
+
+function isAnnotations(value: unknown): value is ContentAnnotations {
+	if (value === undefined) return true;
+	if (!isRecord(value)) return false;
+	return (
+		(value.audience === undefined ||
+			(Array.isArray(value.audience) &&
+				value.audience.every((audience) => audience === "user" || audience === "assistant"))) &&
+		(value.priority === undefined || typeof value.priority === "number") &&
+		(value.lastModified === undefined || typeof value.lastModified === "string")
+	);
+}
+
+/** Structural validation for untrusted server content before it reaches an LLM adapter. */
+export function isContentBlock(value: unknown): value is ContentBlock {
+	if (!isRecord(value) || typeof value.type !== "string") return false;
+	if (!isAnnotations(value.annotations) || !isOptionalRecord(value._meta)) return false;
+	switch (value.type) {
+		case "text":
+			return typeof value.text === "string";
+		case "image":
+		case "audio":
+			return typeof value.data === "string" && typeof value.mimeType === "string";
+		case "resource_link":
+			return (
+				typeof value.uri === "string" &&
+				typeof value.name === "string" &&
+				isOptionalString(value.title) &&
+				isOptionalString(value.description) &&
+				isOptionalString(value.mimeType) &&
+				(value.size === undefined || typeof value.size === "number")
+			);
+		case "resource": {
+			if (!isRecord(value.resource)) return false;
+			const resource = value.resource;
+			const text = typeof resource.text === "string";
+			const blob = typeof resource.blob === "string";
+			return (
+				typeof resource.uri === "string" &&
+				text !== blob &&
+				isOptionalString(resource.mimeType) &&
+				isOptionalRecord(resource._meta)
+			);
+		}
+		default:
+			return false;
+	}
+}
+
 export interface CallToolResult {
 	content: ContentBlock[];
 	/** Any JSON value, including arrays and `null` (MCP 2026-07-28; earlier revisions allowed only objects). */

@@ -7,6 +7,8 @@ import type {
 	OAuthTokens,
 } from "./types.ts";
 
+const OAUTH_STATE_TTL_MS = 10 * 60_000;
+
 export interface McpOAuthState {
 	serverUrl: string;
 	clientInformation?: OAuthClientInformationMixed;
@@ -15,6 +17,8 @@ export interface McpOAuthState {
 	tokensExpireAt?: number;
 	codeVerifier?: string;
 	oauthState?: string;
+	/** When `oauthState` stops being accepted, in milliseconds since the epoch. */
+	oauthStateExpiresAt?: number;
 	discovery?: OAuthDiscoveryState;
 }
 
@@ -82,11 +86,33 @@ export class McpOAuthProvider implements OAuthClientProvider {
 	}
 
 	async state(): Promise<string> {
-		const existing = (await this.load()).oauthState;
-		if (existing) return existing;
-		const state = Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString("hex");
-		await this.update((value) => ({ ...value, oauthState: state }));
+		let state = "";
+		await this.update((value) => {
+			if (value.oauthState && (value.oauthStateExpiresAt ?? 0) > Date.now()) {
+				state = value.oauthState;
+				return value;
+			}
+			state = Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString("hex");
+			return {
+				...value,
+				oauthState: state,
+				oauthStateExpiresAt: Date.now() + OAUTH_STATE_TTL_MS,
+			};
+		});
 		return state;
+	}
+
+	async consumeState(state: string): Promise<boolean> {
+		let consumed = false;
+		await this.update((value) => {
+			if (value.oauthState !== state || (value.oauthStateExpiresAt ?? 0) <= Date.now()) return value;
+			const next = { ...value };
+			delete next.oauthState;
+			delete next.oauthStateExpiresAt;
+			consumed = true;
+			return next;
+		});
+		return consumed;
 	}
 
 	async clientInformation(): Promise<OAuthClientInformationMixed | undefined> {
@@ -108,6 +134,9 @@ export class McpOAuthProvider implements OAuthClientProvider {
 			const next: McpOAuthState = { ...value, tokens };
 			if (expiresAt === undefined) delete next.tokensExpireAt;
 			else next.tokensExpireAt = expiresAt;
+			delete next.oauthState;
+			delete next.oauthStateExpiresAt;
+			delete next.codeVerifier;
 			return next;
 		});
 	}
@@ -136,7 +165,10 @@ export class McpOAuthProvider implements OAuthClientProvider {
 			}
 			if (kind === "all" || kind === "verifier") delete next.codeVerifier;
 			if (kind === "all" || kind === "discovery") delete next.discovery;
-			if (kind === "all") delete next.oauthState;
+			if (kind === "all") {
+				delete next.oauthState;
+				delete next.oauthStateExpiresAt;
+			}
 			return next;
 		});
 	}

@@ -280,6 +280,28 @@ describe("McpClient", () => {
 		await client.close();
 	});
 
+	it("rejects malformed tool content blocks before they reach a model adapter", async () => {
+		const { client, server } = await connect();
+		const invalidResults = [
+			{ content: [{ type: "text", text: 42 }] },
+			{ content: [{ type: "image", data: "aW1n" }] },
+			{ content: [{ type: "resource", resource: { uri: "file:///a" } }] },
+			{ content: [{ type: "resource", resource: { uri: "file:///a", text: "x", blob: "eA==" } }] },
+			{ content: [{ type: "resource_link", uri: "file:///a" }] },
+			{ content: [{ type: "future-type", value: 1 }] },
+			{ content: [], isError: "true" },
+			{ content: [], _meta: "metadata" },
+		];
+
+		for (const result of invalidResults) {
+			server.setHandler("tools/call", () => result);
+			await expect(client.callTool("invalid")).rejects.toThrow(
+				/Invalid (?:content block in )?MCP tools\/call result/,
+			);
+		}
+		await client.close();
+	});
+
 	// #10416: MCP 2026-07-28 allows any JSON value as structured content.
 	it("accepts structured content that is not an object", async () => {
 		const { client, server } = await connect();

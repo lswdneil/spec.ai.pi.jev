@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { McpClient, StreamableHttpTransport } from "../src/index.ts";
 import {
 	adaptOAuthProvider,
@@ -406,6 +406,74 @@ describe("MCP OAuth", () => {
 			onRedirect: () => {},
 		});
 		expect(await second.tokens()).toBeUndefined();
+	});
+
+	it("keeps OAuth state single-use and expires stale authorization attempts", async () => {
+		vi.useFakeTimers();
+		try {
+			vi.setSystemTime(new Date("2026-01-01T00:00:00.000Z"));
+			const provider = new McpOAuthProvider({
+				serverUrl: "https://server.example/mcp",
+				redirectUrl: "http://127.0.0.1/callback",
+				clientMetadata: { client_name: "test" },
+				store: new MemoryOAuthStateStore(),
+				onRedirect: () => {},
+			});
+
+			const [state, concurrent] = await Promise.all([provider.state(), provider.state()]);
+			expect(concurrent).toBe(state);
+			expect(await provider.consumeState(state)).toBe(true);
+			expect(await provider.consumeState(state)).toBe(false);
+
+			const stale = await provider.state();
+			vi.advanceTimersByTime(10 * 60_000 + 1);
+			expect(await provider.consumeState(stale)).toBe(false);
+
+			const completed = await provider.state();
+			await provider.saveTokens({ access_token: "a", token_type: "Bearer" });
+			expect(await provider.consumeState(completed)).toBe(false);
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	it("requires and consumes authorization state before exchanging a code", async () => {
+		let tokenRequests = 0;
+		const origin = await listen(async (request, response) => {
+			if (request.method !== "POST") {
+				response.statusCode = 404;
+				response.end();
+				return;
+			}
+			tokenRequests += 1;
+			response.setHeader("content-type", "application/json");
+			response.end(JSON.stringify({ access_token: "token", token_type: "Bearer" }));
+		});
+		const provider = new TestOAuthProvider("http://127.0.0.1/callback");
+		provider.client = { client_id: "client" };
+		provider.verifier = "verifier";
+		provider.discovery = {
+			authorizationServerUrl: origin,
+			authorizationServerMetadata: {
+				issuer: origin,
+				authorization_endpoint: `${origin}/authorize`,
+				token_endpoint: `${origin}/token`,
+				response_types_supported: ["code"],
+			},
+		};
+		Object.assign(provider, { consumeState: vi.fn((state: string) => state === "expected-state") });
+		const exchange = (authorizationState?: string) =>
+			authorizeMcp(provider, {
+				serverUrl: `${origin}/mcp`,
+				authorizationCode: "code",
+				authorizationState,
+			});
+
+		await expect(exchange()).rejects.toThrow("OAuth authorization state is missing");
+		await expect(exchange("wrong-state")).rejects.toThrow("OAuth authorization state is invalid or expired");
+		expect(tokenRequests).toBe(0);
+		expect(await exchange("expected-state")).toBe("AUTHORIZED");
+		expect(tokenRequests).toBe(1);
 	});
 
 	// #10493

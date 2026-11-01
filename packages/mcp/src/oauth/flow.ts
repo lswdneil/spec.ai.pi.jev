@@ -54,6 +54,7 @@ export interface OAuthClientProvider {
 	 */
 	clientMetadataDocument?(metadata: AuthorizationServerMetadata | undefined): OAuthClientMetadataDocument | undefined;
 	state?(): string | Promise<string>;
+	consumeState?(state: string): boolean | Promise<boolean>;
 	clientInformation(): OAuthClientInformationMixed | undefined | Promise<OAuthClientInformationMixed | undefined>;
 	saveClientInformation?(information: OAuthClientInformationMixed): void | Promise<void>;
 	tokens(): OAuthTokens | undefined | Promise<OAuthTokens | undefined>;
@@ -72,6 +73,8 @@ export interface OAuthFlowOptions {
 	authorizationCode?: string;
 	/** `iss` parameter of the authorization response that delivered `authorizationCode` (RFC 9207). */
 	iss?: string;
+	/** `state` parameter from the same authorization response; consumed once before code exchange. */
+	authorizationState?: string;
 	scope?: string;
 	resourceMetadataUrl?: URL;
 	/**
@@ -381,6 +384,13 @@ async function runFlow(provider: OAuthClientProvider, options: OAuthFlowOptions)
 		signal: options.signal,
 	};
 	if (options.authorizationCode) {
+		if (provider.consumeState) {
+			if (!options.authorizationState)
+				throw new OAuthError("invalid_request", "OAuth authorization state is missing");
+			if (!(await provider.consumeState(options.authorizationState))) {
+				throw new OAuthError("invalid_request", "OAuth authorization state is invalid or expired");
+			}
+		}
 		// RFC 9207: never send a code from another authorization server to this one. Without metadata there
 		// is no issuer to compare with, so any `iss` is rejected.
 		const iss = options.iss;

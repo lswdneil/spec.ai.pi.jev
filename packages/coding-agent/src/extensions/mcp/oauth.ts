@@ -547,7 +547,7 @@ export async function signInMcpServer(options: {
 			options.prompt,
 			signal,
 		);
-		await authorizeMcp(provider, { ...flow, authorizationCode: code, iss });
+		await authorizeMcp(provider, { ...flow, authorizationCode: code, authorizationState: state, iss });
 	} catch (error) {
 		// Aborted requests fail with the signal's reason; report them as the cancellation they are.
 		if (signal?.aborted) throw new McpSignInCancelledError();
