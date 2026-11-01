@@ -411,7 +411,10 @@ describe('BackendLifecycleManager.start (success path)', () => {
     expect(port).toBe(55555);
     expect(mgr.port).toBe(55555);
     expect(createServer).not.toHaveBeenCalled();
-    expect(fetchSpy).toHaveBeenCalledWith('http://127.0.0.1:55555/health');
+    expect(fetchSpy).toHaveBeenCalledWith(
+      'http://127.0.0.1:55555/health',
+      expect.objectContaining({ signal: expect.any(AbortSignal) })
+    );
     expect(vi.mocked(spawn).mock.calls[0][1]).toEqual([
       '--port',
       '0',
@@ -881,9 +884,9 @@ describe('BackendLifecycleManager.start (health timeout)', () => {
     });
 
     const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(
-      () =>
+      (_url, init) =>
         new Promise<Response>((_resolve, reject) => {
-          setTimeout(() => reject(new Error('fetch failed')), 545_000);
+          init?.signal?.addEventListener('abort', () => reject(init.signal?.reason), { once: true });
         })
     );
 
@@ -892,17 +895,18 @@ describe('BackendLifecycleManager.start (health timeout)', () => {
     const expectedRejection = expect(startPromise).rejects.toMatchObject({
       details: expect.objectContaining({
         port: 33340,
-        healthCheckAttempts: 1,
+        healthCheckAttempts: expect.any(Number),
         healthCheckExpectedAttempts: 150,
-        healthCheckAttemptDeficit: 149,
+        healthCheckAttemptDeficit: expect.any(Number),
         healthCheckPollingDelayed: true,
         healthCheckTimeoutOverrunMs: expect.any(Number),
+        healthCheckLastErrorName: 'TimeoutError',
       }),
     });
 
     await Promise.resolve();
     emitListening(child, 33340);
-    await vi.advanceTimersByTimeAsync(545_250);
+    await vi.advanceTimersByTimeAsync(31_250);
     await expectedRejection;
 
     fetchSpy.mockRestore();

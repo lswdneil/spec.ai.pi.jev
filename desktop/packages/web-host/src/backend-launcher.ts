@@ -271,6 +271,7 @@ const AIONCORE_LISTENING_PREFIX = 'AIONCORE_LISTENING ';
 // the earlier AIONCORE_LISTENING line, so this marker carries no payload.
 const AIONCORE_READY_MARKER = 'AIONCORE_READY';
 const BACKEND_PORT_REPORT_TIMEOUT_MS = 60_000;
+const HEALTH_CHECK_REQUEST_TIMEOUT_MS = 5_000;
 
 // Benign boundary code emitted by an aioncore instance that yielded the
 // data-dir instance guard to a peer that already owns it (Sentry 135525166).
@@ -979,8 +980,22 @@ export class BackendLifecycleManager {
       previousAttemptAt = attemptStartedAt;
       diagnostics.healthCheckAttempts += 1;
       diagnostics.healthCheckLastAttemptAfterMs = attemptStartedAt - start;
+      const remainingMs = Number.isFinite(timeoutMs)
+        ? Math.max(1, timeoutMs - (attemptStartedAt - start))
+        : HEALTH_CHECK_REQUEST_TIMEOUT_MS;
+      const attemptTimeoutMs = Math.min(HEALTH_CHECK_REQUEST_TIMEOUT_MS, remainingMs);
+      const controller = new AbortController();
+      let attemptTimer: ReturnType<typeof setTimeout> | undefined;
+      const attemptTimedOut = new Promise<never>((_resolve, reject) => {
+        attemptTimer = setTimeout(() => {
+          const error = new Error(`health check request timed out after ${attemptTimeoutMs}ms`);
+          error.name = 'TimeoutError';
+          controller.abort(error);
+          reject(error);
+        }, attemptTimeoutMs);
+      });
       try {
-        const response = await fetch(healthCheckUrl);
+        const response = await Promise.race([fetch(healthCheckUrl, { signal: controller.signal }), attemptTimedOut]);
         if (response.ok) {
           diagnostics.healthCheckElapsedMs = Date.now() - start;
           return { ok: true, diagnostics };
@@ -988,7 +1003,7 @@ export class BackendLifecycleManager {
         diagnostics.healthCheckLastStatus = response.status;
         clearHealthCheckErrorDiagnostics(diagnostics);
         try {
-          diagnostics.healthCheckLastBody = (await response.text()).slice(0, 500);
+          diagnostics.healthCheckLastBody = (await Promise.race([response.text(), attemptTimedOut])).slice(0, 500);
         } catch (error) {
           delete diagnostics.healthCheckLastBody;
           applyHealthCheckErrorDiagnostics(diagnostics, error);
@@ -997,6 +1012,8 @@ export class BackendLifecycleManager {
         applyHealthCheckErrorDiagnostics(diagnostics, error);
         delete diagnostics.healthCheckLastStatus;
         delete diagnostics.healthCheckLastBody;
+      } finally {
+        if (attemptTimer !== undefined) clearTimeout(attemptTimer);
       }
       await new Promise((r) => setTimeout(r, intervalMs));
     }
