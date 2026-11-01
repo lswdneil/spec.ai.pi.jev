@@ -68,15 +68,27 @@ describe('WebUiAccessManager', () => {
   });
 
   it('locks the code after five wrong attempts', () => {
-    const { manager } = makeManager();
-    manager.beginSession();
+    let now = 1_000;
+    const { manager } = makeManager({ now: () => now });
+    const code = manager.beginSession().code ?? '';
+    const wrongCode = code === '000000' ? '000001' : '000000';
     let last: ReturnType<WebUiAccessManager['requestPairing']> | null = null;
     for (let i = 0; i < 5; i += 1) {
-      last = manager.requestPairing({ code: '000000', name: 'Phone', ip: '127.0.0.1', userAgent: 'UA' });
+      last = manager.requestPairing({ code: wrongCode, name: 'Phone', ip: '127.0.0.1', userAgent: 'UA' });
     }
     expect(last?.ok).toBe(false);
     if (last?.ok === false) expect(last.attemptsLeft).toBe(0);
     expect(manager.listState().code).toMatch(/^\d{6}$/);
+
+    // A correct code must not bypass the lockout window.
+    expect(manager.requestPairing({ code, name: 'Phone', ip: '127.0.0.1', userAgent: 'UA' })).toEqual({
+      ok: false,
+      error: 'invalid_code',
+      attemptsLeft: 0,
+    });
+
+    now += 60_000;
+    expect(manager.requestPairing({ code, name: 'Phone', ip: '127.0.0.1', userAgent: 'UA' }).ok).toBe(true);
   });
 
   it('revokes a device, rejects its cookie, and notifies socket owners', () => {
@@ -150,6 +162,28 @@ describe('WebUiAccessManager', () => {
     now += 11 * 60_000;
     expect(manager.listState().devices[0].rotationPending).toBe(false);
     expect(manager.verifyCookie(cookie)).toEqual({ deviceId, scope: 'control' });
+  });
+
+  it('persists only the pending rotation hash, never its token', () => {
+    const { manager, storePath } = makeManager();
+    const { token } = pair(manager);
+    const deviceId = token.split('.')[0];
+
+    expect(manager.rotateDevice(deviceId)).toEqual({ ok: true });
+
+    const device = JSON.parse(readFileSync(storePath, 'utf8')).devices[0] as Record<string, unknown>;
+    expect(device).not.toHaveProperty('rotationToken');
+    expect(device.rotationTokenHash).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  it('drops an in-memory pending rotation when the device is revoked', () => {
+    const { manager } = makeManager();
+    const { token } = pair(manager);
+    const deviceId = token.split('.')[0];
+
+    expect(manager.rotateDevice(deviceId)).toEqual({ ok: true });
+    expect(manager.revoke(deviceId)).toEqual({ ok: true });
+    expect(manager.claimRotation(`${WEBUI_DEVICE_COOKIE}=${encodeURIComponent(token)}`)).toBeNull();
   });
 
   it('expires a device token after its lifetime', () => {

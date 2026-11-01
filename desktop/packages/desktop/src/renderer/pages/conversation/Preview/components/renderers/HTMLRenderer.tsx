@@ -6,7 +6,6 @@
 
 import { ipcBridge } from '@/common';
 import { PREVIEW_SESSION_PARTITION } from '@/common/config/constants';
-import { useTypingAnimation } from '@/renderer/hooks/chat/useTypingAnimation';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useScrollSyncTarget } from '../../hooks/useScrollSyncHelpers';
 import { generateInspectScript } from './htmlInspectScript';
@@ -324,15 +323,15 @@ const HTMLRenderer: React.FC<HTMLRendererProps> = ({
 
   // 流式打字动画：HTML 预览在使用 data URL 渲染时也能获得流式体验
   // Typing animation: provide streaming experience when rendering via data URL
-  const { displayedContent } = useTypingAnimation({
-    content,
-    enabled: !shouldLoadFromFile && !hasRelativeResources,
-    speed: 40,
-  });
+  const [settledContent, setSettledContent] = useState(content);
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSettledContent(content), 150);
+    return () => window.clearTimeout(timer);
+  }, [content]);
 
   const htmlContent = useMemo(
-    () => (shouldLoadFromFile ? content : displayedContent),
-    [shouldLoadFromFile, content, displayedContent]
+    () => (shouldLoadFromFile ? content : settledContent),
+    [shouldLoadFromFile, content, settledContent]
   );
 
   // 在 browser 环境下，当有相对资源时进行内联化处理
@@ -378,8 +377,8 @@ const HTMLRenderer: React.FC<HTMLRendererProps> = ({
     if (hasRelativeResources && file_path) {
       return inlinedHtmlContent || content; // 在内联化完成前显示原始内容 / Show original content before inlining completes
     }
-    return displayedContent;
-  }, [hasRelativeResources, file_path, inlinedHtmlContent, content, displayedContent]);
+    return settledContent;
+  }, [hasRelativeResources, file_path, inlinedHtmlContent, content, settledContent]);
 
   // 计算 webview 的 src
   // Calculate webview src

@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { join } from 'node:path';
 import { app } from 'electron';
@@ -83,8 +83,18 @@ async function start(): Promise<void> {
 
   const url = `ws://${HOST}:${port}/${token}`;
   const advert = join(muHome(), ADVERT_FILE);
-  mkdirSync(muHome(), { recursive: true });
-  writeFileSync(advert, JSON.stringify({ url, pid: process.pid }), 'utf8');
+  mkdirSync(muHome(), { recursive: true, mode: 0o700 });
+  try {
+    chmodSync(muHome(), 0o700);
+  } catch {
+    // Windows ACLs come from the user profile rather than POSIX modes.
+  }
+  writeFileSync(advert, JSON.stringify({ url, pid: process.pid }), { encoding: 'utf8', mode: 0o600 });
+  try {
+    chmodSync(advert, 0o600);
+  } catch {
+    // Windows ACLs come from the user profile rather than POSIX modes.
+  }
   globalThis.__kyrnHostUrl = url;
 
   app.once('will-quit', () => {

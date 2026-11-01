@@ -157,6 +157,7 @@ export const useAionrsMessage = (
 
       const rawContent = messageBufferRef.current.get(msgId) ?? '';
       if (!rawContent.trim()) {
+        messageBufferRef.current.delete(msgId);
         return;
       }
 
@@ -198,6 +199,8 @@ export const useAionrsMessage = (
         }
       } catch {
         processedCronMsgIdsRef.current.delete(msgId);
+      } finally {
+        messageBufferRef.current.delete(msgId);
       }
     },
     [mergeLiveMessage, conversation_id]

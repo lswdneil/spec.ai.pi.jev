@@ -86,6 +86,18 @@ describe('describeUncaughtError', () => {
     expect(JSON.stringify(diagnostics)).not.toContain('hunter2');
   });
 
+  it('masks credentials that appear inside an allow-listed message or stack', () => {
+    const error = new Error('request failed Authorization: Bearer sk-proj-abcdefghijklmnop1234567890');
+    error.stack = `Error: ${error.message}\nhttps://user:password@example.com/?token=super-secret-token`;
+
+    const diagnostics = describeUncaughtError(error, 'uncaughtException');
+
+    expect(diagnostics.message).toContain('Authorization: Bearer ••••');
+    expect(diagnostics.message).not.toContain('abcdefghijklmnop');
+    expect(diagnostics.stack).not.toContain('password');
+    expect(diagnostics.stack).not.toContain('super-secret-token');
+  });
+
   it('does not reveal the payload of an object without a message', () => {
     const diagnostics = describeUncaughtError({ token: 'super-secret-token' }, 'unhandledRejection');
 

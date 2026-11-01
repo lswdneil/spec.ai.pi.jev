@@ -71,13 +71,15 @@ const GuidInputCard: React.FC<GuidInputCardProps> = ({
   const isMobile = layout?.isMobile ?? false;
   const { compositionHandlers, isComposing } = useCompositionInput();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  const lastFocusRequestRef = useRef<string | undefined>(undefined);
   const textareaAutoSize = isMobile ? MOBILE_AUTO_SIZE : DESKTOP_AUTO_SIZE;
 
   useEffect(() => {
-    if (!focusRequestKey || isMobile) return;
+    if (!focusRequestKey || isMobile || lastFocusRequestRef.current === focusRequestKey) return;
+    lastFocusRequestRef.current = focusRequestKey;
     inputRef.current?.focus();
     inputRef.current?.setSelectionRange(input.length, input.length);
-  }, [focusRequestKey, input, isMobile]);
+  }, [focusRequestKey, input.length, isMobile]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // Trust the event's own composition flag, not only our ref: an interrupted composition can leave the ref true.

@@ -21,6 +21,8 @@
  * is safe to call from inside a global error handler where a secondary throw would be fatal.
  */
 
+import { maskSecrets } from '@/common/utils/nativeHost/redact';
+
 /** Where the failure came from. Node passes this as the 2nd arg of `uncaughtException`. */
 export type UncaughtErrorOrigin = 'uncaughtException' | 'unhandledRejection';
 
@@ -121,7 +123,7 @@ export function describeUncaughtError(value: unknown, origin: UncaughtErrorOrigi
       origin,
       valueType: describeValueType(value),
       name: readString(value, 'name') ?? 'UnknownError',
-      message: truncate(describeMessage(value), MAX_MESSAGE_LENGTH),
+      message: maskSecrets(truncate(describeMessage(value), MAX_MESSAGE_LENGTH)),
     };
 
     const code = readString(value, 'code');
@@ -134,7 +136,7 @@ export function describeUncaughtError(value: unknown, origin: UncaughtErrorOrigi
     if (errno !== undefined) diagnostics.errno = errno;
 
     const stack = readString(value, 'stack');
-    if (stack !== undefined) diagnostics.stack = truncate(stack, MAX_STACK_LENGTH);
+    if (stack !== undefined) diagnostics.stack = maskSecrets(truncate(stack, MAX_STACK_LENGTH));
 
     return diagnostics;
   } catch {

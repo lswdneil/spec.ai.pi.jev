@@ -5,7 +5,7 @@
  */
 
 import React, { type PropsWithChildren } from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type {
   IMessageAcpToolCall,
@@ -75,7 +75,11 @@ vi.mock('@/renderer/pages/conversation/Messages/useAutoScroll', () => ({
 
 vi.mock('@/renderer/pages/conversation/Messages/components/MessageText', () => ({
   default: ({ message, showCopyRow }: { message: IMessageText; showCopyRow?: boolean }) => (
-    <div data-testid={`msgtext-${message.id}`} data-copy-row={String(showCopyRow ?? true)}>
+    <div
+      data-testid={`msgtext-${message.id}`}
+      data-copy-row={String(showCopyRow ?? true)}
+      data-status={message.status ?? ''}
+    >
       {message.content.content}
     </div>
   ),
@@ -782,6 +786,28 @@ describe('MessageList', () => {
     expect(screen.getByTestId('msgtext-text-a').getAttribute('data-copy-row')).toBe('true');
     // The in-progress final turn withholds its row until streaming ends.
     expect(screen.getByTestId('msgtext-text-b').getAttribute('data-copy-row')).toBe('false');
+  });
+
+  it('redraws a message when only its delivery status changes', async () => {
+    const pending = {
+      ...createTextMessage(),
+      position: 'right',
+      status: 'pending',
+    } as IMessageText;
+
+    render(
+      <>
+        <MessageList />
+        <ListDriver />
+      </>,
+      { wrapper: ({ children }) => <Wrapper messages={[pending]}>{children}</Wrapper> }
+    );
+
+    expect(screen.getByTestId('msgtext-message-1')).toHaveAttribute('data-status', 'pending');
+
+    replaceMessages([{ ...pending, status: 'finish' }]);
+
+    await waitFor(() => expect(screen.getByTestId('msgtext-message-1')).toHaveAttribute('data-status', 'finish'));
   });
 
   it('renders the empty slot when there are no messages', () => {

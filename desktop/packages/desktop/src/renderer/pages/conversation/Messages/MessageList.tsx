@@ -479,6 +479,7 @@ const MessageItem: React.FC<{
   (prev, next) =>
     prev.message.id === next.message.id &&
     prev.message.content === next.message.content &&
+    prev.message.status === next.message.status &&
     prev.message.position === next.message.position &&
     prev.message.type === next.message.type &&
     prev.highlighted === next.highlighted &&

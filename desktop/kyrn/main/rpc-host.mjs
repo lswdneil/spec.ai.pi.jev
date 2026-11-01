@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { createInterface } from 'node:readline';
 import { randomUUID } from 'node:crypto';
 
@@ -73,14 +73,19 @@ export class RpcHost {
   close() {
     if (this.stopped) return;
     const pid = this.process.pid;
+    if (process.platform === 'win32') {
+      const killed = pid
+        ? spawnSync('taskkill', ['/PID', String(pid), '/T', '/F'], { windowsHide: true, stdio: 'ignore' })
+        : undefined;
+      if (killed?.status !== 0) this.process.kill('SIGKILL');
+      return;
+    }
     const signal = (name) => {
       try {
-        if (process.platform === 'win32') this.process.kill(name);
-        else process.kill(-pid, name);
+        process.kill(-pid, name);
       } catch {}
     };
     signal('SIGTERM');
-    const timer = setTimeout(() => signal('SIGKILL'), 3000);
-    timer.unref();
+    setTimeout(() => signal('SIGKILL'), 3000);
   }
 }

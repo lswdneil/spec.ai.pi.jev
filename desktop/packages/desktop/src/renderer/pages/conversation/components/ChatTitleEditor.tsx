@@ -80,9 +80,7 @@ const ChatTitleEditor: React.FC<ChatTitleEditorProps> = ({
             disabled={renameLoading}
             className={classNames(
               'w-full min-w-0 max-w-full border-none bg-transparent px-0 text-[var(--color-text-1)] shadow-none',
-              compact
-                ? 'text-13px font-500 leading-20px'
-                : 'text-16px font-700 leading-24px'
+              compact ? 'text-13px font-500 leading-20px' : 'text-16px font-700 leading-24px'
             )}
             style={{
               width: '100%',
@@ -93,13 +91,15 @@ const ChatTitleEditor: React.FC<ChatTitleEditorProps> = ({
             onFocus={(event) => {
               event.target.select();
             }}
-            onPressEnter={() => {
+            onPressEnter={(event) => {
+              if (event.nativeEvent.isComposing) return;
               void submitTitleRename();
             }}
             onBlur={() => {
               void submitTitleRename();
             }}
             onKeyDown={(event) => {
+              if (event.nativeEvent.isComposing) return;
               if (event.key === 'Escape') {
                 setTitleDraft(typeof title === 'string' ? title : '');
                 setEditingTitle(false);

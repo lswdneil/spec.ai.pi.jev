@@ -9,6 +9,7 @@ const DEFAULT_CODE_TTL_MS = 5 * 60_000;
 const DEFAULT_PENDING_TTL_MS = 5 * 60_000;
 const DEFAULT_DELIVERY_TTL_MS = 60_000;
 const MAX_ATTEMPTS = 5;
+const PAIR_LOCKOUT_MS = 60_000;
 const MAX_NAME_LENGTH = 64;
 const DEVICE_LIFETIME_MS = 30 * 24 * 60 * 60_000;
 const ROTATION_GRACE_MS = 10 * 60_000;
@@ -20,7 +21,7 @@ type DeviceRecord = {
   tokenHash: string;
   previousTokenHash?: string;
   previousExpiresAt?: number;
-  rotationToken?: string;
+  rotationTokenHash?: string;
   rotationExpiresAt?: number;
   createdAt: number;
   lastSeenAt: number;
@@ -99,7 +100,8 @@ const isDeviceRecord = (value: unknown): value is DeviceRecord => {
     (device.previousTokenHash === undefined ||
       (typeof device.previousTokenHash === 'string' && /^[a-f0-9]{64}$/.test(device.previousTokenHash))) &&
     (device.previousExpiresAt === undefined || typeof device.previousExpiresAt === 'number') &&
-    (device.rotationToken === undefined || typeof device.rotationToken === 'string') &&
+    (device.rotationTokenHash === undefined ||
+      (typeof device.rotationTokenHash === 'string' && /^[a-f0-9]{64}$/.test(device.rotationTokenHash))) &&
     (device.rotationExpiresAt === undefined || typeof device.rotationExpiresAt === 'number') &&
     (device.scope === 'read' || device.scope === 'control') &&
     typeof device.createdAt === 'number' &&
@@ -128,11 +130,13 @@ export class WebUiAccessManager {
   private readonly deliveryTtlMs: number;
   private readonly devices = new Map<string, DeviceRecord>();
   private readonly pending = new Map<string, PendingRecord>();
+  private readonly rotationTokens = new Map<string, string>();
   private readonly revokeListeners = new Set<(deviceId: string) => void>();
   private active = false;
   private code: string | null = null;
   private codeExpiresAt = 0;
   private attempts = 0;
+  private lockedUntil = 0;
 
   constructor(options: WebUiAccessOptions) {
     this.storePath = options.storePath;
@@ -156,6 +160,7 @@ export class WebUiAccessManager {
     this.code = null;
     this.codeExpiresAt = 0;
     this.attempts = 0;
+    this.lockedUntil = 0;
     this.pending.clear();
   }
 
@@ -164,6 +169,7 @@ export class WebUiAccessManager {
     this.code = randomInt(0, 1_000_000).toString().padStart(6, '0');
     this.codeExpiresAt = this.now() + this.codeTtlMs;
     this.attempts = 0;
+    this.lockedUntil = 0;
     return this.listState();
   }
 
@@ -179,6 +185,11 @@ export class WebUiAccessManager {
     const current = this.getCode();
     if (!current) return { ok: false, error: 'inactive' };
 
+    const attemptedAt = this.now();
+    if (attemptedAt < this.lockedUntil) {
+      return { ok: false, error: 'invalid_code', attemptsLeft: 0 };
+    }
+
     const name = input.name.trim().slice(0, MAX_NAME_LENGTH) || 'Unknown device';
     if (!name) return { ok: false, error: 'invalid_name' };
 
@@ -186,7 +197,8 @@ export class WebUiAccessManager {
     if (!/^\d{6}$/.test(offered) || !this.matchesCurrentCode(offered)) {
       this.attempts += 1;
       if (this.attempts >= MAX_ATTEMPTS) {
-        this.rotateCode();
+        this.lockedUntil = attemptedAt + PAIR_LOCKOUT_MS;
+        this.attempts = 0;
         this.audit('pair.locked', { ip: input.ip });
         return { ok: false, error: 'invalid_code', attemptsLeft: 0 };
       }
@@ -284,6 +296,7 @@ export class WebUiAccessManager {
   revoke(deviceId: string): { ok: boolean } {
     const device = this.devices.get(deviceId);
     if (!device) return { ok: false };
+    this.clearRotation(device);
     this.devices.delete(deviceId);
     this.persist();
     this.audit('device.revoked', { deviceId, name: device.name });
@@ -307,16 +320,14 @@ export class WebUiAccessManager {
       return { ok: false, error: 'device_expired' };
     }
     this.expireRotation(device);
-    if (device.rotationToken) return { ok: false, error: 'rotation_pending' };
+    if (device.rotationTokenHash) return { ok: false, error: 'rotation_pending' };
 
     const now = this.now();
     const secret = randomBytes(32).toString('base64url');
     const token = `${deviceId}.${secret}`;
-    device.previousTokenHash = device.tokenHash;
-    device.previousExpiresAt = now + ROTATION_GRACE_MS;
-    device.rotationToken = token;
+    device.rotationTokenHash = hashToken(token);
     device.rotationExpiresAt = now + ROTATION_GRACE_MS;
-    device.tokenHash = hashToken(token);
+    this.rotationTokens.set(deviceId, token);
     this.persist();
     this.audit('device.rotation_started', { deviceId, name: device.name });
     return { ok: true };
@@ -339,28 +350,24 @@ export class WebUiAccessManager {
     this.expireRotation(device);
 
     if (this.matchesHash(device.tokenHash, token)) {
-      if (device.rotationToken) {
-        // The phone already has the new cookie; nothing left to deliver.
+      const rotationToken = this.rotationTokens.get(deviceId);
+      if (device.rotationTokenHash && rotationToken && this.now() < (device.rotationExpiresAt ?? 0)) {
+        device.tokenHash = hashToken(rotationToken);
+        device.expiresAt = this.now() + DEVICE_LIFETIME_MS;
         this.clearRotation(device);
         this.persist();
-        this.audit('device.rotation_already', { deviceId, name: device.name });
+        this.audit('device.rotation_claimed', { deviceId, name: device.name });
+        return { rotated: true, token: rotationToken };
       }
       return { rotated: false };
     }
 
-    if (
-      device.previousTokenHash &&
-      this.matchesHash(device.previousTokenHash, token) &&
-      device.rotationToken &&
-      this.now() < (device.rotationExpiresAt ?? 0)
-    ) {
-      const newToken = device.rotationToken;
-      device.tokenHash = hashToken(newToken);
-      device.expiresAt = this.now() + DEVICE_LIFETIME_MS;
+    if (device.rotationTokenHash && this.matchesHash(device.rotationTokenHash, token)) {
+      // The phone already has the new cookie; nothing left to deliver.
       this.clearRotation(device);
       this.persist();
-      this.audit('device.rotation_claimed', { deviceId, name: device.name });
-      return { rotated: true, token: newToken };
+      this.audit('device.rotation_already', { deviceId, name: device.name });
+      return { rotated: false };
     }
     return null;
   }
@@ -382,6 +389,7 @@ export class WebUiAccessManager {
     this.expireRotation(device);
     const valid =
       this.matchesHash(device.tokenHash, token) ||
+      (device.rotationTokenHash !== undefined && this.matchesHash(device.rotationTokenHash, token)) ||
       (device.previousTokenHash !== undefined &&
         this.now() < (device.previousExpiresAt ?? 0) &&
         this.matchesHash(device.previousTokenHash, token));
@@ -430,7 +438,7 @@ export class WebUiAccessManager {
             expiresAt: device.expiresAt,
             ip: device.ip,
             userAgent: device.userAgent,
-            rotationPending: Boolean(device.rotationToken),
+            rotationPending: Boolean(device.rotationTokenHash),
           };
         })
         .toSorted((a, b) => a.createdAt - b.createdAt),
@@ -446,14 +454,14 @@ export class WebUiAccessManager {
   private clearRotation(device: DeviceRecord): void {
     device.previousTokenHash = undefined;
     device.previousExpiresAt = undefined;
-    device.rotationToken = undefined;
+    device.rotationTokenHash = undefined;
     device.rotationExpiresAt = undefined;
+    this.rotationTokens.delete(device.id);
   }
 
   private expireRotation(device: DeviceRecord): void {
-    if (!device.rotationToken) return;
+    if (!device.rotationTokenHash) return;
     if (this.now() < (device.rotationExpiresAt ?? 0)) return;
-    if (device.previousTokenHash) device.tokenHash = device.previousTokenHash;
     this.clearRotation(device);
     this.persist();
     this.audit('device.rotation_expired', { deviceId: device.id, name: device.name });
@@ -480,7 +488,11 @@ export class WebUiAccessManager {
       const parsed = JSON.parse(raw) as { devices?: unknown[] };
       if (!Array.isArray(parsed.devices)) return;
       for (const candidate of parsed.devices) {
-        if (isDeviceRecord(candidate)) this.devices.set(candidate.id, candidate);
+        if (isDeviceRecord(candidate)) {
+          const record = { ...candidate };
+          Reflect.deleteProperty(record, 'rotationToken');
+          this.devices.set(record.id, record);
+        }
       }
     } catch {
       // A missing or malformed store means "no paired devices", not a failed start.

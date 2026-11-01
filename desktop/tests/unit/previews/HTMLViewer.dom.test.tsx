@@ -5,7 +5,7 @@
  */
 
 import { afterEach, describe, it, expect, vi } from 'vitest';
-import { render, waitFor } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import React from 'react';
 
 const writeRendererLogInvoke = vi.hoisted(() => vi.fn(() => Promise.resolve()));
@@ -103,6 +103,27 @@ describe('HTMLRenderer', () => {
     expect(iframe).toBeInTheDocument();
     expect(iframe?.getAttribute('sandbox')).toContain('allow-scripts');
     expect(iframe?.getAttribute('sandbox')).not.toContain('allow-same-origin');
+  });
+
+  it('waits for streamed HTML to settle before remounting the preview', () => {
+    vi.useFakeTimers();
+    try {
+      const { container, rerender } = render(<HTMLRenderer content='<p>first</p>' />);
+      const iframe = container.querySelector('iframe');
+      const firstSrc = iframe?.getAttribute('srcdoc');
+      expect(firstSrc).toContain('first');
+
+      rerender(<HTMLRenderer content='<p>second</p>' />);
+      expect(iframe?.getAttribute('srcdoc')).toBe(firstSrc);
+
+      act(() => vi.advanceTimersByTime(149));
+      expect(iframe?.getAttribute('srcdoc')).toBe(firstSrc);
+
+      act(() => vi.advanceTimersByTime(1));
+      expect(iframe?.getAttribute('srcdoc')).toContain('second');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('loads clean local HTML files through file URL in Electron', () => {

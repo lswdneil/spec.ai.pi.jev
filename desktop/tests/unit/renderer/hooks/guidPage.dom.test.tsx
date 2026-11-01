@@ -760,22 +760,27 @@ describe('GuidInputCard prefill focus', () => {
         <GuidInputCard {...guidInputCardProps} focusRequestKey='desktop-prefill' />
       </LayoutContext.Provider>
     );
-    await waitFor(() => expect(textarea).toHaveFocus());
-    expect((textarea as HTMLTextAreaElement).selectionStart).toBe(guidInputCardProps.input.length);
+    expect(outsideTarget).toHaveFocus();
 
     outsideTarget.focus();
     rerender(
       <LayoutContext.Provider value={{ isMobile: false, siderCollapsed: false, setSiderCollapsed: vi.fn() }}>
-        <GuidInputCard {...guidInputCardProps} focusRequestKey='desktop-prefill' />
+        <GuidInputCard {...guidInputCardProps} focusRequestKey='desktop-prefill-2' />
       </LayoutContext.Provider>
     );
-    expect(outsideTarget).toHaveFocus();
+    await waitFor(() => expect(textarea).toHaveFocus());
+    expect((textarea as HTMLTextAreaElement).selectionStart).toBe(guidInputCardProps.input.length);
 
     rerender(
       <LayoutContext.Provider value={{ isMobile: false, siderCollapsed: false, setSiderCollapsed: vi.fn() }}>
-        <GuidInputCard {...guidInputCardProps} input={`${guidInputCardProps.input}!`} />
+        <GuidInputCard
+          {...guidInputCardProps}
+          input={`${guidInputCardProps.input}!`}
+          focusRequestKey='desktop-prefill-2'
+        />
       </LayoutContext.Provider>
     );
+    outsideTarget.focus();
     expect(outsideTarget).toHaveFocus();
     outsideTarget.remove();
   });

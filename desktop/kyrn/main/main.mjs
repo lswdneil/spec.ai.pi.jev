@@ -14,6 +14,9 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(process.env.KYRN_ROOT || join(here, '../../../KYRN'));
 const launcher = join(root, 'kyrn/bin/kyrn');
 const run = promisify(execFile);
+const gitEnv = () =>
+  Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.toUpperCase().startsWith('GIT_')));
+const gitSafety = ['-c', 'core.fsmonitor=false', '-c', 'core.quotepath=false'];
 app.setName('KYRN');
 app.setPath('userData', join(app.getPath('appData'), 'KYRN Desktop'));
 if (!app.requestSingleInstanceLock()) app.exit(0);
@@ -164,8 +167,13 @@ const handlers = {
             emit(session, { type: 'kyrn_state', busy: session.busy });
           }
         })
-        .catch((error) => {
-          session.busy = false;
+        .catch(async (error) => {
+          try {
+            const state = await session.host.send({ type: 'get_state' });
+            session.busy = state.isStreaming || state.isCompacting;
+          } catch {
+            // The host may be gone; keep the last known busy state.
+          }
           emit(session, { type: 'kyrn_error', message: error.message });
         })
         .finally(() => {
@@ -216,10 +224,11 @@ const handlers = {
   },
   files: async ({ id }) => {
     const { cwd } = requireSession(id);
-    const result = await run('git', ['ls-files', '-co', '--exclude-standard'], {
+    const result = await run('git', [...gitSafety, 'ls-files', '-co', '--exclude-standard'], {
       cwd,
       timeout: 10000,
       maxBuffer: 2 * 1024 * 1024,
+      env: { ...gitEnv(), GIT_OPTIONAL_LOCKS: '0', GIT_TERMINAL_PROMPT: '0', LC_ALL: 'C' },
     });
     return [...new Set(result.stdout.split('\n'))]
       .filter((path) => path && !/(^|\/)(\.env($|\.)|auth\.json$|node_modules\/)/.test(path))
@@ -229,8 +238,13 @@ const handlers = {
   save: async ({ id, path, text, revision }) => saveProjectFile(requireSession(id).cwd, path, text, revision),
   diff: async ({ id }) => {
     const { cwd } = requireSession(id);
-    const opts = { cwd, timeout: 10000, maxBuffer: 4 * 1024 * 1024 };
-    const args = ['--no-pager', 'diff', '--no-ext-diff', '--no-textconv'];
+    const opts = {
+      cwd,
+      timeout: 10000,
+      maxBuffer: 4 * 1024 * 1024,
+      env: { ...gitEnv(), GIT_OPTIONAL_LOCKS: '0', GIT_TERMINAL_PROMPT: '0', LC_ALL: 'C' },
+    };
+    const args = ['--no-pager', ...gitSafety, 'diff', '--no-ext-diff', '--no-textconv'];
     const paths = [
       '--',
       '.',

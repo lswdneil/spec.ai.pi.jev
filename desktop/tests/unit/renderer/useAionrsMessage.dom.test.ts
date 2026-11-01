@@ -11,15 +11,21 @@ import { getConversationOrNull } from '@/renderer/pages/conversation/utils/conve
 import { resetConversationTurnClockForTests } from '@/renderer/pages/conversation/utils/conversationTurnClock';
 import type { IResponseMessage } from '@/common/adapter/ipcBridge';
 
-const { addOrUpdateMessageMock, conversationUpdateInvokeMock, responseStreamOnMock, responseStreamHandlerRef } =
-  vi.hoisted(() => ({
-    addOrUpdateMessageMock: vi.fn(),
-    conversationUpdateInvokeMock: vi.fn(),
-    responseStreamOnMock: vi.fn(),
-    responseStreamHandlerRef: {
-      current: undefined as ((message: IResponseMessage) => void) | undefined,
-    },
-  }));
+const {
+  addOrUpdateMessageMock,
+  conversationUpdateInvokeMock,
+  processLocalCronResponseMock,
+  responseStreamOnMock,
+  responseStreamHandlerRef,
+} = vi.hoisted(() => ({
+  addOrUpdateMessageMock: vi.fn(),
+  conversationUpdateInvokeMock: vi.fn(),
+  processLocalCronResponseMock: vi.fn(),
+  responseStreamOnMock: vi.fn(),
+  responseStreamHandlerRef: {
+    current: undefined as ((message: IResponseMessage) => void) | undefined,
+  },
+}));
 
 vi.mock('@/renderer/pages/conversation/Messages/hooks', () => ({
   useAddOrUpdateMessage: () => addOrUpdateMessageMock,
@@ -46,11 +52,16 @@ vi.mock('@/common', () => ({
   },
 }));
 
+vi.mock('@/renderer/pages/conversation/platforms/aionrs/localCronCommands', () => ({
+  processLocalCronResponse: processLocalCronResponseMock,
+}));
+
 describe('useAionrsMessage turn clock', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     resetConversationTurnClockForTests();
     conversationUpdateInvokeMock.mockResolvedValue(undefined);
+    processLocalCronResponseMock.mockResolvedValue({ systemResponses: [] });
     responseStreamHandlerRef.current = undefined;
   });
 
@@ -197,5 +208,45 @@ describe('useAionrsMessage turn clock', () => {
     });
     expect(result.current.turnStartedAtMs).toBe(300_000);
     nowSpy.mockRestore();
+  });
+
+  it('drops buffered content after a failed cron post-processing pass', async () => {
+    vi.mocked(getConversationOrNull).mockResolvedValue(null);
+    processLocalCronResponseMock.mockRejectedValue(new Error('cron post-processing failed'));
+
+    const { result } = renderHook(() => useAionrsMessage('conv-1'));
+    await waitFor(() => {
+      expect(result.current.hasHydratedRunningState).toBe(true);
+    });
+
+    act(() => {
+      responseStreamHandlerRef.current?.({
+        type: 'content',
+        data: 'reply with cron metadata',
+        msg_id: 'msg-1',
+        conversation_id: 'conv-1',
+      } as unknown as IResponseMessage);
+    });
+    act(() => {
+      responseStreamHandlerRef.current?.({
+        type: 'finish',
+        data: null,
+        msg_id: 'msg-1',
+        conversation_id: 'conv-1',
+      } as unknown as IResponseMessage);
+    });
+
+    await waitFor(() => expect(processLocalCronResponseMock).toHaveBeenCalledTimes(1));
+
+    act(() => {
+      responseStreamHandlerRef.current?.({
+        type: 'finish',
+        data: null,
+        msg_id: 'msg-1',
+        conversation_id: 'conv-1',
+      } as unknown as IResponseMessage);
+    });
+
+    expect(processLocalCronResponseMock).toHaveBeenCalledTimes(1);
   });
 });
