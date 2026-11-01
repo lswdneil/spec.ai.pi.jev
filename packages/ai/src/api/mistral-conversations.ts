@@ -20,6 +20,7 @@ import { headersToRecord } from "../utils/headers.ts";
 import { parseStreamingJson, parseToolCallArguments } from "../utils/json-parse.ts";
 import { getPiUserAgent } from "../utils/pi-user-agent.ts";
 import { sanitizeSurrogates } from "../utils/sanitize-unicode.ts";
+import { assertPendingSseBuffer, assertSseEventLength } from "../utils/sse-limits.ts";
 import { getSystemMessageText, renderSystemMessageUpdate } from "../utils/text.ts";
 import { getCurrentTools, resolveTranscript } from "../utils/transcript.ts";
 import { getJsonSchemaToolParameters, resolveJsonSchemaStrictSampling } from "./constrained-sampling.ts";
@@ -477,17 +478,21 @@ async function* readMistralEvents(
 
 			let boundary = findMistralEventBoundary(buffer);
 			while (boundary) {
+				assertSseEventLength(boundary.index);
 				const event = parseMistralEvent(buffer.slice(0, boundary.index));
 				buffer = buffer.slice(boundary.index + boundary.length);
 				if (event === MISTRAL_STREAM_DONE) return;
 				if (event) yield event;
 				boundary = findMistralEventBoundary(buffer);
 			}
+			assertPendingSseBuffer(buffer);
 
 			if (done) break;
 		}
 
 		if (buffer.trim()) {
+			assertSseEventLength(buffer.length);
+			assertPendingSseBuffer(buffer);
 			const event = parseMistralEvent(buffer);
 			if (event !== MISTRAL_STREAM_DONE && event) yield event;
 		}

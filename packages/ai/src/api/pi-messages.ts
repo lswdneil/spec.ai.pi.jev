@@ -29,6 +29,7 @@ import { AssistantMessageEventStream } from "../utils/event-stream.ts";
 import { headersToRecord, providerHeadersToRecord } from "../utils/headers.ts";
 import { parseStreamingJson } from "../utils/json-parse.ts";
 import { getProviderEnvValue } from "../utils/provider-env.ts";
+import { assertPendingSseBuffer, assertSseEventLength } from "../utils/sse-limits.ts";
 
 export interface PiMessagesOptions extends StreamOptions {
 	reasoning?: ThinkingLevel;
@@ -286,6 +287,7 @@ async function* readPiMessagesEvents(stream: ReadableStream<Uint8Array>): AsyncG
 
 			let split = buffer.indexOf("\n\n");
 			while (split !== -1) {
+				assertSseEventLength(split);
 				const event = parsePiMessagesEvent(buffer.slice(0, split));
 				if (event) {
 					yield event;
@@ -293,6 +295,7 @@ async function* readPiMessagesEvents(stream: ReadableStream<Uint8Array>): AsyncG
 				buffer = buffer.slice(split + 2);
 				split = buffer.indexOf("\n\n");
 			}
+			assertPendingSseBuffer(buffer);
 
 			if (done) {
 				break;
@@ -300,6 +303,8 @@ async function* readPiMessagesEvents(stream: ReadableStream<Uint8Array>): AsyncG
 		}
 
 		if (buffer.trim()) {
+			assertSseEventLength(buffer.length);
+			assertPendingSseBuffer(buffer);
 			const event = parsePiMessagesEvent(buffer);
 			if (event) {
 				yield event;

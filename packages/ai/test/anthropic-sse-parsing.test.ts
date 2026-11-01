@@ -5,6 +5,7 @@ import { stream as streamAnthropic } from "../src/api/anthropic-messages.ts";
 import { transformMessages } from "../src/api/transform-messages.ts";
 import { getModel, normalizeContext } from "../src/compat.ts";
 import type { Api, Model, ToolCall } from "../src/types.ts";
+import { MAX_SSE_EVENT_CHARS, MAX_SSE_LINE_CHARS } from "../src/utils/sse-limits.ts";
 
 function createSseResponse(events: Array<{ event: string; data: string }>): Response {
 	const body = events.map(({ event, data }) => `event: ${event}\ndata: ${data}\n`).join("\n");
@@ -110,6 +111,35 @@ function createResponseModelSseResponse(model: string, contentBlock: ResponseCon
 }
 
 describe("Anthropic raw SSE parsing", () => {
+	it("rejects oversized SSE lines and events before parsing JSON", async () => {
+		const model = getModel("anthropic", "claude-haiku-4-5");
+		const context = normalizeContext({ messages: [{ role: "user", content: "Hello", timestamp: 1 }] });
+		const oversizedLine = new Response(
+			`event: content_block_delta\ndata: ${"x".repeat(MAX_SSE_LINE_CHARS + 1)}\n\n`,
+			{
+				status: 200,
+				headers: { "content-type": "text/event-stream" },
+			},
+		);
+		const lineResult = await streamAnthropic(model, context, {
+			client: createFakeAnthropicClient(oversizedLine),
+		}).result();
+		expect(lineResult.stopReason).toBe("error");
+		expect(lineResult.errorMessage).toContain("SSE line exceeds");
+
+		const line = `data: ${"x".repeat(900_000)}`;
+		const oversizedEvent = new Response(`${Array.from({ length: 5 }, () => line).join("\n")}\n\n`, {
+			status: 200,
+			headers: { "content-type": "text/event-stream" },
+		});
+		const eventResult = await streamAnthropic(model, context, {
+			client: createFakeAnthropicClient(oversizedEvent),
+		}).result();
+		expect(eventResult.stopReason).toBe("error");
+		expect(eventResult.errorMessage).toContain("SSE event exceeds");
+		expect(MAX_SSE_EVENT_CHARS).toBeGreaterThan(MAX_SSE_LINE_CHARS);
+	});
+
 	it("forwards parsed provider stream events in order", async () => {
 		const model = getModel("anthropic", "claude-haiku-4-5");
 		const providerEvents: unknown[] = [];

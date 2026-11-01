@@ -45,6 +45,7 @@ import { getPiUserAgent } from "../utils/pi-user-agent.ts";
 import { getProviderEnvValue } from "../utils/provider-env.ts";
 import { retryProviderRequest } from "../utils/provider-retry.ts";
 import { sanitizeSurrogates } from "../utils/sanitize-unicode.ts";
+import { assertPendingSseBuffer, assertSseEventLength, assertSseLineLength } from "../utils/sse-limits.ts";
 import { getSystemMessageText, renderSystemMessageUpdate } from "../utils/text.ts";
 import {
 	getCurrentTools,
@@ -390,6 +391,7 @@ interface SseDecoderState {
 	event: string | null;
 	data: string[];
 	raw: string[];
+	size: number;
 }
 
 const ANTHROPIC_MESSAGE_EVENTS: ReadonlySet<string> = new Set([
@@ -414,6 +416,7 @@ function flushSseEvent(state: SseDecoderState): ServerSentEvent | null {
 	state.event = null;
 	state.data = [];
 	state.raw = [];
+	state.size = 0;
 	return event;
 }
 
@@ -422,6 +425,9 @@ function decodeSseLine(line: string, state: SseDecoderState): ServerSentEvent | 
 		return flushSseEvent(state);
 	}
 
+	assertSseLineLength(line.length);
+	state.size += line.length + 1;
+	assertSseEventLength(state.size);
 	state.raw.push(line);
 	if (line.startsWith(":")) {
 		return null;
@@ -478,7 +484,7 @@ async function* iterateSseMessages(
 ): AsyncGenerator<ServerSentEvent> {
 	const reader = body.getReader();
 	const decoder = new TextDecoder();
-	const state: SseDecoderState = { event: null, data: [], raw: [] };
+	const state: SseDecoderState = { event: null, data: [], raw: [], size: 0 };
 	let buffer = "";
 
 	try {
@@ -502,6 +508,7 @@ async function* iterateSseMessages(
 				}
 				consumed = consumeLine(buffer);
 			}
+			assertPendingSseBuffer(buffer);
 		}
 
 		buffer += decoder.decode();

@@ -31,6 +31,7 @@ import { AssistantMessageEventStream } from "../utils/event-stream.ts";
 import { headersToRecord } from "../utils/headers.ts";
 import { resolveHttpProxyUrlForTarget } from "../utils/node-http-proxy.ts";
 import { getPiUserAgent } from "../utils/pi-user-agent.ts";
+import { assertPendingSseBuffer, assertSseEventLength } from "../utils/sse-limits.ts";
 import { getSystemMessageText } from "../utils/text.ts";
 import {
 	getDeclaredTools,
@@ -823,6 +824,7 @@ async function* parseSSE(response: Response, signal?: AbortSignal): AsyncGenerat
 
 			let idx = buffer.indexOf("\n\n");
 			while (idx !== -1) {
+				assertSseEventLength(idx);
 				const chunk = buffer.slice(0, idx);
 				buffer = buffer.slice(idx + 2);
 
@@ -845,6 +847,7 @@ async function* parseSSE(response: Response, signal?: AbortSignal): AsyncGenerat
 				}
 				idx = buffer.indexOf("\n\n");
 			}
+			assertPendingSseBuffer(buffer);
 
 			if (done) break;
 		}
