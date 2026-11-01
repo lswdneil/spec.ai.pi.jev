@@ -58,10 +58,13 @@ function createConsoleMessageEvent({
 }
 
 describe('HTMLViewer', () => {
-  it('renders iframe with HTML content', () => {
+  it('renders iframe content through srcDoc in a sandbox without same-origin access', () => {
     const { container } = render(<HTMLViewer content='<h1>Test</h1>' />);
     const iframe = container.querySelector('iframe');
     expect(iframe).toBeInTheDocument();
+    expect(iframe?.getAttribute('sandbox')).toContain('allow-scripts');
+    expect(iframe?.getAttribute('sandbox')).not.toContain('allow-same-origin');
+    expect(iframe?.getAttribute('srcdoc')).toContain('<h1>Test</h1>');
   });
 
   it('hides toolbar when hideToolbar is true', () => {
@@ -71,7 +74,7 @@ describe('HTMLViewer', () => {
 
   it('accepts file_path prop', () => {
     const { container } = render(<HTMLViewer content='<h1>Test</h1>' file_path='/test/index.html' />);
-    expect(container.querySelector('iframe')).toBeInTheDocument();
+    expect(container.querySelector('iframe')?.getAttribute('srcdoc')).toContain('<base href="file:///test/">');
   });
 });
 

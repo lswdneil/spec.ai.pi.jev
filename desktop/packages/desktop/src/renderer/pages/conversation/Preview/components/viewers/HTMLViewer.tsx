@@ -6,7 +6,7 @@
 
 import { Message } from '@/renderer/ui/toast';
 import MonacoEditor from '@monaco-editor/react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface HTMLPreviewProps {
@@ -28,6 +28,132 @@ interface SelectedElement {
  * - 支持元素选择器（类似 DevTools）
  * - 支持双向定位：预览 ↔ 代码
  */
+const isSelectedElement = (value: unknown): value is SelectedElement => {
+  if (!value || typeof value !== 'object') return false;
+  const element = value as Record<string, unknown>;
+  return (
+    typeof element.path === 'string' &&
+    typeof element.html === 'string' &&
+    (element.startLine === undefined || typeof element.startLine === 'number') &&
+    (element.endLine === undefined || typeof element.endLine === 'number')
+  );
+};
+
+const escapeHtmlAttribute = (value: string): string =>
+  value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
+
+const INSPECTOR_SCRIPT = `
+      (function() {
+        let hoveredElement = null;
+        let overlay = null;
+
+        function createOverlay() {
+          overlay = document.createElement('div');
+          overlay.style.position = 'absolute';
+          overlay.style.border = '2px solid #2196F3';
+          overlay.style.backgroundColor = 'rgba(33, 150, 243, 0.1)';
+          overlay.style.pointerEvents = 'none';
+          overlay.style.zIndex = '999999';
+          overlay.style.boxSizing = 'border-box';
+          document.body.appendChild(overlay);
+        }
+
+        function updateOverlay(element) {
+          if (!overlay) createOverlay();
+          const rect = element.getBoundingClientRect();
+          overlay.style.top = rect.top + window.scrollY + 'px';
+          overlay.style.left = rect.left + window.scrollX + 'px';
+          overlay.style.width = rect.width + 'px';
+          overlay.style.height = rect.height + 'px';
+          overlay.style.display = 'block';
+        }
+
+        function hideOverlay() {
+          if (overlay) overlay.style.display = 'none';
+        }
+
+        function getElementPath(element) {
+          const path = [];
+          while (element && element.nodeType === Node.ELEMENT_NODE) {
+            let selector = element.nodeName.toLowerCase();
+            if (element.id) {
+              selector += '#' + element.id;
+              path.unshift(selector);
+              break;
+            }
+            let sibling = element;
+            let nth = 1;
+            while (sibling.previousElementSibling) {
+              sibling = sibling.previousElementSibling;
+              if (sibling.nodeName.toLowerCase() === selector) nth++;
+            }
+            if (nth > 1) selector += ':nth-child(' + nth + ')';
+            path.unshift(selector);
+            element = element.parentElement;
+          }
+          return path.join(' > ');
+        }
+
+        document.addEventListener('mousemove', function(e) {
+          hoveredElement = e.target;
+          if (hoveredElement && hoveredElement !== document.body && hoveredElement !== document.documentElement) {
+            updateOverlay(hoveredElement);
+          } else {
+            hideOverlay();
+          }
+        });
+
+        document.addEventListener('mouseleave', hideOverlay);
+        document.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (hoveredElement && hoveredElement !== document.body && hoveredElement !== document.documentElement) {
+            window.parent.postMessage({
+              type: 'element-selected',
+              data: { path: getElementPath(hoveredElement), html: hoveredElement.outerHTML }
+            }, '*');
+          }
+        });
+
+        document.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+          if (hoveredElement && hoveredElement !== document.body && hoveredElement !== document.documentElement) {
+            window.parent.postMessage({
+              type: 'element-contextmenu',
+              data: {
+                element: { path: getElementPath(hoveredElement), html: hoveredElement.outerHTML },
+                x: e.clientX,
+                y: e.clientY
+              }
+            }, '*');
+          }
+        });
+      })();
+`;
+
+const buildPreviewDocument = (html: string, filePath: string | undefined, inspectorMode: boolean): string => {
+  let documentHtml = html;
+  if (filePath) {
+    const fileDir = filePath.substring(0, filePath.lastIndexOf('/') + 1);
+    const baseUrl = escapeHtmlAttribute(`file://${fileDir}`);
+    if (!documentHtml.match(/<base\s+href=/i)) {
+      if (documentHtml.match(/<head>/i)) {
+        documentHtml = documentHtml.replace(/<head>/i, `<head><base href="${baseUrl}">`);
+      } else if (documentHtml.match(/<html>/i)) {
+        documentHtml = documentHtml.replace(/<html>/i, `<html><head><base href="${baseUrl}"></head>`);
+      } else {
+        documentHtml = `<head><base href="${baseUrl}"></head>${documentHtml}`;
+      }
+    }
+  }
+
+  if (!inspectorMode) return documentHtml;
+  const inspector = `<script>${INSPECTOR_SCRIPT}</script>`;
+  return /<\/body\s*>/i.test(documentHtml)
+    ? documentHtml.replace(/<\/body\s*>/i, `${inspector}</body>`)
+    : `${documentHtml}${inspector}`;
+};
+
 const HTMLPreview: React.FC<HTMLPreviewProps> = ({ content, file_path, hideToolbar = false }) => {
   const { t } = useTranslation();
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -57,195 +183,37 @@ const HTMLPreview: React.FC<HTMLPreviewProps> = ({ content, file_path, hideToolb
     return () => observer.disconnect();
   }, []);
 
-  // 初始化 iframe 内容
-  useEffect(() => {
-    if (!iframeRef.current) return;
-
-    const iframe = iframeRef.current;
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-
-    if (!iframeDoc) return;
-
-    // 写入 HTML 内容 / Write HTML content
-    iframeDoc.open();
-
-    // 注入 <base> 标签以支持相对路径 / Inject <base> tag to support relative paths
-    let finalHtml = htmlCode;
-    if (file_path) {
-      // 获取文件所在目录 / Get directory of the file
-      const fileDir = file_path.substring(0, file_path.lastIndexOf('/') + 1);
-      // 构造 file:// 协议的 base URL / Construct file:// protocol base URL
-      const base_url = `file://${fileDir}`;
-
-      // 检查是否已有 base 标签 / Check if base tag exists
-      if (!finalHtml.match(/<base\s+href=/i)) {
-        if (finalHtml.match(/<head>/i)) {
-          finalHtml = finalHtml.replace(/<head>/i, `<head><base href="${base_url}">`);
-        } else if (finalHtml.match(/<html>/i)) {
-          finalHtml = finalHtml.replace(/<html>/i, `<html><head><base href="${base_url}"></head>`);
-        } else {
-          finalHtml = `<head><base href="${base_url}"></head>${finalHtml}`;
-        }
-      }
-    }
-
-    iframeDoc.write(finalHtml);
-    iframeDoc.close();
-
-    // 注入元素选择器脚本
-    if (inspectorMode) {
-      injectInspectorScript(iframeDoc);
-    }
-  }, [htmlCode, inspectorMode]);
-
-  /**
-   * 注入元素选择器脚本到 iframe
-   */
-  const injectInspectorScript = (iframeDoc: Document) => {
-    const script = iframeDoc.createElement('script');
-    script.textContent = `
-      (function() {
-        let hoveredElement = null;
-        let overlay = null;
-
-        // 创建高亮遮罩
-        function createOverlay() {
-          overlay = document.createElement('div');
-          overlay.style.position = 'absolute';
-          overlay.style.border = '2px solid #2196F3';
-          overlay.style.backgroundColor = 'rgba(33, 150, 243, 0.1)';
-          overlay.style.pointerEvents = 'none';
-          overlay.style.zIndex = '999999';
-          overlay.style.boxSizing = 'border-box';
-          document.body.appendChild(overlay);
-        }
-
-        // 更新遮罩位置
-        function updateOverlay(element) {
-          if (!overlay) createOverlay();
-          const rect = element.getBoundingClientRect();
-          overlay.style.top = rect.top + window.scrollY + 'px';
-          overlay.style.left = rect.left + window.scrollX + 'px';
-          overlay.style.width = rect.width + 'px';
-          overlay.style.height = rect.height + 'px';
-          overlay.style.display = 'block';
-        }
-
-        // 隐藏遮罩
-        function hideOverlay() {
-          if (overlay) {
-            overlay.style.display = 'none';
-          }
-        }
-
-        // 获取元素的 CSS 选择器路径
-        function getElementPath(element) {
-          const path = [];
-          while (element && element.nodeType === Node.ELEMENT_NODE) {
-            let selector = element.nodeName.toLowerCase();
-            if (element.id) {
-              selector += '#' + element.id;
-              path.unshift(selector);
-              break;
-            } else {
-              let sibling = element;
-              let nth = 1;
-              while (sibling.previousElementSibling) {
-                sibling = sibling.previousElementSibling;
-                if (sibling.nodeName.toLowerCase() === selector) {
-                  nth++;
-                }
-              }
-              if (nth > 1) {
-                selector += ':nth-child(' + nth + ')';
-              }
-            }
-            path.unshift(selector);
-            element = element.parentElement;
-          }
-          return path.join(' > ');
-        }
-
-        // 鼠标移动事件
-        document.addEventListener('mousemove', function(e) {
-          hoveredElement = e.target;
-          if (hoveredElement && hoveredElement !== document.body && hoveredElement !== document.documentElement) {
-            updateOverlay(hoveredElement);
-          } else {
-            hideOverlay();
-          }
-        });
-
-        // 鼠标离开事件
-        document.addEventListener('mouseleave', function() {
-          hideOverlay();
-        });
-
-        // 点击事件 - 选中元素
-        document.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          if (hoveredElement && hoveredElement !== document.body && hoveredElement !== document.documentElement) {
-            const elementInfo = {
-              path: getElementPath(hoveredElement),
-              html: hoveredElement.outerHTML,
-            };
-
-            // 发送消息到父窗口
-            window.parent.postMessage({
-              type: 'element-selected',
-              data: elementInfo
-            }, '*');
-          }
-        });
-
-        // 右键菜单事件
-        document.addEventListener('contextmenu', function(e) {
-          e.preventDefault();
-
-          if (hoveredElement && hoveredElement !== document.body && hoveredElement !== document.documentElement) {
-            const elementInfo = {
-              path: getElementPath(hoveredElement),
-              html: hoveredElement.outerHTML,
-            };
-
-            // 发送消息到父窗口
-            window.parent.postMessage({
-              type: 'element-contextmenu',
-              data: {
-                element: elementInfo,
-                x: e.clientX,
-                y: e.clientY
-              }
-            }, '*');
-          }
-        });
-      })();
-    `;
-    iframeDoc.body.appendChild(script);
-  };
+  const previewDocument = useMemo(
+    () => buildPreviewDocument(htmlCode, file_path, inspectorMode),
+    [file_path, htmlCode, inspectorMode]
+  );
 
   /**
    * 监听 iframe 消息
    */
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data.type === 'element-selected') {
-        const elementInfo: SelectedElement = event.data.data;
+      if (event.source !== iframeRef.current?.contentWindow) return;
+      const payload = event.data as { type?: unknown; data?: unknown } | null;
+      if (!payload || typeof payload !== 'object') return;
+
+      if (payload.type === 'element-selected' && isSelectedElement(payload.data)) {
+        const elementInfo = payload.data;
         setSelectedElement(elementInfo);
         messageApi.info(t('preview.html.elementSelected', { path: elementInfo.path }));
-      } else if (event.data.type === 'element-contextmenu') {
-        const { element, x, y } = event.data.data;
+      } else if (payload.type === 'element-contextmenu') {
+        const data = payload.data as { element?: unknown; x?: unknown; y?: unknown } | null;
+        if (!data || !isSelectedElement(data.element)) return;
+        if (typeof data.x !== 'number' || typeof data.y !== 'number') return;
 
         // 计算上下文菜单位置（相对于父窗口）
         const iframe = iframeRef.current;
         if (iframe) {
           const iframeRect = iframe.getBoundingClientRect();
           setContextMenu({
-            x: iframeRect.left + x,
-            y: iframeRect.top + y,
-            element: element,
+            x: iframeRect.left + data.x,
+            y: iframeRect.top + data.y,
+            element: data.element,
           });
         }
       }
@@ -402,8 +370,9 @@ const HTMLPreview: React.FC<HTMLPreviewProps> = ({ content, file_path, hideToolb
         <div className={`${editMode ? 'flex-1' : 'w-full'} overflow-auto bg-white`}>
           <iframe
             ref={iframeRef}
+            srcDoc={previewDocument}
             className='w-full h-full border-0'
-            sandbox='allow-scripts allow-same-origin'
+            sandbox='allow-scripts allow-forms allow-popups allow-modals'
             title={t('preview.html.frameTitle')}
           />
         </div>
