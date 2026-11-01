@@ -26,7 +26,7 @@ import {
   switchMcpServer,
 } from '../agent/kyrn/capabilities/mcp';
 import { LessonsStore, lessonsProject, type LessonsProject } from '../agent/kyrn/lessons';
-import { listFolder, readFolder } from '../agent/kyrn/folderFiles';
+import { authorizeFolder, listFolder } from '../agent/kyrn/folderFiles';
 import { activityPage, modelLevels } from '../agent/kyrn/telemetry';
 import { findRegistration, initializeKyrn, recheckKyrn, type OwnCommand } from '../agent/kyrn/product';
 import { ownLauncher } from '../agent/kyrn/windows/launcherCommand';
@@ -218,12 +218,15 @@ export function initKyrnBridge(): void {
     result(async () => lessons.change(await projectOf(change.conversationId), change))
   );
   // A native conversation's panel reads by its folder: it has no AionCore conversation (common/kyrn/folderBridge.ts).
-  const folderProject = (cwd: unknown): LessonsProject => lessonsProject(store, '', readFolder(cwd));
-  kyrnFolderBridge.lessons.provider(({ cwd }) => result(() => lessons.view(folderProject(cwd))));
+  const folderProject = async (cwd: unknown): Promise<LessonsProject> =>
+    lessonsProject(store, '', await authorizeFolder(store, cwd));
+  kyrnFolderBridge.lessons.provider(({ cwd }) => result(async () => lessons.view(await folderProject(cwd))));
   kyrnFolderBridge.lessonsChange.provider(({ cwd, ...change }) =>
-    result(() => lessons.change(folderProject(cwd), change))
+    result(async () => lessons.change(await folderProject(cwd), change))
   );
-  kyrnFolderBridge.files.provider(({ cwd, path }) => result(() => listFolder(readFolder(cwd), path)));
+  kyrnFolderBridge.files.provider(({ cwd, path }) =>
+    result(async () => listFolder(await authorizeFolder(store, cwd), path))
+  );
   const imports = importService({
     cli: importCli(harness),
     // A conversation deleted since it was made is no error here: the import makes a new one.
