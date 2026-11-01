@@ -323,6 +323,30 @@ describe("Pico JsonlStorage publication and recovery", () => {
 		expect(await storage.conversation(ROOT_CONVERSATION_ID, context)).toEqual({ id: ROOT_CONVERSATION_ID });
 	});
 
+	it("keeps uncommitted minted IDs ahead across reopen", async () => {
+		const directory = await tempDirectory();
+		const storage = await openStorage(directory);
+		const first = await storage.mintId<EntryId>();
+		const second = await storage.mintId<EntryId>();
+		await storage.close(context);
+
+		const reopened = await openStorage(directory);
+		const afterReopen = await reopened.mintId<EntryId>();
+
+		expect(first).toBe(2);
+		expect(second).toBe(3);
+		expect(afterReopen).toBeGreaterThan(second);
+	});
+
+	it("serializes concurrent minting across reservation-block writes", async () => {
+		const storage = await createStorage();
+		const ids = await Promise.all(Array.from({ length: 1025 }, () => storage.mintId<EntryId>()));
+
+		expect(new Set(ids).size).toBe(ids.length);
+		expect(Math.min(...ids)).toBe(2);
+		expect(Math.max(...ids)).toBe(1026);
+	});
+
 	it("publishes every commit before reclaiming current-only document and terminal-task sidecars", async () => {
 		const directory = await tempDirectory();
 		const storage = await openStorage(directory);
@@ -417,8 +441,8 @@ describe("Pico JsonlStorage publication and recovery", () => {
 		const env = new InstrumentedEnv({ cwd: directory });
 		const storage = await openStorage(directory, env);
 		await createRoot(storage);
-		env.clear();
 		const id = await storage.mintId<EntryId>();
+		env.clear();
 		await expect(
 			storage.commit(
 				[

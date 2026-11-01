@@ -430,6 +430,12 @@ export class MemoryStorage implements Storage {
 		return idFromNumber<I>(this.nextId++);
 	}
 
+	/** Next candidate implied by stored records, used by persistent wrappers to preserve the ID floor. */
+	nextIdFloor(): number {
+		this.assertOpen();
+		return this.nextId;
+	}
+
 	async conversation(id: ConversationId, _context: Context): Promise<ConversationRecord | undefined> {
 		this.assertOpen();
 		const value = this.state.conversations.get(id);

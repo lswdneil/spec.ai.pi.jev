@@ -1,4 +1,5 @@
 import type { Context, JsonValue } from "@earendil-works/chord";
+import { BACKGROUND_CONTEXT } from "@earendil-works/chord/context";
 import type { FileError, FileSystem } from "../../env/index.ts";
 import { StorageRequestError } from "../../errors.ts";
 import { idFromNumber, seqFromNumber } from "../../ids.ts";
@@ -28,6 +29,9 @@ import { MemoryStorage } from "../memory.ts";
 
 const FORMAT_VERSION = 1;
 const MAIN_FILE = "main.jsonl";
+const IDS_FILE = "ids.json";
+const IDS_TEMP_FILE = "ids.json.tmp";
+const ID_RESERVATION_BLOCK = 1024;
 const RECLAIM_SUFFIX = ".reclaim";
 const textDecoder = new TextDecoder("utf-8", { fatal: true });
 
@@ -74,6 +78,13 @@ type EncodedCommit = {
 	readonly sidecars: ReadonlyMap<string, string>;
 };
 
+type IdReservation = {
+	readonly format: typeof FORMAT_VERSION;
+	readonly type: "ids";
+	/** Highest ID that may have been handed out from this storage. */
+	readonly reservedThrough: number;
+};
+
 export type JsonlStorageOptions = {
 	/** Flush every affected sidecar before appending the main marker. Defaults to false. */
 	readonly fsync?: boolean;
@@ -109,7 +120,7 @@ const isCurrentOnly = (record: DocumentCreate): boolean =>
 
 const sidecarKey = (file: string, seq: Seq, ordinal: number): string => JSON.stringify([file, seq, ordinal]);
 
-const jsonLine = (value: MainMarker | SidecarRecord): string => `${JSON.stringify(value)}\n`;
+const jsonLine = (value: MainMarker | SidecarRecord | IdReservation): string => `${JSON.stringify(value)}\n`;
 
 const errorFromFile = (action: string, error: FileError): Error =>
 	new Error(`JSONL ${action} failed: ${error.message}`, { cause: error });
@@ -243,17 +254,28 @@ export class JsonlStorage implements Storage {
 	private readonly fs: FileSystem;
 	private readonly directory: string;
 	private readonly mainPath: string;
+	private readonly idsPath: string;
 	private readonly fsync: boolean;
 	private readonly memory = new MemoryStorage();
 	private readonly currentOnlyDocuments = new Set<DocumentId>();
 	private readonly liveTaskSidecars = new Set<TaskId>();
 	private closed = false;
 	private poisonError: JsonlStoragePoisonedError | undefined;
+	private nextId = 2;
+	private reservedThrough = 1;
+	private idReservation: Promise<void> | undefined;
 
-	private constructor(fs: FileSystem, directory: string, mainPath: string, options: JsonlStorageOptions) {
+	private constructor(
+		fs: FileSystem,
+		directory: string,
+		mainPath: string,
+		idsPath: string,
+		options: JsonlStorageOptions,
+	) {
 		this.fs = fs;
 		this.directory = directory;
 		this.mainPath = mainPath;
+		this.idsPath = idsPath;
 		this.fsync = options.fsync ?? false;
 	}
 
@@ -270,7 +292,9 @@ export class JsonlStorage implements Storage {
 		if (!created.ok) throw errorFromFile("directory creation", created.error);
 		const mainPathResult = await fs.joinPath([absolute.value, MAIN_FILE], context);
 		if (!mainPathResult.ok) throw errorFromFile("path join", mainPathResult.error);
-		const storage = new JsonlStorage(fs, absolute.value, mainPathResult.value, options);
+		const idsPathResult = await fs.joinPath([absolute.value, IDS_FILE], context);
+		if (!idsPathResult.ok) throw errorFromFile("path join", idsPathResult.error);
+		const storage = new JsonlStorage(fs, absolute.value, mainPathResult.value, idsPathResult.value, options);
 		await storage.recover(context);
 		return storage;
 	}
@@ -301,13 +325,17 @@ export class JsonlStorage implements Storage {
 		const marker = await this.fs.appendFile(this.mainPath, encoded.marker, context);
 		if (!marker.ok) throw this.poison(errorFromFile(`append to ${MAIN_FILE}`, marker.error));
 		const seq = prepared.apply();
+		this.nextId = Math.max(this.nextId, this.memory.nextIdFloor());
 		this.adoptSidecarState(prepared.writes);
 		await this.reclaimSidecars(reclamations, context);
 		return seq;
 	}
 
 	async mintId<I extends Id<string>>(): Promise<I> {
-		return this.store.mintId<I>();
+		this.assertUsable();
+		if (!Number.isSafeInteger(this.nextId)) throw new Error("ID space is exhausted");
+		await this.reserveIds();
+		return idFromNumber<I>(this.nextId++);
 	}
 
 	async conversation(id: ConversationId, context: Context) {
@@ -761,6 +789,56 @@ export class JsonlStorage implements Storage {
 		for (const id of currentOnlyDocuments) this.currentOnlyDocuments.add(id);
 		for (const [id, live] of finalTaskIsLive) {
 			if (live) this.liveTaskSidecars.add(id);
+		}
+		await this.loadIdReservation(context);
+		this.nextId = Math.max(this.nextId, this.memory.nextIdFloor(), this.reservedThrough + 1);
+	}
+
+	private async loadIdReservation(context: Context): Promise<void> {
+		const read = await this.fs.readTextFile(this.idsPath, context);
+		if (!read.ok) {
+			if (read.error.code === "not_found") return;
+			throw errorFromFile(`read of ${IDS_FILE}`, read.error);
+		}
+		const value = parseJson(read.value, IDS_FILE);
+		if (
+			!isObject(value) ||
+			value.format !== FORMAT_VERSION ||
+			value.type !== "ids" ||
+			!isSafeInteger(value.reservedThrough) ||
+			value.reservedThrough < 1
+		) {
+			throw new JsonlCorruptionError(`Invalid ID reservation in ${IDS_FILE}`);
+		}
+		this.reservedThrough = value.reservedThrough;
+	}
+
+	private async persistIdReservation(reservedThrough: number): Promise<void> {
+		const temporary = await this.resolveFile(IDS_TEMP_FILE, BACKGROUND_CONTEXT);
+		const reservation: IdReservation = { format: FORMAT_VERSION, type: "ids", reservedThrough };
+		const written = await this.fs.writeFile(temporary, jsonLine(reservation), BACKGROUND_CONTEXT);
+		if (!written.ok) throw errorFromFile(`write of ${IDS_FILE}`, written.error);
+		if (this.fsync) {
+			const flushed = await this.fs.flushFile(temporary, BACKGROUND_CONTEXT);
+			if (!flushed.ok) throw errorFromFile(`flush of ${IDS_FILE}`, flushed.error);
+		}
+		const renamed = await this.fs.renameFile(temporary, this.idsPath, BACKGROUND_CONTEXT);
+		if (!renamed.ok) throw errorFromFile(`rename of ${IDS_FILE}`, renamed.error);
+	}
+
+	private async reserveIds(): Promise<void> {
+		while (this.nextId > this.reservedThrough) {
+			if (this.idReservation === undefined) {
+				const reservedThrough = Math.min(Number.MAX_SAFE_INTEGER, this.nextId + ID_RESERVATION_BLOCK - 1);
+				this.idReservation = this.persistIdReservation(reservedThrough)
+					.then(() => {
+						this.reservedThrough = Math.max(this.reservedThrough, reservedThrough);
+					})
+					.finally(() => {
+						this.idReservation = undefined;
+					});
+			}
+			await this.idReservation;
 		}
 	}
 
