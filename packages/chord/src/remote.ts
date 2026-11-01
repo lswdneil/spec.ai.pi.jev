@@ -261,8 +261,9 @@ export class RemoteBinding {
 			const error = fromWireError(frame.error!);
 			// Before the first hydration nobody could read anything: the binding fails instead of waiting forever.
 			if (!this.hydrated && this.stateOn) {
+				const hold = this.hold;
 				this.gone(error);
-				this.close();
+				if (hold !== undefined) hold.channel.release(hold.id);
 			} else this.host.report(error);
 			return;
 		}

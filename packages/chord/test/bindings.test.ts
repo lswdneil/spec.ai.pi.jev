@@ -258,11 +258,12 @@ describe("hydration over a link", () => {
 		serveMatrix(server);
 		const [down, up] = memoryLinkPair();
 		server.accept(down, { principal: { user: "u" } });
+		const link = new CountingLink(up);
 		const browser = createHost({
 			self: { kind: "host" },
 			name: "browser",
 			kind: "client",
-			upstream: { link: up, principal: { kind: "server" } },
+			upstream: { link, principal: { kind: "server" } },
 			onError: () => {},
 		});
 		const values = await browser.get(Matrix, { variant: "values" });
@@ -281,6 +282,7 @@ describe("hydration over a link", () => {
 		const broken = browser.hold(Matrix, { variant: "broken" });
 		await assert.rejects(broken.ready, (error) => isChordError(error, "invalid"));
 		assert.equal(broken.status, "gone");
+		await until(() => link.count("sent", "release") === 1);
 		await browser.close();
 		await server.close();
 	});
