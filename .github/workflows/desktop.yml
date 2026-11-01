@@ -54,10 +54,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
           cache: npm
@@ -72,7 +72,7 @@ jobs:
         run: node kyrn/npm/build.mjs --pack
 
       - name: Upload the tarball
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: spec.jev-tarball
           path: .artifacts/npm/spec.jev-*.tgz
@@ -111,10 +111,10 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Download spec.jev
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: spec.jev-tarball
           path: ${{ runner.temp }}/spec.jev
@@ -124,23 +124,23 @@ jobs:
         run: echo "MU_HARNESS_TARBALL=$(ls "$RUNNER_TEMP"/spec.jev/spec.jev-*.tgz)" >> "$GITHUB_ENV"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: latest
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
 
       - name: Setup uv for the Windows MCP build
         if: startsWith(matrix.platform, 'windows')
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
 
       # Windows-MCP needs Python 3.14 and a standalone executable; uv supplies the interpreter and PyInstaller
       # produces the single file that the packaged app seeds as the default Windows MCP server.
@@ -152,7 +152,7 @@ jobs:
           echo "MU_WINDOWS_MCP_BINARY=$(cygpath -w "$GITHUB_WORKSPACE/desktop/resources/bundled-mcp/windows-mcp.exe")" >> "$GITHUB_ENV"
 
       - name: Cache Electron downloads
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: |
             .cache/electron
@@ -188,7 +188,7 @@ jobs:
           "WindowsTargetPlatformVersion=10.0.19041.0" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Setup MSBuild
         if: startsWith(matrix.platform, 'windows')
-        uses: microsoft/setup-msbuild@v2
+        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2
         with:
           vs-version: '17.0'
 
@@ -309,7 +309,7 @@ jobs:
       # profile; the files that hold keys (.env, auth.json, models-store.json) stay out all the same.
       - name: Upload the conversation's report and logs
         if: failure() && steps.conversation.outcome == 'failure'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: conversation-${{ matrix.platform }}
           path: |
@@ -350,7 +350,7 @@ jobs:
 
       - name: Upload the native conversation's report and logs
         if: failure() && steps.native.outcome == 'failure'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: native-conversation-${{ matrix.platform }}
           path: |
@@ -397,7 +397,7 @@ jobs:
 
       - name: Upload the installed app's conversation report and logs
         if: failure() && steps.installed.outcome == 'failure'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: conversation-${{ matrix.platform }}-installed
           path: |
@@ -430,7 +430,7 @@ jobs:
 
       - name: Upload the installed app's native conversation report and logs
         if: failure() && steps.installed-native.outcome == 'failure'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: native-conversation-${{ matrix.platform }}-installed
           path: |
@@ -453,7 +453,7 @@ jobs:
         run: ls -lh out/ 2>/dev/null || echo "no out/ folder"
 
       - name: Upload installers
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: desktop-${{ matrix.platform }}
           path: |
@@ -462,7 +462,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Upload the update feed
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: update-info-${{ matrix.platform }}
           path: |
@@ -480,15 +480,15 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
 
       - name: Download installers
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           pattern: desktop-*
           path: dist
@@ -496,7 +496,7 @@ jobs:
 
       # One folder per build (update-info/update-info-windows-x64/latest.yml, ...).
       - name: Download the update feed
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           pattern: update-info-*
           path: update-info
@@ -506,7 +506,14 @@ jobs:
           set -euo pipefail
           tag="${GITHUB_REF_NAME}"
           mkdir -p dist
-          git archive --format=tar.gz --prefix="spec.jev-${tag#v}/" -o "dist/spec.jev-${tag#v}-source.tar.gz" HEAD
+          npm ci --ignore-scripts
+          npm run hydrate:model-data
+          bash ./scripts/create-source-archive.sh \
+            --version "${tag#v}" \
+            --ref HEAD \
+            --package-manifest desktop/package.json \
+            --archive-name spec.jev \
+            --out "dist/spec.jev-${tag#v}-source.tar.gz"
           cd dist
           sha256sum -- * > SHA256SUMS
           ls -lh
@@ -514,11 +521,9 @@ jobs:
       # electron-updater reads one feed file per system from the newest release. 0.1.x ships Windows x64
       # and Linux x64 only. A missing feed is a warning when its build failed, and a defect when every build
       # succeeded. The merge checks each listed file against the attached copy and takes its checksum from
-      # there. A problem here fails the job, but only after the release is published: the installers do not
-      # wait for the feed.
+      # there. A problem here fails before a release is created.
       - name: Update feed
         id: feed
-        continue-on-error: true
         env:
           BUILD_RESULT: ${{ needs.build.result }}
         run: |
@@ -583,15 +588,12 @@ jobs:
           # The update feed goes along when there is one (SHA256SUMS covers the installers and the source only).
           shopt -s nullglob
           if gh release view "$tag" >/dev/null 2>&1; then
-            # A retried tag must replace the assets of the earlier attempt, not fail because the release exists.
+            # A retried tag must replace the assets of the earlier attempt, then ensure it is public.
             gh release upload "$tag" dist/* updates/* --clobber
-            gh release edit "$tag" --title "spec.jev ${tag}" --notes-file notes.md --prerelease
+            gh release edit "$tag" --title "spec.jev ${tag}" --notes-file notes.md --prerelease --draft=false
           else
-            gh release create "$tag" dist/* updates/* --title "spec.jev ${tag}" --notes-file notes.md --prerelease --verify-tag
+            # Create a draft first: a failed upload cannot expose a partial release.
+            gh release create "$tag" --title "spec.jev ${tag}" --notes-file notes.md --prerelease --draft --verify-tag
+            gh release upload "$tag" dist/* updates/* --clobber
+            gh release edit "$tag" --title "spec.jev ${tag}" --notes-file notes.md --prerelease --draft=false
           fi
-
-      - name: Report an incomplete update feed
-        if: steps.feed.outcome == 'failure'
-        run: |
-          echo "::error::The release is published without a complete update feed (see the Update feed step): the app offers the installer on the systems without one."
-          exit 1

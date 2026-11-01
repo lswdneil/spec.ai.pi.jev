@@ -92,7 +92,7 @@ const options = {
 };
 const repoRoot = process.cwd();
 const rootPackageJson = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8"));
-if (rootPackageJson.name !== "pi-monorepo") throw new Error("Run this script from the repository root");
+if (rootPackageJson.name !== "spec.jev-monorepo") throw new Error("Run this script from the repository root");
 
 execNpmSync(["run", "generate:models"], { cwd: repoRoot, stdio: "inherit" });
 if (!options.skipCheck) execNpmSync(["run", "check"], { cwd: repoRoot, stdio: "inherit" });

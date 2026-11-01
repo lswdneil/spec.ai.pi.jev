@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 /**
- * Release script for pi-mono
+ * Release script for the upstream pi-mono package line.
+ *
+ * This repository ships spec.jev; its desktop and npm releases follow
+ * docs/releasing.md and use different tags. The guard below prevents this
+ * upstream script from creating a vX.Y.Z tag that triggers the wrong product.
  *
  * Usage:
  *   node scripts/release.mjs <major|minor|patch>
@@ -20,7 +24,7 @@
  * 10. Push main and the tag to trigger CI publication and verified pi.dev announcement
  */
 
-import { execSync, spawnSync } from "node:child_process";
+import { execFileSync, execSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { findPackageDirectories } from "./package-workspaces.mjs";
@@ -33,6 +37,21 @@ const SEMVER_RE = /^\d+\.\d+\.\d+$/;
 
 if (!RELEASE_TARGET || (!BUMP_TYPES.has(RELEASE_TARGET) && !SEMVER_RE.test(RELEASE_TARGET))) {
 	console.error("Usage: node scripts/release.mjs <major|minor|patch|x.y.z>");
+	process.exit(1);
+}
+
+const rootManifest = JSON.parse(readFileSync("package.json", "utf-8"));
+if (rootManifest.name !== "pi-monorepo") {
+	console.error(
+		"This is the upstream pi package release script. spec.jev releases use `vX.Y.Z` for the desktop app " +
+			"and `spec.jev-vX.Y.Z` for npm; follow docs/releasing.md instead.",
+	);
+	process.exit(1);
+}
+
+const branch = execFileSync("git", ["branch", "--show-current"], { encoding: "utf-8" }).trim();
+if (branch !== "main") {
+	console.error(`Error: releases must run from main, not ${branch || "(detached HEAD)"}.`);
 	process.exit(1);
 }
 
@@ -142,10 +161,6 @@ function compareVersions(a, b) {
 	return 0;
 }
 
-function shellQuote(value) {
-	return `'${value.replace(/'/g, `'\\''`)}'`;
-}
-
 function removeStaleWorkspaceLockEntries() {
 	const workspaceVersions = new Map(
 		getPublicWorkspacePackages().map((pkg) => [pkg.name, pkg.version]),
@@ -174,13 +189,16 @@ function removeStaleWorkspaceLockEntries() {
 }
 
 function stageChangedFiles() {
-	const output = run("git ls-files -m -o -d --exclude-standard", { silent: true });
-	const paths = [...new Set((output || "").split("\n").map((line) => line.trim()).filter(Boolean))];
+	const output = execFileSync("git", ["ls-files", "-m", "-o", "-d", "--exclude-standard", "-z"], {
+		encoding: "utf-8",
+	});
+	const paths = [...new Set(output.split("\0").filter(Boolean))];
 	if (paths.length === 0) {
 		return;
 	}
 
-	run(`git add -- ${paths.map(shellQuote).join(" ")}`);
+	console.log(`$ git add -- ${paths.length} path(s)`);
+	execFileSync("git", ["add", "--", ...paths], { stdio: "inherit" });
 }
 
 function bumpOrSetVersion(target) {

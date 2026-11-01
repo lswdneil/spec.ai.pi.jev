@@ -84,7 +84,7 @@ README_ASSETS = {
     "bench-test-log-repeats-dark.svg": "assets/readme/bench-test-log-repeats-dark.svg",
 }
 SITE_ASSETS = ["icon-256.png", "favicon-64.png", "apple-touch-icon.png", "og.jpg", "swarm.webp", "board.webp"]
-# The download buttons, by the end of an installer's name (mu-0.1.8-mac-arm64.dmg).
+# The download buttons, by the end of an installer's name (spec.jev-0.1.11-win-x64.exe).
 DOWNLOADS = ["mac-arm64.dmg", "mac-x64.dmg", "win-x64.exe", "linux-amd64.deb"]
 md = MarkdownIt("commonmark", {"html": True}).enable("table")
 WARNINGS = []
@@ -92,6 +92,10 @@ WARNINGS = []
 
 def warn(text):
     WARNINGS.append(text)
+
+
+def download_asset_name(number, suffix):
+    return f"spec.jev-{number}-{suffix}"
 
 
 def readme_repo_path(lang):
@@ -621,10 +625,17 @@ def main():
         shutil.copy(here / "assets" / name, assets / name)
 
     stars = star_count()
+    downloads = {}
+    for suffix in DOWNLOADS:
+        asset = download_asset_name(latest["number"], suffix)
+        url = latest["assets"].get(asset)
+        if not url:
+            warn(f"{latest['tag']}: release has no {asset}")
+            url = f"{REPO}/releases/download/{latest['tag']}/{asset}"
+        downloads[suffix] = url
     release = {
         "tag": latest["tag"], "number": latest["number"], "agent": agents.get(latest["number"]),
-        "downloads": {suffix: latest["assets"].get(f"mu-{latest['number']}-{suffix}")
-                      or f"{REPO}/releases/download/{latest['tag']}/mu-{latest['number']}-{suffix}" for suffix in DOWNLOADS},
+        "downloads": downloads,
     }
     env = Environment(loader=FileSystemLoader(here / "templates"), undefined=StrictUndefined, autoescape=False, keep_trailing_newline=True)
     written, fallbacks = [], []

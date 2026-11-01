@@ -3,17 +3,20 @@
 #
 # Usage:
 #   npm run hydrate:model-data
-#   ./scripts/create-source-archive.sh --version <version> --ref <git-ref> --out <archive.tar.gz>
+#   ./scripts/create-source-archive.sh --version <version> [--ref <git-ref>] \
+#     [--package-manifest <path>] [--archive-name <name>] --out <archive.tar.gz>
 
 set -euo pipefail
 
 version=""
 source_ref="HEAD"
 output=""
+package_manifest="packages/coding-agent/package.json"
+archive_name="pi"
 invocation_dir="$PWD"
 
 usage() {
-    echo "Usage: $0 --version <version> [--ref <git-ref>] --out <archive.tar.gz>"
+    echo "Usage: $0 --version <version> [--ref <git-ref>] [--package-manifest <path>] [--archive-name <name>] --out <archive.tar.gz>"
 }
 
 require_value() {
@@ -41,6 +44,16 @@ while [[ $# -gt 0 ]]; do
             output="$2"
             shift 2
             ;;
+        --package-manifest)
+            require_value "$@"
+            package_manifest="$2"
+            shift 2
+            ;;
+        --archive-name)
+            require_value "$@"
+            archive_name="$2"
+            shift 2
+            ;;
         --help)
             usage
             exit 0
@@ -61,13 +74,17 @@ if [[ ! "$version" =~ ^[0-9A-Za-z][0-9A-Za-z._-]*$ ]]; then
     echo "Invalid version: $version" >&2
     exit 1
 fi
+if [[ ! "$archive_name" =~ ^[0-9A-Za-z][0-9A-Za-z._-]*$ ]]; then
+    echo "Invalid archive name: $archive_name" >&2
+    exit 1
+fi
 
 repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$repo_root"
 
 commit="$(git rev-parse --verify --end-of-options "${source_ref}^{commit}")"
 
-package_version="$(git show "${commit}:packages/coding-agent/package.json" | node -p 'JSON.parse(require("fs").readFileSync(0, "utf8")).version')"
+package_version="$(git show "${commit}:${package_manifest}" | node -p 'JSON.parse(require("fs").readFileSync(0, "utf8")).version')"
 if [[ "$package_version" != "$version" ]]; then
     echo "Version ${version} does not match package version ${package_version} at ${source_ref}" >&2
     exit 1
@@ -108,7 +125,7 @@ GIT_INDEX_FILE="$temporary_index" git add -f -- "${model_data_files[@]}"
 archive_tree="$(GIT_INDEX_FILE="$temporary_index" git write-tree)"
 archive_mtime="$(git show -s --format=%ct "$commit")"
 
-archive_root="pi-${version}"
+archive_root="${archive_name}-${version}"
 git archive --format=tar --prefix="${archive_root}/" --mtime="@${archive_mtime}" "$archive_tree" \
     | gzip -n -9 > "$temporary_archive"
 tar -tzf "$temporary_archive" > "$manifest"
