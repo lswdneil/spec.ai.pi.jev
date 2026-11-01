@@ -2,7 +2,7 @@ import { Marked, type Token, Tokenizer, type TokenizerExtension, type Tokens } f
 import { renderLatex } from "../latex.ts";
 import { getCapabilities, hyperlink, isImageLine } from "../terminal-image.ts";
 import type { Component } from "../tui.ts";
-import { applyBackgroundToLine, flattenLines, visibleWidth, wrapTextWithAnsi } from "../utils.ts";
+import { applyBackgroundToLine, flattenLines, sanitizeTerminalText, visibleWidth, wrapTextWithAnsi } from "../utils.ts";
 
 const STRICT_STRIKETHROUGH_REGEX = /^(~~)(?=[^\s~])((?:\\.|[^\\])*?(?:\\.|[^\s~\\]))\1(?=[^~]|$)/;
 
@@ -226,6 +226,8 @@ export interface MarkdownOptions {
 	transform?: (markdown: string, availableWidth: number) => string;
 	/** Render supported LaTeX math expressions as Unicode text (default: true). */
 	renderLatex?: boolean;
+	/** Remove terminal control sequences from untrusted Markdown before rendering (default: true). */
+	sanitizeTerminalSequences?: boolean;
 }
 
 interface InlineStyleContext {
@@ -286,7 +288,8 @@ export class Markdown implements Component {
 
 		// Calculate available width for content (subtract horizontal padding)
 		const contentWidth = Math.max(1, width - this.paddingX * 2);
-		const text = this.options.transform?.(this.text, contentWidth) ?? this.text;
+		const transformed = this.options.transform?.(this.text, contentWidth) ?? this.text;
+		const text = this.options.sanitizeTerminalSequences === false ? transformed : sanitizeTerminalText(transformed);
 
 		// Don't render anything if there's no actual text
 		if (!text || text.trim() === "") {

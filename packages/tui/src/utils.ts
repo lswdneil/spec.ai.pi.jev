@@ -326,6 +326,39 @@ export function stripTerminalSequences(str: string): string {
 	return result;
 }
 
+const SGR_SEQUENCE = /^\x1b\[[0-9;:]*m$/;
+
+/**
+ * Sanitize terminal text that came from a model, file, or other untrusted source.
+ * Visible text and SGR styling remain; cursor controls, window-title commands,
+ * clipboard writes, APC commands, and raw hyperlinks are removed. Markdown links
+ * are recreated safely by the renderer after this pass.
+ */
+export function sanitizeTerminalText(str: string): string {
+	let result = "";
+	let i = 0;
+	while (i < str.length) {
+		const code = str.charCodeAt(i);
+		if (code === 0x1b) {
+			const ansi = extractAnsiCode(str, i);
+			if (ansi) {
+				if (SGR_SEQUENCE.test(ansi.code)) result += ansi.code;
+				i += ansi.length;
+			} else {
+				i += 1;
+			}
+			continue;
+		}
+		if ((code < 0x20 && code !== 0x09 && code !== 0x0a && code !== 0x0d) || (code >= 0x7f && code <= 0x9f)) {
+			i += 1;
+			continue;
+		}
+		result += str[i];
+		i += 1;
+	}
+	return result;
+}
+
 interface GraphemeCellRange {
 	start: number;
 	end: number;

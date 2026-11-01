@@ -14,7 +14,10 @@ interface EditorCapture {
 	directoryMode: number;
 }
 
-async function runExternalEditor(fixtureFlag?: "--fail" | "--empty"): Promise<{
+async function runExternalEditor(
+	fixtureFlag?: "--fail" | "--empty",
+	quoteExecutable = false,
+): Promise<{
 	result: ExternalEditorResult;
 	capture: EditorCapture;
 }> {
@@ -24,8 +27,9 @@ async function runExternalEditor(fixtureFlag?: "--fail" | "--empty"): Promise<{
 		// Keep the editor command independent of spaces in the source checkout path.
 		const fixturePath = join(testDirectory, "editor.mjs");
 		copyFileSync(editorFixturePath, fixturePath);
+		const executable = quoteExecutable ? JSON.stringify(process.execPath) : process.execPath;
 		const result = await editInExternalEditor({
-			command: `${process.execPath} ${fixturePath} ${capturePath}${fixtureFlag ? ` ${fixtureFlag}` : ""}`,
+			command: `${executable} ${fixturePath} ${capturePath}${fixtureFlag ? ` ${fixtureFlag}` : ""}`,
 			content: "original",
 		});
 		const capture = JSON.parse(readFileSync(capturePath, "utf-8")) as EditorCapture;
@@ -62,5 +66,11 @@ describe("editInExternalEditor", () => {
 		const { result } = await runExternalEditor("--empty");
 
 		expect(result).toEqual({ status: "complete", content: "" });
+	});
+
+	it("accepts a quoted executable path", async () => {
+		const { result } = await runExternalEditor(undefined, true);
+
+		expect(result).toEqual({ status: "complete", content: "edited" });
 	});
 });

@@ -1,5 +1,5 @@
 import { readdir, readFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { dirname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 
@@ -31,7 +31,10 @@ describe("package boundary", () => {
 				const pkg = specifier.split("/").slice(0, 2).join("/");
 				if (specifier.startsWith("@earendil-works/pi-") && !ALLOWED.has(pkg))
 					violations.push(`${path}: ${specifier}`);
-				if (specifier.startsWith(".") && !resolve(dirname(file), specifier).startsWith(`${sourceDirectory}/`)) {
+				if (
+					specifier.startsWith(".") &&
+					!resolve(dirname(file), specifier).startsWith(`${sourceDirectory}${sep}`)
+				) {
 					violations.push(`${path}: ${specifier}`);
 				}
 			}
