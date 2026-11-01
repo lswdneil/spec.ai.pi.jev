@@ -77,6 +77,24 @@ describe("EventStream", () => {
 		expect(events).toEqual([1, 2]);
 	});
 
+	it("resultAndDrain consumes buffered events while resolving the result", async () => {
+		const stream = new EventStream<number, string>(
+			() => false,
+			(event) => String(event),
+		);
+		stream.push(1);
+		stream.push(2);
+		stream.end("complete");
+
+		expect(await stream.resultAndDrain()).toBe("complete");
+
+		const events: number[] = [];
+		for await (const event of stream) {
+			events.push(event);
+		}
+		expect(events).toEqual([]);
+	});
+
 	it("wakes all waiting consumers when ended without a result", async () => {
 		const stream = new EventStream<number, number>(
 			() => false,

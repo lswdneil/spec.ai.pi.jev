@@ -129,6 +129,11 @@ export interface CodemodeSandboxBaseOptions {
 	 * `InternalError: out of memory`. Default: no limit beyond wasm32's 4 GiB address space.
 	 */
 	memoryLimitBytes?: number;
+	/**
+	 * Maximum number of tool or global calls one execution may issue. The host
+	 * enforces this even when the script produces no output. Default: 10000.
+	 */
+	maxCalls?: number;
 }
 
 /** Options of `CodemodeSandbox`, which runs each VM in a Node or Bun worker thread. */

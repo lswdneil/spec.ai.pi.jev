@@ -47,6 +47,7 @@ import {
 } from "./protocol.ts";
 
 const DEFAULT_TIMEOUT_MS = 300_000;
+const DEFAULT_MAX_CALLS = 10_000;
 const IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 const RESERVED_GLOBALS: ReadonlySet<string> = new Set([
 	"tools",
@@ -178,6 +179,7 @@ interface ExecutionOptions {
 	timeoutMs: number;
 	signal: AbortSignal | undefined;
 	memoryLimitBytes: number | undefined;
+	maxCalls: number;
 	store: Record<string, string>;
 	deterministic?: { startedAt: number; seed: number };
 	control?: Control;
@@ -200,6 +202,8 @@ class Execution {
 	private readonly output: CodemodeOutputItem[] = [];
 	private readonly calls: CodemodeCall[] = [];
 	private readonly pending = new Map<number, PendingCall>();
+	private readonly maxCalls: number;
+	private issuedCalls = 0;
 	/** Whether the execution has its outcome. */
 	finished = false;
 
@@ -210,6 +214,7 @@ class Execution {
 		this.executors = options.executors;
 		this.control = options.control;
 		this.signal = options.signal;
+		this.maxCalls = options.maxCalls;
 
 		if (Number.isFinite(options.timeoutMs)) {
 			this.timer = setTimeout(() => {
@@ -335,6 +340,14 @@ class Execution {
 				this.output.push(message.item);
 				break;
 			case "call":
+				this.issuedCalls += 1;
+				if (this.issuedCalls > this.maxCalls) {
+					this.finish({
+						kind: "sandbox",
+						message: `Execution exceeded its limit of ${this.maxCalls} calls`,
+					});
+					return;
+				}
 				if (this.pending.has(message.id)) throw new BridgeError(`duplicate call id ${message.id}`);
 				if (this.control) this.forwardCall(message, this.control);
 				else void this.handleCall(message);
@@ -462,6 +475,7 @@ export class CodemodeSandboxBase {
 	private readonly globalsByName = new Map<string, CodemodeTool>();
 	private readonly timeoutMs: number;
 	private readonly memoryLimitBytes: number | undefined;
+	private readonly maxCalls: number;
 	private readonly launch: VmLauncher;
 	private readonly running = new Set<Execution>();
 	private closed = false;
@@ -469,6 +483,10 @@ export class CodemodeSandboxBase {
 	constructor(options: CodemodeSandboxBaseOptions, launch: VmLauncher) {
 		this.timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 		this.memoryLimitBytes = options.memoryLimitBytes;
+		this.maxCalls = options.maxCalls ?? DEFAULT_MAX_CALLS;
+		if (!Number.isInteger(this.maxCalls) || this.maxCalls <= 0) {
+			throw new Error("maxCalls must be a positive integer");
+		}
 		this.launch = launch;
 		for (const tool of options.tools ?? []) this.registerTool(tool);
 		checkGlobals(options.globals ?? []);
@@ -509,6 +527,7 @@ export class CodemodeSandboxBase {
 			timeoutMs: options.timeoutMs ?? this.timeoutMs,
 			signal: options.signal,
 			memoryLimitBytes: this.memoryLimitBytes,
+			maxCalls: this.maxCalls,
 			store: serializeStore(options.store),
 			launch: this.launch,
 		});
@@ -549,6 +568,7 @@ export class CodemodeSandboxBase {
 			timeoutMs: options.timeoutMs ?? Number.POSITIVE_INFINITY,
 			signal: options.signal,
 			memoryLimitBytes: this.memoryLimitBytes,
+			maxCalls: this.maxCalls,
 			store: serializeStore(options.store),
 			deterministic: { startedAt: options.startedAt, seed: options.seed },
 			control: { onStarted: options.onStarted, onCall: options.onCall, onIdle: options.onIdle },

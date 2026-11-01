@@ -272,7 +272,7 @@ export async function complete<TApi extends Api>(
 	options?: ProviderStreamOptions,
 ): Promise<AssistantMessage> {
 	const s = stream(model, context, options);
-	return s.result();
+	return s.resultAndDrain();
 }
 
 export function streamSimple<TApi extends Api>(
@@ -298,5 +298,5 @@ export async function completeSimple<TApi extends Api>(
 	options?: SimpleStreamOptions,
 ): Promise<AssistantMessage> {
 	const s = streamSimple(model, context, options);
-	return s.result();
+	return s.resultAndDrain();
 }

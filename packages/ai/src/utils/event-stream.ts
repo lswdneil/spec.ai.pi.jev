@@ -86,6 +86,21 @@ export class EventStream<T, R = T> implements AsyncIterable<T> {
 	result(): Promise<R> {
 		return this.finalResultPromise;
 	}
+
+	/**
+	 * Resolve the final result while actively consuming the stream.
+	 *
+	 * Streams queue every event until a consumer reads it. One-shot callers that
+	 * only await `result()` therefore retain every partial event of a long
+	 * response. This keeps the final-value API while draining those events.
+	 */
+	async resultAndDrain(): Promise<R> {
+		const result = this.result();
+		for await (const _event of this) {
+			// Consume only; the final result is carried by the promise above.
+		}
+		return result;
+	}
 }
 
 /**

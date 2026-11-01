@@ -6,6 +6,7 @@ import {
 	mkdirSync,
 	mkdtempSync,
 	openSync,
+	readdirSync,
 	readFileSync,
 	rmSync,
 	writeFileSync,
@@ -385,6 +386,32 @@ describe("SessionManager.setSessionFile with corrupted files", () => {
 		const header = JSON.parse(lines[0]);
 		expect(header.type).toBe("session");
 		expect(header.id).toBe(sm.getSessionId());
+	});
+
+	it("rewrites a legacy session atomically and leaves no temporary file", () => {
+		const file = join(tempDir, "legacy.jsonl");
+		writeFileSync(
+			file,
+			`${JSON.stringify({
+				type: "session",
+				version: 2,
+				id: "legacy-session",
+				timestamp: "2025-01-01T00:00:00Z",
+				cwd: tempDir,
+			})}\n${JSON.stringify({
+				type: "message",
+				id: "abc12345",
+				parentId: null,
+				timestamp: "2025-01-01T00:00:01Z",
+				message: { role: "hookMessage", content: "from a hook", timestamp: 1 },
+			})}\n`,
+		);
+
+		const session = SessionManager.open(file, tempDir);
+		const lines = readFileSync(file, "utf-8").trim().split("\n");
+		expect(JSON.parse(lines[0]).version).toBe(3);
+		expect(session.getEntries()[0]).toMatchObject({ message: { role: "custom" } });
+		expect(readdirSync(tempDir).filter((name) => name.endsWith(".tmp"))).toEqual([]);
 	});
 
 	it("throws and preserves non-empty file without valid header", () => {

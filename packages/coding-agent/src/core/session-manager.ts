@@ -17,12 +17,15 @@ import {
 	closeSync,
 	createReadStream,
 	existsSync,
+	fsyncSync,
 	mkdirSync,
 	openSync,
 	readdirSync,
 	readSync,
+	renameSync,
 	type Stats,
 	statSync,
+	unlinkSync,
 	writeFileSync,
 } from "fs";
 import { readdir, stat } from "fs/promises";
@@ -1125,13 +1128,31 @@ export class SessionManager {
 
 	private _rewriteFile(): void {
 		if (!this.persist || !this.sessionFile) return;
-		const fd = openSync(this.sessionFile, "w");
+		const temporary = `${this.sessionFile}.${randomUUID()}.tmp`;
+		let fd: number | undefined;
 		try {
+			fd = openSync(temporary, "wx", 0o600);
 			for (const entry of this.fileEntries) {
 				writeFileSync(fd, `${JSON.stringify(entry)}\n`);
 			}
-		} finally {
+			fsyncSync(fd);
 			closeSync(fd);
+			fd = undefined;
+			renameSync(temporary, this.sessionFile);
+		} catch (error) {
+			if (fd !== undefined) {
+				try {
+					closeSync(fd);
+				} catch {
+					// Preserve the original write failure.
+				}
+			}
+			try {
+				unlinkSync(temporary);
+			} catch {
+				// The temporary file may not have been created.
+			}
+			throw error;
 		}
 	}
 

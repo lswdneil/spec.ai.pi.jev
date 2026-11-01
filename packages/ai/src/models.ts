@@ -907,7 +907,7 @@ class ModelsImpl implements MutableModels {
 		context: Context,
 		options?: ModelsApiStreamOptions<TApi>,
 	): Promise<AssistantMessage> {
-		return this.stream(model, context, options).result();
+		return this.stream(model, context, options).resultAndDrain();
 	}
 
 	streamSimple(model: Model<Api>, context: Context, options?: ModelsSimpleStreamOptions): AssistantMessageEventStream {
@@ -928,7 +928,7 @@ class ModelsImpl implements MutableModels {
 		context: Context,
 		options?: ModelsSimpleStreamOptions,
 	): Promise<AssistantMessage> {
-		return this.streamSimple(model, context, options).result();
+		return this.streamSimple(model, context, options).resultAndDrain();
 	}
 
 	streamDeferred(
@@ -955,7 +955,7 @@ class ModelsImpl implements MutableModels {
 		handle: DeferredHandle,
 		options?: ModelsDeferredFetchOptions,
 	): Promise<AssistantMessage> {
-		return this.streamDeferred(model, handle, options).result();
+		return this.streamDeferred(model, handle, options).resultAndDrain();
 	}
 
 	async cancelDeferred(

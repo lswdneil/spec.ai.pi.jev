@@ -291,6 +291,35 @@ describe.each(Object.keys(BACKENDS))("%s backend", (name) => {
 			expect(result.calls.every((call) => call.durationMs >= 0)).toBe(true);
 		});
 
+		it("stops an execution at its host-side call limit", async () => {
+			let executions = 0;
+			const sandbox = createSandbox([
+				{
+					name: "tick",
+					execute: () => {
+						executions += 1;
+						return executions;
+					},
+				},
+			]);
+			const limited = new InlineCodemodeSandbox({
+				wasm: loadQuickJSWasm(),
+				interruptBudget: INTERRUPT_BUDGET,
+				maxCalls: 2,
+				tools: sandbox.tools,
+			});
+			const result = await limited.execute(`
+				await tools.tick();
+				await tools.tick();
+				await tools.tick();
+			`);
+			expect(result).toMatchObject({
+				ok: false,
+				error: { kind: "sandbox", message: "Execution exceeded its limit of 2 calls" },
+			});
+			expect(executions).toBe(2);
+		});
+
 		it("runs concurrent calls and lists tool names", async () => {
 			const sandbox = createSandbox([
 				echo,
