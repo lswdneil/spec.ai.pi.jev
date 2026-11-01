@@ -2,6 +2,7 @@ import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { createRequire } from 'node:module';
 import { dirname, extname, isAbsolute, join, relative, resolve } from 'node:path';
+import { isMutationMethod, isSameOriginRequest } from './http-security.js';
 import type { WebUiAccess } from './static-server.js';
 
 type RawWebUiEntry = {
@@ -373,6 +374,12 @@ export async function handleWebUiExtensionRequest(
     }
     const route = contribution.apiRoutes.find((candidate) => candidate.path === pathname);
     if (!route) continue;
+
+    if (route.auth && isMutationMethod(request.method) && !isSameOriginRequest(request)) {
+      response.writeHead(403, { 'content-type': 'application/json; charset=utf-8' });
+      response.end(JSON.stringify({ error: 'ORIGIN_MISMATCH' }));
+      return true;
+    }
 
     if (route.auth) {
       const device = access?.verify(request.headers.cookie);

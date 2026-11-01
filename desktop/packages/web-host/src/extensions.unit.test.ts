@@ -124,11 +124,23 @@ describe('extension WebUI host', () => {
 
       const readPost = await fetch(`${base}/ext-demo/stats`, {
         method: 'POST',
-        headers: { cookie: 'specjev_device=read', 'content-type': 'application/json' },
+        headers: { cookie: 'specjev_device=read', 'content-type': 'application/json', origin: base },
         body: JSON.stringify({ hello: 'world' }),
       });
       expect(readPost.status).toBe(403);
       expect(await readPost.json()).toEqual({ error: 'READ_ONLY_DEVICE' });
+
+      const crossSite = await fetch(`${base}/ext-demo/stats`, {
+        method: 'POST',
+        headers: {
+          cookie: 'specjev_device=control',
+          'content-type': 'application/json',
+          origin: 'https://attacker.example',
+        },
+        body: JSON.stringify({ hello: 'world' }),
+      });
+      expect(crossSite.status).toBe(403);
+      expect(await crossSite.json()).toEqual({ error: 'ORIGIN_MISMATCH' });
     } finally {
       await handle?.stop();
       await api.close();

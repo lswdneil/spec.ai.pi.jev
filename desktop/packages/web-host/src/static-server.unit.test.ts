@@ -140,7 +140,7 @@ describe('static-server', () => {
 
     const r = await fetch(`${handle.localUrl}/login`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', origin: handle.localUrl },
       body: JSON.stringify({ username: 'admin', password: 'anything' }),
     });
     expect(r.status).toBe(200);
@@ -182,7 +182,7 @@ describe('static-server', () => {
     stopBackend = backend.close;
     handle = await startStaticServer({ staticDir, backendPort: backend.port, port: 0 });
 
-    const r = await fetch(`${handle.localUrl}/logout`, { method: 'POST' });
+    const r = await fetch(`${handle.localUrl}/logout`, { method: 'POST', headers: { origin: handle.localUrl } });
     expect(r.status).toBe(200);
     expect(r.headers.get('set-cookie')).toMatch(/Max-Age=0/);
   });
@@ -196,6 +196,37 @@ describe('static-server', () => {
     handle = await startStaticServer({ staticDir, backendPort: freePort, port: 0 });
     const r = await fetch(`${handle.localUrl}/api/anything`);
     expect(r.status).toBe(502);
+  });
+
+  it('rejects cross-site and originless mutations before they reach the backend', async () => {
+    let calls = 0;
+    const backend = await startMockBackend((_req, res) => {
+      calls += 1;
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ ok: true }));
+    });
+    stopBackend = backend.close;
+    handle = await startStaticServer({ staticDir, backendPort: backend.port, port: 0 });
+
+    const crossSite = await fetch(`${handle.localUrl}/api/settings`, {
+      method: 'POST',
+      headers: { origin: 'https://attacker.example' },
+    });
+    expect(crossSite.status).toBe(403);
+    expect(await crossSite.json()).toEqual({ error: 'ORIGIN_MISMATCH' });
+
+    const originless = await fetch(`${handle.localUrl}/api/settings`, { method: 'POST' });
+    expect(originless.status).toBe(403);
+    expect(await originless.json()).toEqual({ error: 'ORIGIN_MISMATCH' });
+    expect(calls).toBe(0);
+
+    const sameOrigin = await fetch(`${handle.localUrl}/api/settings`, {
+      method: 'POST',
+      headers: { origin: handle.localUrl },
+    });
+    expect(sameOrigin.status).toBe(200);
+    expect(await sameOrigin.json()).toEqual({ ok: true });
+    expect(calls).toBe(1);
   });
 
   it('/ws WebSocket upgrade is spliced to backend and 101 is relayed', async () => {
@@ -406,6 +437,7 @@ describe('static-server', () => {
           headers: {
             'content-type': 'application/octet-stream',
             'content-length': BODY_LEN,
+            origin: `http://127.0.0.1:${publicPort}`,
           },
         },
         (res) => {
@@ -578,16 +610,17 @@ describe('static-server', () => {
     };
     handle = await startStaticServer({ staticDir, backendPort: backend.port, port: 0, access });
     const headers = { cookie: 'specjev_device=read' };
+    const mutationHeaders = { ...headers, origin: handle.localUrl };
 
     const read = await fetch(`${handle.localUrl}/api/settings`, { headers });
     expect(read.status).toBe(200);
 
-    const blocked = await fetch(`${handle.localUrl}/api/settings`, { method: 'POST', headers });
+    const blocked = await fetch(`${handle.localUrl}/api/settings`, { method: 'POST', headers: mutationHeaders });
     expect(blocked.status).toBe(403);
     expect(await blocked.json()).toEqual({ error: 'READ_ONLY_DEVICE' });
     expect(calls).toBe(1);
 
-    const blockedFile = await fetch(`${handle.localUrl}/api/fs/read`, { method: 'POST', headers });
+    const blockedFile = await fetch(`${handle.localUrl}/api/fs/read`, { method: 'POST', headers: mutationHeaders });
     expect(blockedFile.status).toBe(403);
     expect(await blockedFile.json()).toEqual({ error: 'READ_ONLY_DEVICE' });
 
@@ -595,7 +628,7 @@ describe('static-server', () => {
     expect(blockedStream.status).toBe(403);
     expect(await blockedStream.json()).toEqual({ error: 'READ_ONLY_DEVICE' });
 
-    const allowed = await fetch(`${handle.localUrl}/api/skills/info`, { method: 'POST', headers });
+    const allowed = await fetch(`${handle.localUrl}/api/skills/info`, { method: 'POST', headers: mutationHeaders });
     expect(allowed.status).toBe(200);
     expect(await allowed.json()).toEqual({ method: 'POST', path: '/api/skills/info' });
   });

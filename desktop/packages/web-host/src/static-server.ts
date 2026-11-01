@@ -15,6 +15,7 @@ import { networkInterfaces } from 'node:os';
 import net, { type Socket } from 'node:net';
 import serveHandler from 'serve-handler';
 import { handleWebUiExtensionRequest } from './extensions.js';
+import { isMutationMethod, isSameOriginRequest } from './http-security.js';
 
 export type WebUiDeviceScope = 'read' | 'control';
 
@@ -312,6 +313,14 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
 
       const pathname = req.url.split('?')[0];
       if (opts.extensions && (await handleWebUiExtensionRequest(req, res, opts.backendPort, opts.access))) {
+        return;
+      }
+      if (isMutationMethod(req.method) && !pathname.startsWith('/api/pair/') && !isSameOriginRequest(req)) {
+        res.writeHead(403, {
+          'content-type': 'application/json; charset=utf-8',
+          'cache-control': 'no-store',
+        });
+        res.end(JSON.stringify({ error: 'ORIGIN_MISMATCH' }));
         return;
       }
       if (opts.access) {
