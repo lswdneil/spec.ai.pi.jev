@@ -564,7 +564,7 @@ describe('static-server', () => {
     expect(await allowed.json()).toEqual({ path: '/api/anything' });
   });
 
-  it('limits read-only devices to reads and a narrow read-only POST allowlist', async () => {
+  it('limits read-only devices to non-filesystem reads and a narrow POST allowlist', async () => {
     let calls = 0;
     const backend = await startMockBackend((req, res) => {
       calls += 1;
@@ -587,9 +587,17 @@ describe('static-server', () => {
     expect(await blocked.json()).toEqual({ error: 'READ_ONLY_DEVICE' });
     expect(calls).toBe(1);
 
-    const allowed = await fetch(`${handle.localUrl}/api/fs/read`, { method: 'POST', headers });
+    const blockedFile = await fetch(`${handle.localUrl}/api/fs/read`, { method: 'POST', headers });
+    expect(blockedFile.status).toBe(403);
+    expect(await blockedFile.json()).toEqual({ error: 'READ_ONLY_DEVICE' });
+
+    const blockedStream = await fetch(`${handle.localUrl}/api/fs/stream?kind=local&path=/etc/passwd`, { headers });
+    expect(blockedStream.status).toBe(403);
+    expect(await blockedStream.json()).toEqual({ error: 'READ_ONLY_DEVICE' });
+
+    const allowed = await fetch(`${handle.localUrl}/api/skills/info`, { method: 'POST', headers });
     expect(allowed.status).toBe(200);
-    expect(await allowed.json()).toEqual({ method: 'POST', path: '/api/fs/read' });
+    expect(await allowed.json()).toEqual({ method: 'POST', path: '/api/skills/info' });
   });
 
   it('requires an authenticated same-origin WebSocket when access is configured', async () => {
@@ -620,6 +628,35 @@ describe('static-server', () => {
       /HTTP\/1\.1 403/i
     );
     expect(await rawUpgradeStatus(handle.port, origin, '/ws', 'specjev_device=good')).toMatch(/HTTP\/1\.1 101/i);
+  });
+
+  it('rejects the /ws control channel for read-only devices', async () => {
+    const { createHash } = await import('node:crypto');
+    const httpMod = await import('node:http');
+    const backendServer = httpMod.createServer();
+    let upgrades = 0;
+    backendServer.on('upgrade', (req, socket) => {
+      upgrades += 1;
+      const wsKey = (req.headers['sec-websocket-key'] as string) || '';
+      const accept = createHash('sha1')
+        .update(wsKey + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')
+        .digest('base64');
+      socket.write('HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n');
+      socket.write(`Sec-WebSocket-Accept: ${accept}\r\n\r\n`);
+      socket.end();
+    });
+    await new Promise<void>((r) => backendServer.listen(0, '127.0.0.1', () => r()));
+    stopBackend = () => new Promise<void>((r) => backendServer.close(() => r()));
+    const backendPort = (backendServer.address() as { port: number }).port;
+    const access: WebUiAccess = {
+      verify: (cookie) => (cookie === 'specjev_device=read' ? { deviceId: 'device-1', scope: 'read' } : null),
+      handlePublicRequest: async () => true,
+    };
+    handle = await startStaticServer({ staticDir, backendPort, port: 0, access });
+
+    const origin = `http://127.0.0.1:${handle.port}`;
+    expect(await rawUpgradeStatus(handle.port, origin, '/ws', 'specjev_device=read')).toMatch(/HTTP\/1\.1 403/i);
+    expect(upgrades).toBe(0);
   });
 
   it('closes a live WebSocket when its device is revoked', async () => {

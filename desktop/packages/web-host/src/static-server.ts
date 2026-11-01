@@ -69,13 +69,6 @@ const DEFAULT_PORT = 25808;
  */
 const READ_ONLY_POST_PATHS: ReadonlySet<string> = new Set([
   '/api/auth/refresh',
-  '/api/fs/dir',
-  '/api/fs/list',
-  '/api/fs/read',
-  '/api/fs/content',
-  '/api/fs/content/metadata',
-  '/api/fs/metadata',
-  '/api/fs/image-base64',
   '/api/skills/builtin-rule',
   '/api/skills/builtin-skill',
   '/api/skills/assistant-rule/read',
@@ -90,6 +83,11 @@ const READ_ONLY_POST_PATHS: ReadonlySet<string> = new Set([
 ]);
 
 function isReadOnlyApiRequest(method: string, pathname: string): boolean {
+  // File APIs accept absolute host paths. Read scope is for conversation data,
+  // not for browsing the machine, so the boundary blocks them until they use
+  // server-issued handles. The backend cannot be the only check here because
+  // the direct WebUI proxy has no per-method scope context.
+  if (pathname === '/api/fs' || pathname.startsWith('/api/fs/')) return false;
   if (method === 'GET' || method === 'HEAD') return true;
   return method === 'POST' && READ_ONLY_POST_PATHS.has(pathname);
 }
@@ -213,16 +211,15 @@ function spliceToTcpEndpoint(client: Socket, targetPort: number, initialBytes: B
  * Keeping the rule simple means we can decide after the first ~50 bytes
  * instead of waiting for the full header block.
  */
-type RouteDecision = 'backend' | 'kyrn' | 'http';
+type RouteDecision = 'backend-ws' | 'backend-stt' | 'kyrn' | 'http';
 
 function peekWsRoute(buf: Buffer): RouteDecision | null {
   const newlineIdx = buf.indexOf(0x0a); // \n
   if (newlineIdx < 0) return null;
   const firstLine = buf.slice(0, newlineIdx).toString('ascii');
   if (/^GET\s+\/kyrn(?:\?[^\s]*)?\s+HTTP\/1\.[01]\r?$/.test(firstLine)) return 'kyrn';
-  if (/^GET\s+\/(?:ws|api\/stt\/stream)(?:\?[^\s]*)?\s+HTTP\/1\.[01]\r?$/.test(firstLine)) {
-    return 'backend';
-  }
+  if (/^GET\s+\/ws(?:\?[^\s]*)?\s+HTTP\/1\.[01]\r?$/.test(firstLine)) return 'backend-ws';
+  if (/^GET\s+\/api\/stt\/stream(?:\?[^\s]*)?\s+HTTP\/1\.[01]\r?$/.test(firstLine)) return 'backend-stt';
   return 'http';
 }
 
@@ -431,7 +428,8 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
       const decision = peekWsRoute(peeked);
       if (decision === null && peeked.length < PEEK_LIMIT_BYTES) return;
       // Auth and the KyRN origin check both need the full header block.
-      const needsHeaders = decision === 'kyrn' || (decision === 'backend' && Boolean(opts.access));
+      const needsHeaders =
+        decision === 'kyrn' || ((decision === 'backend-ws' || decision === 'backend-stt') && Boolean(opts.access));
       if (needsHeaders && peeked.indexOf('\r\n\r\n') < 0 && peeked.length < PEEK_LIMIT_BYTES) return;
       cleanup();
 
@@ -439,7 +437,7 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
       const head = headerEnd >= 0 ? peeked.subarray(0, headerEnd).toString('latin1') : '';
 
       let deviceScope: WebUiDeviceScope = 'control';
-      if (decision === 'backend' || decision === 'kyrn') {
+      if (decision === 'backend-ws' || decision === 'backend-stt' || decision === 'kyrn') {
         if (opts.access) {
           const device = opts.access.verify(headerValue(head, 'cookie') ?? undefined);
           if (!device) {
@@ -452,6 +450,10 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
           }
           deviceScope = device.scope;
           socketDevices.set(client, device.deviceId);
+          if (decision === 'backend-ws' && deviceScope === 'read') {
+            rejectUpgrade(client, 403, 'Read-only device');
+            return;
+          }
         } else if (decision === 'kyrn' && !isSameOriginUpgrade(head)) {
           rejectUpgrade(client, 403, 'Forbidden');
           return;
@@ -472,7 +474,7 @@ export async function startStaticServer(opts: StaticServerOptions): Promise<Stat
         return;
       }
 
-      const target = decision === 'backend' ? opts.backendPort : internalPort;
+      const target = decision === 'backend-ws' || decision === 'backend-stt' ? opts.backendPort : internalPort;
       spliceToTcpEndpoint(client, target, peeked);
     };
     const onEarlyError = (): void => {

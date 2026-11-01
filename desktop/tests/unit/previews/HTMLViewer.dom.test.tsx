@@ -96,6 +96,15 @@ describe('HTMLRenderer', () => {
     vi.clearAllMocks();
   });
 
+  it('sandboxes browser HTML without granting same-origin access', () => {
+    Reflect.deleteProperty(window, 'electronAPI');
+    const { container } = render(<HTMLRenderer content='<script>parent.document.body.remove()</script>' />);
+    const iframe = container.querySelector('iframe');
+    expect(iframe).toBeInTheDocument();
+    expect(iframe?.getAttribute('sandbox')).toContain('allow-scripts');
+    expect(iframe?.getAttribute('sandbox')).not.toContain('allow-same-origin');
+  });
+
   it('loads clean local HTML files through file URL in Electron', () => {
     Object.defineProperty(window, 'electronAPI', {
       configurable: true,
