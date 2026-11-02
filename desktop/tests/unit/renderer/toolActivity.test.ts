@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { NormalizedToolCall, NormalizedToolStatus } from '@/common/chat/normalizeToolCall';
 import {
   ACTIVITY_FOLD_MIN,
+  capOutput,
   clipOutput,
   shouldFoldActivity,
   summarizeToolActivity,
@@ -189,5 +190,10 @@ describe('long output is clipped, not dumped', () => {
   it('cuts a single enormous line by characters', () => {
     const clip = clipOutput('x'.repeat(5000), { chars: 100 });
     expect(clip).toEqual({ text: 'x'.repeat(100), clipped: true });
+  });
+
+  it('caps text before it can reach an expanded DOM view', () => {
+    expect(capOutput('short')).toEqual({ text: 'short', truncated: false });
+    expect(capOutput('x'.repeat(120), 100)).toEqual({ text: 'x'.repeat(100), truncated: true });
   });
 });

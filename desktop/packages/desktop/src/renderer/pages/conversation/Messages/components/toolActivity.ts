@@ -188,6 +188,10 @@ export const shouldFoldActivity = (tools: NormalizedToolCall[]): boolean => tool
 /** A tool's output opens to at most this much before "show more" takes over. */
 export const OUTPUT_CLIP_LINES = 14;
 export const OUTPUT_CLIP_CHARS = 1400;
+/** Full tool output larger than this stays a preview instead of crossing the renderer's full-message path. */
+export const TOOL_OUTPUT_FULL_LOAD_MAX_CHARS = 200_000;
+/** Even a successfully loaded tool output is capped before it reaches the DOM. */
+export const TOOL_OUTPUT_RENDER_MAX_CHARS = 100_000;
 
 export type ClippedText = { text: string; clipped: boolean };
 
@@ -200,4 +204,14 @@ export function clipOutput(
   const head = rows.length > lines ? rows.slice(0, lines).join('\n') : value;
   if (head.length <= chars) return { text: head, clipped: head.length < value.length };
   return { text: head.slice(0, chars), clipped: true };
+}
+
+/** A hard ceiling for text kept in the page, independent of the smaller collapsed preview. */
+export function capOutput(
+  value: string,
+  maxChars = TOOL_OUTPUT_RENDER_MAX_CHARS
+): { text: string; truncated: boolean } {
+  return value.length > maxChars
+    ? { text: value.slice(0, maxChars), truncated: true }
+    : { text: value, truncated: false };
 }

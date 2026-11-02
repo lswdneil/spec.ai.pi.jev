@@ -6,7 +6,10 @@ import type { TMessage } from '@/common/chat/chatLib';
 import type { ToolMessage } from '@/common/chat/normalizeToolCall';
 import MessageToolGroupSummary from '@/renderer/pages/conversation/Messages/components/MessageToolGroupSummary';
 import summaryStyles from '@/renderer/pages/conversation/Messages/components/MessageToolGroupSummary.module.css';
-import { shortPath } from '@/renderer/pages/conversation/Messages/components/toolActivity';
+import {
+  shortPath,
+  TOOL_OUTPUT_FULL_LOAD_MAX_CHARS,
+} from '@/renderer/pages/conversation/Messages/components/toolActivity';
 import { cssRules, readRendererCss } from '../../helpers/cssRules';
 
 vi.mock('@/common', () => ({
@@ -269,7 +272,7 @@ describe('MessageToolGroupSummary', () => {
     expect(calls.queryByRole('button')).not.toBeInTheDocument();
   });
 
-  it('loads full tool content only when an individual compact call is opened', async () => {
+  it('loads full tool content only when the reader asks for it', async () => {
     const invoke = vi.mocked(ipcBridge.database.getConversationMessage.invoke);
     invoke.mockResolvedValue({
       id: 'message-1',
@@ -314,11 +317,52 @@ describe('MessageToolGroupSummary', () => {
 
     expect(invoke).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: 'rg · tools.status.success' }));
+    expect(invoke).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByTestId('tool-load-full-output'));
 
     await waitFor(() => {
       expect(invoke).toHaveBeenCalledWith({ conversation_id: 'conversation-1', message_id: 'message-1' });
     });
     expect(await screen.findByText('full output')).toBeInTheDocument();
+  });
+
+  it('keeps an oversized compact output as a preview instead of starting a full load', () => {
+    const invoke = vi.mocked(ipcBridge.database.getConversationMessage.invoke);
+    render(
+      <MessageToolGroupSummary
+        messages={[
+          {
+            id: 'message-oversized',
+            conversation_id: 'conversation-1',
+            type: 'acp_tool_call',
+            content: {
+              _compact: {
+                truncated: true,
+                original_size: TOOL_OUTPUT_FULL_LOAD_MAX_CHARS + 1,
+                preview_chars: 4096,
+              },
+              update: {
+                session_update: 'tool_call',
+                tool_call_id: 'tool-oversized',
+                status: 'completed',
+                title: 'bash',
+                kind: 'execute',
+                raw_input: { command: 'npm test' },
+                content: [{ type: 'content', content: { type: 'text', text: 'preview output' } }],
+              },
+            },
+          } as unknown as ToolMessage,
+        ]}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'bash · tools.status.success' }));
+
+    expect(screen.getByTestId('tool-output-preview')).toHaveTextContent('preview output');
+    expect(screen.getByTestId('tool-output-preview-only')).toHaveTextContent('conversation.terminal.truncated');
+    expect(screen.queryByTestId('tool-load-full-output')).not.toBeInTheDocument();
+    expect(invoke).not.toHaveBeenCalled();
   });
 
   it('retries a failed full-output fetch', async () => {
@@ -362,6 +406,7 @@ describe('MessageToolGroupSummary', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'rg · tools.status.success' }));
+    fireEvent.click(screen.getByTestId('tool-load-full-output'));
     expect(await screen.findByText('tools.execution.loadError')).toBeInTheDocument();
     fireEvent.click(screen.getByText('tools.execution.retry'));
 

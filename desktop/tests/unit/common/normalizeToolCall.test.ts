@@ -33,6 +33,7 @@ describe('normalizeToolCall', () => {
       description: '"needle" in .',
       output: 'preview',
       truncated: true,
+      originalSize: 90000,
       messageId: 'message-1',
       conversationId: 'conversation-1',
     });

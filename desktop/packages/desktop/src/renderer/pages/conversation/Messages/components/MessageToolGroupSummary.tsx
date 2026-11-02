@@ -26,6 +26,7 @@ import { useMessageListRun } from '../hooks';
 import styles from './MessageToolGroupSummary.module.css';
 import ToolKindIcon from './ToolKindIcon';
 import {
+  capOutput,
   clipOutput,
   shouldFoldActivity,
   summarizeToolActivity,
@@ -35,6 +36,7 @@ import {
   toolErrorLine,
   toolLabel,
   shortPath,
+  TOOL_OUTPUT_FULL_LOAD_MAX_CHARS,
   type ToolLabel,
 } from './toolActivity';
 
@@ -85,17 +87,40 @@ const CallTarget: React.FC<{ label: ToolLabel }> = ({ label }) => {
   );
 };
 
-const ClippedOutput: React.FC<{ text: string }> = ({ text }) => {
+const ClippedOutput: React.FC<{ text: string; testId: string }> = ({ text, testId }) => {
   const { t } = useTranslation();
   const [full, setFull] = useState(false);
-  const clip = useMemo(() => clipOutput(text), [text]);
-  if (!clip.clipped) return <pre className={styles.detailContent}>{text}</pre>;
+  const capped = useMemo(() => capOutput(text), [text]);
+  const clip = useMemo(() => clipOutput(capped.text), [capped.text]);
+  const shown = full ? capped.text : clip.clipped ? `${clip.text}\n…` : capped.text;
+  if (!clip.clipped && !capped.truncated) {
+    return (
+      <pre className={styles.detailContent} data-testid={testId}>
+        {shown}
+      </pre>
+    );
+  }
   return (
     <>
-      <pre className={styles.detailContent}>{full ? text : `${clip.text}\n…`}</pre>
-      <Button className={styles.moreButton} type='text' size='mini' onClick={() => setFull((value) => !value)}>
-        {t(full ? 'tools.execution.showLess' : 'tools.execution.showMore')}
-      </Button>
+      <pre className={styles.detailContent} data-testid={testId}>
+        {shown}
+      </pre>
+      {capped.truncated && (
+        <div className={styles.detailLabel} data-testid={`${testId}-truncated`}>
+          {t('conversation.terminal.truncated')}
+        </div>
+      )}
+      {clip.clipped && (
+        <Button
+          className={styles.moreButton}
+          type='text'
+          size='mini'
+          data-testid={`${testId}-more`}
+          onClick={() => setFull((value) => !value)}
+        >
+          {t(full ? 'tools.execution.showLess' : 'tools.execution.showMore')}
+        </Button>
+      )}
     </>
   );
 };
@@ -112,6 +137,8 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
   // A refused call's output is spec.jev's refusal, written for the model: the row says what happened instead.
   const output = item.denied ? undefined : displayItem.output;
   const hasDetail = Boolean(displayItem.input || output || item.truncated || item.imagePath);
+  const fullOutputTooLarge =
+    item.truncated && typeof item.originalSize === 'number' && item.originalSize > TOOL_OUTPUT_FULL_LOAD_MAX_CHARS;
   const [messageApi, messageContext] = Message.useMessage();
   const handleDownloadImage = useCallback(
     async (path: string) => {
@@ -127,7 +154,8 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
   );
 
   const loadFullItem = async () => {
-    if (!item.truncated || fullItem || loadingFull || !item.conversationId || !item.messageId) return;
+    if (fullOutputTooLarge || !item.truncated || fullItem || loadingFull || !item.conversationId || !item.messageId)
+      return;
     setLoadingFull(true);
     setLoadError(false);
     try {
@@ -145,9 +173,7 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
   };
 
   const toggleExpanded = () => {
-    const nextExpanded = !expanded;
-    setExpanded(nextExpanded);
-    if (nextExpanded) void loadFullItem();
+    setExpanded((value) => !value);
   };
 
   const line = (
@@ -216,7 +242,6 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
       )}
       {expanded && hasDetail && (
         <div className={styles.detailPanel}>
-          {loadingFull && <div className={styles.detailLabel}>{t('tools.execution.loading')}</div>}
           {loadError && (
             <div className={styles.loadError}>
               <span>{t('tools.execution.loadError')}</span>
@@ -228,13 +253,37 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
           {displayItem.input && (
             <div className={styles.detailSection}>
               <div className={styles.detailLabel}>{t('tools.execution.input')}</div>
-              <ClippedOutput text={displayItem.input} />
+              <ClippedOutput text={displayItem.input} testId='tool-input-preview' />
             </div>
           )}
           {output && (
             <div className={styles.detailSection}>
               <div className={styles.detailLabel}>{t('tools.execution.output')}</div>
-              <ClippedOutput text={swarmProgressText(t, displayItem.swarmProgress, output)} />
+              <ClippedOutput
+                text={swarmProgressText(t, displayItem.swarmProgress, output)}
+                testId='tool-output-preview'
+              />
+            </div>
+          )}
+          {item.truncated && !fullItem && !loadError && (
+            <div className={styles.detailSection}>
+              {fullOutputTooLarge ? (
+                <div className={styles.detailLabel} data-testid='tool-output-preview-only'>
+                  {t('conversation.terminal.truncated')}
+                </div>
+              ) : loadingFull ? (
+                <div className={styles.detailLabel}>{t('tools.execution.loading')}</div>
+              ) : (
+                <Button
+                  className={styles.moreButton}
+                  type='text'
+                  size='mini'
+                  data-testid='tool-load-full-output'
+                  onClick={() => void loadFullItem()}
+                >
+                  {t('tools.execution.showMore')}
+                </Button>
+              )}
             </div>
           )}
         </div>

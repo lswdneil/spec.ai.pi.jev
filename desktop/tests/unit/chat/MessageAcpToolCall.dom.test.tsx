@@ -5,12 +5,13 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { IMessageAcpTerminalOutput, IMessageAcpToolCall } from '@/common/chat/chatLib';
 import type { FileChangesPanelProps } from '@/renderer/components/base/FileChangesPanel';
 import MessageAcpTerminalOutput from '@/renderer/pages/conversation/Messages/acp/MessageAcpTerminalOutput';
 import MessageAcpToolCall from '@/renderer/pages/conversation/Messages/acp/MessageAcpToolCall';
+import { TOOL_OUTPUT_RENDER_MAX_CHARS } from '@/renderer/pages/conversation/Messages/components/toolActivity';
 import { cssRules, readRendererCss } from '../../helpers/cssRules';
 
 const mockDownloadFileFromPath = vi.fn().mockResolvedValue(undefined);
@@ -377,7 +378,7 @@ describe('MessageAcpToolCall image output', () => {
     expect(screen.queryByText(/workspace\/file.ts/)).not.toBeInTheDocument();
   });
 
-  it('renders string raw input as markdown', () => {
+  it('renders a string raw input as plain command text', () => {
     render(
       <MessageAcpToolCall
         message={createMessage({
@@ -388,6 +389,36 @@ describe('MessageAcpToolCall image output', () => {
     );
 
     expect(screen.getByText(/echo hello/)).toBeInTheDocument();
+  });
+
+  it('clips a multiline command until the reader asks for the rest', () => {
+    const rawInput = Array.from({ length: 40 }, (_, index) => `echo command-${index + 1}`).join('\n');
+    render(<MessageAcpToolCall message={createMessage({ ...baseUpdate, rawInput })} />);
+
+    const preview = screen.getByTestId('acp-tool-call-input');
+    expect(preview).toHaveTextContent('echo command-1');
+    expect(preview).not.toHaveTextContent('echo command-40');
+
+    fireEvent.click(screen.getByTestId('acp-tool-call-input-more'));
+    expect(preview).toHaveTextContent('echo command-40');
+  });
+
+  it('caps the expanded output before it reaches the DOM', () => {
+    const text = 'x'.repeat(TOOL_OUTPUT_RENDER_MAX_CHARS + 10_000);
+    render(
+      <MessageAcpToolCall
+        message={createMessage({
+          ...baseUpdate,
+          content: [{ type: 'content', content: { type: 'text', text } }],
+        })}
+      />
+    );
+
+    const preview = screen.getByTestId('acp-tool-call-output');
+    fireEvent.click(screen.getByTestId('acp-tool-call-output-more'));
+
+    expect(preview.textContent).toHaveLength(TOOL_OUTPUT_RENDER_MAX_CHARS);
+    expect(screen.getByTestId('acp-tool-call-output-truncated')).toHaveTextContent('conversation.terminal.truncated');
   });
 
   it('renders an empty diff content with fallback file metadata', () => {

@@ -18,9 +18,9 @@ import { Tag } from '@/renderer/ui/tag';
 import { Tooltip } from '@/renderer/ui/tooltip';
 import { Download } from '@icon-park/react';
 import { createTwoFilesPatch } from 'diff';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import MarkdownView, { MAX_RICH_MARKDOWN_CHARS } from '@renderer/components/Markdown';
+import { capOutput, clipOutput } from '../components/toolActivity';
 
 type StatusTone = 'neutral' | 'success' | 'warning';
 
@@ -55,6 +55,42 @@ const StatusTag: React.FC<{ status: string }> = ({ status }) => {
 
   const { color, text } = getTagProps();
   return <Tag color={color}>{text}</Tag>;
+};
+
+const ToolOutputPreview: React.FC<{ text: string; testId: string }> = ({ text, testId }) => {
+  const { t } = useTranslation();
+  const [full, setFull] = useState(false);
+  const capped = useMemo(() => capOutput(text), [text]);
+  const clip = useMemo(() => clipOutput(capped.text), [capped.text]);
+  const shown = full ? capped.text : clip.clipped ? `${clip.text}\n…` : capped.text;
+
+  return (
+    <>
+      <pre
+        dir='ltr'
+        data-testid={testId}
+        className='sv-dense-terminal-output sv-acp-tool-output bg-1 p-2 rounded text-xs font-mono overflow-x-auto whitespace-pre-wrap m-0'
+      >
+        {shown}
+      </pre>
+      {capped.truncated && (
+        <div className='mt-1 text-11px text-t-secondary' data-testid={`${testId}-truncated`}>
+          {t('conversation.terminal.truncated')}
+        </div>
+      )}
+      {clip.clipped && (
+        <Button
+          className='mt-1'
+          type='text'
+          size='mini'
+          data-testid={`${testId}-more`}
+          onClick={() => setFull((value) => !value)}
+        >
+          {t(full ? 'tools.execution.showLess' : 'tools.execution.showMore')}
+        </Button>
+      )}
+    </>
+  );
 };
 
 // Diff content display as a separate component to ensure hooks are called unconditionally
@@ -99,9 +135,7 @@ const ContentView: React.FC<{ content: IMessageAcpToolCall['content']['update'][
     return (
       <div className='mt-3'>
         <div className='sv-dense-code-block sv-acp-tool-output bg-1 p-3 rounded border overflow-hidden'>
-          <div className='min-w-0 overflow-x-auto break-words'>
-            <MarkdownView plainTextAbove={MAX_RICH_MARKDOWN_CHARS}>{content.content.text}</MarkdownView>
-          </div>
+          <ToolOutputPreview text={content.content.text} testId='acp-tool-call-output' />
         </div>
       </div>
     );
@@ -176,11 +210,9 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
           {rawInput && (
             <div className='text-sm'>
               {typeof rawInput === 'string' ? (
-                <MarkdownView plainTextAbove={MAX_RICH_MARKDOWN_CHARS}>{`\`\`\`\n${rawInput}\n\`\`\``}</MarkdownView>
+                <ToolOutputPreview text={rawInput} testId='acp-tool-call-input' />
               ) : (
-                <pre className='sv-dense-terminal-output sv-acp-tool-output bg-1 p-2 rounded text-xs overflow-x-auto'>
-                  {JSON.stringify(rawInput, null, 2)}
-                </pre>
+                <ToolOutputPreview text={JSON.stringify(rawInput, null, 2)} testId='acp-tool-call-input' />
               )}
             </div>
           )}

@@ -12,6 +12,8 @@ export interface NormalizedToolCall {
   input?: string;
   output?: string;
   truncated?: boolean;
+  /** Size of the stored tool message before AionCore replaced it with a compact preview. */
+  originalSize?: number;
   messageId?: string;
   conversationId?: string;
   imagePath?: string;
@@ -192,6 +194,7 @@ export function normalizeAcpToolCall(message: IMessageAcpToolCall): NormalizedTo
   const keyParam = buildParamSummary(update.kind, rawInput);
   const status = normalizeAcpStatus(update.status);
   const rawOutput = update.rawOutput ?? update.raw_output;
+  const originalSize = content?._compact?.original_size;
 
   return {
     key: update.tool_call_id,
@@ -203,6 +206,7 @@ export function normalizeAcpToolCall(message: IMessageAcpToolCall): NormalizedTo
     input,
     output,
     truncated: content?._compact?.truncated === true,
+    ...(typeof originalSize === 'number' ? { originalSize } : {}),
     messageId: message.id,
     conversationId: message.conversation_id,
     imagePath: getAcpImagePath(update),
