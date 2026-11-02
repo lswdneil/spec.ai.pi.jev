@@ -12,6 +12,14 @@ import { Tag } from '@/renderer/ui/tag';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+type StatusTone = 'neutral' | 'success' | 'warning' | 'danger';
+
+const terminalTone = (exit: IMessageAcpTerminalOutput['content']['exit_status']): StatusTone => {
+  if (!exit) return 'neutral';
+  if (exit.signaled || typeof exit.exit_code !== 'number') return 'danger';
+  return exit.exit_code === 0 ? 'success' : 'warning';
+};
+
 /**
  * Live card for a client-hosted terminal (ACP terminal/*): the delegated
  * command runs in OUR process tree, so output streams in real time and the
@@ -25,6 +33,7 @@ const MessageAcpTerminalOutput: React.FC<{ message: IMessageAcpTerminalOutput }>
   const [killing, setKilling] = useState(false);
 
   const running = !content?.exit_status;
+  const tone = terminalTone(content?.exit_status);
 
   // Tail-follow the output while the command runs.
   useEffect(() => {
@@ -58,17 +67,21 @@ const MessageAcpTerminalOutput: React.FC<{ message: IMessageAcpTerminalOutput }>
       {t('conversation.terminal.running', { defaultValue: 'Running' })}
     </Tag>
   ) : exit?.signaled ? (
-    <Tag color='orange' size='small' data-testid='terminal-card-status'>
+    <Tag color='red' size='small' data-testid='terminal-card-status'>
       {t('conversation.terminal.stopped', { defaultValue: 'Stopped' })}
     </Tag>
   ) : (
-    <Tag color={exit?.exit_code === 0 ? 'green' : 'red'} size='small' data-testid='terminal-card-status'>
+    <Tag
+      color={tone === 'success' ? 'green' : tone === 'danger' ? 'red' : 'orange'}
+      size='small'
+      data-testid='terminal-card-status'
+    >
       {t('conversation.terminal.exited', { defaultValue: 'Exit {{code}}', code: exit?.exit_code ?? '?' })}
     </Tag>
   );
 
   return (
-    <Card className='sv-dense-acp-card w-full mb-2' size='small' bordered>
+    <Card className='sv-dense-acp-card w-full mb-2' size='small' bordered data-status-tone={tone}>
       <div className='flex items-center gap-2 mb-2 min-w-0'>
         <code
           dir='ltr'

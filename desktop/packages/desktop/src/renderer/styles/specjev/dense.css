@@ -319,7 +319,20 @@ html[data-sv-ui='dense'] .sv-dense-tool-summary {
 
 html[data-sv-ui='dense'] .sv-dense-acp-card {
   border-radius: 5px;
+  border-inline-start-width: 2px;
   padding: 8px;
+}
+
+html[data-sv-ui='dense'] .sv-dense-acp-card[data-status-tone='success'] {
+  border-inline-start-color: var(--sv-ok);
+}
+
+html[data-sv-ui='dense'] .sv-dense-acp-card[data-status-tone='warning'] {
+  border-inline-start-color: var(--sv-warn);
+}
+
+html[data-sv-ui='dense'] .sv-dense-acp-card[data-status-tone='danger'] {
+  border-inline-start-color: var(--sv-danger);
 }
 
 html[data-sv-ui='dense'] .sv-dense-acp-title,
@@ -342,6 +355,7 @@ html[data-sv-ui='dense'] .sv-dense-code-block {
   border: 1px solid var(--sv-line);
   border-radius: 4px;
   background: var(--sv-surface-2);
+  color: var(--text-primary);
   font-size: 10.5px;
   line-height: 1.6;
   min-width: 0;

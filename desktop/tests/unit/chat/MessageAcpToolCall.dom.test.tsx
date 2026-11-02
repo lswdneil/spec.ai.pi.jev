@@ -444,6 +444,22 @@ describe('Dense ACP card padding', () => {
     expect(rules.some((rule) => rule.includes('padding: 8px;'))).toBe(true);
     expect(css).not.toContain('.sv-dense-acp-card .arco-card-body');
   });
+
+  it('keeps tool output on the theme text colour', () => {
+    const css = readRendererCss('styles/specjev/dense.css');
+    const output = cssRules(css, "html[data-sv-ui='dense'] .sv-dense-terminal-output");
+    expect(output.some((rule) => rule.includes('color: var(--text-primary);'))).toBe(true);
+  });
+
+  it('marks success, warning and execution failure with theme tokens', () => {
+    const css = readRendererCss('styles/specjev/dense.css');
+    const rule = (tone: string) =>
+      cssRules(css, `html[data-sv-ui='dense'] .sv-dense-acp-card[data-status-tone='${tone}']`);
+
+    expect(rule('success').some((value) => value.includes('border-inline-start-color: var(--sv-ok);'))).toBe(true);
+    expect(rule('warning').some((value) => value.includes('border-inline-start-color: var(--sv-warn);'))).toBe(true);
+    expect(rule('danger').some((value) => value.includes('border-inline-start-color: var(--sv-danger);'))).toBe(true);
+  });
 });
 
 describe('MessageAcpTerminalOutput layout', () => {
@@ -468,5 +484,52 @@ describe('MessageAcpTerminalOutput layout', () => {
     const output = screen.getByTestId('terminal-card-output');
     expect(output).toHaveTextContent(token);
     expect(output).toHaveClass('sv-acp-tool-output');
+  });
+});
+
+const terminalMessage = (
+  exit_status: IMessageAcpTerminalOutput['content']['exit_status']
+): IMessageAcpTerminalOutput => ({
+  id: 'terminal-tone',
+  msg_id: 'terminal-tone',
+  conversation_id: 'conv-1',
+  type: 'acp_terminal_output',
+  content: {
+    terminal_id: 'term-1',
+    command: 'bash',
+    output: 'Traceback (most recent call last):',
+    truncated: false,
+    exit_status,
+  },
+});
+
+describe('ACP tool status tones', () => {
+  it('uses a success edge for a completed tool call', () => {
+    const { container } = render(
+      <MessageAcpToolCall message={createMessage({ ...baseUpdate, status: 'completed' })} />
+    );
+
+    expect(container.querySelector('.sv-dense-acp-card')).toHaveAttribute('data-status-tone', 'success');
+  });
+
+  it('uses a warning edge for a failed tool call while keeping running neutral', () => {
+    const { container, rerender } = render(
+      <MessageAcpToolCall message={createMessage({ ...baseUpdate, status: 'failed' })} />
+    );
+    expect(container.querySelector('.sv-dense-acp-card')).toHaveAttribute('data-status-tone', 'warning');
+
+    rerender(<MessageAcpToolCall message={createMessage({ ...baseUpdate, status: 'in_progress' })} />);
+    expect(container.querySelector('.sv-dense-acp-card')).toHaveAttribute('data-status-tone', 'neutral');
+  });
+
+  it('maps terminal exits to success, warning and danger tones', () => {
+    const { container, rerender } = render(<MessageAcpTerminalOutput message={terminalMessage({ exit_code: 0 })} />);
+    expect(container.querySelector('.sv-dense-acp-card')).toHaveAttribute('data-status-tone', 'success');
+
+    rerender(<MessageAcpTerminalOutput message={terminalMessage({ exit_code: 2 })} />);
+    expect(container.querySelector('.sv-dense-acp-card')).toHaveAttribute('data-status-tone', 'warning');
+
+    rerender(<MessageAcpTerminalOutput message={terminalMessage({ exit_code: null, signaled: true })} />);
+    expect(container.querySelector('.sv-dense-acp-card')).toHaveAttribute('data-status-tone', 'danger');
   });
 });

@@ -22,18 +22,31 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import MarkdownView, { MAX_RICH_MARKDOWN_CHARS } from '@renderer/components/Markdown';
 
+type StatusTone = 'neutral' | 'success' | 'warning';
+
+const statusTone = (status: string): StatusTone => {
+  switch (status) {
+    case 'completed':
+      return 'success';
+    case 'failed':
+      return 'warning';
+    default:
+      return 'neutral';
+  }
+};
+
 const StatusTag: React.FC<{ status: string }> = ({ status }) => {
   const { t } = useTranslation();
   const getTagProps = () => {
     switch (status) {
       case 'pending':
-        return { color: 'blue', text: t('common.kyrn.toolStatus.pending') };
+        return { color: 'gray', text: t('common.kyrn.toolStatus.pending') };
       case 'in_progress':
-        return { color: 'orange', text: t('common.kyrn.toolStatus.in_progress') };
+        return { color: 'blue', text: t('common.kyrn.toolStatus.in_progress') };
       case 'completed':
-        return { color: 'gray', text: t('common.kyrn.toolStatus.completed') };
+        return { color: 'green', text: t('common.kyrn.toolStatus.completed') };
       case 'failed':
-        return { color: 'red', text: t('common.kyrn.toolStatus.failed') };
+        return { color: 'orange', text: t('common.kyrn.toolStatus.failed') };
       default:
         // A status this build does not know is shown as the agent sent it rather than guessed at.
         return { color: 'gray', text: status };
@@ -150,7 +163,7 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
   }
 
   return (
-    <Card className='sv-dense-acp-card w-full mb-2' size='small' bordered>
+    <Card className='sv-dense-acp-card w-full mb-2' size='small' bordered data-status-tone={statusTone(status)}>
       {messageContext}
       <div className='flex items-start gap-3'>
         <div className='flex-1 min-w-0'>
@@ -163,9 +176,7 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
           {rawInput && (
             <div className='text-sm'>
               {typeof rawInput === 'string' ? (
-                <MarkdownView
-                  plainTextAbove={MAX_RICH_MARKDOWN_CHARS}
-                >{`\`\`\`\n${rawInput}\n\`\`\``}</MarkdownView>
+                <MarkdownView plainTextAbove={MAX_RICH_MARKDOWN_CHARS}>{`\`\`\`\n${rawInput}\n\`\`\``}</MarkdownView>
               ) : (
                 <pre className='sv-dense-terminal-output sv-acp-tool-output bg-1 p-2 rounded text-xs overflow-x-auto'>
                   {JSON.stringify(rawInput, null, 2)}
