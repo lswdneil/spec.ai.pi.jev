@@ -3,6 +3,7 @@
 ## Using spec.jev
 
 - [Getting started](getting-started.md): install the desktop app or the command line, connect a model, and watch or turn off the judge's decisions.
+- [Desktop accounts](accounts.md): the sign-in gate, per-account local data, secrets and the account environment variables.
 - [Configuration](configuration.md): `spec.jev.json`, modes, environment variables and proxies.
 - [Judges](judges.md): hosted Jev, the free Jev, the local judge, classifier models and LLMs, and how to compare them.
 - [The moli backend](moli.md): driving the built-in browser with moli's engine, and the cheap `page_fetch` read.

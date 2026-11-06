@@ -169,3 +169,31 @@ Do not fast-forward or cherry-pick the whole upstream branch: the Dense UI,
 spec.jev naming, WebUI host, scopes, extension hosting, and tests are local
 forks. Port by user-value batches, with a parity matrix and the existing
 visual/unit/E2E gates after each batch.
+
+## Desktop accounts (implemented 2026-11-06)
+
+Status: implemented on `feat/auth-accounts` (`aa0777482`, `c09d53f7a`,
+`4607768f8`); not released.
+
+A packaged desktop build now starts at a spec.jev cloud-account sign-in. Each
+cloud account maps to its own local aioncore user, so conversations, projects,
+provider keys, skills, MCP servers and settings stay with the account that
+created them on this installation. The first account claims the built-in
+`admin` user and inherits pre-account data; later accounts use
+`cloud_<cloudUserId>`. The main process keeps the cloud token, the generated
+local password and the aioncore cookies; the renderer only sees the public
+identity and role. See `docs/accounts.md`.
+
+Still open:
+
+- Forgot password: `resetCloudPassword` exists in the cloud client, but there
+  is no IPC provider or UI.
+- Providers, skills and MCP isolation share the per-user data directory, but
+  have not been checked directly.
+- Cross-device sync is out of scope; isolation is per installation.
+- Cloud operations still need a real check: mail/SMS delivery, SPF/DKIM/DMARC,
+  login and code rate limits, account-enumeration protection, and the device
+  limit policy.
+- The Windows installer is unsigned, and the release channel is undecided.
+- The account UI was approved as high-fidelity HTML in the working session;
+  no design file for it is committed.

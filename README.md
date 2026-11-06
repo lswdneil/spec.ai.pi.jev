@@ -41,7 +41,7 @@ What you get:
 
 ## Quick start
 
-**Desktop app.** Download the installer for Windows x64 or Linux x64 (Debian/Ubuntu) from [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases/latest), open it and paste an API key or sign in with a ChatGPT, Claude, Grok or Google subscription. There's nothing else to install.
+**Desktop app.** Download the installer for Windows x64 or Linux x64 (Debian/Ubuntu) from [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases/latest). A packaged install opens at account sign-in first: create or sign in to a spec.jev account at [spec-ai.cn](https://spec-ai.cn) with an email address or phone number. After that, paste an API key or sign in with a ChatGPT, Claude, Grok or Google subscription. There's nothing else to install.
 
 **Command line.**
 
@@ -289,6 +289,8 @@ A desktop app with spec.jev and its runtime built in: there's no Node.js to inst
 
 A bar along the bottom keeps the kernel in view: which judge answers and where it runs, how many decision points are active and, in a conversation, the verdicts so far, the latest judge latency and the context in use. The permission mode and the goal sit in the composer, and `⌘K` opens the command palette. You sign in to models inside the app: ChatGPT, Claude, Grok and Google (Gemini CLI / Antigravity) subscriptions, or an API key for any provider pi supports. You can import Claude Code and Codex CLI conversations and continue them.
 
+A packaged install starts at account sign-in. Each spec.jev account maps to its own local user, so conversations, projects, provider keys, skills, MCP servers and settings stay with the account that created them on this computer. The mapping is per installation; there is no cross-device sync yet. See [Desktop accounts](docs/accounts.md).
+
 GitHub Actions builds the app for Windows x64 and Linux x64 (Debian/Ubuntu) and publishes it under [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases).
 
 ## Command line
@@ -327,11 +329,12 @@ pi's own commands (`/model`, `/thinking`, `/login`, `/resume`, `/tree`, `/fork`,
 
 ## Privacy
 
-Your keys stay on your machine. spec.jev never downloads a model or a runtime on its own; anything that needs a download asks first. The judge sees only the fields a question needs. With no key set, those fields go to the free Jev on OpenCode Zen; `SPECJEV_JUDGE=off` or Laya keeps everything on your machine. Every verdict is logged locally, and you can read all of them. The desktop app sends no telemetry or crash reports. Details are in [SECURITY.md](SECURITY.md#what-leaves-your-machine).
+Your keys stay on your machine. spec.jev never downloads a model or a runtime on its own; anything that needs a download asks first. The judge sees only the fields a question needs. With no key set, those fields go to the free Jev on OpenCode Zen; `SPECJEV_JUDGE=off` or Laya keeps everything on your machine. Every verdict is logged locally, and you can read all of them. The desktop app sends no telemetry or crash reports. Signing in to the desktop app sends the account identifier (email address or phone number), the password or one-time code, and the session token to `spec-ai.cn`; conversation content and provider keys are not sent as part of account sign-in. Details are in [SECURITY.md](SECURITY.md#what-leaves-your-machine).
 
 ## Status and limitations
 
 - spec.jev is in early development. Pre-releases (0.1.x) are on npm and under [Releases](https://github.com/lswdneil/spec.ai.pi.jev/releases). The authors use it every day, but names, settings and formats may still change.
+- Desktop account data is isolated per account on one installation. It is not synced across devices, and the app does not merge two cloud accounts into one local profile.
 - The measurements above come from the authors' own sessions and from synthetic projects. The test-log repeats cover Vitest only.
 - The test-log numbers measure what reaches the model, not whether the model then finishes the task. There's no end-to-end comparison with pi, Claude Code or Codex on the same tasks yet.
 - Laya, the local judge, runs on Windows and Linux x64 through ONNX. It's weaker on meta-judgments than on simple predicates; run it in shadow before you give it a decision point.

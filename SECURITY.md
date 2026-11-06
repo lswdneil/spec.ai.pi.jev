@@ -36,10 +36,12 @@ On top of that, spec.jev adds guards. They lower risk but aren't guarantees. Rep
 - **Prompt-injection screening.** Web pages, search results and MCP output are screened passage by passage (`tool.injection`), and passages containing instructions aimed at the AI are withheld from the model. A judge can miss one: this is defense in depth, not a filter to rely on by itself.
 - **Projects are untrusted by default.** MCP servers defined by a project aren't started until you approve them, and a project can't point the judge at an endpoint of its choosing.
 - **Secrets.** Keys stay on your machine. Credentials are masked before text reaches the judge, the board or a session title; `.env` and key files are kept out of checkpoints; and a key set for one judge service is never sent to another.
+- **Desktop accounts.** A packaged desktop build requires a spec.jev cloud account. Each account maps to a separate local aioncore user; the main process keeps the cloud token, the generated local password and the aioncore cookies, and the renderer receives only the public identity and role. This isolates accounts on one installation. It is not an anti-tamper boundary against someone who can already write to your home directory.
 
 ### What leaves your machine
 
 - Your conversation goes to the model provider you chose, as with any coding agent.
+- The desktop app's account sign-in and account checks send the account identifier (email address or phone number), the password or one-time code, and the session token to `spec-ai.cn` (APP-API v0.5.0). Conversation content and provider keys are not part of those requests.
 - The judge sees only the fields each question needs. With no judge key, those questions go to the free Jev on OpenCode Zen; with a key, to the service the key belongs to. `MU_JUDGE=off`, or the local judge (Laya), keeps them on your machine.
 - Nothing is downloaded without your consent: the local judge's model, browser runtimes and app updates all ask first.
 - The desktop app sends no telemetry and no crash reports.
