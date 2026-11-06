@@ -190,7 +190,12 @@ Still open:
 - Cloud operations still need a real check: mail/SMS delivery, SPF/DKIM/DMARC,
   login and code rate limits, account-enumeration protection, and the device
   limit policy.
-- The Windows installer is unsigned, and the release channel is undecided.
+- Windows code signing has no certificate. Tagged CI builds fail closed until
+  `WINDOWS_CERTIFICATE_BASE64` and `WINDOWS_CERTIFICATE_PASSWORD` exist as
+  repository secrets.
+- The release channel is configured as GitHub pre-releases
+  (`lswdneil/spec.ai.pi.jev`). Pushing the branch and tag needs explicit
+  authorization; a self-hosted or spec-ai.cn update feed is not implemented.
 - The account UI was approved as high-fidelity HTML in the working session;
   no design file for it is committed.
 
