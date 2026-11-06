@@ -30,7 +30,7 @@ Until that package exists on npm and its trusted publisher is configured, an own
 
 ## Releasing the desktop app
 
-0. From a clean checkout, run `npm run check:desktop-release`. It checks the version lockstep, the changelog section, the worktree, the tag, the GitHub publish target, the update feed and the signing configuration. It never pushes, tags or publishes. Add `--strict` when every warning must be resolved.
+0. From a clean checkout, run `npm run check:desktop-release`. It checks the version lockstep, the changelog section, the worktree, the tag, the GitHub publish target, the update feed and the signing configuration. It never pushes, tags or publishes. Add `--strict` when every warning must be resolved; with an unsigned release, set `ALLOW_UNSIGNED_WINDOWS_RELEASE=true` in the same shell so the missing certificate is reported as the explicit decision instead of a warning.
 1. Make sure the app bundles the intended `spec.jev` (the build packs the spec.jev from the same commit), and that `desktop.yml` passed on `main`, including the conversations held in the built apps.
 2. Update [CHANGELOG.md](../CHANGELOG.md): move `[Unreleased]` under the new version.
 3. Tag and push: `git tag vX.Y.Z && git push origin vX.Y.Z`. The tag run builds every platform again, writes `SHA256SUMS` and the update feeds, and creates the pre-release. Push the command line's `spec.jev-vX.Y.Z` tag from the same commit as well when the release includes the npm package.
@@ -51,5 +51,7 @@ Tagged Windows builds are release/update inputs and require a valid Authenticode
 The certificate must include the Code Signing extended key usage and be trusted by Windows; the build checks both `spec.jev.exe` and the installer with `Get-AuthenticodeSignature`. Pull-request and branch builds may remain unsigned, but those packaged apps do not enable auto-update and use the manual installer path.
 
 `npm run check:desktop-release` reports whether the signing variables are set in the current shell. The variables that matter for a tagged build are the repository secrets; the check does not read them.
+
+There is no code-signing certificate: this is the decision as of 2026-11-06, so releases are unsigned. A `v*` tag therefore stops at the signing gate unless the repository variable `ALLOW_UNSIGNED_WINDOWS_RELEASE` is `true`. With it set, the Windows installer is built unsigned and published as a pre-release, and the release notes say so. SmartScreen warns on the first run, and because an unsigned build fails the signature check that auto-update relies on, it updates by downloading the new installer and asking the person to run it instead of restarting in place. Remove the variable once a certificate is configured.
 
 Linux deb packages are not Authenticode-signed. Linux never uses the restart updater: the app downloads the `.deb`, and the person installs it explicitly. `SHA256SUMS` is published with every desktop release.

@@ -183,10 +183,22 @@ if (
 const workflowPath = ".github/workflows/desktop.yml";
 if (existsSync(path.join(root, workflowPath))) {
 	const workflow = readText(workflowPath);
-	if (workflow.includes("WINDOWS_CERTIFICATE_BASE64") && workflow.includes("Tagged Windows builds require")) {
-		pass("CI fails closed without signing secrets");
+	if (
+		workflow.includes("WINDOWS_CERTIFICATE_BASE64") &&
+		workflow.includes("Tagged Windows builds require") &&
+		/MU_REQUIRE_SIGNED_BUILD:[^\n]*startsWith\(github\.ref, 'refs\/tags\/v'\)/.test(workflow)
+	) {
+		pass("tagged Windows builds require signing by default");
 	} else {
-		fail("CI fails closed without signing secrets", "desktop.yml lost the tagged-build signing gate");
+		fail("tagged Windows builds require signing by default", "desktop.yml lost the tagged-build signing gate");
+	}
+	if (/MU_REQUIRE_SIGNED_BUILD:[^\n]*vars\.ALLOW_UNSIGNED_WINDOWS_RELEASE != 'true'/.test(workflow)) {
+		pass("unsigned releases need the explicit repository variable");
+	} else {
+		fail(
+			"unsigned releases need the explicit repository variable",
+			"MU_REQUIRE_SIGNED_BUILD must only relax for vars.ALLOW_UNSIGNED_WINDOWS_RELEASE",
+		);
 	}
 } else {
 	fail("CI workflow exists", workflowPath);
@@ -194,10 +206,15 @@ if (existsSync(path.join(root, workflowPath))) {
 
 if (process.env.WINDOWS_CERTIFICATE_BASE64 && process.env.WINDOWS_CERTIFICATE_PASSWORD) {
 	pass("local signing secrets are set");
+} else if (process.env.ALLOW_UNSIGNED_WINDOWS_RELEASE === "true") {
+	pass(
+		"unsigned Windows release is explicit",
+		"ALLOW_UNSIGNED_WINDOWS_RELEASE=true: SmartScreen warns and updates use the installer",
+	);
 } else {
 	warn(
-		"local signing secrets are not set",
-		"tagged CI builds need WINDOWS_CERTIFICATE_BASE64 and WINDOWS_CERTIFICATE_PASSWORD as repository secrets; local builds stay unsigned",
+		"no Windows code-signing certificate",
+		"tagged CI builds stop at the signing gate; set ALLOW_UNSIGNED_WINDOWS_RELEASE=true to publish an unsigned pre-release",
 	);
 }
 

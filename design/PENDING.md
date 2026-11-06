@@ -190,14 +190,17 @@ Still open:
 - Cloud operations still need a real check: mail/SMS delivery, SPF/DKIM/DMARC,
   login and code rate limits, account-enumeration protection, and the device
   limit policy.
-- Windows code signing has no certificate. Tagged CI builds fail closed until
-  `WINDOWS_CERTIFICATE_BASE64` and `WINDOWS_CERTIFICATE_PASSWORD` exist as
-  repository secrets. `gh secret list` on 2026-11-06 showed only
-  `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`, so a `v*` tag run would
-  stop at the signing gate instead of publishing.
-- The release channel is configured as GitHub pre-releases
-  (`lswdneil/spec.ai.pi.jev`). Pushing the branch and tag needs explicit
-  authorization; a self-hosted or spec-ai.cn update feed is not implemented.
+- Windows code signing has no certificate: decided 2026-11-06 to ship unsigned
+  builds. A `v*` tag still fails closed by default; the repository variable
+  `ALLOW_UNSIGNED_WINDOWS_RELEASE=true` opts into an unsigned pre-release. The
+  unsigned installer gets a SmartScreen warning and updates by downloading the
+  new installer, not by restarting in place. `gh secret list` on 2026-11-06
+  showed only `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`, so the
+  certificate secrets do not exist.
+- The release channel stays GitHub pre-releases
+  (`lswdneil/spec.ai.pi.jev`), confirmed 2026-11-06. Pushing the branch and tag
+  still needs explicit authorization; a self-hosted or spec-ai.cn update feed
+  is not implemented.
 - The account UI was approved as high-fidelity HTML in the working session;
   no design file for it is committed.
 

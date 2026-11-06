@@ -104,8 +104,9 @@ jobs:
       MU_BACKEND_ARCH: ${{ matrix.arch }}
       # The Windows installer must carry the default Windows desktop MCP.
       MU_REQUIRE_WINDOWS_MCP: '1'
-      # Tagged Windows builds are release/update inputs and must carry a valid Authenticode signature.
-      MU_REQUIRE_SIGNED_BUILD: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.platform == 'windows-x64' && '1' || '0' }}
+      # Tagged Windows builds are release/update inputs and must carry a valid Authenticode signature. The repository
+      # variable ALLOW_UNSIGNED_WINDOWS_RELEASE=true opts into an unsigned pre-release instead; absent, tags stay fail closed.
+      MU_REQUIRE_SIGNED_BUILD: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.platform == 'windows-x64' && vars.ALLOW_UNSIGNED_WINDOWS_RELEASE != 'true' && '1' || '0' }}
       # Public release downloads (AionCore, Electron) are rate-limited without a token.
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -230,7 +231,7 @@ jobs:
         run: |
           if (-not $env:WINDOWS_CERTIFICATE_BASE64 -or -not $env:WINDOWS_CERTIFICATE_PASSWORD) {
             if ($env:MU_REQUIRE_SIGNED_BUILD -eq '1') {
-              throw 'Tagged Windows builds require WINDOWS_CERTIFICATE_BASE64 and WINDOWS_CERTIFICATE_PASSWORD.'
+              throw 'Tagged Windows builds require WINDOWS_CERTIFICATE_BASE64 and WINDOWS_CERTIFICATE_PASSWORD, or the repository variable ALLOW_UNSIGNED_WINDOWS_RELEASE=true.'
             }
             Write-Host "No certificate: building an unsigned app."
             exit 0
@@ -576,7 +577,7 @@ jobs:
             if [ "$WINDOWS_SIGNED" = "true" ]; then
               echo "- Windows: signed."
             else
-              echo "- Windows is not code-signed: SmartScreen shows a warning."
+              echo "- Windows is not code-signed: SmartScreen shows a warning. Updates download the new installer and ask you to run it instead of restarting in place."
             fi
             echo "- The app carries spec.jev inside it: nothing else to install, no Node.js, no download at the first start."
             echo "- The \`spec.jev\` command line: \`npm i -g spec.jev\` (Node.js 22.19 or newer), or from source (the archive below, or a clone)."
