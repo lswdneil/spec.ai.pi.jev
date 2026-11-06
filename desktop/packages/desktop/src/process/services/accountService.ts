@@ -287,7 +287,7 @@ async function clearBrowserCookies(): Promise<void> {
   const port = headerInjectionPort ?? backendPort();
   const base = backendBaseUrl(port);
   await Promise.all(
-    SESSION_COOKIE_NAMES.map((name) => session.defaultSession.cookies.remove(base, name).catch(() => undefined))
+    SESSION_COOKIE_NAMES.map((name) => session.defaultSession.cookies.remove(base, name).catch((): void => undefined))
   );
 }
 

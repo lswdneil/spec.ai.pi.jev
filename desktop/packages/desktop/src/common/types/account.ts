@@ -82,6 +82,12 @@ export type AccountBindParams =
   | { method: 'email'; email: string; code: string }
   | { method: 'phone'; phone: string; code: string };
 
+export type AccountResetParams = {
+  email: string;
+  code: string;
+  newPassword: string;
+};
+
 export type AccountSendCodePurpose = 'register' | 'login' | 'reset' | 'bind';
 
 export function isAccountFailure<T>(

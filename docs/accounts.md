@@ -41,5 +41,6 @@ A packaged desktop build requires a spec.jev cloud account before the app opens.
 
 ## Known gaps
 
-- The cloud client has `resetCloudPassword`, but there is no IPC bridge or UI for it, so "forgot password" is not available in the app yet.
-- Provider, skill and MCP isolation uses the same per-user aioncore data directory as conversations and settings, but those three areas have not been verified directly.
+- Password reset is email-only. The sign-in page offers it when the email method is selected; phone-only accounts use one-time codes and have no password to reset.
+- Conversations, settings, providers, MCP servers and imported skills were verified against aioncore on 2026-11-06: a provider, an MCP server and a skill created by account A were invisible to account B (`desktop/scripts/spike-auth-webui.mjs`, 35/35 checks).
+- Cross-device sync is out of scope.

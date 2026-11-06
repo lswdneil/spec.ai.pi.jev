@@ -186,10 +186,6 @@ identity and role. See `docs/accounts.md`.
 
 Still open:
 
-- Forgot password: `resetCloudPassword` exists in the cloud client, but there
-  is no IPC provider or UI.
-- Providers, skills and MCP isolation share the per-user data directory, but
-  have not been checked directly.
 - Cross-device sync is out of scope; isolation is per installation.
 - Cloud operations still need a real check: mail/SMS delivery, SPF/DKIM/DMARC,
   login and code rate limits, account-enumeration protection, and the device
@@ -197,3 +193,11 @@ Still open:
 - The Windows installer is unsigned, and the release channel is undecided.
 - The account UI was approved as high-fidelity HTML in the working session;
   no design file for it is committed.
+
+Verified 2026-11-06:
+
+- Forgot password is wired through the sign-in page for email accounts
+  (`account:reset-password` -> `/api/auth/reset-password`).
+- A provider, an MCP server and an imported skill created by account A were
+  invisible to account B in `desktop/scripts/spike-auth-webui.mjs` (35/35
+  checks, including the earlier conversation/settings/WebSocket checks).

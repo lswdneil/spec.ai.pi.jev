@@ -9,7 +9,7 @@
  */
 
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -172,7 +172,8 @@ function assertSafeCleanup(dir) {
   const tempRoot = `${path.resolve(tmpdir()).toLowerCase()}${path.sep}`;
   const target = path.resolve(dir);
   const inside = target.toLowerCase().startsWith(tempRoot);
-  const named = path.basename(target).startsWith('specjev-auth-spike-');
+  const named =
+    path.basename(target).startsWith('specjev-auth-spike-') || path.basename(target).startsWith('specjev-spike-skill-');
   if (!inside || !named) throw new Error(`refusing to remove unexpected directory: ${target}`);
 }
 
@@ -219,7 +220,10 @@ try {
   const loginAdmin = await login('admin', adminPassword);
   requireOk('user A login succeeds', loginA.response.ok && loginA.body?.success === true);
   requireOk('user B login succeeds', loginB.response.ok && loginB.body?.success === true);
-  requireOk('built-in admin login succeeds with set password', loginAdmin.response.ok && loginAdmin.body?.success === true);
+  requireOk(
+    'built-in admin login succeeds with set password',
+    loginAdmin.response.ok && loginAdmin.body?.success === true
+  );
   requireOk('login returns a local JWT', Boolean(loginA.body?.token));
   requireOk('login sets a session cookie', Boolean(cookieValue(loginA.cookie, 'aionui-session')));
   requireOk('login sets a CSRF cookie', Boolean(loginA.csrf));
@@ -255,11 +259,7 @@ try {
   requireOk('user A reads its own setting', readA?.['spike.owner'] === 'A', JSON.stringify(readA));
 
   const readBBefore = await jsonData(await api('/api/settings/client', { cookie: loginB.cookie }));
-  requireOk(
-    'user B cannot read user A setting',
-    readBBefore?.['spike.owner'] !== 'A',
-    JSON.stringify(readBBefore)
-  );
+  requireOk('user B cannot read user A setting', readBBefore?.['spike.owner'] !== 'A', JSON.stringify(readBBefore));
 
   const writeB = await api('/api/settings/client', {
     method: 'PUT',
@@ -272,6 +272,78 @@ try {
   const readAAfter = await jsonData(await api('/api/settings/client', { cookie: loginA.cookie }));
   requireOk('user A setting is unchanged by user B', readAAfter?.['spike.owner'] === 'A');
 
+  const providerWrite = await api('/api/providers', {
+    method: 'POST',
+    cookie: loginA.cookie,
+    csrf: loginA.csrf,
+    body: {
+      platform: 'openai',
+      name: 'spike-provider-a',
+      base_url: 'https://example.invalid/v1',
+      api_key: 'spike-key',
+      models: [],
+    },
+  });
+  requireOk('user A creates a provider', providerWrite.ok, `status=${providerWrite.status}`);
+  const providersA = await jsonData(await api('/api/providers', { cookie: loginA.cookie }));
+  const providersB = await jsonData(await api('/api/providers', { cookie: loginB.cookie }));
+  const providerNamesA = Array.isArray(providersA) ? providersA.map((provider) => provider?.name) : [];
+  const providerNamesB = Array.isArray(providersB) ? providersB.map((provider) => provider?.name) : [];
+  requireOk('user A sees its provider', providerNamesA.includes('spike-provider-a'), JSON.stringify(providerNamesA));
+  requireOk(
+    'user B cannot see user A provider',
+    !providerNamesB.includes('spike-provider-a'),
+    JSON.stringify(providerNamesB)
+  );
+
+  const mcpWrite = await api('/api/mcp/servers', {
+    method: 'POST',
+    cookie: loginA.cookie,
+    csrf: loginA.csrf,
+    body: {
+      name: 'spike-mcp-a',
+      description: 'isolation probe',
+      transport: { type: 'stdio', command: 'echo', args: [] },
+      original_json: '{}',
+      builtin: false,
+    },
+  });
+  requireOk('user A creates an MCP server', mcpWrite.ok, `status=${mcpWrite.status}`);
+  const mcpA = await jsonData(await api('/api/mcp/servers', { cookie: loginA.cookie }));
+  const mcpB = await jsonData(await api('/api/mcp/servers', { cookie: loginB.cookie }));
+  const mcpNamesA = Array.isArray(mcpA) ? mcpA.map((server) => server?.name) : [];
+  const mcpNamesB = Array.isArray(mcpB) ? mcpB.map((server) => server?.name) : [];
+  requireOk('user A sees its MCP server', mcpNamesA.includes('spike-mcp-a'), JSON.stringify(mcpNamesA));
+  requireOk('user B cannot see user A MCP server', !mcpNamesB.includes('spike-mcp-a'), JSON.stringify(mcpNamesB));
+
+  const skillDir = mkdtempSync(path.join(tmpdir(), 'specjev-spike-skill-'));
+  writeFileSync(
+    path.join(skillDir, 'SKILL.md'),
+    '---\nname: spike-skill-a\ndescription: Isolation probe\n---\n\n# Spike skill\n'
+  );
+  try {
+    const skillWrite = await api('/api/skills/import', {
+      method: 'POST',
+      cookie: loginA.cookie,
+      csrf: loginA.csrf,
+      body: { skill_path: skillDir },
+    });
+    requireOk('user A imports a skill', skillWrite.ok, `status=${skillWrite.status}`);
+    const skillsA = await jsonData(await api('/api/skills', { cookie: loginA.cookie }));
+    const skillsB = await jsonData(await api('/api/skills', { cookie: loginB.cookie }));
+    const skillNamesA = Array.isArray(skillsA) ? skillsA.map((skill) => skill?.name) : [];
+    const skillNamesB = Array.isArray(skillsB) ? skillsB.map((skill) => skill?.name) : [];
+    requireOk('user A sees its imported skill', skillNamesA.includes('spike-skill-a'), JSON.stringify(skillNamesA));
+    requireOk(
+      'user B cannot see user A imported skill',
+      !skillNamesB.includes('spike-skill-a'),
+      JSON.stringify(skillNamesB)
+    );
+  } finally {
+    assertSafeCleanup(skillDir);
+    rmSync(skillDir, { recursive: true, force: true });
+  }
+
   const socketA = await probeWebSocket(`ws://127.0.0.1:${PORT}/ws`, { cookie: loginA.cookie });
   requireOk('WebSocket opens with session cookie', socketA.opened === true, JSON.stringify(socketA));
 
@@ -283,11 +355,7 @@ try {
       message.name === 'realtime.error' &&
       (message.data?.code === 'REALTIME_AUTH_MISSING' || message.data?.code === 'REALTIME_AUTH_EXPIRED')
   );
-  record(
-    'WebSocket without credentials gets an auth error',
-    anonymousAuthError,
-    JSON.stringify(socketAnonymous)
-  );
+  record('WebSocket without credentials gets an auth error', anonymousAuthError, JSON.stringify(socketAnonymous));
 
   const logout = await api('/logout', {
     method: 'POST',

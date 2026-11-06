@@ -4,6 +4,7 @@ import type {
   AccountBindParams,
   AccountLoginParams,
   AccountRegisterParams,
+  AccountResetParams,
   AccountResult,
   AccountSendCodePurpose,
   AccountStatus,
@@ -19,6 +20,7 @@ type AccountContextValue = {
   register: (params: AccountRegisterParams) => Promise<AccountResult<AccountStatus>>;
   logout: () => Promise<AccountResult>;
   changePassword: (oldPassword: string, newPassword: string) => Promise<AccountResult>;
+  resetPassword: (params: AccountResetParams) => Promise<AccountResult>;
   bind: (params: AccountBindParams) => Promise<AccountResult<AccountStatus>>;
   revokeAll: () => Promise<AccountResult>;
   deactivate: (params: { password: string } | { code: string }) => Promise<AccountResult>;
@@ -131,6 +133,10 @@ export const AccountProvider: React.FC<React.PropsWithChildren> = ({ children })
     return ipcBridge.account.changePassword.invoke({ oldPassword, newPassword });
   }, []);
 
+  const resetPassword = useCallback(async (params: AccountResetParams) => {
+    return ipcBridge.account.resetPassword.invoke(params);
+  }, []);
+
   const bind = useCallback(
     async (params: AccountBindParams) => acceptStatus(await ipcBridge.account.bind.invoke(params)),
     [acceptStatus]
@@ -179,11 +185,25 @@ export const AccountProvider: React.FC<React.PropsWithChildren> = ({ children })
       register,
       logout,
       changePassword,
+      resetPassword,
       bind,
       revokeAll,
       deactivate,
     }),
-    [bind, changePassword, deactivate, loading, login, logout, refresh, register, revokeAll, sendCode, status]
+    [
+      bind,
+      changePassword,
+      deactivate,
+      loading,
+      login,
+      logout,
+      refresh,
+      register,
+      resetPassword,
+      revokeAll,
+      sendCode,
+      status,
+    ]
   );
 
   return <AccountContext.Provider value={value}>{children}</AccountContext.Provider>;

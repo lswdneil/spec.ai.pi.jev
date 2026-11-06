@@ -93,6 +93,7 @@ import type {
   AccountBindParams,
   AccountLoginParams,
   AccountRegisterParams,
+  AccountResetParams,
   AccountResult,
   AccountSendCodePurpose,
   AccountStatus,
@@ -309,16 +310,13 @@ export const account = {
   login: bridge.buildProvider<AccountResult<AccountStatus>, AccountLoginParams>('account:login'),
   register: bridge.buildProvider<AccountResult<AccountStatus>, AccountRegisterParams>('account:register'),
   logout: bridge.buildProvider<AccountResult, void>('account:logout'),
-  changePassword: bridge.buildProvider<
-    AccountResult,
-    { oldPassword: string; newPassword: string }
-  >('account:change-password'),
+  changePassword: bridge.buildProvider<AccountResult, { oldPassword: string; newPassword: string }>(
+    'account:change-password'
+  ),
+  resetPassword: bridge.buildProvider<AccountResult, AccountResetParams>('account:reset-password'),
   bind: bridge.buildProvider<AccountResult<AccountStatus>, AccountBindParams>('account:bind'),
   revokeAll: bridge.buildProvider<AccountResult, void>('account:revoke-all'),
-  deactivate: bridge.buildProvider<
-    AccountResult,
-    { password: string } | { code: string }
-  >('account:deactivate'),
+  deactivate: bridge.buildProvider<AccountResult, { password: string } | { code: string }>('account:deactivate'),
   refreshLocalSession: bridge.buildProvider<AccountResult<AccountStatus>, void>('account:refresh-local-session'),
 };
 

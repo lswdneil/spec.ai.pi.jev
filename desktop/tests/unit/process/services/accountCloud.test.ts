@@ -6,7 +6,13 @@ vi.mock('@/common/platform', () => ({
   getPlatformServices: () => ({ network: { fetch: fetchMock } }),
 }));
 
-import { SpecAiError, fetchCloudMe, loginCloud, sendCloudCode } from '@/process/services/accountCloud';
+import {
+  SpecAiError,
+  fetchCloudMe,
+  loginCloud,
+  resetCloudPassword,
+  sendCloudCode,
+} from '@/process/services/accountCloud';
 
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -110,5 +116,22 @@ describe('spec-ai cloud account client', () => {
     fetchMock.mockResolvedValue(jsonResponse({ delivered: false }));
 
     await expect(sendCloudCode('person@example.com', 'register')).resolves.toEqual({ delivered: false });
+  });
+
+  it('resets a password without an authorization header', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ ok: true }));
+
+    await resetCloudPassword('person@example.com', '123456', 'new password');
+
+    expect(fetchMock).toHaveBeenCalledOnce();
+    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    expect(url).toBe('https://spec-ai.cn/api/auth/reset-password');
+    expect(init.method).toBe('POST');
+    expect(init.headers).not.toHaveProperty('authorization');
+    expect(JSON.parse(init.body as string)).toEqual({
+      email: 'person@example.com',
+      code: '123456',
+      newPassword: 'new password',
+    });
   });
 });

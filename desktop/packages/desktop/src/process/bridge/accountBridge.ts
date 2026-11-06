@@ -11,6 +11,7 @@ import {
   changeCloudPassword,
   deactivateCloudAccount,
   fetchCloudMe,
+  resetCloudPassword,
   revokeCloudSessions,
   sendCloudCode,
   SpecAiError,
@@ -103,6 +104,12 @@ export function initAccountBridge(): void {
   ipcBridge.account.changePassword.provider(({ oldPassword, newPassword }) =>
     plain(async () => {
       await changeCloudPassword(oldPassword, newPassword, requireToken());
+    })
+  );
+
+  ipcBridge.account.resetPassword.provider(({ email, code, newPassword }) =>
+    plain(async () => {
+      await resetCloudPassword(email, code, newPassword);
     })
   );
 

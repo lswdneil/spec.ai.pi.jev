@@ -5,7 +5,7 @@ import MuMark from '@renderer/components/brand/MuMark';
 import { useAccount } from '@renderer/hooks/context/AccountContext';
 import { changeLanguage } from '@renderer/services/i18n';
 import { cn } from '@/renderer/ui';
-import type { AccountFailureCode } from '@/common/types/account';
+import { isAccountFailure, type AccountFailureCode } from '@/common/types/account';
 import './login.css';
 
 declare const __APP_VERSION__: string;
@@ -13,7 +13,7 @@ declare const __APP_VERSION__: string;
 const APP_VERSION = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev';
 const CODE_RESEND_SECONDS = 60;
 
-type Mode = 'login' | 'register' | 'admin';
+type Mode = 'login' | 'register' | 'admin' | 'reset';
 type Method = 'email' | 'phone';
 type MessageState = { type: 'error' | 'success'; text: string };
 
@@ -49,6 +49,7 @@ function errorKey(code: AccountFailureCode): string {
     case 'already_registered':
       return 'alreadyRegistered';
     case 'account_not_registered':
+    case 'account_not_found':
       return 'accountNotRegistered';
     case 'account_disabled':
       return 'accountDisabled';
@@ -70,6 +71,7 @@ const LoginPage: React.FC = () => {
   const [method, setMethod] = useState<Method>('email');
   const [target, setTarget] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [code, setCode] = useState('');
   const [countdown, setCountdown] = useState(0);
   const [sending, setSending] = useState(false);
@@ -143,8 +145,9 @@ const LoginPage: React.FC = () => {
     setSending(true);
     setMessage(null);
     try {
-      const result = await account.sendCode(trimmed, mode === 'register' ? 'register' : 'login');
-      if (!result.ok) {
+      const purpose = mode === 'register' ? 'register' : mode === 'reset' ? 'reset' : 'login';
+      const result = await account.sendCode(trimmed, purpose);
+      if (isAccountFailure(result)) {
         showError(errorKey(result.code));
         return;
       }
@@ -183,6 +186,47 @@ const LoginPage: React.FC = () => {
         showError('targetRequired');
         return;
       }
+      if (mode === 'reset') {
+        if (!code.trim()) {
+          showError('codeRequired');
+          return;
+        }
+        if (!password) {
+          showError('passwordRequired');
+          return;
+        }
+        if (password.length < 8) {
+          showError('passwordTooShort');
+          return;
+        }
+        if (password !== confirmPassword) {
+          showError('passwordMismatch');
+          return;
+        }
+        setLoading(true);
+        setMessage(null);
+        try {
+          const result = await account.resetPassword({
+            email: trimmed,
+            code: code.trim(),
+            newPassword: password,
+          });
+          if (isAccountFailure(result)) {
+            showError(errorKey(result.code));
+            return;
+          }
+          setMode('login');
+          setCode('');
+          setPassword('');
+          setConfirmPassword('');
+          setMessage({ type: 'success', text: t('login.online.resetSuccess') });
+        } catch {
+          showError('networkError');
+        } finally {
+          setLoading(false);
+        }
+        return;
+      }
       const register = mode === 'register';
       const needCode = method === 'phone' || register;
       const needPassword = method === 'email';
@@ -209,7 +253,7 @@ const LoginPage: React.FC = () => {
                 ? { method: 'email', email: trimmed, password }
                 : { method: 'phone', phone: trimmed, code: code.trim() }
             );
-        if (!result.ok) {
+        if (isAccountFailure(result)) {
           showError(errorKey(result.code));
           return;
         }
@@ -221,7 +265,7 @@ const LoginPage: React.FC = () => {
         setLoading(false);
       }
     },
-    [account, code, method, mode, password, persistLanguageAndReload, showError, t, target]
+    [account, code, confirmPassword, method, mode, password, persistLanguageAndReload, showError, t, target]
   );
 
   const chooseLanguage = useCallback((index: number) => {
@@ -263,20 +307,26 @@ const LoginPage: React.FC = () => {
   );
 
   const isRegister = mode === 'register';
-  const needCode = method === 'phone' || isRegister;
+  const isReset = mode === 'reset';
+  const needCode = method === 'phone' || isRegister || isReset;
   const needPassword = method === 'email';
   const targetLabel = method === 'email' ? t('login.online.methodEmail') : t('login.online.methodPhone');
   const targetPlaceholder =
     method === 'email' ? t('login.online.emailPlaceholder') : t('login.online.phonePlaceholder');
   const submitLabel = loading
     ? t('login.online.submitting')
-    : isRegister
-      ? t('login.online.register')
-      : t('login.online.login');
+    : isReset
+      ? t('login.online.resetPassword')
+      : isRegister
+        ? t('login.online.register')
+        : t('login.online.login');
 
   return (
     <div className='sv-login-stage'>
-      <section className='sv-login-card' aria-label={t(isRegister ? 'login.online.register' : 'login.submit')}>
+      <section
+        className='sv-login-card'
+        aria-label={t(isReset ? 'login.online.resetPassword' : isRegister ? 'login.online.register' : 'login.submit')}
+      >
         <div className='sv-login-lang' ref={langPickerRef}>
           <button
             type='button'
@@ -327,28 +377,32 @@ const LoginPage: React.FC = () => {
           <p className='sv-login-subtitle'>
             {mode === 'admin'
               ? t('login.online.adminSubtitle')
-              : isRegister
-                ? t('login.online.registerSubtitle')
-                : t('login.subtitle')}
+              : isReset
+                ? t('login.online.resetSubtitle')
+                : isRegister
+                  ? t('login.online.registerSubtitle')
+                  : t('login.subtitle')}
           </p>
         </header>
 
         <form className='sv-login-form' onSubmit={handleSubmit}>
-          <div className='sv-login-method-tabs' role='tablist' aria-label={t('login.online.methodLabel')}>
-            {(['email', 'phone'] as const).map((value) => (
-              <button
-                key={value}
-                type='button'
-                role='tab'
-                aria-selected={method === value}
-                tabIndex={method === value ? 0 : -1}
-                className={cn('sv-login-method-tab', method === value && 'is-active')}
-                onClick={() => setMethod(value)}
-              >
-                {t(value === 'email' ? 'login.online.methodEmail' : 'login.online.methodPhone')}
-              </button>
-            ))}
-          </div>
+          {!isReset ? (
+            <div className='sv-login-method-tabs' role='tablist' aria-label={t('login.online.methodLabel')}>
+              {(['email', 'phone'] as const).map((value) => (
+                <button
+                  key={value}
+                  type='button'
+                  role='tab'
+                  aria-selected={method === value}
+                  tabIndex={method === value ? 0 : -1}
+                  className={cn('sv-login-method-tab', method === value && 'is-active')}
+                  onClick={() => setMethod(value)}
+                >
+                  {t(value === 'email' ? 'login.online.methodEmail' : 'login.online.methodPhone')}
+                </button>
+              ))}
+            </div>
+          ) : null}
 
           <div className='sv-login-field'>
             <label className='sv-login-label' htmlFor='sv-online-target'>
@@ -371,17 +425,36 @@ const LoginPage: React.FC = () => {
           {needPassword ? (
             <div className='sv-login-field'>
               <label className='sv-login-label' htmlFor='sv-online-password'>
-                {t('login.online.password')}
+                {isReset ? t('login.online.newPassword') : t('login.online.password')}
               </label>
               <input
                 id='sv-online-password'
                 name='password'
                 className='sv-login-input'
                 type='password'
-                autoComplete={isRegister ? 'new-password' : 'current-password'}
-                placeholder={t('login.online.passwordPlaceholder')}
+                autoComplete={isRegister || isReset ? 'new-password' : 'current-password'}
+                placeholder={isReset ? t('login.online.newPasswordPlaceholder') : t('login.online.passwordPlaceholder')}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
+                aria-required='true'
+              />
+            </div>
+          ) : null}
+
+          {isReset ? (
+            <div className='sv-login-field'>
+              <label className='sv-login-label' htmlFor='sv-online-confirm-password'>
+                {t('login.online.confirmPassword')}
+              </label>
+              <input
+                id='sv-online-confirm-password'
+                name='confirmPassword'
+                className='sv-login-input'
+                type='password'
+                autoComplete='new-password'
+                placeholder={t('login.online.confirmPasswordPlaceholder')}
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
                 aria-required='true'
               />
             </div>
@@ -427,30 +500,69 @@ const LoginPage: React.FC = () => {
             <span>{submitLabel}</span>
           </button>
 
-          <div className='sv-login-mode-switch'>
-            <button
-              type='button'
-              className='sv-login-link'
-              onClick={() => {
-                setMode(isRegister ? 'login' : 'register');
-                setMessage(null);
-              }}
-            >
-              {isRegister ? t('login.online.backToLogin') : t('login.online.goRegister')}
-            </button>
-          </div>
-          <div className='sv-login-admin-entry'>
-            <button
-              type='button'
-              className='sv-login-link'
-              onClick={() => {
-                setMode(mode === 'admin' ? 'login' : 'admin');
-                setMessage(null);
-              }}
-            >
-              {mode === 'admin' ? t('login.online.backToLogin') : t('login.online.adminLogin')}
-            </button>
-          </div>
+          {!isRegister && !isReset && method === 'email' ? (
+            <div className='sv-login-forgot'>
+              <button
+                type='button'
+                className='sv-login-link'
+                onClick={() => {
+                  setMode('reset');
+                  setMethod('email');
+                  setCode('');
+                  setPassword('');
+                  setConfirmPassword('');
+                  setMessage(null);
+                }}
+              >
+                {t('login.online.forgotPassword')}
+              </button>
+            </div>
+          ) : null}
+
+          {isReset ? (
+            <div className='sv-login-mode-switch'>
+              <button
+                type='button'
+                className='sv-login-link'
+                onClick={() => {
+                  setMode('login');
+                  setCode('');
+                  setPassword('');
+                  setConfirmPassword('');
+                  setMessage(null);
+                }}
+              >
+                {t('login.online.backToLogin')}
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className='sv-login-mode-switch'>
+                <button
+                  type='button'
+                  className='sv-login-link'
+                  onClick={() => {
+                    setMode(isRegister ? 'login' : 'register');
+                    setMessage(null);
+                  }}
+                >
+                  {isRegister ? t('login.online.backToLogin') : t('login.online.goRegister')}
+                </button>
+              </div>
+              <div className='sv-login-admin-entry'>
+                <button
+                  type='button'
+                  className='sv-login-link'
+                  onClick={() => {
+                    setMode(mode === 'admin' ? 'login' : 'admin');
+                    setMessage(null);
+                  }}
+                >
+                  {mode === 'admin' ? t('login.online.backToLogin') : t('login.online.adminLogin')}
+                </button>
+              </div>
+            </>
+          )}
 
           {message ? (
             <div className={cn('sv-login-message', message.type)} role={message.type === 'error' ? 'alert' : 'status'}>
