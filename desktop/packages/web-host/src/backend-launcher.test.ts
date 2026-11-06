@@ -156,6 +156,37 @@ describe('buildSpawnArgs', () => {
     expect(args).not.toContain('--local');
   });
 
+  it('passes an explicit webui identity mode', () => {
+    const args = buildSpawnArgs({
+      port: 1,
+      dbPath: '/d',
+      local: false,
+      identityMode: 'webui',
+      appVersion: '0.0.1',
+      isPackaged: false,
+    });
+
+    expect(args.slice(args.indexOf('--identity-mode'), args.indexOf('--identity-mode') + 2)).toEqual([
+      '--identity-mode',
+      'webui',
+    ]);
+    expect(args).not.toContain('--local');
+  });
+
+  it('keeps an explicit local identity mode even when local is false', () => {
+    const args = buildSpawnArgs({
+      port: 1,
+      dbPath: '/d',
+      local: false,
+      identityMode: 'local',
+      appVersion: '0.0.1',
+      isPackaged: false,
+    });
+
+    expect(args).toContain('--local');
+    expect(args).not.toContain('--identity-mode');
+  });
+
   it('passes prompt dump flag in development only when MU_DUMP_PROMPTS is enabled', () => {
     const prev = process.env.MU_DUMP_PROMPTS;
     process.env.MU_DUMP_PROMPTS = '1';

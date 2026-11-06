@@ -65,6 +65,12 @@ type SpawnConfig = {
   port: number;
   dbPath: string;
   local: boolean;
+  /**
+   * Which identity mode aioncore starts in. `local` keeps the single
+   * `system_default_user`; `webui` requires a session and scopes data by user.
+   * When omitted it follows `local`, so existing callers keep their behavior.
+   */
+  identityMode?: BackendIdentityMode;
   parentPid?: number;
   logDir?: string;
   workDir?: string;
@@ -77,6 +83,8 @@ type SpawnConfig = {
    */
   bundledManagedResources?: boolean;
 };
+
+export type BackendIdentityMode = 'local' | 'webui';
 
 export type BackendLaunchFlags = {
   recoverCorruptedDatabase?: boolean;
@@ -200,6 +208,7 @@ export class BackendStartupCancelledError extends Error {
 
 export function buildSpawnArgs(config: SpawnConfig): string[] {
   const logLevel = process.env.MU_LOG_LEVEL || (config.isPackaged ? 'info' : 'debug');
+  const identityMode = config.identityMode ?? (config.local ? 'local' : 'webui');
   const args = [
     '--port',
     String(config.port),
@@ -215,7 +224,8 @@ export function buildSpawnArgs(config: SpawnConfig): string[] {
   if (!config.isPackaged && process.env.MU_DUMP_PROMPTS === '1') args.push('--dump-prompts');
   if (config.logDir) args.push('--log-dir', config.logDir);
   if (config.workDir) args.push('--work-dir', config.workDir);
-  if (config.local) args.push('--local');
+  if (identityMode === 'local') args.push('--local');
+  else args.push('--identity-mode', identityMode);
   if (config.recoverCorruptedDatabase) args.push('--recover-corrupted-database');
   return args;
 }
@@ -548,7 +558,8 @@ export class BackendLifecycleManager {
 
   constructor(
     private readonly appMeta: AppMetadata,
-    private readonly resolveBackend: BackendBinaryResolver
+    private readonly resolveBackend: BackendBinaryResolver,
+    private readonly identityMode: BackendIdentityMode = 'local'
   ) {}
 
   get port(): number {
@@ -697,6 +708,7 @@ export class BackendLifecycleManager {
       port: this._port,
       dbPath,
       local: true,
+      identityMode: this.identityMode,
       parentPid: process.pid,
       logDir,
       workDir: dirs?.workDir,

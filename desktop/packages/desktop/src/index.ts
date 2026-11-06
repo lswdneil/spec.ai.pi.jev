@@ -184,6 +184,19 @@ const isVersionMode = hasCommand('--version') || hasCommand('-v');
 let appReadyDone = false;
 
 let mainWindow: BrowserWindow;
+
+/**
+ * Packaged builds require a cloud account and run aioncore in webui mode. A
+ * development build keeps the old local mode unless explicitly asked, so the
+ * existing test and development flows do not need an account before the login
+ * screen exists.
+ */
+function resolveBackendIdentityMode(): 'local' | 'webui' {
+  const override = process.env.SPECJEV_IDENTITY_MODE;
+  if (override === 'local' || override === 'webui') return override;
+  return app.isPackaged ? 'webui' : 'local';
+}
+
 const backendManager = new BackendLifecycleManager(
   {
     version: app.getVersion(),
@@ -191,7 +204,8 @@ const backendManager = new BackendLifecycleManager(
     resourcesPath: process.resourcesPath,
     userDataPath: app.getPath('userData'),
   },
-  resolveBinaryPath
+  resolveBinaryPath,
+  resolveBackendIdentityMode()
 );
 let disposeCronResumeListener: (() => void) | null = null;
 
