@@ -211,3 +211,12 @@ Verified 2026-11-06:
 - A provider, an MCP server and an imported skill created by account A were
   invisible to account B in `desktop/scripts/spike-auth-webui.mjs` (35/35
   checks, including the earlier conversation/settings/WebSocket checks).
+- An unsigned Windows x64 build succeeds:
+  `npm run build-win:x64:fast` wrote
+  `desktop/out/spec.jev-0.1.11-win-x64.exe`, `Get-AuthenticodeSignature`
+  returns `NotSigned` for it and for `win-unpacked/spec.jev.exe`, and
+  `build-provenance.json` records `signed: false` / `signatureKind: none`.
+  The fast script also skips executable metadata editing, so that build is a
+  packaging smoke test, not a release artifact. The repository variable
+  `ALLOW_UNSIGNED_WINDOWS_RELEASE=true` was set on the GitHub repository the
+  same day.

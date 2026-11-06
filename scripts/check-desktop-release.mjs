@@ -220,9 +220,9 @@ if (process.env.WINDOWS_CERTIFICATE_BASE64 && process.env.WINDOWS_CERTIFICATE_PA
 
 const localBuild = desktopManifest.scripts?.["build-win:x64:fast"] ?? "";
 if (localBuild.includes("signAndEditExecutable=false")) {
-	pass("local unsigned build path is explicit");
+	pass("local unsigned smoke build is explicit", "build-win:x64:fast skips signing and executable metadata");
 } else {
-	warn("local unsigned build path is not explicit", "build-win:x64:fast should keep signAndEditExecutable=false");
+	warn("local unsigned smoke build is not explicit", "build-win:x64:fast should keep signAndEditExecutable=false");
 }
 
 const releasing = readText("docs/releasing.md");
