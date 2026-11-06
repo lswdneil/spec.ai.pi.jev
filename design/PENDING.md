@@ -192,7 +192,9 @@ Still open:
   limit policy.
 - Windows code signing has no certificate. Tagged CI builds fail closed until
   `WINDOWS_CERTIFICATE_BASE64` and `WINDOWS_CERTIFICATE_PASSWORD` exist as
-  repository secrets.
+  repository secrets. `gh secret list` on 2026-11-06 showed only
+  `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`, so a `v*` tag run would
+  stop at the signing gate instead of publishing.
 - The release channel is configured as GitHub pre-releases
   (`lswdneil/spec.ai.pi.jev`). Pushing the branch and tag needs explicit
   authorization; a self-hosted or spec-ai.cn update feed is not implemented.
