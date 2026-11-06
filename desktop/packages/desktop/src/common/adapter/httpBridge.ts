@@ -166,6 +166,33 @@ export type HttpRequestOptions = {
   headers?: Record<string, string>;
 };
 
+export type CoreAuthHeaders = {
+  cookie?: string;
+  csrf?: string;
+};
+
+/**
+ * The desktop account session lives in the main process, but many services
+ * call aioncore through this shared HTTP helper instead of the renderer. The
+ * main process registers this provider so those calls carry the same session
+ * as the page (Cookie + the double-submit CSRF token). Browser WebUI leaves it
+ * unset and keeps using the same-origin page session.
+ */
+let coreAuthHeadersProvider: (() => CoreAuthHeaders | null) | null = null;
+
+export function setCoreAuthHeadersProvider(provider: (() => CoreAuthHeaders | null) | null): void {
+  coreAuthHeadersProvider = provider;
+}
+
+function currentAuthHeaders(): Record<string, string> {
+  const auth = coreAuthHeadersProvider?.();
+  if (!auth) return {};
+  const headers: Record<string, string> = {};
+  if (auth.cookie) headers.Cookie = auth.cookie;
+  if (auth.csrf) headers['x-csrf-token'] = auth.csrf;
+  return headers;
+}
+
 const SENSITIVE_LOG_KEY_PATTERN = /api[_-]?key|authorization|auth[_-]?token|access[_-]?token|refresh[_-]?token|secret/i;
 
 function redactForLog(value: unknown, depth = 0): unknown {
@@ -242,6 +269,10 @@ export async function httpRequest<T>(
   if (options?.headers) {
     Object.assign(headers, options.headers);
   }
+
+  // Account headers win over caller headers: a service must not accidentally
+  // send a different session than the one the app is signed in with.
+  Object.assign(headers, currentAuthHeaders());
 
   console.debug(
     `[httpBridge] ${method} ${path}`,

@@ -74,6 +74,10 @@ declare global {
     __backendStartupFailure?: BackendStartupFailureInfo | null;
     /** The person put the Node.js runtime download off at this start: see common/adapter/nodeRuntimeDeferral.ts. */
     __nodeRuntimeDeferred?: boolean;
+    /** A packaged build requires a cloud account (aioncore runs in webui mode). */
+    __accountRequired?: boolean;
+    /** The main process already has a usable account session at this load. */
+    __accountAuthenticated?: boolean;
     __backendStartupBridge?: {
       getState: () => BackendStartupFailureInfo | null;
       subscribe: (callback: (state: BackendStartupFailureInfo | null) => void) => () => void;

@@ -16,11 +16,13 @@ import { initKyrnHost } from './kyrnHost';
 import { initKyrnBrowserBridge } from './kyrnBrowserBridge';
 import { initNativeBridge } from './nativeBridge';
 import { initFolderGitBridge } from '../services/folderGit';
+import { initAccountBridge } from './accountBridge';
 
 export type BridgeDependencies = Record<string, never>;
 
 export function initAllBridges(_deps: BridgeDependencies = {}): void {
   initDialogBridge();
+  initAccountBridge();
   initApplicationBridge();
   initWindowControlsBridge();
   initUpdateBridge();
@@ -36,6 +38,7 @@ export function initAllBridges(_deps: BridgeDependencies = {}): void {
 
 export {
   initApplicationBridge,
+  initAccountBridge,
   initDialogBridge,
   initNotificationBridge,
   initSystemSettingsBridge,

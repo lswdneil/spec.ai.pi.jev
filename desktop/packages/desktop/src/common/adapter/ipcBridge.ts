@@ -89,6 +89,14 @@ import type { AgentMetadata } from '@/renderer/utils/model/agentTypes';
 import type { Theme, WindowAppearance } from '@/common/theme/types';
 import type { AttachFolderRequest, ProjectDetailDto, ProjectEntryDto } from '@/common/types/project';
 import type { ChatFileRef, ContentEncoding } from '@/common/types/chatFile';
+import type {
+  AccountBindParams,
+  AccountLoginParams,
+  AccountRegisterParams,
+  AccountResult,
+  AccountSendCodePurpose,
+  AccountStatus,
+} from '@/common/types/account';
 import { withTextsAsMu } from '../kyrn/displayName';
 import {
   buildCreateConversationBody,
@@ -281,6 +289,37 @@ export const auth = {
    * Desktop needs this at all because `AuthContext` keeps `user` null there.
    */
   currentUser: httpGet<{ id: string; username: string }>('/api/system/current-user'),
+};
+
+// ---------------------------------------------------------------------------
+// Account — cloud identity + local account seat (main process only)
+// ---------------------------------------------------------------------------
+
+/**
+ * The account API does not throw across the bridge: a rejected provider would
+ * leave `invoke` waiting forever, and error objects do not survive the IPC
+ * JSON transport. Every call answers with a result envelope instead.
+ */
+export const account = {
+  status: bridge.buildProvider<AccountStatus, void>('account:status'),
+  sendCode: bridge.buildProvider<
+    AccountResult<{ delivered: boolean }>,
+    { target: string; purpose: AccountSendCodePurpose }
+  >('account:send-code'),
+  login: bridge.buildProvider<AccountResult<AccountStatus>, AccountLoginParams>('account:login'),
+  register: bridge.buildProvider<AccountResult<AccountStatus>, AccountRegisterParams>('account:register'),
+  logout: bridge.buildProvider<AccountResult, void>('account:logout'),
+  changePassword: bridge.buildProvider<
+    AccountResult,
+    { oldPassword: string; newPassword: string }
+  >('account:change-password'),
+  bind: bridge.buildProvider<AccountResult<AccountStatus>, AccountBindParams>('account:bind'),
+  revokeAll: bridge.buildProvider<AccountResult, void>('account:revoke-all'),
+  deactivate: bridge.buildProvider<
+    AccountResult,
+    { password: string } | { code: string }
+  >('account:deactivate'),
+  refreshLocalSession: bridge.buildProvider<AccountResult<AccountStatus>, void>('account:refresh-local-session'),
 };
 
 // ---------------------------------------------------------------------------

@@ -24,6 +24,7 @@ import {
   Target,
   Tool,
   Toolkit,
+  User,
 } from '@icon-park/react';
 
 /**
@@ -60,6 +61,7 @@ export type DetailArea = (typeof DETAIL_AREAS)[number];
 export type DetailsPageId = `details-${DetailArea}`;
 
 export type SettingsPageId =
+  | 'account'
   | 'appearance'
   | 'system'
   | 'conversations'
@@ -131,6 +133,14 @@ const detailsEntry = (area: DetailArea): SettingsPage => ({
 
 /** Every entry of the rail, flat and in display order; `group` says which header it sits under. */
 export const SETTINGS_PAGES = [
+  {
+    id: 'account',
+    group: 'preferences',
+    path: 'account',
+    route: '/settings/account',
+    labelKey: 'login.account.title',
+    Icon: User,
+  },
   {
     id: 'appearance',
     group: 'preferences',

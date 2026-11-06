@@ -47,6 +47,9 @@ const initialLanguage = ipcRenderer.sendSync('get-initial-language') as string |
 const backendStartupFailed = ipcRenderer.sendSync('get-backend-startup-failed') as boolean;
 const backendStartupFailure = ipcRenderer.sendSync('get-backend-startup-failure') as unknown;
 const nodeRuntimeDeferred = ipcRenderer.sendSync('get-node-runtime-deferred') as boolean;
+const accountBootState = ipcRenderer.sendSync('get-account-boot-state') as
+  | { required?: boolean; authenticated?: boolean }
+  | null;
 contextBridge.exposeInMainWorld('__backendPort', backendPort > 0 ? backendPort : 0);
 contextBridge.exposeInMainWorld('__initialLanguage', initialLanguage ?? null);
 contextBridge.exposeInMainWorld('__muE2ETest', process.env.MU_E2E_TEST === '1');
@@ -54,6 +57,8 @@ contextBridge.exposeInMainWorld('__backendStartupFailed', backendStartupFailed =
 contextBridge.exposeInMainWorld('__backendStartupFailure', backendStartupFailure ?? null);
 // The person put the Node.js runtime download off at this start: see common/adapter/nodeRuntimeDeferral.ts.
 contextBridge.exposeInMainWorld('__nodeRuntimeDeferred', nodeRuntimeDeferred === true);
+contextBridge.exposeInMainWorld('__accountRequired', accountBootState?.required === true);
+contextBridge.exposeInMainWorld('__accountAuthenticated', accountBootState?.authenticated === true);
 
 // Backend startup state bridge: `getState` re-reads the current failure info on
 // mount (resolves the "READY arrived before the renderer subscribed" race), and

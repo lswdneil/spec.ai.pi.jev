@@ -44,9 +44,14 @@ import './styles/markdown.css';
 // so their startup paths (which await configService.whenReady()) observe the
 // authoritative settings from the backend instead of the empty cache.
 import { configService } from '@/common/config/configService';
-configService.initialize().catch((err) => {
-  console.error('Failed to initialize config:', err);
-});
+// A packaged build must not read per-user settings before the account session
+// exists: the backend answers 401 until then. The authenticated app below
+// initializes the config itself, and the login page reloads on success.
+if (window.__accountRequired !== true || window.__accountAuthenticated === true) {
+  configService.initialize().catch((err) => {
+    console.error('Failed to initialize config:', err);
+  });
+}
 
 // i18n
 import './services/i18n';
@@ -65,6 +70,8 @@ import Layout from './components/layout/Layout';
 import Router from './components/layout/Router';
 import DenseSider from './components/layout/Sider/DenseSider';
 import { ConversationHistoryProvider } from './hooks/context/ConversationHistoryContext';
+import { AccountProvider, useAccount } from './hooks/context/AccountContext';
+import LoginPage from './pages/login/LoginPage';
 import type { BackendStartupFailureInfo } from '@/common/types/platform/electron';
 import type { IRuntimeStatusEvent, RuntimeFailureKind } from '@/common/adapter/ipcBridge';
 import {
@@ -168,18 +175,22 @@ const AppProviders: React.FC<PropsWithChildren> = ({ children }) =>
         PreviewProvider,
         null,
         React.createElement(
-          React.Fragment,
+          AccountProvider,
           null,
-          React.createElement(AppToaster, null),
-          React.createElement(RuntimeFailureDialogs, null),
-          React.createElement(GpuAutoDisableNotice, null),
-          children
+          React.createElement(
+            React.Fragment,
+            null,
+            React.createElement(AppToaster, null),
+            React.createElement(RuntimeFailureDialogs, null),
+            React.createElement(GpuAutoDisableNotice, null),
+            children
+          )
         )
       )
     )
   );
 
-const Main = () => {
+const AuthenticatedApp: React.FC = () => {
   const [configReady, setConfigReady] = useState(false);
 
   useEffect(() => {
@@ -203,6 +214,25 @@ const Main = () => {
       }
     />
   );
+};
+
+/**
+ * First screen of a packaged install: the account gate. The main process owns
+ * the session; this only asks whether one exists and shows the sign-in card
+ * until it does.
+ */
+const Main: React.FC = () => {
+  const { status, loading } = useAccount();
+
+  if (loading) {
+    return <div className='min-h-screen bg-[var(--sv-bg)]' aria-busy='true' />;
+  }
+
+  if (status?.required && !status.authenticated) {
+    return <LoginPage />;
+  }
+
+  return <AuthenticatedApp />;
 };
 
 const BackendStartupFailureDialog: React.FC<{ failure: BackendStartupFailureInfo }> = ({ failure }) => {

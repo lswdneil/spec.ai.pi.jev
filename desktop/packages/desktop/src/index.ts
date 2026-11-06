@@ -37,6 +37,8 @@ import { wasLaunchedAtLogin } from '@process/bridge/applicationBridge';
 import { applyStartupAppLanguage, onAppLanguageApplied } from '@process/services/i18n';
 import { setApplicationMenuWindow, setupApplicationMenu } from './process/utils/appMenu';
 import { getUpdateService } from './process/services/update';
+import { resolveIdentityMode } from './process/services/identityMode';
+import { ensureAccountReady, getAccountBootState } from './process/services/accountService';
 import { initializeZoomFactor, setupZoomForWindow } from './process/utils/zoom';
 import {
   followSystemAppearance,
@@ -185,18 +187,6 @@ let appReadyDone = false;
 
 let mainWindow: BrowserWindow;
 
-/**
- * Packaged builds require a cloud account and run aioncore in webui mode. A
- * development build keeps the old local mode unless explicitly asked, so the
- * existing test and development flows do not need an account before the login
- * screen exists.
- */
-function resolveBackendIdentityMode(): 'local' | 'webui' {
-  const override = process.env.SPECJEV_IDENTITY_MODE;
-  if (override === 'local' || override === 'webui') return override;
-  return app.isPackaged ? 'webui' : 'local';
-}
-
 const backendManager = new BackendLifecycleManager(
   {
     version: app.getVersion(),
@@ -205,7 +195,7 @@ const backendManager = new BackendLifecycleManager(
     userDataPath: app.getPath('userData'),
   },
   resolveBinaryPath,
-  resolveBackendIdentityMode()
+  resolveIdentityMode()
 );
 let disposeCronResumeListener: (() => void) | null = null;
 
@@ -216,6 +206,7 @@ let backendStartupFailed = false;
 let backendStartupFailureInfo: BackendStartupFailureInfo | null = null;
 let rendererInitialLanguage: string | null = null;
 let backendMigrationsScheduled = false;
+let rendererDidLoad = false;
 // The person put the Node.js runtime download off at this start: the backend runs without it (see
 // process/startup/nodeRuntimeConsent.ts), and the renderer says so where it is needed.
 let nodeRuntimeDeferred = false;
@@ -238,6 +229,10 @@ ipcMain.on('get-backend-startup-failure', (event) => {
 
 ipcMain.on('get-node-runtime-deferred', (event) => {
   event.returnValue = nodeRuntimeDeferred;
+});
+
+ipcMain.on('get-account-boot-state', (event) => {
+  event.returnValue = getAccountBootState();
 });
 
 ipcMain.handle('backend:recover-corrupted-database', async () => {
@@ -346,6 +341,10 @@ function registerCronResumeBridge(backendPort: number): void {
  */
 const scheduleBackendMigrations = (): void => {
   if (backendMigrationsScheduled || !backendStartedOk) return;
+  // ConfigStorage.get and listProviders round-trip through the renderer. A
+  // login-page renderer has no config bridge yet, and an unauthenticated one
+  // only gets 401/403 from aioncore. Wait for both before touching user data.
+  if (!rendererDidLoad || !getAccountBootState().authenticated) return;
   backendMigrationsScheduled = true;
   void (async () => {
     try {
@@ -370,6 +369,9 @@ function markBackendReady(backendPort: number, source: string): void {
   if (backendStartedOk) return;
   console.log(`[spec.jev] ${source} ready (port=${backendPort})`);
   exposeBackendPort(backendPort);
+  void ensureAccountReady().catch((error) => {
+    console.warn('[spec.jev] account session could not be restored at startup', error);
+  }).then(() => scheduleBackendMigrations());
   registerCronResumeBridge(backendPort);
   backendStartedOk = true;
   backendStartupFailed = false;
@@ -506,8 +508,9 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
       showWindow();
     });
     // Belt-and-suspenders: also show on did-finish-load in case ready-to-show already fired
-    mainWindow.webContents.once('did-finish-load', () => {
+    mainWindow.webContents.on('did-finish-load', () => {
       console.log('[spec.jev] Renderer did-finish-load');
+      rendererDidLoad = true;
       showWindow();
       scheduleBackendMigrations();
     });

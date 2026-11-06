@@ -41,6 +41,7 @@ const MuSkillsSettings = preloadablePage(() => import('@renderer/pages/settings/
 const MuMcpSettings = preloadablePage(() => import('@renderer/pages/settings/MuCapabilities/McpPage'));
 const AssistantSettings = preloadablePage(() => import('@renderer/pages/settings/AssistantSettings'));
 const AppearanceSettings = preloadablePage(() => import('@renderer/pages/settings/AppearanceSettings'));
+const AccountSettings = preloadablePage(() => import('@renderer/pages/settings/AccountSettings'));
 const SystemSettings = preloadablePage(() => import('@renderer/pages/settings/SystemSettings'));
 const ConversationSettings = preloadablePage(
   () => import('@renderer/pages/settings/SystemSettings/ConversationSettings')
@@ -144,6 +145,7 @@ const withRouteFallback = (Component: React.ComponentType) => (
 
 /** The page each entry of the settings rail opens: spec.jev's own sections are one area, routed by the path. */
 const SETTINGS_PAGE_ELEMENTS: Record<SettingsPageId, PreloadablePage> = {
+  account: AccountSettings,
   appearance: AppearanceSettings,
   system: SystemSettings,
   conversations: ConversationSettings,
