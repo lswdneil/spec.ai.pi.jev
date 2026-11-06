@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { SettingsStore } from '../../../packages/desktop/src/process/agent/kyrn/settings';
@@ -385,8 +385,9 @@ describe('mu-only backend catalog', () => {
     return { calls, request };
   }
 
-  // https://github.com/lswdneil/spec.ai.pi.jev/issues/14: uninstalling leaves the backend registration behind.
-  describe('reinstalling into a different folder', () => {
+  // https://github.com/lswdneil/spec.ai.pi.jev/issues/14: the backend registration outlives an install, and an
+  // unpacked build must be able to take it over while the installed copy is still there.
+  describe('reinstalling or running a build from another folder', () => {
     const old = 'C:\\old\\resources\\spec.jev\\acp.cmd';
     const current = 'D:\\spec.jev\\resources\\spec.jev\\acp.cmd';
     const row = {
@@ -407,7 +408,6 @@ describe('mu-only backend catalog', () => {
         platform: 'win32',
         env: {},
         realPath: (file) => (file === current ? current : undefined),
-        missing: (file) => file === old,
       });
 
     it('repairs the command in place while retaining settings and assistant associations', async () => {
@@ -447,10 +447,9 @@ describe('mu-only backend catalog', () => {
       expect(calls).toHaveLength(1);
     });
 
-    it('does not replace an existing installation', async () => {
-      const { calls, request } = backend([row]);
-      const own = await installed();
-      await expect(initializeKyrn(request, { ...own, canRestore: () => false })).rejects.toMatchObject({
+    it('does not replace a custom command registered under spec.jev’s name', async () => {
+      const { calls, request } = backend([{ ...row, command: 'C:\\tools\\my-acp.cmd' }]);
+      await expect(initializeKyrn(request, await installed())).rejects.toMatchObject({
         code: 'otherRegistration',
       });
       expect(calls).toHaveLength(1);

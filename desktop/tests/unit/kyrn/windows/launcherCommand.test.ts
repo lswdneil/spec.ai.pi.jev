@@ -222,23 +222,19 @@ describe('which registered commands run this launcher', () => {
   });
 });
 
-// https://github.com/lswdneil/spec.ai.pi.jev/issues/14: only absent packaged launchers are eligible for restoration.
-describe('restoring an uninstalled launcher', () => {
-  it('recognizes missing Windows launchers, including old short paths, without probing arbitrary commands', async () => {
-    const checked: string[] = [];
-    const existing = 'D:\\other\\resources\\spec.jev\\acp.cmd';
+// https://github.com/lswdneil/spec.ai.pi.jev/issues/14: the backend registration outlives an install, so a packaged
+// copy takes it over, whether the other copy is still installed or was removed.
+describe('taking over another packaged copy', () => {
+  it('claims a packaged Windows launcher, including old short paths, without probing arbitrary commands', async () => {
     const { deps } = machine({ files: { [INSTALLED]: INSTALLED }, short: SHORT });
-    const own = await ownLauncher('C:\\spec.jev\\resources\\spec.jev\\acp.cmd', {
-      ...deps,
-      missing: (file) => {
-        checked.push(file);
-        return file !== existing;
-      },
-    });
-    for (const file of [INSTALLED, SHORT, 'c:/old/RESOURCES/spec.jev/ACP.CMD'])
-      expect(own.canRestore?.(file)).toBe(true);
-    expect(own.canRestore?.(existing)).toBe(false);
-    const before = checked.length;
+    const own = await ownLauncher('C:\\spec.jev\\resources\\spec.jev\\acp.cmd', deps);
+    for (const file of [
+      INSTALLED,
+      SHORT,
+      'c:/old/RESOURCES/spec.jev/ACP.CMD',
+      'D:\\other\\resources\\spec.jev\\acp.cmd',
+    ])
+      expect(own.canAdopt?.(file), file).toBe(true);
     for (const file of [
       'npx mu-acp',
       'resources\\spec.jev\\acp.cmd',
@@ -246,21 +242,15 @@ describe('restoring an uninstalled launcher', () => {
       '\\\\server\\share\\resources\\spec.jev\\acp.cmd',
       'C:\\spec.jev\\resources\\spec.jev\\acp.cmd --flag',
     ])
-      expect(own.canRestore?.(file), file).toBe(false);
-    expect(checked).toHaveLength(before);
+      expect(own.canAdopt?.(file), file).toBe(false);
   });
 
-  it('never lets a development checkout restore a packaged registration', async () => {
-    const own = await ownLauncher('/checkout/desktop/scripts/kyrn/acp', {
-      platform: 'linux',
-      missing: () => {
-        throw new Error('must not probe');
-      },
-    });
-    expect(own.canRestore?.('/opt/spec.jev/resources/spec.jev/acp')).toBe(false);
+  it('never lets a development checkout adopt a packaged registration', async () => {
+    const own = await ownLauncher('/checkout/desktop/scripts/kyrn/acp', { platform: 'linux' });
+    expect(own.canAdopt?.('/opt/spec.jev/resources/spec.jev/acp')).toBe(false);
   });
 
-  it('checks actual file removal on the host platform before allowing restoration', async () => {
+  it('claims a packaged launcher on the host platform whether or not the other copy still exists', async () => {
     const platform = process.platform;
     const root = mkdtempSync(join(tmpdir(), 'mu-reinstall-'));
     try {
@@ -272,11 +262,11 @@ describe('restoring an uninstalled launcher', () => {
       mkdirSync(join(current, '..'), { recursive: true });
       writeFileSync(current, '');
       const own = await ownLauncher(current, { env: { ...process.env, LOCALAPPDATA: join(root, 'local') } });
-      expect(own.canRestore?.(old)).toBe(false);
+      expect(own.canAdopt?.(old)).toBe(true);
       rmSync(old);
-      expect(own.canRestore?.(old)).toBe(true);
-      expect(own.canRestore?.('//server/resources/spec.jev/acp')).toBe(false);
-      expect(own.canRestore?.('/opt/custom/acp')).toBe(false);
+      expect(own.canAdopt?.(old)).toBe(true);
+      expect(own.canAdopt?.('//server/resources/spec.jev/acp')).toBe(false);
+      expect(own.canAdopt?.('/opt/custom/acp')).toBe(false);
     } finally {
       rmSync(root, { recursive: true, force: true });
     }

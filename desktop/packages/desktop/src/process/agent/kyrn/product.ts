@@ -89,8 +89,8 @@ const needsFullAuto = (row: AgentRow): boolean => !row.yolo_id?.trim() || LEGACY
 export type OwnCommand = {
   command: string;
   sameFile: (registered: string) => boolean;
-  /** A missing packaged launcher left by an uninstalled copy of spec.jev. Never a custom command or a live install. */
-  canRestore?: (registered: string) => boolean;
+  /** Another packaged copy of spec.jev, installed or not. Never a custom command. */
+  canAdopt?: (registered: string) => boolean;
 };
 
 const ownCommand = (own: string | OwnCommand): OwnCommand =>
@@ -103,24 +103,25 @@ const ownCommand = (own: string | OwnCommand): OwnCommand =>
  *
  * A row under our name that runs our launcher by another spelling is ours too: an earlier start may have registered
  * another one (the path with a space, which AionCore cannot start; the short path; a forwarder), and `initializeKyrn`
- * gives it this start's. After an uninstall, a single app-owned row whose packaged launcher is gone can be restored
- * in place. Custom commands, live installations and ambiguous registrations are never taken over.
+ * gives it this start's. A single app-owned row whose command is another packaged copy of spec.jev is ours as well,
+ * whether that copy is still installed or was removed: the running copy takes the registration over, so an unpacked
+ * build can be tested beside the installed app. Custom commands and ambiguous registrations are never taken over.
  */
 export function findRegistration(agents: AgentRow[], own: string | OwnCommand): AgentRow | undefined {
-  const { command, sameFile, canRestore } = ownCommand(own);
+  const { command, sameFile, canAdopt } = ownCommand(own);
   const ours = agents.find((row) => row.command === command);
   if (ours) return ours;
   const namesakes = agents.filter((row) => [AGENT_NAME, ...FORMER_NAMES].includes(row.name));
   const respelled = namesakes.find((row) => row.command !== undefined && sameFile(row.command));
   if (respelled) return respelled;
-  const stale = namesakes.length === 1 ? namesakes[0] : undefined;
+  const single = namesakes.length === 1 ? namesakes[0] : undefined;
   if (
-    stale?.command &&
-    typeof stale.description === 'string' &&
-    OWN_DESCRIPTIONS.has(stale.description.toLowerCase()) &&
-    canRestore?.(stale.command)
+    single?.command &&
+    typeof single.description === 'string' &&
+    OWN_DESCRIPTIONS.has(single.description.toLowerCase()) &&
+    canAdopt?.(single.command)
   )
-    return stale;
+    return single;
   if (namesakes.length > 0)
     throw new KyrnError('otherRegistration', 'A different spec.jev command is already registered');
   return undefined;
