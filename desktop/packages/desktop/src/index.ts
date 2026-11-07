@@ -194,7 +194,7 @@ const backendManager = new BackendLifecycleManager(
     resourcesPath: process.resourcesPath,
     userDataPath: app.getPath('userData'),
   },
-  resolveBinaryPath,
+  () => resolveBinaryPath({ appPath: app.getAppPath(), resourcesPath: process.resourcesPath }),
   resolveIdentityMode()
 );
 let disposeCronResumeListener: (() => void) | null = null;
@@ -844,7 +844,13 @@ const handleAppReady = async (): Promise<void> => {
       },
       exitApp: (code) => app.exit(code),
       exitOnFailure: false,
-      logError: console.error,
+      logError: (message, error) => {
+        // The message alone cannot tell a missing checkout binary from a missing
+        // install; the resolver's diagnostics carry the paths it actually checked.
+        const details = (error as { details?: unknown } | undefined)?.details;
+        if (details) console.error(message, error, JSON.stringify(details));
+        else console.error(message, error);
+      },
     });
     void backendStartup;
   }

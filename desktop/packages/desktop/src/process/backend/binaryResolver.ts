@@ -3,7 +3,7 @@
  *
  * Search order:
  *  1. MU_BACKEND_BIN env override (path, resolved to absolute)
- *  2. Bundled with app (production)
+ *  2. Bundled with app (production) or in the checkout's `resources` (development)
  *  3. System PATH
  */
 
@@ -16,6 +16,15 @@ const BIN_ENV_VAR = 'MU_BACKEND_BIN';
 const MAX_DIR_ENTRIES = 20;
 const MAX_LOOKUP_TEXT_LENGTH = 1000;
 
+type ResolveBinaryPathOptions = {
+  /** Electron's resources directory. Defaults to `process.resourcesPath`. */
+  resourcesPath?: string;
+  /** The app directory. A checkout keeps its bundled binaries below `<appPath>/resources`. */
+  appPath?: string;
+  /** Fallback checkout root. Defaults to `process.cwd()`. */
+  cwd?: string;
+};
+
 type BackendBinaryResolveDiagnostics = {
   envOverridePath?: string;
   envOverrideExists?: boolean;
@@ -23,6 +32,7 @@ type BackendBinaryResolveDiagnostics = {
   runtimeKey: string;
   binaryName: string;
   checkedBundledPath?: string;
+  checkedBundledPaths?: string[];
   bundledDirExists?: boolean;
   runtimeDirExists?: boolean;
   resourcesDirEntries?: string[];
@@ -68,7 +78,7 @@ function trimLookupText(text: string): string {
  * Resolve the aioncore binary path.
  * Returns the absolute path to the binary, or throws if not found.
  */
-export function resolveBinaryPath(): string {
+export function resolveBinaryPath(options: ResolveBinaryPathOptions = {}): string {
   const runtimeKey = getRuntimeKey();
   const binaryName = getBinaryName();
   const diagnostics: BackendBinaryResolveDiagnostics = {
@@ -80,7 +90,7 @@ export function resolveBinaryPath(): string {
   const override = envOverridePath(diagnostics);
   if (override) return override;
 
-  const bundled = bundledPath(runtimeKey, binaryName, diagnostics);
+  const bundled = bundledPath(runtimeKey, binaryName, options, diagnostics);
   if (bundled) return bundled;
 
   const fromPath = resolveFromSystemPATH(diagnostics);
@@ -117,28 +127,48 @@ function envOverridePath(diagnostics: BackendBinaryResolveDiagnostics): string |
 }
 
 /**
- * Check bundled binary in resources directory.
- * Layout: bundled-aioncore/{platform}-{arch}/aioncore[.exe]
+ * Check bundled binaries. The packaged app keeps them under
+ * `<resources>/bundled-aioncore`; a checkout keeps the same tree under
+ * `<appPath>/resources` and `<cwd>/resources`, the layout the other bundled
+ * resources (moli, MCP servers) use in development.
  */
 function bundledPath(
   runtimeKey: string,
   binaryName: string,
+  options: ResolveBinaryPathOptions,
   diagnostics: BackendBinaryResolveDiagnostics
 ): string | null {
-  const resourcesPath = (process as NodeJS.Process & { resourcesPath?: string }).resourcesPath;
-  if (!resourcesPath) return null;
-  diagnostics.resourcesPath = resourcesPath;
+  const resourcesPath =
+    options.resourcesPath ?? (process as NodeJS.Process & { resourcesPath?: string }).resourcesPath;
+  const roots: string[] = [];
+  if (resourcesPath) {
+    diagnostics.resourcesPath = resourcesPath;
+    roots.push(resourcesPath);
+  }
+  for (const root of [options.appPath, options.cwd ?? process.cwd()]) {
+    if (root) roots.push(join(root, 'resources'));
+  }
 
-  const bundledDir = join(resourcesPath, 'bundled-aioncore');
-  const runtimeDir = join(bundledDir, runtimeKey);
-  const candidate = join(runtimeDir, binaryName);
-  diagnostics.checkedBundledPath = candidate;
-  diagnostics.bundledDirExists = existsSync(bundledDir);
-  diagnostics.runtimeDirExists = existsSync(runtimeDir);
-  diagnostics.resourcesDirEntries = listDirEntries(resourcesPath);
-  diagnostics.runtimeDirEntries = listDirEntries(runtimeDir);
+  const candidates = [...new Set(roots)].map((root) =>
+    join(root, 'bundled-aioncore', runtimeKey, binaryName)
+  );
+  if (candidates.length === 0) return null;
 
-  if (existsSync(candidate)) return candidate;
+  diagnostics.checkedBundledPath = candidates[0];
+  diagnostics.checkedBundledPaths = candidates;
+
+  if (resourcesPath) {
+    const packagedDir = join(resourcesPath, 'bundled-aioncore');
+    const packagedRuntimeDir = join(packagedDir, runtimeKey);
+    diagnostics.bundledDirExists = existsSync(packagedDir);
+    diagnostics.runtimeDirExists = existsSync(packagedRuntimeDir);
+    diagnostics.resourcesDirEntries = listDirEntries(resourcesPath);
+    diagnostics.runtimeDirEntries = listDirEntries(packagedRuntimeDir);
+  }
+
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) return candidate;
+  }
   return null;
 }
 

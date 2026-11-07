@@ -119,6 +119,22 @@ describe('resolveBinaryPath', () => {
     expect(resolveBinaryPath()).toBe(resolved);
   });
 
+  it('finds the checkout binary when the packaged resources have none', () => {
+    const resourcesPath = '/electron/resources';
+    const appPath = '/repo/desktop';
+    const runtimeKey = `${process.platform}-${process.arch}`;
+    const binaryName = process.platform === 'win32' ? 'aioncore.exe' : 'aioncore';
+    const checkoutBinary = join(appPath, 'resources', 'bundled-aioncore', runtimeKey, binaryName);
+
+    setResourcesPath(resourcesPath);
+    vi.mocked(existsSync).mockImplementation((path) => path === checkoutBinary);
+    vi.mocked(readdirSync).mockReturnValue([] as ReturnType<typeof readdirSync>);
+
+    expect(resolveBinaryPath({ appPath })).toBe(checkoutBinary);
+    // The checkout binary wins before the PATH lookup runs.
+    expect(execSync).not.toHaveBeenCalled();
+  });
+
   it('attaches bundled path diagnostics when aioncore cannot be resolved', () => {
     const resourcesPath = '/app/resources';
     const runtimeKey = `${process.platform}-${process.arch}`;
