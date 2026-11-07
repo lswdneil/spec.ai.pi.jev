@@ -14,10 +14,10 @@
 // scripts/build-with-builder.js runs this before electron-builder; scripts/afterPack.js checks the packaged app with
 // the check this ends with (packages/shared-scripts/src/verify-bundled-harness.js).
 import { spawnSync } from 'node:child_process';
-import { lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 
@@ -136,6 +136,84 @@ function sizeOf(dir) {
   return { files, bytes };
 }
 
+/**
+ * Where spec.jev carries both the skills it ships with and the ones the app adds: `skills` beside the judgment
+ * layer's manifest (process/agent/kyrn/harness.ts, manifestOf, then process/bridge/kyrnBridge.ts builds `builtinDir`
+ * from it). In the npm package that manifest is `judge/manifest.json`.
+ */
+export function builtinSkillsDir(harnessPackage) {
+  return join(harnessPackage, 'judge', 'skills');
+}
+
+/** Left out of a built-in skill: a Python cache, an editor's droppings, a repository's history, installed packages. */
+const NOT_IN_SKILL = new Set(['__pycache__', '.DS_Store', 'Thumbs.db', 'node_modules', '.git']);
+
+/** Whether a plain file is there; a link is not followed. */
+function isFile(path) {
+  try {
+    return lstatSync(path).isFile();
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Copies the skills this repository adds to the ones spec.jev ships with: `resources/builtin-skills/<name>/` to
+ * `<harness>/judge/skills/<name>/`. They are copied after the harness is unpacked (which starts from an empty
+ * resources/harness) and before the integrity record is written, so bundle.json covers them. spec.jev's settings read
+ * a skill folder without a SKILL.md from neither root: one here would never load, so the build says so instead.
+ *
+ * A skill that declares its own `package.json` gets those dependencies installed beside it, for the platform and
+ * processor the app is built for: a skill's scripts run on the machine the app was installed on, where no package
+ * is downloaded at run time. `node_modules` is never copied from the source tree — the install writes it here.
+ */
+export function copyBuiltinSkills({
+  root = projectRoot,
+  harnessPackage = join(root, 'resources', 'harness', 'spec.jev'),
+  platform = process.platform,
+  arch = process.arch,
+  npm = runNpm,
+  log = console.log,
+} = {}) {
+  const from = join(root, 'resources', 'builtin-skills');
+  let names;
+  try {
+    names = readdirSync(from, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
+      .map((entry) => entry.name)
+      .toSorted();
+  } catch {
+    // No folder is the same as no extra skills: spec.jev's own are already in the harness.
+    return [];
+  }
+  if (names.length === 0) return [];
+  const to = builtinSkillsDir(harnessPackage);
+  mkdirSync(to, { recursive: true });
+  for (const name of names) {
+    const skill = join(from, name);
+    if (!isFile(join(skill, 'SKILL.md')))
+      throw new Error(`resources/builtin-skills/${name} has no SKILL.md: spec.jev would never load it`);
+    const target = join(to, name);
+    cpSync(skill, target, {
+      recursive: true,
+      filter: (source) => !NOT_IN_SKILL.has(basename(source)),
+    });
+    if (isFile(join(skill, 'package.json'))) {
+      log(`Installing what built-in skill ${name} depends on, for ${platform}-${arch}`);
+      npm(installArgs(platform, arch), target);
+    }
+  }
+  // What the app registers with pi at startup (process/agent/kyrn/capabilities/bundledSkills.ts): pi does not read
+  // a skill folder of the harness's own, only the paths on its `skills` list.
+  writeFileSync(
+    join(dirname(harnessPackage), 'builtin-skills.json'),
+    `${JSON.stringify({ skills: names }, null, 2)}\n`,
+    'utf8'
+  );
+  log(`Bundled ${names.length} built-in skill(s) into the harness: ${names.join(', ')}`);
+  return names;
+}
+
 /** Bundles spec.jev into resources/harness and checks the result; throws when anything is missing. */
 export function bundleHarness({
   root = projectRoot,
@@ -172,6 +250,7 @@ export function bundleHarness({
     if (manifest.name !== 'spec.jev') throw new Error(`${file} is ${manifest.name}, not spec.jev`);
     log(`Installing what spec.jev ${manifest.version} depends on, for ${platform}-${arch}`);
     npm(installArgs(platform, arch), target);
+    copyBuiltinSkills({ root, harnessPackage: target, platform, arch, npm, log });
     const record = {
       name: manifest.name,
       version: manifest.version,

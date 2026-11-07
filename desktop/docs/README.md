@@ -6,6 +6,7 @@ Notes for working on the desktop app. How to run it and where the code is: [../r
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | [native-host.md](native-host.md)                                 | How the app runs pi and the judgment kernel in a utility process, and the bridge to the interface |
 | [native-host-ui.md](native-host-ui.md)                           | How a native conversation is drawn from pi's events                                               |
+| [builtin-skills.md](builtin-skills.md)                           | Where built-in skills come from, how a build carries them, and what one has to contain            |
 | [ui-polish-plan.md](ui-polish-plan.md)                           | The October 2026 polish plan for settings, the conversation and the first-run guide (Chinese)     |
 | [kyrn-webui-parity.md](kyrn-webui-parity.md)                     | Which KyRN bridge calls can run in the WebUI and which need a local host                          |
 | [webui-remote-access.md](webui-remote-access.md)                 | Pairing, TLS/reverse-proxy choices and the remote WebUI boundary                                  |

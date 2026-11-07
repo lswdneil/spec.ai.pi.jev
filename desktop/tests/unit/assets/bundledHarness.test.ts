@@ -193,6 +193,32 @@ describe('bundle-harness', () => {
     rmSync(tmp, { recursive: true, force: true });
   });
 
+  /** spec.jev 0.1.1 packed as npm packs it, with the files a build checks for. */
+  function harnessTarball(): string {
+    const files: Record<string, string> = {
+      'package/package.json': JSON.stringify({ name: 'spec.jev', version: '0.1.1', dependencies: DEPENDENCIES }),
+    };
+    for (const file of PACKAGE_FILES) files[`package/${file}`] = file === 'kyrn/bin/mu.mjs' ? LAUNCHER : '';
+    const file = join(tmp, 'mu-agent-0.1.1.tgz');
+    tarball(file, files);
+    return file;
+  }
+
+  /** npm that installs what the manifest depends on, where the real one would. */
+  const installDependencies = (_args: string[], cwd: string): string => {
+    for (const name of Object.keys(DEPENDENCIES))
+      writeFile(join(cwd, 'node_modules', ...name.split('/'), 'package.json'));
+    return '';
+  };
+
+  /** A skill this repository adds to the ones spec.jev ships with, as resources/builtin-skills/<name>. */
+  function builtinSkill(name: string, files: Record<string, string>): void {
+    for (const [file, content] of Object.entries(files))
+      writeFile(join(tmp, 'resources', 'builtin-skills', name, ...file.split('/')), content);
+  }
+
+  const builtinSkills = () => join(tmp, 'resources', 'harness', 'spec.jev', 'judge', 'skills');
+
   it('pins the spec.jev version in one place, the root package.json', () => {
     expect(pinnedVersion()).toMatch(/^\d+\.\d+\.\d+/);
     writeFile(join(tmp, 'package.json'), '{"name":"x"}');
@@ -272,5 +298,93 @@ describe('bundle-harness', () => {
     expect(() =>
       bundleHarness({ root: tmp, platform: 'linux', arch: 'x64', tarball: '', npm: unpublished, log: () => {} })
     ).toThrow('MU_HARNESS_TARBALL');
+  });
+
+  it('puts the skills this repository adds beside spec.jev’s own, without caches or editor files', () => {
+    builtinSkill('stack-diagram', {
+      'SKILL.md': '---\nname: stack-diagram\ndescription: Draw a stack\n---\n',
+      'scripts/build.py': 'print("stack")\n',
+      '__pycache__/build.cpython-311.pyc': 'stale',
+      '.DS_Store': 'stale',
+      'node_modules/leftover/package.json': '{}',
+    });
+    bundleHarness({
+      root: tmp,
+      platform: 'linux',
+      arch: 'x64',
+      tarball: harnessTarball(),
+      npm: installDependencies,
+      log: () => {},
+    });
+    const skill = join(builtinSkills(), 'stack-diagram');
+    expect(readFileSync(join(skill, 'SKILL.md'), 'utf8')).toContain('name: stack-diagram');
+    expect(existsSync(join(skill, 'scripts', 'build.py'))).toBe(true);
+    expect(existsSync(join(skill, '__pycache__'))).toBe(false);
+    expect(existsSync(join(skill, '.DS_Store'))).toBe(false);
+    expect(existsSync(join(skill, 'node_modules'))).toBe(false);
+    // What the app registers with pi, which reads no skill folder of the harness's own.
+    expect(JSON.parse(readFileSync(join(tmp, 'resources', 'harness', 'builtin-skills.json'), 'utf8'))).toEqual({
+      skills: ['stack-diagram'],
+    });
+  });
+
+  it('installs what a built-in skill depends on beside the copy, for the target', () => {
+    builtinSkill('pptx', {
+      'SKILL.md': '---\nname: pptx\ndescription: Make a deck\n---\n',
+      'package.json': JSON.stringify({ private: true, dependencies: { pptxgenjs: '^4.0.1' } }),
+      'node_modules/leftover/package.json': '{}',
+    });
+    const calls: { args: string[]; cwd: string }[] = [];
+    const npm = (args: string[], cwd: string) => {
+      calls.push({ args, cwd });
+      if (cwd.includes('pptx')) writeFile(join(cwd, 'node_modules', 'pptxgenjs', 'package.json'), '{}');
+      else
+        for (const name of Object.keys(DEPENDENCIES))
+          writeFile(join(cwd, 'node_modules', ...name.split('/'), 'package.json'));
+      return '';
+    };
+    bundleHarness({ root: tmp, platform: 'win32', arch: 'x64', tarball: harnessTarball(), npm, log: () => {} });
+
+    expect(calls).toEqual([
+      { args: installArgs('win32', 'x64'), cwd: join(tmp, 'resources', 'harness', 'spec.jev') },
+      { args: installArgs('win32', 'x64'), cwd: join(builtinSkills(), 'pptx') },
+    ]);
+    const installed = join(builtinSkills(), 'pptx', 'node_modules');
+    expect(existsSync(join(installed, 'pptxgenjs', 'package.json'))).toBe(true);
+    expect(existsSync(join(installed, 'leftover'))).toBe(false);
+  });
+
+  it('records the built-in skills in the integrity record and leaves no skill of a build before', () => {
+    writeFile(join(tmp, 'resources', 'harness', 'spec.jev', 'judge', 'skills', 'gone', 'SKILL.md'), 'stale');
+    builtinSkill('stack-diagram', { 'SKILL.md': '---\nname: stack-diagram\ndescription: Draw a stack\n---\n' });
+    bundleHarness({
+      root: tmp,
+      platform: 'linux',
+      arch: 'x64',
+      tarball: harnessTarball(),
+      npm: installDependencies,
+      log: () => {},
+    });
+    const resourcesDir = join(tmp, 'resources');
+    const verify = () => verifyBundledHarness({ resourcesDir, electronPlatformName: 'linux', targetArch: 'x64' });
+    expect(existsSync(join(builtinSkills(), 'gone'))).toBe(false);
+    expect(verify().missing).toEqual([]);
+
+    writeFile(join(builtinSkills(), 'stack-diagram', 'SKILL.md'), 'tampered');
+    expect(verify().missing).toContain('harness/bundle.json<integrity:digest_mismatch>');
+  });
+
+  it('refuses a skill this repository adds without a SKILL.md, which spec.jev would never load', () => {
+    builtinSkill('stack-diagram', { 'scripts/build.py': 'print("stack")\n' });
+    expect(() =>
+      bundleHarness({
+        root: tmp,
+        platform: 'linux',
+        arch: 'x64',
+        tarball: harnessTarball(),
+        npm: installDependencies,
+        log: () => {},
+      })
+    ).toThrow('SKILL.md');
   });
 });

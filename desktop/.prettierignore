@@ -1,0 +1,3 @@
+# Vendored skills are redistributed exactly as their upstream ships them: formatting them here would
+# diverge from the source and make the next update a rewrite.
+resources/builtin-skills/

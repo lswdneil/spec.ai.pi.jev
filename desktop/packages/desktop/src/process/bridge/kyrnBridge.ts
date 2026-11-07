@@ -18,6 +18,7 @@ import { OnnxLocalJudge, openFolder, usesOnnxJudge } from '../agent/kyrn/localJu
 import { importCli, importService } from '../agent/kyrn/importChats';
 import { addSkill, listSkills, removeSkill, skillsFolder } from '../agent/kyrn/capabilities/skills';
 import { seedBundledWindowsMcp } from '../agent/kyrn/capabilities/bundledWindowsMcp';
+import { seedBundledSkills } from '../agent/kyrn/capabilities/bundledSkills';
 import {
   addMcpServer,
   listMcpServers,
@@ -98,6 +99,9 @@ export function initKyrnBridge(): void {
     agentDir,
     process.platform === 'win32' ? getBundledMcpExecutablePath('windows-mcp') : undefined
   );
+  // The skills this app adds — stack-diagram and the like — are files beside the harness, which pi does not read:
+  // they have to be on pi's `skills` list before the first conversation starts.
+  seedBundledSkills(agentDir, dirname(harness.root));
   const store = join(home, 'acp-sessions');
   const settings = new SettingsStore(agentDir, root, {
     env: envFileOf(harness, home, process.platform),

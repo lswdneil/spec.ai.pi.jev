@@ -122,6 +122,17 @@ describe('the skills spec.jev loads', () => {
     expect(names(where)).toEqual(['builtin:mu-browser', 'builtin:mu-github', 'claude:pdf', 'codex:slides']);
   });
 
+  it('offers a skill added beside the harness’s own as a default one, unless a folder of that name comes first', () => {
+    const where = roots();
+    // What scripts/kyrn/bundle-harness.mjs copies into judge/skills: BUILTIN_FEATURES names none of it, so always on.
+    skill(join(where.builtinDir as string, 'stack-diagram', 'SKILL.md'), { name: 'stack-diagram' });
+    where.muJson({ features: { inherit: false, browser: false, packs: false } });
+    expect(names(where)).toEqual(['builtin:stack-diagram']);
+    // A shared skill of that name wins instead: the first of a name is the one spec.jev keeps.
+    skill(join(where.home, '.agents', 'skills', 'stack-diagram', 'SKILL.md'), { name: 'stack-diagram' });
+    expect(names(where)).toEqual(['agents:stack-diagram']);
+  });
+
   it('lets only a skill of its own in spec.jev’s folder be removed', () => {
     const where = roots();
     skill(join(where.agentDir, 'skills', 'review', 'SKILL.md'));

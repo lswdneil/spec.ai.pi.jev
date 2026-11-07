@@ -1,0 +1,9 @@
+{
+  "name": "spec-jev-skill-pptx",
+  "private": true,
+  "description": "Dependencies of the bundled pptx skill: HTML to editable PowerPoint.",
+  "dependencies": {
+    "playwright-core": "^1.59.1",
+    "pptxgenjs": "^4.0.1"
+  }
+}
