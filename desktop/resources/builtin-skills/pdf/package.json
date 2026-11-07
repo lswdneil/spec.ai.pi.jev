@@ -1,0 +1,9 @@
+{
+  "name": "spec-jev-skill-pdf",
+  "private": true,
+  "description": "Dependencies of the bundled pdf skill: merge, split, inspect and read PDF files.",
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "unpdf": "^2.1.0"
+  }
+}

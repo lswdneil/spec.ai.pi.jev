@@ -1,0 +1,8 @@
+{
+  "name": "spec-jev-skill-xlsx",
+  "private": true,
+  "description": "Dependencies of the bundled xlsx skill: read and write spreadsheets.",
+  "dependencies": {
+    "xlsx-republish": "^0.20.3"
+  }
+}

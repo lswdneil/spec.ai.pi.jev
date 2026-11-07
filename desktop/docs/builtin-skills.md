@@ -75,3 +75,42 @@ PowerPoint file — text stays text, boxes stay shapes.
 - Not bundled, on purpose: upstream's PDF export, rendered-HTML fallback and `pptx_from_rendered.py`. The first two
   need Playwright plus `sharp`; the last needs Python's `python-pptx` and Pillow. `references/slide-decks.md` and
   `references/editable-pptx.md` still mention them; `pptx/SKILL.md` says what is actually here.
+
+## docx
+
+Reads, cleans and produces Word documents: formatting diagnosis, Chinese/English punctuation and spacing,
+official/academic/legal/custom presets, tables, page numbers, revision marks, and Markdown or plain text into a
+formatted `.docx`.
+
+- Source: `KaguraNanaga/document-format-skills`, commit `a1005d13c3429d40cc1e5a5db677555cd672f930`; the scripts
+  and `requirements.txt` are copied unchanged (`docx/NOTICE.md` lists them). MIT (`docx/LICENSE`).
+- Changed: `SKILL.md` — the upstream one is named `document-format-skills` and runs the scripts through
+  `uv run --with python-docx`; this one calls `python` directly.
+- Added: `scripts/preflight.py`, which names the missing Python package and the command that installs it.
+- Runtime it asks of the machine: Python 3.8+ and `python-docx`. Like stack-diagram's Python packages, this is a
+  published dependency of the skill, not something the app installs; `.doc`/`.wps` conversion additionally needs
+  Windows, `pywin32` and WPS Office or Microsoft Word.
+
+## xlsx
+
+Reads a workbook (sheet list, CSV/JSON dump, all sheets at once) and writes one from CSV/TSV/JSON with a header
+row, column widths, an autofilter, number formats and formulas.
+
+- Source: written for this repository (MIT), on `xlsx-republish` (SheetJS 0.20.3, Apache-2.0). The library is the
+  only dependency and the build installs it beside the skill.
+- Honest limits, stated in `SKILL.md`: the community edition writes values, formulas, number formats, widths and an
+  autofilter — no fonts, fills, borders, conditional formatting, freeze panes, charts or pivot tables.
+- `--no-coerce` keeps identifiers (leading zeros, long account numbers) as text; by default a plainly decimal CSV
+  cell becomes a number so Excel does not flag the column.
+
+## pdf
+
+Prints HTML to PDF, extracts the text layer, reports page count/sizes/metadata, merges and splits.
+
+- Source: written for this repository (MIT), on `pdf-lib` (MIT) and `unpdf` (MIT, reads the text layer through a
+  bundled pdf.js). Both are installed beside the skill at build time; `unpdf` is 3 MB unpacked, where `officeparser`
+  would have added pdf.js plus a 36 MB optional native canvas that text extraction does not use.
+- Printing uses the same browser the pptx skill uses — Edge, Chrome, a Playwright download, or `SPECJEV_CHROMIUM` —
+  through `--print-to-pdf`, so `@page { size: A4; margin: 18mm }` in the page's CSS decides the paper.
+- A scanned PDF has no text layer: `pdf-to-text` exits non-zero rather than returning nothing, and `SKILL.md` tells
+  the model to say OCR is needed instead of guessing.
