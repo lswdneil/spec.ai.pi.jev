@@ -32,6 +32,14 @@ in the page and never reaches the model. The harness's own skills are registered
 `resources/harness/builtin-skills.json`, and `capabilities/bundledSkills.ts` puts those folders on pi's `skills` list
 when the app starts: once, refreshed when a build or an install moved them, with anybody else's entries left alone.
 
+## The component check
+
+Settings → Skills starts with **Required components**. It asks the main process to probe the pieces a built-in skill
+needs: the Python interpreter (`SPECJEV_PYTHON`, then the bundled runtime, then the system `python`), whether that
+interpreter can `import docx`, and the Edge or Chrome that pptx and PDF use (`SPECJEV_CHROMIUM` first). The card states
+the version or path it found and whether the runtime came with the app or from the machine. It is a status card, not a
+gate: a missing component only disables the skills that use it, and **Check again** reruns the probes on demand.
+
 ## What a skill folder needs
 
 - `SKILL.md` with frontmatter holding `name` and a non-empty `description`. The app silently skips a folder without

@@ -6,6 +6,7 @@
 
 import { initApplicationBridge } from './applicationBridge';
 import { initDialogBridge } from './dialogBridge';
+import { initEnvironmentBridge } from './environmentBridge';
 import { initUpdateBridge } from './updateBridge';
 import { initSystemSettingsBridge } from './systemSettingsBridge';
 import { initWindowControlsBridge } from './windowControlsBridge';
@@ -22,6 +23,7 @@ export type BridgeDependencies = Record<string, never>;
 
 export function initAllBridges(_deps: BridgeDependencies = {}): void {
   initDialogBridge();
+  initEnvironmentBridge();
   initAccountBridge();
   initApplicationBridge();
   initWindowControlsBridge();
@@ -40,6 +42,7 @@ export {
   initApplicationBridge,
   initAccountBridge,
   initDialogBridge,
+  initEnvironmentBridge,
   initNotificationBridge,
   initSystemSettingsBridge,
   initThemeBridge,

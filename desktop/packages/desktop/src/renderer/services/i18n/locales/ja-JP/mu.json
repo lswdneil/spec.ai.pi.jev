@@ -1165,6 +1165,34 @@
       }
     },
     "showAll": "すべて表示（{{count}}）",
-    "showFewer": "折りたたむ"
+    "showFewer": "折りたたむ",
+    "dependencies": {
+      "title": "必要なコンポーネント",
+      "lead": "組み込みスキルがこのコンピューターに求めるものです。不足しているコンポーネントは、それを使うスキルだけに影響します。",
+      "check": "再確認",
+      "checking": "確認しています…",
+      "failed": "コンポーネントを確認できませんでした。",
+      "available": "利用可能",
+      "missing": "不足",
+      "python": {
+        "name": "Python ランタイム",
+        "ok": "docx と stack-diagram が使用します。",
+        "missing": "docx と stack-diagram を実行できません。Python 3.8+ をインストールするか、同梱ランタイムを含むビルドを再インストールしてください。"
+      },
+      "pythonDocx": {
+        "name": "python-docx",
+        "ok": "docx スキルが Word 文書を読み書きできます。",
+        "missing": "docx スキルが Word 文書を開けません。python -m pip install --user python-docx を実行してください。"
+      },
+      "chromium": {
+        "name": "ブラウザー（Edge または Chrome）",
+        "ok": "pptx の書き出しと PDF 印刷が使用します。",
+        "missing": "pptx の書き出しと PDF 印刷を利用できません。Microsoft Edge または Google Chrome をインストールしてください。"
+      },
+      "source": {
+        "bundled": "アプリに同梱",
+        "system": "システムにインストール"
+      }
+    }
   }
 }

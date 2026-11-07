@@ -1165,6 +1165,34 @@
       }
     },
     "showAll": "모두 보기({{count}})",
-    "showFewer": "접기"
+    "showFewer": "접기",
+    "dependencies": {
+      "title": "필수 구성 요소",
+      "lead": "기본 제공 스킬이 이 컴퓨터에서 필요로 하는 항목입니다. 구성 요소가 없으면 해당 구성 요소를 사용하는 스킬에만 영향을 줍니다.",
+      "check": "다시 확인",
+      "checking": "확인하는 중…",
+      "failed": "구성 요소를 확인하지 못했습니다.",
+      "available": "사용 가능",
+      "missing": "없음",
+      "python": {
+        "name": "Python 런타임",
+        "ok": "docx와 stack-diagram에서 사용합니다.",
+        "missing": "docx와 stack-diagram을 실행할 수 없습니다. Python 3.8+을 설치하거나 번들 런타임이 포함된 빌드를 다시 설치하세요."
+      },
+      "pythonDocx": {
+        "name": "python-docx",
+        "ok": "docx 스킬이 Word 문서를 읽고 쓸 수 있습니다.",
+        "missing": "docx 스킬이 Word 문서를 열 수 없습니다. python -m pip install --user python-docx를 실행하세요."
+      },
+      "chromium": {
+        "name": "브라우저(Edge 또는 Chrome)",
+        "ok": "pptx 내보내기와 PDF 인쇄에서 사용합니다.",
+        "missing": "pptx 내보내기와 PDF 인쇄를 사용할 수 없습니다. Microsoft Edge 또는 Google Chrome을 설치하세요."
+      },
+      "source": {
+        "bundled": "앱에 포함됨",
+        "system": "시스템 설치"
+      }
+    }
   }
 }

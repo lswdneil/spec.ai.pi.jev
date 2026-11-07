@@ -88,6 +88,7 @@ import type { UpdateAction, UpdateState } from '../update/updateTypes';
 import type { AgentMetadata } from '@/renderer/utils/model/agentTypes';
 import type { Theme, WindowAppearance } from '@/common/theme/types';
 import type { AttachFolderRequest, ProjectDetailDto, ProjectEntryDto } from '@/common/types/project';
+import type { EnvironmentReport } from '@/common/types/environment';
 import type { ChatFileRef, ContentEncoding } from '@/common/types/chatFile';
 import type {
   AccountBindParams,
@@ -867,6 +868,14 @@ const isElectronRenderer = (): boolean =>
 
 export const dialog = {
   showOpen: bridge.buildProvider<string[] | undefined, ShowOpenOptions>('show-open'),
+};
+
+// ---------------------------------------------------------------------------
+// Environment — the components the built-in skills need, probed in the main process
+// ---------------------------------------------------------------------------
+
+export const environment = {
+  check: bridge.buildProvider<EnvironmentReport, void>('environment.check'),
 };
 
 // ---------------------------------------------------------------------------

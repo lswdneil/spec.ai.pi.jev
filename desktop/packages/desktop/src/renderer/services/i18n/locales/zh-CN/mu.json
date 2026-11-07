@@ -1165,6 +1165,34 @@
       }
     },
     "showAll": "显示全部（{{count}}）",
-    "showFewer": "收起"
+    "showFewer": "收起",
+    "dependencies": {
+      "title": "必需组件",
+      "lead": "内置技能需要这台电脑具备的组件。缺少某个组件只会影响用到它的技能。",
+      "check": "重新检查",
+      "checking": "正在检查…",
+      "failed": "无法检查组件。",
+      "available": "可用",
+      "missing": "缺失",
+      "python": {
+        "name": "Python 运行时",
+        "ok": "docx 和 stack-diagram 使用它。",
+        "missing": "docx 和 stack-diagram 无法运行。请安装 Python 3.8+，或重新安装带内置运行时的版本。"
+      },
+      "pythonDocx": {
+        "name": "python-docx",
+        "ok": "docx 技能可以读写 Word 文档。",
+        "missing": "docx 技能无法打开 Word 文档。请运行 python -m pip install --user python-docx。"
+      },
+      "chromium": {
+        "name": "浏览器（Edge 或 Chrome）",
+        "ok": "pptx 导出和 PDF 打印使用它。",
+        "missing": "pptx 导出和 PDF 打印不可用。请安装 Microsoft Edge 或 Google Chrome。"
+      },
+      "source": {
+        "bundled": "随应用提供",
+        "system": "系统安装"
+      }
+    }
   }
 }

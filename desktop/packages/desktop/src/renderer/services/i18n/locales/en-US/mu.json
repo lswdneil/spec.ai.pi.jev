@@ -1165,6 +1165,34 @@
       }
     },
     "showAll": "Show all ({{count}})",
-    "showFewer": "Show fewer"
+    "showFewer": "Show fewer",
+    "dependencies": {
+      "title": "Required components",
+      "lead": "What the built-in skills need from this machine. A missing component only affects the skills that use it.",
+      "check": "Check again",
+      "checking": "Checking…",
+      "failed": "Couldn't check the components.",
+      "available": "Available",
+      "missing": "Missing",
+      "python": {
+        "name": "Python runtime",
+        "ok": "Used by docx and stack-diagram.",
+        "missing": "docx and stack-diagram can't run. Install Python 3.8+, or reinstall a build that carries the bundled runtime."
+      },
+      "pythonDocx": {
+        "name": "python-docx",
+        "ok": "The docx skill can read and write Word documents.",
+        "missing": "The docx skill can't open Word documents. Run python -m pip install --user python-docx."
+      },
+      "chromium": {
+        "name": "Browser (Edge or Chrome)",
+        "ok": "pptx export and PDF printing use it.",
+        "missing": "pptx export and PDF printing are unavailable. Install Microsoft Edge or Google Chrome."
+      },
+      "source": {
+        "bundled": "Bundled with the app",
+        "system": "System install"
+      }
+    }
   }
 }

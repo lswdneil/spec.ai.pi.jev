@@ -17,6 +17,7 @@ import { muErrorText, toMuError } from '../KyrnSettings/fields/muError';
 import SectionShell, { Card } from '../KyrnSettings/sections/SectionShell';
 import styles from '../KyrnSettings/sections/sections.module.css';
 import Count from './Count';
+import EnvironmentCard from './EnvironmentCard';
 import { useMuList } from './useMuList';
 
 /** Rows a group shows before 显示全部: a page is a few short groups, not every skill on the computer at once. */
@@ -128,6 +129,7 @@ export default function MuSkillsPage() {
           </>
         }
       >
+        <EnvironmentCard />
         {list.error && !list.data ? (
           <Alert
             type='error'
