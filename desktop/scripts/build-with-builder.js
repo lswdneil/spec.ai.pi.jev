@@ -774,6 +774,13 @@ try {
     [path.join(__dirname, 'prepareMoliResources.js'), '--platform', buildPlatform, '--arch', targetArch],
     { stdio: 'inherit', env: process.env }
   );
+  // The docx skill and stack-diagram run Python, and Windows has none by default: carry one, with
+  // python-docx already installed, so the person's machine downloads nothing.
+  execFileSync(
+    process.execPath,
+    [path.join(__dirname, 'preparePythonResources.js'), '--platform', buildPlatform, '--arch', targetArch],
+    { stdio: 'inherit', env: process.env }
+  );
   execFileSync(process.execPath, [path.join(__dirname, 'prepareWindowsMcpResources.js')], {
     stdio: 'inherit',
     env: process.env,

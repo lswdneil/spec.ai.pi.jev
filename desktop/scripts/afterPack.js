@@ -1,4 +1,5 @@
 const { Arch } = require('builder-util');
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
@@ -104,6 +105,26 @@ function verifyBundledResources(resourcesDir, electronPlatformName, targetArch) 
     else if (process.env.MU_REQUIRE_WINDOWS_MCP === '1')
       throw new Error(`Packaged app is missing bundled Windows MCP: ${windowsMcp}`);
     else console.warn(`   bundled Windows MCP is not included (${windowsMcp})`);
+  }
+
+  // The docx skill and stack-diagram run Python; the app carries one so a fresh Windows machine
+  // needs no install. A staged runtime that did not land in the package would only show up as a
+  // skill failing in the person's first conversation, so fail the build instead.
+  if (electronPlatformName === 'win32') {
+    const runtimeKey = `${electronPlatformName}-${targetArch}`;
+    const staged = path.resolve(__dirname, '..', 'resources', 'bundled-python', runtimeKey);
+    const python = path.join(resourcesDir, 'bundled-python', runtimeKey, 'python.exe');
+    const required =
+      process.env.MU_REQUIRE_BUNDLED_PYTHON === '1' ||
+      (fs.existsSync(staged) && process.env.MU_SKIP_BUNDLED_PYTHON !== '1');
+    if (fs.existsSync(python)) {
+      execFileSync(python, ['-c', 'import docx'], { stdio: 'inherit' });
+      console.log(`   bundled python verified (${python})`);
+    } else if (required) {
+      throw new Error(`Packaged app is missing bundled Python: ${python}`);
+    } else {
+      console.warn(`   bundled python is not included (${python})`);
+    }
   }
 }
 

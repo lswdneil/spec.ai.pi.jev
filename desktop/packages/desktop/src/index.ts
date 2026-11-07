@@ -20,6 +20,7 @@ import { initMainAdapterWithWindow } from './common/adapter/main';
 import { ipcBridge } from './common';
 import { initializeProcess } from './process';
 import { installBundledMoli } from './process/startup/bundledMoli';
+import { installBundledPython } from './process/startup/bundledPython';
 import { startWebUiIfEnabled } from './process/bridge/applicationBridge';
 import { startBackendOrExit } from './process/startup/backendStartup';
 import { planStartupNodeRuntime } from './process/startup/nodeRuntimeStartup';
@@ -369,9 +370,11 @@ function markBackendReady(backendPort: number, source: string): void {
   if (backendStartedOk) return;
   console.log(`[spec.jev] ${source} ready (port=${backendPort})`);
   exposeBackendPort(backendPort);
-  void ensureAccountReady().catch((error) => {
-    console.warn('[spec.jev] account session could not be restored at startup', error);
-  }).then(() => scheduleBackendMigrations());
+  void ensureAccountReady()
+    .catch((error) => {
+      console.warn('[spec.jev] account session could not be restored at startup', error);
+    })
+    .then(() => scheduleBackendMigrations());
   registerCronResumeBridge(backendPort);
   backendStartedOk = true;
   backendStartupFailed = false;
@@ -693,6 +696,11 @@ const handleAppReady = async (): Promise<void> => {
   // Give the agent a browser that ships with the app before any child inherits our environment.
   const bundledMoli = installBundledMoli();
   if (bundledMoli) console.log(`[spec.jev] using bundled moli: ${bundledMoli}`);
+
+  // The docx skill and stack-diagram run Python. A Windows machine has no interpreter by default,
+  // so a build that carries one puts it first on PATH before any agent shell inherits this process.
+  const bundledPython = installBundledPython();
+  if (bundledPython) console.log(`[spec.jev] using bundled python: ${bundledPython}`);
 
   try {
     await initializeProcess();

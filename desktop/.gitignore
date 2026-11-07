@@ -199,6 +199,7 @@ resources/bundled-bun
 resources/bundled-aioncore
 resources/bundled-moli
 resources/bundled-mcp
+resources/bundled-python
 resources/harness
 resources/hub
 resources/build-provenance.json

@@ -18,8 +18,10 @@ python -c "import docx; print(docx.__version__ if hasattr(docx, '__version__') e
 python scripts/preflight.py
 ```
 
-If it is missing, install it once — `python -m pip install --user "python-docx>=0.8.11"`. Say that
-you did; do not silently skip the step, every command below needs it.
+In the spec.jev desktop app `python` is a bundled interpreter that already has python-docx, so
+these commands work on a fresh machine. If `docx` is missing (a checkout, or a system Python), install
+it once — `python -m pip install --user "python-docx>=0.8.11"`. Say that you did; do not silently
+skip the step, every command below needs it.
 
 ## The one command to remember
 
