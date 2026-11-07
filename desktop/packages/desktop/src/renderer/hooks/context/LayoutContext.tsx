@@ -7,6 +7,8 @@ import React from 'react';
 
 export interface LayoutContextValue {
   isMobile: boolean;
+  /** The sidebar's width as it is on screen: the rail when folded, the drawer's full width on a phone. */
+  siderWidth: number;
   siderCollapsed: boolean;
   setSiderCollapsed: (value: boolean) => void;
 }

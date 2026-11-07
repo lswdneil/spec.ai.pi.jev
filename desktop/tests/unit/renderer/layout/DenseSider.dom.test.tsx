@@ -45,6 +45,25 @@ vi.mock('@renderer/hooks/system/useAccountIdentity', () => ({
   useAccountIdentity: () => ({ identity: { kind: 'local', id: 'system_default_user' } }),
 }));
 
+vi.mock('@renderer/hooks/context/AccountContext', () => ({
+  useAccount: () => ({
+    status: {
+      required: true,
+      authenticated: true,
+      user: { id: 7, email: 'dev@example.com', phone: null, plan: 'free', role: 'user', hasPassword: true },
+      localUserId: 'system_default_user',
+      localUsername: null,
+      lastLoginAt: null,
+      offline: false,
+      storage: { encryptionAvailable: true, plaintext: false },
+    },
+    logout: vi.fn(),
+  }),
+}));
+vi.mock('@renderer/components/account/AccountManagementModal', () => ({ default: () => null }));
+vi.mock('@renderer/components/account/AccountPanel', () => ({ logoutAndReload: vi.fn() }));
+vi.mock('@renderer/components/settings/UpdateNotice', () => ({ default: () => null }));
+
 vi.mock('@/renderer/ui', () => ({
   cn: (...values: unknown[]) => values.filter(Boolean).join(' '),
   Tooltip: ({ children }: React.PropsWithChildren) => <>{children}</>,
@@ -64,6 +83,7 @@ vi.mock('@/renderer/ui', () => ({
 }));
 
 import DenseSider from '@renderer/components/layout/Sider/DenseSider';
+import { accountMenuWidth } from '@renderer/components/layout/Sider/DenseSiderFooter';
 
 describe('Dense sidebar', () => {
   beforeEach(() => {
@@ -124,12 +144,27 @@ describe('Dense sidebar', () => {
     expect(navigate).toHaveBeenCalledWith('/guid');
   });
 
-  it('shows a local workspace instead of the internal user id', () => {
+  it('shows the signed-in account instead of the internal user id', () => {
     render(<DenseSider />);
-    expect(screen.getByTestId('sider-account')).toHaveTextContent('common.localWorkspace');
-    expect(screen.queryByText('system_default_user')).not.toBeInTheDocument();
-    expect(screen.getByTestId('sider-account-menu')).toHaveTextContent('common.localWorkspaceHint');
-    expect(screen.getByTestId('sider-account-menu')).toHaveTextContent('common.accountComingSoon');
+    expect(screen.getByTestId('sider-account')).toHaveTextContent('dev@example.com');
+    expect(screen.getByTestId('sider-account')).not.toHaveTextContent('system_default_user');
+    const menu = screen.getByTestId('sider-account-menu');
+    expect(menu).toHaveTextContent('login.account.manage');
+    expect(menu).toHaveTextContent('login.account.logout');
+    // The label keeps the UI font; only the identifier is monospaced.
+    expect(screen.getByText('login.account.localUser')).not.toHaveClass('font-mono');
+    const localUserId = screen.getByTestId('sider-account-local-user-id');
+    expect(localUserId).toHaveTextContent('system_default_user');
+    expect(localUserId).toHaveClass('font-mono');
+    // Settings sits beside the account; the drawer must not repeat it.
+    expect(menu).not.toHaveTextContent('login.account.settings');
+  });
+
+  it('keeps the account drawer as wide as the sidebar', () => {
+    expect(accountMenuWidth(208, false)).toBe(192);
+    expect(accountMenuWidth(320, false)).toBe(304);
+    expect(accountMenuWidth(184, false)).toBe(176);
+    expect(accountMenuWidth(48, true)).toBe(208);
   });
 
   it('keeps the settings action and the theme switch in its own place', () => {

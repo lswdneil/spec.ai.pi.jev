@@ -19,7 +19,7 @@ export const DialogContent = React.forwardRef<
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          'fixed left-1/2 top-1/2 z-50 w-[min(92vw,var(--sv-modal-width,520px))] -translate-x-1/2 -translate-y-1/2 rounded-[var(--sv-r-dialog)] border border-sv-line bg-sv-popover p-5 text-sv-text outline-none',
+          'fixed left-1/2 top-1/2 z-50 box-border w-[min(92vw,var(--sv-modal-width,520px))] -translate-x-1/2 -translate-y-1/2 rounded-[var(--sv-r-dialog)] border border-sv-line bg-sv-popover p-5 text-sv-text outline-none',
           className
         )}
         {...props}

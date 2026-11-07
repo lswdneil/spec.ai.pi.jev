@@ -12,14 +12,24 @@ type DenseSiderFooterProps = {
   isMobile: boolean;
   isSettings: boolean;
   collapsed?: boolean;
+  siderWidth: number;
   siderTooltipProps: SiderTooltipProps;
   onSettingsClick: () => void;
 };
+
+/**
+ * The drawer sits inside the sidebar. The account row is inset from the sidebar's edge, and the drawer is aligned to
+ * that row, so its width stops short of the sidebar's right edge. A folded rail keeps a readable menu instead of
+ * squeezing it into 48px.
+ */
+export const accountMenuWidth = (siderWidth: number, iconOnly: boolean): number =>
+  iconOnly ? 208 : Math.max(176, siderWidth - 16);
 
 const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
   isMobile,
   isSettings,
   collapsed = false,
+  siderWidth,
   siderTooltipProps,
   onSettingsClick,
 }) => {
@@ -39,7 +49,14 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
       : t('login.account.cloudAccount') + ' · ' + plan
     : t('common.localWorkspaceHint');
   const displayName = accountName || t('common.localWorkspace');
-  const initial = user ? (accountName ?? '').split('@')[0].replace(/[^a-z0-9]/gi, '').slice(0, 2).toUpperCase() : '';
+  const initial = user
+    ? (accountName ?? '')
+        .split('@')[0]
+        .replace(/[^a-z0-9]/gi, '')
+        .slice(0, 2)
+        .toUpperCase()
+    : '';
+  const menuWidth = accountMenuWidth(siderWidth, iconOnly);
 
   const handleLogout = async () => {
     setMenuOpen(false);
@@ -53,7 +70,8 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
         {authenticated ? (
           <Popover
             position='top'
-            className='w-[248px]'
+            align='start'
+            style={{ width: menuWidth }}
             popupVisible={menuOpen}
             onVisibleChange={setMenuOpen}
             content={
@@ -66,16 +84,20 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
                     <div className='truncate text-[12px] font-medium text-sv-text'>{displayName}</div>
                     <div className='mt-0.5 truncate text-[11px] leading-[1.35] text-sv-muted'>{subline}</div>
                     {account.status?.localUserId ? (
-                      <div className='mt-0.5 truncate font-mono text-[10px] leading-[1.35] text-sv-faint'>
-                        {t('login.account.localUser')} {account.status.localUserId}
+                      <div className='mt-0.5 flex min-w-0 items-baseline gap-1 text-[10px] leading-[1.35] text-sv-faint'>
+                        <span className='shrink-0'>{t('login.account.localUser')}</span>
+                        <span data-testid='sider-account-local-user-id' className='min-w-0 truncate font-mono'>
+                          {account.status.localUserId}
+                        </span>
                       </div>
                     ) : null}
                   </div>
                 </div>
                 <div className='flex flex-col gap-0.5 border-t border-sv-line pt-1.5'>
-                  <button
-                    type='button'
-                    className='flex h-8 items-center gap-2 rounded-[var(--sv-r-control)] px-2 text-left text-[12px] text-sv-text hover:bg-sv-surface'
+                  <Button
+                    variant='ghost'
+                    size='md'
+                    className='h-8 w-full justify-start gap-2 px-2 text-left text-[12px] font-normal text-sv-text hover:text-sv-text'
                     onClick={() => {
                       setMenuOpen(false);
                       setManagementOpen(true);
@@ -83,37 +105,27 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
                   >
                     <UserRound className='sv-icon-sm text-sv-muted' strokeWidth={1.75} />
                     {t('login.account.manage')}
-                  </button>
-                  <button
-                    type='button'
-                    className='flex h-8 items-center gap-2 rounded-[var(--sv-r-control)] px-2 text-left text-[12px] text-sv-text hover:bg-sv-surface'
-                    onClick={() => {
-                      setMenuOpen(false);
-                      onSettingsClick();
-                    }}
-                  >
-                    <Settings2 className='sv-icon-sm text-sv-muted' strokeWidth={1.75} />
-                    {t('login.account.settings')}
-                  </button>
-                  <button
-                    type='button'
-                    className='flex h-8 items-center gap-2 rounded-[var(--sv-r-control)] px-2 text-left text-[12px] text-sv-danger hover:bg-sv-surface'
+                  </Button>
+                  <Button
+                    variant='ghost'
+                    size='md'
+                    className='h-8 w-full justify-start gap-2 px-2 text-left text-[12px] font-normal text-sv-danger hover:text-sv-danger'
                     onClick={() => void handleLogout()}
                   >
                     <LogOut className='sv-icon-sm' strokeWidth={1.75} />
                     {t('login.account.logout')}
-                  </button>
+                  </Button>
                 </div>
               </div>
             }
           >
-            <button
-              type='button'
+            <Button
+              variant='ghost'
               data-testid='sider-account'
               aria-label={t('common.account')}
               className={cn(
-                'flex min-w-0 appearance-none items-center gap-2 rounded-[var(--sv-r-control)] border-0 bg-transparent px-2 py-1 text-left transition-colors hover:bg-sv-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sv-focus',
-                iconOnly ? 'justify-center px-0' : 'flex-1'
+                'h-auto min-w-0 justify-start gap-2 px-2 py-1 text-left hover:bg-sv-surface',
+                iconOnly ? 'justify-center px-0' : 'w-full flex-1'
               )}
             >
               <Avatar size={22} shape='square' className='text-sv-muted'>
@@ -128,16 +140,16 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
                   <ChevronUp className='sv-icon-xs shrink-0 text-sv-muted' strokeWidth={1.75} />
                 </>
               )}
-            </button>
+            </Button>
           </Popover>
         ) : (
-          <button
-            type='button'
+          <Button
+            variant='ghost'
             data-testid='sider-account'
             aria-label={t('common.localWorkspace')}
             className={cn(
-              'flex min-w-0 appearance-none items-center gap-2 rounded-[var(--sv-r-control)] border-0 bg-transparent px-2 py-1 text-left',
-              iconOnly ? 'justify-center px-0' : 'flex-1'
+              'h-auto min-w-0 justify-start gap-2 px-2 py-1 text-left',
+              iconOnly ? 'justify-center px-0' : 'w-full flex-1'
             )}
           >
             <Avatar size={22} shape='square' className='text-sv-muted'>
@@ -146,7 +158,7 @@ const DenseSiderFooter: React.FC<DenseSiderFooterProps> = ({
             {iconOnly ? null : (
               <span className='min-w-0 flex-1 truncate text-[11.5px] text-sv-text'>{t('common.localWorkspace')}</span>
             )}
-          </button>
+          </Button>
         )}
         <Tooltip content={settingsLabel} position='top'>
           <Button

@@ -413,7 +413,14 @@ const Layout: React.FC<{
       };
 
   return (
-    <LayoutContext.Provider value={{ isMobile, siderCollapsed: collapsed, setSiderCollapsed }}>
+    <LayoutContext.Provider
+      value={{
+        isMobile,
+        siderWidth: collapsed && !isMobile ? SIDER_RAIL_WIDTH : siderWidth,
+        siderCollapsed: collapsed,
+        setSiderCollapsed,
+      }}
+    >
       <NavigationHistoryProvider>
         <div className='app-shell flex flex-col size-full min-h-0'>
           <Titlebar workspaceAvailable={workspaceAvailable} />

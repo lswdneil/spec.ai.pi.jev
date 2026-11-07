@@ -210,6 +210,7 @@ const DenseSider: React.FC<DenseSiderProps> = ({ onSessionClick, collapsed = fal
         isMobile={isMobile}
         isSettings={isSettings}
         collapsed={collapsed}
+        siderWidth={layout?.siderWidth ?? 208}
         siderTooltipProps={siderTooltipProps}
         onSettingsClick={handleSettings}
       />

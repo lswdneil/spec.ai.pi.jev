@@ -20,11 +20,13 @@ export interface PopoverProps {
   content?: React.ReactNode;
   children: React.ReactNode;
   position?: PopoverPosition;
+  align?: 'start' | 'center' | 'end';
   trigger?: 'click' | 'hover' | 'focus';
   popupVisible?: boolean;
   onVisibleChange?: (visible: boolean) => void;
   unmountOnExit?: boolean;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 const sideFor = (position: PopoverPosition): 'top' | 'bottom' | 'left' | 'right' => {
@@ -40,10 +42,12 @@ export const Popover: React.FC<PopoverProps> = ({
   content,
   children,
   position = 'bottom',
+  align = 'center',
   trigger = 'click',
   popupVisible,
   onVisibleChange,
   className,
+  style,
 }) => {
   const [hoverOpen, setHoverOpen] = React.useState(false);
   const hover = trigger === 'hover';
@@ -73,9 +77,11 @@ export const Popover: React.FC<PopoverProps> = ({
         <PopoverPrimitive.Portal>
           <PopoverPrimitive.Content
             side={sideFor(position)}
+            align={align}
             sideOffset={8}
+            style={style}
             className={cn(
-              'z-[70] max-w-[min(360px,calc(100vw-24px))] rounded-[var(--sv-r-popup)] border border-sv-line bg-sv-popover p-3 text-[12px] text-sv-text outline-none',
+              'z-[70] box-border max-w-[min(360px,calc(100vw-24px))] rounded-[var(--sv-r-popup)] border border-sv-line bg-sv-popover p-3 text-[12px] text-sv-text outline-none',
               className
             )}
           >

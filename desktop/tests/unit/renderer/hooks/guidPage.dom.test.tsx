@@ -743,7 +743,9 @@ describe('GuidInputCard prefill focus', () => {
 
     const originalDraft = 'Existing Guid draft';
     const { rerender } = render(
-      <LayoutContext.Provider value={{ isMobile: false, siderCollapsed: false, setSiderCollapsed: vi.fn() }}>
+      <LayoutContext.Provider
+        value={{ isMobile: false, siderWidth: 208, siderCollapsed: false, setSiderCollapsed: vi.fn() }}
+      >
         <GuidInputCard {...guidInputCardProps} input={originalDraft} focusRequestKey='desktop-prefill' />
       </LayoutContext.Provider>
     );
@@ -756,7 +758,9 @@ describe('GuidInputCard prefill focus', () => {
     document.body.append(outsideTarget);
     outsideTarget.focus();
     rerender(
-      <LayoutContext.Provider value={{ isMobile: false, siderCollapsed: false, setSiderCollapsed: vi.fn() }}>
+      <LayoutContext.Provider
+        value={{ isMobile: false, siderWidth: 208, siderCollapsed: false, setSiderCollapsed: vi.fn() }}
+      >
         <GuidInputCard {...guidInputCardProps} focusRequestKey='desktop-prefill' />
       </LayoutContext.Provider>
     );
@@ -764,7 +768,9 @@ describe('GuidInputCard prefill focus', () => {
 
     outsideTarget.focus();
     rerender(
-      <LayoutContext.Provider value={{ isMobile: false, siderCollapsed: false, setSiderCollapsed: vi.fn() }}>
+      <LayoutContext.Provider
+        value={{ isMobile: false, siderWidth: 208, siderCollapsed: false, setSiderCollapsed: vi.fn() }}
+      >
         <GuidInputCard {...guidInputCardProps} focusRequestKey='desktop-prefill-2' />
       </LayoutContext.Provider>
     );
@@ -772,7 +778,9 @@ describe('GuidInputCard prefill focus', () => {
     expect((textarea as HTMLTextAreaElement).selectionStart).toBe(guidInputCardProps.input.length);
 
     rerender(
-      <LayoutContext.Provider value={{ isMobile: false, siderCollapsed: false, setSiderCollapsed: vi.fn() }}>
+      <LayoutContext.Provider
+        value={{ isMobile: false, siderWidth: 208, siderCollapsed: false, setSiderCollapsed: vi.fn() }}
+      >
         <GuidInputCard
           {...guidInputCardProps}
           input={`${guidInputCardProps.input}!`}
@@ -791,7 +799,9 @@ describe('GuidInputCard prefill focus', () => {
     >('@/renderer/pages/guid/components/GuidInputCard');
 
     render(
-      <LayoutContext.Provider value={{ isMobile: true, siderCollapsed: false, setSiderCollapsed: vi.fn() }}>
+      <LayoutContext.Provider
+        value={{ isMobile: true, siderWidth: 320, siderCollapsed: false, setSiderCollapsed: vi.fn() }}
+      >
         <GuidInputCard {...guidInputCardProps} focusRequestKey='mobile-prefill' />
       </LayoutContext.Provider>
     );
