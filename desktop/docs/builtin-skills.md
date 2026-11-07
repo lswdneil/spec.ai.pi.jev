@@ -53,9 +53,11 @@ Cloud-architecture-style diagrams of a stack, as self-contained HTML, PNG, a Rea
 - Licence: MIT (`stack-diagram/LICENSE`). The bundled Geist and JetBrains Mono fonts are SIL OFL 1.1, with their
   licence texts in `assets/fonts/`.
 - Runtime it asks of the machine: Python 3.9+ for `scripts/fetch_icons.py`, `scripts/build.py` and
-  `scripts/share.py` (standard library only), network access to the icon sources, and Playwright with Chromium for
-  `scripts/render_png.py`. Without Python the model can still write the HTML by hand, but the scripts are the
-  documented path, so this is a published dependency of the skill rather than something the app installs.
+  `scripts/share.py` (standard library only), and network access to the icon sources. The desktop app puts its
+  bundled Python 3.12 first on `PATH`, so these scripts run on a fresh Windows machine. Playwright is not bundled:
+  `scripts/render_png.py` needs it to produce PNGs. Without Python or Playwright the model still reads
+  `assets/template.html` and `references/geometry.md`, writes the HTML by hand, delivers it, and says which optional
+  rendering step was skipped.
 
 ## pptx
 
@@ -87,9 +89,10 @@ formatted `.docx`.
 - Changed: `SKILL.md` — the upstream one is named `document-format-skills` and runs the scripts through
   `uv run --with python-docx`; this one calls `python` directly.
 - Added: `scripts/preflight.py`, which names the missing Python package and the command that installs it.
-- Runtime it asks of the machine: Python 3.8+ and `python-docx`. Like stack-diagram's Python packages, this is a
-  published dependency of the skill, not something the app installs; `.doc`/`.wps` conversion additionally needs
-  Windows, `pywin32` and WPS Office or Microsoft Word.
+- Runtime it asks of the machine: Python 3.8+ and `python-docx`. The desktop app ships a portable CPython 3.12 with
+  `python-docx` under `resources/bundled-python` and puts it first on `PATH`, so the skill runs on a fresh Windows
+  machine with no Python install. A checkout or a build made with `MU_SKIP_BUNDLED_PYTHON=1` falls back to the
+  machine's Python. `.doc`/`.wps` conversion additionally needs Windows, `pywin32` and WPS Office or Microsoft Word.
 
 ## xlsx
 

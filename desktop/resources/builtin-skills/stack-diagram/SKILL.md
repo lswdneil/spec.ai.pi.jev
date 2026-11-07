@@ -13,7 +13,11 @@ Produces engineering-drawing-style architecture diagrams: real logos on white ti
 
 - Python 3.9+ (standard library only for `fetch_icons.py`, `build.py` and `share.py`)
 - Network access to the icon sources (svgl.app, raw.githubusercontent.com, cdn.jsdelivr.net, aws.amazon.com and d1.awsstatic.com for AWS icons, services.google.com for Google Cloud icons, learn.microsoft.com and arch-center.azureedge.net for Azure icons, plus the brand's own site or repo for `name=URL`) when fetching icons
-- Playwright + Chromium for `render_png.py`: `pip install playwright && python3 -m playwright install --with-deps chromium`
+- Playwright + Chromium for `render_png.py`: `pip install playwright && python -m playwright install --with-deps chromium`
+
+In the spec.jev desktop app `python` is a bundled 3.12 interpreter, so the scripts below need no
+installation there. Playwright is not bundled: on a machine without it, deliver the HTML and say
+the PNG was not rendered.
 
 ## Workflow
 
@@ -24,6 +28,10 @@ Produces engineering-drawing-style architecture diagrams: real logos on white ti
 5. **Render a PNG and look at it** before delivering
 6. Deliver in the requested format(s)
 7. Optionally share it to the public gallery
+
+If `python` is missing (only possible outside the desktop app), do not stop: read
+`assets/template.html` and `references/geometry.md`, write the HTML by hand the same way
+`build.py` would, deliver it, and say the PNG step was skipped because Python is unavailable.
 
 ## Step 1 — Content
 
@@ -41,10 +49,10 @@ If the user gave only a flat list of tools, infer sensible groups and flows from
 ## Step 2 — Icons
 
 ```bash
-python3 scripts/fetch_icons.py <icons-dir> tanstack hono drizzle "betterauth:better-auth" "orpc=https://orpc.unnoq.com/logo.webp"
-python3 scripts/fetch_icons.py <icons-dir> "aws:aws/AWS-Cloud-logo" "vpc:aws/vpc" "fargate:aws/fargate" "s3:aws/s3"
-python3 scripts/fetch_icons.py <icons-dir> "gcp:google-cloud" "run:gcp/cloud-run" "lb:gcp/load-balancing" "sql:gcp/cloud-sql"
-python3 scripts/fetch_icons.py <icons-dir> "azure:azure/Azure-A" "app:azure/app-service" "vnet:azure/vnet" "sql:azure/sql-database"
+python scripts/fetch_icons.py <icons-dir> tanstack hono drizzle "betterauth:better-auth" "orpc=https://orpc.unnoq.com/logo.webp"
+python scripts/fetch_icons.py <icons-dir> "aws:aws/AWS-Cloud-logo" "vpc:aws/vpc" "fargate:aws/fargate" "s3:aws/s3"
+python scripts/fetch_icons.py <icons-dir> "gcp:google-cloud" "run:gcp/cloud-run" "lb:gcp/load-balancing" "sql:gcp/cloud-sql"
+python scripts/fetch_icons.py <icons-dir> "azure:azure/Azure-A" "app:azure/app-service" "vnet:azure/vnet" "sql:azure/sql-database"
 ```
 
 Spec forms: `name` (name used as slug), `name:slug` (different slug), `name=URL` (explicit URL), `name:aws/<Name>` (official AWS icon), `name:gcp/<Product>` (official Google Cloud icon), `name:azure/<Name>` (official Azure icon). The script tries, in order: **svgl → devicon → gilbarbara/logos**, writes files plus `manifest.json`, and flags icons whose fill is white. svgl (svgl.app) is first because it carries current official marks for modern dev brands (TanStack, Better Auth, Hono...). When a logo has light/dark versions, the light one becomes `<name>` (tiles are white in both themes) and the dark one is saved as `<name>_dark` for group labels. svgl is matched by exact title only, so a miss just falls through. Its API also exposes `wordmark` variants — occasionally useful for a wide group-label, never for tiles.
@@ -76,7 +84,7 @@ Read `references/geometry.md` for the coordinate system, spacing constants, and 
 Copy `assets/template.html`, replace the sample GROUPS / EDGES / NODES / header sections with yours (the template's markup doubles as format documentation), then inline the assets. Set `lang` on `<html>` to the language of the diagram's labels (`en` by default; use `ja` for Japanese so browsers pick Japanese glyph variants). Two options the template already carries: a **dark variant** (set `data-theme="dark"` on `<html>`; tiles stay white so logos survive, group-label icons follow the Step 2 rule, and arrowheads and legend swatches follow the tokens automatically), and a "deploy to platform X" edge where X is a group, not a node — point the arrow at the most representative node *inside* the group and label the edge (`deploy`), which reads correctly.
 
 ```bash
-python3 scripts/build.py my-diagram.html <icons-dir> out.html --fonts <skill>/assets/fonts
+python scripts/build.py my-diagram.html <icons-dir> out.html --fonts <skill>/assets/fonts
 ```
 
 Icons are referenced in markup as `%%ICON_<name>%%`; fonts as `%%FONT_DISPLAY%%` (Geist) / `%%FONT_JBM%%` (JetBrains Mono). The build fails loudly on unresolved tokens. Keep every color and font behind the CSS custom properties already in the template — tweak the tokens, not scattered values.
@@ -86,7 +94,7 @@ Icons are referenced in markup as `%%ICON_<name>%%`; fonts as `%%FONT_DISPLAY%%`
 Render and actually read the image:
 
 ```bash
-python3 scripts/render_png.py out.html check.png --selector .canvas --scale 2
+python scripts/render_png.py out.html check.png --selector .canvas --scale 2
 ```
 
 If the diagram contains Japanese text, the render host needs a Japanese font, or CJK characters silently come out in Chinese glyph variants (users notice immediately). The script warns and prints a fix; the template's font stack already names the Noto JP faces.
@@ -128,11 +136,11 @@ Then show exactly what will be sent before sending anything:
 Point out anything that looks internal — hostnames, IPs, customer or company names, internal service names — and suggest re-rendering without it first. Ask them to confirm it is their own system or one they may show publicly, and send only after a second explicit yes on that exact content.
 
 ```bash
-python3 scripts/share.py submit out.png out-dark.png --title "..." --stack "..." --name "..." [--github LOGIN] [--icons DIR]
+python scripts/share.py submit out.png out-dark.png --title "..." --stack "..." --name "..." [--github LOGIN] [--icons DIR]
 ```
 
 `--stack` lists the technologies, comma-separated, by their official names. Write `Name=key` to show a technology's logo beside it in the gallery: `key` is its entry in the icons dir's `manifest.json`, and `--icons` takes that dir (`<icons-dir>` from Step 2). A name without `=` goes without a logo, for example `--stack "Next.js=nextjs,Hono=hono,Neon" --icons <icons-dir>`. The gallery shows only logos from svgl, gilbarbara/logos and devicon; AWS, Google Cloud and Azure product icons, Lucide and logos from a brand's own site or repo go without one.
 
 If `share.py` rejects a PNG as too large, re-render with a lower `--scale` and show the new pair before sending.
 
-Tell the user the URL, that a held post appears only after a manual review, and the path where `share.py` says it saved the delete key. To delete later: `python3 scripts/share.py delete <id>` (`list` shows saved posts). If the gallery could confirm the GitHub login they gave, signing in with that account on the gallery deletes it too.
+Tell the user the URL, that a held post appears only after a manual review, and the path where `share.py` says it saved the delete key. To delete later: `python scripts/share.py delete <id>` (`list` shows saved posts). If the gallery could confirm the GitHub login they gave, signing in with that account on the gallery deletes it too.
