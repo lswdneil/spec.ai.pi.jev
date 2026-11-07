@@ -74,6 +74,19 @@ function verifyBundledResources(resourcesDir, electronPlatformName, targetArch) 
   }
   console.log(`   spec.jev ${harness.version} verified (${harness.checked.length} checks)`);
 
+  // AionCore starts every conversation through resources/spec.jev/acp.cmd, which runs this adapter.
+  // `electron-vite build` does not create it — only the development config runs that plugin — and
+  // scripts/build-mcp-servers.js does. A package built without that step starts the agent, gets
+  // MODULE_NOT_FOUND, and shows "spec.jev 启动失败", so fail the build here instead.
+  const adapter = path.join(resourcesDir, 'app.asar.unpacked', 'out', 'main', 'mu-acp.js');
+  if (!fs.existsSync(adapter)) {
+    throw new Error(
+      `Packaged app has no agent adapter: ${adapter}. ` +
+        'Run "node scripts/build-mcp-servers.js" after the vite build and before electron-builder.'
+    );
+  }
+  console.log(`   agent adapter verified (${adapter})`);
+
   if (electronPlatformName === 'win32' || electronPlatformName === 'linux') {
     const moli = path.join(
       resourcesDir,
