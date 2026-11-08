@@ -14,6 +14,95 @@
     "none": "なし",
     "quickActionsTitle": "spec.jev で何ができる？"
   },
+  "quickActions": {
+    "more": "その他",
+    "moreDesc": "すべてのスキルを見る",
+    "moreTitle": "すべてのスキル",
+    "moreHint": "スキルを選ぶと入力欄に追加されます。あとは要望を書いてください。",
+    "moreSearch": "スキルを検索",
+    "moreEmpty": "一致するスキルがありません",
+    "moreNoDescription": "説明なし",
+    "generate": "生成する",
+    "topic": "テーマ",
+    "topicRequired": "テーマを入力してください",
+    "pptx": {
+      "name": "PPT 作成",
+      "desc": "編集可能なスライドを作成",
+      "hint": "テーマを入力するだけ。枚数とスタイルは選んであります。",
+      "placeholder": "例：2026 年の製品計画",
+      "prompt": "{{skill}} スキルを使って「{{topic}}」についてのプレゼンテーションを約 {{pages}}、{{style}}スタイルで作成してください。まず構成を整理し、編集可能な .pptx ファイルを生成してください。"
+    },
+    "docx": {
+      "name": "Word 文書",
+      "desc": "整った書式の文書を作成",
+      "hint": "テーマを入力するだけ。文書タイプと長さは選んであります。",
+      "placeholder": "例：四半期プロジェクト振り返り",
+      "prompt": "{{skill}} スキルを使って「{{topic}}」についての{{docType}}を約 {{length}}で書いてください。書式の整った .docx ファイルを生成してください。"
+    },
+    "xlsx": {
+      "name": "Excel 表",
+      "desc": "書式付きの表を作成",
+      "hint": "テーマを入力するだけ。表の種類とデータ方法は選んであります。",
+      "placeholder": "例：部門の年間予算",
+      "prompt": "{{skill}} スキルを使って「{{topic}}」についての{{sheetType}}を作成してください。{{data}}。見出し行、列幅、フィルター付きの .xlsx ファイルを生成してください。",
+      "dataSample": "妥当なサンプルデータを作成してください",
+      "dataUser": "データは後続のメッセージで提供します"
+    },
+    "diagram": {
+      "name": "フローチャート",
+      "desc": "フロー・構成・シーケンス図を描画",
+      "hint": "テーマを入力するだけ。図の種類と出力形式は選んであります。",
+      "placeholder": "例：ユーザーの注文フロー",
+      "prompt": "{{skill}} スキルを使って「{{topic}}」についての{{diagramType}}を{{detail}}に描いてください。{{output}}で出力してください。"
+    },
+    "pdf": {
+      "name": "PDF 文書",
+      "desc": "印刷可能な PDF を作成",
+      "hint": "テーマを入力するだけ。文書タイプは選んであります。",
+      "placeholder": "例：プロジェクト完了報告",
+      "prompt": "{{skill}} スキルを使って「{{topic}}」についての{{docType}} PDF を生成してください。まず HTML を書き、A4 PDF として印刷してください。"
+    },
+    "field": {
+      "pages": "枚数",
+      "style": "スタイル",
+      "docType": "文書タイプ",
+      "length": "長さ",
+      "sheetType": "表の種類",
+      "data": "データ",
+      "diagramType": "図の種類",
+      "detail": "詳細度",
+      "output": "出力形式",
+      "pdfType": "文書タイプ"
+    },
+    "value": {
+      "pages8": "8 枚",
+      "pages12": "12 枚",
+      "pages20": "20 枚",
+      "styleMinimal": "シンプル",
+      "styleBusiness": "ビジネス",
+      "styleTech": "テック",
+      "report": "レポート",
+      "proposal": "提案書",
+      "summary": "まとめ",
+      "lengthShort": "1〜2 ページ",
+      "lengthMedium": "3〜5 ページ",
+      "lengthLong": "5 ページ以上",
+      "stats": "集計表",
+      "list": "リスト",
+      "budget": "予算表",
+      "sampleData": "サンプルデータを使う",
+      "myData": "自分で用意する",
+      "flow": "フローチャート",
+      "architecture": "アーキテクチャ図",
+      "sequence": "シーケンス図",
+      "concise": "簡潔",
+      "detailed": "詳細",
+      "html": "Web ページ",
+      "htmlPng": "Web ページ + PNG",
+      "resume": "履歴書",
+      "guide": "説明書"
+    }
+  },
   "history": {
     "recents": "最近",
     "today": "今日",

@@ -62,7 +62,7 @@ import { useConversationExport } from '@renderer/hooks/file/useConversationExpor
 import { useDragUpload } from '@renderer/hooks/file/useDragUpload';
 import { useLatestRef } from '@renderer/hooks/ui/useLatestRef';
 import { usePasteService } from '@renderer/hooks/file/usePasteService';
-import { useMessageList } from '@renderer/pages/conversation/Messages/hooks';
+import { useMessageList, useMessageListLoading } from '@renderer/pages/conversation/Messages/hooks';
 import type { FileMetadata } from '@renderer/services/FileService';
 import { useUploadState } from '@renderer/hooks/file/useUploadState';
 import { useAbortUploadsOnConversationChange } from '@renderer/hooks/file/useAbortUploadsOnConversationChange';
@@ -71,6 +71,7 @@ import { allSupportedExts } from '@renderer/services/FileService';
 import { getConversationInputHistory, isCaretOnFirstLine } from '@/renderer/utils/chat/messageHistory';
 import { commandDescription } from '@/renderer/utils/chat/muCommands';
 import SendArrowIcon from './SendArrowIcon';
+import QuickActions from './QuickActions';
 import './sendbox.css';
 
 const constVoid = (): void => undefined;
@@ -278,6 +279,8 @@ const SendBox: React.FC<{
    * `tools` and `rightTools` are not rendered inline on mobile.
    */
   onMobilePlusClick?: () => void;
+  /** Desktop only: capability cards under the composer while the conversation is empty. */
+  showQuickActions?: boolean;
   /** Team multi-column focus coordination: whether this box owns focus (default true). */
   active?: boolean;
   /** Called when the textarea gains focus, so the team layer can sync tab selection. */
@@ -335,6 +338,7 @@ const SendBox: React.FC<{
   onSelectedWorkspaceItemsChange,
   bottomHint,
   onMobilePlusClick,
+  showQuickActions = false,
   active = true,
   onFocused,
   topRightOverlay,
@@ -361,6 +365,7 @@ const SendBox: React.FC<{
   const latestInputRef = useLatestRef(input);
   const setInputRef = useLatestRef(setInput);
   const messageList = useMessageList();
+  const isMessageListLoading = useMessageListLoading();
   const [historyNavigationIndex, setHistoryNavigationIndex] = useState<number | null>(null);
   const historyDraftRef = useRef<string | null>(null);
   const [replyQuote, setReplyQuote] = useState<ReplyQuote | null>(null);
@@ -641,6 +646,17 @@ const SendBox: React.FC<{
       t('conversation.skills.slashHint', { defaultValue: 'Skill' })
     );
   }, [loadedSkills, skillIndex, t]);
+  const quickActionSkills = useMemo(() => {
+    const descriptionByName = new Map((skillIndex ?? []).map((skill) => [skill.name, skill.description]));
+    return (loadedSkills ?? []).map((name) => ({ name, description: descriptionByName.get(name) ?? '' }));
+  }, [loadedSkills, skillIndex]);
+
+  // An empty conversation is the only place capability cards belong: once a
+  // turn exists, the composer is for continuing that conversation.
+  const isConversationEmpty = useMemo(
+    () => !messageList.some((item) => !item.hidden && item.type !== 'available_commands' && item.type !== 'plan'),
+    [messageList]
+  );
 
   // Priority on name collisions: builtin > ACP agent commands > session skills.
   const mergedSlashCommands = useMemo(
@@ -732,6 +748,22 @@ const SendBox: React.FC<{
     const textarea = containerRef.current?.querySelector('textarea');
     return textarea instanceof HTMLTextAreaElement ? textarea : null;
   }, []);
+
+  const insertQuickActionSkill = useCallback(
+    (name: string) => {
+      const token = `/${name} `;
+      const current = latestInputRef.current;
+      const next = current.trim() ? `${current.replace(/\s+$/, '')} ${token}` : token;
+      setInputRef.current(next);
+      requestAnimationFrame(() => {
+        const textarea = getTextareaElement();
+        if (!textarea) return;
+        textarea.focus();
+        textarea.setSelectionRange(next.length, next.length);
+      });
+    },
+    [getTextareaElement, latestInputRef, setInputRef]
+  );
 
   const handleConversationPrefill = useCallback(
     ({ prompt, requestId }: { prompt: string; requestId: number }) => {
@@ -2282,6 +2314,20 @@ const SendBox: React.FC<{
           </div>
         )}
       </div>
+      {showQuickActions &&
+        !isMobile &&
+        !isTeamConversation &&
+        !disabled &&
+        !isMessageListLoading &&
+        isConversationEmpty &&
+        input.trim() === '' && (
+          <QuickActions
+            skills={quickActionSkills}
+            onSendPrompt={onSend}
+            onInsertSkill={insertQuickActionSkill}
+            className='mt-2.5'
+          />
+        )}
     </div>
   );
 };

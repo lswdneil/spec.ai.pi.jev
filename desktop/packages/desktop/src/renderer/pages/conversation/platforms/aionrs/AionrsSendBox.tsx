@@ -772,6 +772,7 @@ const AionrsSendBox: React.FC<{
       <CrossSessionDisabledBanner />
       <SendBox
         data-testid='aionrs-sendbox'
+        showQuickActions
         onMobilePlusClick={isMobile ? () => setIsMobileSheetOpen(true) : undefined}
         value={content}
         onChange={handleContentChange}

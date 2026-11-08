@@ -14,6 +14,95 @@
     "none": "None",
     "quickActionsTitle": "What can spec.jev do?"
   },
+  "quickActions": {
+    "more": "More",
+    "moreDesc": "See all skills",
+    "moreTitle": "All skills",
+    "moreHint": "Pick a skill to add it to the composer, then add your request.",
+    "moreSearch": "Search skills",
+    "moreEmpty": "No matching skills",
+    "moreNoDescription": "No description",
+    "generate": "Generate",
+    "topic": "Topic",
+    "topicRequired": "Enter a topic first",
+    "pptx": {
+      "name": "PPT deck",
+      "desc": "Create an editable slide deck",
+      "hint": "Type a topic; page count and style are already set.",
+      "placeholder": "e.g. 2026 product roadmap",
+      "prompt": "Use the {{skill}} skill to create a presentation about \"{{topic}}\" with about {{pages}} in a {{style}} style. Outline it first, then produce an editable .pptx file."
+    },
+    "docx": {
+      "name": "Word document",
+      "desc": "Create a well-formatted document",
+      "hint": "Type a topic; document type and length are already set.",
+      "placeholder": "e.g. quarterly project review",
+      "prompt": "Use the {{skill}} skill to write a {{docType}} about \"{{topic}}\", about {{length}}. Produce a properly formatted .docx file."
+    },
+    "xlsx": {
+      "name": "Excel sheet",
+      "desc": "Create a formatted spreadsheet",
+      "hint": "Type a topic; sheet type and data option are already set.",
+      "placeholder": "e.g. department annual budget",
+      "prompt": "Use the {{skill}} skill to create a {{sheetType}} about \"{{topic}}\". {{data}}. Produce an .xlsx file with a header row, sensible column widths and an autofilter.",
+      "dataSample": "Invent reasonable sample data",
+      "dataUser": "I'll provide the data in a follow-up message"
+    },
+    "diagram": {
+      "name": "Flowchart",
+      "desc": "Draw a flow, architecture or sequence diagram",
+      "hint": "Type a topic; diagram type and output are already set.",
+      "placeholder": "e.g. user checkout flow",
+      "prompt": "Use the {{skill}} skill to draw a {{diagramType}} about \"{{topic}}\" with {{detail}} detail. Deliver {{output}}."
+    },
+    "pdf": {
+      "name": "PDF document",
+      "desc": "Create a print-ready PDF",
+      "hint": "Type a topic; the document type is already set.",
+      "placeholder": "e.g. project closure report",
+      "prompt": "Use the {{skill}} skill to create a {{docType}} PDF about \"{{topic}}\". Write the HTML first, then print it to A4 PDF."
+    },
+    "field": {
+      "pages": "Pages",
+      "style": "Style",
+      "docType": "Document type",
+      "length": "Length",
+      "sheetType": "Sheet type",
+      "data": "Data",
+      "diagramType": "Diagram type",
+      "detail": "Detail",
+      "output": "Output",
+      "pdfType": "Document type"
+    },
+    "value": {
+      "pages8": "8 slides",
+      "pages12": "12 slides",
+      "pages20": "20 slides",
+      "styleMinimal": "Minimal",
+      "styleBusiness": "Business",
+      "styleTech": "Tech",
+      "report": "Report",
+      "proposal": "Proposal",
+      "summary": "Summary",
+      "lengthShort": "1–2 pages",
+      "lengthMedium": "3–5 pages",
+      "lengthLong": "5+ pages",
+      "stats": "Statistics",
+      "list": "Checklist",
+      "budget": "Budget",
+      "sampleData": "Use sample data",
+      "myData": "I'll provide data",
+      "flow": "Flowchart",
+      "architecture": "Architecture",
+      "sequence": "Sequence",
+      "concise": "Concise",
+      "detailed": "Detailed",
+      "html": "Web page",
+      "htmlPng": "Web page + PNG",
+      "resume": "Résumé",
+      "guide": "Guide"
+    }
+  },
   "history": {
     "recents": "Recent",
     "noHistory": "No conversations yet",

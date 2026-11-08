@@ -14,6 +14,95 @@
     "none": "없음",
     "quickActionsTitle": "spec.jev로 무엇을 할 수 있나요?"
   },
+  "quickActions": {
+    "more": "더 보기",
+    "moreDesc": "모든 스킬 보기",
+    "moreTitle": "모든 스킬",
+    "moreHint": "스킬을 선택하면 입력창에 추가됩니다. 이어서 요청을 적어 주세요.",
+    "moreSearch": "스킬 검색",
+    "moreEmpty": "일치하는 스킬이 없습니다",
+    "moreNoDescription": "설명 없음",
+    "generate": "생성 시작",
+    "topic": "주제",
+    "topicRequired": "주제를 먼저 입력하세요",
+    "pptx": {
+      "name": "PPT 만들기",
+      "desc": "편집 가능한 슬라이드 생성",
+      "hint": "주제만 입력하세요. 페이지 수와 스타일은 미리 선택되어 있습니다.",
+      "placeholder": "예: 2026년 제품 계획",
+      "prompt": "{{skill}} 스킬을 사용해 \"{{topic}}\"에 대한 프레젠테이션을 약 {{pages}}, {{style}} 스타일로 만들어 주세요. 먼저 개요를 정리한 뒤 편집 가능한 .pptx 파일을 생성하세요."
+    },
+    "docx": {
+      "name": "Word 문서",
+      "desc": "서식이 정돈된 문서 생성",
+      "hint": "주제만 입력하세요. 문서 유형과 분량은 미리 선택되어 있습니다.",
+      "placeholder": "예: 분기 프로젝트 회고",
+      "prompt": "{{skill}} 스킬을 사용해 \"{{topic}}\"에 대한 {{docType}}을(를) 약 {{length}} 분량으로 작성해 주세요. 서식이 정돈된 .docx 파일을 생성하세요."
+    },
+    "xlsx": {
+      "name": "Excel 표",
+      "desc": "서식이 적용된 표 생성",
+      "hint": "주제만 입력하세요. 표 유형과 데이터 방식은 미리 선택되어 있습니다.",
+      "placeholder": "예: 부서 연간 예산",
+      "prompt": "{{skill}} 스킬을 사용해 \"{{topic}}\"에 대한 {{sheetType}}을(를) 만들어 주세요. {{data}}. 헤더 행, 열 너비, 필터가 포함된 .xlsx 파일을 생성하세요.",
+      "dataSample": "적절한 예시 데이터를 직접 만들어 주세요",
+      "dataUser": "데이터는 이후 메시지에서 제공하겠습니다"
+    },
+    "diagram": {
+      "name": "순서도",
+      "desc": "흐름·아키텍처·시퀀스 다이어그램",
+      "hint": "주제만 입력하세요. 다이어그램 유형과 출력 형식은 미리 선택되어 있습니다.",
+      "placeholder": "예: 사용자 주문 흐름",
+      "prompt": "{{skill}} 스킬을 사용해 \"{{topic}}\"에 대한 {{diagramType}}을(를) {{detail}}하게 그려 주세요. {{output}} 형식으로 출력하세요."
+    },
+    "pdf": {
+      "name": "PDF 문서",
+      "desc": "인쇄 가능한 PDF 생성",
+      "hint": "주제만 입력하세요. 문서 유형은 미리 선택되어 있습니다.",
+      "placeholder": "예: 프로젝트 종료 보고서",
+      "prompt": "{{skill}} 스킬을 사용해 \"{{topic}}\"에 대한 {{docType}} PDF를 생성해 주세요. 먼저 HTML을 작성한 뒤 A4 PDF로 인쇄하세요."
+    },
+    "field": {
+      "pages": "페이지 수",
+      "style": "스타일",
+      "docType": "문서 유형",
+      "length": "분량",
+      "sheetType": "표 유형",
+      "data": "데이터",
+      "diagramType": "다이어그램 유형",
+      "detail": "상세 수준",
+      "output": "출력 형식",
+      "pdfType": "문서 유형"
+    },
+    "value": {
+      "pages8": "8쪽",
+      "pages12": "12쪽",
+      "pages20": "20쪽",
+      "styleMinimal": "미니멀",
+      "styleBusiness": "비즈니스",
+      "styleTech": "테크",
+      "report": "보고서",
+      "proposal": "제안서",
+      "summary": "요약",
+      "lengthShort": "1~2쪽",
+      "lengthMedium": "3~5쪽",
+      "lengthLong": "5쪽 이상",
+      "stats": "통계표",
+      "list": "목록",
+      "budget": "예산표",
+      "sampleData": "예시 데이터 사용",
+      "myData": "직접 제공",
+      "flow": "순서도",
+      "architecture": "아키텍처 다이어그램",
+      "sequence": "시퀀스 다이어그램",
+      "concise": "간결",
+      "detailed": "상세",
+      "html": "웹 페이지",
+      "htmlPng": "웹 페이지 + PNG",
+      "resume": "이력서",
+      "guide": "안내서"
+    }
+  },
   "history": {
     "recents": "최근",
     "today": "오늘",

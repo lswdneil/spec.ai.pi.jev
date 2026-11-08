@@ -23,6 +23,26 @@
   border-color: var(--color-border-4);
 }
 
+/* Capability cards under an empty composer: a single scrollable row, with a
+   thin thumb so the row never looks like a second toolbar. */
+.sendbox-quick-actions {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sv-line-strong) transparent;
+}
+
+.sendbox-quick-actions::-webkit-scrollbar {
+  height: 4px;
+}
+
+.sendbox-quick-actions::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sendbox-quick-actions::-webkit-scrollbar-thumb {
+  background: var(--sv-line-strong);
+  border-radius: 999px;
+}
+
 /* Send button layout */
 .send-button-custom {
   width: 32px !important;

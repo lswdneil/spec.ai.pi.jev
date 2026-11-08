@@ -879,6 +879,7 @@ Please check your local CLI tool authentication status`,
       <NodeRuntimeNote conversationId={conversation_id} />
       <CrossSessionDisabledBanner />
       <SendBox
+        showQuickActions
         onMobilePlusClick={isMobile ? () => setIsMobileSheetOpen(true) : undefined}
         value={content}
         onChange={handleContentChange}

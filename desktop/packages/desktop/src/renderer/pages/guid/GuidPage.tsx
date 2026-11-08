@@ -14,6 +14,7 @@ import type { AssistantDetail } from '@/common/types/agent/assistantTypes';
 import { appendPromptToDraft } from '@/renderer/hooks/chat/useSendBoxDraft';
 import { getFuzzyMatchIndices, useSlashCommandController } from '@/renderer/hooks/chat/useSlashCommandController';
 import SlashCommandMenu, { type SlashCommandMenuItem } from '@/renderer/components/chat/SlashCommandMenu';
+import QuickActions from '@/renderer/components/chat/SendBox/QuickActions';
 import AssistantSelectionArea from './components/AssistantSelectionArea';
 import GuidActionRow from './components/GuidActionRow';
 import GuidInputCard from './components/GuidInputCard';
@@ -189,6 +190,10 @@ const GuidPage: React.FC = () => {
     () => new Map(allSkills.map((skill) => [skill.name, skill.description])),
     [allSkills]
   );
+  const quickActionSkills = useMemo(
+    () => allSkills.map((skill) => ({ name: skill.name, description: skill.description })),
+    [allSkills]
+  );
   const guidBuiltinSlashCommands = useMemo<SlashCommandItem[]>(
     () => [
       {
@@ -310,6 +315,42 @@ const GuidPage: React.FC = () => {
       guidInput.setInput(value);
     },
     [guidInput.setInput]
+  );
+
+  // Capability cards are a shortcut for people who have never picked a skill:
+  // using one enables that skill for the conversation being created.
+  const enableQuickActionSkill = useCallback(
+    (name: string) => {
+      setGuidEnabledSkills((previous) => {
+        const current = previous ?? resolvedAssistantDefaults.skillIds ?? [];
+        return current.includes(name) ? current : [...current, name];
+      });
+    },
+    [resolvedAssistantDefaults.skillIds]
+  );
+
+  const handleQuickActionSend = useCallback(
+    (prompt: string, skillName: string) => {
+      enableQuickActionSkill(skillName);
+      return classicSend.sendPrompt(prompt, [skillName]);
+    },
+    [classicSend, enableQuickActionSkill]
+  );
+
+  const handleInsertQuickActionSkill = useCallback(
+    (name: string) => {
+      enableQuickActionSkill(name);
+      const token = `/${name} `;
+      const next = guidInput.input.trim() ? `${guidInput.input.replace(/\s+$/, '')} ${token}` : token;
+      handleInputChange(next);
+      requestAnimationFrame(() => {
+        const input = document.querySelector<HTMLTextAreaElement>('[data-testid="guid-input"]');
+        if (!input) return;
+        input.focus();
+        input.setSelectionRange(next.length, next.length);
+      });
+    },
+    [enableQuickActionSkill, guidInput.input, handleInputChange]
   );
 
   const handleInputKeyDown = useCallback(
@@ -708,6 +749,15 @@ const GuidPage: React.FC = () => {
           onSelectWorkspace={(dir) => guidInput.setDir(dir)}
           onClearWorkspace={() => guidInput.setDir('')}
         />
+        {!nativeHost && hasSelectedAssistant && guidInput.input.trim() === '' && (
+          <QuickActions
+            skills={quickActionSkills}
+            onSendPrompt={handleQuickActionSend}
+            onInsertSkill={handleInsertQuickActionSkill}
+            onLoadSkill={enableQuickActionSkill}
+            className='mt-3'
+          />
+        )}
       </div>
     </div>
   );

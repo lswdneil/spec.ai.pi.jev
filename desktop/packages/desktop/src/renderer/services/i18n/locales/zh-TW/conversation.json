@@ -14,6 +14,95 @@
     "none": "無",
     "quickActionsTitle": "spec.jev 能做什麼？"
   },
+  "quickActions": {
+    "more": "更多",
+    "moreDesc": "查看全部技能",
+    "moreTitle": "全部技能",
+    "moreHint": "點一個技能加入輸入框，再補充你的需求。",
+    "moreSearch": "搜尋技能",
+    "moreEmpty": "沒有符合的技能",
+    "moreNoDescription": "暫無說明",
+    "generate": "開始生成",
+    "topic": "主題",
+    "topicRequired": "先填一個主題",
+    "pptx": {
+      "name": "PPT 製作",
+      "desc": "產生可編輯的簡報",
+      "hint": "填一個主題，頁數和風格已幫你選好。",
+      "placeholder": "例如：2026 年產品規劃",
+      "prompt": "使用 {{skill}} 技能，幫我做一份關於「{{topic}}」的 PPT，約 {{pages}}，{{style}}風格。請先整理大綱，再產生可編輯的 .pptx 檔案。"
+    },
+    "docx": {
+      "name": "Word 文件",
+      "desc": "產生排版規範的文件",
+      "hint": "填一個主題，文件類型和篇幅已幫你選好。",
+      "placeholder": "例如：季度專案復盤",
+      "prompt": "使用 {{skill}} 技能，幫我寫一份{{docType}}，主題是「{{topic}}」，篇幅約 {{length}}。請產生排版規範的 .docx 檔案。"
+    },
+    "xlsx": {
+      "name": "Excel 表格",
+      "desc": "產生帶格式的表格",
+      "hint": "填一個主題，表格類型和資料方式已幫你選好。",
+      "placeholder": "例如：部門年度預算",
+      "prompt": "使用 {{skill}} 技能，幫我做一份{{sheetType}}，主題是「{{topic}}」。{{data}}。請產生帶表頭、欄寬和篩選的 .xlsx 檔案。",
+      "dataSample": "請自行編造合理的範例資料",
+      "dataUser": "資料我會在後續訊息裡提供"
+    },
+    "diagram": {
+      "name": "流程圖",
+      "desc": "畫流程、架構或時序圖",
+      "hint": "填一個主題，圖形類型和輸出格式已幫你選好。",
+      "placeholder": "例如：使用者下單流程",
+      "prompt": "使用 {{skill}} 技能，幫我畫一張關於「{{topic}}」的{{diagramType}}，內容{{detail}}。請輸出{{output}}。"
+    },
+    "pdf": {
+      "name": "PDF 文件",
+      "desc": "產生可列印的 PDF",
+      "hint": "填一個主題，文件類型已幫你選好。",
+      "placeholder": "例如：專案結案報告",
+      "prompt": "使用 {{skill}} 技能，幫我產生一份關於「{{topic}}」的{{docType}} PDF。請先寫 HTML，再列印成 A4 PDF。"
+    },
+    "field": {
+      "pages": "頁數",
+      "style": "風格",
+      "docType": "文件類型",
+      "length": "篇幅",
+      "sheetType": "表格類型",
+      "data": "資料",
+      "diagramType": "圖形類型",
+      "detail": "詳細程度",
+      "output": "輸出格式",
+      "pdfType": "文件類型"
+    },
+    "value": {
+      "pages8": "8 頁",
+      "pages12": "12 頁",
+      "pages20": "20 頁",
+      "styleMinimal": "簡約",
+      "styleBusiness": "商務",
+      "styleTech": "科技",
+      "report": "報告",
+      "proposal": "方案",
+      "summary": "總結",
+      "lengthShort": "1–2 頁",
+      "lengthMedium": "3–5 頁",
+      "lengthLong": "5 頁以上",
+      "stats": "統計表",
+      "list": "清單",
+      "budget": "預算表",
+      "sampleData": "用範例資料",
+      "myData": "我來提供",
+      "flow": "流程圖",
+      "architecture": "架構圖",
+      "sequence": "時序圖",
+      "concise": "簡潔",
+      "detailed": "詳細",
+      "html": "網頁",
+      "htmlPng": "網頁 + PNG",
+      "resume": "履歷",
+      "guide": "說明"
+    }
+  },
   "history": {
     "recents": "最近",
     "today": "今天",

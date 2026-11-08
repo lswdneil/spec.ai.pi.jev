@@ -14,6 +14,95 @@
     "none": "无",
     "quickActionsTitle": "spec.jev 能做什么？"
   },
+  "quickActions": {
+    "more": "更多",
+    "moreDesc": "查看全部技能",
+    "moreTitle": "全部技能",
+    "moreHint": "点一个技能加入输入框，再补充你的需求。",
+    "moreSearch": "搜索技能",
+    "moreEmpty": "没有匹配的技能",
+    "moreNoDescription": "暂无说明",
+    "generate": "开始生成",
+    "topic": "主题",
+    "topicRequired": "先填一个主题",
+    "pptx": {
+      "name": "PPT 制作",
+      "desc": "生成可编辑的演示文稿",
+      "hint": "填一个主题，页数和风格已帮你选好。",
+      "placeholder": "例如：2026 年产品规划",
+      "prompt": "使用 {{skill}} 技能，帮我做一份关于「{{topic}}」的 PPT，约 {{pages}}，{{style}}风格。请先梳理大纲，再生成可编辑的 .pptx 文件。"
+    },
+    "docx": {
+      "name": "Word 文档",
+      "desc": "生成排版规范的文档",
+      "hint": "填一个主题，文档类型和篇幅已帮你选好。",
+      "placeholder": "例如：季度项目复盘",
+      "prompt": "使用 {{skill}} 技能，帮我写一份{{docType}}，主题是「{{topic}}」，篇幅约 {{length}}。请生成排版规范的 .docx 文件。"
+    },
+    "xlsx": {
+      "name": "Excel 表格",
+      "desc": "生成带格式的表格",
+      "hint": "填一个主题，表格类型和数据方式已帮你选好。",
+      "placeholder": "例如：部门年度预算",
+      "prompt": "使用 {{skill}} 技能，帮我做一份{{sheetType}}，主题是「{{topic}}」。{{data}}。请生成带表头、列宽和筛选的 .xlsx 文件。",
+      "dataSample": "请自行编造合理的示例数据",
+      "dataUser": "数据我会在后续消息里提供"
+    },
+    "diagram": {
+      "name": "流程图",
+      "desc": "画流程、架构或时序图",
+      "hint": "填一个主题，图形类型和输出格式已帮你选好。",
+      "placeholder": "例如：用户下单流程",
+      "prompt": "使用 {{skill}} 技能，帮我画一张关于「{{topic}}」的{{diagramType}}，内容{{detail}}。请输出{{output}}。"
+    },
+    "pdf": {
+      "name": "PDF 文档",
+      "desc": "生成可打印的 PDF",
+      "hint": "填一个主题，文档类型已帮你选好。",
+      "placeholder": "例如：项目结项报告",
+      "prompt": "使用 {{skill}} 技能，帮我生成一份关于「{{topic}}」的{{docType}} PDF。请先写 HTML，再打印成 A4 PDF。"
+    },
+    "field": {
+      "pages": "页数",
+      "style": "风格",
+      "docType": "文档类型",
+      "length": "篇幅",
+      "sheetType": "表格类型",
+      "data": "数据",
+      "diagramType": "图形类型",
+      "detail": "详细程度",
+      "output": "输出格式",
+      "pdfType": "文档类型"
+    },
+    "value": {
+      "pages8": "8 页",
+      "pages12": "12 页",
+      "pages20": "20 页",
+      "styleMinimal": "简约",
+      "styleBusiness": "商务",
+      "styleTech": "科技",
+      "report": "报告",
+      "proposal": "方案",
+      "summary": "总结",
+      "lengthShort": "1–2 页",
+      "lengthMedium": "3–5 页",
+      "lengthLong": "5 页以上",
+      "stats": "统计表",
+      "list": "清单",
+      "budget": "预算表",
+      "sampleData": "用示例数据",
+      "myData": "我来提供",
+      "flow": "流程图",
+      "architecture": "架构图",
+      "sequence": "时序图",
+      "concise": "简洁",
+      "detailed": "详细",
+      "html": "网页",
+      "htmlPng": "网页 + PNG",
+      "resume": "简历",
+      "guide": "说明"
+    }
+  },
   "history": {
     "recents": "最近",
     "noHistory": "暂无对话历史",
