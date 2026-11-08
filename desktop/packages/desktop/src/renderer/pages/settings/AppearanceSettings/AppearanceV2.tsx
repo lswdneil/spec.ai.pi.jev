@@ -92,7 +92,7 @@ const AppearanceV2: React.FC = () => {
     <SettingsPage title={t('settings.appearancePanel')} description={t('settings.appearanceDescription')}>
       <div className='flex flex-col gap-6' data-testid='appearance-v2'>
         <section aria-labelledby='appearance-theme'>
-          <h2 id='appearance-theme' className='text-[13px] font-medium'>
+          <h2 id='appearance-theme' className='text-[13px] font-medium text-sv-text'>
             {t('settings.theme')}
           </h2>
           <p className='mt-1 text-[12px] text-sv-muted'>{t('settings.appearanceThemeHint')}</p>
@@ -123,11 +123,11 @@ const AppearanceV2: React.FC = () => {
 
         <section className='overflow-hidden rounded-[var(--sv-r-control)] border border-sv-line bg-sv-surface'>
           <div className='flex items-center gap-2 border-b border-sv-line px-3 py-2.5'>
-            <h2 className='text-[12px] font-medium'>{t('settings.appearancePreview')}</h2>
+            <h2 className='text-[12px] font-medium text-sv-text'>{t('settings.appearancePreview')}</h2>
             <span className='ml-auto font-mono text-[10px] text-sv-faint'>{t('settings.appearancePreviewLive')}</span>
           </div>
           <div className='flex flex-col gap-2.5 p-4'>
-            <div className='self-end max-w-[70%] rounded-[12px_12px_4px_12px] border border-sv-line bg-sv-surface-2 px-3 py-2 text-[12px] leading-[1.65]'>
+            <div className='self-end max-w-[70%] rounded-[12px_12px_4px_12px] border border-sv-line bg-sv-surface-2 px-3 py-2 text-[12px] leading-[1.65] text-sv-text'>
               {t('settings.appearancePreviewQuestion')}
             </div>
             <div className='flex items-start gap-2 text-[12px] leading-[1.65] text-sv-muted'>

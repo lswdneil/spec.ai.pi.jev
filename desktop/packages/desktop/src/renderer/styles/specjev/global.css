@@ -47,4 +47,6 @@ body {
   font-size: var(--app-font-size, 14px);
   font-weight: var(--app-font-weight, normal);
   background-color: var(--bg-1);
+  /* Unstyled text inherits the active palette instead of the browser's black. */
+  color: var(--sv-text);
 }
