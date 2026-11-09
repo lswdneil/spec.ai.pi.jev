@@ -25,6 +25,7 @@
     "generate": "Generate",
     "topic": "Topic",
     "topicRequired": "Enter a topic first",
+    "useSkill": "Use the {{skill}} skill, ",
     "pptx": {
       "name": "PPT deck",
       "desc": "Create an editable slide deck",

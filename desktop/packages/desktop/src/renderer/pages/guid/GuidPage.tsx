@@ -5,6 +5,7 @@
  */
 
 import { ipcBridge } from '@/common';
+import { kyrnBridge, unwrap } from '@/common/kyrn/bridge';
 import { buildGuidSlashCommands } from '@/common/chat/slash/guidSlashCommands';
 import type { SlashCommandItem } from '@/common/chat/slash/types';
 import type { IMcpServer, TProviderWithModel } from '@/common/config/storage';
@@ -57,6 +58,9 @@ const GuidPage: React.FC = () => {
   const location = useLocation();
   const guidContainerRef = useRef<HTMLDivElement>(null);
   const localeKey = resolveLocaleKey(i18n.language);
+  // While the native host is on, the page starts a conversation on it instead: pi inside the app, no AionCore.
+  const nativeEnabled = useNativeEnabled();
+  const nativeHost = nativeEnabled === true;
 
   // --- Skills state ---
   // Skill metadata comes from the database-backed catalog. Built-in auto-inject
@@ -190,9 +194,16 @@ const GuidPage: React.FC = () => {
     () => new Map(allSkills.map((skill) => [skill.name, skill.description])),
     [allSkills]
   );
+  // The native host loads skills from pi's own folders, not from AionCore's catalog.
+  const { data: nativeSkillCatalog } = useSWR(nativeHost ? 'kyrn.skills' : null, async () =>
+    unwrap(await kyrnBridge.skills.invoke())
+  );
   const quickActionSkills = useMemo(
-    () => allSkills.map((skill) => ({ name: skill.name, description: skill.description })),
-    [allSkills]
+    () =>
+      nativeHost && nativeSkillCatalog
+        ? nativeSkillCatalog.skills.map((skill) => ({ name: skill.name, description: skill.description }))
+        : allSkills.map((skill) => ({ name: skill.name, description: skill.description })),
+    [allSkills, nativeHost, nativeSkillCatalog]
   );
   const guidBuiltinSlashCommands = useMemo<SlashCommandItem[]>(
     () => [
@@ -286,8 +297,6 @@ const GuidPage: React.FC = () => {
     t,
     localeKey,
   });
-  // While the native host is on, the page starts a conversation on it instead: pi inside the app, no AionCore.
-  const nativeHost = useNativeEnabled() === true;
   // The thinking level the person picked on this page: the native start sends only that, never the level the pill shows
   // by default. A model picked after it clears it (a level belongs to its model).
   const [pickedThoughtLevel, setPickedThoughtLevel] = useState('');
@@ -331,16 +340,17 @@ const GuidPage: React.FC = () => {
 
   const handleQuickActionSend = useCallback(
     (prompt: string, skillName: string) => {
+      if (nativeHost) return nativeSend.sendPrompt(prompt);
       enableQuickActionSkill(skillName);
       return classicSend.sendPrompt(prompt, [skillName]);
     },
-    [classicSend, enableQuickActionSkill]
+    [classicSend, enableQuickActionSkill, nativeHost, nativeSend]
   );
 
   const handleInsertQuickActionSkill = useCallback(
     (name: string) => {
-      enableQuickActionSkill(name);
-      const token = `/${name} `;
+      if (!nativeHost) enableQuickActionSkill(name);
+      const token = nativeHost ? `${t('conversation.quickActions.useSkill', { skill: name })} ` : `/${name} `;
       const next = guidInput.input.trim() ? `${guidInput.input.replace(/\s+$/, '')} ${token}` : token;
       handleInputChange(next);
       requestAnimationFrame(() => {
@@ -350,7 +360,7 @@ const GuidPage: React.FC = () => {
         input.setSelectionRange(next.length, next.length);
       });
     },
-    [enableQuickActionSkill, guidInput.input, handleInputChange]
+    [enableQuickActionSkill, guidInput.input, handleInputChange, nativeHost, t]
   );
 
   const handleInputKeyDown = useCallback(
@@ -749,12 +759,12 @@ const GuidPage: React.FC = () => {
           onSelectWorkspace={(dir) => guidInput.setDir(dir)}
           onClearWorkspace={() => guidInput.setDir('')}
         />
-        {!nativeHost && hasSelectedAssistant && guidInput.input.trim() === '' && (
+        {nativeEnabled !== undefined && (nativeHost || hasSelectedAssistant) && guidInput.input.trim() === '' && (
           <QuickActions
             skills={quickActionSkills}
             onSendPrompt={handleQuickActionSend}
             onInsertSkill={handleInsertQuickActionSkill}
-            onLoadSkill={enableQuickActionSkill}
+            onLoadSkill={nativeHost ? undefined : enableQuickActionSkill}
             className='mt-3'
           />
         )}

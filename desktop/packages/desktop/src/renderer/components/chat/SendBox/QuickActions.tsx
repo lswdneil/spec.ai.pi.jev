@@ -50,7 +50,7 @@ type QuickActionCapability = {
 const QUICK_ACTIONS: readonly QuickActionCapability[] = [
   {
     id: 'pptx',
-    skills: ['pptx', 'officecli-pptx'],
+    skills: ['pptx', 'officecli-pptx', 'officecli'],
     icon: FilePpt,
     nameKey: 'conversation.quickActions.pptx.name',
     descKey: 'conversation.quickActions.pptx.desc',
@@ -83,7 +83,7 @@ const QUICK_ACTIONS: readonly QuickActionCapability[] = [
   },
   {
     id: 'docx',
-    skills: ['docx', 'officecli-docx'],
+    skills: ['docx', 'officecli-docx', 'officecli'],
     icon: FileWord,
     nameKey: 'conversation.quickActions.docx.name',
     descKey: 'conversation.quickActions.docx.desc',
@@ -116,7 +116,7 @@ const QUICK_ACTIONS: readonly QuickActionCapability[] = [
   },
   {
     id: 'xlsx',
-    skills: ['xlsx', 'officecli-xlsx'],
+    skills: ['xlsx', 'officecli-xlsx', 'officecli'],
     icon: FileExcel,
     nameKey: 'conversation.quickActions.xlsx.name',
     descKey: 'conversation.quickActions.xlsx.desc',
@@ -197,7 +197,7 @@ const QUICK_ACTIONS: readonly QuickActionCapability[] = [
   },
   {
     id: 'pdf',
-    skills: ['pdf'],
+    skills: ['pdf', 'officecli'],
     icon: FilePdf,
     nameKey: 'conversation.quickActions.pdf.name',
     descKey: 'conversation.quickActions.pdf.desc',
@@ -336,54 +336,52 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
 
   return (
     <>
-      <div className={cn('relative w-full', className)}>
-        <div className='sendbox-quick-actions w-full overflow-x-auto pb-1.5' data-testid='quick-action-cards'>
-          <div className='flex w-max items-stretch gap-2'>
-            {cards.map((capability) => {
-              const Icon = capability.icon;
-              return (
-                <button
-                  key={capability.id}
-                  type='button'
-                  data-testid={`quick-action-${capability.id}`}
-                  onClick={() => openCapability(capability)}
-                  className='group flex h-[58px] w-[168px] shrink-0 items-center gap-2.5 rounded-[12px] border border-sv-line bg-sv-surface px-3 text-left outline-none transition-colors hover:border-sv-line-strong hover:bg-sv-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
-                >
-                  <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] bg-sv-surface-2 text-sv-muted transition-colors group-hover:text-sv-text'>
-                    <Icon size={17} />
-                  </span>
-                  <span className='min-w-0'>
-                    <span className='block truncate text-[12.5px] font-medium text-sv-text'>
-                      {t(capability.nameKey)}
-                    </span>
-                    <span className='mt-0.5 block truncate text-[11px] text-sv-faint'>{t(capability.descKey)}</span>
-                  </span>
-                </button>
-              );
-            })}
-            {moreSkills.length > 0 && (
+      <div className={cn('w-full', className)}>
+        <div
+          className='sendbox-quick-actions grid w-full grid-cols-2 items-stretch gap-2 sm:grid-cols-3'
+          data-testid='quick-action-cards'
+        >
+          {cards.map((capability) => {
+            const Icon = capability.icon;
+            return (
               <button
+                key={capability.id}
                 type='button'
-                data-testid='quick-action-more'
-                onClick={() => setMoreOpen(true)}
-                className='group flex h-[58px] w-[132px] shrink-0 items-center gap-2.5 rounded-[12px] border border-sv-line bg-sv-surface px-3 text-left outline-none transition-colors hover:border-sv-line-strong hover:bg-sv-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
+                data-testid={`quick-action-${capability.id}`}
+                onClick={() => openCapability(capability)}
+                className='group flex h-[58px] w-full min-w-0 items-center gap-2.5 rounded-[12px] border border-sv-line bg-sv-surface px-3 text-left outline-none transition-colors hover:border-sv-line-strong hover:bg-sv-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
               >
                 <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] bg-sv-surface-2 text-sv-muted transition-colors group-hover:text-sv-text'>
-                  <GridFour size={17} />
+                  <Icon size={17} />
                 </span>
                 <span className='min-w-0'>
-                  <span className='block truncate text-[12.5px] font-medium text-sv-text'>
-                    {t('conversation.quickActions.more')}
-                  </span>
-                  <span className='mt-0.5 block truncate text-[11px] text-sv-faint'>
-                    {t('conversation.quickActions.moreDesc')}
-                  </span>
+                  <span className='block truncate text-[12.5px] font-medium text-sv-text'>{t(capability.nameKey)}</span>
+                  <span className='mt-0.5 block truncate text-[11px] text-sv-faint'>{t(capability.descKey)}</span>
                 </span>
               </button>
-            )}
-          </div>
+            );
+          })}
+          {moreSkills.length > 0 && (
+            <button
+              type='button'
+              data-testid='quick-action-more'
+              onClick={() => setMoreOpen(true)}
+              className='group flex h-[58px] w-full min-w-0 items-center gap-2.5 rounded-[12px] border border-sv-line bg-sv-surface px-3 text-left outline-none transition-colors hover:border-sv-line-strong hover:bg-sv-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
+            >
+              <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] bg-sv-surface-2 text-sv-muted transition-colors group-hover:text-sv-text'>
+                <GridFour size={17} />
+              </span>
+              <span className='min-w-0'>
+                <span className='block truncate text-[12.5px] font-medium text-sv-text'>
+                  {t('conversation.quickActions.more')}
+                </span>
+                <span className='mt-0.5 block truncate text-[11px] text-sv-faint'>
+                  {t('conversation.quickActions.moreDesc')}
+                </span>
+              </span>
+            </button>
+          )}
         </div>
-        <div className='pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-sv-bg to-transparent' />
       </div>
 
       <Modal

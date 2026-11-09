@@ -25,6 +25,7 @@
     "generate": "生成する",
     "topic": "テーマ",
     "topicRequired": "テーマを入力してください",
+    "useSkill": "{{skill}} スキルを使って、",
     "pptx": {
       "name": "PPT 作成",
       "desc": "編集可能なスライドを作成",

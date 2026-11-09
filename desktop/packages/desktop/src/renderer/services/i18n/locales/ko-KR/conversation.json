@@ -25,6 +25,7 @@
     "generate": "생성 시작",
     "topic": "주제",
     "topicRequired": "주제를 먼저 입력하세요",
+    "useSkill": "{{skill}} 스킬을 사용해, ",
     "pptx": {
       "name": "PPT 만들기",
       "desc": "편집 가능한 슬라이드 생성",

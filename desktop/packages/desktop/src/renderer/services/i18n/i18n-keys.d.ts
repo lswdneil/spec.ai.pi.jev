@@ -1866,6 +1866,7 @@ export type I18nKey =
   | 'conversation.quickActions.pptx.prompt'
   | 'conversation.quickActions.topic'
   | 'conversation.quickActions.topicRequired'
+  | 'conversation.quickActions.useSkill'
   | 'conversation.quickActions.value.architecture'
   | 'conversation.quickActions.value.budget'
   | 'conversation.quickActions.value.concise'

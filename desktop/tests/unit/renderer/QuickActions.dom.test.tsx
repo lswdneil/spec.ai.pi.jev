@@ -86,6 +86,22 @@ describe('QuickActions', () => {
     expect(onSendPrompt.mock.calls[0][1]).toBe('officecli-pptx');
   });
 
+  it('uses officecli when the native host only loads the combined office skill', async () => {
+    const { onSendPrompt } = setup([{ name: 'officecli', description: 'office files' }]);
+
+    expect(screen.getByTestId('quick-action-pptx')).toBeInTheDocument();
+    expect(screen.getByTestId('quick-action-docx')).toBeInTheDocument();
+    expect(screen.getByTestId('quick-action-xlsx')).toBeInTheDocument();
+    expect(screen.getByTestId('quick-action-pdf')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('quick-action-xlsx'));
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: '年度预算' } });
+    fireEvent.click(screen.getByText('conversation.quickActions.generate'));
+
+    await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
+    expect(onSendPrompt.mock.calls[0][1]).toBe('officecli');
+  });
+
   it('enables and inserts a skill chosen from More', () => {
     const { onInsertSkill, onLoadSkill } = setup();
 

@@ -25,6 +25,7 @@
     "generate": "开始生成",
     "topic": "主题",
     "topicRequired": "先填一个主题",
+    "useSkill": "使用 {{skill}} 技能，",
     "pptx": {
       "name": "PPT 制作",
       "desc": "生成可编辑的演示文稿",

@@ -45,10 +45,14 @@ export type GuidNativeSendDeps = {
   readImage?: ReadImage;
 };
 
+export type GuidNativeSendResult = GuidSendResult & {
+  sendPrompt: (prompt: string) => Promise<boolean>;
+};
+
 const readWithBackend: ReadImage = (file) =>
   ipcBridge.fs.readContent.invoke({ file, encoding: 'dataurl' }).catch((): undefined => undefined);
 
-export const useGuidNativeSend = (deps: GuidNativeSendDeps): GuidSendResult => {
+export const useGuidNativeSend = (deps: GuidNativeSendDeps): GuidNativeSendResult => {
   const {
     input,
     setInput,
@@ -69,35 +73,68 @@ export const useGuidNativeSend = (deps: GuidNativeSendDeps): GuidSendResult => {
   const sendingRef = useRef(false);
 
   /** Whether the conversation started; it says why when it did not. */
-  const start = useCallback(async (): Promise<boolean> => {
-    // pi works in a project folder: there is no conversation without one.
-    if (!dir) {
-      Message.warning(t('mu.native.home.noFolder'));
-      return false;
-    }
-    const started = await startNativeConversation(
-      client,
-      {
-        cwd: dir,
-        ...(MODE_ID.test(selectedMode) ? { permissions: selectedMode } : {}),
-        ...(selectedAcpModel ? { model: selectedAcpModel } : {}),
-        ...(LEVEL_ID.test(pickedThoughtLevel) ? { level: pickedThoughtLevel } : {}),
-        input,
-        files,
-      },
-      readImage
-    );
-    if (started.ok === false) {
-      Message.error(`${t(errorKey(started.kind))} ${started.message}`.trim());
-      return false;
-    }
-    await navigate(nativeConversationPath(started.id));
-    return true;
-  }, [client, dir, files, input, navigate, pickedThoughtLevel, readImage, selectedAcpModel, selectedMode, t]);
+  const start = useCallback(
+    async (contentOverride?: string): Promise<boolean> => {
+      // pi works in a project folder: there is no conversation without one.
+      if (!dir) {
+        Message.warning(t('mu.native.home.noFolder'));
+        return false;
+      }
+      const started = await startNativeConversation(
+        client,
+        {
+          cwd: dir,
+          ...(MODE_ID.test(selectedMode) ? { permissions: selectedMode } : {}),
+          ...(selectedAcpModel ? { model: selectedAcpModel } : {}),
+          ...(LEVEL_ID.test(pickedThoughtLevel) ? { level: pickedThoughtLevel } : {}),
+          input: contentOverride ?? input,
+          files,
+        },
+        readImage
+      );
+      if (started.ok === false) {
+        Message.error(`${t(errorKey(started.kind))} ${started.message}`.trim());
+        return false;
+      }
+      await navigate(nativeConversationPath(started.id));
+      return true;
+    },
+    [client, dir, files, input, navigate, pickedThoughtLevel, readImage, selectedAcpModel, selectedMode, t]
+  );
 
-  const handleSend = useCallback(async () => {
-    await start();
-  }, [start]);
+  const handleSend = useCallback(
+    async (contentOverride?: string) => {
+      await start(contentOverride);
+    },
+    [start]
+  );
+
+  const clearDraft = useCallback(() => {
+    setInput('');
+    setFiles([]);
+    setDir('');
+  }, [setDir, setFiles, setInput]);
+
+  const sendPrompt = useCallback(
+    async (prompt: string): Promise<boolean> => {
+      if (loading || sendingRef.current) return false;
+      sendingRef.current = true;
+      setLoading(true);
+      try {
+        const started = await start(prompt);
+        if (!started) return false;
+        clearDraft();
+        return true;
+      } catch (error) {
+        Message.error(`${t(errorKey('failed'))} ${error instanceof Error ? error.message : String(error)}`);
+        return false;
+      } finally {
+        sendingRef.current = false;
+        setLoading(false);
+      }
+    },
+    [clearDraft, loading, setLoading, start, t]
+  );
 
   const sendMessageHandler = useCallback(() => {
     if (loading || sendingRef.current) return;
@@ -106,9 +143,7 @@ export const useGuidNativeSend = (deps: GuidNativeSendDeps): GuidSendResult => {
     start()
       .then((started) => {
         if (!started) return;
-        setInput('');
-        setFiles([]);
-        setDir('');
+        clearDraft();
       })
       .catch((error: unknown) => {
         Message.error(`${t(errorKey('failed'))} ${error instanceof Error ? error.message : String(error)}`);
@@ -117,8 +152,8 @@ export const useGuidNativeSend = (deps: GuidNativeSendDeps): GuidSendResult => {
         sendingRef.current = false;
         setLoading(false);
       });
-  }, [loading, setDir, setFiles, setInput, setLoading, start, t]);
+  }, [clearDraft, loading, setLoading, start, t]);
 
   // No assistant needed: the native host runs spec.jev itself. Empty input is allowed, as on the classic page ("start chat").
-  return { handleSend, sendMessageHandler, isButtonDisabled: loading };
+  return { handleSend, sendPrompt, sendMessageHandler, isButtonDisabled: loading };
 };
