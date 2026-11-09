@@ -129,7 +129,13 @@ function ReopenGuide() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (
-    <Button size='small' type='text' data-testid='mu-open-welcome' onClick={() => navigate('/welcome')}>
+    <Button
+      size='small'
+      variant='secondary'
+      className='bg-sv-surface-2'
+      data-testid='mu-open-welcome'
+      onClick={() => navigate('/welcome')}
+    >
       {t('mu.welcome.reopen')}
     </Button>
   );
