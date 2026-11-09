@@ -5,6 +5,8 @@
  */
 
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
+import { ipcBridge } from '@/common';
+import { addRecentWorkspace } from '@/renderer/components/workspace/recentWorkspaces';
 import type { I18nKey } from '@/renderer/services/i18n';
 import { Button } from '@/renderer/ui/button';
 import { cn } from '@/renderer/ui/cn';
@@ -17,12 +19,13 @@ import {
   FilePdf,
   FilePpt,
   FileWord,
+  FolderClose,
   GridFour,
   Ruler,
   Search,
   TreeDiagram,
 } from '@icon-park/react';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export type QuickActionSkill = {
@@ -280,10 +283,24 @@ type Props = {
   onInsertSkill: (name: string) => void;
   /** Enables a skill that the current conversation has not loaded yet. */
   onLoadSkill?: (name: string) => void;
+  /** The folder the new conversation works in; omit where the cards have no workspace of their own. */
+  workspaceDir?: string;
+  onSelectWorkspace?: (dir: string) => void;
+  /** The native host cannot start a conversation without a folder. */
+  workspaceRequired?: boolean;
   className?: string;
 };
 
-const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, onLoadSkill, className }) => {
+const QuickActions: React.FC<Props> = ({
+  skills,
+  onSendPrompt,
+  onInsertSkill,
+  onLoadSkill,
+  workspaceDir = '',
+  onSelectWorkspace,
+  workspaceRequired = false,
+  className,
+}) => {
   const { t } = useTranslation();
   const layout = useLayoutContext();
   const isMobile = layout?.isMobile ?? false;
@@ -296,6 +313,11 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
   const [moreOpen, setMoreOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [comingSoonId, setComingSoonId] = useState<QuickActionComingSoon['id'] | null>(null);
+  const [workspaceError, setWorkspaceError] = useState(false);
+
+  useEffect(() => {
+    if (workspaceDir) setWorkspaceError(false);
+  }, [workspaceDir]);
 
   const availableSkills = useMemo(() => new Set(skills.map((skill) => skill.name)), [skills]);
   const resolvedSkills = useMemo(() => {
@@ -342,6 +364,7 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
     setTopic('');
     setTopicError(false);
     setChoices({ ...capability.defaults });
+    setWorkspaceError(false);
   }, []);
 
   const closeCapability = useCallback(() => {
@@ -364,6 +387,10 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
 
   const handleGenerate = useCallback(async () => {
     if (!activeCapability || !activeSkillName || sending) return;
+    if (workspaceRequired && !workspaceDir) {
+      setWorkspaceError(true);
+      return;
+    }
     const trimmed = topic.trim();
     if (!trimmed) {
       setTopicError(true);
@@ -383,7 +410,33 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
     } finally {
       setSending(false);
     }
-  }, [activeCapability, activeSkillName, buildPrompt, choices, onSendPrompt, sending, topic]);
+  }, [
+    activeCapability,
+    activeSkillName,
+    buildPrompt,
+    choices,
+    onSendPrompt,
+    sending,
+    topic,
+    workspaceDir,
+    workspaceRequired,
+  ]);
+
+  const chooseWorkspace = useCallback(() => {
+    if (!onSelectWorkspace) return;
+    ipcBridge.dialog.showOpen
+      .invoke({ properties: ['openDirectory', 'createDirectory'] })
+      .then((dirs) => {
+        if (dirs && dirs[0]) {
+          addRecentWorkspace(dirs[0]);
+          onSelectWorkspace(dirs[0]);
+          setWorkspaceError(false);
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to open directory dialog:', error);
+      });
+  }, [onSelectWorkspace]);
 
   const handleInsertSkill = useCallback(
     (name: string) => {
@@ -483,6 +536,40 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
       >
         {activeCapability && (
           <div className='flex flex-col gap-3.5'>
+            {onSelectWorkspace && (
+              <div>
+                <div className='mb-1 block text-[12px] text-sv-muted'>
+                  {t('conversation.quickActions.workspace')}
+                  {workspaceRequired ? <span className='ms-1 text-sv-danger'>*</span> : null}
+                </div>
+                <div className='flex items-center gap-2'>
+                  <div
+                    title={workspaceDir || undefined}
+                    data-testid='quick-action-workspace-path'
+                    className={cn(
+                      'flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[var(--sv-r-control)] border px-3 text-[12.5px]',
+                      workspaceError ? 'border-sv-danger' : 'border-sv-line',
+                      workspaceDir ? 'text-sv-text' : 'text-sv-faint'
+                    )}
+                  >
+                    <FolderClose size={15} className='shrink-0 text-sv-muted' />
+                    <span className='min-w-0 truncate'>{workspaceDir || t('conversation.quickActions.notChosen')}</span>
+                  </div>
+                  <Button
+                    size='small'
+                    variant='secondary'
+                    className='shrink-0'
+                    data-testid='quick-action-workspace'
+                    onClick={chooseWorkspace}
+                  >
+                    {t('conversation.quickActions.chooseFolder')}
+                  </Button>
+                </div>
+                {workspaceError && (
+                  <div className='mt-1 text-[11.5px] text-sv-danger'>{t('mu.native.home.noFolder')}</div>
+                )}
+              </div>
+            )}
             <div>
               <label className='mb-1 block text-[12px] text-sv-muted' htmlFor='quick-action-topic'>
                 {t('conversation.quickActions.topic')}

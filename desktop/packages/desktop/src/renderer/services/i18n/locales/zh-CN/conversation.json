@@ -76,6 +76,9 @@
       "desc": "机械图纸与三维建模"
     },
     "comingSoon": "敬请期待，请联系 spec-ai.cn 技术团队",
+    "workspace": "工作文件夹",
+    "chooseFolder": "选择文件夹",
+    "notChosen": "尚未选择",
     "field": {
       "pages": "页数",
       "style": "风格",

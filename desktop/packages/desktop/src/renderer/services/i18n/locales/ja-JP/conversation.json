@@ -76,6 +76,9 @@
       "desc": "機械製図と 3D モデリング"
     },
     "comingSoon": "近日公開予定です。spec-ai.cn の技術チームまでお問い合わせください。",
+    "workspace": "作業フォルダー",
+    "chooseFolder": "フォルダーを選択",
+    "notChosen": "未選択",
     "field": {
       "pages": "枚数",
       "style": "スタイル",

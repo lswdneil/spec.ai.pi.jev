@@ -765,6 +765,9 @@ const GuidPage: React.FC = () => {
             onSendPrompt={handleQuickActionSend}
             onInsertSkill={handleInsertQuickActionSkill}
             onLoadSkill={nativeHost ? undefined : enableQuickActionSkill}
+            workspaceDir={guidInput.dir}
+            onSelectWorkspace={(dir) => guidInput.setDir(dir)}
+            workspaceRequired={nativeHost}
             className='mt-3'
           />
         )}

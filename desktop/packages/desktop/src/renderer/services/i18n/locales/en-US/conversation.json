@@ -76,6 +76,9 @@
       "desc": "Mechanical drafting and 3D modeling"
     },
     "comingSoon": "Coming soon. Please contact the spec-ai.cn technical team.",
+    "workspace": "Workspace folder",
+    "chooseFolder": "Choose folder",
+    "notChosen": "Not selected",
     "field": {
       "pages": "Pages",
       "style": "Style",

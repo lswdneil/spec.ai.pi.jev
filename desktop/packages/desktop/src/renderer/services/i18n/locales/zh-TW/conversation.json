@@ -76,6 +76,9 @@
       "desc": "機械圖紙與三維建模"
     },
     "comingSoon": "敬請期待，請聯繫 spec-ai.cn 技術團隊",
+    "workspace": "工作資料夾",
+    "chooseFolder": "選擇資料夾",
+    "notChosen": "尚未選擇",
     "field": {
       "pages": "頁數",
       "style": "風格",

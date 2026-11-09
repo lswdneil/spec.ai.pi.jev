@@ -7,12 +7,26 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
+import { ipcBridge } from '@/common';
 import QuickActions from '@/renderer/components/chat/SendBox/QuickActions';
+import { addRecentWorkspace } from '@/renderer/components/workspace/recentWorkspaces';
 
 const layoutState = vi.hoisted(() => ({ isMobile: false }));
 
 vi.mock('@/renderer/hooks/context/LayoutContext', () => ({
   useLayoutContext: () => ({ isMobile: layoutState.isMobile }),
+}));
+
+vi.mock('@/common', () => ({
+  ipcBridge: {
+    dialog: {
+      showOpen: { invoke: vi.fn().mockResolvedValue([]) },
+    },
+  },
+}));
+
+vi.mock('@/renderer/components/workspace/recentWorkspaces', () => ({
+  addRecentWorkspace: vi.fn(),
 }));
 
 vi.mock('react-i18next', () => ({
@@ -44,9 +58,27 @@ const setup = (skills = SKILLS) => {
   return { onSendPrompt, onInsertSkill, onLoadSkill };
 };
 
+const setupWithWorkspace = (workspaceDir: string) => {
+  const onSendPrompt = vi.fn().mockResolvedValue(true);
+  const onSelectWorkspace = vi.fn();
+  render(
+    <QuickActions
+      skills={SKILLS}
+      onSendPrompt={onSendPrompt}
+      onInsertSkill={vi.fn()}
+      workspaceDir={workspaceDir}
+      onSelectWorkspace={onSelectWorkspace}
+      workspaceRequired
+    />
+  );
+  return { onSendPrompt, onSelectWorkspace };
+};
+
 describe('QuickActions', () => {
   beforeEach(() => {
     layoutState.isMobile = false;
+    vi.mocked(ipcBridge.dialog.showOpen.invoke).mockResolvedValue([]);
+    vi.mocked(addRecentWorkspace).mockClear();
   });
 
   it('shows a card only for capabilities whose skill is installed', () => {
@@ -110,6 +142,41 @@ describe('QuickActions', () => {
 
     expect(onLoadSkill).toHaveBeenCalledWith('cron');
     expect(onInsertSkill).toHaveBeenCalledWith('cron');
+  });
+
+  it('asks for a workspace before generating when the host needs one', () => {
+    const { onSendPrompt } = setupWithWorkspace('');
+
+    fireEvent.click(screen.getByTestId('quick-action-pptx'));
+    expect(screen.getByTestId('quick-action-workspace-path')).toHaveTextContent('conversation.quickActions.notChosen');
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: '季度复盘' } });
+    fireEvent.click(screen.getByText('conversation.quickActions.generate'));
+
+    expect(onSendPrompt).not.toHaveBeenCalled();
+    expect(screen.getByText('mu.native.home.noFolder')).toBeInTheDocument();
+  });
+
+  it('picks a workspace from the card dialog', async () => {
+    const { onSelectWorkspace } = setupWithWorkspace('');
+    vi.mocked(ipcBridge.dialog.showOpen.invoke).mockResolvedValue(['C:/work/deck']);
+
+    fireEvent.click(screen.getByTestId('quick-action-pptx'));
+    fireEvent.click(screen.getByTestId('quick-action-workspace'));
+
+    await waitFor(() => expect(onSelectWorkspace).toHaveBeenCalledWith('C:/work/deck'));
+    expect(addRecentWorkspace).toHaveBeenCalledWith('C:/work/deck');
+  });
+
+  it('sends straight away when the card dialog already shows a workspace', async () => {
+    const { onSendPrompt } = setupWithWorkspace('C:/work/deck');
+
+    fireEvent.click(screen.getByTestId('quick-action-pptx'));
+    expect(screen.getByTestId('quick-action-workspace-path')).toHaveTextContent('C:/work/deck');
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: '季度复盘' } });
+    fireEvent.click(screen.getByText('conversation.quickActions.generate'));
+
+    await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
+    expect(screen.queryByText('mu.native.home.noFolder')).not.toBeInTheDocument();
   });
 
   it('announces SCH, PCB and CAD design and opens a notice instead of the composer', () => {

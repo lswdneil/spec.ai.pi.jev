@@ -76,6 +76,9 @@
       "desc": "기계 도면 및 3D 모델링"
     },
     "comingSoon": "곧 제공될 예정입니다. spec-ai.cn 기술팀에 문의해 주세요.",
+    "workspace": "작업 폴더",
+    "chooseFolder": "폴더 선택",
+    "notChosen": "선택 안 됨",
     "field": {
       "pages": "페이지 수",
       "style": "스타일",
