@@ -30,6 +30,7 @@ import {
 import { runLegacyDatabaseMigrations } from '@process/services/database/runLegacyDatabaseMigrations';
 import { BUILTIN_IMAGE_GEN_ID } from '../resources/builtinMcp/constants';
 import { CONFIG_FILES, DIRS_KEY } from '@/common/platform/legacyNames';
+import { seedBackendSkills } from './backendSkills';
 // Platform and architecture types (moved from deleted updateConfig)
 type PlatformType = 'win32' | 'darwin' | 'linux';
 type ArchitectureType = 'x64' | 'arm64' | 'ia32' | 'arm';
@@ -49,6 +50,9 @@ const STORAGE_PATH = {
 /** Legacy builtin-skills cache directory, cleaned up at startup after the
  * backend took ownership of the corpus. */
 const LEGACY_BUILTIN_SKILLS_DIR = 'builtin-skills';
+
+/** The backend's built-in skill corpus under `<data>/`, which AionCore scans at startup. */
+const BACKEND_BUILTIN_SKILLS_DIR = 'builtin-skills';
 
 const getHomePage = getConfigPath;
 
@@ -410,6 +414,24 @@ const initStorage = async () => {
   //     before the backend took ownership of the corpus.
   cleanupLegacyBuiltinSkillsDir();
   mark('5b. legacyBuiltinSkillsCleanup');
+
+  // 5c. The backend scans its built-in corpus (`<data>/builtin-skills`) at startup. Skills this app ships beside
+  //     the harness but the backend's binary does not carry are added before that scan, so they are built in on a
+  //     fresh machine too. An existing folder is never overwritten.
+  try {
+    const services = getPlatformServices();
+    const appPath = services.paths.getAppPath();
+    const bundledSkills = services.paths.isPackaged()
+      ? path.join(process.resourcesPath, 'harness', 'spec.jev', 'judge', 'skills')
+      : appPath && path.join(appPath, 'resources', 'builtin-skills');
+    const added = bundledSkills
+      ? seedBackendSkills(bundledSkills, path.join(getDataPath(), BACKEND_BUILTIN_SKILLS_DIR))
+      : [];
+    if (added.length > 0) console.log(`[spec.jev] Added built-in skills: ${added.join(', ')}`);
+    mark('5c. seedBackendSkills');
+  } catch (error) {
+    console.error('[spec.jev] Failed to add built-in skills:', error);
+  }
 
   // 6. Backend only understands the v26-era schema baseline. Older desktop
   //    users may still have a pre-v26 Electron-managed catalog, so we upgrade
