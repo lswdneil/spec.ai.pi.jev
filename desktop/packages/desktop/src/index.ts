@@ -19,6 +19,7 @@ import * as path from 'path';
 import { initMainAdapterWithWindow } from './common/adapter/main';
 import { ipcBridge } from './common';
 import { initializeProcess } from './process';
+import { installBundledAgentDesktop } from './process/startup/bundledAgentDesktop';
 import { installBundledMoli } from './process/startup/bundledMoli';
 import { installBundledPython } from './process/startup/bundledPython';
 import { startWebUiIfEnabled } from './process/bridge/applicationBridge';
@@ -701,6 +702,11 @@ const handleAppReady = async (): Promise<void> => {
   // so a build that carries one puts it first on PATH before any agent shell inherits this process.
   const bundledPython = installBundledPython();
   if (bundledPython) console.log(`[spec.jev] using bundled python: ${bundledPython}`);
+
+  // Computer use through the OS accessibility tree. The built-in agent-desktop skill calls the CLI, so its
+  // folder goes on PATH before any agent shell inherits this process.
+  const bundledAgentDesktop = installBundledAgentDesktop();
+  if (bundledAgentDesktop) console.log(`[spec.jev] using bundled agent-desktop: ${bundledAgentDesktop}`);
 
   try {
     await initializeProcess();

@@ -67,6 +67,29 @@ Cloud-architecture-style diagrams of a stack, as self-contained HTML, PNG, a Rea
   `assets/template.html` and `references/geometry.md`, writes the HTML by hand, delivers it, and says which optional
   rendering step was skipped.
 
+## agent-desktop
+
+Computer use for the agent: read and operate desktop apps through the OS accessibility tree — Windows UI
+Automation, macOS AX, or Linux AT-SPI — and act on stable refs instead of screenshots or pixel matching.
+
+- Source: `vercel-labs/agent-desktop`, release `v1.2.0` (Apache-2.0). The CLI is a Rust executable, so it is
+  staged rather than compiled: `scripts/prepareAgentDesktopResources.js` downloads the pinned release archive,
+  checks its SHA-256 against the release's `checksums.txt`, and extracts it to
+  `resources/bundled-agent-desktop/<platform>-<arch>/`. `MU_AGENT_DESKTOP_BINARY` names a local executable for
+  offline builds; `MU_SKIP_AGENT_DESKTOP=1` builds without it. The folder is git-ignored like `bundled-moli` and
+  `bundled-python`.
+- Runtime it asks of the machine: the signed-in user's interactive desktop session. Windows 10 1809+ needs no
+  permission grant; macOS needs its Accessibility grant; Linux needs AT-SPI. No download happens on the
+  person's machine.
+- Wired at startup: `process/startup/bundledAgentDesktop.ts` finds the executable, puts its folder first on
+  `PATH`, and records `SPECJEV_AGENT_DESKTOP` plus (on macOS) `AGENT_DESKTOP_MACOS_HELPER_PATH` before any agent
+  shell inherits the environment.
+- The skill keeps only the cross-platform loop, refs, retry rules and Windows first-contact notes. Flags and
+  platform detail stay in the binary (`agent-desktop skills get platform` and
+  `agent-desktop skills get desktop <reference>`), so the guide can never drift from the executable.
+- Not included: `agent-desktop mcp`. The app already seeds the bundled Windows MCP as an MCP server; this skill
+  exposes the CLI instead, so the two do not duplicate a 56-tool surface.
+
 ## pptx
 
 A slide deck written as one HTML file per slide, presented in the browser and exported to a genuinely editable

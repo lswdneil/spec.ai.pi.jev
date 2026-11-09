@@ -15,7 +15,7 @@ import path from 'node:path';
  * never reaches the settings page or a conversation. These names are copied in before the backend starts, which
  * makes them built in on a fresh machine as well.
  */
-export const APP_ADDED_SKILLS = ['stack-diagram'] as const;
+export const APP_ADDED_SKILLS = ['agent-desktop', 'stack-diagram'] as const;
 
 /**
  * Copies the named skills from `sourceDir` into the backend's corpus when they are absent.

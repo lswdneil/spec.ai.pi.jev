@@ -137,6 +137,9 @@ extraResources:
   # The Windows desktop MCP server, a standalone executable with its own Python runtime.
   - from: resources/bundled-mcp
     to: bundled-mcp
+  # agent-desktop: observe and operate desktop apps through the OS accessibility tree. The built-in skill calls it.
+  - from: resources/bundled-agent-desktop
+    to: bundled-agent-desktop
 win:
   target:
     - nsis

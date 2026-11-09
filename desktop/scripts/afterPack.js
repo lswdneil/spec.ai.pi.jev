@@ -107,6 +107,28 @@ function verifyBundledResources(resourcesDir, electronPlatformName, targetArch) 
     else console.warn(`   bundled Windows MCP is not included (${windowsMcp})`);
   }
 
+  // The agent-desktop skill drives this executable, which the app puts on PATH before any agent shell starts.
+  // A packaged app without it would list the skill and then fail on its first command, so a staged binary must land.
+  const agentDesktopRuntimeKey = `${electronPlatformName}-${targetArch}`;
+  const agentDesktop = path.join(
+    resourcesDir,
+    'bundled-agent-desktop',
+    agentDesktopRuntimeKey,
+    electronPlatformName === 'win32' ? 'agent-desktop.exe' : 'agent-desktop'
+  );
+  const agentDesktopStaged = path.resolve(
+    __dirname,
+    '..',
+    'resources',
+    'bundled-agent-desktop',
+    agentDesktopRuntimeKey,
+    electronPlatformName === 'win32' ? 'agent-desktop.exe' : 'agent-desktop'
+  );
+  if (fs.existsSync(agentDesktop)) console.log(`   bundled agent-desktop verified (${agentDesktop})`);
+  else if (process.env.MU_REQUIRE_AGENT_DESKTOP === '1' || fs.existsSync(agentDesktopStaged))
+    throw new Error(`Packaged app is missing bundled agent-desktop: ${agentDesktop}`);
+  else console.warn(`   bundled agent-desktop is not included (${agentDesktop})`);
+
   // The docx skill and stack-diagram run Python; the app carries one so a fresh Windows machine
   // needs no install. A staged runtime that did not land in the package would only show up as a
   // skill failing in the person's first conversation, so fail the build instead.

@@ -785,6 +785,13 @@ try {
     stdio: 'inherit',
     env: process.env,
   });
+  // agent-desktop gives the agent computer use through the Windows UI Automation tree (and AX/AT-SPI on macOS and
+  // Linux). It is a standalone executable, so the installer carries it and the built-in skill finds it on PATH.
+  execFileSync(
+    process.execPath,
+    [path.join(__dirname, 'prepareAgentDesktopResources.js'), '--platform', buildPlatform, '--arch', targetArch],
+    { stdio: 'inherit', env: process.env }
+  );
   execFileSync(
     process.execPath,
     [path.join(__dirname, 'kyrn', 'bundle-harness.mjs'), '--platform', buildPlatform, '--arch', targetArch],

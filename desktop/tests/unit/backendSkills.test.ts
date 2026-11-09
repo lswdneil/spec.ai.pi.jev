@@ -26,12 +26,13 @@ describe('seedBackendSkills', () => {
     const root = tempRoot();
     const source = join(root, 'bundled');
     const corpus = join(root, 'corpus');
-    writeSkill(source, 'stack-diagram');
+    for (const name of APP_ADDED_SKILLS) writeSkill(source, name);
     mkdirSync(join(source, 'stack-diagram', 'references'), { recursive: true });
     writeFileSync(join(source, 'stack-diagram', 'references', 'palette.md'), '# palette\n');
 
     expect(seedBackendSkills(source, corpus)).toEqual([...APP_ADDED_SKILLS]);
     expect(readFileSync(join(corpus, 'stack-diagram', 'references', 'palette.md'), 'utf8')).toBe('# palette\n');
+    expect(existsSync(join(corpus, 'agent-desktop', 'SKILL.md'))).toBe(true);
   });
 
   it('leaves a skill that is already in the corpus alone', () => {
