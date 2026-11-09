@@ -63,6 +63,19 @@
       "placeholder": "例：プロジェクト完了報告",
       "prompt": "{{skill}} スキルを使って「{{topic}}」についての{{docType}} PDF を生成してください。まず HTML を書き、A4 PDF として印刷してください。"
     },
+    "sch": {
+      "name": "SCH設計",
+      "desc": "回路図の作成と出力"
+    },
+    "pcb": {
+      "name": "PCB設計",
+      "desc": "PCB の配置と配線"
+    },
+    "cad": {
+      "name": "CAD設計",
+      "desc": "機械製図と 3D モデリング"
+    },
+    "comingSoon": "近日公開予定です。spec-ai.cn の技術チームまでお問い合わせください。",
     "field": {
       "pages": "枚数",
       "style": "スタイル",

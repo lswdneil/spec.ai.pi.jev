@@ -63,6 +63,19 @@
       "placeholder": "예: 프로젝트 종료 보고서",
       "prompt": "{{skill}} 스킬을 사용해 \"{{topic}}\"에 대한 {{docType}} PDF를 생성해 주세요. 먼저 HTML을 작성한 뒤 A4 PDF로 인쇄하세요."
     },
+    "sch": {
+      "name": "SCH 설계",
+      "desc": "회로도 설계 및 출력"
+    },
+    "pcb": {
+      "name": "PCB 설계",
+      "desc": "PCB 배치 및 배선"
+    },
+    "cad": {
+      "name": "CAD 설계",
+      "desc": "기계 도면 및 3D 모델링"
+    },
+    "comingSoon": "곧 제공될 예정입니다. spec-ai.cn 기술팀에 문의해 주세요.",
     "field": {
       "pages": "페이지 수",
       "style": "스타일",

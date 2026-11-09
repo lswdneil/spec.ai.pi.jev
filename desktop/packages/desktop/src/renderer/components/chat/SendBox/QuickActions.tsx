@@ -10,7 +10,18 @@ import { Button } from '@/renderer/ui/button';
 import { cn } from '@/renderer/ui/cn';
 import { Modal } from '@/renderer/ui/dialog';
 import { Input } from '@/renderer/ui/input';
-import { FileExcel, FilePdf, FilePpt, FileWord, GridFour, Search, TreeDiagram } from '@icon-park/react';
+import {
+  Chip,
+  Cpu,
+  FileExcel,
+  FilePdf,
+  FilePpt,
+  FileWord,
+  GridFour,
+  Ruler,
+  Search,
+  TreeDiagram,
+} from '@icon-park/react';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -33,19 +44,38 @@ type QuickActionField = {
   options: QuickActionFieldOption[];
 };
 
-type QuickActionCapability = {
-  id: 'pptx' | 'docx' | 'xlsx' | 'diagram' | 'pdf';
-  /** Installed skill names that can serve this capability, preferred name first. */
-  skills: readonly string[];
+type QuickActionId = 'pptx' | 'docx' | 'xlsx' | 'diagram' | 'pdf' | 'sch' | 'pcb' | 'cad';
+
+type QuickActionCard = {
+  id: QuickActionId;
   icon: React.ComponentType<{ size?: number; className?: string }>;
   nameKey: I18nKey;
   descKey: I18nKey;
+};
+
+type QuickActionReady = QuickActionCard & {
+  comingSoon?: false;
+  /** Installed skill names that can serve this capability, preferred name first. */
+  skills: readonly string[];
   hintKey: I18nKey;
   placeholderKey: I18nKey;
   promptKey: I18nKey;
   fields: QuickActionField[];
   defaults: Record<string, string>;
 };
+
+/** A card that announces a capability this build does not ship yet. It opens a notice instead of the composer. */
+type QuickActionComingSoon = QuickActionCard & {
+  comingSoon: true;
+};
+
+type QuickActionCapability = QuickActionReady | QuickActionComingSoon;
+
+const isComingSoonCard = (capability: QuickActionCapability): capability is QuickActionComingSoon =>
+  capability.comingSoon === true;
+
+const isReadyCard = (capability: QuickActionCapability): capability is QuickActionReady =>
+  !isComingSoonCard(capability);
 
 const QUICK_ACTIONS: readonly QuickActionCapability[] = [
   {
@@ -218,9 +248,30 @@ const QUICK_ACTIONS: readonly QuickActionCapability[] = [
     ],
     defaults: { pdfType: 'report' },
   },
+  {
+    id: 'sch',
+    comingSoon: true,
+    icon: Cpu,
+    nameKey: 'conversation.quickActions.sch.name',
+    descKey: 'conversation.quickActions.sch.desc',
+  },
+  {
+    id: 'pcb',
+    comingSoon: true,
+    icon: Chip,
+    nameKey: 'conversation.quickActions.pcb.name',
+    descKey: 'conversation.quickActions.pcb.desc',
+  },
+  {
+    id: 'cad',
+    comingSoon: true,
+    icon: Ruler,
+    nameKey: 'conversation.quickActions.cad.name',
+    descKey: 'conversation.quickActions.cad.desc',
+  },
 ];
 
-const FEATURED_SKILLS = new Set(QUICK_ACTIONS.flatMap((capability) => capability.skills));
+const FEATURED_SKILLS = new Set(QUICK_ACTIONS.filter(isReadyCard).flatMap((capability) => capability.skills));
 
 type Props = {
   /** Reachable skills: every installed skill on the start page, loaded ones inside a chat. */
@@ -244,20 +295,26 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
   const [sending, setSending] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [comingSoonId, setComingSoonId] = useState<QuickActionComingSoon['id'] | null>(null);
 
   const availableSkills = useMemo(() => new Set(skills.map((skill) => skill.name)), [skills]);
   const resolvedSkills = useMemo(() => {
-    const resolved = new Map<QuickActionCapability['id'], string>();
+    const resolved = new Map<QuickActionId, string>();
     for (const capability of QUICK_ACTIONS) {
+      if (!isReadyCard(capability)) continue;
       const skillName = capability.skills.find((candidate) => availableSkills.has(candidate));
       if (skillName) resolved.set(capability.id, skillName);
     }
     return resolved;
   }, [availableSkills]);
-  const cards = useMemo(
-    () => QUICK_ACTIONS.filter((capability) => resolvedSkills.has(capability.id)),
-    [resolvedSkills]
-  );
+  const cards = useMemo(() => {
+    const ready = QUICK_ACTIONS.filter(
+      (capability): capability is QuickActionReady => isReadyCard(capability) && resolvedSkills.has(capability.id)
+    );
+    // Announcements ride with the ready cards: no installed skill means no card section at all.
+    if (ready.length === 0) return [];
+    return [...ready, ...QUICK_ACTIONS.filter(isComingSoonCard)];
+  }, [resolvedSkills]);
   const moreSkills = useMemo(() => {
     const keyword = query.trim().toLowerCase();
     return skills
@@ -268,11 +325,19 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
       });
   }, [query, skills]);
 
-  const activeCapability = QUICK_ACTIONS.find((capability) => capability.id === activeId) ?? null;
+  const activeCapability =
+    QUICK_ACTIONS.find(
+      (capability): capability is QuickActionReady => isReadyCard(capability) && capability.id === activeId
+    ) ?? null;
+  const comingSoonCapability =
+    QUICK_ACTIONS.find(
+      (capability): capability is QuickActionComingSoon =>
+        isComingSoonCard(capability) && capability.id === comingSoonId
+    ) ?? null;
   const activeIcon = activeCapability?.icon;
   const activeSkillName = activeCapability ? (resolvedSkills.get(activeCapability.id) ?? '') : '';
 
-  const openCapability = useCallback((capability: QuickActionCapability) => {
+  const openCapability = useCallback((capability: QuickActionReady) => {
     setActiveId(capability.id);
     setTopic('');
     setTopicError(false);
@@ -285,7 +350,7 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
   }, [sending]);
 
   const buildPrompt = useCallback(
-    (capability: QuickActionCapability, skillName: string, text: string, picked: Record<string, string>) => {
+    (capability: QuickActionReady, skillName: string, text: string, picked: Record<string, string>) => {
       const values: Record<string, string> = { topic: text, skill: skillName };
       for (const field of capability.fields) {
         const value = picked[field.key] ?? capability.defaults[field.key];
@@ -348,7 +413,13 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
                 key={capability.id}
                 type='button'
                 data-testid={`quick-action-${capability.id}`}
-                onClick={() => openCapability(capability)}
+                onClick={() => {
+                  if (isComingSoonCard(capability)) {
+                    setComingSoonId(capability.id);
+                    return;
+                  }
+                  openCapability(capability);
+                }}
                 className='group flex h-[58px] w-full min-w-0 items-center gap-2.5 rounded-[12px] border border-sv-line bg-sv-surface px-3 text-left outline-none transition-colors hover:border-sv-line-strong hover:bg-sv-surface-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sv-focus'
               >
                 <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] bg-sv-surface-2 text-sv-muted transition-colors group-hover:text-sv-text'>
@@ -509,6 +580,24 @@ const QuickActions: React.FC<Props> = ({ skills, onSendPrompt, onInsertSkill, on
             ))
           )}
         </div>
+      </Modal>
+
+      <Modal
+        visible={Boolean(comingSoonCapability)}
+        onCancel={() => setComingSoonId(null)}
+        maskClosable={false}
+        width={420}
+        title={comingSoonCapability ? t(comingSoonCapability.nameKey) : null}
+        footer={
+          <div className='flex items-center justify-end'>
+            <Button variant='primary' onClick={() => setComingSoonId(null)}>
+              {t('common.confirm')}
+            </Button>
+          </div>
+        }
+        data-testid='quick-action-coming-soon'
+      >
+        <div className='text-[13px] leading-6 text-sv-text'>{t('conversation.quickActions.comingSoon')}</div>
       </Modal>
     </>
   );

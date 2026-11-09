@@ -112,6 +112,21 @@ describe('QuickActions', () => {
     expect(onInsertSkill).toHaveBeenCalledWith('cron');
   });
 
+  it('announces SCH, PCB and CAD design and opens a notice instead of the composer', () => {
+    const { onSendPrompt } = setup();
+
+    expect(screen.getByTestId('quick-action-sch')).toBeInTheDocument();
+    expect(screen.getByTestId('quick-action-pcb')).toBeInTheDocument();
+    expect(screen.getByTestId('quick-action-cad')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('quick-action-pcb'));
+
+    expect(screen.getByTestId('quick-action-coming-soon')).toBeInTheDocument();
+    expect(screen.getByText('conversation.quickActions.comingSoon')).toBeInTheDocument();
+    expect(screen.queryByTestId('quick-action-dialog')).not.toBeInTheDocument();
+    expect(onSendPrompt).not.toHaveBeenCalled();
+  });
+
   it('renders nothing on mobile', () => {
     layoutState.isMobile = true;
     setup();

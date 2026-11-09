@@ -63,6 +63,19 @@
       "placeholder": "例如：项目结项报告",
       "prompt": "使用 {{skill}} 技能，帮我生成一份关于「{{topic}}」的{{docType}} PDF。请先写 HTML，再打印成 A4 PDF。"
     },
+    "sch": {
+      "name": "SCH设计",
+      "desc": "原理图设计与输出"
+    },
+    "pcb": {
+      "name": "PCB设计",
+      "desc": "PCB 布局与布线"
+    },
+    "cad": {
+      "name": "CAD设计",
+      "desc": "机械图纸与三维建模"
+    },
+    "comingSoon": "敬请期待，请联系 spec-ai.cn 技术团队",
     "field": {
       "pages": "页数",
       "style": "风格",

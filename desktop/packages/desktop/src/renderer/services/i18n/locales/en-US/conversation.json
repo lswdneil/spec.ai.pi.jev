@@ -63,6 +63,19 @@
       "placeholder": "e.g. project closure report",
       "prompt": "Use the {{skill}} skill to create a {{docType}} PDF about \"{{topic}}\". Write the HTML first, then print it to A4 PDF."
     },
+    "sch": {
+      "name": "SCH design",
+      "desc": "Schematic capture and output"
+    },
+    "pcb": {
+      "name": "PCB design",
+      "desc": "PCB layout and routing"
+    },
+    "cad": {
+      "name": "CAD design",
+      "desc": "Mechanical drafting and 3D modeling"
+    },
+    "comingSoon": "Coming soon. Please contact the spec-ai.cn technical team.",
     "field": {
       "pages": "Pages",
       "style": "Style",
