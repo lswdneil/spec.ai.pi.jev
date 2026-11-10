@@ -567,16 +567,28 @@ test('关于 shows the version, and 检查更新 downloads nothing', async () =>
   if (!app) throw new Error('the app is not running');
   const fakeAssets = `${run.fake?.baseUrl.replace(/\/v1$/, '')}/__e2e/asset`;
   const version = '99.0.0';
-  // The app's own version (a packaged app's is the one it was built with), its downloads folder, and how it checks: an
-  // installed app on macOS and Windows asks electron-updater, which reads GitHub's release feed through a session of its
-  // own (the releases' atom feed, then the newest release's latest-mac.yml or latest.yml); the others ask GitHub's API
-  // with fetch.
-  const own = await app.evaluate(({ app: electronApp }) => ({
-    packaged: electronApp.isPackaged,
-    version: electronApp.getVersion(),
-    downloads: electronApp.getPath('downloads'),
-  }));
-  const restarts = own.packaged && (process.platform === 'darwin' || process.platform === 'win32');
+  // The app's own version (a packaged app's is the one it was built with), its downloads folder, and how it checks: a
+  // signed installed app on macOS and Windows asks electron-updater, which reads GitHub's release feed through a session
+  // of its own (the releases' atom feed, then the newest release's latest-mac.yml or latest.yml); an unsigned build, as
+  // every 0.1.x installer is, and every other app asks GitHub's API with fetch.
+  const own = await app.evaluate(({ app: electronApp }) => {
+    let signed = false;
+    try {
+      const { readFileSync } = require('node:fs');
+      const { join } = require('node:path');
+      const provenance = JSON.parse(readFileSync(join(process.resourcesPath, 'build-provenance.json'), 'utf8'));
+      signed = provenance.signed === true;
+    } catch {
+      signed = false;
+    }
+    return {
+      packaged: electronApp.isPackaged,
+      version: electronApp.getVersion(),
+      downloads: electronApp.getPath('downloads'),
+      signed,
+    };
+  });
+  const restarts = own.packaged && own.signed && (process.platform === 'darwin' || process.platform === 'win32');
   const appVersion = own.packaged
     ? own.version
     : JSON.parse(readFileSync(join(desktopRoot, 'package.json'), 'utf8')).version;

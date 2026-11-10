@@ -258,6 +258,9 @@ export function profileEnv({ platform = process.platform, env = process.env, pat
     // The backend's Node.js runtime (about 50 MB from nodejs.org) is declined, as a person can decline it. A packaged
     // app carries it, and never asks.
     MU_NODE_RUNTIME: 'later',
+    // A packaged build asks for a cloud account first; these conversations are about the app, not the account, so the
+    // app starts in its documented local identity mode and the guide opens on the fresh profile.
+    SPECJEV_IDENTITY_MODE: 'local',
     SPECJEV_AGENT_DIR: paths.agentDir,
   });
   if (checkout) {

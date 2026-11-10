@@ -13,7 +13,7 @@
  */
 const { createHash } = require('node:crypto');
 const { execFileSync } = require('node:child_process');
-const { createWriteStream, createReadStream, promises: fs } = require('node:fs');
+const { createWriteStream, createReadStream, existsSync, promises: fs } = require('node:fs');
 const https = require('node:https');
 const os = require('node:os');
 const path = require('node:path');
@@ -34,6 +34,16 @@ const ASSETS = {
 function option(name) {
   const at = process.argv.indexOf(`--${name}`);
   return at >= 0 ? process.argv[at + 1] : undefined;
+}
+
+/**
+ * Windows' own tar (bsdtar in System32) reads `C:` paths as files. A GNU tar first on PATH — Git for Windows puts one
+ * there for the GitHub runner's bash — reads the same argument as a remote host and fails with "Cannot connect to C:".
+ */
+function tarExecutable() {
+  if (process.platform !== 'win32') return 'tar';
+  const systemTar = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'tar.exe');
+  return existsSync(systemTar) ? systemTar : 'tar';
 }
 
 function download(url, destination, redirects = 0) {
@@ -208,7 +218,7 @@ async function main() {
 
     const extracted = path.join(work, 'extracted');
     await fs.mkdir(extracted, { recursive: true });
-    execFileSync('tar', ['-xzf', archive, '-C', extracted], { stdio: 'inherit' });
+    execFileSync(tarExecutable(), ['-xzf', archive, '-C', extracted], { stdio: 'inherit' });
     const source = path.join(extracted, 'python');
     await fs.access(pythonExecutable(source));
 
