@@ -141,7 +141,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(fun
       ref={ref}
       className={cn(
         field,
-        'min-h-[72px] resize-y py-2 leading-[1.55]',
+        'box-border min-h-[72px] resize-y py-2 leading-[1.55]',
         status === 'error' ? 'border-sv-danger' : status === 'warning' ? 'border-sv-warn' : '',
         className
       )}

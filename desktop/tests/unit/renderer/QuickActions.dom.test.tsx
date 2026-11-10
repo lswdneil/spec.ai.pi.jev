@@ -139,9 +139,9 @@ describe('QuickActions', () => {
 
     fireEvent.click(screen.getByTestId('quick-action-pptx'));
     fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), { target: { value: '季度复盘' } });
-    fireEvent.change(screen.getByLabelText('conversation.quickActions.otherRequirements'), {
-      target: { value: '突出增长数据' },
-    });
+    const notes = screen.getByLabelText('conversation.quickActions.otherRequirements');
+    expect(notes).toHaveClass('box-border');
+    fireEvent.change(notes, { target: { value: '突出增长数据' } });
     fireEvent.click(screen.getByText('conversation.quickActions.generate'));
 
     await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
