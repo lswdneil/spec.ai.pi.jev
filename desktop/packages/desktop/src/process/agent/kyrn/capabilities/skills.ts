@@ -37,6 +37,11 @@ export type SkillRoots = {
   home: string;
   /** The skills that come with spec.jev: `skills` next to the harness's manifest. */
   builtinDir?: string;
+  /**
+   * Skills this app ships beside the harness. A checkout keeps them under the app's own `resources/builtin-skills`,
+   * which the harness's folder does not hold; the packaged app carries them in `builtinDir` already.
+   */
+  extraBuiltinDirs?: readonly string[];
 };
 
 /** The features that bring a skill that comes with spec.jev; a skill not named here comes whenever spec.jev runs. */
@@ -155,17 +160,20 @@ export function listSkills(roots: SkillRoots): MuSkills {
   const { config } = readMuConfig(roots.agentDir);
   const inherit = featureOptions(config, 'inherit', INHERIT_DEFAULTS);
   const takesOver = Boolean(inherit.enabled) && Boolean(inherit.skills);
+  const builtinDirs = [roots.builtinDir, ...(roots.extraBuiltinDirs ?? [])].filter((dir): dir is string =>
+    Boolean(dir)
+  );
   const sources: Array<{ source: SkillSource; files: string[] }> = [
     { source: 'mu', files: collect(folder, 'pi') },
     { source: 'agents', files: collect(join(roots.home, '.agents', 'skills'), 'agents') },
     {
       source: 'builtin',
-      files: roots.builtinDir
-        ? entries(roots.builtinDir)
-            .filter((name) => BUILTIN_FEATURES[name]?.(config) ?? true)
-            .map((name) => join(roots.builtinDir as string, name, 'SKILL.md'))
-            .filter(isFile)
-        : [],
+      files: builtinDirs.flatMap((dir) =>
+        entries(dir)
+          .filter((name) => BUILTIN_FEATURES[name]?.(config) ?? true)
+          .map((name) => join(dir, name, 'SKILL.md'))
+          .filter(isFile)
+      ),
     },
     { source: 'claude', files: takesOver && inherit.claude ? inherited(join(roots.home, '.claude', 'skills')) : [] },
     { source: 'codex', files: takesOver && inherit.codex ? inherited(join(roots.home, '.codex', 'skills')) : [] },

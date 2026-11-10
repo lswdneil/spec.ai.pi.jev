@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { seedBundledSkills } from '@/process/agent/kyrn/capabilities/bundledSkills';
+import { seedBundledSkills, seedSkillsFromFolder } from '@/process/agent/kyrn/capabilities/bundledSkills';
 
 const dirs: string[] = [];
 const temp = (): string => {
@@ -89,5 +89,31 @@ describe('seedBundledSkills', () => {
     seedBundledSkills(agentDir, harnessDir);
     warn.mockRestore();
     expect(readFileSync(join(agentDir, 'settings.json'), 'utf8')).toBe('{ not json');
+  });
+});
+
+describe('seedSkillsFromFolder', () => {
+  it('registers a checkout’s skills beside the app, which have no build manifest', () => {
+    const root = temp();
+    const folder = join(root, 'resources', 'builtin-skills');
+    for (const name of ['stack-diagram', 'agent-desktop']) {
+      const file = join(folder, name, 'SKILL.md');
+      mkdirSync(join(file, '..'), { recursive: true });
+      writeFileSync(file, `---\nname: ${name}\ndescription: Does a thing.\n---\n`);
+    }
+    mkdirSync(join(folder, 'not-a-skill'), { recursive: true });
+    const agentDir = join(root, 'agent');
+    mkdirSync(agentDir, { recursive: true });
+
+    seedSkillsFromFolder(agentDir, folder);
+
+    expect(settings(agentDir).skills).toEqual([join(folder, 'agent-desktop'), join(folder, 'stack-diagram')]);
+    const first = readFileSync(join(agentDir, 'settings.json'), 'utf8');
+    seedSkillsFromFolder(agentDir, folder);
+    expect(readFileSync(join(agentDir, 'settings.json'), 'utf8')).toBe(first);
+
+    const bare = temp();
+    seedSkillsFromFolder(bare, join(bare, 'nothing-here'));
+    expect(existsSync(join(bare, 'settings.json'))).toBe(false);
   });
 });

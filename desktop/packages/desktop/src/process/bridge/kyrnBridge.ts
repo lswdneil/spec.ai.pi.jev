@@ -18,7 +18,7 @@ import { OnnxLocalJudge, openFolder, usesOnnxJudge } from '../agent/kyrn/localJu
 import { importCli, importService } from '../agent/kyrn/importChats';
 import { addSkill, listSkills, removeSkill, skillsFolder } from '../agent/kyrn/capabilities/skills';
 import { seedBundledWindowsMcp } from '../agent/kyrn/capabilities/bundledWindowsMcp';
-import { seedBundledSkills } from '../agent/kyrn/capabilities/bundledSkills';
+import { seedBundledSkills, seedSkillsFromFolder } from '../agent/kyrn/capabilities/bundledSkills';
 import {
   addMcpServer,
   listMcpServers,
@@ -102,6 +102,12 @@ export function initKyrnBridge(): void {
   // The skills this app adds — stack-diagram and the like — are files beside the harness, which pi does not read:
   // they have to be on pi's `skills` list before the first conversation starts.
   seedBundledSkills(agentDir, dirname(harness.root));
+  // A checkout runs a harness whose own folder holds only the harness's skills; the ones this app adds are under
+  // `resources/builtin-skills` beside the app. Register them there, and list them from there below.
+  const appSkillsDir = app.isPackaged
+    ? join(process.resourcesPath, 'harness', 'spec.jev', 'judge', 'skills')
+    : join(app.getAppPath(), 'resources', 'builtin-skills');
+  if (!app.isPackaged) seedSkillsFromFolder(agentDir, appSkillsDir);
   const store = join(home, 'acp-sessions');
   const settings = new SettingsStore(agentDir, root, {
     env: envFileOf(harness, home, process.platform),
@@ -251,10 +257,12 @@ export function initKyrnBridge(): void {
   kyrnBridge.importHistory.provider(({ conversationId }) => result(() => imports.history(conversationId)));
   // The skills and MCP servers spec.jev itself uses, for the settings pages while spec.jev runs inside the app. The skills that
   // come with spec.jev lie next to its manifest.
+  const builtinDir = join(dirname(manifestOf(harness, process.platform)), 'skills');
   const skillRoots = {
     agentDir,
     home: homedir(),
-    builtinDir: join(dirname(manifestOf(harness, process.platform)), 'skills'),
+    builtinDir,
+    extraBuiltinDirs: appSkillsDir === builtinDir ? [] : [appSkillsDir],
   };
   const mcpRoots = { agentDir, home: homedir() };
   kyrnBridge.skills.provider(() => result(() => listSkills(skillRoots)));

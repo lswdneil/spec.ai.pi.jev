@@ -133,6 +133,19 @@ describe('the skills spec.jev loads', () => {
     expect(names(where)).toEqual(['agents:stack-diagram']);
   });
 
+  it('lists the skills this app ships beside a checkout’s harness, and each name once', () => {
+    const where = roots();
+    // A checkout runs the harness from its sources: `resources/builtin-skills` beside the app holds what the app adds.
+    const appDir = join(temp(), 'builtin-skills');
+    skill(join(appDir, 'agent-desktop', 'SKILL.md'), { name: 'agent-desktop' });
+    skill(join(appDir, 'mu-browser', 'SKILL.md'), { name: 'mu-browser' });
+    const withApp = { ...where, extraBuiltinDirs: [appDir] };
+    expect(names(withApp)).toEqual(['builtin:mu-browser', 'builtin:mu-github', 'builtin:agent-desktop']);
+    // The config's switches cover these folders too.
+    where.muJson({ features: { browser: false } });
+    expect(names(withApp)).toEqual(['builtin:mu-github', 'builtin:agent-desktop']);
+  });
+
   it('lets only a skill of its own in spec.jev’s folder be removed', () => {
     const where = roots();
     skill(join(where.agentDir, 'skills', 'review', 'SKILL.md'));

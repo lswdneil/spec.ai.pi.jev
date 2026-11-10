@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve, sep } from 'node:path';
 
 /**
@@ -52,12 +52,8 @@ function readSettings(file: string): Json | undefined {
   return undefined;
 }
 
-/** @param harnessDir the folder holding `spec.jev/` and `builtin-skills.json`, as the packaged app carries them */
-export function seedBundledSkills(agentDir: string, harnessDir: string): void {
-  const names = readManifest(join(harnessDir, MANIFEST));
-  if (names.length === 0) return;
-
-  const folder = join(harnessDir, 'spec.jev', 'judge', 'skills');
+/** Puts the named skill folders under `folder` on pi's list, replacing what a build before put there. */
+function registerSkills(agentDir: string, folder: string, names: readonly string[]): void {
   const wanted = names.map((name) => join(folder, name)).filter((path) => existsSync(join(path, 'SKILL.md')));
   if (wanted.length === 0) return;
 
@@ -82,4 +78,29 @@ export function seedBundledSkills(agentDir: string, harnessDir: string): void {
   } catch (error) {
     console.warn(`[spec.jev] cannot write ${file}:`, error);
   }
+}
+
+/** @param harnessDir the folder holding `spec.jev/` and `builtin-skills.json`, as the packaged app carries them */
+export function seedBundledSkills(agentDir: string, harnessDir: string): void {
+  const names = readManifest(join(harnessDir, MANIFEST));
+  if (names.length === 0) return;
+  registerSkills(agentDir, join(harnessDir, 'spec.jev', 'judge', 'skills'), names);
+}
+
+/**
+ * Registers the skills in a folder this app ships, for a checkout whose harness does not carry them and has no
+ * `builtin-skills.json`: `resources/builtin-skills` beside the app.
+ */
+export function seedSkillsFromFolder(agentDir: string, folder: string): void {
+  let names: string[];
+  try {
+    names = readdirSync(folder, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && isSkillFolder(entry.name))
+      .map((entry) => entry.name)
+      .toSorted();
+  } catch {
+    return;
+  }
+  if (names.length === 0) return;
+  registerSkills(agentDir, folder, names);
 }
