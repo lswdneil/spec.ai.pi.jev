@@ -11,7 +11,7 @@ import type { I18nKey } from '@/renderer/services/i18n';
 import { Button } from '@/renderer/ui/button';
 import { cn } from '@/renderer/ui/cn';
 import { Modal } from '@/renderer/ui/dialog';
-import { Input } from '@/renderer/ui/input';
+import { Input, Textarea } from '@/renderer/ui/input';
 import {
   Chip,
   Cpu,
@@ -96,9 +96,26 @@ const QUICK_ACTIONS: readonly QuickActionCapability[] = [
         promptVar: 'pages',
         labelKey: 'conversation.quickActions.field.pages',
         options: [
-          { value: '8', labelKey: 'conversation.quickActions.value.pages8' },
-          { value: '12', labelKey: 'conversation.quickActions.value.pages12' },
-          { value: '20', labelKey: 'conversation.quickActions.value.pages20' },
+          {
+            value: '8',
+            labelKey: 'conversation.quickActions.value.pages8',
+            promptKey: 'conversation.quickActions.pptx.pages8Prompt',
+          },
+          {
+            value: '12',
+            labelKey: 'conversation.quickActions.value.pages12',
+            promptKey: 'conversation.quickActions.pptx.pages12Prompt',
+          },
+          {
+            value: '20',
+            labelKey: 'conversation.quickActions.value.pages20',
+            promptKey: 'conversation.quickActions.pptx.pages20Prompt',
+          },
+          {
+            value: 'unlimited',
+            labelKey: 'conversation.quickActions.value.unlimited',
+            promptKey: 'conversation.quickActions.pptx.pagesUnlimitedPrompt',
+          },
         ],
       },
       {
@@ -139,9 +156,26 @@ const QUICK_ACTIONS: readonly QuickActionCapability[] = [
         promptVar: 'length',
         labelKey: 'conversation.quickActions.field.length',
         options: [
-          { value: 'short', labelKey: 'conversation.quickActions.value.lengthShort' },
-          { value: 'medium', labelKey: 'conversation.quickActions.value.lengthMedium' },
-          { value: 'long', labelKey: 'conversation.quickActions.value.lengthLong' },
+          {
+            value: 'short',
+            labelKey: 'conversation.quickActions.value.lengthShort',
+            promptKey: 'conversation.quickActions.docx.lengthShortPrompt',
+          },
+          {
+            value: 'medium',
+            labelKey: 'conversation.quickActions.value.lengthMedium',
+            promptKey: 'conversation.quickActions.docx.lengthMediumPrompt',
+          },
+          {
+            value: 'long',
+            labelKey: 'conversation.quickActions.value.lengthLong',
+            promptKey: 'conversation.quickActions.docx.lengthLongPrompt',
+          },
+          {
+            value: 'unlimited',
+            labelKey: 'conversation.quickActions.value.unlimited',
+            promptKey: 'conversation.quickActions.docx.lengthUnlimitedPrompt',
+          },
         ],
       },
     ],
@@ -307,6 +341,7 @@ const QuickActions: React.FC<Props> = ({
   const topicInputRef = useRef<HTMLInputElement | null>(null);
   const [activeId, setActiveId] = useState<QuickActionCapability['id'] | null>(null);
   const [topic, setTopic] = useState('');
+  const [notes, setNotes] = useState('');
   const [topicError, setTopicError] = useState(false);
   const [choices, setChoices] = useState<Record<string, string>>({});
   const [sending, setSending] = useState(false);
@@ -362,6 +397,7 @@ const QuickActions: React.FC<Props> = ({
   const openCapability = useCallback((capability: QuickActionReady) => {
     setActiveId(capability.id);
     setTopic('');
+    setNotes('');
     setTopicError(false);
     setChoices({ ...capability.defaults });
     setWorkspaceError(false);
@@ -373,14 +409,22 @@ const QuickActions: React.FC<Props> = ({
   }, [sending]);
 
   const buildPrompt = useCallback(
-    (capability: QuickActionReady, skillName: string, text: string, picked: Record<string, string>) => {
+    (
+      capability: QuickActionReady,
+      skillName: string,
+      text: string,
+      picked: Record<string, string>,
+      notesText: string
+    ) => {
       const values: Record<string, string> = { topic: text, skill: skillName };
       for (const field of capability.fields) {
         const value = picked[field.key] ?? capability.defaults[field.key];
         const option = field.options.find((candidate) => candidate.value === value) ?? field.options[0];
         values[field.promptVar] = t(option.promptKey ?? option.labelKey);
       }
-      return t(capability.promptKey, values);
+      const prompt = t(capability.promptKey, values);
+      const trimmedNotes = notesText.trim();
+      return trimmedNotes ? `${prompt} ${t('conversation.quickActions.notesPrompt', { notes: trimmedNotes })}` : prompt;
     },
     [t]
   );
@@ -400,7 +444,7 @@ const QuickActions: React.FC<Props> = ({
     setSending(true);
     try {
       const result = await onSendPrompt(
-        buildPrompt(activeCapability, activeSkillName, trimmed, choices),
+        buildPrompt(activeCapability, activeSkillName, trimmed, choices, notes),
         activeSkillName
       );
       if (result === false) return;
@@ -415,6 +459,7 @@ const QuickActions: React.FC<Props> = ({
     activeSkillName,
     buildPrompt,
     choices,
+    notes,
     onSendPrompt,
     sending,
     topic,
@@ -513,6 +558,7 @@ const QuickActions: React.FC<Props> = ({
         onCancel={closeCapability}
         maskClosable={false}
         width={480}
+        className='max-h-[calc(100vh-32px)] overflow-y-auto overflow-x-hidden'
         title={
           activeCapability && activeIcon ? (
             <span className='flex items-center gap-2'>
@@ -592,6 +638,19 @@ const QuickActions: React.FC<Props> = ({
               {topicError && (
                 <div className='mt-1 text-[11.5px] text-sv-danger'>{t('conversation.quickActions.topicRequired')}</div>
               )}
+            </div>
+            <div>
+              <label className='mb-1 block text-[12px] text-sv-muted' htmlFor='quick-action-notes'>
+                {t('conversation.quickActions.otherRequirements')}
+              </label>
+              <Textarea
+                id='quick-action-notes'
+                value={notes}
+                onChange={setNotes}
+                placeholder={t('conversation.quickActions.notesPlaceholder')}
+                rows={3}
+                className='text-[13px]'
+              />
             </div>
             {activeCapability.fields.map((field) => (
               <div key={field.key}>

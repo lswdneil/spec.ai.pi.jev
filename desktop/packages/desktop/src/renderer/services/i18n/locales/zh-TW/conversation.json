@@ -31,14 +31,22 @@
       "desc": "產生可編輯的簡報",
       "hint": "填一個主題，頁數和風格已幫你選好。",
       "placeholder": "例如：2026 年產品規劃",
-      "prompt": "使用 {{skill}} 技能，幫我做一份關於「{{topic}}」的 PPT，約 {{pages}}，{{style}}風格。請先整理大綱，再產生可編輯的 .pptx 檔案。"
+      "prompt": "使用 {{skill}} 技能，幫我做一份關於「{{topic}}」的 PPT，{{pages}}，{{style}}風格。請先整理大綱，再產生可編輯的 .pptx 檔案。",
+      "pages8Prompt": "約 8 頁",
+      "pages12Prompt": "約 12 頁",
+      "pages20Prompt": "約 20 頁",
+      "pagesUnlimitedPrompt": "頁數不限"
     },
     "docx": {
       "name": "Word 文件",
       "desc": "產生排版規範的文件",
       "hint": "填一個主題，文件類型和篇幅已幫你選好。",
       "placeholder": "例如：季度專案復盤",
-      "prompt": "使用 {{skill}} 技能，幫我寫一份{{docType}}，主題是「{{topic}}」，篇幅約 {{length}}。請產生排版規範的 .docx 檔案。"
+      "prompt": "使用 {{skill}} 技能，幫我寫一份{{docType}}，主題是「{{topic}}」，{{length}}。請產生排版規範的 .docx 檔案。",
+      "lengthShortPrompt": "篇幅約 1–2 頁",
+      "lengthMediumPrompt": "篇幅約 3–5 頁",
+      "lengthLongPrompt": "篇幅約 5 頁以上",
+      "lengthUnlimitedPrompt": "篇幅不限"
     },
     "xlsx": {
       "name": "Excel 表格",
@@ -79,6 +87,9 @@
     "workspace": "工作資料夾",
     "chooseFolder": "選擇資料夾",
     "notChosen": "尚未選擇",
+    "otherRequirements": "其他要求（選填）",
+    "notesPlaceholder": "例如：面向管理層，突出成長數據，避免使用英文縮寫",
+    "notesPrompt": "補充要求：{{notes}}。",
     "field": {
       "pages": "頁數",
       "style": "風格",
@@ -117,7 +128,8 @@
       "html": "網頁",
       "htmlPng": "網頁 + PNG",
       "resume": "履歷",
-      "guide": "說明"
+      "guide": "說明",
+      "unlimited": "不限"
     }
   },
   "history": {

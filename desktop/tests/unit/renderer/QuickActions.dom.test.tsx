@@ -97,7 +97,7 @@ describe('QuickActions', () => {
     const { onSendPrompt } = setup();
 
     fireEvent.click(screen.getByTestId('quick-action-pptx'));
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: '季度复盘' } });
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), { target: { value: '季度复盘' } });
     fireEvent.click(screen.getByText('conversation.quickActions.generate'));
 
     await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
@@ -111,7 +111,7 @@ describe('QuickActions', () => {
     const { onSendPrompt } = setup([{ name: 'officecli-pptx', description: 'deck cli' }]);
 
     fireEvent.click(screen.getByTestId('quick-action-pptx'));
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: '路线图' } });
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), { target: { value: '路线图' } });
     fireEvent.click(screen.getByText('conversation.quickActions.generate'));
 
     await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
@@ -127,11 +127,51 @@ describe('QuickActions', () => {
     expect(screen.getByTestId('quick-action-pdf')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('quick-action-xlsx'));
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: '年度预算' } });
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), { target: { value: '年度预算' } });
     fireEvent.click(screen.getByText('conversation.quickActions.generate'));
 
     await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
     expect(onSendPrompt.mock.calls[0][1]).toBe('officecli');
+  });
+
+  it('adds the extra requirements to the generated prompt', async () => {
+    const { onSendPrompt } = setup();
+
+    fireEvent.click(screen.getByTestId('quick-action-pptx'));
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), { target: { value: '季度复盘' } });
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.otherRequirements'), {
+      target: { value: '突出增长数据' },
+    });
+    fireEvent.click(screen.getByText('conversation.quickActions.generate'));
+
+    await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
+    const [prompt] = onSendPrompt.mock.calls[0];
+    expect(prompt).toContain('conversation.quickActions.notesPrompt');
+    expect(prompt).toContain('notes=突出增长数据');
+  });
+
+  it('lets a document have no length limit', async () => {
+    const { onSendPrompt } = setup([{ name: 'docx', description: 'document' }]);
+
+    fireEvent.click(screen.getByTestId('quick-action-docx'));
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), { target: { value: '季度复盘' } });
+    fireEvent.click(screen.getByText('conversation.quickActions.value.unlimited'));
+    fireEvent.click(screen.getByText('conversation.quickActions.generate'));
+
+    await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
+    expect(onSendPrompt.mock.calls[0][0]).toContain('conversation.quickActions.docx.lengthUnlimitedPrompt');
+  });
+
+  it('lets a deck have no page limit', async () => {
+    const { onSendPrompt } = setup();
+
+    fireEvent.click(screen.getByTestId('quick-action-pptx'));
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), { target: { value: '季度复盘' } });
+    fireEvent.click(screen.getByText('conversation.quickActions.value.unlimited'));
+    fireEvent.click(screen.getByText('conversation.quickActions.generate'));
+
+    await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
+    expect(onSendPrompt.mock.calls[0][0]).toContain('conversation.quickActions.pptx.pagesUnlimitedPrompt');
   });
 
   it('enables and inserts a skill chosen from More', () => {
@@ -149,7 +189,7 @@ describe('QuickActions', () => {
 
     fireEvent.click(screen.getByTestId('quick-action-pptx'));
     expect(screen.getByTestId('quick-action-workspace-path')).toHaveTextContent('conversation.quickActions.notChosen');
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: '季度复盘' } });
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), { target: { value: '季度复盘' } });
     fireEvent.click(screen.getByText('conversation.quickActions.generate'));
 
     expect(onSendPrompt).not.toHaveBeenCalled();
@@ -172,7 +212,7 @@ describe('QuickActions', () => {
 
     fireEvent.click(screen.getByTestId('quick-action-pptx'));
     expect(screen.getByTestId('quick-action-workspace-path')).toHaveTextContent('C:/work/deck');
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: '季度复盘' } });
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), { target: { value: '季度复盘' } });
     fireEvent.click(screen.getByText('conversation.quickActions.generate'));
 
     await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));

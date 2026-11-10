@@ -31,14 +31,22 @@
       "desc": "Create an editable slide deck",
       "hint": "Type a topic; page count and style are already set.",
       "placeholder": "e.g. 2026 product roadmap",
-      "prompt": "Use the {{skill}} skill to create a presentation about \"{{topic}}\" with about {{pages}} in a {{style}} style. Outline it first, then produce an editable .pptx file."
+      "prompt": "Use the {{skill}} skill to create a presentation about \"{{topic}}\" with {{pages}} in a {{style}} style. Outline it first, then produce an editable .pptx file.",
+      "pages8Prompt": "about 8 slides",
+      "pages12Prompt": "about 12 slides",
+      "pages20Prompt": "about 20 slides",
+      "pagesUnlimitedPrompt": "any number of slides"
     },
     "docx": {
       "name": "Word document",
       "desc": "Create a well-formatted document",
       "hint": "Type a topic; document type and length are already set.",
       "placeholder": "e.g. quarterly project review",
-      "prompt": "Use the {{skill}} skill to write a {{docType}} about \"{{topic}}\", about {{length}}. Produce a properly formatted .docx file."
+      "prompt": "Use the {{skill}} skill to write a {{docType}} about \"{{topic}}\", {{length}}. Produce a properly formatted .docx file.",
+      "lengthShortPrompt": "about 1–2 pages",
+      "lengthMediumPrompt": "about 3–5 pages",
+      "lengthLongPrompt": "5+ pages",
+      "lengthUnlimitedPrompt": "any length"
     },
     "xlsx": {
       "name": "Excel sheet",
@@ -79,6 +87,9 @@
     "workspace": "Workspace folder",
     "chooseFolder": "Choose folder",
     "notChosen": "Not selected",
+    "otherRequirements": "Other requirements (optional)",
+    "notesPlaceholder": "e.g. for management, highlight growth numbers, avoid acronyms",
+    "notesPrompt": "Additional requirements: {{notes}}.",
     "field": {
       "pages": "Pages",
       "style": "Style",
@@ -117,7 +128,8 @@
       "html": "Web page",
       "htmlPng": "Web page + PNG",
       "resume": "Résumé",
-      "guide": "Guide"
+      "guide": "Guide",
+      "unlimited": "No limit"
     }
   },
   "history": {

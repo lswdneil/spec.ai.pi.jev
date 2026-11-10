@@ -31,14 +31,22 @@
       "desc": "生成可编辑的演示文稿",
       "hint": "填一个主题，页数和风格已帮你选好。",
       "placeholder": "例如：2026 年产品规划",
-      "prompt": "使用 {{skill}} 技能，帮我做一份关于「{{topic}}」的 PPT，约 {{pages}}，{{style}}风格。请先梳理大纲，再生成可编辑的 .pptx 文件。"
+      "prompt": "使用 {{skill}} 技能，帮我做一份关于「{{topic}}」的 PPT，{{pages}}，{{style}}风格。请先梳理大纲，再生成可编辑的 .pptx 文件。",
+      "pages8Prompt": "约 8 页",
+      "pages12Prompt": "约 12 页",
+      "pages20Prompt": "约 20 页",
+      "pagesUnlimitedPrompt": "页数不限"
     },
     "docx": {
       "name": "Word 文档",
       "desc": "生成排版规范的文档",
       "hint": "填一个主题，文档类型和篇幅已帮你选好。",
       "placeholder": "例如：季度项目复盘",
-      "prompt": "使用 {{skill}} 技能，帮我写一份{{docType}}，主题是「{{topic}}」，篇幅约 {{length}}。请生成排版规范的 .docx 文件。"
+      "prompt": "使用 {{skill}} 技能，帮我写一份{{docType}}，主题是「{{topic}}」，{{length}}。请生成排版规范的 .docx 文件。",
+      "lengthShortPrompt": "篇幅约 1–2 页",
+      "lengthMediumPrompt": "篇幅约 3–5 页",
+      "lengthLongPrompt": "篇幅约 5 页以上",
+      "lengthUnlimitedPrompt": "篇幅不限"
     },
     "xlsx": {
       "name": "Excel 表格",
@@ -79,6 +87,9 @@
     "workspace": "工作文件夹",
     "chooseFolder": "选择文件夹",
     "notChosen": "尚未选择",
+    "otherRequirements": "其他要求（可选）",
+    "notesPlaceholder": "例如：面向管理层，突出增长数据，避免使用英文缩写",
+    "notesPrompt": "补充要求：{{notes}}。",
     "field": {
       "pages": "页数",
       "style": "风格",
@@ -117,7 +128,8 @@
       "html": "网页",
       "htmlPng": "网页 + PNG",
       "resume": "简历",
-      "guide": "说明"
+      "guide": "说明",
+      "unlimited": "不限"
     }
   },
   "history": {

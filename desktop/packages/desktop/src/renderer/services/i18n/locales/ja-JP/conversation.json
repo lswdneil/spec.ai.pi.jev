@@ -31,14 +31,22 @@
       "desc": "編集可能なスライドを作成",
       "hint": "テーマを入力するだけ。枚数とスタイルは選んであります。",
       "placeholder": "例：2026 年の製品計画",
-      "prompt": "{{skill}} スキルを使って「{{topic}}」についてのプレゼンテーションを約 {{pages}}、{{style}}スタイルで作成してください。まず構成を整理し、編集可能な .pptx ファイルを生成してください。"
+      "prompt": "{{skill}} スキルを使って「{{topic}}」についてのプレゼンテーションを作成してください。{{pages}}、{{style}}スタイル。まず構成を整理し、編集可能な .pptx ファイルを生成してください。",
+      "pages8Prompt": "約 8 枚",
+      "pages12Prompt": "約 12 枚",
+      "pages20Prompt": "約 20 枚",
+      "pagesUnlimitedPrompt": "枚数は指定なし"
     },
     "docx": {
       "name": "Word 文書",
       "desc": "整った書式の文書を作成",
       "hint": "テーマを入力するだけ。文書タイプと長さは選んであります。",
       "placeholder": "例：四半期プロジェクト振り返り",
-      "prompt": "{{skill}} スキルを使って「{{topic}}」についての{{docType}}を約 {{length}}で書いてください。書式の整った .docx ファイルを生成してください。"
+      "prompt": "{{skill}} スキルを使って「{{topic}}」についての{{docType}}を書いてください。{{length}}。書式の整った .docx ファイルを生成してください。",
+      "lengthShortPrompt": "長さは約 1〜2 ページ",
+      "lengthMediumPrompt": "長さは約 3〜5 ページ",
+      "lengthLongPrompt": "長さは 5 ページ以上",
+      "lengthUnlimitedPrompt": "長さは指定なし"
     },
     "xlsx": {
       "name": "Excel 表",
@@ -79,6 +87,9 @@
     "workspace": "作業フォルダー",
     "chooseFolder": "フォルダーを選択",
     "notChosen": "未選択",
+    "otherRequirements": "その他の要件（任意）",
+    "notesPlaceholder": "例：経営層向け、成長データを強調、略語は使わない",
+    "notesPrompt": "追加の要件：{{notes}}。",
     "field": {
       "pages": "枚数",
       "style": "スタイル",
@@ -117,7 +128,8 @@
       "html": "Web ページ",
       "htmlPng": "Web ページ + PNG",
       "resume": "履歴書",
-      "guide": "説明書"
+      "guide": "説明書",
+      "unlimited": "指定なし"
     }
   },
   "history": {

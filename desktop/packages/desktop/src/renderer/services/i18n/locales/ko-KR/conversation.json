@@ -31,14 +31,22 @@
       "desc": "편집 가능한 슬라이드 생성",
       "hint": "주제만 입력하세요. 페이지 수와 스타일은 미리 선택되어 있습니다.",
       "placeholder": "예: 2026년 제품 계획",
-      "prompt": "{{skill}} 스킬을 사용해 \"{{topic}}\"에 대한 프레젠테이션을 약 {{pages}}, {{style}} 스타일로 만들어 주세요. 먼저 개요를 정리한 뒤 편집 가능한 .pptx 파일을 생성하세요."
+      "prompt": "{{skill}} 스킬을 사용해 \"{{topic}}\"에 대한 프레젠테이션을 만들어 주세요. {{pages}}, {{style}} 스타일. 먼저 개요를 정리한 뒤 편집 가능한 .pptx 파일을 생성하세요.",
+      "pages8Prompt": "약 8장",
+      "pages12Prompt": "약 12장",
+      "pages20Prompt": "약 20장",
+      "pagesUnlimitedPrompt": "장수 제한 없음"
     },
     "docx": {
       "name": "Word 문서",
       "desc": "서식이 정돈된 문서 생성",
       "hint": "주제만 입력하세요. 문서 유형과 분량은 미리 선택되어 있습니다.",
       "placeholder": "예: 분기 프로젝트 회고",
-      "prompt": "{{skill}} 스킬을 사용해 \"{{topic}}\"에 대한 {{docType}}을(를) 약 {{length}} 분량으로 작성해 주세요. 서식이 정돈된 .docx 파일을 생성하세요."
+      "prompt": "{{skill}} 스킬을 사용해 \"{{topic}}\"에 대한 {{docType}}을(를) 작성해 주세요. {{length}}. 서식이 정돈된 .docx 파일을 생성하세요.",
+      "lengthShortPrompt": "분량은 약 1~2쪽",
+      "lengthMediumPrompt": "분량은 약 3~5쪽",
+      "lengthLongPrompt": "분량은 5쪽 이상",
+      "lengthUnlimitedPrompt": "분량 제한 없음"
     },
     "xlsx": {
       "name": "Excel 표",
@@ -79,6 +87,9 @@
     "workspace": "작업 폴더",
     "chooseFolder": "폴더 선택",
     "notChosen": "선택 안 됨",
+    "otherRequirements": "기타 요구 사항(선택)",
+    "notesPlaceholder": "예: 경영진 대상, 성장 수치 강조, 약어 사용 금지",
+    "notesPrompt": "추가 요구 사항: {{notes}}.",
     "field": {
       "pages": "페이지 수",
       "style": "스타일",
@@ -117,7 +128,8 @@
       "html": "웹 페이지",
       "htmlPng": "웹 페이지 + PNG",
       "resume": "이력서",
-      "guide": "안내서"
+      "guide": "안내서",
+      "unlimited": "제한 없음"
     }
   },
   "history": {
