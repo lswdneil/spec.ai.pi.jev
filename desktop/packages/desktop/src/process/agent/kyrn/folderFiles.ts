@@ -1,4 +1,4 @@
-import { readFile, readdir, realpath, stat } from 'node:fs/promises';
+import { open, readFile, readdir, realpath, stat } from 'node:fs/promises';
 import { isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { KyrnError } from '../../../common/kyrn/errors';
 import {
@@ -31,11 +31,37 @@ export function readFolder(value: unknown): string {
 
 const STORED_SESSION = /^[a-f\d-]{36}\.json$/i;
 
+/** Enough for a session header line, which names the folder the conversation ran in. */
+const HEADER_BYTES = 4096;
+
+/** The folder named by a spec.jev session file's first line, when that line is a session header. */
+async function sessionHeaderCwd(file: string): Promise<string | undefined> {
+  try {
+    const handle = await open(file, 'r');
+    try {
+      const buffer = Buffer.alloc(HEADER_BYTES);
+      const { bytesRead } = await handle.read(buffer, 0, HEADER_BYTES, 0);
+      const header = JSON.parse(buffer.subarray(0, bytesRead).toString('utf8').split('\n', 1)[0]) as {
+        type?: unknown;
+        cwd?: unknown;
+      };
+      return header.type === 'session' && typeof header.cwd === 'string' ? header.cwd : undefined;
+    } finally {
+      await handle.close();
+    }
+  } catch {
+    return undefined;
+  }
+}
+
 /**
  * A folder the app can show is one recorded by a native session. The folder is
- * canonicalized before it becomes the root for every later path check.
+ * canonicalized before it becomes the root for every later path check. An ACP
+ * record is written before a conversation's first turn can still be dropped,
+ * and a folder picked after it is not in that record; spec.jev's own session
+ * headers name the folder each conversation runs in, so they are read too.
  */
-export async function authorizeFolder(store: string, value: unknown): Promise<string> {
+export async function authorizeFolder(store: string, value: unknown, agentDir?: string): Promise<string> {
   const requested = readFolder(value);
   let root: string;
   try {
@@ -61,6 +87,28 @@ export async function authorizeFolder(store: string, value: unknown): Promise<st
     } catch {
       // A half-written or moved session does not authorize a folder.
     }
+  }
+  if (agentDir) {
+    const sessionsDir = join(agentDir, 'sessions');
+    const dirs = (await readdir(sessionsDir, { withFileTypes: true }).catch(() => [])).filter((entry) =>
+      entry.isDirectory()
+    );
+    const files = (
+      await Promise.all(
+        dirs.map((entry) =>
+          readdir(join(sessionsDir, entry.name))
+            .then((names) =>
+              names.filter((name) => name.endsWith('.jsonl')).map((name) => join(sessionsDir, entry.name, name))
+            )
+            .catch(() => [])
+        )
+      )
+    ).flat();
+    const folders = (await Promise.all(files.map((file) => sessionHeaderCwd(file)))).filter(
+      (cwd): cwd is string => typeof cwd === 'string'
+    );
+    const resolved = await Promise.all(folders.map((cwd) => realpath(cwd).catch(() => undefined)));
+    if (resolved.includes(root)) return root;
   }
   throw new KyrnError('invalid', 'Folder is not attached to a session');
 }

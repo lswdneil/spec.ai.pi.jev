@@ -229,13 +229,13 @@ export function initKyrnBridge(): void {
   );
   // A native conversation's panel reads by its folder: it has no AionCore conversation (common/kyrn/folderBridge.ts).
   const folderProject = async (cwd: unknown): Promise<LessonsProject> =>
-    lessonsProject(store, '', await authorizeFolder(store, cwd));
+    lessonsProject(store, '', await authorizeFolder(store, cwd, agentDir));
   kyrnFolderBridge.lessons.provider(({ cwd }) => result(async () => lessons.view(await folderProject(cwd))));
   kyrnFolderBridge.lessonsChange.provider(({ cwd, ...change }) =>
     result(async () => lessons.change(await folderProject(cwd), change))
   );
   kyrnFolderBridge.files.provider(({ cwd, path }) =>
-    result(async () => listFolder(await authorizeFolder(store, cwd), path))
+    result(async () => listFolder(await authorizeFolder(store, cwd, agentDir), path))
   );
   const imports = importService({
     cli: importCli(harness),

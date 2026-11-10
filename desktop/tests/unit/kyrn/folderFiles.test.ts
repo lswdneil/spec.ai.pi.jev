@@ -6,7 +6,7 @@
 
 import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { authorizeFolder, listFolder } from '@process/agent/kyrn/folderFiles';
 
@@ -46,6 +46,25 @@ describe('KyRN folder files', () => {
     const { outside, store } = await makeFixture();
 
     await expect(authorizeFolder(store, outside)).rejects.toMatchObject({
+      code: 'invalid',
+      message: 'Folder is not attached to a session',
+    });
+  });
+
+  it("authorizes a folder spec.jev's own session header names, with no ACP record", async () => {
+    const { root, store } = await makeFixture();
+    const emptyStore = join(dirname(store), 'acp-sessions-empty');
+    await mkdir(emptyStore, { recursive: true });
+    const agentDir = join(dirname(store), 'agent');
+    const sessions = join(agentDir, 'sessions', '--project--');
+    await mkdir(sessions, { recursive: true });
+    await writeFile(
+      join(sessions, '2026-11-10T06-09-37-373Z_session.jsonl'),
+      `${JSON.stringify({ type: 'session', version: 3, cwd: root })}\n`
+    );
+
+    await expect(authorizeFolder(emptyStore, root, agentDir)).resolves.toBe(await realpath(root));
+    await expect(authorizeFolder(emptyStore, root)).rejects.toMatchObject({
       code: 'invalid',
       message: 'Folder is not attached to a session',
     });
