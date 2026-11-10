@@ -6,11 +6,19 @@ spec.jev is in pre-release (0.1.x): names, settings and formats may still change
 
 ## [Unreleased]
 
+## [0.1.12] - 2026-11-10
+
 ### Added
 
+- **Computer control is on the start page.** A new card opens a short form and sends an `agent-desktop` task that reads the screen before acting, asks before sensitive steps and reports what it did. `agent-desktop` ships with the app and is enabled in every new AionCore conversation.
 - **The desktop app carries moli**, so the agent's browser backend works without a separate install. Windows and Linux builds stage the pinned moli release (or a locally built `MU_MOLI_BINARY`) under `resources/bundled-moli`, verify it during packaging, and set `SPECJEV_MOLI` before the agent starts. The In-app browser settings expose the backend choice.
 - **The Windows desktop app includes Windows-MCP by default.** A standalone `windows-mcp.exe` is built from the latest Windows-MCP source and seeded as an enabled built-in MCP server, so desktop control, screenshots, UI inspection, input, files and PowerShell work without installing Python or uv. It is added once to the native host's `mcp.json` (shown as **Windows desktop** in Settings → MCP servers) and to the classic MCP database; it can be switched off or removed, and removing it is remembered.
 - **The kernel bar shows MCP and skill activity.** Its right end carries a quiet `MCP n · Skills n` pulse while a conversation runs: MCP servers that load, MCP tool calls (`mcp__server__tool`), relevant-skill suggestions, explicit skill invocations and `find_skill` searches appear in the expanded panel. Hover or focus opens it above the bar; the panel also lists the configured MCP servers and the loaded skills, with a shortcut to Settings.
+
+### Fixed
+
+- **The native host lists the skills the app ships.** A checkout runs the harness from its sources, whose skill folder holds only the harness's own; the app's `resources/builtin-skills` are now listed and registered with pi as well, so built-in skills such as `agent-desktop` appear in every catalog.
+- **The computer-control card asks only what the task needs.** The folder is optional and falls back to the home folder, the task field is labeled "What to do", and the optional notes use a computer-control example.
 
 ## [0.1.11] - 2026-10-26
 
