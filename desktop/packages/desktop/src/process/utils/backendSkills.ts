@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { cpSync, existsSync, mkdirSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, renameSync } from 'node:fs';
 import path from 'node:path';
 
 /**
@@ -18,12 +18,24 @@ import path from 'node:path';
 export const APP_ADDED_SKILLS = ['agent-desktop', 'stack-diagram'] as const;
 
 /**
+ * Skills the backend injects into every conversation. AionCore treats a skill under `auto-inject/` in its corpus as
+ * auto-injected; the others stay opt-in.
+ */
+const AUTO_INJECT_SKILLS: ReadonlySet<string> = new Set(['agent-desktop']);
+
+function corpusPath(corpusDir: string, name: string): string {
+  return AUTO_INJECT_SKILLS.has(name) ? path.join(corpusDir, 'auto-inject', name) : path.join(corpusDir, name);
+}
+
+/**
  * Copies the named skills from `sourceDir` into the backend's corpus when they are absent.
  *
- * A folder that is already there is left untouched: it may be the person's copy, edited after the first start. A
- * failure to copy one skill never blocks the others, nor the app.
+ * A folder that is already there is left untouched: it may be the person's copy, edited after the first start. An
+ * older top-level copy of an auto-injected skill is moved to `auto-inject/` instead of being copied again, so an
+ * upgrade keeps the person's edits and does not leave two skills with the same name. A failure to place one skill
+ * never blocks the others, nor the app.
  *
- * @returns the names actually copied
+ * @returns the names actually placed
  */
 export function seedBackendSkills(
   sourceDir: string,
@@ -33,10 +45,17 @@ export function seedBackendSkills(
   const copied: string[] = [];
   for (const name of names) {
     const from = path.join(sourceDir, name);
-    const to = path.join(corpusDir, name);
+    const to = corpusPath(corpusDir, name);
     if (!existsSync(path.join(from, 'SKILL.md')) || existsSync(to)) continue;
     try {
-      mkdirSync(corpusDir, { recursive: true });
+      const legacy = path.join(corpusDir, name);
+      if (AUTO_INJECT_SKILLS.has(name) && existsSync(legacy)) {
+        mkdirSync(path.dirname(to), { recursive: true });
+        renameSync(legacy, to);
+        copied.push(name);
+        continue;
+      }
+      mkdirSync(path.dirname(to), { recursive: true });
       cpSync(from, to, { recursive: true });
       copied.push(name);
     } catch (error) {

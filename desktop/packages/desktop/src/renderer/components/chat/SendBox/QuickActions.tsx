@@ -14,6 +14,7 @@ import { Modal } from '@/renderer/ui/dialog';
 import { Input, Textarea } from '@/renderer/ui/input';
 import {
   Chip,
+  Computer,
   Cpu,
   FileExcel,
   FilePdf,
@@ -47,7 +48,7 @@ type QuickActionField = {
   options: QuickActionFieldOption[];
 };
 
-type QuickActionId = 'pptx' | 'docx' | 'xlsx' | 'diagram' | 'pdf' | 'sch' | 'pcb' | 'cad';
+type QuickActionId = 'pptx' | 'docx' | 'xlsx' | 'diagram' | 'pdf' | 'computer' | 'sch' | 'pcb' | 'cad';
 
 type QuickActionCard = {
   id: QuickActionId;
@@ -284,6 +285,38 @@ const QUICK_ACTIONS: readonly QuickActionCapability[] = [
       },
     ],
     defaults: { pdfType: 'report' },
+  },
+  {
+    id: 'computer',
+    skills: ['agent-desktop'],
+    icon: Computer,
+    nameKey: 'conversation.quickActions.computer.name',
+    descKey: 'conversation.quickActions.computer.desc',
+    hintKey: 'conversation.quickActions.computer.hint',
+    placeholderKey: 'conversation.quickActions.computer.placeholder',
+    promptKey: 'conversation.quickActions.computer.prompt',
+    fields: [
+      {
+        key: 'target',
+        promptVar: 'target',
+        labelKey: 'conversation.quickActions.field.target',
+        options: [
+          { value: 'current', labelKey: 'conversation.quickActions.value.targetCurrent' },
+          { value: 'app', labelKey: 'conversation.quickActions.value.targetApp' },
+          { value: 'desktop', labelKey: 'conversation.quickActions.value.targetDesktop' },
+        ],
+      },
+      {
+        key: 'confirm',
+        promptVar: 'confirm',
+        labelKey: 'conversation.quickActions.field.confirm',
+        options: [
+          { value: 'each', labelKey: 'conversation.quickActions.value.confirmEach' },
+          { value: 'auto', labelKey: 'conversation.quickActions.value.confirmAuto' },
+        ],
+      },
+    ],
+    defaults: { target: 'current', confirm: 'each' },
   },
   {
     id: 'sch',

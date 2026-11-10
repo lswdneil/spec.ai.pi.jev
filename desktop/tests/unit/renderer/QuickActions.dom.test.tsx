@@ -174,6 +174,23 @@ describe('QuickActions', () => {
     expect(onSendPrompt.mock.calls[0][0]).toContain('conversation.quickActions.pptx.pagesUnlimitedPrompt');
   });
 
+  it('turns the computer-control card into an agent-desktop task that confirms each step', async () => {
+    const { onSendPrompt } = setup([{ name: 'agent-desktop', description: 'desktop automation' }]);
+
+    fireEvent.click(screen.getByTestId('quick-action-computer'));
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), {
+      target: { value: '打开记事本并保存会议纪要' },
+    });
+    fireEvent.click(screen.getByText('conversation.quickActions.generate'));
+
+    await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
+    const [prompt, skillName] = onSendPrompt.mock.calls[0];
+    expect(skillName).toBe('agent-desktop');
+    expect(prompt).toContain('skill=agent-desktop');
+    expect(prompt).toContain('target=conversation.quickActions.value.targetCurrent');
+    expect(prompt).toContain('confirm=conversation.quickActions.value.confirmEach');
+  });
+
   it('enables and inserts a skill chosen from More', () => {
     const { onInsertSkill, onLoadSkill } = setup();
 

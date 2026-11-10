@@ -71,6 +71,13 @@
       "placeholder": "e.g. project closure report",
       "prompt": "Use the {{skill}} skill to create a {{docType}} PDF about \"{{topic}}\". Write the HTML first, then print it to A4 PDF."
     },
+    "computer": {
+      "name": "Computer control",
+      "desc": "Let me operate desktop apps for you",
+      "hint": "Describe the task; I'll inspect the screen before acting.",
+      "placeholder": "e.g. open Notepad, type today's meeting notes and save the file",
+      "prompt": "Use the {{skill}} skill to operate the computer and complete this task: {{topic}}. Scope: {{target}}. Execution: {{confirm}}. Inspect the current screen first and confirm the target window before acting. If I chose \"A specific app\" but did not name it, ask me first. Stop and ask before any sensitive action such as entering a password, deleting files, making a payment or sending a message. Report the result when done."
+    },
     "sch": {
       "name": "SCH design",
       "desc": "Schematic capture and output"
@@ -100,7 +107,9 @@
       "diagramType": "Diagram type",
       "detail": "Detail",
       "output": "Output",
-      "pdfType": "Document type"
+      "pdfType": "Document type",
+      "target": "Scope",
+      "confirm": "Execution"
     },
     "value": {
       "pages8": "8 slides",
@@ -129,6 +138,11 @@
       "htmlPng": "Web page + PNG",
       "resume": "Résumé",
       "guide": "Guide",
+      "targetCurrent": "Current window",
+      "targetApp": "A specific app",
+      "targetDesktop": "Whole desktop",
+      "confirmEach": "Confirm each step",
+      "confirmAuto": "Run automatically",
       "unlimited": "No limit"
     }
   },

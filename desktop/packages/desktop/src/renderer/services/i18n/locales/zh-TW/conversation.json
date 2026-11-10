@@ -71,6 +71,13 @@
       "placeholder": "例如：專案結案報告",
       "prompt": "使用 {{skill}} 技能，幫我產生一份關於「{{topic}}」的{{docType}} PDF。請先寫 HTML，再列印成 A4 PDF。"
     },
+    "computer": {
+      "name": "電腦操控",
+      "desc": "讓我直接操作桌面應用程式",
+      "hint": "說清要做什麼，我會先讀取介面再操作。",
+      "placeholder": "例如：開啟記事本，輸入今天的會議紀錄並儲存",
+      "prompt": "使用 {{skill}} 技能操控電腦完成任務：{{topic}}。操作範圍：{{target}}。執行方式：{{confirm}}。先讀取目前介面狀態，確認目標視窗後再操作；如果我選了「指定應用程式」但沒說清是哪個，先問我。遇到輸入密碼、刪除檔案、付款或傳送訊息等敏感操作時，先停下來問我。完成後回報結果。"
+    },
     "sch": {
       "name": "SCH設計",
       "desc": "原理圖設計與輸出"
@@ -100,7 +107,9 @@
       "diagramType": "圖形類型",
       "detail": "詳細程度",
       "output": "輸出格式",
-      "pdfType": "文件類型"
+      "pdfType": "文件類型",
+      "target": "操作範圍",
+      "confirm": "執行方式"
     },
     "value": {
       "pages8": "8 頁",
@@ -129,6 +138,11 @@
       "htmlPng": "網頁 + PNG",
       "resume": "履歷",
       "guide": "說明",
+      "targetCurrent": "目前視窗",
+      "targetApp": "指定應用程式",
+      "targetDesktop": "整個桌面",
+      "confirmEach": "每步確認",
+      "confirmAuto": "自動執行",
       "unlimited": "不限"
     }
   },

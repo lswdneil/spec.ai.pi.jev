@@ -84,6 +84,9 @@ Automation, macOS AX, or Linux AT-SPI — and act on stable refs instead of scre
 - Wired at startup: `process/startup/bundledAgentDesktop.ts` finds the executable, puts its folder first on
   `PATH`, and records `SPECJEV_AGENT_DESKTOP` plus (on macOS) `AGENT_DESKTOP_MACOS_HELPER_PATH` before any agent
   shell inherits the environment.
+- On by default: AionCore treats a corpus folder under `builtin-skills/auto-inject/` as auto-injected, so
+  `process/utils/backendSkills.ts` seeds the bundled skill there and moves an older top-level copy on upgrade. The
+  pi host loads the same skill from `resources/harness/builtin-skills.json` in every conversation.
 - The skill keeps only the cross-platform loop, refs, retry rules and Windows first-contact notes. Flags and
   platform detail stay in the binary (`agent-desktop skills get platform` and
   `agent-desktop skills get desktop <reference>`), so the guide can never drift from the executable.

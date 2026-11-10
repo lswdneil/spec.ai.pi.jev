@@ -71,6 +71,13 @@
       "placeholder": "例如：项目结项报告",
       "prompt": "使用 {{skill}} 技能，帮我生成一份关于「{{topic}}」的{{docType}} PDF。请先写 HTML，再打印成 A4 PDF。"
     },
+    "computer": {
+      "name": "电脑操控",
+      "desc": "让我直接操作桌面应用",
+      "hint": "说清要做什么，我会先读取界面再操作。",
+      "placeholder": "例如：打开记事本，输入今天的会议纪要并保存",
+      "prompt": "使用 {{skill}} 技能操控电脑完成任务：{{topic}}。操作范围：{{target}}。执行方式：{{confirm}}。先读取当前界面状态，确认目标窗口后再操作；如果我选了“指定应用”但没说清是哪个应用，先问我。遇到输入密码、删除文件、付款或发送消息等敏感操作时，先停下来问我。完成后汇报结果。"
+    },
     "sch": {
       "name": "SCH设计",
       "desc": "原理图设计与输出"
@@ -100,7 +107,9 @@
       "diagramType": "图形类型",
       "detail": "详细程度",
       "output": "输出格式",
-      "pdfType": "文档类型"
+      "pdfType": "文档类型",
+      "target": "操作范围",
+      "confirm": "执行方式"
     },
     "value": {
       "pages8": "8 页",
@@ -129,6 +138,11 @@
       "htmlPng": "网页 + PNG",
       "resume": "简历",
       "guide": "说明",
+      "targetCurrent": "当前窗口",
+      "targetApp": "指定应用",
+      "targetDesktop": "整个桌面",
+      "confirmEach": "每步确认",
+      "confirmAuto": "自动执行",
       "unlimited": "不限"
     }
   },

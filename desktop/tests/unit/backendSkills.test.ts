@@ -32,7 +32,8 @@ describe('seedBackendSkills', () => {
 
     expect(seedBackendSkills(source, corpus)).toEqual([...APP_ADDED_SKILLS]);
     expect(readFileSync(join(corpus, 'stack-diagram', 'references', 'palette.md'), 'utf8')).toBe('# palette\n');
-    expect(existsSync(join(corpus, 'agent-desktop', 'SKILL.md'))).toBe(true);
+    expect(existsSync(join(corpus, 'auto-inject', 'agent-desktop', 'SKILL.md'))).toBe(true);
+    expect(existsSync(join(corpus, 'agent-desktop'))).toBe(false);
   });
 
   it('leaves a skill that is already in the corpus alone', () => {
@@ -54,5 +55,29 @@ describe('seedBackendSkills', () => {
 
     expect(seedBackendSkills(source, corpus)).toEqual([]);
     expect(existsSync(join(corpus, 'stack-diagram'))).toBe(false);
+  });
+
+  it('moves an older top-level auto-injected skill into auto-inject without losing edits', () => {
+    const root = tempRoot();
+    const source = join(root, 'bundled');
+    const corpus = join(root, 'corpus');
+    writeSkill(source, 'agent-desktop');
+    writeSkill(corpus, 'agent-desktop', 'edited by hand\n');
+
+    expect(seedBackendSkills(source, corpus)).toEqual(['agent-desktop']);
+    expect(readFileSync(join(corpus, 'auto-inject', 'agent-desktop', 'SKILL.md'), 'utf8')).toBe('edited by hand\n');
+    expect(existsSync(join(corpus, 'agent-desktop'))).toBe(false);
+  });
+
+  it('leaves an existing auto-injected copy alone', () => {
+    const root = tempRoot();
+    const source = join(root, 'bundled');
+    const corpus = join(root, 'corpus');
+    writeSkill(source, 'agent-desktop');
+    mkdirSync(join(corpus, 'auto-inject'), { recursive: true });
+    writeSkill(join(corpus, 'auto-inject'), 'agent-desktop', 'edited by hand\n');
+
+    expect(seedBackendSkills(source, corpus)).toEqual([]);
+    expect(readFileSync(join(corpus, 'auto-inject', 'agent-desktop', 'SKILL.md'), 'utf8')).toBe('edited by hand\n');
   });
 });
