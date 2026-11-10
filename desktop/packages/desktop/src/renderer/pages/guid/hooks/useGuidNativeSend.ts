@@ -46,7 +46,7 @@ export type GuidNativeSendDeps = {
 };
 
 export type GuidNativeSendResult = GuidSendResult & {
-  sendPrompt: (prompt: string) => Promise<boolean>;
+  sendPrompt: (prompt: string, dirOverride?: string) => Promise<boolean>;
 };
 
 const readWithBackend: ReadImage = (file) =>
@@ -74,16 +74,17 @@ export const useGuidNativeSend = (deps: GuidNativeSendDeps): GuidNativeSendResul
 
   /** Whether the conversation started; it says why when it did not. */
   const start = useCallback(
-    async (contentOverride?: string): Promise<boolean> => {
+    async (contentOverride?: string, dirOverride?: string): Promise<boolean> => {
       // pi works in a project folder: there is no conversation without one.
-      if (!dir) {
+      const cwd = dirOverride || dir;
+      if (!cwd) {
         Message.warning(t('mu.native.home.noFolder'));
         return false;
       }
       const started = await startNativeConversation(
         client,
         {
-          cwd: dir,
+          cwd,
           ...(MODE_ID.test(selectedMode) ? { permissions: selectedMode } : {}),
           ...(selectedAcpModel ? { model: selectedAcpModel } : {}),
           ...(LEVEL_ID.test(pickedThoughtLevel) ? { level: pickedThoughtLevel } : {}),
@@ -116,12 +117,12 @@ export const useGuidNativeSend = (deps: GuidNativeSendDeps): GuidNativeSendResul
   }, [setDir, setFiles, setInput]);
 
   const sendPrompt = useCallback(
-    async (prompt: string): Promise<boolean> => {
+    async (prompt: string, dirOverride?: string): Promise<boolean> => {
       if (loading || sendingRef.current) return false;
       sendingRef.current = true;
       setLoading(true);
       try {
-        const started = await start(prompt);
+        const started = await start(prompt, dirOverride);
         if (!started) return false;
         clearDraft();
         return true;

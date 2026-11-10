@@ -45,6 +45,7 @@ const SKILLS = [
   { name: 'officecli-pptx', description: 'deck cli' },
   { name: 'pdf', description: 'pdf' },
   { name: 'mermaid', description: 'diagram' },
+  { name: 'agent-desktop', description: 'desktop automation' },
   { name: 'cron', description: 'scheduled tasks' },
 ];
 
@@ -178,17 +179,36 @@ describe('QuickActions', () => {
     const { onSendPrompt } = setup([{ name: 'agent-desktop', description: 'desktop automation' }]);
 
     fireEvent.click(screen.getByTestId('quick-action-computer'));
-    fireEvent.change(screen.getByLabelText('conversation.quickActions.topic'), {
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.computer.topic'), {
+      target: { value: '打开记事本并保存会议纪要' },
+    });
+    expect(screen.getByPlaceholderText('conversation.quickActions.computer.notesPlaceholder')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('conversation.quickActions.generate'));
+
+    await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
+    const [prompt, skillName, options] = onSendPrompt.mock.calls[0];
+    expect(skillName).toBe('agent-desktop');
+    expect(options).toEqual({ allowDefaultWorkspace: false });
+    expect(prompt).toContain('skill=agent-desktop');
+    expect(prompt).toContain('target=conversation.quickActions.value.targetCurrent');
+    expect(prompt).toContain('confirm=conversation.quickActions.value.confirmEach');
+  });
+
+  it('does not stop the computer-control card at the folder picker, and asks for the home folder instead', async () => {
+    const { onSendPrompt } = setupWithWorkspace('');
+
+    fireEvent.click(screen.getByTestId('quick-action-computer'));
+    expect(screen.getByTestId('quick-action-workspace-path')).toHaveTextContent(
+      'conversation.quickActions.defaultHome'
+    );
+    fireEvent.change(screen.getByLabelText('conversation.quickActions.computer.topic'), {
       target: { value: '打开记事本并保存会议纪要' },
     });
     fireEvent.click(screen.getByText('conversation.quickActions.generate'));
 
     await waitFor(() => expect(onSendPrompt).toHaveBeenCalledTimes(1));
-    const [prompt, skillName] = onSendPrompt.mock.calls[0];
-    expect(skillName).toBe('agent-desktop');
-    expect(prompt).toContain('skill=agent-desktop');
-    expect(prompt).toContain('target=conversation.quickActions.value.targetCurrent');
-    expect(prompt).toContain('confirm=conversation.quickActions.value.confirmEach');
+    expect(onSendPrompt.mock.calls[0][2]).toEqual({ allowDefaultWorkspace: true });
+    expect(screen.queryByText('mu.native.home.noFolder')).not.toBeInTheDocument();
   });
 
   it('enables and inserts a skill chosen from More', () => {

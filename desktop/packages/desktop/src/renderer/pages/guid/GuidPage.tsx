@@ -339,12 +339,20 @@ const GuidPage: React.FC = () => {
   );
 
   const handleQuickActionSend = useCallback(
-    (prompt: string, skillName: string) => {
-      if (nativeHost) return nativeSend.sendPrompt(prompt);
+    async (prompt: string, skillName: string, options?: { allowDefaultWorkspace?: boolean }) => {
+      if (nativeHost) {
+        if (guidInput.dir || !options?.allowDefaultWorkspace) return nativeSend.sendPrompt(prompt);
+        // A task that does not live in a project (computer control) may run in the home folder, which always
+        // exists, instead of stopping at a folder picker the task has no use for.
+        const home = await ipcBridge.application.getPath.invoke({ name: 'home' }).catch((): string => '');
+        if (!home) return nativeSend.sendPrompt(prompt);
+        guidInput.setDir(home);
+        return nativeSend.sendPrompt(prompt, home);
+      }
       enableQuickActionSkill(skillName);
       return classicSend.sendPrompt(prompt, [skillName]);
     },
-    [classicSend, enableQuickActionSkill, nativeHost, nativeSend]
+    [classicSend, enableQuickActionSkill, guidInput.dir, guidInput.setDir, nativeHost, nativeSend]
   );
 
   const handleInsertQuickActionSkill = useCallback(

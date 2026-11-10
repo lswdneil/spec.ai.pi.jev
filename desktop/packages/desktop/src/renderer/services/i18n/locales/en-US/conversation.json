@@ -76,7 +76,9 @@
       "desc": "Let me operate desktop apps for you",
       "hint": "Describe the task; I'll inspect the screen before acting.",
       "placeholder": "e.g. open Notepad, type today's meeting notes and save the file",
-      "prompt": "Use the {{skill}} skill to operate the computer and complete this task: {{topic}}. Scope: {{target}}. Execution: {{confirm}}. Inspect the current screen first and confirm the target window before acting. If I chose \"A specific app\" but did not name it, ask me first. Stop and ask before any sensitive action such as entering a password, deleting files, making a payment or sending a message. Report the result when done."
+      "prompt": "Use the {{skill}} skill to operate the computer and complete this task: {{topic}}. Scope: {{target}}. Execution: {{confirm}}. Inspect the current screen first and confirm the target window before acting. If I chose \"A specific app\" but did not name it, ask me first. Stop and ask before any sensitive action such as entering a password, deleting files, making a payment or sending a message. Report the result when done.",
+      "topic": "What to do",
+      "notesPlaceholder": "e.g. only use Notepad; leave other windows alone"
     },
     "sch": {
       "name": "SCH design",
@@ -92,8 +94,10 @@
     },
     "comingSoon": "Coming soon. Please contact the spec-ai.cn technical team.",
     "workspace": "Workspace folder",
+    "optional": "Optional",
     "chooseFolder": "Choose folder",
     "notChosen": "Not selected",
+    "defaultHome": "Not selected — the home folder will be used",
     "otherRequirements": "Other requirements (optional)",
     "notesPlaceholder": "e.g. for management, highlight growth numbers, avoid acronyms",
     "notesPrompt": "Additional requirements: {{notes}}.",

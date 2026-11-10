@@ -66,6 +66,11 @@ type QuickActionReady = QuickActionCard & {
   promptKey: I18nKey;
   fields: QuickActionField[];
   defaults: Record<string, string>;
+  /** The task does not live in a project, so the conversation may fall back to the home folder. */
+  workspaceOptional?: boolean;
+  /** The card's own words for the task, when "topic" would say the wrong thing. */
+  topicLabelKey?: I18nKey;
+  notesPlaceholderKey?: I18nKey;
 };
 
 /** A card that announces a capability this build does not ship yet. It opens a notice instead of the composer. */
@@ -295,6 +300,9 @@ const QUICK_ACTIONS: readonly QuickActionCapability[] = [
     hintKey: 'conversation.quickActions.computer.hint',
     placeholderKey: 'conversation.quickActions.computer.placeholder',
     promptKey: 'conversation.quickActions.computer.prompt',
+    workspaceOptional: true,
+    topicLabelKey: 'conversation.quickActions.computer.topic',
+    notesPlaceholderKey: 'conversation.quickActions.computer.notesPlaceholder',
     fields: [
       {
         key: 'target',
@@ -346,7 +354,11 @@ const FEATURED_SKILLS = new Set(QUICK_ACTIONS.filter(isReadyCard).flatMap((capab
 type Props = {
   /** Reachable skills: every installed skill on the start page, loaded ones inside a chat. */
   skills: readonly QuickActionSkill[];
-  onSendPrompt: (prompt: string, skillName: string) => Promise<boolean | void>;
+  onSendPrompt: (
+    prompt: string,
+    skillName: string,
+    options?: { allowDefaultWorkspace?: boolean }
+  ) => Promise<boolean | void>;
   onInsertSkill: (name: string) => void;
   /** Enables a skill that the current conversation has not loaded yet. */
   onLoadSkill?: (name: string) => void;
@@ -464,7 +476,7 @@ const QuickActions: React.FC<Props> = ({
 
   const handleGenerate = useCallback(async () => {
     if (!activeCapability || !activeSkillName || sending) return;
-    if (workspaceRequired && !workspaceDir) {
+    if (workspaceRequired && !activeCapability.workspaceOptional && !workspaceDir) {
       setWorkspaceError(true);
       return;
     }
@@ -478,7 +490,8 @@ const QuickActions: React.FC<Props> = ({
     try {
       const result = await onSendPrompt(
         buildPrompt(activeCapability, activeSkillName, trimmed, choices, notes),
-        activeSkillName
+        activeSkillName,
+        { allowDefaultWorkspace: workspaceRequired && activeCapability.workspaceOptional === true }
       );
       if (result === false) return;
       setActiveId(null);
@@ -619,7 +632,11 @@ const QuickActions: React.FC<Props> = ({
               <div>
                 <div className='mb-1 block text-[12px] text-sv-muted'>
                   {t('conversation.quickActions.workspace')}
-                  {workspaceRequired ? <span className='ms-1 text-sv-danger'>*</span> : null}
+                  {workspaceRequired && !activeCapability.workspaceOptional ? (
+                    <span className='ms-1 text-sv-danger'>*</span>
+                  ) : (
+                    <span className='ms-1 text-sv-faint'>({t('conversation.quickActions.optional')})</span>
+                  )}
                 </div>
                 <div className='flex items-center gap-2'>
                   <div
@@ -632,7 +649,12 @@ const QuickActions: React.FC<Props> = ({
                     )}
                   >
                     <FolderClose size={15} className='shrink-0 text-sv-muted' />
-                    <span className='min-w-0 truncate'>{workspaceDir || t('conversation.quickActions.notChosen')}</span>
+                    <span className='min-w-0 truncate'>
+                      {workspaceDir ||
+                        (workspaceRequired && activeCapability.workspaceOptional
+                          ? t('conversation.quickActions.defaultHome')
+                          : t('conversation.quickActions.notChosen'))}
+                    </span>
                   </div>
                   <Button
                     size='small'
@@ -651,7 +673,7 @@ const QuickActions: React.FC<Props> = ({
             )}
             <div>
               <label className='mb-1 block text-[12px] text-sv-muted' htmlFor='quick-action-topic'>
-                {t('conversation.quickActions.topic')}
+                {t(activeCapability.topicLabelKey ?? 'conversation.quickActions.topic')}
               </label>
               <Input
                 id='quick-action-topic'
@@ -680,7 +702,7 @@ const QuickActions: React.FC<Props> = ({
                 id='quick-action-notes'
                 value={notes}
                 onChange={setNotes}
-                placeholder={t('conversation.quickActions.notesPlaceholder')}
+                placeholder={t(activeCapability.notesPlaceholderKey ?? 'conversation.quickActions.notesPlaceholder')}
                 rows={3}
                 className='text-[13px]'
               />
